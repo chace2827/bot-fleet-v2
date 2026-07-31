@@ -1,0 +1,16 @@
+{
+  "ledger_start": "2026-07-03",
+  "ledger_start_source": "--ledger-start",
+  "source_export": "2026-07-30.csv",
+  "counts": {
+    "export_rows": 1386,
+    "post_cutover": 0,
+    "straddler": 6,
+    "pre_cutover": 1380
+  },
+  "n_trades_condors": 0,
+  "n_bots": 0,
+  "total_pnl": 0,
+  "note": "",
+  "contract": "working ledger is POST-CUTOVER ONLY; the filter is on open_date"
+}

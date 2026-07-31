@@ -1,0 +1,7 @@
+bot,structure,status,pnl,risk,open_date,close_date,symbol,quantity,note
+Tasty Condor,ironcondor,expired,405,1095,2026-05-19 10:00:02,2026-07-27 15:25:42,SPY,1,PRE-CUTOVER OPEN — mirror baseline layer only; NEVER a working-ledger or reporting input
+Trendy-Paper-v1,shortputspread,expired,62,938,2026-07-02 10:45:02,2026-07-13 16:02:48,SPY,1,PRE-CUTOVER OPEN — mirror baseline layer only; NEVER a working-ledger or reporting input
+Nigiri-Paper-v1,shortputspread,expired,80,4920,2026-07-02 09:45:24,2026-07-13 16:02:48,SPY,10,PRE-CUTOVER OPEN — mirror baseline layer only; NEVER a working-ledger or reporting input
+3DTE $140-$350,ironcondor,expired,30,970,2026-07-02 12:45:03,2026-07-13 16:02:48,SPX,1,PRE-CUTOVER OPEN — mirror baseline layer only; NEVER a working-ledger or reporting input
+3DTE $140-$350,ironcondor,expired,35,965,2026-06-30 10:05:03,2026-07-06 23:48:45,SPX,1,PRE-CUTOVER OPEN — mirror baseline layer only; NEVER a working-ledger or reporting input
+3DTE $140-$350,ironcondor,expired,20,980,2026-07-01 10:10:02,2026-07-06 23:48:45,SPX,1,PRE-CUTOVER OPEN — mirror baseline layer only; NEVER a working-ledger or reporting input

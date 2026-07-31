@@ -1,0 +1,138 @@
+# Detector vs the FROZEN v1 ARCHIVE (a test fixture, never a reporting input)
+# run on macbookpro, 2026-07-31T00:31:04Z
+
+==========================================================================
+EXECUTION AUDIT v1.0.0 (frozen 2026-07-30, sha 67a537977c5d0896)
+1380 position rows, window 2026-03-05 .. 2026-07-02
+mode: REDUCED (no declared config — Tier C SKIPPED)
+==========================================================================
+
+--- RED (6) ---
+  [MECHANICS] EXPIRY_RATIO_FLIP        2026-06-01  IC-SPX-FastPT25-S2
+      observed : 40% expired over the last 10 vs 0% over the prior 300
+      threshold: jump >= 40% from a baseline <= 25%
+      first expiry of the onset window: 2026-06-01 (T00179); tripped on the position opened 2026-06-02. Positions stopped CLOSING and started EXPIRING — the signature of an exit that no longer generates orders
+      VERIFY BY: the Trades list of T00179 (2026-06-01): is there an exit order at all?
+  [MECHANICS] EXPIRY_RATIO_FLIP        2026-06-12  QQQ-IC-0DTE-Fortress
+      observed : 50% expired over the last 10 vs 4% over the prior 25
+      threshold: jump >= 40% from a baseline <= 25%
+      first expiry of the onset window: 2026-06-12 (T00136); tripped on the position opened 2026-06-22. Positions stopped CLOSING and started EXPIRING — the signature of an exit that no longer generates orders
+      VERIFY BY: the Trades list of T00136 (2026-06-12): is there an exit order at all?
+  [MECHANICS] EXPIRY_RATIO_FLIP        2026-06-12  QQQ-IC-0DTE-Fortress-NoPT50
+      observed : 40% expired over the last 10 vs 0% over the prior 18
+      threshold: jump >= 40% from a baseline <= 25%
+      first expiry of the onset window: 2026-06-12 (T00138); tripped on the position opened 2026-06-17. Positions stopped CLOSING and started EXPIRING — the signature of an exit that no longer generates orders
+      VERIFY BY: the Trades list of T00138 (2026-06-12): is there an exit order at all?
+  [MECHANICS] FILL_WORSE_THAN_MAE      2026-06-11  IC-SPX-FastPT25-S2 T00147
+      observed : $5.05/contract (4.81 credits)
+      threshold: $0.50 and 0.25 credits
+      exit 7.5 vs worst recorded mark 2.45 — the fill is outside the price path the position ever traded at
+      VERIFY BY: the Trades list: exit ORDER TYPE (Market vs SmartPricing) and fill time
+  [MECHANICS] IMPOSSIBLE_FILL          2026-03-31  QQQ-IC-0DTE-Raw-HoldToExp T00845
+      observed : R=-1.1050
+      threshold: R >= -1.0000
+      pnl -200 on risk 181 — a loss larger than max loss is structurally impossible for this spread
+      VERIFY BY: the position's Trades list + Trade Details (exit order type and fill)
+  [MECHANICS] IMPOSSIBLE_FILL          2026-06-11  IC-SPX-FastPT25-S2 T00147
+      observed : R=-1.6329
+      threshold: R >= -1.0000
+      pnl -7,740 on risk 4,740 — a loss larger than max loss is structurally impossible for this spread
+      VERIFY BY: the position's Trades list + Trade Details (exit order type and fill)
+
+--- AMBER (13) ---
+  [FIRE     ] DUPLICATE_ARM               -        IC-SPX-Fortress-Defang
+      observed : 10 positions identical to IC-SPX-Fortress-Unstopped
+      threshold: < 5
+      'IC-SPX-Fortress-Defang' and 'IC-SPX-Fortress-Unstopped' produced identical P/L at an identical entry minute 10 times — they are not independent arms and cannot be ranked against each other
+      VERIFY BY: a capture-diff of the two bots' automation trees
+  [FIRE     ] DUPLICATE_ARM               -        QQQ-IC-0DTE-Fortress
+      observed : 14 positions identical to QQQ-IC-0DTE-Fortress-NoPT50
+      threshold: < 5
+      'QQQ-IC-0DTE-Fortress' and 'QQQ-IC-0DTE-Fortress-NoPT50' produced identical P/L at an identical entry minute 14 times — they are not independent arms and cannot be ranked against each other
+      VERIFY BY: a capture-diff of the two bots' automation trees
+  [FIRE     ] DUPLICATE_ARM               -        QQQ-IC-0DTE-HedgeA-S1
+      observed : 73 positions identical to QQQ-IC-0DTE-HedgeD-Conditional
+      threshold: < 5
+      'QQQ-IC-0DTE-HedgeA-S1' and 'QQQ-IC-0DTE-HedgeD-Conditional' produced identical P/L at an identical entry minute 73 times — they are not independent arms and cannot be ranked against each other
+      VERIFY BY: a capture-diff of the two bots' automation trees
+  [FIRE     ] DUPLICATE_ARM               -        QQQ-IC-0DTE-HedgeA-S1
+      observed : 73 positions identical to QQQ-IC-0DTE-HedgeTest
+      threshold: < 5
+      'QQQ-IC-0DTE-HedgeA-S1' and 'QQQ-IC-0DTE-HedgeTest' produced identical P/L at an identical entry minute 73 times — they are not independent arms and cannot be ranked against each other
+      VERIFY BY: a capture-diff of the two bots' automation trees
+  [FIRE     ] DUPLICATE_ARM               -        QQQ-IC-0DTE-HedgeA-S1
+      observed : 42 positions identical to QQQ-IC-0DTE-HedgeC-S3
+      threshold: < 5
+      'QQQ-IC-0DTE-HedgeA-S1' and 'QQQ-IC-0DTE-HedgeC-S3' produced identical P/L at an identical entry minute 42 times — they are not independent arms and cannot be ranked against each other
+      VERIFY BY: a capture-diff of the two bots' automation trees
+  [FIRE     ] DUPLICATE_ARM               -        QQQ-IC-0DTE-HedgeA-S1
+      observed : 17 positions identical to QQQ-IC-0DTE-HedgeB-S2
+      threshold: < 5
+      'QQQ-IC-0DTE-HedgeA-S1' and 'QQQ-IC-0DTE-HedgeB-S2' produced identical P/L at an identical entry minute 17 times — they are not independent arms and cannot be ranked against each other
+      VERIFY BY: a capture-diff of the two bots' automation trees
+  [FIRE     ] DUPLICATE_ARM               -        QQQ-IC-0DTE-HedgeB-S2
+      observed : 18 positions identical to QQQ-IC-0DTE-HedgeC-S3
+      threshold: < 5
+      'QQQ-IC-0DTE-HedgeB-S2' and 'QQQ-IC-0DTE-HedgeC-S3' produced identical P/L at an identical entry minute 18 times — they are not independent arms and cannot be ranked against each other
+      VERIFY BY: a capture-diff of the two bots' automation trees
+  [FIRE     ] DUPLICATE_ARM               -        QQQ-IC-0DTE-HedgeB-S2
+      observed : 17 positions identical to QQQ-IC-0DTE-HedgeD-Conditional
+      threshold: < 5
+      'QQQ-IC-0DTE-HedgeB-S2' and 'QQQ-IC-0DTE-HedgeD-Conditional' produced identical P/L at an identical entry minute 17 times — they are not independent arms and cannot be ranked against each other
+      VERIFY BY: a capture-diff of the two bots' automation trees
+  [FIRE     ] DUPLICATE_ARM               -        QQQ-IC-0DTE-HedgeB-S2
+      observed : 17 positions identical to QQQ-IC-0DTE-HedgeTest
+      threshold: < 5
+      'QQQ-IC-0DTE-HedgeB-S2' and 'QQQ-IC-0DTE-HedgeTest' produced identical P/L at an identical entry minute 17 times — they are not independent arms and cannot be ranked against each other
+      VERIFY BY: a capture-diff of the two bots' automation trees
+  [FIRE     ] DUPLICATE_ARM               -        QQQ-IC-0DTE-HedgeC-S3
+      observed : 42 positions identical to QQQ-IC-0DTE-HedgeD-Conditional
+      threshold: < 5
+      'QQQ-IC-0DTE-HedgeC-S3' and 'QQQ-IC-0DTE-HedgeD-Conditional' produced identical P/L at an identical entry minute 42 times — they are not independent arms and cannot be ranked against each other
+      VERIFY BY: a capture-diff of the two bots' automation trees
+  [FIRE     ] DUPLICATE_ARM               -        QQQ-IC-0DTE-HedgeC-S3
+      observed : 42 positions identical to QQQ-IC-0DTE-HedgeTest
+      threshold: < 5
+      'QQQ-IC-0DTE-HedgeC-S3' and 'QQQ-IC-0DTE-HedgeTest' produced identical P/L at an identical entry minute 42 times — they are not independent arms and cannot be ranked against each other
+      VERIFY BY: a capture-diff of the two bots' automation trees
+  [FIRE     ] DUPLICATE_ARM               -        QQQ-IC-0DTE-HedgeD-Conditional
+      observed : 70 positions identical to QQQ-IC-0DTE-HedgeTest
+      threshold: < 5
+      'QQQ-IC-0DTE-HedgeD-Conditional' and 'QQQ-IC-0DTE-HedgeTest' produced identical P/L at an identical entry minute 70 times — they are not independent arms and cannot be ranked against each other
+      VERIFY BY: a capture-diff of the two bots' automation trees
+  [FIRE     ] SILENT_BOT                  -        DIR-SPX-PutVIX22-SL75
+      observed : 0 positions in the window
+      threshold: 1 position, or a scanner run in the logs
+      correctly-gated and switched-off are indistinguishable from position data — this is unverifiable here, not a failure
+      VERIFY BY: OA bot logs: a scanner run recorded with no entry closes this GREEN; zero log entries closes it RED
+
+--- CONTEXT (291) — not findings ---
+  CLOSED_AT_MAE           181   S2:58  S3:44  HedgeTest:15  S1:14  S2:14  Conditional:13
+  NEVER_IN_PROFIT         110   S2:43  S3:15  130PM:15  S2:14  S2:3  Defang:3
+
+--- NOT EVALUATED (21) — blind spots, not passes ---
+  BACKSTOP_CAUGHT_IT       (fleet)                                no declared config
+  EXPIRY_RATIO_FLIP        1-45pm-Sandwich-Paper-v1               n=9
+  EXPIRY_RATIO_FLIP        60min-ORB-10W-Paper-v1                 n=12
+  EXPIRY_RATIO_FLIP        DIR-SPX-CallVIXdrop                    n=2
+  EXPIRY_RATIO_FLIP        DIR-SPX-Put-Control                    n=5
+  EXPIRY_RATIO_FLIP        Friday 14 DTE Broken Wing IB (B-70)    n=7
+  EXPIRY_RATIO_FLIP        Opening Range Breakout 60m             n=19
+  EXPIRY_RATIO_FLIP        QQQ long call                          n=6
+  EXPIRY_RATIO_FLIP        QQQ-IC-0DTE-Fortress-NoFilter          n=8
+  EXPIRY_RATIO_FLIP        QQQ-IC-0DTE-Fortress-S2                n=16
+  EXPIRY_RATIO_FLIP        QQQ-IC-0DTE-InverseFilter-HoldToExp    n=3
+  EXPIRY_RATIO_FLIP        QQQ-IC-0DTE-Range075-PT50              n=5
+  EXPIRY_RATIO_FLIP        QQQ-IC-0DTE-Range075-PT50-Wide2-155PM  n=10
+  EXPIRY_RATIO_FLIP        QQQ-IC-0DTE-VIX25-Range075-PT50        n=1
+  EXPIRY_RATIO_FLIP        Tasty Condor                           n=3
+  EXPIRY_RATIO_FLIP        Trendy-Paper-v1                        n=14
+  EXPIRY_RATIO_FLIP        Weekly-IB-SPY-Paper-v1                 n=18
+  PT_DECLARED_NOT_TAKEN    (fleet)                                no declared config
+  PT_NEVER_FIRES           (fleet)                                no declared config
+  REMOVED_EXIT_FIRED       (fleet)                                no declared config
+  TIME_EXIT_MISSED         (fleet)                                no declared config
+
+summary: AMBER=13  INFO=291  RED=6  SKIPPED=21
+-> data/receipts/archive-fixture-findings.csv
+-> data/receipts/archive-fixture-findings_meta.json

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.andrewchace.botfleet.intraday</string>
+
+    <!-- Fires every 5 min around the clock; the script self-gates to
+         RTH weekdays (09:35-16:10 ET) and exits instantly otherwise. -->
+    <key>ProgramArguments</key>
+    <array>
+        <string>/usr/bin/python3</string>
+        <string>/Users/andrewchace/bot-fleet/scripts/intraday_read.py</string>
+    </array>
+
+    <key>StartInterval</key>
+    <integer>300</integer>
+
+    <key>RunAtLoad</key>
+    <true/>
+
+    <key>WorkingDirectory</key>
+    <string>/Users/andrewchace/bot-fleet</string>
+
+    <key>StandardOutPath</key>
+    <string>/Users/andrewchace/.bot-fleet-intraday.log</string>
+
+    <key>StandardErrorPath</key>
+    <string>/Users/andrewchace/.bot-fleet-intraday.log</string>
+</dict>
+</plist>

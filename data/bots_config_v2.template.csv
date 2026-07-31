@@ -1,0 +1,19 @@
+# TEMPLATE ONLY — deliberately NOT named bots_config_v2.csv so the detector does not load it.
+# Copy to data/bots_config_v2.csv in Phase 4 and fill from the bookmarklet capture, never from memory.
+#
+# THREE-STATE CELLS. Every mechanic column has exactly three legal states:
+#   a value   0.25 / 15:50   DECLARED      -> the rule evaluates
+#   none                     REMOVED BY    -> forward rule OFF, INVERSE rule ON
+#                            DESIGN           (REMOVED_EXIT_FIRED)
+#   (blank)                  MISSING DATA  -> rule SKIPPED, reported as a blind spot
+# BLANK IS NOT NONE. Anything else is refused, not coerced.
+#
+# time_exit      = the EXIT-OPTIONS-side time exit.
+# event_backstop = the AUTOMATIONS-side Scheduled Event flat-close. Separate column
+#                  on purpose: different execution class. Rule C5 exists precisely
+#                  because these two can disagree.
+bot,pt_pct,sl_pct,time_exit,event_backstop,capture_file,capture_hash
+IC-SPX-FastPT25-S2,none,none,none,none,<capture>,<hash>
+IC-SPX-FastPT25-S2-130PM,none,none,none,none,<capture>,<hash>
+QQQ-IC-0DTE-Fortress,0.50,none,15:50,15:52,<capture>,<hash>
+QQQ-IC-0DTE-Fortress-NoPT50,none,none,15:50,15:52,<capture>,<hash>

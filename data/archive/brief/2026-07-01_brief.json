@@ -1,0 +1,866 @@
+{
+  "date": "2026-07-01",
+  "generated": "2026-07-03T16:40:23",
+  "tape": {
+    "date": "2026-07-01",
+    "generated": "2026-07-03T16:29:52",
+    "any_reconstructed": false,
+    "underlyings": {
+      "SPX": {
+        "symbol": "SPX",
+        "source": "tradier",
+        "prior_close": 7499.36,
+        "open": 7478.84,
+        "high": 7521.81,
+        "low": 7449.63,
+        "close": 7483.23,
+        "series": [
+          {
+            "t": "09:30",
+            "p": 7450.81,
+            "h": 7479.24,
+            "l": 7450.13
+          },
+          {
+            "t": "09:35",
+            "p": 7457.56,
+            "h": 7459.29,
+            "l": 7449.63
+          },
+          {
+            "t": "09:40",
+            "p": 7458.75,
+            "h": 7463.99,
+            "l": 7455.09
+          },
+          {
+            "t": "09:45",
+            "p": 7463.95,
+            "h": 7467.41,
+            "l": 7454.99
+          },
+          {
+            "t": "09:50",
+            "p": 7474.36,
+            "h": 7476.19,
+            "l": 7463.03
+          },
+          {
+            "t": "09:55",
+            "p": 7480.52,
+            "h": 7480.77,
+            "l": 7471.77
+          },
+          {
+            "t": "10:00",
+            "p": 7481.55,
+            "h": 7483.67,
+            "l": 7477.52
+          },
+          {
+            "t": "10:05",
+            "p": 7488.4,
+            "h": 7490.74,
+            "l": 7480.94
+          },
+          {
+            "t": "10:10",
+            "p": 7493.52,
+            "h": 7496.54,
+            "l": 7487.82
+          },
+          {
+            "t": "10:15",
+            "p": 7494.77,
+            "h": 7495.97,
+            "l": 7491.04
+          },
+          {
+            "t": "10:20",
+            "p": 7495.67,
+            "h": 7497.82,
+            "l": 7493.78
+          },
+          {
+            "t": "10:25",
+            "p": 7496.12,
+            "h": 7498.21,
+            "l": 7494.63
+          },
+          {
+            "t": "10:30",
+            "p": 7490.56,
+            "h": 7496.97,
+            "l": 7488.01
+          },
+          {
+            "t": "10:35",
+            "p": 7496.25,
+            "h": 7496.65,
+            "l": 7487.68
+          },
+          {
+            "t": "10:40",
+            "p": 7493.86,
+            "h": 7497.91,
+            "l": 7491.83
+          },
+          {
+            "t": "10:45",
+            "p": 7491.91,
+            "h": 7493.83,
+            "l": 7484.41
+          },
+          {
+            "t": "10:50",
+            "p": 7495.29,
+            "h": 7498.67,
+            "l": 7491.53
+          },
+          {
+            "t": "10:55",
+            "p": 7497.07,
+            "h": 7497.07,
+            "l": 7490.71
+          },
+          {
+            "t": "11:00",
+            "p": 7505.18,
+            "h": 7506.68,
+            "l": 7496.36
+          },
+          {
+            "t": "11:05",
+            "p": 7503.94,
+            "h": 7507.76,
+            "l": 7500.6
+          },
+          {
+            "t": "11:10",
+            "p": 7508.32,
+            "h": 7508.42,
+            "l": 7501.86
+          },
+          {
+            "t": "11:15",
+            "p": 7512.38,
+            "h": 7513.16,
+            "l": 7507.81
+          },
+          {
+            "t": "11:20",
+            "p": 7515.97,
+            "h": 7518.19,
+            "l": 7512.3
+          },
+          {
+            "t": "11:25",
+            "p": 7520.64,
+            "h": 7521.11,
+            "l": 7515.31
+          },
+          {
+            "t": "11:30",
+            "p": 7513.98,
+            "h": 7520.96,
+            "l": 7513.98
+          },
+          {
+            "t": "11:35",
+            "p": 7513.38,
+            "h": 7515.53,
+            "l": 7510.76
+          },
+          {
+            "t": "11:40",
+            "p": 7514.96,
+            "h": 7516.26,
+            "l": 7511.91
+          },
+          {
+            "t": "11:45",
+            "p": 7511.87,
+            "h": 7515.99,
+            "l": 7511.17
+          },
+          {
+            "t": "11:50",
+            "p": 7512.21,
+            "h": 7515.58,
+            "l": 7510.67
+          },
+          {
+            "t": "11:55",
+            "p": 7515.41,
+            "h": 7515.99,
+            "l": 7510.97
+          },
+          {
+            "t": "12:00",
+            "p": 7515.58,
+            "h": 7519.21,
+            "l": 7514.33
+          },
+          {
+            "t": "12:05",
+            "p": 7515.83,
+            "h": 7518.01,
+            "l": 7514.27
+          },
+          {
+            "t": "12:10",
+            "p": 7518.26,
+            "h": 7518.45,
+            "l": 7514.9
+          },
+          {
+            "t": "12:15",
+            "p": 7518.03,
+            "h": 7519.14,
+            "l": 7516.17
+          },
+          {
+            "t": "12:20",
+            "p": 7519.98,
+            "h": 7521.81,
+            "l": 7516.9
+          },
+          {
+            "t": "12:25",
+            "p": 7517.08,
+            "h": 7521.15,
+            "l": 7516.99
+          },
+          {
+            "t": "12:30",
+            "p": 7518.17,
+            "h": 7519.3,
+            "l": 7517.04
+          },
+          {
+            "t": "12:35",
+            "p": 7513.29,
+            "h": 7517.97,
+            "l": 7513.27
+          },
+          {
+            "t": "12:40",
+            "p": 7513.81,
+            "h": 7514.26,
+            "l": 7510.2
+          },
+          {
+            "t": "12:45",
+            "p": 7511.35,
+            "h": 7515.25,
+            "l": 7511.35
+          },
+          {
+            "t": "12:50",
+            "p": 7509.05,
+            "h": 7513.28,
+            "l": 7507.28
+          },
+          {
+            "t": "12:55",
+            "p": 7503.24,
+            "h": 7509.33,
+            "l": 7501.94
+          },
+          {
+            "t": "13:00",
+            "p": 7502.45,
+            "h": 7507.03,
+            "l": 7501.63
+          },
+          {
+            "t": "13:05",
+            "p": 7502.45,
+            "h": 7503.47,
+            "l": 7498.31
+          },
+          {
+            "t": "13:10",
+            "p": 7505.66,
+            "h": 7506.12,
+            "l": 7500.46
+          },
+          {
+            "t": "13:15",
+            "p": 7508.5,
+            "h": 7508.85,
+            "l": 7504.9
+          },
+          {
+            "t": "13:20",
+            "p": 7510.15,
+            "h": 7510.39,
+            "l": 7508.54
+          },
+          {
+            "t": "13:25",
+            "p": 7506.71,
+            "h": 7511.8,
+            "l": 7506.59
+          },
+          {
+            "t": "13:30",
+            "p": 7505.45,
+            "h": 7509.13,
+            "l": 7504.31
+          },
+          {
+            "t": "13:35",
+            "p": 7506.87,
+            "h": 7507.81,
+            "l": 7503.7
+          },
+          {
+            "t": "13:40",
+            "p": 7502.61,
+            "h": 7507.45,
+            "l": 7502.34
+          },
+          {
+            "t": "13:45",
+            "p": 7501.64,
+            "h": 7503.83,
+            "l": 7500.4
+          },
+          {
+            "t": "13:50",
+            "p": 7503.34,
+            "h": 7504.63,
+            "l": 7500.18
+          },
+          {
+            "t": "13:55",
+            "p": 7499.26,
+            "h": 7503.5,
+            "l": 7499.03
+          },
+          {
+            "t": "14:00",
+            "p": 7504.64,
+            "h": 7504.64,
+            "l": 7499.16
+          },
+          {
+            "t": "14:05",
+            "p": 7502.74,
+            "h": 7504.39,
+            "l": 7500.76
+          },
+          {
+            "t": "14:10",
+            "p": 7498.14,
+            "h": 7503.08,
+            "l": 7498.03
+          },
+          {
+            "t": "14:15",
+            "p": 7499.56,
+            "h": 7499.61,
+            "l": 7494.65
+          },
+          {
+            "t": "14:20",
+            "p": 7501.41,
+            "h": 7501.5,
+            "l": 7498.7
+          },
+          {
+            "t": "14:25",
+            "p": 7498.8,
+            "h": 7502.36,
+            "l": 7498.46
+          },
+          {
+            "t": "14:30",
+            "p": 7499.7,
+            "h": 7499.97,
+            "l": 7497.13
+          },
+          {
+            "t": "14:35",
+            "p": 7500.16,
+            "h": 7501.26,
+            "l": 7498.26
+          },
+          {
+            "t": "14:40",
+            "p": 7498.9,
+            "h": 7500.49,
+            "l": 7497.7
+          },
+          {
+            "t": "14:45",
+            "p": 7496.6,
+            "h": 7499.13,
+            "l": 7494.48
+          },
+          {
+            "t": "14:50",
+            "p": 7491.85,
+            "h": 7496.94,
+            "l": 7491.65
+          },
+          {
+            "t": "14:55",
+            "p": 7495.92,
+            "h": 7496.38,
+            "l": 7491.74
+          },
+          {
+            "t": "15:00",
+            "p": 7500.75,
+            "h": 7500.96,
+            "l": 7495.55
+          },
+          {
+            "t": "15:05",
+            "p": 7504.52,
+            "h": 7504.81,
+            "l": 7500.65
+          },
+          {
+            "t": "15:10",
+            "p": 7501.02,
+            "h": 7504.33,
+            "l": 7499.86
+          },
+          {
+            "t": "15:15",
+            "p": 7501.85,
+            "h": 7503.13,
+            "l": 7499.86
+          },
+          {
+            "t": "15:20",
+            "p": 7502.74,
+            "h": 7503.06,
+            "l": 7500.57
+          },
+          {
+            "t": "15:25",
+            "p": 7497.54,
+            "h": 7502.77,
+            "l": 7496.67
+          },
+          {
+            "t": "15:30",
+            "p": 7499.49,
+            "h": 7500.86,
+            "l": 7497.22
+          },
+          {
+            "t": "15:35",
+            "p": 7496.19,
+            "h": 7499.61,
+            "l": 7495.07
+          },
+          {
+            "t": "15:40",
+            "p": 7494.24,
+            "h": 7496.32,
+            "l": 7492.5
+          },
+          {
+            "t": "15:45",
+            "p": 7492.44,
+            "h": 7494.26,
+            "l": 7491.0
+          },
+          {
+            "t": "15:50",
+            "p": 7489.44,
+            "h": 7495.32,
+            "l": 7486.95
+          },
+          {
+            "t": "15:55",
+            "p": 7485.02,
+            "h": 7489.52,
+            "l": 7479.31
+          },
+          {
+            "t": "16:00",
+            "p": 7483.24,
+            "h": 7483.89,
+            "l": 7483.24
+          }
+        ],
+        "series_interval": "5min",
+        "pct_move": 0.06,
+        "gap_pct": -0.27,
+        "full_pct": -0.22,
+        "range_pct": 0.96,
+        "net_pct": 0.06,
+        "directionality": 0.14,
+        "label": "Drift",
+        "label_approx": false,
+        "meaning": "In-between \u2014 modest range, no clean one-way trend."
+      },
+      "VIX": {
+        "symbol": "VIX",
+        "source": "tradier",
+        "prior_close": 16.45,
+        "open": 17.11,
+        "high": 17.3,
+        "low": 15.97,
+        "close": 16.59,
+        "series": [],
+        "series_interval": null,
+        "vix_close": 16.59,
+        "vix_change_pct": 0.85
+      }
+    },
+    "divergence": null
+  },
+  "cards": [
+    {
+      "bot": "DIR-SPX-Put-Control",
+      "hedge_type": "SL75",
+      "n_condors": 1,
+      "day_pnl": -350,
+      "grade": "amber",
+      "rows": [
+        {
+          "name": "Filter",
+          "programmed": "none (trades every day ex half-days)",
+          "actual": "not ledger-verifiable (needs the intraday gate value)",
+          "flag": "\u00b7"
+        },
+        {
+          "name": "Entry",
+          "programmed": "11:00",
+          "actual": "first entry 11:00 \u2713 on time",
+          "flag": "\u2713"
+        },
+        {
+          "name": "Profit target",
+          "programmed": "PT100",
+          "actual": "no profit leg today (all losers/held)",
+          "flag": "\u00b7"
+        },
+        {
+          "name": "Hedge",
+          "programmed": "SL75",
+          "actual": "no breach today \u2014 nothing to hedge",
+          "flag": "\u2713"
+        },
+        {
+          "name": "Re-entry",
+          "programmed": "0",
+          "actual": "1 condor(s) today",
+          "flag": "\u26a0"
+        },
+        {
+          "name": "Verdict",
+          "programmed": "behave as designed",
+          "actual": "P/L $-350 \u00b7 AMBER \u2014 good loss \u2014 design held, tape unlucky",
+          "flag": "\u00b7"
+        }
+      ],
+      "breach_lines": [],
+      "naked_losses": [],
+      "counterfactuals": [],
+      "compliance_pct": 67,
+      "n_applicable": 3,
+      "n_pass": 2
+    },
+    {
+      "bot": "IC-SPX-FastPT25-S2",
+      "hedge_type": "S2",
+      "n_condors": 10,
+      "day_pnl": -250,
+      "grade": "amber",
+      "rows": [
+        {
+          "name": "Filter",
+          "programmed": "Range075 (\u00b10.75% from prior close; skip FOMC)",
+          "actual": "all 10 entries inside \u00b10.75% band",
+          "flag": "\u2713"
+        },
+        {
+          "name": "Entry",
+          "programmed": "11:00",
+          "actual": "first entry 11:01 \u2713 on time \u00b7 +9 re-entries through 11:27 (by design)",
+          "flag": "\u2713"
+        },
+        {
+          "name": "Profit target",
+          "programmed": "PT25",
+          "actual": "4 PT-exit + 0 expired-worthless-win",
+          "flag": "\u2713"
+        },
+        {
+          "name": "Hedge",
+          "programmed": "S2",
+          "actual": "no breach today \u2014 nothing to hedge",
+          "flag": "\u2713"
+        },
+        {
+          "name": "Re-entry",
+          "programmed": "<=10",
+          "actual": "10 condor(s) today",
+          "flag": "\u2713"
+        },
+        {
+          "name": "Verdict",
+          "programmed": "behave as designed",
+          "actual": "P/L $-250 \u00b7 AMBER \u2014 good loss \u2014 design held, tape unlucky",
+          "flag": "\u00b7"
+        }
+      ],
+      "breach_lines": [
+        "put short 7460.0 \u00b7 NO BREACH \u00b7 \u2014",
+        "put short 7460.0 \u00b7 NO BREACH \u00b7 \u2014",
+        "put short 7460.0 \u00b7 NO BREACH \u00b7 \u2014",
+        "put short 7455.0 \u00b7 NO BREACH \u00b7 \u2014",
+        "put short 7455.0 \u00b7 NO BREACH \u00b7 \u2014",
+        "put short 7450.0 \u00b7 NO BREACH \u00b7 \u2014",
+        "put short 7445.0 \u00b7 NO BREACH \u00b7 \u2014",
+        "put short 7450.0 \u00b7 NO BREACH \u00b7 \u2014",
+        "put short 7445.0 \u00b7 NO BREACH \u00b7 \u2014",
+        "put short 7440.0 \u00b7 NO BREACH \u00b7 \u2014"
+      ],
+      "naked_losses": [],
+      "counterfactuals": [],
+      "compliance_pct": 100,
+      "n_applicable": 5,
+      "n_pass": 5
+    },
+    {
+      "bot": "IC-SPX-FastPT25-S2-130PM",
+      "hedge_type": "S2",
+      "n_condors": 5,
+      "day_pnl": 50,
+      "grade": "amber",
+      "rows": [
+        {
+          "name": "Filter",
+          "programmed": "Range075 (\u00b10.75%) + skip FOMC + min mid $0.08",
+          "actual": "all 5 entries inside \u00b10.75% band",
+          "flag": "\u2713"
+        },
+        {
+          "name": "Entry",
+          "programmed": "13:30 (after 1:30pm \u2014 CONFIRMED)",
+          "actual": "13:31, 13:33, 13:42, 13:45, 13:54",
+          "flag": "\u00b7"
+        },
+        {
+          "name": "Profit target",
+          "programmed": "PT25 (Profits: 25%)",
+          "actual": "6 PT-exit + 0 expired-worthless-win",
+          "flag": "\u2713"
+        },
+        {
+          "name": "Hedge",
+          "programmed": "S2",
+          "actual": "fired on 2 touched leg(s) \u2014 cut as designed",
+          "flag": "\u2713"
+        },
+        {
+          "name": "Re-entry",
+          "programmed": "re-enter when 0 open put/call positions (after 1:30pm)",
+          "actual": "5 condor(s) today",
+          "flag": "\u26a0"
+        },
+        {
+          "name": "Verdict",
+          "programmed": "behave as designed",
+          "actual": "P/L $50 \u00b7 AMBER \u2014 borderline; watch",
+          "flag": "\u00b7"
+        }
+      ],
+      "breach_lines": [
+        "put short 7475.0 \u00b7 NO BREACH \u00b7 \u2014",
+        "call short 7520.0 \u00b7 NO BREACH \u00b7 \u2014",
+        "put short 7475.0 \u00b7 NO BREACH \u00b7 \u2014",
+        "call short 7525.0 \u00b7 NO BREACH \u00b7 \u2014",
+        "put short 7480.0 \u00b7 BREACH \u00b7 hedge FIRED (cut early)",
+        "call short 7525.0 \u00b7 NO BREACH \u00b7 \u2014",
+        "put short 7480.0 \u00b7 BREACH \u00b7 profit-exit",
+        "call short 7530.0 \u00b7 NO BREACH \u00b7 \u2014",
+        "put short 7480.0 \u00b7 BREACH \u00b7 hedge FIRED (cut early)",
+        "call short 7530.0 \u00b7 NO BREACH \u00b7 \u2014"
+      ],
+      "naked_losses": [],
+      "counterfactuals": [
+        "put 7480.0: cut at $-150; hold-to-expiry \u2248 recovered inside \u2192 cut may have HURT",
+        "put 7480.0: cut at $-100; hold-to-expiry \u2248 recovered inside \u2192 cut may have HURT"
+      ],
+      "compliance_pct": 75,
+      "n_applicable": 4,
+      "n_pass": 3
+    },
+    {
+      "bot": "IC-SPX-Fortress-Defang",
+      "hedge_type": "Defang",
+      "n_condors": 1,
+      "day_pnl": 0,
+      "grade": "green",
+      "rows": [
+        {
+          "name": "Filter",
+          "programmed": "Range075",
+          "actual": "all 1 entries inside \u00b10.75% band",
+          "flag": "\u2713"
+        },
+        {
+          "name": "Entry",
+          "programmed": "13:30",
+          "actual": "first entry 13:33 \u2713 on time",
+          "flag": "\u2713"
+        },
+        {
+          "name": "Profit target",
+          "programmed": "none",
+          "actual": "0 rode to settlement",
+          "flag": "\u00b7"
+        },
+        {
+          "name": "Hedge",
+          "programmed": "Defang",
+          "actual": "no breach today \u2014 nothing to hedge",
+          "flag": "\u2713"
+        },
+        {
+          "name": "Re-entry",
+          "programmed": "1/side/day (Fortress-family guard; flow not expanded in save)",
+          "actual": "1 condor(s) today",
+          "flag": "\u2713"
+        },
+        {
+          "name": "Verdict",
+          "programmed": "behave as designed",
+          "actual": "P/L $0 \u00b7 GREEN \u2014 clean win",
+          "flag": "\u2713"
+        }
+      ],
+      "breach_lines": [
+        "put short 7450.0 \u00b7 NO BREACH \u00b7 \u2014"
+      ],
+      "naked_losses": [],
+      "counterfactuals": [],
+      "compliance_pct": 100,
+      "n_applicable": 4,
+      "n_pass": 4
+    },
+    {
+      "bot": "IC-SPX-Fortress-Unstopped",
+      "hedge_type": "Unstopped",
+      "n_condors": 1,
+      "day_pnl": 0,
+      "grade": "green",
+      "rows": [
+        {
+          "name": "Filter",
+          "programmed": "Range075",
+          "actual": "all 1 entries inside \u00b10.75% band",
+          "flag": "\u2713"
+        },
+        {
+          "name": "Entry",
+          "programmed": "13:30",
+          "actual": "first entry 13:33 \u2713 on time",
+          "flag": "\u2713"
+        },
+        {
+          "name": "Profit target",
+          "programmed": "none",
+          "actual": "0 rode to settlement",
+          "flag": "\u00b7"
+        },
+        {
+          "name": "Hedge",
+          "programmed": "Unstopped",
+          "actual": "no breach today \u2014 nothing to hedge",
+          "flag": "\u2713"
+        },
+        {
+          "name": "Re-entry",
+          "programmed": "2 positions/day, 2 at once (Safeguards; = 1 IC/day). Alloc $50k.",
+          "actual": "1 condor(s) today",
+          "flag": "\u2713"
+        },
+        {
+          "name": "Verdict",
+          "programmed": "behave as designed",
+          "actual": "P/L $0 \u00b7 GREEN \u2014 clean win",
+          "flag": "\u2713"
+        }
+      ],
+      "breach_lines": [
+        "put short 7450.0 \u00b7 NO BREACH \u00b7 \u2014"
+      ],
+      "naked_losses": [],
+      "counterfactuals": [],
+      "compliance_pct": 100,
+      "n_applicable": 4,
+      "n_pass": 4
+    },
+    {
+      "bot": "Nigiri-Paper-v1",
+      "hedge_type": "none",
+      "n_condors": 2,
+      "day_pnl": 180,
+      "grade": "amber",
+      "rows": [
+        {
+          "name": "Filter",
+          "programmed": "0.05-delta short entry",
+          "actual": "not ledger-verifiable (needs the intraday gate value)",
+          "flag": "\u00b7"
+        },
+        {
+          "name": "Entry",
+          "programmed": "scanner (DoW-routed)",
+          "actual": "09:45",
+          "flag": "\u00b7"
+        },
+        {
+          "name": "Profit target",
+          "programmed": "75% default + 7-day accelerated (return% > 10x DIT)",
+          "actual": "2 PT-exit + 0 expired-worthless-win",
+          "flag": "\u2713"
+        },
+        {
+          "name": "Hedge",
+          "programmed": "none",
+          "actual": "no breach today \u2014 nothing to hedge",
+          "flag": "\u2713"
+        },
+        {
+          "name": "Re-entry",
+          "programmed": "1 at a time",
+          "actual": "2 condor(s) today",
+          "flag": "\u26a0"
+        },
+        {
+          "name": "Verdict",
+          "programmed": "behave as designed",
+          "actual": "P/L $180 \u00b7 AMBER \u2014 borderline; watch",
+          "flag": "\u00b7"
+        }
+      ],
+      "breach_lines": [
+        "put short 720.0 \u00b7 NO BREACH \u00b7 \u2014",
+        "put short 720.0 \u00b7 NO BREACH \u00b7 \u2014"
+      ],
+      "naked_losses": [],
+      "counterfactuals": [],
+      "compliance_pct": 67,
+      "n_applicable": 3,
+      "n_pass": 2
+    }
+  ],
+  "hedge_clinic": [],
+  "grades": {
+    "green": 2,
+    "amber": 4,
+    "red": 0
+  }
+}

@@ -1,0 +1,34 @@
+bot,pillar,role,underlying,status,champion,epoch_boundary,hedge,strike_fix,superseded,focus,notes
+IC-SPX-FastPT25-S2,IC,live-candidate,SPX,ON,yes,2026-06-08,S2,,,yes,Champion + primary go/no-go. Renamed from Scalp-SPX-PT25-S2 on 2026-06-10.
+IC-SPX-Fortress-Unstopped,IC,control,SPX,ON,,2026-07-03,Unstopped,,,,"Unstopped baseline; closest SPX port of QQQ Fortress. 2026-07-03: turned OFF both monitors (Defang-Mon-S2-StrikeTouch + Fortress-Mon-S2-Cleanup) -> now a TRUE unstopped control. Epoch boundary set: pre-7/3 history had an active Cleanup monitor (churned ~10/26 positions, opened+closed in 1-3 min); the StrikeTouch stop never actually fired (deep-excursion positions all held to settle). Don't pool pre/post."
+IC-SPX-Fortress-Defang,IC,experiment,SPX,ON,,,Defang,,,,Defang A/B
+QQQ-IC-0DTE-Fortress,IC,experiment,QQQ,ON,,2026-06-12,Unstopped,Y,,,"PT50 only; NO stop, NO S2 (6/17 OA Exit Options: Profit 50% / StopLoss None; Log shows only entry scanners, no monitor). hedge corrected S2->Unstopped 2026-06-22 — was a mislabel; NOT S2 evidence. Downside-naked."
+QQQ-IC-0DTE-Fortress-NoPT50,IC,experiment,QQQ,ON,,2026-06-12,Unstopped,Y,,,"no PT, no stop, no S2; downside-naked. hedge corrected S2->Unstopped 2026-06-22. NoFilter/Fortress-S2 (rows below) still tagged S2 but UNVERIFIED — check Exit Options before trusting."
+QQQ-IC-0DTE-Fortress-NoFilter,IC,experiment,QQQ,OFF,,,S2,Y,,,
+QQQ-IC-0DTE-Fortress-S2,IC,experiment,QQQ,OFF,,,S2,Y,,,
+QQQ-IC-0DTE-HedgeA-S1,IC,experiment,QQQ,OFF,,,S1,Y,yes,,exit-mechanic; superseded by tournament; archive candidate
+QQQ-IC-0DTE-HedgeB-S2,IC,experiment,QQQ,OFF,,,S2,Y,yes,,exit-mechanic; archive candidate
+QQQ-IC-0DTE-HedgeC-S3,IC,experiment,QQQ,OFF,,,S3,Y,yes,,exit-mechanic; archive candidate
+QQQ-IC-0DTE-HedgeD-Conditional,IC,experiment,QQQ,OFF,,,Conditional,,yes,,exit-mechanic; archive candidate
+QQQ-IC-0DTE-HedgeTest,IC,experiment,QQQ,OFF,,,Conditional,Y,yes,,suspected dup of A/D; archive candidate
+QQQ-IC-0DTE-Baseline,IC,control,QQQ,OFF,,,Unstopped,Y,yes,,unfiltered control; archive candidate
+QQQ-IC-0DTE-Raw-HoldToExp,IC,control,QQQ,OFF,,,Unstopped,Y,,,no exit logic control
+QQQ-IC-0DTE-InverseFilter-HoldToExp,IC,experiment,QQQ,OFF,,,Unstopped,Y,,,
+QQQ-IC-0DTE-VIX25-Range075-PT50,IC,experiment,QQQ,OFF,,,PT50,Y,,,
+QQQ-IC-0DTE-Range075-PT50,IC,experiment,QQQ,OFF,,,PT50,Y,,,
+QQQ-IC-0DTE-Range075-PT50-Wide2-155PM,IC,experiment,QQQ,OFF,,,PT50,Y,,,
+QQQ-IC-0DTE-Range075-PT50-Wide2-1230PM,IC,experiment,QQQ,OFF,,,PT50,Y,,,
+3DTE $140-$350,OA-Mirror,mirror-watch,SPX,ON,,,,,,yes,fund-watch (100%/27)
+Nigiri-Paper-v1,OA-Mirror,mirror-watch,,ON,,,,,,yes,fund-watch (93%/27)
+QQQ long call,OA-Mirror,mirror-watch,QQQ,ON,,,,,,yes,strong but provisional (5 trades)
+Friday 14 DTE Broken Wing IB (B-70),OA-Mirror,mirror-watch,,ON,,,,,,yes,multi-day
+Trendy-Paper-v1,OA-Mirror,mirror-watch,,ON,,,,,,,
+60min-ORB-10W-Paper-v1,OA-Mirror,mirror-watch,SPX,ON,,,,,,,
+Weekly-IB-SPY-Paper-v1,OA-Mirror,mirror-watch,SPY,OFF,,,,,kill,,"KILL 2026-06-10: Exp(R) -0.161/14 trades, 43% WR, -$2,744 closed; paper-allocation funding-halted (alloc <1 contract). Fails funding bar (needs +P/L). Turn OFF in OA (Andy)."
+1-45pm-Sandwich-Paper-v1,OA-Mirror,mirror-watch,,OFF,,,,,kill,,kill candidate (-0.412R)
+Opening Range Breakout 60m,OA-Mirror,mirror-watch,,OFF,,,,,kill,,kill candidate (-0.111R)
+Tasty Condor,OA-Mirror,mirror-watch,,ON,,,,,,,newly tracked; no closed trades
+IC-SPX-FastPT25-S2-130PM,IC,experiment,SPX,ON,,,S2,,,,"Entry-time A/B: clone of champion, ONLY change = 1:30 PM entry (vs 11 AM). Tests whether later entry cuts the 0.75% breach rate (ATR-gate ~64%). Cloned 2026-06-14. VERIFY this matches the exact OA bot name on first export; if OA named it differently, edit this bot field to match (build warns if unclassified)."
+DIR-SPX-PutVIX22-SL75,Directional,experiment,SPX,ON,,2026-06-25,SL75,,,yes,"Directional paper bot (live on paper 2026-06-25). Long PUT debit spread $15-wide, VIX>=22, PT100/SL75, 11:00, 1ct. Backtest +9.2% RoR/PF 1.23. Paper $10k. Generated from backtest (config-verified: VIX22 gate in Passes-market-conditions; exits Fast/100%-bid-ask, no Market). OOS holdout pending before live capital."
+DIR-SPX-Put-Control,Directional,control,SPX,ON,,2026-06-25,SL75,,,,"No-VIX-filter control for DIR-SPX-PutVIX22-SL75 (only diff = VIX condition removed; trades every day ex half-days). Backtest -1.4% RoR — MEANT to lose, proves the VIX gate adds value. Paper $10k. Live on paper 2026-06-25."
+DIR-SPX-CallVIXdrop,Directional,experiment,SPX,ON,,2026-06-25,SL50,,,yes,"Directional CALL paper bot (created 2026-06-25). Long CALL debit spread $15-wide, VIX Change% <= -2 (since prev close), NO PT (ride to settlement)/SL50, 11:00, 1ct. Backtest +21.9% RoR/PF 1.63, +$42,122; OOS IS +24.8%/OOS +19.1%, positive every year 2021-26. The put's REGIME COMPLEMENT (call=low-vol melt-ups/2023-25-heavy vs put=high-vol selloffs/2022-heavy). Config-verified vs locked spec: gate in Passes-market-conditions node, exits SL50-only/100%-bid-ask $.03-from-mid, no Market. ⚠️ Alloc set $50k (put pair are $10k — harmless for a 1-ct bot; align if comparability wanted). ⚠️ Confirm AUTOMATIONS toggled ON (was OFF at creation). OOS-passed but paper-only until forward mechanics confirmed."

@@ -1,0 +1,13 @@
+{
+  "detector_version": "1.0.0",
+  "frozen_on": "2026-07-30",
+  "detector_sha256_16": "67a537977c5d0896",
+  "mode": "REDUCED",
+  "window_start": "",
+  "window_end": "",
+  "n_position_rows": 0,
+  "counts": {
+    "SKIPPED": 6
+  },
+  "contract": "findings are evidence with an address, never a verdict; every RED names the artifact that closes it"
+}

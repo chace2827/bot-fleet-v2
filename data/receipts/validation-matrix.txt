@@ -1,0 +1,29 @@
+# Validation matrix — run on macbookpro, 2026-07-31T00:31:04Z
+# scripts/execution_audit.py v1.0.0
+
+==========================================================================
+VALIDATION MATRIX — detector vs the frozen v1 archive + 35-row fixture
+==========================================================================
+  PASS  V1  IMPOSSIBLE_FILL == {T00147, T00845}
+  PASS  V2  T00038 (longcallspread, R +1.03) not RED
+  PASS  V3  T00339 (ironcondor,     R +1.78) not RED
+  PASS  V4  |pnl|>risk would add exactly {T00038, T00339}
+  PASS  V5  fixture is 35 rows and every trade_id resolves
+  PASS  V6  no `by_design` fixture row flagged RED
+  PASS  V7  Tier C reports SKIPPED (not silent) with no bots_config_v2.csv
+  PASS  V8a EXPIRY_RATIO_FLIP dates IC-SPX-FastPT25-S2 to 2026-06-01 (PT25 died on the first session back)
+  PASS  V8b EXPIRY_RATIO_FLIP dates BOTH Fortress bots to 2026-06-12 (the known regression)
+  PASS  V8c EXPIRY_RATIO_FLIP silent on IC-SPX-Fortress-Unstopped (already 50% expired — no engine to lose)
+  PASS  V9  DUPLICATE_ARM reproduces HedgeA-S1 == HedgeD on 73 positions
+  PASS  V10 deterministic across runs
+  PASS  V11 pt_pct='none' suppresses the forward PT/time rules (no daily false alarm on the control clones)
+  PASS  V12 blank pt_pct reports SKIPPED (missing data), NOT silence and NOT 'none'
+  PASS  V13 pt_pct='none' + observed PT-consistent closes -> REMOVED_EXIT_FIRED RED (the control clones' inverted Day-0 proof, automated)
+  PASS  V14 an unparseable cell ('PT25') is refused loudly, not coerced
+  PASS  V16 derived risk corroborates all 1,380 archive rows (0 mismatches, 0 unwitnessed)
+  PASS  V17 T00845's risk derives clean (181 == 181) — the witness disagrees with the FILL, not with the risk column
+  PASS  V18 wrong-HIGH risk masks IMPOSSIBLE_FILL on T00845, and RISK_MISMATCH catches it anyway (the second witness earns its keep)
+  PASS  V19 PT band reproduces the forensic pre-lapse record (119-125 of 306 legs, not 141)
+  PASS  V15 BACKSTOP_CAUGHT_IT fires only with BOTH time_exit and event_backstop, and only inside the gap
+--------------------------------------------------------------------------
+21/21 passed
