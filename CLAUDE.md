@@ -89,7 +89,7 @@ gates stand; its kill-IC and third-party-switch verdicts are **overruled**.
 - `docs/oa-mirror-reference.md` (§3 evidence standards load-bearing) · `docs/ic-trailing-stop-backtest.md` ·
   `docs/oo-trial-backtests.md` · `docs/lean-backtesting-reference.md` ·
   `docs/quantconnect-lean-exploration-brief.md`.
-- **Not written yet** (do not go looking for them): `docs/daily-loop-spec.md`, `docs/evidence-standards.md`,
+- **Not written yet** (do not go looking for them): `docs/evidence-standards.md`,
   `docs/pre-registration-ledger.md`, `docs/oa-ops-runbook.md`, `data/bots_config_v2.csv`,
   `data/mirror_baseline.csv`, `scripts/execution_audit.py`, `STATUS.md`. All are Phase 2–3 deliverables
   tracked in the `bot-fleet-migration` artifact (Andy's tracker, outside this folder).
@@ -128,11 +128,31 @@ each piece, before starting the next.
 
 1. Append `docs/session-log.md` (and update `docs/current-state.md` if a stated fact changed).
 2. Update the `bot-fleet-migration` tracker artifact via `update_artifact`.
-3. **`git commit`.**
+3. **Hand off for commit** — say "ready to commit" with a one-line summary of the changed
+   files. **Andy runs the commit and confirms it. Claude does not commit.**
+
+**Why commits moved to Andy (2026-07-31):** the device bridge cannot unlink files, so every git
+operation from this side stranded `index.lock`, `HEAD.lock` and temp objects in `.git/` — each
+one blocking Andy's next git command. Moving the commit to Andy removes that friction
+permanently and puts the final check with the person who can see the result.
 
 **Uncommitted work at session end is unfinished work.** A session that produced files but no
 commit produced nothing durable — the folder is the only memory this project has, and an
-untracked folder cannot be diffed, reverted, or trusted.
+untracked folder cannot be diffed, reverted, or trusted. Claude's obligation is to leave the
+tree in a state Andy can commit in one command, and to say so plainly.
+
+> ### ⛔ 9.1a — TOOL SUCCESS MESSAGES ARE NOT VERIFICATION
+> A tool returning "updated" is a claim, not evidence. Neither is a stage-back read: the
+> staleness seen on 2026-07-31 — **fresh metadata, stale content** — reproduced on a plain file
+> in a separate session, so it is a caching defect in the verification channel. A stage-back
+> can therefore be wrong in *either* direction and proves nothing on its own.
+>
+> **Files** verify by a direct device read or hash of the file itself.
+> **The tracker artifact** verifies by **Andy's visual confirmation**, and that confirmation is
+> part of the close-out — the close-out is not complete without it.
+>
+> Never report a write as landed on the strength of the tool call that made it. State what was
+> attempted, state how it was checked, and if it was not checked, say so.
 
 > **Failure record — this rule has now failed twice.**
 > The 7/29 sessions skipped it entirely. On 2026-07-31 two governing documents

@@ -631,3 +631,59 @@ two-failure record written in; §9.2 states that "stopped for review" means stop
 **5. Stop-point discipline confirmed.** The four remaining Phase 3 docs — `daily-loop-spec.md`,
 `evidence-standards.md`, the pre-registration template, `oa-ops-runbook.md` — are **HELD**.
 No writes until Andy releases the hold.
+
+---
+
+## 2026-07-31 — `daily-loop-spec.md` written (hold released for this one doc)
+
+Andy released the hold for `daily-loop-spec.md` only. The other three Phase 3 docs stay HELD.
+
+**Two `CLAUDE.md` §9.1 amendments applied first**, both from Andy:
+
+1. **Tool success messages and stage-backs are never verification** (new §9.1a). The stage-back
+   staleness I hit on the tracker — **fresh metadata, stale content** — reproduced on a plain
+   file in a separate session, so it is a caching defect in the verification channel, not
+   evidence of a failed update. It can therefore be wrong in *either* direction. **Files verify
+   by direct device read or hash. The tracker verifies by Andy's visual confirmation, and that
+   confirmation is now part of the close-out** — the close-out is not complete without it.
+2. **Commits move to Andy.** The bridge cannot unlink, so every git operation from this side
+   stranded `index.lock`, `HEAD.lock` and temp objects in `.git/`, each one blocking Andy's next
+   command. My close-out is now log → tracker → **"ready to commit"** with a one-line summary;
+   Andy runs it and confirms. Andy cleaned up the stranded locks from the initial commit.
+
+**`docs/daily-loop-spec.md` — the MERGE.** Sources: the archive's `daily-brief-spec.md` (render
+conventions) and `daily-review-design-2026-07-29.md` (accumulation discipline + the three-verdict
+split). Both are superseded and neither is a v2 input.
+
+**What survived:** the tape chart with the ±0.75% GO band on a %-from-prior-close axis, the
+colour=bot / shape=instruction marker convention (including the teaching payoff of the *absent*
+mark), the regime read, the instruction-mirror card, the hedge clinic, the cumulative threads,
+and the daily-ops conventions.
+
+**What did not survive, and why it matters:** the single blended green/amber/red grade, and the
+entire compliance-scoring layer. **G5 scored 100% instruction-compliance on five consecutive
+days while the champion's PT had been dead for a month.** It was scoring fidelity to a record,
+and the record was false. Replaced by the three-verdict split — FIRE / MECHANICS / STRATEGY,
+each carrying its own status, never averaged — plus the detector at stage 3.
+
+**Design points worth keeping visible:**
+- **MECHANICS is answered by the Trades list or it is NOT EVALUABLE.** ⬜ NOT EVALUABLE is a
+  fourth status and is explicitly never a pass.
+- **The drift audit runs BEFORE the brief**, not after. Reversed, the brief renders a clean day
+  and the detector contradicts it afterwards.
+- **The prosecution section is unconditional** — every day, not skipped on good days. Attachment
+  is the failure mode of daily review.
+- **Instruction cards require both `IF CONFIRMED` and `IF NOT`.** A card with one branch has
+  assumed its conclusion. Cards repeat until the naming artifact is read — closing by assertion
+  is how PT25 stayed "alive" for four months.
+- **The counterfactual engine is an optimistic bound, never a live estimate**, and only the two
+  exact arms (hold-to-expiry, PT-from-`mfe_pct`) are model-free.
+- **NO FINDINGS is the goal.** A loop that surfaces something every day is generating false
+  positives and will stop being read.
+
+**Carried forward unresolved:** the rolling-30 win-rate kill criterion is still Andy's decision
+(a 0DTE PT scalper wins small often and loses bigger rarely, so raw WR is a poor bar; the
+champion sat at ~43% with no kill review ever recorded). Until adjudicated it is a note, not a
+criterion, and `report.py` cannot fire it automatically.
+
+**Still HELD:** `evidence-standards.md`, the pre-registration template, `oa-ops-runbook.md`.
