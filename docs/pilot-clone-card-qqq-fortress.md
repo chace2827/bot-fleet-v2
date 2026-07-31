@@ -19,7 +19,7 @@ Today's finish line is a structural one, not a behavioural one. Do not try to te
 — so if the ritual goes wrong, the blast radius is a bot that was being archived anyway.
 **A mistake made once is a lesson; the same mistake made across nine bots is a rebuild.**
 
-**3. You will hit at least one unknown.** Three specification questions are genuinely unresolved
+**3. You will hit at least one unknown.** Two specification questions are genuinely unresolved
 and one of them lands mid-ritual at Step 5. They are flagged inline with a **⚠️ DECISION POINT**
 box. **When you hit one, stop and tell me what you see** — do not improvise a spec on the fly.
 That is exactly how the v1 `Conditional` bot ended up testing something nobody chose.
@@ -305,9 +305,14 @@ both.
 >
 > **Leave them as they are.** Turning this bot ON is a **Day-0** action, not a today action.
 >
-> ⚠️ **Does the `EXIT OPTIONS` toggle actually exist on this dashboard?** It appears nowhere in
-> OA's documentation — its only source is one support rep. **Tell me yes or no.** If it is not
-> there, the lapse mechanism is **unexplained, not solved**, and that is a significant finding.
+> The `EXIT OPTIONS` toggle's **existence is established** — the support rep's screenshot of both
+> toggles on a bot dashboard, plus your own fleet-wide observation of both toggles OFF on all 35
+> bots. Two independent observations. Nothing to report here.
+>
+> ⚠️ **What is still unverified is the CAUSAL claim** — that flipping `EXIT OPTIONS` back ON
+> actually re-arms exit-order generation. A toggle can exist, read ON, and still not produce
+> orders; that is the exact shape of the v1 failure. **Only the Day-0 Trades-list check settles
+> it**, which is why §FINISH keeps that check rather than treating a toggle screenshot as proof.
 
 ---
 
@@ -369,10 +374,13 @@ nothing trades.
 Paste or upload:
 
 1. `data/captures/2026-07-31-pilot/` — both capture sets and the screenshots
-2. Answers to the three open questions:
+2. Answers to the two open questions:
    - **Preset control exists in the Exit Options panel?** yes / no
    - **Can a Scheduled Event reach 15:52?** yes / no / what the trigger options actually are
-   - **Does the `EXIT OPTIONS` dashboard toggle exist?** yes / no
+
+   *(The `EXIT OPTIONS` toggle question is closed — its existence is established by the rep's
+   screenshot and your fleet-wide observation. Only whether flipping it ON re-arms exit-order
+   generation is open, and that is a Day-0 Trades-list question, not a today question.)*
 3. Anything that surprised you, however small
 
 Then I run the capture-diff, write up what the pilot found, and we decide whether the ritual is

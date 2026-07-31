@@ -995,3 +995,54 @@ lapse mechanism is unexplained rather than solved).
 **Phase 3 is now complete except the half-done liveness check.** Everything remaining before
 Day-0 is Andy's: toggle screenshots, the one-dead-bot probe, the two deletions, this pilot, then
 the remaining three clones and the fresh builds per the plan.
+
+---
+
+## 2026-07-31 — Correction: the EXIT OPTIONS toggle is NOT single-source
+
+Committed as `fef1dfa` before this. **Andy's correction, and it lands on a claim I made too
+strongly.**
+
+**What I got wrong.** I wrote `oa-platform-reference.md` §10 as *"The single-source claim this
+whole rebuild rests on"*, and said the toggle's **"sole source is one OA support rep."** That is
+false. There are **two independent observations of its existence**:
+
+1. the support rep's **screenshot** showing both toggles on a bot dashboard, and
+2. **Andy's own fleet-wide observation** — both toggles OFF on **all 35 bots**.
+
+I had the second one in front of me — it is in `current-state.md` and the runbook — and still
+wrote the section as if only the rep's word existed. The docs sweep returning nothing is a
+**docs gap, not an evidence gap**, and my own §0.2 says first-hand observation beats a stale doc
+where they disagree. I applied that rule everywhere except here.
+
+**The distinction that actually matters**, and Andy's framing is sharper than mine was:
+
+- **EXISTENCE — established.** Two independent first-hand observations. Closed.
+- **CAUSATION — unverified.** That *flipping the toggle back ON re-arms exit-order generation*
+  is the lapse explanation, and it is **not established.** A toggle can exist, read ON, and
+  still produce no orders — which is the precise shape of the v1 failure, where the editor
+  displayed every setting correctly while the engine emitted nothing.
+
+**Deferred to Day-0's Trades-list check**, which is exactly where it belonged all along.
+
+**Changed, two files:**
+- `docs/pilot-clone-card-qqq-fortress.md` — Step 9's question removed (it was asking Andy to
+  confirm something already established); replaced with the causal caveat. The end-of-session
+  list is now **two** questions, not three, with a note saying why the third closed. Intro count
+  corrected to match.
+- `docs/oa-platform-reference.md` §10 — retitled *"existence established, MECHANISM still
+  unverified"*, re-tagged `[FIRST-HAND ×2]`, both observations named, with an inline note
+  recording what the section previously claimed and that it was wrong. Added the outcome to
+  watch for: **if the toggles read ON at Day-0 and the Trades lists still show no PT rows, the
+  lapse mechanism is REFUTED, not confirmed** — and the Excessive Errors Failsafe plus the docs'
+  silence on billing-state effects both move back into contention.
+
+**Why I edited §10 and not only the card.** Andy asked for the card's question list. But §10 is
+a governing document that six others cite, and it now contained a statement I knew to be false —
+leaving it would have meant a cold-read session getting the wrong picture from the strongest
+warning in the folder. **Flagged rather than assumed; happy to revert §10 if Andy wants the edit
+scoped to the card alone.**
+
+**Builder work is complete. HOLD in force — no further writes** until Andy returns with the
+pilot-clone captures and the two open answers (does an Exit Option Preset save control exist;
+can a Scheduled Event reach 15:52).

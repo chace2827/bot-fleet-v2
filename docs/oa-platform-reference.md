@@ -509,18 +509,37 @@ Nothing below is answerable from documentation. Each is a few minutes in the acc
 
 ---
 
-## 10. ⚠️ The single-source claim this whole rebuild rests on
+## 10. The `EXIT OPTIONS` toggle — existence established, MECHANISM still unverified
 
-**The per-bot `EXIT OPTIONS` ON/OFF dashboard toggle is [SINGLE-SOURCE].**
+*Corrected 2026-07-31. This section previously called the toggle `[SINGLE-SOURCE]` and said its
+sole source was one support rep. **That was wrong** — there are two independent observations of
+its existence. The distinction that actually matters is between the toggle EXISTING and the
+toggle DOING what the lapse explanation says it does.*
 
-`current-state.md` and `reactivation-runbook.md` §1 describe a per-bot `EXIT OPTIONS` ON/OFF
-toggle sitting beside `AUTOMATIONS` at the top right of each bot's dashboard, visible only
-there and never in the editor — and identify it as the mechanism by which resubscription
-restored automations while leaving every profit target dead.
+**Existence: [FIRST-HAND ×2].**
 
-**That toggle appears nowhere in OA's documentation.** A full documentation sweep for it
-returns nothing. Its sole source is **one OA support rep, 2026-07-30** — the same rep who did
-not know about the documented Excessive Errors Failsafe (§4.5).
+A per-bot `EXIT OPTIONS` ON/OFF toggle sits beside `AUTOMATIONS` at the top right of each bot's
+dashboard, visible only there and never in the editor. **Two independent observations:**
+
+1. **The OA support rep's screenshot** showing both toggles on a bot dashboard (2026-07-30).
+2. **Andy's own fleet-wide observation** — both toggles read OFF on **all 35 bots**.
+
+**It still appears nowhere in OA's documentation** — a full sweep returns nothing. That is a
+docs gap, not an evidence gap: the docs demonstrably lag the product in at least three other
+confirmed places (§0.2), and a first-hand observation beats a stale doc.
+
+> ### ⚠️ WHAT REMAINS UNVERIFIED IS THE CAUSAL CLAIM
+> That **flipping the toggle back ON re-arms exit-order generation** is the explanation for the
+> lapse, and it is **not established.** A toggle can exist, read ON, and still produce no orders
+> — that is the precise shape of the v1 failure, where the Exit Options *editor* displayed every
+> setting correctly while the engine emitted nothing.
+>
+> The rep who supplied the mechanism also **did not know about the documented Excessive Errors
+> Failsafe** (§4.5), which is an independent candidate explanation for a bot that silently stops
+> firing. Neither has been tested.
+>
+> **Only the Day-0 order-level check settles it** — first new position, Trades list, PT row
+> present. §8.3.
 
 What the evidence set *does* contain:
 
@@ -530,19 +549,21 @@ What the evidence set *does* contain:
 - The **Bid-Ask Guard**, which disables Exit Options conditionally on spread width (§6.3).
 - The **Excessive Errors Failsafe**, which disables all automations (§4.5).
 
-None of these is the claimed toggle. None of them refutes it either.
+None of these is the claimed toggle, and none refutes it — they are separate mechanisms that
+could produce a similar-looking outcome, which is why the Day-0 check has to discriminate.
 
 > **How to hold this.** The *observed failure* is not in doubt: automations resumed, every Exit
-> Option stayed dead, and the editor kept displaying settings as configured. The *mechanism* is
-> one rep's explanation. The Day-0 runbook is correct to act on it — re-arm the nine
-> leave-in-place bots and screenshot both toggles — because acting on it is cheap and
-> reversible. But **a toggle screenshot is necessary and not sufficient**, and the runbook
-> already says so. Keep the order-level verification (§8.3) as the actual proof.
+> Option stayed dead, and the editor kept displaying settings as configured. The *toggle* is not
+> in doubt either. What is in doubt is that **one causes the other.**
 >
-> Confirm the toggle's existence with a screenshot at Day-0. If it is not there, the lapse
-> mechanism is **unexplained**, not solved — and §4.5 and the docs' total silence on what
-> happens to a running bot's exit conditions when billing state changes both move back into
-> contention.
+> The Day-0 runbook is right to act on it — re-arm the nine leave-in-place bots, screenshot both
+> toggles — because acting on it is cheap and reversible. But **a toggle screenshot is necessary
+> and not sufficient**, and the runbook already says so.
+>
+> **If the toggles read ON at Day-0 and the Trades lists still show no PT rows, the lapse
+> mechanism is refuted, not confirmed** — and §4.5 plus the docs' total silence on what happens
+> to a running bot's exit conditions when billing state changes both move back into contention.
+> That is the outcome to watch for, and it is why §8.3 is a hard gate rather than a formality.
 
 ---
 
