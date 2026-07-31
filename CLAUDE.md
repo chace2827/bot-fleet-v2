@@ -100,6 +100,8 @@ of `rules-of-engagement.md` + pre-registration. `docs/evidence-standards.md` §9
 - `docs/oa-ops-runbook.md` — how to touch the account: capture ritual, template versioning,
   group scheme, edit verification, and the nine traps. Read before any OA session.
 - `docs/pre-registration-ledger.md` — template + drafted entries for all ≈18–20 active bots.
+- `docs/pilot-clone-card-qqq-fortress.md` — the live-follow instruction card for the pilot clone.
+  Every clone after it reuses this shape.
 - **Not written yet** (do not go looking for them): `data/bots_config_v2.csv`,
   `data/mirror_baseline.csv`, `STATUS.md`. All are Phase 2–4 deliverables
   tracked in the `bot-fleet-migration` artifact (Andy's tracker, outside this folder).

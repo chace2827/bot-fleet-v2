@@ -939,3 +939,59 @@ half-done — the `SILENT_BOT` rule ships but the bot-log side needs a log sourc
 not have.
 
 **Still HELD:** the pilot-clone instruction card for `QQQ-IC-0DTE-Fortress` (Block 4).
+
+---
+
+## 2026-07-31 — Block 4: the pilot-clone instruction card
+
+`docs/pilot-clone-card-qqq-fortress.md`. The 9-step ritual expanded into a click-by-click Andy
+can follow live. **This is the last deliverable before he is in OA.**
+
+**Structure:** every step is `DO → CAPTURE → ✅ CONFIRM BEFORE PROCEEDING`, written on the
+assumption that mistakes happen. The confirm boxes test **observable state**, not recollection —
+"read the Symbols panel character by character against your note", not "did you add the symbols".
+
+**Three framing decisions that shape the card:**
+
+1. **The account is INACTIVE, so order-level verification is IMPOSSIBLE today.** The card says so
+   at the top and splits the finish line in two: today's is **structural** (capture-diff, symbols,
+   forked automations, template, rename, toggles); the **Trades-list check is explicitly deferred
+   to Day-0**. Writing a card that ends in "confirm the PT row appears" would have set him up to
+   either fail or fake it.
+2. **The two traps are inline where they occur, not in an appendix** — Trap 1 (shared automations)
+   as Step 2, Trap 2 (Symbols drop) as Step 3, each with its own ⛔ box explaining what the
+   silent failure looks like.
+3. **Step 2's confirm check is on the ORIGINAL, not the clone.** The only reliable test that the
+   fork took is that the original's automation list is unchanged. Checking the clone tells you
+   nothing — a shared object looks identical from either side. This is the single most likely
+   way to produce a bot that looks right and is not.
+
+**Two ⚠️ DECISION POINTs are built in where the spec is genuinely unresolved:**
+
+- **A — Exit Option Preset:** does a save/dropdown control exist? Cross-automation scope is
+  undocumented and this is the cheapest place to find out.
+- **B — the 15:52 backstop may not be buildable.** Market-close is hard-coded to 3:50 pm and Exit
+  Options stop 1 minute before close; a Repeating trigger *may* reach a custom time and nobody
+  has checked. **The card instructs him to STOP rather than substitute a different time**, with
+  the reason stated: the spec is frozen, and *"a substitution made silently at a platform limit
+  is exactly what produced the −$15,376 HedgeD bot."*
+
+**Sequencing gotcha handled explicitly:** the production name is occupied by the original at
+clone time, so OA gives the clone a temporary name. Step 1 has him write that name down; Step 8
+renames the original first, confirms it took, then renames the clone, then archives. Getting
+this backwards archives the wrong bot.
+
+**Also carried in:** IC = 2 positions as its own step with an even-number check · the
+`60min-ORB-10W-Paper-v1` name-collision guard at the archive click · the `rename_map.csv` row
+written **at** Step 8, not afterwards from memory · a symptom→action troubleshooting table · and
+a closing note that **the pilot's job is to find where the ritual breaks before it runs nine
+times, so an awkward step is a finding.**
+
+**Three questions come back from the session:** does a Preset control exist · can a Scheduled
+Event reach 15:52 · **does the `EXIT OPTIONS` dashboard toggle actually exist** (it appears
+nowhere in OA's documentation; its only source is one support rep — and if it is not there, the
+lapse mechanism is unexplained rather than solved).
+
+**Phase 3 is now complete except the half-done liveness check.** Everything remaining before
+Day-0 is Andy's: toggle screenshots, the one-dead-bot probe, the two deletions, this pilot, then
+the remaining three clones and the fresh builds per the plan.
