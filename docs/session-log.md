@@ -867,3 +867,75 @@ undocumented and the greenfield "PT% as a Bot Input" spec depends on it; `CallVI
 allocation is $50k against the put pair's $10k.
 
 **Still HELD:** `oa-ops-runbook.md`, and the pilot-clone instruction card.
+
+---
+
+## 2026-07-31 — Plan amendment (wording) + Block 3: `oa-ops-runbook.md`
+
+Committed as `ec4e5f3` before this block. **Noted for future close-outs: that commit was 11
+files, not the 8 I listed — `STATUS.md` and `dashboard.html` rode along from my n=0 verification
+run of `report.py`, plus a mode change on `report.py` itself. Generated outputs get listed in the
+"ready to commit" summary from now on.**
+
+### Plan amendment — `build-plan.md` §5, wording only
+
+At Andy's explicit instruction, so the freeze holds. The Evidence-law clause now reads
+*"its **kill-IC** verdict and its **custody-separation / independent-go-live-authority**
+recommendations (audit §5.5 items 6–7) are overruled/declined"*, with an inline note recording
+what the old wording said, that it was a garbled transcription of *"the go-live **switch** held
+by a **third party**"*, and that **nothing else in the plan changed.** This was the last instance
+of the phrase in the folder.
+
+### Block 3 — `docs/oa-ops-runbook.md`
+
+MERGE of `oa-capture-bookmarklet-2026-07-28.md`, `oa-capture-coverage-2026-07-29.md`, the
+archive's `oa-cleanup-runbook.md`, and the template/group material from
+`oa-setup-exploration-2026-07-29.md`. Supersedes all four operationally.
+
+**Sections:** the capture ritual · template versioning · the group scheme · edit verification ·
+the nine traps · standing operational rules · the four open UI checks that belong to ops.
+
+**The things worth knowing that were buried across four files:**
+
+- **`Ctrl+S` re-fetches from the server and captures nothing.** OA renders automation trees
+  client-side, so a saved page has automation *names* and no logic. Verified by probing a saved
+  file — `FOMC`, `11:00am`, `Profit Taking`, `50% of credit`: **none present.** The bookmarklet
+  captures the live DOM instead, which is the entire reason it exists.
+- **Collapsed nodes may not be in the DOM at all.** An unexpanded caret is a silently missing
+  branch that will not announce itself. Expand every one before capturing.
+- **`/bots` yields 18 fields per bot deterministically** — but loses the **`AUTOS`/`EXITS`
+  counts** (the column that would have flagged HedgeC-S3 having zero monitors), the ON/OFF
+  toggles, group membership, and **all precision above $10K** (3 s.f., so −$11,200 → −$11,249
+  will not diff).
+- **`/positions/analyze` does not capture its own filter state** — eight dropdowns, two
+  captured. The file then records numbers without recording what produced them, which is exactly
+  the failure class this project exists to eliminate. Do not use the bookmarklet there.
+- **Template versioning is OA-native and replaces the clone-and-archive scheme** — VERSION
+  counter, Notes, Tags, History with "Clone version N" restore. It matters more than it sounds
+  because **the Symbols panel is not carried on clone**, so clone-based versioning silently
+  produces a bot that looks configured and never scans. Template versions have no such mode.
+  ⚠️ The docs describe **no versioning at all** — this is a case where the docs lag the product
+  and the first-hand screenshot wins.
+- **`BUILD_ID` carries its own precondition**: mirroring VERSION into a bot input by hand is a
+  step that will be forgotten, reproducing the `bots_config.csv` disease in a new location.
+  **If the nightly assert isn't built, don't build the mechanism** — a self-report nobody checks
+  manufactures confidence.
+- **Groups are single-select; `Group = Pillar`**, reconciling to `bots_meta.csv`. Their real
+  operational use is that a tournament cohort in one group lets the nightly script **assert
+  arm-level parameter distinctness** — the S1 ≈ HedgeD finding, made detectable in advance
+  rather than four months late. ⚠️ Sequenced **after** the Phase 4 sweep, not before: the v2
+  roster changes every count, so doing it first means sorting bots you are about to archive.
+- **Verify input VALUES, not presence.** OA's three-tier input chain fails silently — a broken
+  link reverts to a stale Default and keeps trading rather than erroring.
+
+**The nine traps are collected in one table** — clone-by-reference, silent Symbols drop,
+collapsed nodes, the group-filtered export, IC = 2 positions, Market fills outside the spread
+(the 6/11 fill was **$5.05/contract beyond the worst mark the position ever traded at**), the
+time gate that was never implemented, the `Opening Range Breakout 60m` vs `60min-ORB-10W-Paper-v1`
+name collision, and zero-trade ≠ worthless.
+
+**Phase 3's document set is now complete.** Remaining Phase 3 item: the liveness check, which is
+half-done — the `SILENT_BOT` rule ships but the bot-log side needs a log source the detector does
+not have.
+
+**Still HELD:** the pilot-clone instruction card for `QQQ-IC-0DTE-Fortress` (Block 4).

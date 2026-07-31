@@ -1,0 +1,314 @@
+# OA ops runbook
+
+*Written 2026-07-31 for Bot Fleet v2. **MERGE** of the archive's `oa-capture-bookmarklet-2026-07-28.md`,
+`oa-capture-coverage-2026-07-29.md`, `oa-cleanup-runbook.md`, and the template/group material from
+`oa-setup-exploration-2026-07-29.md`. Supersedes all four for operational purposes.*
+
+> **What this is:** how to touch the OA account. The capture ritual, template versioning, the
+> group scheme, and the edit-verification procedure.
+>
+> **What this is not:** what to build (`build-plan.md`, frozen), what the platform can express
+> (`oa-platform-reference.md`), or how to read the results (`daily-loop-spec.md`).
+>
+> **The one rule underneath all of it:** *Claude detects and instructs; **Andy makes every OA
+> edit**.* Nothing in this runbook is executed by Claude.
+
+---
+
+## 1. The capture ritual
+
+### 1.1 Why `Ctrl+S` does not work
+
+`Ctrl+S` **re-fetches the document from the server.** It does not save what is on your screen.
+OA renders automation trees **client-side**, after you click into an automation — so a saved
+copy of a template overview page contains automation **names and nothing else.** Verified by
+probing a saved file: `FOMC`, `11:00am`, `Loop QQQ`, `Profit Taking`, `50% of credit` — **none
+present.**
+
+**The fix is not a different service. It is capturing the live DOM, with the tree already
+expanded on screen.**
+
+### 1.2 The bookmarklet — the primary instrument
+
+Install once: Chrome → Bookmark Manager (`⌥⌘B`) → ⋮ → Add new bookmark → name it `OA Grab` →
+paste as the URL:
+
+```
+javascript:(function(){var h=document.querySelector('h1,h2');var n=((h&&h.innerText)||document.title||'oa').trim().replace(/[^\w\-]+/g,'_').slice(0,60);var d=new Date().toISOString().slice(0,19).replace(/[:T]/g,'-');var t='# '+n+'\n'+location.href+'\ncaptured: '+new Date().toString()+'\n\n'+document.body.innerText;var b=new Blob([t],{type:'text/plain'});var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='oa_'+n+'_'+d+'.txt';document.body.appendChild(a);a.click();a.remove();})()
+```
+
+Use:
+1. Open the automation so **the full tree is visible on screen**.
+2. **Expand every collapsed node** (the `^` carets). ⚠️ **Collapsed nodes may not be in the DOM
+   at all** — an unexpanded caret is a silently missing branch, and it will not announce itself.
+3. Click **OA Grab**. A timestamped `.txt` lands in Downloads.
+
+You get the decision nodes verbatim — `FOMC Meeting today`, `Current market time is after
+11:00am`, `Position is more than $1 in the money`, `Profit Taking % 50% of credit`. **Diffable,
+greppable, git-trackable.**
+
+### 1.3 The three fallbacks, and when each is right
+
+| Method | Use it for |
+|---|---|
+| **`⌘P` → Save as PDF** | **The Exit Options modal**, which the bookmarklet may miss if the modal renders in a separate layer. Prints what is *rendered*, text stays selectable. |
+| **SingleFile extension** | A visual archive alongside the text. Saves current DOM state, not a re-fetch. Heavier than needed for config. |
+| **DevTools → Copy outerHTML** | One-off precision on a single subtree. Tedious past one automation. Console equivalent: `copy(document.body.innerText)`. |
+
+### 1.4 ⛔ What NOT to use — image screenshot tools
+
+GoFullPage, Awesome Screenshot, Fireshot and the region-capture services all produce PNGs, which
+means OCR, which means **transcription errors in exactly the place errors are most expensive:
+strike prices, percentages, thresholds.** Images do not diff, do not grep, and do not version.
+Text does all three.
+
+**The one exception is a screenshot you cannot get any other way — see §1.6.**
+
+### 1.5 Page-by-page coverage — what the bookmarklet actually gets
+
+Tested against three live captures with matching screenshots, 2026-07-28.
+
+| Page | Verdict | Use it for |
+|---|---|---|
+| **`/bots`** | **Strong** — 35/35 bots, **18 fields each**, fixed schema, no heuristics | The roster authority and the per-bot drift diff |
+| **`/positions/analyze`** | **Weak** — scalars survive, **every chart dies** | **Nothing. Use Export Data.** |
+| **Day drill-down modal** | **Strong but anonymous** — 27/27 rows, **no bot ID** | Intraday sequence forensics, single-bot-filtered only |
+
+**`/bots` schema, 18 fields per bot, consistent across full-data, partial-data and zero-trade bots:**
+```
+name, TOTAL_PL, RETURN_PCT, CLOSED_PL, CLOSED_PCT, CHANGE, CHANGE_PCT,
+POS, RISK, ALLOCATION, WIN_RATE, BETA_WEIGHT, BETA_EXPOSURE,
+AVG_PL, AVG_WIN, AVG_LOSS, P_FACTOR, STREAK, CLOSED
+```
+
+**What `/bots` loses — know these before trusting a capture:**
+
+| Lost | Consequence |
+|---|---|
+| **`AUTOS` / `EXITS` counts** | **The highest-value miss.** This is the column that would have flagged `QQQ-IC-0DTE-HedgeC-S3` having zero monitors. |
+| **ON/OFF toggle state** | The capture **cannot** tell a switched-off bot from a correctly-gated one. `DIR-SPX-PutVIX22-SL75` emits all dashes. §1.6 exists for this. |
+| Live/Paper per bot | Only inferable from the global filter chip |
+| Bot Group membership | No trace |
+| **Precision above $10K** | `-$11.2K`, `-$31.6K` — 3 significant figures. **A move from −$11,200 to −$11,249 will not diff.** Sub-$10K values are exact. |
+
+**Normalise before diffing**, or you get false positives every single day: strip the `captured:`
+line, the sidebar clock, the `Opportunities N` counter, the two-line *"Account inactive, no
+changes will be saved / See plans"* banner, the footer *"N active bots • N left in your plan •
+Upgrade"*, and any hover tooltip that happened to be in the DOM.
+
+⚠️ **`/positions/analyze` also fails to capture its own filter state** — eight dropdowns, and the
+text gets two. **The file then records numbers without recording what produced them.** Numbers
+whose scope cannot be reconstructed are precisely the failure class this project exists to
+eliminate. Do not use the bookmarklet on that page.
+
+### 1.6 Toggle screenshots — the one place images are mandatory
+
+**`AUTOMATIONS` and `EXIT OPTIONS` toggle state does not survive text capture.** It is the single
+config state that does not, and it is the state that killed v1.
+
+**Per bot: screenshot both toggles.** File as `data/captures/toggles/<date>/<bot>.png`.
+
+⚠️ **A toggle screenshot is necessary and not sufficient.** The per-bot `EXIT OPTIONS` toggle is
+a **single-source claim** — one OA support rep, absent from OA's documentation entirely
+(`oa-platform-reference.md` §10). If it is not on the dashboard at Day-0, the lapse mechanism is
+**unexplained, not solved.** Keep §4's order-level verification as the actual proof.
+
+### 1.7 Export Data — the ledger source
+
+`Export Data`, **all bot groups selected**, → `data/raw/YYYY-MM-DD.csv`.
+
+- **`botName` is column 1 of 26.** Attribution is direct; no reconstruction needed.
+- `highReturnPct` / `lowReturnPct` + their dates are **native MFE/MAE**.
+- `risk` / `ror` / `ev` ship per position, so R is computed at ingest.
+- **Exports work while the subscription is lapsed** — positions closing as late as 7/27 came
+  back after the 6/30 lapse.
+
+> ⛔ **THE EXPORT RESPECTS THE BOT-GROUP FILTER.** An export taken with any group deselected is a
+> **subset**, and rebuilding the ledger from it would erase the excluded bots' history.
+> `build_ledger.py` carries a filtered-export guard that compares against the prior ledger and
+> warns loudly — but it can only catch bots that were already there. **Select all groups.**
+
+### 1.8 The sweep, end to end
+
+1. **`/bots` bookmarklet capture first** — it is the roster authority, and the only record
+   zero-trade bots will ever have.
+2. Per bot: open each automation, **expand every node**, click OA Grab.
+3. Open Position action → Exit Options → `⌘P` → Save as PDF.
+4. **Both toggle screenshots per bot.**
+5. `Export Data`, all groups → `data/raw/YYYY-MM-DD.csv`.
+6. Drop everything into `data/captures/<date>/`.
+7. Hand off for commit.
+
+**Then the diff against the previous snapshot IS the drift detector** — the thing that would
+have caught PT25 dying, HedgeD's missing Range075, and the unattached call-side PT50, on day one
+instead of month four.
+
+---
+
+## 2. Template versioning — OA-native, and it replaces the clone scheme
+
+> **This is the single most useful thing in the account that this project was not using.**
+
+OA templates carry a **VERSION counter, LAST UPDATE, Tags, Notes, and History with "Clone
+version N" restore.** [FIRST-HAND — screenshot; **the OA docs describe no versioning at all**,
+so this is a case where the docs lag the product and the screenshot wins.]
+
+**Why it matters more than it sounds:** the fleet's previous versioning scheme was *clone the
+bot and archive the original*. But **the Symbols panel is not carried on clone** — so a
+clone-based versioning scheme silently produces a bot that looks configured and never scans.
+Template versions have no such failure mode.
+
+### 2.1 The convention
+
+- **Save a template version at every spec change.** Version numbers are the config's identity.
+- **The pre-registration goes in Notes**, at V1, **before** the bot runs — hypothesis, kill
+  criterion, sample target, review date (`pre-registration-ledger.md` §2).
+- **Tags carry the pre-registration ID**, so a template is greppable back to its entry.
+- **The capture cites the version.** `bots_config_v2.csv` carries `capture_file` and
+  `capture_hash`; the template version is what those describe.
+
+### 2.2 The proposed `BUILD_ID` mirror — and its precondition
+
+Mirror the template VERSION into a non-functional `BUILD_ID` bot input so **the running bot
+self-reports which pre-registration it is executing.**
+
+> ⚠️ **The obvious failure: hand-mirroring VERSION into BUILD_ID is a manual step that will be
+> forgotten, reproducing the `bots_config.csv` disease in a new location.**
+> **Guard: the nightly script asserts `BUILD_ID` == the version named in the current
+> pre-registration file, and fails loudly on mismatch.**
+> **If that assert is not built, do not build the BUILD_ID mechanism at all.** A self-report
+> nobody checks is worse than no self-report — it manufactures confidence.
+
+### 2.3 Unverified
+
+Whether **saving a template from a live bot disturbs the bot** (position count, automation
+states) is [EXPECTED, not confirmed]. **Verify on a dead bot before saving a template from a
+live one.**
+
+---
+
+## 3. The group scheme — Group = Pillar
+
+OA Bot Group is a **single-select container**: a bot is in exactly one group.
+
+**Convention: `Group = Pillar`** — `IC` · `Directional` · `OA-Mirror` · `Lab`.
+Groups must reconcile to `bots_meta.csv`'s `pillar` column, exactly.
+
+**Current state (v1, pre-sweep):** `SPX-IC` and `OA-Mirror` only. The v1 cleanup plan was:
+rename `SPX-IC` → `IC`, create `Directional` and `Lab`, move every bot per its `pillar` cell,
+then check group counts against the CSV.
+
+> ⚠️ **The v2 roster changes all of these counts.** `build-plan.md` §2 archives ~20 bots, deletes
+> 2, clones 4 and builds 5–7. **Do the group reorganisation as part of the Phase 4 sweep, not
+> before it** — otherwise you sort bots you are about to archive. The reconciliation check
+> (group counts == `bots_meta.csv` pillar counts) is what closes it, and it can only be run once
+> the roster is final.
+
+**Two operational uses beyond tidiness:**
+1. **Export scope.** The export respects the group filter (§1.7) — which makes "all groups
+   selected" a thing you can only verify if the groups are correct.
+2. **Experiment cohorts.** Tournament arms live in one group so they can be queried as a set,
+   and so the nightly script can **assert arm-level parameter distinctness.** If two arms' inputs
+   are identical, the tournament is degenerate — **that is exactly the S1 ≈ HedgeD finding, made
+   detectable in advance** instead of four months late.
+
+> ⚠️ Shared Library automations across a cohort are **fleet-wide blast radius disguised as a
+> single edit** — edit one and all arms change. Fork via **Copy** (§5, trap 1), and let the group
+> be the thing that makes the arms *queryable*, not the thing that makes them *shared*.
+
+---
+
+## 4. Edit verification — the procedure that is not optional
+
+**Every OA edit is verified by reading the first NEW position's Trades list.** A fix unverified
+after one trading day is repeated at the top of every brief until closed.
+
+### 4.1 The two acceptable proofs, in order of preference
+
+1. **Button test-fire**, then read the resulting **Trades list**; or
+2. Open the **first new position** and confirm the Trades list contains the PT row and the
+   exit-trigger row.
+
+### 4.2 ⛔ The Exit Options panel is NEVER evidence
+
+Exit Options are **copied onto the position at open**. The panel renders the *automation's
+current settings*, which can diverge from every live position silently and indefinitely — and in
+v1 they did: Fortress positions generated **no exit orders at all**, not sent-and-unfilled,
+**never sent**, while the panel still displayed `PROFIT % 50%`.
+
+**The Trades list is the only order-level ground truth.** This has no exception.
+
+### 4.3 Inverted verification — the two control clones
+
+For `IC-SPX-FastPT25-S2` and `-130PM`, the check runs backwards: confirm the Trades list shows
+**NO** PT row and **NO** exit-trigger row, and that the S2 monitor **is** firing. Their spec is
+Exit-Option-free by design (`build-plan.md` §4). **Do not "fix" them.**
+
+### 4.4 The timestamp gap test — sibling closes
+
+For a mechanism that closes both spreads of a condor: a **designed** close-both shows `:00`/`:00`.
+An **emergent**, Cleanup-driven one shows `:00`/`:01–:02`. **The timestamp gap is the test** —
+it is how you tell a real mechanism from a side effect.
+
+### 4.5 Verify values, not presence
+
+Assert each bot's **live input values** against the **pre-registered values**, not merely that
+inputs exist. ⚠️ OA's input chain is three-tier (decision ← automation ← bot) and **a broken link
+does not error — it silently falls back to a stale Default and keeps trading**
+(`oa-platform-reference.md` §5.2). Presence proves nothing; the value is the check.
+
+---
+
+## 5. The traps — every one of these has bitten this fleet
+
+| # | Trap | What it does | The counter |
+|---|---|---|---|
+| **1** | **Clones share automations by reference** | Edit the clone, you edited the original — or the original's later edit silently changes your clone | **Fork every automation via Copy** immediately after cloning, then confirm the clone's list points at the copies |
+| **2** | **Symbols drop silently on clone** | The bot looks fully configured and **simply never scans** | **Re-add Symbols.** Verify, don't assume |
+| **3** | **Collapsed nodes may not be in the DOM** | A branch missing from the capture with no error | **Expand every caret** before clicking OA Grab |
+| **4** | **The export respects the group filter** | A subset export rebuilds the ledger and erases history | **All groups selected**, every time |
+| **5** | **IC = 2 positions** | Limits set to 1 mean one side never opens | Daily/Total limits **× 2 per IC** |
+| **6** | **Market orders fill outside the spread** | The 6/11 fill came in **$5.05/contract beyond the worst mark the position ever traded at** — R −1.63 on a defined-risk spread | **Market pricing is banned on every exit except a hard end-of-day flat close** |
+| **7** | **A time gate that was never implemented** | The v1 11:00 gate did not exist; 20+ sessions of entry drift | Confirm the gate is **a real decision node**, then check the first five entry timestamps |
+| **8** | **Name collision on archive** | `Opening Range Breakout 60m` is archived; **`60min-ORB-10W-Paper-v1` stays live** | **Read the full name** before archiving |
+| **9** | **Zero-trade ≠ worthless** | `DIR-SPX-PutVIX22-SL75` has 0 positions because its VIX≥22 gate **correctly never fired** | Delete only bots that are **both** zero-trade **and** absent from the disposition table |
+
+---
+
+## 6. Standing operational rules
+
+- **Claude detects and instructs; Andy makes every OA edit.** No exceptions.
+- **Refactor first (behaviour-neutral), then change values.** Pilot on a dead bot; the champion
+  goes last.
+- **No changes during streaks.** Sizing is set once at restart, never adjusted ad hoc.
+- **Log every inactive-era edit.** Edits made while the account is inactive **do persist**
+  (verified 7/29→7/30), so the pre-lapse capture is not the current state.
+- **Never reset OA history by cloning to escape a bad record.** Cloning to build a **new
+  strategy identity to a written spec**, with the original renamed `-ARCHIVED-<date>` and
+  archived and the reason logged, is the sanctioned path. The distinction is whether a spec
+  change is being **documented or hidden**.
+- **Append to `data/archive/rename_map.csv` as the sweep runs** — `original_name` · `archived_as`
+  · `clone_name` · `date` · `disposition`. Live, not reconstructed afterwards from memory.
+  Without it, no name in the frozen ledger can be traced to a bot running today.
+
+---
+
+## 7. Open UI checks that belong to ops
+
+Carried from `oa-platform-reference.md` §9 — the ones that change how you *operate*, not what you
+build:
+
+| Check | Why ops cares |
+|---|---|
+| **Is re-applying `Update Position Exit Options` side-effect-free?** | Gates any re-assertion watchdog — the architecturally correct fix for panel-vs-position drift |
+| **What is the automation-log retention window?** | Every liveness check depends on it, and looking back more than a day is currently unproven |
+| **Does saving a template from a live bot disturb the bot?** | §2.3 — gates the whole versioning convention |
+| **Do the Fortress bots show ≥10 errors in June?** | Confirms or kills the Excessive Errors Failsafe hypothesis for the 6/12 regression |
+
+---
+
+*Sources: `oa-capture-bookmarklet-2026-07-28.md` (methods, the Ctrl+S finding, the ritual) ·
+`oa-capture-coverage-2026-07-29.md` (page-by-page coverage, the 18-field schema, what is lost) ·
+`oa-cleanup-runbook.md` (the Group = Pillar convention) · `oa-setup-exploration-2026-07-29.md`
+§2.1/§2.9/H1 (template versioning, groups, BUILD_ID) · `capture-architecture-2026-07-30.md` (the
+export as ledger source) · `oa-platform-reference.md` (primitives, traps, the open checks).*

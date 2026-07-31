@@ -210,8 +210,14 @@ automations side.
 **Compare by R, never raw P/L.** Condor risk = the larger side. The unit of account is the **position**.
 
 **Evidence law** — every claim tiered T1–T5. Nothing below T2 with n≥100 / 6 months / a regime change
-supports a live-capital or growth decision. Machinery adopted from the independent audit; its kill-IC and
-third-party-switch verdicts overruled.
+supports a live-capital or growth decision. Machinery adopted from the independent audit; its **kill-IC**
+verdict and its **custody-separation / independent-go-live-authority** recommendations (audit §5.5 items
+6–7) are overruled/declined.
+*Amended 2026-07-31, wording only, at Andy's explicit instruction. This clause previously read
+"third-party-switch verdicts overruled" — a garbled transcription of "the go-live **switch** held by a
+**third party**", which had come to read as a platform change. No platform-migration recommendation exists
+anywhere in the audit. **Nothing else in this plan changed.** Reason and reopen condition:
+`docs/evidence-standards.md` §9.2.*
 
 **Pre-registration** — hypothesis, kill criterion, sample target, review date, config-capture hash. Written
 **before** the bot starts. No entry, no restart. Every one of the ≈18–20 active bots needs one, including

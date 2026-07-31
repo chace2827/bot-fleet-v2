@@ -97,8 +97,11 @@ of `rules-of-engagement.md` + pre-registration. `docs/evidence-standards.md` §9
 - `docs/evidence-standards.md` — tiers, both gate systems, the R methodology. **Written to be revised.**
 - `docs/oa-platform-reference.md` · `docs/hedge-research.md` — the two v2 REWRITEs. Read the platform
   reference before designing any mechanic; it says what OA affirmatively cannot express.
-- **Not written yet** (do not go looking for them): `docs/oa-ops-runbook.md`,
-  `data/bots_config_v2.csv`, `data/mirror_baseline.csv`, `STATUS.md`. All are Phase 2–4 deliverables
+- `docs/oa-ops-runbook.md` — how to touch the account: capture ritual, template versioning,
+  group scheme, edit verification, and the nine traps. Read before any OA session.
+- `docs/pre-registration-ledger.md` — template + drafted entries for all ≈18–20 active bots.
+- **Not written yet** (do not go looking for them): `data/bots_config_v2.csv`,
+  `data/mirror_baseline.csv`, `STATUS.md`. All are Phase 2–4 deliverables
   tracked in the `bot-fleet-migration` artifact (Andy's tracker, outside this folder).
 - `data/archive/` — **frozen v1 ledger, never a reporting input.** `README-v1-ledger.md` first.
 - `data/`: `bots_meta.csv` · `execution_audit.csv` — the **frozen 35-row detector
