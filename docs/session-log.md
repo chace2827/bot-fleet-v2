@@ -687,3 +687,183 @@ champion sat at ~43% with no kill review ever recorded). Until adjudicated it is
 criterion, and `report.py` cannot fire it automatically.
 
 **Still HELD:** `evidence-standards.md`, the pre-registration template, `oa-ops-runbook.md`.
+
+---
+
+## 2026-07-31 — Block 1: `evidence-standards.md`
+
+Committed as `3a69972` before this block (3 files, 496 insertions). Tracker confirmed by Andy
+at Phase 3 = 20/24. **Standing change: Claude runs no git commands at all** — close-out ends at
+"ready to commit".
+
+**Decision recorded — the rolling-30 win-rate kill criterion is RETIRED.** Replaced by per-bot,
+R-based, pre-registered kill criteria at Phase 4. Noted in `daily-loop-spec.md` §9 (struck
+through, with the reason) and its open-items list (closed), and written up as
+`evidence-standards.md` §7. **No fleet-wide win-rate bar is reinstated in any form.**
+
+**`docs/evidence-standards.md` written.** Marked **WRITTEN TO BE REVISED** at the top, per
+Andy's redesign intent. Nothing in it is my own design — every tier, gate, threshold and formula
+is quoted or closely paraphrased from a named source, and where two sources disagree **both are
+stated and the disagreement is flagged rather than reconciled.** Reconciling them is a decision,
+not a transcription.
+
+Sources were extracted by a subagent pass over `independent-audit-2026-07-27.md`, its
+pre-commitment ledger, `oa-mirror-reference.md` §3 and `rebuild-audit-2026-07-29.md`.
+
+**Contents:** the T1–T5 tiers with their four decision rules · **the two gate systems, kept
+apart** · audit gates A–K in full · the readiness board G1–G6 as actually implemented · the R
+methodology and labelling law · kill criteria · pre-registration · a redesign agenda.
+
+**The most important structural finding: there are TWO gate systems and their letters collide.**
+System I is the audit's pre-commitment gates A–K (per system, at a decision point). System II is
+`report.py`'s readiness board G1–G6 (per bot, per condor, every run). **`G1` means "live Exp(R)
+≥ 50% of backtest" in one and "clean data" in the other**; `B1`, `C1`, `C2` and `G2` also collide
+with unrelated schemes elsewhere in the folder. The doc opens the gate section with a
+disambiguation table and a standing instruction to always write "audit gate C1" or "board gate G3".
+
+### ⛔ Three things found that need Andy, all flagged and none acted on
+
+1. **THE R DENOMINATOR CONTRADICTION — the big one.** `scripts/report.py` builds its condor
+   series with `c["risk"] += fl(t["risk"])` — it **sums both sides**. That is exactly the
+   denominator the independent audit identified as wrong and replaced with **risk = the larger
+   side**, its one flagged *stricter* revision. Four documents (`CLAUDE.md` §4, `build-plan.md`
+   §5, `rebuild-audit`, the audit itself) assert the larger-side rule; **the code does not
+   implement it, and no document anywhere records this as resolved.**
+   **Consequence: board gates G3 (Exp(R) + its bootstrap CI) and G4 (maxDD-R), and every Exp(R)
+   figure `STATUS.md` reports, currently run on the flattered denominator.** Fixing it moves
+   every reported number and shifts a code-enforced graduation gate — a decision, not a
+   transcription, so I did not touch it. It is §10 item 1 of the redesign agenda.
+
+2. **The T3 "separate, weaker gate" is named and never defined.** The pre-commitment ledger says
+   *"(T3 counts for a separate, weaker gate only.)"* and no document defines it. **T3 evidence
+   therefore has no home** — it cannot clear B1, and the gate it supposedly clears does not
+   exist. This matters more than it sounds: backtests are how most evidence will arrive before
+   Day-0 + 6 months.
+
+3. **The "third-party switch" overrule may be a misquote of itself.** The banner says the audit
+   recommended *"switch to a third-party platform"* — **that recommendation appears nowhere in
+   the audit body.** The nearest text is §5.5 items 6 and 7: **custody separation** (*"any live
+   account is opened and funded by someone other than the owner… the single most important
+   control and it is non-negotiable"*) and **independent go-live authority** (*"the decision to
+   move from paper to live is not the owner's to make"*). Those are governance controls, not a
+   vendor change — and it is the **only** overrule in the set with no recorded reason.
+   **Andy should confirm which verdict he intended to overrule.** I have not treated either
+   control as retired.
+
+**Also carried in, because they are the lessons with teeth:**
+- **G5 is the gate that lied** — 100% instruction-compliance across five graded days while PT25
+  had generated zero orders for a month. The gate worked as specified; the specification was the
+  problem. In v2 it may only read `bots_config_v2.csv`, and absent that file the brief runs
+  config-blind and G5 stays **pending** rather than passing.
+- **The audit's §3.5 finding on why pre-committed rules failed** — *"no strategy the owner built
+  himself has ever been killed by a triggered rule. That asymmetry is the whole tell."* This is
+  the reason kill criteria must fire in code, and why a fired-but-unexecuted trigger is itself a
+  kill condition within 48 hours.
+- **The legacy "≥15 clean post-fix condors" go-live gate is retired** — it was declared cleared
+  at "18/15", a count that silently dropped 11 positions. Board G2's ≥20 supersedes it.
+
+**Still HELD:** the pre-registration template + ~18–20 drafted entries, `oa-ops-runbook.md`, and
+the pilot-clone instruction card.
+
+---
+
+## 2026-07-31 — Three rulings executed + Block 2: `pre-registration-ledger.md`
+
+Tracker confirmed at 22/28 · 39/93. Committed before this block.
+
+### Ruling 1 — R denominator FIXED
+
+`scripts/report.py` condor aggregation now uses `c["risk"] = max(c["risk"], fl(t["risk"]))`
+instead of `+=`. `max()` is correct for every structure: two paired spread rows give the larger
+side (the real max loss), a single `ironcondor`/`ironbutterfly`/debit row gives itself, a
+single-sided spread gives its own risk. **A no-op everywhere except legged iron condors, which
+is exactly where it should bite.**
+
+Timing was chosen so nothing live moved: the working ledger is empty (n=0) and **the archive
+ledger stays frozen as-computed** — it is not recomputed.
+
+**Receipt: `data/receipts/r-denominator-fix.txt`**, old-vs-new for every bot.
+
+| | n | OLD (sum) | NEW (larger side) |
+|---|--:|--:|--:|
+| **`IC-SPX-FastPT25-S2`** clean post-fix condors | 18 | −2.9549% | **−5.8293%** |
+| `IC-SPX-Fortress-Defang` | 8 | +1.3877% | **+2.7429%** |
+| `QQQ-IC-0DTE-HedgeD-Conditional` | 35 | −3.6657% | **−7.3222%** |
+
+**This is not a uniform haircut, it is the removal of one.** Magnitudes roughly double on
+legged ICs because the two sides carry similar risk — **losers get more negative and winners get
+more positive.** Every mirror and every single-row structure is unchanged to the digit, which is
+the check that the fix is right rather than merely different.
+
+⚠️ **Anything quoting a pre-2026-07-31 condor Exp(R) is quoting the flattered number.**
+
+### Ruling 2 — gate T3 DEFINED
+
+The ledger's undefined "separate, weaker gate" now exists, generalised from the directional OOS
+protocol: parameters frozen before the window · window untouched during design · n≥100 backtest
+trades over ≥2 years incl. a regime change · positive after a 30–40% haircut + commissions ·
+beats its control · clears the F1 multiple-comparisons haircut.
+
+**Scope is the important half: a T3 pass authorises BUILDING and PAPER-RUNNING an experiment and
+setting its sizing tier. It never authorises live capital, and B1 is unchanged** — n≥100 at
+T1/T2 still stands and the six-month clock does not shorten. T3 answers *is this worth the cost
+of running*, which is a real question, and not *does this make money*.
+Marked for the redesign session: the 30–40% haircut is a range, not a number.
+
+### Ruling 3 — the record corrected
+
+**"Switch to a third-party platform" was a garbled transcription of "the go-live SWITCH held by
+a THIRD PARTY."** No platform-migration recommendation exists anywhere in the audit. What was
+actually declined is audit §5.5 items 6–7: **custody separation** and **independent go-live
+authority**. Reason recorded: **go-live authority stays with Andy**; substitutes are external
+review of `rules-of-engagement.md` plus the pre-registration discipline.
+
+Corrected in four places — the banner on `independent-audit-2026-07-27.md`, the banner on the
+pre-commitment ledger, `CLAUDE.md` §4, and `evidence-standards.md` §1 and §9.2 — each stating
+what the old wording said and why it was wrong, rather than silently replacing it.
+
+> **One thing said plainly in §9.2 rather than left implicit:** the declined control existed to
+> solve the problem that *"no strategy the owner built himself has ever been killed by a
+> triggered rule."* Declining it means the substitutes carry that weight alone — which is what
+> makes "fired in code, no human in the loop" load-bearing rather than a nicety. **The reopen
+> condition is now explicit:** if kill triggers end up needing a human decision, this should be
+> reconsidered. On the redesign agenda as item 7.
+
+⚠️ **`build-plan.md` §5 still carries the old "third-party-switch" wording. NOT edited** — the
+plan is under decision freeze and correcting it needs an explicit "amend the plan". It is the
+last instance of the garbled phrase in the folder.
+
+### Block 2 — `docs/pre-registration-ledger.md`
+
+Template + **drafted entries for all ≈18–20 planned active bots**: 4 clones · 9 untouched ·
+5–7 fresh. **Every entry is DRAFT and unsigned** — Day-0 is signing, not authoring.
+
+Template fields: disposition · pillar/role · hypothesis · **mechanism, including the platform
+primitive it will be built from** · R-based kill criterion · sample target · review date ·
+max loss · sizing tier · config hash · verification artifact · signature line.
+
+**Why "mechanism" carries the primitive:** the HedgeD lesson. Whoever built it hit a platform
+limit, substituted position age for a 10-minute sustain, and recorded nothing — so the config
+record and the automation tree agreed with each other and both were wrong about the *intent*.
+Naming the primitive in advance gives a substitution something to contradict.
+
+Design points worth keeping visible:
+- **Review dates are relative (Day-0 + N)** because Day-0 is not fixed. No invented dates.
+- **The champion clone's entry explicitly does NOT inherit the 29 post-fix condors**, and says
+  so — that argument is dead per `build-plan.md` §4 and would otherwise walk back in.
+- **Verification is INVERTED on the two control clones**: the Trades list must show NO PT row.
+- **The greenfield family has a FAMILY-LEVEL kill**: if a capture-diff ever shows more than one
+  differing input between arms, **the ranking is void and the bots are re-based** — the
+  comparison dies, not the bots. This is the v1 tournament's failure encoded as a trigger.
+- **The canary's P/L exemption is written down**, so it cannot later be mistaken for a losing
+  bot nobody killed.
+- **The mirrors' kill criterion is the funding bar**, judged on `mirror_baseline.csv` — which
+  must be built from the capture export, not the archived ledger (the ledger is missing 6 mirror
+  positions worth +$632).
+
+**Carried into the entries as blockers, not smoothed over:** the 15:52 backstop timestamp is
+unverified and gates two clone specs; whether Exit Options can reference a Bot Input is
+undocumented and the greenfield "PT% as a Bot Input" spec depends on it; `CallVIXdrop`'s
+allocation is $50k against the put pair's $10k.
+
+**Still HELD:** `oa-ops-runbook.md`, and the pilot-clone instruction card.

@@ -57,7 +57,11 @@ Say **"positions"** or **"condors"**, never a bare count: the Fortress pre-June 
 same trades.
 Detail: `docs/evidence-standards.md` (Phase 3; written to be revised — Andy wants a redesign pass).
 Machinery — not verdicts — is inherited from `docs/independent-audit-2026-07-27*.md`: its tiers and sample
-gates stand; its kill-IC and third-party-switch verdicts are **overruled**.
+gates stand; its **kill-IC** verdict and its **custody-separation / independent-go-live-authority**
+recommendations (audit §5.5 items 6–7) are **overruled/declined**. ⚠️ Corrected 2026-07-31: this
+previously read "third-party-switch" — that meant the **go-live switch held by a third party**,
+not a platform change. Reason: go-live authority stays with Andy; substitutes are external review
+of `rules-of-engagement.md` + pre-registration. `docs/evidence-standards.md` §9.2.
 
 ## 5. Discipline rules
 - **Pre-register before restart**: hypothesis, kill criterion, sample target, review date, config-capture hash.
@@ -89,9 +93,12 @@ gates stand; its kill-IC and third-party-switch verdicts are **overruled**.
 - `docs/oa-mirror-reference.md` (§3 evidence standards load-bearing) · `docs/ic-trailing-stop-backtest.md` ·
   `docs/oo-trial-backtests.md` · `docs/lean-backtesting-reference.md` ·
   `docs/quantconnect-lean-exploration-brief.md`.
-- **Not written yet** (do not go looking for them): `docs/evidence-standards.md`,
-  `docs/pre-registration-ledger.md`, `docs/oa-ops-runbook.md`, `data/bots_config_v2.csv`,
-  `data/mirror_baseline.csv`, `scripts/execution_audit.py`, `STATUS.md`. All are Phase 2–3 deliverables
+- `docs/daily-loop-spec.md` — the daily-loop contract (three verdicts, never blended).
+- `docs/evidence-standards.md` — tiers, both gate systems, the R methodology. **Written to be revised.**
+- `docs/oa-platform-reference.md` · `docs/hedge-research.md` — the two v2 REWRITEs. Read the platform
+  reference before designing any mechanic; it says what OA affirmatively cannot express.
+- **Not written yet** (do not go looking for them): `docs/oa-ops-runbook.md`,
+  `data/bots_config_v2.csv`, `data/mirror_baseline.csv`, `STATUS.md`. All are Phase 2–4 deliverables
   tracked in the `bot-fleet-migration` artifact (Andy's tracker, outside this folder).
 - `data/archive/` — **frozen v1 ledger, never a reporting input.** `README-v1-ledger.md` first.
 - `data/`: `bots_meta.csv` · `execution_audit.csv` — the **frozen 35-row detector

@@ -1,0 +1,55 @@
+R-DENOMINATOR FIX — RECEIPT
+Ruling: Andy, 2026-07-31. risk = LARGER SIDE, never the sum.
+Changed: scripts/report.py condor aggregation, c['risk'] = max(...) instead of +=.
+
+Run against the FROZEN v1 ARCHIVE (data/archive/trades.csv) as a fixture.
+The archive ledger itself is NOT recomputed — it stays frozen as-computed.
+The working ledger is EMPTY (n=0), so no live reported number moved.
+
+Clean condor series = post-fix/baseline epoch, risk>0, single-sided excluded.
+
+bot                                         n   OLD (sum)  NEW (larger)      delta
+----------------------------------------------------------------------------------
+1-45pm-Sandwich-Paper-v1                    9  -41.2461%    -41.2461%  +0.0000%
+3DTE $140-$350                             43   +1.4663%     +1.4663%  +0.0000%
+60min-ORB-10W-Paper-v1                     12   -3.2809%     -3.2809%  +0.0000%
+DIR-SPX-CallVIXdrop                         2  +22.3658%    +22.3658%  +0.0000%
+DIR-SPX-Put-Control                         5  -41.8153%    -41.8153%  +0.0000%
+Friday 14 DTE Broken Wing IB (B-70)         7   +8.9334%     +8.9334%  +0.0000%
+IC-SPX-FastPT25-S2                         18   -2.9549%     -5.8293%  -2.8744%
+IC-SPX-FastPT25-S2-130PM                   28   +0.0388%     +0.0785%  +0.0397%
+IC-SPX-Fortress-Defang                      8   +1.3877%     +2.7429%  +1.3551%
+Nigiri-Paper-v1                            37   +1.0007%     +1.0007%  +0.0000%
+Opening Range Breakout 60m                 19  -11.0668%    -11.0668%  +0.0000%
+QQQ long call                               6  +34.0076%    +34.0076%  +0.0000%
+QQQ-IC-0DTE-Baseline                       43   -7.3738%     -7.3738%  +0.0000%
+QQQ-IC-0DTE-Fortress                       14   -2.1996%     -4.3748%  -2.1753%
+QQQ-IC-0DTE-Fortress-NoFilter               1   +3.1622%     +6.2348%  +3.0726%
+QQQ-IC-0DTE-Fortress-NoPT50                11   -3.6661%     -7.2984%  -3.6323%
+QQQ-IC-0DTE-Fortress-S2                     4   -0.8644%     -1.7240%  -0.8596%
+QQQ-IC-0DTE-HedgeA-S1                      35   -2.9606%     -5.9089%  -2.9483%
+QQQ-IC-0DTE-HedgeB-S2                      35   -0.6673%     -1.3249%  -0.6576%
+QQQ-IC-0DTE-HedgeC-S3                      36   -0.6300%     -1.2705%  -0.6406%
+QQQ-IC-0DTE-HedgeD-Conditional             35   -3.6657%     -7.3222%  -3.6566%
+QQQ-IC-0DTE-HedgeTest                      38   -2.5017%     -4.9960%  -2.4943%
+QQQ-IC-0DTE-InverseFilter-HoldToExp         3   +6.7830%     +6.7830%  +0.0000%
+QQQ-IC-0DTE-Range075-PT50                   5   +5.6293%     +5.6293%  +0.0000%
+QQQ-IC-0DTE-Range075-PT50-Wide2-1230PM     13   +1.6630%     +3.2969%  +1.6339%
+QQQ-IC-0DTE-Range075-PT50-Wide2-155PM       4   +4.0188%     +7.9711%  +3.9523%
+QQQ-IC-0DTE-Raw-HoldToExp                  33   -2.7369%     -5.4254%  -2.6885%
+QQQ-IC-0DTE-VIX25-Range075-PT50             1   +5.4945%     +5.4945%  +0.0000%
+Tasty Condor                                3  +33.9133%    +33.9133%  +0.0000%
+Trendy-Paper-v1                            14   -4.3864%     -4.3864%  +0.0000%
+Weekly-IB-SPY-Paper-v1                     18   -7.7006%     -7.7006%  +0.0000%
+
+==================================================================================
+THE CHAMPION — IC-SPX-FastPT25-S2, clean post-fix condors
+  n = 18   OLD Exp(R) -2.9549%   ->   NEW Exp(R) -5.8293%   (delta -2.8744%)
+==================================================================================
+
+READ: the fix is a NO-OP for every single-row structure (ironcondor,
+ironbutterfly, debit spreads) and every single-spread mirror bot — max() of
+one value is that value. It bites ONLY on legged iron condors, where it
+roughly doubles the magnitude of Exp(R) because the two sides carry similar
+risk. Losers get more negative; winners get more positive. It is not a
+uniform haircut, it is the removal of one.

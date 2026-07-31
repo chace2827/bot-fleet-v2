@@ -467,12 +467,32 @@ def boot_ci(rs):
     return (pctile(means, 2.5), pctile(means, 97.5))
 
 # --- aggregate legs → condors, keyed by trade_id -----------------------
+#
+# ⛔ RISK = THE LARGER SIDE, NEVER THE SUM.  (fixed 2026-07-31, Andy's ruling)
+#
+# A condor can only lose ONE side. Summing both sides' risk inflates the
+# denominator and flatters Exp(R) toward zero — it makes a losing book look
+# less negative and a winning one look less positive. The independent audit
+# identified this as its single *stricter* revision and the project adopted the
+# larger-side rule in four separate documents (CLAUDE.md §4, build-plan.md §5,
+# rebuild-audit, the audit itself) — but this line kept summing, so every
+# Exp(R) in STATUS.md and both code-enforced gates (G3 edge, G4 maxDD-R) ran on
+# the wrong denominator. See docs/evidence-standards.md §6.2.
+#
+# max() is correct for every structure, not just condors:
+#   two paired spread rows  -> the larger side, which is the real max loss
+#   one `ironcondor` row    -> max of one value = itself, unchanged
+#   a single-sided spread   -> its own risk, unchanged
+# So this is a no-op for every non-paired structure and only bites where it
+# should. The archive ledger stays frozen as-computed; this changes reporting
+# going forward, and the working ledger is empty, so no live number moved.
 cond = collections.defaultdict(lambda: {"pnl": 0.0, "risk": 0.0, "date": "9999-99-99",
                                          "epoch": "", "ss": False})
 cond_bot = {}
 for t in trades:
     k = t["trade_id"]; c = cond[k]
-    c["pnl"] += fl(t["pnl"]); c["risk"] += fl(t["risk"])
+    c["pnl"] += fl(t["pnl"])
+    c["risk"] = max(c["risk"], fl(t["risk"]))      # larger side, NOT the sum
     c["date"] = min(c["date"], t["open_date"][:10])
     c["epoch"] = t["epoch"]
     if t["single_sided"] == "True": c["ss"] = True

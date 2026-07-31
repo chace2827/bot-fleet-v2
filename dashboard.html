@@ -1,0 +1,54 @@
+<!doctype html>
+<script type="application/json" id="cowork-artifact-meta">
+{ "name": "Bot Fleet Dashboard", "schemaVersion": 1, "description": "Bot Fleet status + backlog, generated from the local ledger (data/trades.csv + docs/backlog.md). Static snapshot; refreshed by the daily task.", "mcpTools": [], "mcpServerNames": [] }
+</script>
+<html><head><meta charset="utf-8">
+<title>Bot Fleet Status</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js" integrity="sha384-iU8HYtnGQ8Cy4zl7gbNMOhsDTTKX02BTXptVP/vqAWIaTfM7isw76iyZCsjL2eVi" crossorigin="anonymous"></script>
+<style>
+body{font-family:system-ui,Arial,sans-serif;margin:24px;color:#1a1a1a;max-width:920px}
+h1{font-size:20px;margin:0 0 2px}.sub{color:#777;font-size:12px}
+.card{display:inline-block;border:1px solid #eee;border-radius:8px;padding:8px 16px;margin:12px 8px 4px 0}
+.card span{color:#777;font-size:12px}.card b{display:block;font-size:18px}
+table{border-collapse:collapse;width:100%;font-size:13px;margin-top:18px}
+th,td{border-bottom:1px solid #eee;padding:6px 8px;text-align:right}
+th:first-child,td:first-child{text-align:left}
+.neg{color:#c0392b}.pos{color:#1e7e34}.off{color:#bbb}
+canvas{margin-top:16px;max-height:240px}
+h2{font-size:15px;margin:30px 0 6px;border-top:1px solid #eee;padding-top:18px}
+#bl h3{font-size:11.5px;text-transform:uppercase;letter-spacing:.05em;color:#555;margin:16px 0 5px}
+#bl .ct{color:#bbb;font-weight:400}#bl ul{margin:0;padding-left:18px}#bl li{margin:3px 0;font-size:13px}
+code{background:#f0f0f3;padding:1px 4px;border-radius:4px;font-size:12px}
+</style></head><body>
+<h1>Bot Fleet — Status</h1>
+<div class="sub">generated 2026-07-31 · PAPER · source: data/trades.csv + docs/backlog.md</div>
+<div>
+<div class="card"><span>Total P/L</span><b class="pos">$0</b></div>
+<div class="card"><span>Legs</span><b>0</b></div>
+<div class="card"><span>Bots</span><b>0</b></div>
+<div class="card"><span>Scalp P/L</span><b class="pos">$0</b></div>
+</div>
+<canvas id="ch"></canvas>
+<h2>Per-bot</h2>
+<table id="t"><thead><tr><th>Bot</th><th>Proj</th><th>Status</th><th>Trades</th><th>Legs</th>
+<th>P/L</th><th>WR</th><th>Fix?</th></tr></thead><tbody></tbody></table>
+<div class="sub" style="margin-top:6px">Trades = condors · Legs = OA position rows (≈2× trades for legged bots) · WR is per-condor</div>
+<h2>Backlog</h2><div id="bl"></div>
+<script>
+const rows=[], cum=[];
+const tb=document.querySelector('#t tbody');
+rows.sort((a,b)=>a.pnl-b.pnl).forEach(r=>{
+ const tr=document.createElement('tr');
+ tr.innerHTML='<td>'+r.bot+'</td><td>'+r.proj+'</td>'+
+  '<td class="'+(r.status==='OFF'?'off':'')+'">'+r.status+'</td>'+
+  '<td>'+r.trades+'</td><td>'+r.legs+'</td>'+
+  '<td class="'+(r.pnl<0?'neg':'pos')+'">$'+r.pnl.toLocaleString()+'</td>'+
+  '<td>'+r.wr+'</td><td>'+(r.fix||'-')+'</td>';
+ tb.appendChild(tr);
+});
+new Chart(document.getElementById('ch'),{type:'line',
+ data:{labels:cum.map(x=>x.d),datasets:[{label:'Scalp-SPX cumulative P/L',
+  data:cum.map(x=>x.c),borderColor:'#2962ff',backgroundColor:'rgba(41,98,255,.08)',
+  fill:true,tension:.2,pointRadius:0}]},
+ options:{plugins:{legend:{display:true}},scales:{x:{ticks:{maxTicksLimit:8}}}}});
+</script></body></html>

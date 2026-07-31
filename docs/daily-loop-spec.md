@@ -357,11 +357,13 @@ checked.
 - Any single-day loss > 3× average daily credit.
 - A declared hedge failed to fire on a strike touch.
 - An OA automation toggled off silently 3× in a week.
-- ⚠️ **Rolling-30 win rate < 75% — DECISION STILL OPEN (Andy).** A 0DTE PT scalper wins small
-  often and loses bigger rarely, so raw WR is a poor bar; the champion sat at ~43% with no kill
-  review recorded. **Adjudicate whether this criterion applies as written or is replaced by an
-  R/expectancy bar.** Whichever survives gets encoded in `report.py` so it fires automatically.
-  Until then it is not a criterion, it is a note. Carried forward from the v1 spec unresolved.
+- ~~Rolling-30 win rate < 75%~~ — **RETIRED 2026-07-31 (Andy).** A 0DTE PT scalper wins small
+  often and loses bigger rarely, so raw win rate was never the right bar; the champion sat at
+  ~43% over 221 positions with no kill review ever recorded, and the rule's only effect was to
+  fire and be argued with. **Replaced by per-bot, R-based kill criteria, pre-registered at
+  Phase 4** — one criterion per bot, written before it restarts, fired in code. See
+  `docs/evidence-standards.md` §7 and `docs/pre-registration-ledger.md`.
+  A fleet-wide win-rate bar is not reinstated in any form.
 
 ---
 
@@ -404,7 +406,9 @@ itself does not.
 
 ## 12. Open items
 
-1. **The rolling-30 WR kill criterion** — Andy's decision (§9). Blocks automatic kill-flagging.
+1. ~~The rolling-30 WR kill criterion~~ — **CLOSED 2026-07-31: retired**, replaced by per-bot
+   R-based pre-registered criteria at Phase 4 (§9). Automatic kill-flagging is unblocked but
+   cannot be wired until those criteria exist, one per bot.
 2. **`data/bots_config_v2.csv` does not exist yet.** Until it does, Tier C of the detector is
    SKIPPED and §4's cards run config-blind. This is the single largest gap in the loop.
 3. **Counterfactual option pricing** — accept a Black-Scholes reconstruction for the approximate

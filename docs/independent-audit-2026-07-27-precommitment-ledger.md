@@ -1,6 +1,11 @@
 > **⚠️ Carried for machinery, not verdicts (banner added 2026-07-30, Phase 1).**
-> The tiers and sample gates in this ledger are **adopted**. The parent audit's kill-IC and
-> third-party-switch verdicts are **overruled** — see `docs/independent-audit-2026-07-27.md`.
+> The tiers and sample gates in this ledger are **adopted**. The parent audit's **kill-IC** verdict
+> and its **custody-separation / independent-go-live-authority** recommendations (§5.5 items 6–7)
+> are **overruled/declined** — see `docs/independent-audit-2026-07-27.md`.
+> ⚠️ **Corrected 2026-07-31:** this previously read "third-party-switch verdicts". That phrase meant
+> the **go-live switch held by a third party** and garbled into sounding like a platform change.
+> **Gate T3 — the "separate, weaker gate" §B1 promises and never defines — is now DEFINED** in
+> `docs/evidence-standards.md` §4.5 (Andy, 2026-07-31).
 > Andy has flagged wanting to redesign the scoring; `docs/evidence-standards.md` is written to be revised.
 
 # PRE-COMMITMENT LEDGER — LOCKED 2026-07-27, BEFORE ANY RESULTS WERE READ

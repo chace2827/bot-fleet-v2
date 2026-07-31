@@ -3,7 +3,17 @@
 > (n≥100 / 6 months / regime change). That machinery is adopted.
 > Its **verdicts are overruled**, specifically:
 > • "kill IC" — overruled; the IC pillar continues at pilot scale under pre-registration.
-> • "switch to a third-party platform" — overruled.
+> • **Custody separation (§5.5 item 6) and independent go-live authority (§5.5 item 7)** — DECLINED.
+>   ⚠️ **Correction of record, 2026-07-31.** This bullet previously read *"switch to a third-party
+>   platform" — overruled*, which does not correspond to anything in this audit. **"Third-party
+>   switch" meant the GO-LIVE SWITCH held by a third party**; it garbled in transit into sounding
+>   like a platform migration, and was then carried forward in that garbled form. What was actually
+>   declined is §5.5 items 6 and 7 — the owner funding/custody separation and the transfer of
+>   go-live authority to a named third party.
+>   **Reason (Andy, 2026-07-31): go-live authority stays with Andy.** Substitutes: external review
+>   of `rules-of-engagement.md`, plus the pre-registration discipline — kill criteria written
+>   before data arrives and fired in code. See `docs/evidence-standards.md` §9.2, which also
+>   records the condition under which this should be reopened.
 > • Any **AUTOMATIC KILL / add-a-stop verdict on the QQQ-Fortress pair** — overruled. That pair's June
 >   losses were a dead-exit execution artifact, not a strategy property; see
 >   `docs/qqq-fortress-loss-forensic-2026-07-27.md`. The decision is restore & verify, then re-ask.
