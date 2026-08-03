@@ -9,6 +9,14 @@
 > Exit-Options-panel-as-evidence was implicit throughout — the exact reasoning that let a
 > dead profit target look alive for four months.
 
+> ### 📌 AMENDED 2026-08-03 — this file is no longer frozen. Read §0.2 before adding to it.
+> Twelve marked blocks were added the same day: **4 × `⛔ CONTESTED`** (§2 clone trap, §4.1
+> market-open/close, §6.4 order-lifetime tag, §8.2 the 15:52 premise), **3 × `✅ RESOLVED`**
+> (§6.2 Touch, §7 SmartPricing table, §7 final-price conflict), and **5 × `📝` appends**.
+> **Nothing was deleted** — every contested claim stands with its original text beneath the banner.
+> **§8's build instructions were marked but not rewritten** and remain gated.
+> `§9` rows 1, 2 and 6 are now answered; row 4 is narrowed.
+
 ---
 
 ## 0. Read this first — three structural facts
@@ -51,6 +59,31 @@ automatically stronger than a screenshot of the running account.
 
 Where a first-hand screenshot and a stale doc disagree, **the screenshot wins**. Where memory
 and a doc disagree, **the doc wins**.
+
+> ### ⛔ PROVENANCE RULE — added 2026-08-03
+> **A tier tag must name what was observed and when. Citing another project document is NOT
+> provenance.** §2's clone trap carried `[FIRST-HAND — runbook §2 step 2]`; the runbook asserted
+> the same claim with no observation behind it. Two documents vouching for each other is a
+> citation loop, and it survived because the tag *looked* like evidence.
+>
+> **`[FIRST-HAND]` requires a value that was read** — a DOM field, a hidden-input payload, a
+> screenshot. **Inference from absence is not observation.** "I did not see a control" is not a
+> finding; it is a screen that was not opened. (Written the same day it would have caught a wrong
+> claim about Exit Option presets — see §6.1.)
+>
+> ⚠️ **Do not quote this file, or any file, from a stage-back or a cached read.** On 2026-08-03 a
+> read of this file returned a paraphrase of §2's clone-trap paragraph — same meaning, different
+> sentences — while the bytes on disk were unchanged (hash identical). **Verify a quotation against
+> the file itself before relying on it.**
+
+> ### 📝 THE `⛔ CONTESTED` CONVENTION — added 2026-08-03
+> When an observation falsifies a claim in this file, the claim is **marked in place, dated, and
+> left standing** — not deleted. The banner names the contradicting evidence so no session reads
+> the old claim as authority; the original text survives so the record can be audited.
+> **Rewriting a contested section requires Andy's authorization. Marking it does not.**
+>
+> Appends backed by a value that was read or a sentence that can be quoted need no authorization.
+> **§8 stays gated** — it is build-plan-adjacent. §8.2 below is *marked* but not rewritten.
 
 ### 0.3 The Exit Options panel is NOT evidence
 
@@ -96,6 +129,20 @@ Portfolio
 **Automations are shared by reference.** They live in the Library and can be added to many
 bots. Editing a shared automation changes it in **every** bot that uses it. **Copy** to fork.
 
+> ### ⛔ CONTESTED 2026-08-03 — THIS CLAIM IS FALSE. Do not act on it.
+> **Cloned bots do NOT share automations by reference.** Direct test: the CLONE's ScannerA was
+> renamed, saved, hard-reloaded, and the ORIGINAL read back **unchanged** in both name and
+> allocation. A shared object would have propagated. Corroborated structurally — OA's Automation
+> Library is **opt-in** ("Add to My Library"), reports per-automation usage, and contained exactly
+> **one** shared automation fleet-wide (`Defang-Mon-S2-StrikeTouch` → 2 bots, both §2A
+> archive-directly bots). **Sharing is opt-in via the Library. Cloning copies.**
+>
+> The `[FIRST-HAND]` tag below cites `runbook §2 step 2` — the other document asserting the same
+> claim. That is a citation loop with no observation behind it, and it is why §0.2's provenance
+> rule now exists. **Consequence: the fork step is a no-op** and can come out of the clone ritual
+> for all four clones, removing a `Delete` from the procedure.
+> **Original preserved below for audit; rewrite pending authorization.**
+
 > ⚠️ **THE CLONE TRAP.** A cloned bot shares its parent's automations by reference. Edit the
 > clone and you have edited the original; edit the original later and you silently change the
 > clone. Fork every automation via **Copy** immediately after cloning, then confirm the clone's
@@ -103,6 +150,18 @@ bots. Editing a shared automation changes it in **every** bot that uses it. **Co
 
 > ⚠️ **SYMBOLS DROP SILENTLY ON CLONE.** The Symbols panel is not carried over. A bot with no
 > Symbols looks fully configured and simply never scans. Re-add them. [FIRST-HAND]
+
+> **📝 Observed 2026-08-03 — INAPPLICABLE on the Fortress pair, for a reason worth knowing.**
+> The Symbols panel reads `No symbols yet` on **both** original and clone. The symbol is not in the
+> watchlist at all — it lives **inside the automation** (`Loop QQQ` + action `Symbol: QQQ`) and
+> carried across the clone correctly. **This trap does not bite a bot whose symbol is
+> automation-resident.** It still bites one using the Bot Symbols loop.
+>
+> ⚠️ **Three clone traps that ARE real and appear in NO document** (first-hand, 2026-08-03):
+> **Allocation resets to a flat `1000`** in the Clone dialog (original `$100,000` — a silent 100×
+> sizing error on a bot that looks fine on the dashboard), **Bot Group drops to `None`**, and
+> **Tags drop to empty**. Of the two traps this file *does* document, one is false (above) and one
+> is inapplicable here — while the three that bite were undocumented.
 
 ---
 
@@ -152,6 +211,26 @@ Two of these are richer than this project previously assumed:
 
 - **Market open is hard-coded 9:40 am; Market close is hard-coded 3:50 pm.** Neither is
   adjustable. See §8.2 — this constrains the clone specs.
+
+> ### ⛔ CONTESTED 2026-08-03 — "neither is adjustable" is contradicted on two independent lines.
+> **(i) The running product.** The live `Add Automation` → Schedule menu renders these two entries
+> as **`Market open — At scheduled time in settings`** and **`Market close — At scheduled time in
+> settings`** — not as fixed 9:40/3:50 times.
+> **(ii) OA's own current documentation.** The Exit Options page states the 9:31am→1-minute-before-
+> close window is **customizable via Settings** (§6). Both point at the same Settings surface.
+>
+> **Not yet verified in Settings directly** — that is the open check this replaces §9 #2 with. If
+> it holds, it is a **second independent route** to the 15:52 spec and §8.2's premise collapses.
+> The quotation above is accurate *as a quotation*; the **conclusion drawn from it** is contested.
+
+> **📝 Observed 2026-08-03 — the live trigger vocabulary, with undocumented per-bot SLOT LIMITS.**
+> `Scanner` — Every scan to find new positions — **2/5** · `Monitor` — Every scan to monitor open
+> positions — 0/5 · `Date` — At a specific date and time — 0/10 · `Repeating` — On a recurring
+> schedule — 0/10 · `Market open` — 0/5 · `Market close` — 0/5 · `Position opened` — 0/5 ·
+> `Position closed` — 0/5 · `Webhook` — 0/10 · **`Button` — Add a button to bot dashboard — 0/10**
+> (a tenth type absent from the documented list quoted above).
+> **Each bot has a bounded budget per trigger class.** The 15:52 backstop spends 1 of 10 Repeating
+> slots. Nothing in OA's docs states these limits.
 - **Position opened / Position closed** are native triggers. They are the designed replacement
   for the emergent Cleanup-monitor behaviour, and are how a sibling-spread close should be
   built (§5.4).
@@ -309,6 +388,25 @@ Per-position rules, evaluated every **1 market minute**, running **first** in th
 *(The v1 file said "roughly 9:40 AM–3:58 PM ET". The docs are more precise; adopt them. This
 change matters — see §8.2.)*
 
+> **📝 Appended 2026-08-03 — TWO documented facts this section was missing.**
+>
+> **1. THE WINDOW IS CUSTOMIZABLE.** The docs give the window and then state it is **customizable
+> via Settings**. This file recorded it as fixed. ⚠️ The Exit Options modal renders the phrase
+> *"9:31am to 1 minute before market close"* **as a hyperlink** — present in the 2026-08-03
+> capture, read as plain text and not followed. Same Settings surface as §4.1's contested claim.
+>
+> **2. ⛔ EXIT OPTIONS RUN EVEN WHEN AUTOMATIONS ARE OFF.**
+> > *"Exit Options always run, even if your automations inside a bot are turned off."*
+> > — `tools/managing-positions/exit-options.md` [DOCUMENTED]
+>
+> Two load-bearing consequences:
+> - **A bot with `AUTOMATIONS` OFF is NOT inert if it holds positions** — its Exit Options still
+>   fire. Any "is this bot parked / is it safe" judgement must read **both** toggles, not one.
+> - **This is the documented reason a flat-close backstop belongs on the AUTOMATIONS side**
+>   (§8.2). v1's failure was Exit Options dead while automations ran; a backstop living *inside*
+>   Exit Options would have died with them. The architecture was right for a reason this file
+>   never stated.
+
 ### 6.1 The triggers [DOCUMENTED]
 
 > *"You can customize each position's Exit Options for specific management using six triggers:
@@ -326,6 +424,23 @@ similar position types."* ⚠️ **Cross-automation scope is [DOCS-SILENT]** —
 object can be referenced from both the call-side and the put-side Open Position action is
 unverified, and the greenfield spec assumes it can.
 
+> **📝 Appended 2026-08-03 — the quote above stops ONE SENTENCE SHORT of the answer.**
+> The docs continue: *"**You can name your presets for easy identification.**"* [DOCUMENTED]
+> **Presets ARE nameable, so `build-plan.md` §2B/§8.1's "NAMED Exit Option Preset" is expressible
+> exactly as written.**
+>
+> ⛔ **A retracted claim, recorded because the error class matters more than the claim.** A
+> 2026-08-03 session opened the Exit Options modal, saw a `Presets` picker and a `Save as presets
+> for short option positions` checkbox, saw no name field, and concluded "NAMED preset" might not
+> be expressible. **That was wrong.** The checkbox was never ticked, so the naming step was never
+> reached — **absence inferred from a screen that was never opened.** This is precisely the error
+> §0.2's provenance rule now forbids.
+>
+> **Observed first-hand 2026-08-03:** the control exists, and the account holds **zero** presets —
+> the picker returns the exact string `"No presets found for short option positions"`. It is scoped
+> by **position type**, which is suggestive for the cross-automation question (both an IC's put and
+> call spreads are short option positions) **but is not observation. §9 check #4 stands.**
+
 > **A preset makes the VALUES consistent, not the ATTACHMENT.** A preset can still be attached
 > to one Open action and omitted from the other. It converts a silent asymmetry into a visible
 > one — a smaller failure class, not none. The per-side fire-rate assertion still has to run.
@@ -334,6 +449,29 @@ unverified, and the greenfield spec assumes it can.
 
 A `Touch` Exit Option is documented to exist. **What it references is not.**
 
+> ### ✅ RESOLVED 2026-08-03 — TOUCH REFERENCES THE UNDERLYING, RELATIVE TO THE STRIKE.
+> > *"The new 'Touch' Exit Option references the underlying price relative to a position's strike
+> > price(s)."* — `optionalpha.com/blog/new-exit-option-for-itm-price-touches` [DOCUMENTED]
+>
+> It fires when the underlying is **`$X` or `X%` from in-the-money, or less**. Takes dollars or
+> percent: **`$0`** exits the moment the position goes ITM; **negative** values (`-$0.50`, `-5%`)
+> allow ITM penetration first; **positive** values exit *before* ITM. Documented to work on credit
+> spreads **and** on long options and debit spreads.
+>
+> **This is the underlying-touches-strike reading — so everything in the paragraph below now HOLDS**
+> rather than being conditional. `build-plan.md` §2D/§8.1's "Touch $0 on the challenged side" has a
+> precise meaning: close the moment the position goes ITM.
+>
+> ⚠️ **Still unresolved: whether a Touch on one spread can close its SIBLING.** The source describes
+> "closing iron condors", but OA models an IC as **two positions** (§3). Treat as loose phrasing,
+> keep §5.4's mechanism, do not assume.
+>
+> ⚠️ **Process note.** This section called it "a two-minute UI check" and §9 ranked it #1 of 8. It
+> was answerable from OA's own published material the whole time — one link from a page already in
+> the swept docs corpus — and a 2026-08-03 session spent two failed clicks on the dropdown before
+> stopping. **Read the product's own material before instrumenting it.**
+
+> **Superseded — the original open question, preserved for audit:**
 > **Open, and gating:** does Touch mean *the underlying touches the short strike*, or *the
 > position price touches a level*? This is a two-minute UI check and it changes the entire
 > tournament architecture.
@@ -360,6 +498,10 @@ high%/low% tracking **pauses**. It exists to stop the platform acting on garbage
 **It is currently OFF on the champion and on HedgeD** [FIRST-HAND]. Turning it on is a
 silent-suppression generator. Decide per bot, deliberately, and record the decision.
 
+> **📝 Re-confirmed 2026-08-03 [FIRST-HAND]** on `QQQ-IC-0DTE-Fortress Clone`: the control renders
+> as `Disable exit options if bid/ask exceeds $ ___` at the foot of the Exit Options modal, and is
+> **unchecked with the dollar field empty**. The guard is OFF on the Fortress line too.
+
 ### 6.4 Mid-price, two-minute orders — carry the caveat
 
 Exit Options evaluate the position's **mid-price**; a triggered order stays active **two
@@ -369,6 +511,21 @@ profit target, SmartPricing's final price is auto-set to the price that locks in
 ⚠️ **[PROJECT-RULE, not doc-verified.]** The 2-minute lifetime and mid-price evaluation appear
 in project files only; the docs do not address either. They explain the observed ~11% PT-miss
 rate on thin credits, so they are probably right — but they are not documented.
+
+> ### ⛔ CONTESTED 2026-08-03 — THE TAG ABOVE IS WRONG. The 2-minute lifetime IS documented.
+> > *"Orders triggered by an exit option will remain active for two minutes; during that time,
+> > **no additional orders will be sent to your broker**."*
+> > — `tools/managing-positions/exit-options.md` [DOCUMENTED]
+>
+> **Promote the 2-minute lifetime to [DOCUMENTED].** The emphasised clause appears **nowhere in
+> this folder** and is operationally significant: for those two minutes the position is
+> **uncoverable by any further exit order**, so no stacked-exit design may assume a second attempt
+> inside that window.
+>
+> The **mid-price** half remains unquoted; it is only implied, by the docs' Stop Loss definition
+> ("closes position when mid-price reaches specified loss threshold"). **Leave that half as
+> [PROJECT-RULE] until it can be quoted directly** — half a claim being documented does not
+> document the other half.
 
 ### 6.5 Re-applying Exit Options — the highest-value unverified operation
 
@@ -397,11 +554,34 @@ cancelling and re-sending until filled or exhausted.
 ⚠️ **[PROJECT-RULE, not doc-verified.]** These mode names, price counts and timings come from
 project files. The docs do not state them.
 
-> ### ⛔ [CONFLICT] — FINAL PRICE CEILING
-> The v1 file said SmartPricing may reach **150%** of the bid/ask spread. The docs describe the
-> control as *"0% (bid) through 50% (mid) to 100% (ask)"*. **These disagree and the conflict is
-> unresolved.** Check the Final Price control's actual maximum in the UI before relying on
-> either. Do not quote 150% as fact.
+> ### ✅ VERIFIED FIRST-HAND 2026-08-03 — the table above is correct in every cell.
+> Read verbatim off the live SmartPricing selector on `QQQ-IC-0DTE-Fortress Clone`, with each
+> option's internal value: `Normal` (**`normal`**) up to 4 prices / 10s each · `Fast`
+> (**internal value `speedy`, not "fast"**) up to 3 / 5s · `Patient` (**`patient`**) up to 5 / 20s ·
+> `Off` (**`off`**) 1 limit price · `Market` (**`market`**) send a market order.
+> **Promote off [PROJECT-RULE] to [FIRST-HAND].**
+> ⚠️ **`speedy`** — any capture-diff or config parser keying on the string "fast" will silently
+> miss it.
+> Also observed: selecting `Market` **collapses the Final Price ladder entirely** — a market order
+> takes no limit, consistent with §7's "do not cap the flat exit's slippage".
+
+> ### ✅ [CONFLICT] RESOLVED 2026-08-03 — the v1 file was right; the docs are wrong.
+> The Final Price control is, first-hand:
+> `<input name="pct" type="number" min="50" max="150" step="1" value="100">`
+> **The range is 50–150.** The v1 file's **150%** claim is correct and may now be quoted as fact;
+> the docs' *"0% (bid) through 50% (mid) to 100% (ask)"* is wrong for this control.
+> ⚠️ **Note the FLOOR: 50, not 0.** A final price better than the mid is **not settable**, so any
+> design assuming a bid-side final price is not expressible. **Closes §9 check #6.**
+> The other four Final Price options observed alongside it: `Up to $X slippage from the mid price`,
+> `X% of typical slippage from the mid price for symbol`, a fixed `$` price, and
+> `Position trade price ×`. The docs' note that "when multiple final price options are selected,
+> the best price is used" is confirmed on screen.
+
+> **Superseded — the original conflict, preserved for audit:**
+> **[CONFLICT] — FINAL PRICE CEILING.** The v1 file said SmartPricing may reach **150%** of the
+> bid/ask spread. The docs describe the control as *"0% (bid) through 50% (mid) to 100% (ask)"*.
+> These disagree and the conflict is unresolved. Check the Final Price control's actual maximum
+> in the UI before relying on either. Do not quote 150% as fact.
 
 **Confirmed** [DOCUMENTED]: a *"slippage from the mid-price setting to protect against price
 fluctuations"* exists independently of final price, and *"when multiple final price options are
@@ -436,6 +616,36 @@ Per `build-plan.md` §2B and runbook §3 Step C, each greenfield bot carries:
    interlocks.
 
 ### 8.2 ⚠️ THE 15:52 BACKSTOP MAY NOT BE BUILDABLE AS SPECIFIED
+
+> ### ⛔ CONTESTED 2026-08-03 — 15:52 IS BUILDABLE. It was built. The premise below is falsified.
+> *Marked, not rewritten — §8 is build-plan-adjacent and stays gated. **Nothing about what to build
+> has been changed here.***
+>
+> **15:52 is reachable.** `Add Automation` → Schedule = **Repeating** → Pattern →
+> `Market Time (EST)` → **`Custom`** — a selectable option, `data-value="0"`, first in the list,
+> **not** a heading — opens a modal *"Select a time from 9:31AM to 3:55PM EST:"* backed by a native
+> `<input type="time" min="09:31" max="15:55">` at 1-minute step. `15:52` validates
+> (`checkValidity() true`, no range error) and commits as `ntime=1552`. The visible **77-entry
+> 5-minute grid is a convenience list, not the constraint.**
+> Built and reload-verified on the pilot clone as `Fortress-Backstop-1552-FlatClose`:
+> `Every week on Mon-Fri, 3:52pm EST`, `holidays=skip`.
+>
+> **⛔ The second bullet below is not merely outdated — it is UNSOUND.** It reasons that Exit
+> Options run *"until 1 minute before the market close"*, therefore a 15:52 **Exit Option** cannot
+> exist. **15:52 is INSIDE a window that runs to roughly 15:59.** An `Expiration: 8 minutes before`
+> would plausibly reach it (⚠️ that dropdown's options were **not** read).
+> **The correct objection was never impossibility — it is architectural:** the backstop's whole
+> value is living in the **Events** execution class, which survives an Exit Options failure. That
+> is now documented rather than inferred — see §6, *"Exit Options always run, even if your
+> automations inside a bot are turned off."* **Right build, wrong stated reason.**
+>
+> ⚠️ **NEW, UNRESOLVED — a DST ambiguity this section does not anticipate.** The saved trigger
+> serialises `startDate` as `2026-08-03T20:52:00.000Z`. 20:52 UTC is 15:52 at **UTC−5 (EST)** — but
+> August is **EDT (UTC−4)**, where that is **16:52 ET, after the close.** The control is labelled
+> "Market Time (**EST**)" and the summary reads "3:52pm EST". Either OA means market time loosely
+> and `ntime=1552` fires at 15:52 ET year-round, or it means EST literally and the trigger drifts
+> an hour under daylight saving. **`ntime` is the operative field; `startDate`'s time component may
+> be a stamp only. Requires a Day-0 observation — do not assume.**
 
 `build-plan.md` §2B specifies a **"15:52 flat-close Scheduled Event backstop"** on two of the
 four clones. Two documented facts sit against it:
@@ -498,12 +708,12 @@ Nothing below is answerable from documentation. Each is a few minutes in the acc
 
 | # | Check | Gates |
 |---|---|---|
-| **1** | **What does the Exit Option `Touch` trigger reference** — underlying vs short strike vs position price? | The entire tournament architecture (§6.2). If it means underlying-touches-strike, S1/S2 stop needing monitors and the execution-class confound dissolves. |
-| **2** | **Can a Repeating trigger fire at a custom time like 15:52?** | Two clone specs (§8.2). Market-close is hard-coded 3:50. |
+| ~~**1**~~ | ✅ **ANSWERED 2026-08-03 — `Touch` references the UNDERLYING relative to the position's strike(s).** Not a UI check; it was in OA's own docs. | **Resolved in favour of the tournament.** S1/S2 stop needing monitors, become 1-minute Exit Options running first in the cycle, and the execution-class confound dissolves (§6.2). Sibling-close via Touch still unresolved. |
+| ~~**2**~~ | ✅ **ANSWERED 2026-08-03 — YES**, via `Repeating` → `Market Time (EST)` → `Custom` → native time input, `min=09:31 max=15:55`, 1-minute step. Built as `Fortress-Backstop-1552-FlatClose`. | **Both clone specs unblocked** (§8.2). ⚠️ **Replaced by a new check: is the Market open/close time configurable in Settings?** (§4.1 contested) — and **does "Market Time (EST)" mean 15:52 ET year-round, or drift under DST?** |
 | **3** | **Can Exit Options reference a Bot Input?** | The greenfield "PT% as a Bot Input" spec (§5.2). Nowhere documented. |
-| **4** | **Can one Exit Option Preset be referenced from two different Open Position actions?** | The preset-as-unit-of-attachment design (§6.1). |
+| **4** | **Can one Exit Option Preset be referenced from two different Open Position actions?** **STANDS.** Partial 2026-08-03: the control exists, presets **are nameable**, the account holds zero, and the picker is scoped "for short option positions" — suggestive, not observation. | The preset-as-unit-of-attachment design (§6.1). **Cheapest test: save one on the put side and look at the call side.** |
 | **5** | **Is re-applying Update Position Exit Options side-effect-free?** | Any re-assertion watchdog (§6.5). |
-| **6** | **What is the Final Price control's actual maximum** — 100% or 150%? | Resolves the §7 conflict. |
+| ~~**6**~~ | ✅ **ANSWERED 2026-08-03 — `min="50" max="150"`.** The v1 file's 150% was right; the docs are wrong. **Floor is 50 (mid)**, so a better-than-mid final price is not settable. | **§7 conflict RESOLVED.** |
 | **7** | **What is the automation-log retention window?** | Any liveness monitoring that looks back more than a day (§4.4). |
 | **8** | **Does the June error counter show ≥10 on the Fortress bots in June?** | Confirms or kills the Excessive Errors Failsafe hypothesis (§4.5). |
 
