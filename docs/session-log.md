@@ -1046,3 +1046,41 @@ scoped to the card alone.**
 **Builder work is complete. HOLD in force — no further writes** until Andy returns with the
 pilot-clone captures and the two open answers (does an Exit Option Preset save control exist;
 can a Scheduled Event reach 15:52).
+
+---
+
+## 2026-08-03 — Folder cleanup Block 1: history docs out of the read path
+
+Information-architecture audit run against the migration's own goals (G1–G6). Verdict, blunt:
+the migration succeeded at correctness (cutover, frozen archive, receipts, detector) and failed
+at leanness — 21 of 37 docs in `docs/` were byte-identical to their `~/bot-fleet/docs` copies
+(sha256 compare on-device). Cleanup approved by Andy as reorganization only; the frozen
+architecture (disposition table, cutover, clone specs, detector, gates, pre-registration
+entries) untouched in substance.
+
+**Block 1 (this entry):**
+- Wrote `docs/history-index.md` — one pointer entry per removed doc: what it establishes, exact
+  archive path root, successor doc for every operating rule, the preserved v2 banners for the
+  three bannered docs (archive copies lack them), and the known-bad-figure warnings formerly in
+  `current-state.md` §Known reconciliation gaps.
+- **16 docs to be removed by Andy** (Claude cannot delete over the bridge): approach-reset,
+  config-vs-reality, qqq-fortress-loss-forensic, the four execution-audits, rebuild-audit,
+  independent-audit + precommitment ledger, phase1-kickoff, daily-review-design,
+  instrumentation-decision, oa-capture-bookmarklet, oa-capture-coverage, oa-docs-research.
+  All 16 archive-verified: 13 byte-identical, 3 banner-only additions (diff shows zero
+  deletions; banners preserved in the index).
+- Pre-checks done before removal was proposed: `evidence-standards.md` carries the
+  precommitment ledger's A–K in full (verified line-by-line, incl. B3's VIX definition and the
+  locking clause); rebuild-audit's 10 open questions all have live v2 homes; the one orphan —
+  "intra-day drift between captures is an accepted residual" — preserved in the index entry.
+- **Deviation from the approved proposal, stated plainly:** `quantconnect-lean-exploration-
+  brief.md` was listed for Block-1 removal but its live rules merge into
+  `lean-backtesting-reference.md` in Block 4 — removing it first would violate "every rule
+  survives." It stays until Block 4. Block 1 removes 16, not 17.
+- Blocks 2 (cold-read core: `state.md`, CLAUDE.md rewrite + §10 response style) approved and
+  next; Blocks 3–4 (ops-doc trims, reference merges) deferred until after the pilot/Day-0 by
+  agreement.
+
+**Verification:** history-index.md and this log verified by on-device sha256 after commit-back
+(hash table in chat). Tracker updated (Andy to visually confirm). HOLD on the builder chat
+remains in force — this cleanup ran in the audit chat.
