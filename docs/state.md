@@ -44,10 +44,14 @@ Last updated 2026-08-03.*
 - **Pilot clone** (`QQQ-IC-0DTE-Fortress`) — first thing in Andy's next OA session. Two open
   platform answers ride on it: does an Exit Option Preset save control exist, and can a
   Scheduled Event reach 15:52.
-- **Fortress strike check** — both Fortress bots still carry `strike_fix=Y` in
-  `bots_meta.csv` while `build-plan.md` §2B rests on their positive pre-regression record.
-  Nobody has checked their strikes against the tape; queued as a Phase 2 verification. Until
-  then the flag and the record contradict each other and the folder does not say which wins.
+- **Fortress strike check — optional research, non-gating.** Both Fortress bots still carry
+  `strike_fix=Y` in `bots_meta.csv` while `build-plan.md` §2B rests on their positive
+  pre-regression record; nobody has checked their strikes against the tape. `build-plan.md`
+  §3 rules this adjudication **dead as a blocker** — it concerns archived bots and
+  pre-cutover data, and the clone starts at n=0 judged on its own gate evidence
+  (`build-plan.md` §4). Re-filed 2026-08-03 from "queued as a Phase 2 verification";
+  parallel to the Baseline forensic in `build-plan.md` §6. It affects only how the frozen
+  v1 record is read — not the pilot, not Day-0, not any live decision.
 - 48 cached symbol-days of 5-min SPX/QQQ tape (5/29→7/02) were never committed; Tradier's
   window is rolling and the early days are unrecoverable. Noted, closed as a loss.
 - RoE `$` blanks stand by decision (an active audit-gate H3 failure — `evidence-standards.md`

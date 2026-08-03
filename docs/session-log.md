@@ -1119,3 +1119,28 @@ Phase 7 visually confirmed by Andy (uploaded copy hash-matched the pushed versio
 **Verification:** all four written files verified by on-device sha256 (table in chat). Tracker
 updated (Block 2 items done; Andy to visually confirm). Blocks 3–4 remain deferred until after
 the pilot / Day-0.
+
+---
+
+## 2026-08-03 — state.md: Fortress strike check re-filed as optional research
+
+**Trigger.** Cold read of the v2 core surfaced a contradiction between two live docs:
+`state.md` §Open items carried the Fortress strike check as "queued as a Phase 2
+verification", while `build-plan.md` §3 lists the `strike_fix=Y` adjudication under
+**Dead — do not revive as blockers**. Flagged, not edited (build-plan is frozen).
+
+**Andy's ruling.** Build-plan wins — it is frozen and CLAUDE.md §3.6 places decisions
+there. The item is **mis-filed, not meaningless**: it cannot block anything (the clone
+starts at n=0 and is judged on its own gate evidence; the pre-regression record is archive
+context, not a prior — `build-plan.md` §4), but it still bears on how the frozen v1 record
+is read. Authorized edit scoped to `state.md` only.
+
+**Change — one bullet, `docs/state.md` §Open items.** "Fortress strike check" re-filed from
+Phase 2 verification to **optional research, non-gating**, parallel to the Baseline forensic
+in `build-plan.md` §6, with the §3 dead-as-a-blocker ruling cited and the scope stated (v1
+record reading only — not the pilot, not Day-0). No other file touched: `build-plan.md` and
+`bots_meta.csv` explicitly out of scope and unmodified; the `strike_fix=Y` flag stands.
+
+**Verification:** `docs/state.md` and this log verified by on-device sha256 (table in chat).
+Tracker Phase 6 gains the matching optional-research row (Andy to visually confirm).
+Blocks 3–4 remain deferred; HOLD on the builder chat remains in force.
