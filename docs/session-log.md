@@ -1374,3 +1374,12 @@ the standing rule was mostly right, for a reason the rule never stated.
 
 **Verification:** `state.md` and this log verified by on-device sha256 (table in chat). Capture
 files hashed at write time. Tracker updated (Andy to visually confirm). No frozen doc edited.
+
+### Addendum, same session — no git remote on bot-fleet-v2
+
+`git push` after commit `83af63b` failed: **no configured push destination.** `.git/config` has
+`[core]` and `[user]` only. The v2 folder has never been pushed anywhere; all four post-rebuild
+commits live on a single disk. `CLAUDE.md` §8's `chace2827/bot-fleet` remote is the **archive's**,
+and has been doing duty as an assumed backup for v2 that was never real. Logged as an open item in
+`state.md`. Not fixed this session — creating the remote is Andy's, and `.gitignore` coverage of
+`.env` must be confirmed before any first push.

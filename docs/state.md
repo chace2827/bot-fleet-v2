@@ -92,5 +92,13 @@ Last updated 2026-08-03 (pilot session, part 1).*
   window is rolling and the early days are unrecoverable. Noted, closed as a loss.
 - RoE `$` blanks stand by decision (an active audit-gate H3 failure — `evidence-standards.md`
   §10 item 4). Notion's role in v2 is undecided.
+- **⚠️ `bot-fleet-v2` HAS NO GIT REMOTE — the folder exists on one disk only.**
+  Discovered 2026-08-03 when `git push` failed: `.git/config` carries only `[core]` and
+  `[user]`, no `[remote]`. Every v2 commit since the 7/30 rebuild (`298d7a3`, `e7f3b36`,
+  `6a39373`, `83af63b`) is unbacked. `CLAUDE.md` §8's remote (`chace2827/bot-fleet`) belongs to
+  the **archive**, not to v2 — it has been standing in for a backup that does not exist.
+  Fix: create a private repo, then `git remote add origin <url>` + `git push -u origin master`.
+  ⚠️ Confirm `.gitignore` covers `.env` before the first push (§8 records `.env` is
+  deliberately absent from the archive backup).
 - **HOLD in force on the builder chat** — no writes there until Andy returns with the pilot
   captures and the two open answers.
