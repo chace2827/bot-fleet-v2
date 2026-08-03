@@ -1203,3 +1203,174 @@ scope. A one-line pointer to the `PR-NN` definition there is an optional follow-
 created directories verified by `find`. Tracker: no change warranted — this is pre-session prep
 inside Phase 4, no tracker item's status moved. HOLD on the builder chat remains in force;
 cleanup Blocks 3–4 remain deferred.
+
+---
+
+## 2026-08-03 — PILOT CLONE, part 1: Chrome-direct trial, and Trap 1 falsified
+
+**Mode: TRIAL AMENDMENT, authorized by Andy in-session.** Claude executed OA edits directly via
+Claude-in-Chrome, as a sanctioned trial of amending `build-plan.md` §5 / `CLAUDE.md` §5
+("Andy makes all OA edits"). Log-only: **no frozen doc was edited.** Division of labour: Claude
+drove navigation/clicks/fields/captures; five hard stops required Andy's explicit OK in chat
+(fork commit · archive click · any deletion · the Step 8 rename sequence · both Decision Points).
+Step 2's fork was added to that list at Claude's request — invisible failure + fleet-wide blast
+radius — and Andy approved the addition.
+
+**Gate approvals given by Andy this session:** (1) create a fresh tab and navigate to OA;
+(2) set clone Allocation to 100000; (3) proceed past the inactive-account banner; (4) run the
+rename probe; (5) the $0.08 / Market-entry carry-forward decision.
+
+### Findings that outlive the pilot
+
+**1. ⛔ TRAP 1 IS FALSE. Cloned bots do NOT share automations by reference.**
+Direct test: renamed the CLONE's ScannerA to `-CLONE`, saved, hard-reloaded, then read the
+ORIGINAL. Original unchanged — name and allocation both. A shared object would have propagated.
+Corroborated structurally: OA's Automation Library is **opt-in** ("Add to My Library"), reports
+per-automation usage, and contains exactly ONE automation fleet-wide (below). Bot-owned
+automations are per-bot; cloning copies them.
+- **`oa-platform-reference.md` §2 "THE CLONE TRAP" is wrong.** Its `[FIRST-HAND]` tag cites
+  "runbook §2 step 2" — which is the *other document asserting the same claim*. The provenance
+  is a citation loop; no independent observation exists. **This is the more serious finding:**
+  that file gates the greenfield builds and all four clone specs, and its tier tags are the
+  thing the evidence law rests on. An audit of its `[FIRST-HAND]` / `[DOCUMENTED]` tags is
+  warranted before any of them gate a build decision.
+- **`oa-ops-runbook.md` §5 Trap 1** — same claim, same status.
+- **`pilot-clone-card-qqq-fortress.md` Step 2 is a no-op and should be deleted.** Its only exit
+  was a `Delete` on a supposedly-shared object. Removing it removes a deletion from the ritual
+  for all four clones.
+- All three are frozen or spec-bearing: FLAGGED, NOT EDITED.
+
+**2. Automation Library inventory (first ever taken).** Exactly one shared automation:
+`Defang-Mon-S2-StrikeTouch` → 2 bots → `IC-SPX-Fortress-Defang`, `IC-SPX-Fortress-Unstopped`.
+Both are `build-plan.md` §2A archive-directly bots, so the blast radius is real but expiring.
+
+**3. ⚠️ DOC CONFLICT on the tournament build.** `oa-ops-runbook.md` §3 says fork via Copy so
+cohort arms are NOT shared. `build-plan.md` §2D and `hedge-research.md` §5.2 require "**shared
+automation**" with one differing input proven by capture-diff. Now that the mechanism is
+understood, these are incompatible instructions. A shared Library automation + per-bot **Bot
+Inputs** for the single differing parameter would give matched arms *by construction* — which is
+exactly the v1 failure mode (arms that were supposed to be matched and weren't). Unresolved;
+build-plan is frozen.
+
+**4. THREE UNDOCUMENTED CLONE TRAPS.** None appear in any doc; the two that ARE documented
+(automations-by-reference, Symbols) turned out false and inapplicable respectively.
+- **Allocation resets to a flat `1000`** in the Clone dialog (original: $100,000). A 100x sizing
+  error, silent, on a bot that would look fine on the dashboard. Caught pre-clone; set to 100000.
+- **Bot Group dropped** — original `Monitor` → clone `None`.
+- **Tags dropped** — original `experiment` → clone empty.
+- Symbols (Trap 2) did NOT bite: the watchlist is empty on BOTH bots because the symbol lives in
+  the automation (`Loop QQQ` + action `Symbol: QQQ`), and it carried correctly.
+
+**5. The clone is born with `EXIT OPTIONS` ON** (original: OFF). It was never lapsed, so
+"born correct" is literally true. Left ON and recorded; switching it off would be an
+unrequested edit. It cannot trade — `AUTOMATIONS` is OFF and the account is inactive.
+
+**6. THE EXITS ALREADY EXIST. `build-plan.md` §2B's "restored exits" are a no-op.**
+Both Open Position actions on the ORIGINAL already read `Exit Options: Profits: 50%,
+Expiration: 10 minutes` = PT50 + a 15:50 time exit on 0DTE. The config was never missing. Card
+Step 5a collapses from an edit into a verification; only the 15:52 backstop (5b) is new work.
+This also corroborates `oa-ops-runbook.md` §4.2 on screen: the panel displays `PROFIT 50%` on a
+bot whose `EXIT OPTIONS` toggle is OFF and which generated no exit orders. **The failure was the
+toggle, not the configuration** — which is precisely why the panel is not evidence.
+⚠️ The card's and build-plan §2B's justification wording ("the restoration the forensic called
+for") is now inaccurate. FLAGGED, NOT EDITED.
+
+**7. Inactive-account persistence extended.** Bot *creation* persists, not just field edits:
+roster went 35 → 36 bots across a full navigation. The banner ("no changes will be saved") is
+false, as Andy said. Automation renames also persist. Now evidence, not assertion.
+
+**8. Config facts nobody had recorded** (carried forward untouched by Andy's decision — the
+pre-regression record was earned with them, so changing either mid-clone would be a silent spec
+change): a **$0.08 minimum-credit floor** (`Mid price is between $0.08 – no max`) live on BOTH
+sides, and **`Price = Market` on BOTH ENTRIES**. Also: strikes 0.75% from underlying both sides,
+longs $2.00 beyond the shorts; sizing already `Up to $5,000 risk`; limits 2/2 (even, one condor);
+Bot Group `Monitor` (a group `oa-ops-runbook.md` §3 does not list).
+
+**9. §7 MARKET-ORDER BAN — scope check requested by Andy. Result: no literal conflict, real
+tension.** `oa-platform-reference.md` §7 reads "Market pricing is **banned on every exit** in the
+v2 fleet, with one exception — a hard end-of-day flat close." It is scoped to exits; the
+Fortress's Market **entry** is not covered by the letter of the rule. But the evidence behind the
+ban is order-type-specific, not side-specific: the 6/11 fill came in $5.05/contract beyond the
+worst mark the position ever traded at (R −1.63). That mechanism applies to entries too, where a
+bad fill degrades the position from birth. **Open question for Andy: should entries come under
+the ban (entry Market → SmartPricing)?** Resolution is a future pre-registered decision, not a
+change today.
+
+### Method failures, self-caught and recorded
+
+**A. A capture file carried a false claim.** Revision 1 of the ScannerA capture asserted
+"Position Criteria ALL EMPTY / UNCHECKED", derived from `innerText` alone — which returns field
+LABELS but not `input.value` or checkbox state, so a set field and a blank one are byte-identical.
+The $0.08 floor and the entire Entry Criteria block were invisible to that method. **It was caught
+by luck** (the call-side value happened to appear in a screenshot taken for another purpose), not
+by verification — the same blind method made and checked the capture. This is the correlated-error
+failure predicted when one agent is both editor and verifier. Files rewritten to revision 2 by
+reading `input.value` / `input.checked` with each accordion section expanded in turn.
+
+**B. The action panel is an ACCORDION** — Position Details / Entry Criteria / Position Criteria
+render one at a time. No single text read can cover all three. This is the card's Trap 3
+(collapsed nodes) in a form the card does not describe: the trap is in the ACTION PANEL, not only
+the automation-tree carets.
+
+**C. Standing positive control adopted.** Before/after a scroll to bottom, compare checkbox count,
+input count and text length. Identical = the DOM read covered everything. Verified on this bot
+(27/27, 64/64, 2796/2796) — OA does **not** lazily render, so DOM reads are complete regardless of
+scroll position. Recorded so completeness is auditable rather than asserted.
+
+**D. I did not read `docs/oa-platform-reference.md` at cold-read.** `CLAUDE.md` §6 says to read it
+before designing any mechanic and the card cites it three times. Instead of opening the Library
+page — a visible product surface with a usage counter — I reverse-engineered the DOM and sniffed
+the API. Andy supplied the screenshots that closed it. Process lesson: read the reference; look at
+the product before instrumenting it.
+
+### Ritual progress
+
+- **Step 0 COMPLETE** — baseline capture of the original, verified. Files in
+  `data/captures/2026-08-03-pilot/00-original/` (3 .txt + toggles .png), hashed in chat.
+  Documented deviation: no Exit Options PDF; captured as structured text instead (diffs and greps,
+  which `⌘P` output does not).
+- **Step 1 COMPLETE** — clone created and persistence-verified.
+- **Step 2 VOID** — see finding 1.
+- **Steps 3–4** — effectively verified in passing (symbols carried via the automation; limits 2/2).
+- **Step 5 NOT STARTED.** Decision Point A (Exit Option Preset control) and Decision Point B
+  (can a Scheduled Event reach 15:52) both **UNANSWERED** — the session's two headline
+  deliverables. B's answer is located: automation `Edit Settings` → `Schedule` → `Market Time
+  (EST)` dropdown.
+- **Steps 6–9, FINISH — NOT STARTED.**
+
+### Why the session stopped
+
+Chrome interaction degraded: the viewport changed size mid-session (screenshots 1528–1548px wide
+while `innerWidth` reported 2560 after a resize), coordinate clicks began landing wrong, and
+element-ref clicks on the gear icon registered without opening the dialog. **Five consecutive
+interaction failures**, against Andy's standing rule to stop after 2–3 rather than push through.
+DOM *reads* remained reliable throughout; only *driving* degraded.
+
+### OPEN — carry into the next session
+
+1. **Clone's ScannerA is still named `Fortress-ScannerA-PutSpread-CLONE`.** Revert to
+   `Fortress-ScannerA-PutSpread` (Andy's call: revert, so the clone reproduces the original).
+2. **Clone's Bot Group (`None`) and Tags (empty) not yet restored** to `Monitor` / `experiment`.
+3. **Decision Points A and B unanswered.**
+4. Card, ops-runbook and platform-reference corrections pending Andy's authorization (Trap 1,
+   Step 2, the §2B "restoration" wording).
+5. The `[FIRST-HAND]` / `[DOCUMENTED]` tag audit of `oa-platform-reference.md`.
+6. The tournament shared-automation doc conflict (finding 3).
+7. Entry-pricing question (finding 9).
+
+### TRIAL VERDICT — Chrome-direct OA edits
+
+**Qualified pass, with one clear condition.** What worked: reading. Every DOM extraction was
+accurate, fast, and produced a richer capture than the bookmarklet — structured, diffable text
+plus verifiable hashes, and it surfaced config (the $0.08 floor, Entry Criteria) that a text
+capture would have missed entirely. What did not work: driving. Coordinate clicks are unreliable
+against this app's shifting viewport; only element refs are dependable, and even those failed at
+the end. And the editor/verifier collapse produced exactly the predicted failure — a false claim
+in a capture file, caught by luck rather than by method.
+**Recommended shape going forward: Claude reads and detects, Andy clicks.** That keeps the large
+demonstrated gain (capture quality) and removes the demonstrated risk (self-verified mutation).
+It is also, notably, close to what `build-plan.md` §5 already says — the trial's result is that
+the standing rule was mostly right, for a reason the rule never stated.
+
+**Verification:** `state.md` and this log verified by on-device sha256 (table in chat). Capture
+files hashed at write time. Tracker updated (Andy to visually confirm). No frozen doc edited.

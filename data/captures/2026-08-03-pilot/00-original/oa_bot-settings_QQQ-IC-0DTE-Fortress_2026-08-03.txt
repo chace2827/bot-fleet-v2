@@ -1,0 +1,51 @@
+# QQQ-IC-0DTE-Fortress — BOT SETTINGS (ORIGINAL, pre-clone baseline)
+https://app.optionalpha.com/bots/bot/BOTfw5TkkCRF817734373392552121/settings
+captured: 2026-08-03 (pilot Step 0)
+method: Claude-in-Chrome DOM extraction (trial mode)
+bot_id: BOTfw5TkkCRF817734373392552121
+
+ACCOUNT            Paper Trading
+BOT GROUP          Monitor
+TAGS               experiment
+AUTOMATIONS        OFF   (scan speed: every 1m)
+EXIT OPTIONS       OFF   (scan speed: every 1m)
+
+ALLOCATION         $100,000
+DAILY POSITIONS    2 per day
+POSITION LIMIT     2 at once
+DAY TRADING        Allowed
+
+AUTOMATION LIST (in order):
+  SCANNERS
+  1. Fortress-ScannerA-PutSpread
+  2. Fortress-ScannerB-CallSpread
+  (no monitors, no other automations)
+
+BOT INPUTS         none
+NOTES              none
+
+SYMBOLS            "No symbols yet"  <-- EMPTY. Symbol lives in the automations, not here.
+
+ACTIVITY ALERTS    Open position · Close position · Automation warning · Automation error
+
+--- DASHBOARD STATS AT CAPTURE ---
+CLOSED P/L  -$1,834    RETURN  -1.83%    CLOSED POSITIONS  41
+PROFIT FACTOR 0.83     MAX DRAWDOWN  $5,579
+ALLOCATION $100,000    NET LIQUID $98,166    AT RISK 0    AVAILABLE $98,166
+Chart since Mar 13, 2026.
+
+--- FINDINGS OF RECORD ---
+1. EXIT OPTIONS ALREADY CONFIGURED: both Open Position actions carry
+   "Profits: 50%, Expiration: 10 minutes" = PT50 + 15:50 time exit on 0DTE.
+   build-plan.md 2B's "restored exits" for this clone ALREADY EXIST in the original.
+   Only the 15:52 Scheduled Event backstop is genuinely new.
+   Corroborates oa-ops-runbook.md 4.2: the panel displays PROFIT 50% while the
+   EXIT OPTIONS toggle is OFF and no exit orders are generated.
+2. Price = Market on BOTH ENTRIES. Trap 6 bans Market on exits; entry is not covered
+   by the letter of the rule. Out of clone spec scope. FLAGGED, NOT CHANGED.
+3. Sizing already matches build-plan 5: "Up to $5,000 risk" per side.
+   Condor risk = larger side = ~$5K. Position limits 2/2 = exactly one condor. Even. OK.
+4. BOT GROUP = "Monitor" — a group not recorded in oa-ops-runbook.md 3, which lists
+   only SPX-IC and OA-Mirror. The group reconciliation check needs the real set.
+5. Strike config (for the Fortress strike check, optional research, non-gating):
+   short legs 0.75% from underlying both sides; longs $2.00 beyond the shorts.

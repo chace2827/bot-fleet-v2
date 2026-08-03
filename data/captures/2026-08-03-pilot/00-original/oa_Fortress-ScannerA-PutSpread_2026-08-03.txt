@@ -1,0 +1,81 @@
+# Fortress-ScannerA-PutSpread
+https://app.optionalpha.com/bots/bot/BOTfw5TkkCRF817734373392552121/settings
+captured: 2026-08-03 (pilot Step 0 — BASELINE OF THE ORIGINAL)
+method: Claude-in-Chrome DOM extraction (trial mode; bookmarklet not used)
+bot: QQQ-IC-0DTE-Fortress   bot_id: BOTfw5TkkCRF817734373392552121
+REVISION 2 — see METHOD CORRECTION at the foot of this file. Revision 1 asserted
+"Position Criteria ALL EMPTY / UNCHECKED". That was FALSE and is corrected below.
+
+--- AUTOMATION TREE (expansion verified: every decision node exposes BOTH branches) ---
+START AUTOMATION
+Fortress-ScannerA-PutSpread
+Loop QQQ
+Current market time is after 1:30pm
+YES
+Symbol change % is greater than -0.75 since previous close
+YES
+Symbol change % is less than 0.75 since previous close
+YES
+Bot opened a position with put side today
+YES
+Add Action
+NO
+Open QQQ Short Put Spread
+NO
+Add Action
+NO
+Add Action
+NO
+Add Action
+
+--- ACTION: Open Short Put Spread / POSITION DETAILS ---
+Symbol           QQQ
+Expiration       exactly 0 days
+Long Put         $2.00 below short put leg
+Short Put        0.75% below underlying price
+Position Size    Up to $5,000 risk
+Price            Market
+Exit Options     Profits: 50%, Expiration: 10 minutes
+Tags             put side
+
+--- ACTION: ENTRY CRITERIA (accordion section — expanded and read) ---
+ALL SEVEN UNCHECKED:
+  [ ] Bot has enough available capital
+  [ ] Bot has less than <1 open position>
+  [ ] Bot opened less than <1 new position> today
+  [ ] Bot has less than <1 open position> with symbol
+  [ ] Bot doesn't have a position with an identical leg
+  [ ] VIX is between <Min> - <Max>
+  [ ] IV Rank is between <Min> - <Max>
+NOTE: "Bot has enough available capital" is UNCHECKED.
+
+--- ACTION: POSITION CRITERIA (accordion section — expanded, checkbox+value read) ---
+CHECKED (1 of 16):
+  [x] Mid price is between $ 0.08  -  $ <blank, no max>
+UNCHECKED (15): Bid/ask spread is less than $ · Spread width is between Min-Max ·
+  OTM % is greater than % · Expires before next earnings report ·
+  Expires before next FOMC meeting · Expires before next ex-dividend date ·
+  Alpha is greater than % · EV per contract greater than $ ·
+  Reward/risk ratio greater than % · Reward/risk ratio favorable for probability of max profit ·
+  Probability of profit greater than % · Probability of max profit greater than % ·
+  Probability of max loss less than % · Max profit per contract greater than $ ·
+  Max loss per contract less than $
+
+--- NOTES ---
+Range075 present: the +/-0.75% change gates are BOTH here.
+Re-entry gate present: "Bot opened a position with put side today" -> NO -> open.
+Symbol is HARDCODED in the automation (Loop QQQ + action Symbol=QQQ).
+The bot-level Symbols watchlist reads "No symbols yet".
+A $0.08 MINIMUM-CREDIT floor is live on this side (Mid price >= $0.08).
+
+--- METHOD CORRECTION (record this; it is a ritual lesson, not a bot fact) ---
+Revision 1 of this file was produced from document.body.innerText alone. That method:
+  (a) returns Position/Entry Criteria LABELS but NOT <input value> or checkbox state, so
+      an empty-looking label list reads identically whether the field is set or not; and
+  (b) cannot see collapsed accordion sections — this action panel renders Position Details /
+      Entry Criteria / Position Criteria one at a time, so no single text read covers all three.
+Revision 2 was produced by reading input.value and input.checked directly from the DOM with
+each accordion section expanded in turn. The $0.08 mid-price floor and the entire Entry
+Criteria block were invisible to the revision-1 method.
+This is the card's Trap 3 (collapsed nodes) in a form the card does not describe: the trap is
+in the ACTION PANEL accordion, not only in the automation tree carets.

@@ -1,0 +1,59 @@
+# Fortress-ScannerB-CallSpread
+https://app.optionalpha.com/bots/bot/BOTfw5TkkCRF817734373392552121/settings
+captured: 2026-08-03 (pilot Step 0 — BASELINE OF THE ORIGINAL)
+method: Claude-in-Chrome DOM extraction (trial mode; bookmarklet not used)
+bot: QQQ-IC-0DTE-Fortress   bot_id: BOTfw5TkkCRF817734373392552121
+REVISION 2 — Entry Criteria and Position Criteria added; see the METHOD CORRECTION note in
+the ScannerA file. Revision 1 omitted both sections entirely.
+
+--- AUTOMATION TREE (expansion verified: every decision node exposes BOTH branches) ---
+START AUTOMATION
+Fortress-ScannerB-CallSpread
+Loop QQQ
+Current market time is after 1:30pm
+YES
+Symbol change % is greater than -0.75 since previous close
+YES
+Symbol change % is less than 0.75 since previous close
+YES
+Bot opened a position with call side today
+YES
+Add Action
+NO
+Open QQQ Short Call Spread
+NO
+Add Action
+NO
+Add Action
+NO
+Add Action
+
+--- ACTION: Open Short Call Spread / POSITION DETAILS ---
+Symbol           QQQ
+Expiration       exactly 0 days
+Short Call       0.75% above underlying price
+Long Call        $2.00 above short call leg
+Position Size    Up to $5,000 risk
+Price            Market
+Exit Options     Profits: 50%, Expiration: 10 minutes
+Tags             call side
+
+--- ACTION: ENTRY CRITERIA (accordion section — expanded and read) ---
+ALL SEVEN UNCHECKED (identical to the put side):
+  [ ] Bot has enough available capital
+  [ ] Bot has less than <1 open position>
+  [ ] Bot opened less than <1 new position> today
+  [ ] Bot has less than <1 open position> with symbol
+  [ ] Bot doesn't have a position with an identical leg
+  [ ] VIX is between <Min> - <Max>
+  [ ] IV Rank is between <Min> - <Max>
+
+--- ACTION: POSITION CRITERIA (accordion section — expanded, checkbox+value read) ---
+CHECKED (1 of 16):
+  [x] Mid price is between $ 0.08  -  $ <blank, no max>
+UNCHECKED (15): same list as the put side.
+
+--- NOTES ---
+Exact mirror of ScannerA on the call side. Same gates, same sizing, same exits, same pricing,
+same $0.08 minimum-credit floor, same (empty) entry criteria.
+The two sides are symmetric in every field read.
