@@ -1144,3 +1144,62 @@ record reading only — not the pilot, not Day-0). No other file touched: `build
 **Verification:** `docs/state.md` and this log verified by on-device sha256 (table in chat).
 Tracker Phase 6 gains the matching optional-research row (Andy to visually confirm).
 Blocks 3–4 remain deferred; HOLD on the builder chat remains in force.
+
+---
+
+## 2026-08-03 — Pilot-session prep: five gaps closed before the ritual runs
+
+Cold read of `oa-ops-runbook.md` + `pilot-clone-card-qqq-fortress.md` against the folder found
+five things that would have bitten mid-ritual. All five authorized by Andy and closed here. The
+card's spec is unchanged and still matches `build-plan.md` §2B exactly — none of this touched
+what gets built.
+
+**1. `data/archive/rename_map.csv` created**, header row only, exactly per `build-plan.md` §3:
+`original_name,archived_as,clone_name,date,disposition`. Card Step 8 said "append the row" to a
+file that did not exist; Step 8 is now an append, not schema-authoring mid-rename. Closes a
+pre-Day-0 checklist item.
+
+**2. Capture folders created** — `data/captures/<session-date>-pilot/00-original/` and
+`06-clone-final/`, each with a `.keep` (the `data/raw/` + `data/brief/` convention; empty dirs
+do not survive a commit). ⚠️ **The directory ships with a literal `<session-date>` in its name**
+— the session date is not known yet, and a folder whose name is visibly unfilled cannot be
+mistaken for a filled one. Renaming it is part of the pre-start step below.
+
+**3. Date drift → placeholders.** The card hard-coded `2026-07-31` in **11 places across three
+kinds**: the capture path (6), the `-ARCHIVED-` suffix (4), the `rename_map.csv` row's `date`
+field (1). *(The earlier flag in chat said "3 occurrences" — that was three KINDS; the literal
+count is 11.)* All 11 are now `<session-date>`, and a **BEFORE STARTING** block at the top of the
+card instructs the fill and states the count and the three kinds. The authorship date on line 5
+is left alone. Rationale, Andy's: a placeholder you are told to fill beats a stale literal and
+beats a silent mental substitution.
+
+**4. Pre-registration ID scheme decided and stamped — `PR-NN`**, two digits, assigned in the
+ledger's entry order; the OA template Tag is the bare ID. Added as an `ID` line to the §2
+template and stamped on every drafted entry:
+- **PR-01…PR-04** — Group B clones (FastPT25-S2, -130PM, **Fortress = PR-03**, NoPT50)
+- **PR-05, PR-06** — PutVIX22-SL75, CallVIXdrop
+- **PR-07…PR-13** — the seven mirrors, one ID per bot, as an explicit table (the shared frame
+  covers seven bots and each is tagged and signed separately)
+- **§6 fresh builds — ranges, not literals**: greenfield `PR-14…PR-17` as drafted at four arms,
+  hedge arms `PR-18 onward`, canary `<next free>`. ⚠️ **The canary has no literal ID** because
+  `build-plan.md` §2D allows 4–6 greenfield arms and the hedge count is TBD — any literal today
+  would be an invented arm count. Recorded in ledger §8 item 1 as a dependency of the count
+  decision. Metadata only: no hypothesis, kill criterion, sample target, review date or spec
+  text was touched in any entry.
+
+**5. The Preset/Notes collision, written onto the card at Step 7.** The Fortress entry's
+MECHANISM names a NAMED EXIT OPTION PRESET; if Decision Point A finds no Preset control, that
+line describes a build the bot does not have. Card now says: **paste it verbatim, unedited** —
+the entry is DRAFT/unsigned, signing is Day-0, and the ledger is corrected from the pilot's
+findings before signing. Editing pre-registration text live to match what was just built is how
+a pre-registration stops being one. Step 7 also now carries the literal tag value `PR-03`, so
+there is no lookup mid-ritual.
+
+**Not done, deliberately:** `oa-ops-runbook.md` §2.1 already says "Tags carry the
+pre-registration ID" and is consistent with the scheme — left untouched, out of authorized
+scope. A one-line pointer to the `PR-NN` definition there is an optional follow-up.
+
+**Verification:** all four written files verified by on-device sha256 (table in chat); the two
+created directories verified by `find`. Tracker: no change warranted — this is pre-session prep
+inside Phase 4, no tracker item's status moved. HOLD on the builder chat remains in force;
+cleanup Blocks 3–4 remain deferred.

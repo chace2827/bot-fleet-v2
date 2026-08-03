@@ -37,6 +37,8 @@ Copy this block per bot. Fields are mandatory unless marked optional.
 
 ```
 ### <exact OA bot name>
+ID               PR-NN            two digits, assigned in this ledger's entry order. The OA
+                                  template Tag is the bare ID, e.g. `PR-03`.
 DISPOSITION      clone-to-spec | untouched | fresh build     (build-plan.md §2 group)
 PILLAR / ROLE    IC | Directional | OA-Mirror  ·  candidate | control | experiment | mirror-watch
 STATUS           DRAFT — unsigned
@@ -87,6 +89,7 @@ Per `build-plan.md` §2, under decision freeze: **4 clones + 9 untouched + 5–7
 
 ### `IC-SPX-FastPT25-S2` (clone; original archived `-ARCHIVED-<date>`)
 ```
+ID               PR-01
 DISPOSITION      clone-to-spec        PILLAR/ROLE  IC · control        STATUS  DRAFT — unsigned
 HYPOTHESIS       The legacy configuration, run as ride+S2 with no Exit Options at all, has
                  non-negative Exp(R) per condor over ≥100 post-cutover positions. This is the
@@ -114,6 +117,7 @@ SIGNED           ..............................
 
 ### `IC-SPX-FastPT25-S2-130PM` (clone; original archived)
 ```
+ID               PR-02
 DISPOSITION      clone-to-spec        PILLAR/ROLE  IC · experiment     STATUS  DRAFT — unsigned
 HYPOTHESIS       A 1:30 PM entry produces a materially lower short-strike touch rate than the
                  11:00 entry, and that difference shows up as higher Exp(R) per condor. The A/B
@@ -139,6 +143,7 @@ SIGNED           ..............................
 
 ### `QQQ-IC-0DTE-Fortress` (clone; original archived) — the pilot bot
 ```
+ID               PR-03
 DISPOSITION      clone-to-spec        PILLAR/ROLE  IC · experiment     STATUS  DRAFT — unsigned
 HYPOTHESIS       With PT50 and the time exit actually attached and firing, this structure has
                  positive Exp(R) per condor. The pre-regression window (+2.9% Exp(R), 21
@@ -169,6 +174,7 @@ SIGNED           ..............................
 
 ### `QQQ-IC-0DTE-Fortress-NoPT50` (clone; original archived)
 ```
+ID               PR-04
 DISPOSITION      clone-to-spec        PILLAR/ROLE  IC · experiment     STATUS  DRAFT — unsigned
 HYPOTHESIS       Removing the profit target improves Exp(R) per condor versus the PT50 arm —
                  i.e. PT50 caps winners more than it protects. The genuine A/B: PT50 vs none,
@@ -199,6 +205,7 @@ strategy ones.
 
 ### `DIR-SPX-PutVIX22-SL75`
 ```
+ID               PR-05
 DISPOSITION      untouched            PILLAR/ROLE  Directional · experiment   STATUS  DRAFT
 HYPOTHESIS       A VIX≥22-gated long put debit spread has positive RoR out-of-sample. Backtest
                  +6.4% RoR OOS, params frozen. The open question is not the edge — it is
@@ -224,6 +231,7 @@ SIGNED           ..............................
 
 ### `DIR-SPX-CallVIXdrop`
 ```
+ID               PR-06
 DISPOSITION      untouched            PILLAR/ROLE  Directional · experiment   STATUS  DRAFT
 HYPOTHESIS       A VIX-drop-gated long call debit spread, ridden to settlement with SL50 and no
                  PT, has positive RoR out-of-sample. Backtest +21.9% RoR, IS +24.8% / OOS
@@ -244,11 +252,20 @@ SIGNED           ..............................
 
 ### The seven live mirrors — one shared frame, seven entries
 
-`3DTE $140-$350` · `Nigiri-Paper-v1` · `QQQ long call` ·
-`Friday 14 DTE Broken Wing IB (B-70)` · `Trendy-Paper-v1` · `60min-ORB-10W-Paper-v1` ·
-`Tasty Condor`
+One frame, seven separate entries — **one ID per bot**, so each is tagged and signed on its own:
+
+| ID | Bot |
+|---|---|
+| **PR-07** | `3DTE $140-$350` |
+| **PR-08** | `Nigiri-Paper-v1` |
+| **PR-09** | `QQQ long call` |
+| **PR-10** | `Friday 14 DTE Broken Wing IB (B-70)` |
+| **PR-11** | `Trendy-Paper-v1` |
+| **PR-12** | `60min-ORB-10W-Paper-v1` |
+| **PR-13** | `Tasty Condor` |
 
 ```
+ID               PR-07 … PR-13    one per bot, per the table above
 DISPOSITION      untouched            PILLAR/ROLE  OA-Mirror · mirror-watch   STATUS  DRAFT
 HYPOTHESIS       <per bot> This mirrored strategy reproduces its source's claimed edge closely
                  enough to justify funding. Watch-only — never refactored.
@@ -290,6 +307,9 @@ SIGNED           ..............................
 
 ### Greenfield IC family — 4 matched arms (names TBD)
 ```
+ID               PR-14 … PR-17    one per arm, in creation order, as drafted at four arms.
+                                  ⚠️ build-plan.md §2D allows 4–6; if the count changes, the
+                                  hedge block below shifts with it. Stamp literals at build time.
 DISPOSITION      fresh build          PILLAR/ROLE  IC · experiment      STATUS  DRAFT
 HYPOTHESIS       Across four arms differing in EXACTLY ONE input value — the exit policy —
                  at least one has positive Exp(R) per condor, and the ranking between them is
@@ -324,6 +344,8 @@ SIGNED           ..............................
 
 ### Rebuilt hedge tournament arms (count TBD)
 ```
+ID               PR-18 onward     one per arm, in creation order. Count is TBD, so the literals
+                                  are assigned at build time — not now.
 DISPOSITION      fresh build          PILLAR/ROLE  IC · experiment      STATUS  DRAFT
 HYPOTHESIS       With matched arms in a single execution class, the hedge tournament can rank
                  mechanics. The v1 tournament could not, and this is the rebuild that makes the
@@ -349,6 +371,7 @@ SIGNED           ..............................
 
 ### Optional 1-lot canary
 ```
+ID               <next free ID after the hedge arms are stamped>
 DISPOSITION      fresh build          PILLAR/ROLE  IC · control          STATUS  DRAFT
 HYPOTHESIS       Not a strategy hypothesis — an INSTRUMENT hypothesis: a bot whose PT should
                  fill every single day will stop filling the day the exit engine dies, giving
@@ -394,7 +417,10 @@ checks is worse than none.
 
 ## 8. Open items
 
-1. **Fresh-build names and arm counts** (§6) — Andy's, at build time.
+1. **Fresh-build names and arm counts** (§6) — Andy's, at build time. **This also blocks their
+   `ID` literals:** PR-01…PR-13 are stamped and final; §6's IDs are ranges until the greenfield
+   arm count (4 or 6) and the hedge arm count are decided, which is why the canary has no literal
+   yet. Scheme decided 2026-08-03: `PR-NN`, two digits, ledger entry order, OA Tag = the bare ID.
 2. **The 15:52 backstop timestamp** — unverified, gates two clone specs
    (`oa-platform-reference.md` §8.2).
 3. **Exit Options ← Bot Input, and Preset cross-automation scope** — both unverified, and the

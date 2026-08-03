@@ -10,6 +10,17 @@ clean.***
 
 ## READ THIS FIRST — three things that shape the whole session
 
+> ### ✍️ BEFORE STARTING — fill the date placeholders
+> This card is written with `<session-date>` placeholders. **Replace every one with today's
+> date (`YYYY-MM-DD`) before Step 0** — including the name of the capture folder on disk,
+> which ships as a literal `<session-date>-pilot` directory.
+>
+> **11 occurrences, three kinds:** the capture path (6), the archive suffix
+> (4), and the `rename_map.csv` row's `date` field (1).
+>
+> A stale literal date on an `-ARCHIVED-` suffix or a `rename_map` row is a lineage record
+> that lies — which is the one thing that file exists to prevent.
+
 **1. The account is INACTIVE. That is fine and it is deliberate.**
 Edits made while inactive **do persist** (verified 7/29→7/30). Nothing will trade today. This
 means **order-level verification is impossible today** and is deferred to Day-0 — see §FINISH.
@@ -28,7 +39,7 @@ That is exactly how the v1 `Conditional` bot ended up testing something nobody c
 
 ```
 CLONE NAME       QQQ-IC-0DTE-Fortress          (takes the production name at Step 8)
-ORIGINAL         QQQ-IC-0DTE-Fortress-ARCHIVED-2026-07-31   → then archived
+ORIGINAL         QQQ-IC-0DTE-Fortress-ARCHIVED-<session-date>   → then archived
 EXITS            PT50  +  15:50 time exit  +  15:52 flat-close Scheduled Event backstop
 NOT IN SCOPE     any new exit architecture, any filter change, any sizing change
 ```
@@ -37,7 +48,7 @@ NOT IN SCOPE     any new exit architecture, any filter change, any sizing change
 
 - OA `/bots`
 - The `OA Grab` bookmarklet installed (`oa-ops-runbook.md` §1.2)
-- A folder ready: `data/captures/2026-07-31-pilot/`
+- A folder ready: `data/captures/<session-date>-pilot/`
 - This card
 - Me
 
@@ -68,7 +79,7 @@ AUTOMATION LIST (names, in order):
   4. ______________________
 ```
 
-**CAPTURE →** `data/captures/2026-07-31-pilot/00-original/`
+**CAPTURE →** `data/captures/<session-date>-pilot/00-original/`
 
 > ### ✅ CONFIRM BEFORE PROCEEDING
 > - [ ] One `.txt` file exists **per automation** — count them against the list above.
@@ -120,7 +131,7 @@ CLONE'S TEMPORARY NAME: ______________________________
 4. Repeat until every automation in the clone's list is a copy.
 
 **CAPTURE →** clone's automation list (bookmarklet on the Automations page)
-→ `data/captures/2026-07-31-pilot/02-clone-automations-forked.txt`
+→ `data/captures/<session-date>-pilot/02-clone-automations-forked.txt`
 
 > ### ✅ CONFIRM BEFORE PROCEEDING — do this test, do not skip it
 > - [ ] The clone's automation list has the **same number** of automations as Step 0.
@@ -226,7 +237,7 @@ end-of-day flat close, where fill certainty beats fill quality.
 **DO** — For every automation on the clone: open → **expand every caret** → **OA Grab**.
 Plus Open Position action → Exit Options → `⌘P` → PDF.
 
-**CAPTURE →** `data/captures/2026-07-31-pilot/06-clone-final/`
+**CAPTURE →** `data/captures/<session-date>-pilot/06-clone-final/`
 
 > ### ✅ CONFIRM BEFORE PROCEEDING
 > - [ ] One `.txt` per automation, same count as Step 2.
@@ -244,7 +255,18 @@ Plus Open Position action → Exit Options → `⌘P` → PDF.
 1. Clone → save as **Template**, version **V1**.
 2. In the template **Notes**, paste the bot's pre-registration entry from
    `docs/pre-registration-ledger.md` §4 (`QQQ-IC-0DTE-Fortress`).
-3. Add a **Tag** carrying the pre-registration ID.
+3. Add a **Tag** carrying the pre-registration ID: **`PR-03`**
+   (`pre-registration-ledger.md` §4 — scheme is `PR-NN`, ledger entry order).
+
+> ### ⚠️ PASTE THE MECHANISM VERBATIM — even if Decision Point A came back "no Preset"
+> The entry's MECHANISM line names **"PT50 + 15:50 time exit as a NAMED EXIT OPTION PRESET"**.
+> If Step 5a found no Preset control and you set the values by hand, that line now describes a
+> build this bot does not have. **Paste it anyway, unedited.**
+>
+> The entry is `STATUS DRAFT — unsigned`; signing is a **Day-0** act, and the ledger is
+> corrected from the pilot's findings *before* it is signed. Editing pre-registration text live,
+> mid-ritual, to match what you just built is how a pre-registration stops being one.
+> Report what you found; I amend the ledger with the reason recorded.
 
 > ⚠️ Whether saving a template from a live bot disturbs the bot (position count, automation
 > states) is **expected but unverified**. The account is inactive and this bot has no open
@@ -264,14 +286,14 @@ Plus Open Position action → Exit Options → `⌘P` → PDF.
 > The production name is currently **occupied by the original**. It has to be freed first.
 
 **DO — in this exact order**
-1. **Original** → rename to `QQQ-IC-0DTE-Fortress-ARCHIVED-2026-07-31`.
+1. **Original** → rename to `QQQ-IC-0DTE-Fortress-ARCHIVED-<session-date>`.
 2. **Confirm the rename took** (refresh `/bots`).
 3. **Clone** → rename from its temporary name to **`QQQ-IC-0DTE-Fortress`**.
 4. **Now archive the original.**
 
 > ### ✅ CONFIRM BEFORE PROCEEDING
 > - [ ] `/bots` shows **exactly one** bot named `QQQ-IC-0DTE-Fortress` — the clone.
-> - [ ] The archived one reads `QQQ-IC-0DTE-Fortress-ARCHIVED-2026-07-31`.
+> - [ ] The archived one reads `QQQ-IC-0DTE-Fortress-ARCHIVED-<session-date>`.
 > - [ ] **You archived the ARCHIVED-suffixed one, not the clone.** Read the full name before
 >       clicking. Check again.
 > - [ ] ⚠️ **Name-collision guard:** you did not touch `60min-ORB-10W-Paper-v1`. (Different bot,
@@ -282,7 +304,7 @@ Plus Open Position action → Exit Options → `⌘P` → PDF.
 `data/archive/rename_map.csv`
 ```
 original_name,archived_as,clone_name,date,disposition
-QQQ-IC-0DTE-Fortress,QQQ-IC-0DTE-Fortress-ARCHIVED-2026-07-31,QQQ-IC-0DTE-Fortress,2026-07-31,clone-to-spec
+QQQ-IC-0DTE-Fortress,QQQ-IC-0DTE-Fortress-ARCHIVED-<session-date>,QQQ-IC-0DTE-Fortress,<session-date>,clone-to-spec
 ```
 
 > ### ✅ CONFIRM
@@ -329,7 +351,7 @@ both.
 - [ ] Template V1 saved with the pre-registration in Notes.
 - [ ] Rename done in the right order; `rename_map.csv` row written.
 - [ ] Both toggles screenshotted.
-- [ ] `data/captures/2026-07-31-pilot/` committed.
+- [ ] `data/captures/<session-date>-pilot/` committed.
 
 ### ⏳ DEFERRED TO DAY-0 — order-level verification
 
@@ -373,7 +395,7 @@ nothing trades.
 
 Paste or upload:
 
-1. `data/captures/2026-07-31-pilot/` — both capture sets and the screenshots
+1. `data/captures/<session-date>-pilot/` — both capture sets and the screenshots
 2. Answers to the two open questions:
    - **Preset control exists in the Exit Options panel?** yes / no
    - **Can a Scheduled Event reach 15:52?** yes / no / what the trigger options actually are
