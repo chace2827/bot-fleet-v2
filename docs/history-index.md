@@ -139,3 +139,26 @@ time-persistence primitive and named the eight platform primitives. Subsumed by
 DOCUMENTED / DOCS-SILENT / DOCS-CONFLICT verdicts with source paths — was **not** carried
 forward anywhere and lives only in the archive copy; consult it when a platform-reference claim
 needs its original source.
+
+---
+
+## Reading the v1 era — standing warnings
+
+*(Moved here 2026-08-03 when `docs/current-state.md` was retired in cleanup Block 2. Its full
+v1-era analysis is preserved in this repo's git history — last full version at commit `298d7a3`'s
+parent — and summarized in `data/archive/README-v1-ledger.md`. The live facts it carried now live
+in `docs/state.md`.)*
+
+- **"Pre-fix" ≠ "pre-lapse" — never use them interchangeably.** Pre-fix = before 2026-06-08 (the
+  champion's config epoch boundary in `bots_meta.csv`). Pre-lapse = before 2026-06-01 (when the exit
+  engine died; the A4 quarantine boundary). The 6/01–6/07 gap is labelled `pre-fix` in the archived
+  `trades.csv` but sits **inside** the exit-off quarantine — so pre-fix figures are **not**
+  exit-clean, even though pre-lapse figures are. The lapse signature is winners expiring at
+  `mfe_pct 1.00` while losers still close (dead Exit Options, live monitors).
+- **Any condor Exp(R) computed before 2026-07-31 used the summed-sides denominator** and is the
+  flattered number (`evidence-standards.md` §6.2; receipt `data/receipts/r-denominator-fix.txt`).
+  Restate or drop.
+- **The archived ledger is missing 6 mirror positions (+$632)** that closed after its last ingest —
+  which is why `data/mirror_baseline.csv` must be built from
+  `data/captures/oa_export_positions_2026-07-30.csv`, never from the archived `trades.csv`
+  (`capture-architecture-2026-07-30.md`).

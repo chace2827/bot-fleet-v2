@@ -1084,3 +1084,38 @@ entries) untouched in substance.
 **Verification:** history-index.md and this log verified by on-device sha256 after commit-back
 (hash table in chat). Tracker updated (Andy to visually confirm). HOLD on the builder chat
 remains in force — this cleanup ran in the audit chat.
+
+---
+
+## 2026-08-03 — Folder cleanup Block 2: the cold-read core
+
+Block 1 committed by Andy as `298d7a3` (18 files: 16 deletions + history-index + log). Tracker
+Phase 7 visually confirmed by Andy (uploaded copy hash-matched the pushed version exactly).
+
+**Block 2 (this entry):**
+- **`docs/state.md` (new)** — one page of live facts, no v1 figures: account status, what is
+  built / not built, Day-0 first action, open items. Replaces `current-state.md` as the
+  read-first doc.
+- **`CLAUDE.md` rewritten** — same rules, lean form: file map now matches the 21-doc tree with
+  the cold-read core (state.md · build-plan · reactivation-runbook) marked; §3.1 updated
+  (STATUS.md exists, n=0; stale bots_config.csv path corrected to data/archive/); §3.4
+  correction layer → history-index; §3.6 reworded — decisions live in build-plan (frozen),
+  resolved migration conflicts recorded in history-index (PT25-removed instance now cited to
+  build-plan §2B); §4 stale pre-denominator-fix Exp(R) example figures dropped per
+  evidence-standards §6.2, law unchanged; §9.1 commit-friction and §9.1a failure-record
+  narratives compressed to one-line rules; **new §10 response-style rules** (answer from
+  current state · cite files, don't recount · v1 only when asked or decision-relevant · short
+  by default · never re-explain the migration · no number without its source file).
+- **`docs/evidence-standards.md` §6.5 added** — the loss-side impossible-fill detector rule
+  lifted from current-state (pnl < −risk, per-leg, fixture T00147/T00845, silent on
+  T00038/T00339, FILL_WORSE_THAN_MAE corroboration). Additive only; no gate touched.
+- **`docs/history-index.md` appended** — "Reading the v1 era" standing warnings lifted from
+  current-state: pre-fix ≠ pre-lapse, pre-2026-07-31 condor Exp(R) is the flattered
+  denominator, the +$632 mirror-tail reason mirror_baseline builds from the export. Notes that
+  current-state's full text is preserved in git history (parent of 298d7a3).
+- **`docs/current-state.md` → removed by Andy** (git rm in the Block 2 commit). Its live facts
+  are in state.md; its v1 analysis is history per the index entry above.
+
+**Verification:** all four written files verified by on-device sha256 (table in chat). Tracker
+updated (Block 2 items done; Andy to visually confirm). Blocks 3–4 remain deferred until after
+the pilot / Day-0.

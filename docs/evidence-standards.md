@@ -337,6 +337,26 @@ Day-0 forward.
 Verify `WR × avg_win − (1−WR) × avg_loss ≈ reported Avg P/L`. **A clean match means no
 data-mining fingerprint.** A mismatch means the reported figures were assembled, not measured.
 
+### 6.5 The impossible-fill detector rule — LOSS-SIDE ONLY, per leg
+*(Lifted verbatim-in-substance from the retired `current-state.md`, 2026-08-03. The fixture and
+validation live in `scripts/execution_audit.py --validate`, assertions V1–V4.)*
+
+- **The rule is `pnl < −risk`, never `|pnl| > risk`.** A loss beyond max loss is structurally
+  impossible for a defined-risk spread; a *gain* beyond recorded risk is legal (a debit spread can
+  return more than its debit; a high-credit IC can beat its recorded risk). The absolute-value rule
+  adds **exactly two false positives on clean wins** — T00038 and T00339 — and nothing else (proven
+  load-bearing by assertion V4).
+- **It runs per LEG, and that does not contradict §6's unit-of-account.** §6 fixes the *position* as
+  the unit of expectancy; this is a *structural integrity* check on one vertical spread's own
+  max-loss guarantee, a per-spread property. Netted to the condor, T00845 vanishes.
+- **The frozen fixture is two rows**: `T00147` (R −1.63; mechanism: Cleanup priced at Market — this
+  is correction A1) and `T00845` (R −1.10; logged C4, deliberately uncorrected — immaterial, no
+  diagnosed mechanism). The detector must reproduce both and stay silent on the two wins.
+- **Second, independent corroboration**: `FILL_WORSE_THAN_MAE` — an exit filled outside the
+  position's own recorded price path. It finds T00147 with no risk column and no config (filled 4.81
+  credits beyond the worst mark; next-worst of 1,232 closed rows is 0.91), corroborating the
+  Market-pricing mechanism from the data alone.
+
 ---
 
 ## 7. Kill criteria — per bot, R-based, pre-registered
