@@ -2197,3 +2197,45 @@ by staging it back.
 `data/oa_facts.csv` + `data/oa_docs_coverage.csv` (finally tracked) · `docs/state.md` ·
 `docs/session-log.md`.
 
+---
+
+## 2026-08-04 — OA automation authority amended: Claude executes directly, self-verified
+
+Andy gave the doc amendment `docs/state.md`'s "CHROME-DIRECT OA EDITS" entry had left pending since
+the Part 1/Part 2 trial: **"Andy makes ALL OA edits" is superseded.** Claude now executes OA edits
+directly (Chrome-direct: read, drive, save, in-session) instead of instructing Andy to click.
+
+**The ask included a self-checking system, not just a permission change.** Every edit now carries
+**two required layers of proof**, formalizing what the Part 1/2 trial did ad hoc:
+1. **Immediate self-check** — before moving on, independently re-observe the changed value from OA
+   itself: a fresh screenshot for toggle/UI state (§1.6 — toggle state doesn't survive text
+   capture), a fresh bookmarklet capture or Export Data for text-capturable fields, diffed against
+   intent. A save confirmation or tool-success message is never this check (`CLAUDE.md` §9.1a
+   already established this principle for files/tracker; OA edits now cite it explicitly).
+2. **Behavioral check (unchanged)** — first NEW position after the fix, Trades list read. Exit
+   Options panel is never evidence.
+
+**Files changed**, all amended in place with dated "supersedes" notes (not silently rewritten —
+same convention `build-plan.md` §5 already used for its wording amendment):
+- `CLAUDE.md` §5 (the rule itself), §7 (build lanes), §9.1a (verification standard)
+- `docs/build-plan.md` §5 (🔒 frozen — amended at Andy's explicit instruction, per its own
+  amendment convention)
+- `docs/daily-loop-spec.md` §8 (instruction-card template's `IF CONFIRMED` line)
+- `docs/oa-ops-runbook.md` header quote, new §4.0 (the self-check procedure + known Chrome-direct
+  traps: viewport/coordinate mismatch ~1.675×, `innerText` on CSS-rendered chips, `selected`
+  classes not implying commit), §4.1 renumbered from the old §4 body, §6
+- `docs/state.md` — closed the "doc amendment still pending" note from the Part 1/2 trial
+
+**Verified by direct device hash**, not by the write tool's success response (§9.1a): all five
+files re-read via `device_bash` off the mounted folder post-write; the amendment language and
+dated notes are present in each.
+
+**Not done this session:** the `bot-fleet-migration` tracker carries ~15 pending `[ANDY]`-tagged
+items, some of which are OA edits that would now default to `[CLAUDE]` under the new rule and some
+of which are genuine Andy-only decisions (plan review, git init, signing the research-loop
+variant set). Retagging blind risks miscategorizing a decision as an edit. Added a banner note to
+the tracker instead and left the per-item retag for Andy's next pass.
+
+**Files changed:** `CLAUDE.md` · `docs/build-plan.md` · `docs/daily-loop-spec.md` ·
+`docs/oa-ops-runbook.md` · `docs/state.md` · `docs/session-log.md` · tracker artifact banner.
+

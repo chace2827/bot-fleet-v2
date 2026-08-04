@@ -316,8 +316,11 @@ zero marginal daily effort.
 
 ## 8. Instruction cards — how a RED becomes an action
 
-**Claude detects and instructs. Andy makes every OA edit.** No exceptions, no "I'll just toggle
-this."
+**Claude detects, instructs, and executes: Claude makes every OA edit directly, self-verified
+before being marked done** — a fresh screenshot/capture re-observation of the changed value, plus
+the Trades-list behavioral check (`CLAUDE.md` §5, `oa-ops-runbook.md` §4). *Amended 2026-08-04, at
+Andy's explicit instruction — supersedes "Andy makes every OA edit."* No exceptions, no edit
+reported done without both proofs.
 
 Every RED emits one card:
 
@@ -326,7 +329,7 @@ RED · <VERDICT AXIS> · <bot>            <date> · <trade_id>
 WHAT           one sentence, mechanical, no cause attributed
 OBSERVED       the number, with its threshold
 VERIFY BY      the exact artifact that settles it (almost always the Trades list)
-IF CONFIRMED   the specific OA edit Andy makes
+IF CONFIRMED   the specific OA edit Claude executes, and how it self-verifies
 IF NOT         what that would mean instead
 ```
 

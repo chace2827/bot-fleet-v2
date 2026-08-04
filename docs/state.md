@@ -371,10 +371,16 @@ single match before relying on them.
   refs are unaffected** — use refs, never coordinates.
 
 ### Operating mode
-- **CHROME-DIRECT OA EDITS.** Part 1's trial verdict was **qualified pass — Claude reads and
-  detects, Andy clicks.** Part 2: **Andy released Claude to drive and to save, in-session.**
-  `build-plan.md` §5 / `CLAUDE.md` §5 remain **UNAMENDED**; "Andy makes all OA edits" stands
-  textually. Doc amendment still pending Andy's decision.
+- **CHROME-DIRECT OA EDITS — STANDING AUTHORITY, decided 2026-08-04.** Part 1's trial verdict was
+  qualified pass (Claude reads and detects, Andy clicks); Part 2 released Claude to drive and save,
+  in-session. **Doc amendment now made, at Andy's explicit instruction**: `CLAUDE.md` §5,
+  `build-plan.md` §5, `daily-loop-spec.md` §8, and `oa-ops-runbook.md` (header, §4, §6) all updated
+  from "Andy makes every OA edit" to Claude-executes-directly. Every edit now requires a **two-layer
+  proof** — an immediate screenshot/capture re-observation of the changed value (new, formalizes
+  what Part 1/2 did ad hoc), plus the pre-existing Trades-list behavioral check. Andy retains revoke
+  authority, globally or per-bot, at any time. Known traps from the trial (viewport/coordinate
+  mismatch, `innerText` on CSS-rendered chips, `selected` classes not implying commit) are now
+  written into `oa-ops-runbook.md` §4.0 so they aren't re-discovered per session.
 
 ### Standing / unchanged
 - **Fortress strike check — optional research, non-gating.** Both Fortress bots still carry

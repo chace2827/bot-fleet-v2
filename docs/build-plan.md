@@ -223,9 +223,14 @@ anywhere in the audit. **Nothing else in this plan changed.** Reason and reopen 
 **before** the bot starts. No entry, no restart. Every one of the ≈18–20 active bots needs one, including
 the untouched nine.
 
-**The daily loop** — Claude detects and instructs; **Andy makes all OA edits**; every edit verified by the
-**first new position's Trades list**. The Exit Options panel is never evidence. Three verdicts, never
-blended: did it fire? / did the mechanics execute? / was it right for the tape?
+**The daily loop** — Claude detects, instructs, **and executes: Claude makes OA edits directly**
+(Chrome-direct), self-verified before being reported done — an immediate screenshot/capture
+re-observation of the changed value, **plus** the pre-existing **first new position's Trades list**
+check for behavior. The Exit Options panel is never evidence. Three verdicts, never blended: did it
+fire? / did the mechanics execute? / was it right for the tape?
+*Amended 2026-08-04, at Andy's explicit instruction — supersedes "Andy makes all OA edits." Andy
+retains revoke authority, globally or per-bot, at any time. Full procedure:
+`docs/oa-ops-runbook.md` §4; `CLAUDE.md` §5.*
 
 **Never reset OA history by cloning** — this rule still stands and is *not* contradicted by §2B. Cloning to
 escape a bad record is forbidden. Cloning to build a **new strategy identity to a written spec**, with the

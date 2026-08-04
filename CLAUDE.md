@@ -62,9 +62,18 @@ platform change): `docs/evidence-standards.md` §1, §9.2. The audit itself: `do
 - **No changes during streaks.** Sizing set once at restart, never ad hoc.
 - **Never reset OA history by cloning** — Symbols drop, history fragments, slots burn. Epoch boundaries
   live in `data/bots_meta.csv` + the local ledger.
-- **Claude detects and instructs; Andy makes ALL OA edits.** Every edit is verified by opening the FIRST
-  NEW POSITION after the fix and reading its **Trades list**. A fix unverified after one trading day is
-  repeated at the top of every brief until closed.
+- **OA automation authority — AMENDED 2026-08-04, at Andy's explicit instruction.** Claude executes
+  OA edits directly (Chrome-direct: read, drive, and save, in-session) instead of instructing Andy to
+  click. Every edit carries **two required layers of proof** — neither substitutes for the other:
+  (1) an **immediate self-check**: before moving on, Claude independently re-observes the changed
+  value from OA itself (a fresh screenshot for toggle/UI state, a fresh capture/export for
+  text-capturable fields) and confirms it matches intent — a save confirmation or tool-success
+  message is never this check (§9.1a). (2) The pre-existing **behavioral check**: opening the FIRST
+  NEW POSITION after the fix and reading its **Trades list** — the Exit Options panel is never
+  evidence. A fix unverified after one trading day is repeated at the top of every brief until
+  closed. **Andy retains revoke authority** — globally or per-bot, at any time; until revoked, no
+  edit is queued for Andy to click manually. Full procedure: `docs/oa-ops-runbook.md` §4. Supersedes
+  "Andy makes ALL OA edits"; prior operating history: `docs/state.md`.
 - **Standing exception**: the legacy champion (`IC-SPX-FastPT25-S2`) and its `-130PM` clone are
   deliberately **Exit-Option-free ride+S2 controls**. Do not "fix" them, do not re-arm them. See §Day-0
   in `docs/reactivation-runbook.md`.
@@ -107,7 +116,9 @@ platform change): `docs/evidence-standards.md` §1, §9.2. The audit itself: `do
 `mirror_baseline.csv` — Phase 2–4 deliverables tracked in the `bot-fleet-migration` tracker.
 
 ## 7. Build lanes
-Cowork = strategy, ops, decisions, docs. Claude Code = code and VPS. **OA edits = Andy only.**
+Cowork = strategy, ops, decisions, docs, **and OA edits — Claude executes directly, self-verified
+per §5.** Claude Code = code and VPS. Andy retains override/revoke authority over direct OA-edit
+access at any time.
 
 ## 8. Archive pointer
 `~/bot-fleet` — permanent READ-ONLY archive, git remote `chace2827/bot-fleet` (note: `.env` is NOT in
@@ -147,6 +158,8 @@ commit in one command, and say so plainly.
 > nothing in either direction.
 >
 > **Files** verify by a direct device read or hash of the file itself.
+> **OA edits** verify by the two-layer check in §5 — a fresh screenshot/capture re-observation of
+> the changed value, plus the Trades-list behavioral check. A save confirmation proves nothing.
 > **The tracker artifact** verifies by **Andy's visual confirmation**, and that confirmation is part
 > of the close-out — the close-out is not complete without it.
 >

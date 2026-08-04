@@ -10,8 +10,11 @@
 > **What this is not:** what to build (`build-plan.md`, frozen), what the platform can express
 > (`oa-platform-reference.md`), or how to read the results (`daily-loop-spec.md`).
 >
-> **The one rule underneath all of it:** *Claude detects and instructs; **Andy makes every OA
-> edit**.* Nothing in this runbook is executed by Claude.
+> **The one rule underneath all of it — AMENDED 2026-08-04, at Andy's explicit instruction:**
+> *Claude executes every OA edit directly (Chrome-direct: read, drive, save), and self-verifies it
+> before reporting it done.* A save confirmation or tool-success message is never the verification.
+> Andy retains authority to revoke direct-edit access, globally or per-bot, at any time. Supersedes
+> "Andy makes every OA edit" — see `CLAUDE.md` §5, `build-plan.md` §5.
 
 ---
 
@@ -220,10 +223,38 @@ then check group counts against the CSV.
 
 ## 4. Edit verification — the procedure that is not optional
 
-**Every OA edit is verified by reading the first NEW position's Trades list.** A fix unverified
-after one trading day is repeated at the top of every brief until closed.
+Every OA edit carries **two required layers of proof.** Neither substitutes for the other, and an
+edit is not reported done until both are satisfied (or, for Layer 2, queued and tracked until the
+next trading day produces a position).
 
-### 4.1 The two acceptable proofs, in order of preference
+### 4.0 Layer 1 — the immediate self-check (every edit, every time)
+
+Before moving to the next action, independently re-observe the changed value **from OA itself** —
+never trust the save confirmation, a toast, or the tool call that made the edit (`CLAUDE.md` §9.1a).
+
+1. **Toggle / UI state** (`AUTOMATIONS`, `EXIT OPTIONS`, template version, and anything else that
+   does not survive text capture per §1.6) — take a fresh **screenshot** *after* the save. File as
+   `data/captures/edit-verify/<date>/<bot>_<field>.png`.
+2. **Text-capturable fields** (decision-node values, bot inputs, template Notes/Tags) — take a
+   fresh bookmarklet capture or `Export Data` *after* the save and diff it against the intended
+   value. Same reading rules as the capture ritual: read `input.value` / `input.checked` /
+   `data-value` on `<item>` nodes, **never `innerText` alone** — it has produced wrong findings
+   three separate times, most recently on CSS-rendered filter chips whose `innerText` is `""`.
+3. Log the self-check result (match / mismatch) against the edit in the session log. A mismatch is
+   surfaced as its own finding, not silently retried.
+
+⚠️ **Known traps from the Chrome-direct trial** (full record: `docs/state.md`): `read_page`'s
+reported viewport and screenshot pixel coordinates disagree by ~1.675× — **use element refs for
+every click, never raw coordinates.** A `selected` CSS class on a multi-select option does not
+imply a committed value — closing the menu is what commits it; check the underlying field, not the
+checkmarks.
+
+### 4.1 Layer 2 — the behavioral check (unchanged from the original procedure)
+
+**Every OA edit is also verified by reading the first NEW position's Trades list.** A fix
+unverified after one trading day is repeated at the top of every brief until closed.
+
+**The two acceptable proofs, in order of preference:**
 
 1. **Button test-fire**, then read the resulting **Trades list**; or
 2. Open the **first new position** and confirm the Trades list contains the PT row and the
@@ -277,7 +308,9 @@ does not error — it silently falls back to a stale Default and keeps trading**
 
 ## 6. Standing operational rules
 
-- **Claude detects and instructs; Andy makes every OA edit.** No exceptions.
+- **Claude executes every OA edit directly, self-verified per §4 (both layers).** *Amended
+  2026-08-04, at Andy's explicit instruction — supersedes "Andy makes every OA edit."* Andy retains
+  revoke authority, globally or per-bot, at any time.
 - **Refactor first (behaviour-neutral), then change values.** Pilot on a dead bot; the champion
   goes last.
 - **No changes during streaks.** Sizing is set once at restart, never adjusted ad hoc.
