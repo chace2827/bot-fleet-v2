@@ -1,0 +1,57 @@
+# Exit Options panel — full 13-field roster as rendered
+https://app.optionalpha.com/bots/bot/BOTfw5TkkCRF2717857919585029021/settings
+captured: 2026-08-04 (pilot Step 6)
+bot: QQQ-IC-0DTE-Fortress Clone   bot_id: BOTfw5TkkCRF2717857919585029021
+
+!! METHOD SUBSTITUTION — READ THIS BEFORE TREATING THIS FILE AS THE CARD'S ARTEFACT.
+   The card's Step 6 asks for the Exit Options panel via Cmd-P -> Save as PDF.
+   THAT WAS NOT DONE. A print-to-PDF cannot be driven from this session (the OS print
+   dialog is outside the browser tool's reach). What is here instead is a DOM read of the
+   same modal, taken with every field expanded, values from input.value.
+   This is STRONGER than the PDF for diffing (text, greppable, exact) and WEAKER as a
+   visual record (no rendering). oa-ops-runbook 1.3 lists the PDF as a FALLBACK for what
+   the bookmarklet misses; the DOM read does not miss it. Recorded as a substitution, not
+   as a completed PDF step.
+
+--- PANEL HEADER ---
+Title:   "Exit Options"
+Control: "Presets"  (a.btn.gray.menu, data-ui menu=loadPresets)
+Standing text: "Your bot checks your position every 1 minute from 9:31am to 1 minute before
+market close and automatically attempts to close it if any of these criteria are met."
+  -> corroborates the ~15:59 Exit-Options window; distinct from the 15:45 scan-cadence end
+     and the 15:55 automation cap. THREE WINDOWS, do not conflate.
+
+--- PRESETS AVAILABLE IN THE ACCOUNT (read from the loadPresets menu) ---
+  TIER2-CHECK4-PUTSIDE   id=UIfw5TkkCRF1517858152565216101
+  (exactly one; this is the check-4 residue recorded in state.md. NOT attached to anything.)
+
+--- THE 13-FIELD ROSTER, AS RENDERED, WITH THE CLONE'S PUT-SIDE VALUES ---
+  1  Profit Taking %       50% of credit      pricing: Normal      [profits=0.5, smprofits=normal]
+  2  Profit Taking $       None                                    [dprofit=""]
+  3  Price Target          None                                    [price=""]
+  4  Stop Loss %           None                                    [stoploss=""]
+  5  Stop Loss $           None                                    [dstop=""]
+  6  Trailing Stop         None                                    [tstop=""]
+  7  Touch                 None                                    [touch=""]
+  8  Expiration            10 minutes before  pricing: Market      [expdays=0.01, smexpdays=market]
+  9  Avoid Events          None                                    [xevents=""]
+ 10  Earnings              None                                    [epsdays=""]
+ 11  [ ] Wait at least 1 day to avoid pattern day trading          [nopdt=false]
+ 12  [ ] Disable exit options if bid/ask exceeds $ <blank>         [chigba=false, igba=""]
+ 13  [ ] Save as presets for short option positions                [defs=false]
+     + hidden preset-NAME field, name="pretext", value=""  <-- see finding below
+
+--- FINDING: THE PRESET NAME FIELD EXISTS AND IS NAMED `pretext` ---
+state.md's pilot-clone block records that part 2 flagged "no name field observed", then
+RETRACTED it because the "Save as presets" checkbox had never been ticked so the naming
+step was never reached. This capture closes that loop from the DOM side: the field is
+present in the form as input[name="pretext"], rendered hidden until `defs` is checked.
+build-plan.md 2B/8.1's NAMED preset is expressible. Observed, not inferred.
+
+--- FINDING: EVERY POSITION PARAM IS LINKABLE, NOT JUST EXIT OPTIONS ---
+On the Open Position action, ct.param-input carries linkable:true for:
+  symbol · series (Expiration) · longPut/longCall · shortPut/shortCall · amount · price · exits
+and linkable:FALSE for:  tags
+D-1's forcing fact is unchanged — there is no per-field link INSIDE the exits bundle, so the
+bundle is still the smallest linkable unit for exits. But "the link icon sits on the Exit
+Options row" understates it: it sits on seven rows.

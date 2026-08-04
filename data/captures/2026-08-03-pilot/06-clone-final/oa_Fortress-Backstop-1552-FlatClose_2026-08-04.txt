@@ -1,0 +1,41 @@
+# Fortress-Backstop-1552-FlatClose
+https://app.optionalpha.com/bots/bot/BOTfw5TkkCRF2717857919585029021/settings
+captured: 2026-08-04 (pilot Step 6 — CLONE FINAL)
+method: Claude-in-Chrome DOM extraction; input.value / data-ui param JSON.
+bot: QQQ-IC-0DTE-Fortress Clone   bot_id: BOTfw5TkkCRF2717857919585029021
+automation_attachment_id: fw5TkkCRF2717857955908567123
+Built 2026-08-03 (card Step 5b). NOT EDITED THIS SESSION. Read-only.
+
+--- SCHEDULE (as rendered on the bot settings automation list) ---
+Every week on Mon-Fri, 3:52pm EST
+class: TRIGGERS (Repeating trigger, Market Time (EST) -> Custom -> 15:52)
+
+--- AUTOMATION TREE (expansion verified) ---
+START AUTOMATION
+Fortress-Backstop-1552-FlatClose
+Repeat for each position
+Close Position
+
+--- ACTION: Close Position ---
+Position         <output of posrepeater398133 — "Repeat for each position">
+Price            Market
+Quantity         100% of position
+Memo             1552 backstop flat close
+Tags             <empty>
+Options          "Discard expiring OTM long leg(s) with no bid price"  chabs=false
+raw closeqty     {"text":"100% of position","type":"pct","value":100}
+raw price        {"text":"Market","smart":"market"}
+
+--- STEP 5c VERDICT (pricing) ---
+Market pricing HERE IS THE PERMITTED CARVE-OUT (oa-platform-reference 7: hard end-of-day
+flat close; fill certainty beats fill quality).
+
+--- CARRIED-FORWARD OPEN ITEMS, NOT RESOLVED BY THIS CAPTURE ---
+1. 8.2 ATTRIBUTION GUARD IS STILL UNSATISFIED. The Expiration (15:50) exit is ALSO Market,
+   so pricing no longer distinguishes the backstop from the Exit-Options exit. Only the memo
+   string "1552 backstop flat close" and the ~2-minute timestamp gap separate them.
+   Andy's call, per state.md. NOT changed here.
+2. DST / "Market Time (EST)" AMBIGUITY UNRESOLVED. ntime=1552 is the operative field; the
+   serialized startDate stamp implied 16:52 ET under EDT. Needs a Day-0 observation.
+3. TIMING IS NOT GUARANTEED. OA pushes automations into a distributed queue; the backstop
+   has an ~8-minute buffer, not a slot. Any exact-timestamp rule reads a jittered clock.

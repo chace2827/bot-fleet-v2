@@ -2432,3 +2432,362 @@ visual confirmation to be complete (`CLAUDE.md` §9.1a).
 
 **Files changed:** `docs/decision-memo-2026-08-04.md` (new) · `docs/state.md` ·
 `docs/session-log.md`.
+
+---
+
+## 2026-08-04 — PILOT CLONE, part 4: the ritual finished (Chrome-direct), D-1 gates closed, D-3 set
+
+**Sprint Task 3.** Claude drove every click. Steps 5c, 6, 7, 9 and FINISH are DONE; Step 8 is
+3-of-4 done — **the archive click did not take and is the one item outstanding.** The clone now
+holds the production name `QQQ-IC-0DTE-Fortress`.
+
+### Identities, for the record
+
+| Thing | Id |
+|---|---|
+| Production bot (was the clone) | `BOTfw5TkkCRF2717857919585029021` |
+| Archived-name bot (the original) | `BOTfw5TkkCRF817734373392552121` |
+| Template `QQQ-IC-0DTE-Fortress` V1 | `Tfw5TkkCRF2617858650531245641` |
+| ScannerA automation object | `RTfw5TkkCRF2717857919585272551` |
+| Probe input on the TEST bot | `IN178586615441261` |
+
+### What was written to OA this session
+
+1. `Fortress-ScannerA-PutSpread-CLONE` → **`Fortress-ScannerA-PutSpread`** (Decision 7 item 3).
+2. Bot Tags → **`experiment`** (Decision 7 item 5). Picked the existing account tag (n=91), not
+   typed, to avoid creating a near-duplicate.
+3. **Template `QQQ-IC-0DTE-Fortress` created, VERSION 1**, with PR-03 pasted into Notes.
+4. Original renamed → **`QQQ-IC-0DTE-Fortress-ARCHIVED-2026-08-03`**.
+5. Clone renamed → **`QQQ-IC-0DTE-Fortress`**.
+6. Account setting **`itmpaper` = `market`** (D-3, ruled to Claude's call; memo recommendation
+   taken). **`itmlive` untouched at `auto` — that remains the Day-0 gate.**
+7. On `TEST QQQ-IC-0DTE-HedgeC-S3 Clone` only: automation input **`CLAUDE-G1-EMPTY-EXITS`**
+   created on `HedgeC-Scan-Put`'s Open Position action, with an EMPTY Exit-Options default.
+   Authorized probe. **Not reverted** — see residue below.
+
+**Bot Group deliberately NOT set.** Ruled: stays unset until the Phase 4 sweep.
+
+### Every edit's Layer-1 self-check — all MATCH, all after a hard reload, all from
+`input.value` / `input.checked`, never `innerText`, never a save banner
+
+| Edit | Re-read | Result |
+|---|---|---|
+| ScannerA rename | `input[name=action].value` → `{"text":"Fortress-ScannerA-PutSpread",…,"value":"RTfw5TkkCRF2717857919585272551"}` | MATCH |
+| Tags | `input[name=tags].value` = `experiment` | MATCH |
+| Template Notes | `<pre>` reconstructed and compared byte-for-byte against the ledger source: **1574/1574 chars, byteExact true** | MATCH |
+| Original rename | `.edit-title` after hard reload = `QQQ-IC-0DTE-Fortress-ARCHIVED-2026-08-03`; `document.title` agrees | MATCH |
+| Clone rename | `/bots` roster: exactly ONE `QQQ-IC-0DTE-Fortress`, resolving to the CLONE's id; the ARCHIVED name resolves to the ORIGINAL's id | MATCH |
+| `itmpaper` | `input[name=itmpaper].value` = `market`, `itmlive` = `auto`, Bot Schedule + Max Exit Attempts unchanged | MATCH |
+| G1 probe input | after hard reload the Inputs panel lists `CLAUDE-G1-EMPTY-EXITS · 1 usage · Exit Options`, Default Value `None` | MATCH |
+
+**Layer 2 (Trades list): DEFERRED TO DAY-0.** Not done, not partially done. The account is
+inactive and nothing will trade.
+
+---
+
+## ⛔ THE ONE THING THAT DID NOT WORK — the archive
+
+`Archive` on the bot `...` menu **would not fire**, across three attempts and three distinct
+mechanisms:
+
+1. dispatched `pointerdown/mousedown/pointerup/mouseup/click` on the `item[data-click=archiveBot]`
+2. the same sequence on the element returned by `document.elementFromPoint` at the item's centre
+   (a `<bd>`), i.e. the true hit-tested target
+3. `computer.left_click` with an element ref
+
+Each attempt: the menu closed, no confirmation dialog appeared, no error surfaced, and `/bots`
+afterwards still listed `QQQ-IC-0DTE-Fortress-ARCHIVED-2026-08-03` with the footer still reading
+`36 active bots`. **Every other write this session committed with mechanism 1**, so this is
+specific to `archiveBot`, not to the driving method.
+
+**I stopped after three, per the standing rule, and deliberately did NOT fall back to a
+coordinate click.** `Delete` sits directly below `Archive` — ~29 px apart in screenshot space —
+and the two are one row apart in a menu whose coordinate mapping is already known to be
+unreliable (viewport 1920×985 CSS vs 1529-px screenshots). A mis-landed click would have
+permanently destroyed a bot carrying 41 closed positions of pre-regression history. Not a
+tradeoff worth taking to save one human click.
+
+**OUTSTANDING: one click.** `QQQ-IC-0DTE-Fortress-ARCHIVED-2026-08-03` → `...` → `Archive`.
+The rename is done and verified, so the production name is already free and correct; the archive
+is hygiene, not a blocker.
+
+---
+
+## FINDINGS
+
+### 1. ⭐ Saving a template does NOT disturb the bot — and it hands us `BUILD_ID` for free
+
+`oa-ops-runbook.md` §2.3's `[EXPECTED, not confirmed]` question is **ANSWERED: no disturbance.**
+After the template save, the bot re-read identical on every field — 3 automations, same names and
+order, Symbols `No symbols yet`, Allocation $100,000, limits 2/2, Day trading Allowed, scan speeds,
+both toggles, all four activity alerts.
+
+**What DID change is an addition, not a disturbance:** a new **Template** panel now appears on the
+bot's settings page —
+
+```
+Template      QQQ-IC-0DTE-Fortress   (→ /bots/templates/Tfw5TkkCRF2617858650531245641)
+BOT VERSION   1  Aug 4, 2026
+```
+
+**This is §2.2's `BUILD_ID` mirror, native.** The runbook proposed hand-mirroring the template
+VERSION into a non-functional bot input so the running bot self-reports which pre-registration it
+executes — and then correctly predicted the failure mode (*"a manual step that will be forgotten,
+reproducing the `bots_config.csv` disease in a new location"*) and gated the whole mechanism on
+building an assert. **OA already does the mirroring itself.** The bot displays its own template
+version, maintained by the platform, with no hand-step to forget. §2.2's precondition is moot for
+the version field; **do not build the hand-mirrored `BUILD_ID`.**
+
+### 2. ⭐ D-1 GATES G1–G4 — all four closed
+
+**G1 — can a bundle input hold an EMPTY value? YES, server-confirmed.**
+Client half on the pilot: clearing every field left all 13 exit fields `None`, no validation error,
+Save enabled. Server half on the TEST bot (authorized): the empty bundle serialized to
+`{"profits":"","dprofit":"","price":"","stoploss":"","dstop":"","tstop":"","touch":"","expdays":"","xevents":"","epsdays":"","text":"None","dtype":"short","sig":"…^^^$0|…"}`,
+saved, and **survived a hard reload** with Default Value `None`.
+**Option A can express the `ride` arm. The G1 fallback in the memo is not needed.**
+
+**G2 — does the capture record values or a reference? A REFERENCE. This one bites.**
+Once Exit Options are driven by an input, the action's `exits` param persists as:
+
+```json
+{"nid":"root","text":"CLAUDE-G1-EMPTY-EXITS","type":"input","input":"IN178586615441261",
+ "oldValue":{ …the full pre-link payload… }}
+```
+
+**No live field values at the action level — only the input's id and label**, plus an `oldValue`
+snapshot of what was configured *before* the link, which is an archive and goes stale the moment
+the input's value changes. Confirmed after a hard reload.
+
+**Consequence, and it is a real one:** a per-bot capture that reads only the action records the
+input's NAME. `bots_config_v2.csv`, the capture-diff and the drift detector must **additionally
+read the input object's value**, or every arm in the greenfield family will diff as identical
+while carrying different exits. This is not an opacity problem — the input's value is readable —
+but it IS a second fetch that nothing in the current capture ritual performs.
+**⚠️ `oldValue` is a trap for exactly this reason: it looks like the answer and is not.**
+
+**G3 — bundle input + named Preset: COMPATIBLE, not exclusive.**
+The `Presets` control (`menu:loadPresets`) is present in the same Exit Options editor that authors
+a bundle input's default value, and it listed `TIER2-CHECK4-PUTSIDE`
+(`UIfw5TkkCRF1517858152565216101`) there. They compose: preset loads values → values fill the
+bundle → bundle becomes the input's default.
+
+**G4 — does editing a preset propagate to attached actions? NO, by the stored contract.**
+The `exits` payload carries no preset id, uid or reference of any kind — only the serialized
+values. There is no pointer to propagate through; a preset is load-by-value.
+[STRUCTURAL — read from the persisted object. Not a behavioural test.]
+
+### 3. The preset NAME field exists and is called `pretext`
+
+`state.md` recorded that part 2's "no name field observed" was RETRACTED because the *Save as
+presets* checkbox had never been ticked. Closed from the DOM side: `input[name="pretext"]` is
+present in the exits form, rendered hidden until `defs` is checked.
+**`build-plan.md` §2B/§8.1's NAMED preset is expressible. Observed, not inferred.**
+
+### 4. The 🔗 is on SEVEN rows, not one
+
+`linkable:true` on `symbol`, `series`, `longPut`/`longCall`, `shortPut`/`shortCall`, `amount`,
+`price` **and** `exits`; `linkable:false` only on `tags`. D-1's forcing fact survives intact —
+there is no 🔗 *inside* the bundle, so the bundle is still the smallest linkable unit for exits —
+but "the link icon sits on the Exit Options row" understates the surface.
+
+### 5. ⛔ `PR-03` IS NOT EXPRESSIBLE AS AN OA TAG — the tag was NOT written
+
+Typing `PR-03` into the tag widget produced a single suggestion: **`pr 03`**. OA normalises tags
+to lowercase and converts non-alphanumerics to spaces. Every pre-existing account tag is
+consistent with this (`experiment`, `focus ic`, `focus oa mirror`, `focus directional`).
+
+`pre-registration-ledger.md` §2 specifies *"template Tag is the bare ID, e.g. `PR-03`"*, and
+`oa-ops-runbook.md` §2.1 wants tags to make a template greppable back to its entry.
+**Neither is satisfiable as written.** I did **not** write `pr 03` — that is a silent substitution
+at a platform limit, and the card forbids exactly that. The input was cleared; template Tags remain
+`experiment`.
+
+**The link is not lost:** the template's Notes carry the full entry verbatim, including the literal
+line `ID               PR-03`, so the template IS greppable to PR-03 — via Notes, not via Tags.
+**Andy's call:** adopt `pr 03` as the tag convention, or drop Tags as the link mechanism and let
+Notes carry it.
+
+### 6. ⚠️ `itmpaper` = `market` races the bot's own Expiration exit
+
+D-3 executed per the memo. But read the setting's own description: it closes ITM positions
+**"10 minutes before the close on expiration day"** — which is the *same* trigger point as the
+bot's `expdays: 0.01` Expiration exit, also 10 minutes before, also Market. On a 0DTE condor that
+goes ITM, **two Market closes are now aimed at the same instant.**
+The memo predicted this ("they would race"); the settings copy confirms it in the platform's own
+words. **Day-0 must watch for it** — and note `oa-ops-runbook.md` §4.4's timestamp-gap test is the
+tool: a designed close shows `:00`/`:00`, an emergent one `:00`/`:01–:02`.
+
+### 7. The two scanners' exit labels differ; their payloads do not
+
+ScannerA reads `"Profit: 50%, …"` with an `xevents` key in its `sig`; ScannerB reads
+`"Profits: 50%, …"` with no `xevents` key. **Numeric payload identical on both: `^^0.5|0.01^$0`.**
+This is the 2026-08-04 check-4 save residue, and it is a live demonstration of Decision 7 item 2's
+warning: **a capture-diff comparing rendered labels would report a false difference between the two
+sides of the same condor.** Decode, don't compare labels.
+
+---
+
+## METHOD FAILURES AND RITUAL BREAKS — the pilot's real product
+
+### A. ⛔ ELEMENT REFS ARE NOT SUFFICIENT ON THIS APP
+
+`oa-ops-runbook.md` §4.0 currently says: *use element refs for every click, never raw coordinates.*
+That is correct about coordinates and **incomplete about refs.** `computer.left_click` with an
+element ref reported `Clicked on element ref_N` and **nothing happened** — on the automation rows,
+on the node cards, and on the archive item. No error. The tool's success message is not evidence
+that the app received the click.
+
+**What works:** dispatching the full sequence
+`pointerdown → mousedown → pointerup → mouseup → click` on the element, with `clientX`/`clientY`
+set to its bounding-rect centre. Every write in this session went through that path.
+
+This is the same wall the 2026-08-03 part-2 session hit before it stopped ("element-ref clicks on
+the gear icon registered without opening the dialog"). It was recorded there as degradation; it is
+better read as **a standing property of this app**, and the ritual should say so.
+
+### B. `computer.type` lands intermittently
+
+Real typing committed the automation rename, then silently failed twice on the Tags box and the
+template Name field — the value simply never arrived, though `document.activeElement` was the right
+input. `form_input` (native setter + input event) worked every time. **Prefer `form_input`; verify
+the field's `.value` after every text entry rather than assuming.**
+
+### C. The `<pre>` round-trip ate two placeholders — caught only by a byte-exact assert
+
+First paste of PR-03 into template Notes came back with `CONFIG HASH       @ ` — OA's sanitizer
+**decodes entities and then strips unknown tags**, so `&lt;capture&gt;` was decoded to `<capture>`
+and removed as markup. The rendered text looked fine at a glance; the two placeholders were gone.
+Fixed by double-escaping (`&amp;lt;`) so one decode pass leaves `&lt;` intact.
+**Caught only because the verification compared 1574 characters byte-for-byte instead of eyeballing
+the panel.** This is the evidence-standards rule ("assert quotes byte-exact") earning its keep on a
+write path rather than a read path.
+
+### D. The card's Step 6 PDF was NOT produced — substitution recorded
+
+`⌘P → Save as PDF` cannot be driven from this session (the OS print dialog is outside the browser
+tool's reach). What exists instead is a DOM read of the same modal with every field expanded,
+in `06-clone-final/oa_exit-options-panel_2026-08-04.txt`, and the file says so at the top.
+Stronger for diffing, weaker as a visual record. `oa-ops-runbook.md` §1.3 lists the PDF as a
+*fallback for what the bookmarklet misses* — the DOM read does not miss it.
+
+### E. Template creation has no Version and no Notes field
+
+The **Save Template** form offers Name, Caption, Icon and Tags only — and its Icon/Tags sit under
+*"Bot Settings — Default settings for bots cloned from this template"*, i.e. they are **defaults
+for future clones, not properties of the template.** VERSION and Notes exist on the template
+**record**, reachable only after creation. The card's Step 7 ("save as Template, version V1… paste
+into the template Notes") reads as one action and is two. Worth writing into the card.
+
+**Template name:** the card does not specify one; the form pre-filled `QQQ-IC-0DTE-Fortress Clone`.
+I set **`QQQ-IC-0DTE-Fortress`** — the name the bot takes one step later and the name PR-03 is
+registered under. Baking "Clone" into a permanent artifact would have been a lineage record that
+lies. Flagged as a choice, not silently taken.
+
+---
+
+## RESIDUE LEFT ON PURPOSE
+
+| # | Residue | Where | Status |
+|---|---|---|---|
+| 1 | Preset `TIER2-CHECK4-PUTSIDE` | account | KEEP, ruled |
+| 2 | ScannerA's re-serialized `exits` label | production bot | KEEP, ruled |
+| 3 | Bot Group `None` | production bot | KEEP until Phase 4 sweep, ruled |
+| 4 | `EXIT OPTIONS` toggle ON | production bot | Birth state, left as-is |
+| 5 | **`CLAUDE-G1-EMPTY-EXITS` input with an EMPTY exits bundle** | `TEST QQQ-IC-0DTE-HedgeC-S3 Clone` → `HedgeC-Scan-Put` | **NEW. Authorized probe, not reverted.** That action now has NO exit options. Zero behavioural risk — delete-list bot, AUTOMATIONS OFF, account inactive. The pre-link config is preserved in the param's `oldValue`. Say the word and I revert it. |
+
+## STILL DEFERRED TO DAY-0 — unchanged, none of this was closed today
+
+- First new position's Trades list: must show a PT row AND a time-exit row
+- `BACKSTOP_CAUGHT_IT`: the 15:52 backstop must NOT be what closes positions
+- DST / `Market Time (EST)`: does `ntime=1552` fire at 15:52 ET in August?
+- Whether flipping `EXIT OPTIONS` ON actually re-arms exit-order generation (the causal claim)
+- **NEW:** the `itmpaper=market` ↔ Expiration-exit race at 15:50
+- `oa-platform-reference.md` §9 #5: is re-applying Update Position Exit Options side-effect-free
+
+## Verification of files written
+
+Every file below was written by `device_bash` directly to the mounted repo path and hashed there.
+The two screenshot pairs were additionally hashed in the container and on the device and compared.
+
+### 2026-08-04 part 4, close-out — archive confirmed, three rulings applied
+
+**ARCHIVE DONE — by Andy, manually.** Claude could not fire it (three attempts, three mechanisms;
+see above). **Verified read-only immediately after, from `/bots`:**
+
+| Check | Result |
+|---|---|
+| Footer active count | **`35 active bots • 15 left in your plan`** (was 36) |
+| Bots named exactly `QQQ-IC-0DTE-Fortress` | **exactly 1** |
+| …resolving to | **`BOTfw5TkkCRF2717857919585029021`** — the CLONE |
+| `QQQ-IC-0DTE-Fortress-ARCHIVED-2026-08-03` still listed | **no** |
+| Fortress family remaining | `QQQ-IC-0DTE-Fortress` · `-NoFilter` · `-NoPT50` · `-S2` |
+| Name-collision guard (Trap 8) | `60min-ORB-10W-Paper-v1` **present** · `Opening Range Breakout 60m` **present** — neither touched |
+| Do-not-touch bots | `-NoPT50`, `IC-SPX-FastPT25-S2`, `IC-SPX-FastPT25-S2-130PM` all **present** |
+
+**Step 8 is now COMPLETE. The pilot clone ritual is finished end to end.**
+
+---
+
+### Rulings applied 2026-08-04
+
+**1. PR-03 tag → ADOPT `pr 03`.** Written and verified: template tags read **`experiment,pr 03`**
+after a hard reload (`input[name=tags].value`). Notes **re-verified byte-exact at 1574/1574
+characters after the tag write** — the literal `ID               PR-03` line is intact, so the
+record is unchanged and the tag is only a search handle.
+Convention recorded as a dated append to `oa-ops-runbook.md` §2.1: **`PR-NN` → `pr nn` in OA tags,
+literal `PR-NN` in Notes.** Tagged as the substitution-at-a-platform-limit class and documented
+rather than absorbed.
+*Method note:* the tag widget will not commit from `form_input` + Enter. It needs per-character
+`input` events to open its suggestion list, then a click on the suggestion item. Recorded in §4.0.
+
+**2. `CLAUDE-G1-EMPTY-EXITS` on `TEST QQQ-IC-0DTE-HedgeC-S3 Clone` → LEAVE.**
+> ⚠️ **PHASE 4 DELETION MUST ALSO CLOSE THIS.** `TEST QQQ-IC-0DTE-HedgeC-S3 Clone`
+> (`BOTfw5TkkCRF2217852702121253931`) is on the delete list, and deleting it is what disposes of
+> the `CLAUDE-G1-EMPTY-EXITS` input (`IN178586615441261`) and the empty Exit-Options bundle now
+> sitting on its `HedgeC-Scan-Put` Open Position action. **If that bot is ever un-listed from the
+> delete set, this residue becomes live again and must be reverted instead** — the pre-link config
+> survives in the param's `oldValue`.
+
+**3. `BUILD_ID` → ACCEPTED, do not build the manual mirror.** Appended to `oa-ops-runbook.md`
+§2.2, dated and evidence-cited. §2.3's open check marked **ANSWERED** in place, and its row in the
+§7 open-checks table **struck**.
+⚠️ **A successor check was opened by that same evidence and is NOT run:** the template page's
+automation rows carry `rid=RTfw5TkkCRF2717857919585272551` — **the same object id as the bot's live
+ScannerA.** Whether a later edit to the bot's automation therefore changes what the template
+describes is untested. **Do not assume a template is a frozen snapshot.** Recorded against §2.3 and
+carried into the §7 table as the successor row.
+
+---
+
+### ⛔ TWO FINDINGS AGAINST THE PILOT CARD — FLAGGED, NOT EDITED (card is gated)
+
+Both belong in the Task 4 authorization batch. Neither was written into
+`docs/pilot-clone-card-qqq-fortress.md`.
+
+**(a) Step 7 is two actions, not one.** The card reads *"save as Template, version V1 … paste the
+pre-registration into the template Notes … add a Tag."* The **Save Template** form offers only
+**Name, Caption, Icon and Tags** — and its Icon/Tags sit under *"Bot Settings — Default settings for
+bots cloned from this template"*, i.e. they are **defaults applied to future clones, not properties
+of the template.** **VERSION and Notes exist only on the template record, reachable after
+creation.** Following the card literally leaves Notes empty and the tag on the wrong object.
+Proposed card wording: split Step 7 into 7a (create the template) and 7b (open the template record;
+set Notes and Tags there).
+**Also unspecified by the card: the template's NAME.** The form pre-fills the bot's *current* name,
+which at Step 7 is still the temporary clone name. I set **`QQQ-IC-0DTE-Fortress`** — the name the
+bot takes one step later and the name PR-03 is registered under. Baking `Clone` into a permanent
+artifact would have been a lineage record that lies, the same class the card's own date-stamp note
+warns about. Recorded as a deliberate choice.
+
+**(b) Step 6's `⌘P → Save as PDF` is not drivable and was substituted.** The OS print dialog is
+outside the browser tool's reach. Substituted a DOM read of the same modal with every field
+expanded — `06-clone-final/oa_exit-options-panel_2026-08-04.txt`, which states the substitution at
+the top of the file. Stronger for diffing (text, greppable, exact), weaker as a visual record.
+`oa-ops-runbook.md` §1.3 lists the PDF as a *fallback for what the bookmarklet misses*; the DOM read
+does not miss it. Proposed card wording: name the DOM read as the primary and the PDF as optional.
+
+---
+
+### Files changed by this close-out
+`docs/oa-ops-runbook.md` (§2.1, §2.2, §2.3, §4.0, §7) · `docs/session-log.md` · `docs/state.md`.
+No frozen or gated doc was edited. No git was run.

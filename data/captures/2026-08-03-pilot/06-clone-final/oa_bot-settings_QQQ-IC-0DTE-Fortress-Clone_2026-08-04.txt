@@ -1,0 +1,61 @@
+# QQQ-IC-0DTE-Fortress Clone — bot settings
+https://app.optionalpha.com/bots/bot/BOTfw5TkkCRF2717857919585029021/settings
+captured: 2026-08-04 (pilot Step 6 — CLONE FINAL)
+method: Claude-in-Chrome DOM extraction; toggle state read from input[name=onoff].value
+        and the onoffbtn title attribute, NOT from CSS class or innerText.
+bot_id: BOTfw5TkkCRF2717857919585029021
+NAME AT CAPTURE TIME: "QQQ-IC-0DTE-Fortress Clone" (Step 8 rename not yet applied)
+
+--- HEADER STATE ---
+ACCOUNT            Paper Trading
+BOT GROUP          None
+AUTOMATIONS        OFF   (input[name=onoff].value="false"; title="Scheduled automations are off")
+EXIT OPTIONS       ON    (input[name=onoff].value="true";  title="Exit Options for positions
+                          managed by this bot are on")
+TAGS               experiment   (input[name=tags].value="experiment"; restored this session)
+
+  !! EXIT OPTIONS IS **ON**, NOT OFF. This is the clone's BIRTH STATE (session-log
+     2026-08-03, finding 5: "The clone is born with EXIT OPTIONS ON (original: OFF)").
+     It was left ON deliberately then and is left ON now. Switching it off would be an
+     unrequested edit. The bot cannot trade: AUTOMATIONS is OFF and the account is inactive.
+
+--- AUTOMATIONS ---
+SCANNERS
+  1. Fortress-ScannerA-PutSpread          (renamed this session from ...-CLONE)
+  2. Fortress-ScannerB-CallSpread
+TRIGGERS
+  3. Fortress-Backstop-1552-FlatClose     Every week on Mon-Fri, 3:52pm EST
+COUNT: 3   (baseline original had 2 scanners + 0 triggers; the backstop is the ONLY
+            intended structural addition, card Step 5b)
+
+--- BOT INPUTS ---
+NONE. Empty-state placeholder rendered ("Bot inputs are variables shared by your bot's
+automations..."). No bot input exists on this bot. Relevant to D-1 gate G2.
+
+--- NOTES ---
+Empty ("Add Notes").
+
+--- SAFEGUARDS ---
+ALLOCATION         $100,000
+DAILY POSITIONS    2 per day        (even; IC = 2 positions; card Step 4 satisfied)
+POSITION LIMIT     2 at once        (even)
+DAY TRADING        Allowed
+
+--- SCAN SPEEDS ---
+AUTOMATIONS        OFF   / Every 1m     (scanrate=1)
+EXIT OPTIONS       Every 1m             (exitrate=1)
+
+--- SYMBOLS ---
+"No symbols yet"  — EMPTY, and this is CORRECT for this bot. The symbol is carried inside
+the automations (Loop QQQ + action Symbol=QQQ). Identical to the original's baseline.
+Card Trap 2 does not bite here.
+
+--- ACTIVITY ALERTS ---
+Open position       ON  (posopen=true)
+Close position      ON  (posclose=true)
+Automation warning  ON  (autowarn=true)
+Automation error    ON  (autoerror=true)
+
+--- CAPITAL (dashboard) ---
+ALLOCATION $100,000 · NET LIQUID $100,000 · AT RISK 0 · AVAILABLE $100,000 · MAINTENANCE 0
+CLOSED POSITIONS 0 · no trades ever.

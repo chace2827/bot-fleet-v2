@@ -170,6 +170,25 @@ Template versions have no such failure mode.
 - **The capture cites the version.** `bots_config_v2.csv` carries `capture_file` and
   `capture_hash`; the template version is what those describe.
 
+> ### 📝 APPENDED 2026-08-04 — the tag convention collides with an OA platform limit. Ruled.
+> **OA normalises tags: lowercase, and every non-alphanumeric becomes a space.** Typing `PR-03`
+> into the tag widget offers exactly one suggestion — **`pr 03`**. Every pre-existing account tag
+> is consistent with this (`experiment`, `focus ic`, `focus oa mirror`, `focus directional`).
+> [FIRST-HAND — observed in the tag widget on template `Tfw5TkkCRF2617858650531245641`,
+> 2026-08-04, `session-log.md` 2026-08-04 part 4 finding 5.]
+>
+> The bullet above and `pre-registration-ledger.md` §2 both assume the **bare** ID in the tag.
+> **Not expressible.** This is the substitution-at-a-platform-limit class, so it is documented
+> rather than absorbed silently.
+>
+> **RULED (Andy, 2026-08-04): adopt `pr 03`.** The scheme is **`PR-NN` → `pr nn` in OA tags,
+> literal `PR-NN` in Notes.** The tag is a **search handle, not the record** — the record is the
+> pre-registration entry pasted verbatim into Notes, which carries the literal `ID   PR-NN` line
+> and is what makes the template greppable back to its entry.
+>
+> Applied on the pilot: template tags read `experiment,pr 03`, verified after a hard reload from
+> `input[name=tags].value`; Notes verified byte-exact at 1574/1574 characters after the tag write.
+
 ### 2.2 The proposed `BUILD_ID` mirror — and its precondition
 
 Mirror the template VERSION into a non-functional `BUILD_ID` bot input so **the running bot
@@ -182,7 +201,47 @@ self-reports which pre-registration it is executing.**
 > **If that assert is not built, do not build the BUILD_ID mechanism at all.** A self-report
 > nobody checks is worse than no self-report — it manufactures confidence.
 
+> ### ✅ APPENDED 2026-08-04 — DO NOT BUILD THIS. OA already mirrors the version natively.
+> **Saving a template binds the bot to it and stamps the version on the bot's own settings page.**
+> After the pilot's template save, the bot settings page gained a panel reading:
+>
+> ```
+> Template      QQQ-IC-0DTE-Fortress   (→ /bots/templates/Tfw5TkkCRF2617858650531245641)
+> BOT VERSION   1  Aug 4, 2026
+> ```
+>
+> [FIRST-HAND — read from the live DOM on `BOTfw5TkkCRF2717857919585029021` after a hard reload,
+> 2026-08-04; the panel was absent from the same page before the save.]
+>
+> **This is exactly what §2.2 wanted, without the step §2.2 correctly predicted would be
+> forgotten.** The whole precondition above — build the nightly assert or do not build the
+> mechanism — exists because hand-mirroring is a manual step. The platform maintains this field
+> itself, so there is no hand-step and no drift to assert against.
+>
+> **RULED (Andy, 2026-08-04): ACCEPTED — do not build the manual `BUILD_ID` mirror.**
+> The §2.2 proposal above is superseded for the VERSION field and is left standing as the record
+> of why. If a future need arises for a self-reported value OA does *not* maintain, the assert
+> precondition still governs it.
+
 ### 2.3 Unverified
+
+> ### ✅ ANSWERED 2026-08-04 — saving a template does NOT disturb the bot.
+> Run on the pilot (`BOTfw5TkkCRF2717857919585029021`), which had zero open positions and an
+> inactive account — the safest possible moment, as the pilot card intended.
+> **Every bot field re-read identical after the save:** 3 automations, same names and same order ·
+> Symbols `No symbols yet` · Allocation `$100,000` · Daily 2 per day · Position limit 2 at once ·
+> Day trading `Allowed` · scan speeds `Every 1m` / `Every 1m` · `AUTOMATIONS` OFF ·
+> `EXIT OPTIONS` ON · all four Activity Alerts on · Tags `experiment`.
+> The only change was an **addition**: the `Template` / `BOT VERSION` panel — see §2.2's append.
+> [FIRST-HAND — DOM re-read after a hard reload, 2026-08-04.]
+> **The "verify on a dead bot first" instruction above has now been discharged. §2.3 is closed;
+> the versioning convention is unblocked.**
+>
+> ⚠️ **What this does NOT answer** is whether the template stores a *reference* to the same
+> automation objects as the live bot. The template page's automation rows carry
+> `rid=RTfw5TkkCRF2717857919585272551` — **the same object id as the bot's live ScannerA.**
+> Whether a later edit to the bot's automation therefore changes what the template describes is
+> **UNTESTED**. Do not assume a template is a frozen snapshot until this is checked.
 
 Whether **saving a template from a live bot disturbs the bot** (position count, automation
 states) is [EXPECTED, not confirmed]. **Verify on a dead bot before saving a template from a
@@ -248,6 +307,43 @@ reported viewport and screenshot pixel coordinates disagree by ~1.675× — **us
 every click, never raw coordinates.** A `selected` CSS class on a multi-select option does not
 imply a committed value — closing the menu is what commits it; check the underlying field, not the
 checkmarks.
+
+⚠️ **APPENDED 2026-08-04 — three more, all first-hand from the pilot part-4 session
+(`session-log.md` 2026-08-04 part 4, method failures A–C).**
+
+1. **⛔ ELEMENT REFS ARE NOT SUFFICIENT ON THIS APP.** The rule above is right about coordinates
+   and **incomplete about refs.** `computer.left_click` with an element ref returns
+   `Clicked on element ref_N` and **nothing happens** — reproduced on automation rows
+   (`a.autolink[data-click=editAuto]`), on tree node cards (`card[data-nid=…]`), and on the bot
+   `…` menu's `Archive` item. No error is raised, and the tool reports success.
+   **A tool's success message is not evidence the app received the click** (`CLAUDE.md` §9.1a
+   applies to clicks, not only to writes).
+   **What works:** dispatch the full sequence on the element —
+   `pointerdown → mousedown → pointerup → mouseup → click`, each a `MouseEvent` with
+   `bubbles:true, cancelable:true, view:window` and `clientX`/`clientY` set to the element's
+   `getBoundingClientRect()` centre. Every write of 2026-08-04 committed through that path.
+   **Known exception:** `archiveBot` fired from *none* of the three methods. If an action resists
+   all three, **stop — do not fall back to coordinates.** On that menu `Delete` sits ~29px below
+   `Archive`; a mis-landed coordinate click is unrecoverable. Hand it to Andy.
+   *(This is the same wall the 2026-08-03 part-2 session hit and recorded as tool degradation. It
+   is a standing property of the app, not a bad session.)*
+
+2. **⛔ THE NOTES EDITOR'S SANITIZER DECODES ENTITIES, THEN STRIPS UNKNOWN TAGS.** Pasting the
+   PR-03 entry into template Notes silently lost `<capture>` and `<hash>`: `&lt;capture&gt;` was
+   decoded to `<capture>` and then removed as markup. The rendered panel looked correct — the
+   `CONFIG HASH` line simply read `CONFIG HASH       @ `.
+   **Counter:** double-escape (`&amp;lt;`) so one decode pass leaves `&lt;` intact, **and verify
+   every paste by a byte-exact length-and-content compare against the source**, not by reading the
+   panel. The loss was caught only by a 1574-character compare. This extends
+   `evidence-standards.md`'s byte-exact quote rule from the READ path to the WRITE path.
+
+3. **`computer.type` lands intermittently; `form_input` does not.** Real typing committed one
+   rename, then silently failed twice with `document.activeElement` correctly set to the target
+   input — the characters never arrived. `form_input` (native setter + input event) worked every
+   time. **Prefer `form_input`, and re-read `.value` after every text entry.**
+   **Tag widgets are the exception:** they need per-character `input` events to open their
+   suggestion menu, and a bulk `form_input` + Enter does **not** commit. Drive them by clicking
+   the suggestion item.
 
 ### 4.1 Layer 2 — the behavioral check (unchanged from the original procedure)
 
@@ -335,7 +431,7 @@ build:
 |---|---|
 | **Is re-applying `Update Position Exit Options` side-effect-free?** | Gates any re-assertion watchdog — the architecturally correct fix for panel-vs-position drift |
 | **What is the automation-log retention window?** | Every liveness check depends on it, and looking back more than a day is currently unproven |
-| **Does saving a template from a live bot disturb the bot?** | §2.3 — gates the whole versioning convention |
+| ~~**Does saving a template from a live bot disturb the bot?**~~ **ANSWERED 2026-08-04 — NO.** | ~~§2.3 — gates the whole versioning convention~~ **Closed. See §2.3's append. Successor check, NOT yet run: does a template store a REFERENCE to the bot's live automation objects?** |
 | **Do the Fortress bots show ≥10 errors in June?** | Confirms or kills the Excessive Errors Failsafe hypothesis for the 6/12 regression |
 
 ---

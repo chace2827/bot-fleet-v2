@@ -1,0 +1,89 @@
+# Fortress-ScannerA-PutSpread
+https://app.optionalpha.com/bots/bot/BOTfw5TkkCRF2717857919585029021/settings
+captured: 2026-08-04 (pilot Step 6 — CLONE FINAL)
+method: Claude-in-Chrome DOM extraction (Chrome-direct authority, CLAUDE.md 5)
+        values read from input.value / input.checked / data-ui param JSON. NEVER innerText.
+bot: QQQ-IC-0DTE-Fortress Clone   bot_id: BOTfw5TkkCRF2717857919585029021
+automation_object_id: RTfw5TkkCRF2717857919585272551
+automation_attachment_id: fw5TkkCRF2717857919585402201
+NOTE: renamed this session from Fortress-ScannerA-PutSpread-CLONE back to the production
+name, per decision-memo-2026-08-04.md Decision 7 item 3. Verified by hard reload.
+
+--- AUTOMATION TREE (expansion verified: 0 nodes carry a collapsed class; every decision
+    node exposes BOTH branches; 6 expander controls present, all open) ---
+START AUTOMATION
+Fortress-ScannerA-PutSpread
+Loop QQQ
+Current market time is after 1:30pm
+YES
+Symbol change % is greater than -0.75 since previous close
+YES
+Symbol change % is less than 0.75 since previous close
+YES
+Bot opened a position with put side today
+YES
+Add Action
+NO
+Open QQQ Short Put Spread
+NO
+Add Action
+NO
+Add Action
+NO
+Add Action
+
+--- ACTION: Open Short Put Spread / POSITION DETAILS ---
+Symbol           QQQ
+Expiration       exactly 0 days
+Long Put         $2.00 below short put leg
+Short Put        0.75% below underlying price
+Position Size    Up to $5,000 risk
+Price            Market
+Exit Options     Profit: 50%, Expiration: 10 minutes
+Tags             put side
+
+--- ACTION: EXIT OPTIONS BUNDLE, DECODED FIELD BY FIELD (13-field roster) ---
+This is the decoded payload of input[name=exits].value, not the rendered label.
+Decision-memo Decision 7 item 2 requires decoding rather than label comparison.
+  profits          0.5          (Profit Taking % = 50% of credit)
+  smprofits        normal       (PT exit pricing = SmartPricing Normal -- NOT Market)
+  dprofit          ""           (Profit Taking $   = None)
+  price            ""           (Price Target      = None)
+  stoploss         ""           (Stop Loss %       = None)
+  dstop            ""           (Stop Loss $       = None)
+  tstop            ""           (Trailing Stop     = None)
+  touch            ""           (Touch             = None)
+  expdays          0.01         (Expiration        = 10 minutes before)
+  smexpdays        {"text":"Market","smart":"market"}   (Expiration exit pricing = MARKET)
+  xevents          ""           (Avoid Events      = None)
+  epsdays          ""           (Earnings          = None)
+  dtype            short
+  text             "Profit: 50%, Expiration: 10 minutes"
+sig: profits|smprofits|normal|dprofit|price|stoploss|dstop|tstop|touch|expdays|smexpdays|text|Market|smart|market|xevents|epsdays|Profit:+50%25,+Expiration:+10+minutes|dtype|short^^0.5|0.01^$0|K|1|2|3|-4|4|-4|5|-4|6|-4|7|-4|8|-4|9|L|A|$B|C|D|E]|F|-4|G|-4|B|H|I|J]
+
+--- ACTION: ENTRY CRITERIA (read from checkbox .checked, not labels) ---
+ALL SEVEN UNCHECKED:
+  [ ] Bot has enough available capital                        (cap=false)
+  [ ] Bot has less than <1 open position>                     (chposLimit=false, posLimit=1)
+  [ ] Bot opened less than <1 new position> today             (chposLimitDay=false, posLimitDay=1)
+  [ ] Bot has less than <1 open position> with symbol         (chsymLimit=false, symLimit=1)
+  [ ] Bot doesn't have a position with an identical leg       (posleg=false)
+  [ ] VIX is between <Min> - <Max>                            (chvix=false, minVix="", maxVix="")
+  [ ] IV Rank is between <Min> - <Max>                        (chivr=false, minIvr="", maxIvr="")
+
+--- ACTION: POSITION CRITERIA (checkbox + value read) ---
+CHECKED (1 of 16):
+  [x] Mid price is between $ 0.08  -  $ <blank, no max>       (chprice=true, minPrice=0.08, maxPrice="")
+UNCHECKED (15): chbidask · chspread · chotmpct · eps · fomc · exdiv · chalpha · chev ·
+  chrwr · chfavrwr · chpop · chpmp · chpml · chmaxprofit · chmaxloss
+
+--- STEP 5c VERDICT (pricing) ---
+Only exit using Market pricing on this automation is the Expiration (15:50) exit.
+PT50 uses SmartPricing "normal". Compliant with oa-platform-reference 7 as carved out.
+The ENTRY is Price=Market. That is an entry, not an exit; outside 7's letter. Unchanged.
+
+--- DIFF NOTE vs the 2026-08-03 baseline of the ORIGINAL ---
+The rendered exits label reads "Profit: 50%, ..." here and "Profits: 50%, ..." in the
+baseline. This is the re-serialization recorded in state.md WRITES MADE TO THE CLONE item 2
+(2026-08-04 check-4 save). The NUMERIC PAYLOAD IS IDENTICAL. Label-level diffing would
+report a false difference; this file exists partly to make that visible.

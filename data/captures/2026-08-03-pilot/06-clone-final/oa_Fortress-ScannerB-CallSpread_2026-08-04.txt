@@ -1,0 +1,72 @@
+# Fortress-ScannerB-CallSpread
+https://app.optionalpha.com/bots/bot/BOTfw5TkkCRF2717857919585029021/settings
+captured: 2026-08-04 (pilot Step 6 — CLONE FINAL)
+method: Claude-in-Chrome DOM extraction; input.value / input.checked / data-ui param JSON.
+bot: QQQ-IC-0DTE-Fortress Clone   bot_id: BOTfw5TkkCRF2717857919585029021
+automation_attachment_id: fw5TkkCRF2717857919585432022
+NOT EDITED THIS SESSION. Read-only. Never saved.
+
+--- AUTOMATION TREE (expansion verified: every decision node exposes BOTH branches) ---
+START AUTOMATION
+Fortress-ScannerB-CallSpread
+Loop QQQ
+Current market time is after 1:30pm
+YES
+Symbol change % is greater than -0.75 since previous close
+YES
+Symbol change % is less than 0.75 since previous close
+YES
+Bot opened a position with call side today
+YES
+Add Action
+NO
+Open QQQ Short Call Spread
+NO
+Add Action
+NO
+Add Action
+NO
+Add Action
+
+--- ACTION: Open Short Call Spread / POSITION DETAILS ---
+Symbol           QQQ
+Expiration       exactly 0 days
+Short Call       0.75% above underlying price
+Long Call        $2.00 above short call leg
+Position Size    Up to $5,000 risk
+Price            Market
+Exit Options     Profits: 50%, Expiration: 10 minutes
+Tags             call side
+
+--- ACTION: EXIT OPTIONS BUNDLE, DECODED FIELD BY FIELD ---
+  profits          0.5          (Profit Taking % = 50% of credit)
+  smprofits        normal       (PT exit pricing = SmartPricing Normal -- NOT Market)
+  dprofit          ""
+  price            ""
+  stoploss         ""
+  dstop            ""
+  tstop            ""
+  touch            ""
+  expdays          0.01         (Expiration = 10 minutes before)
+  smexpdays        {"text":"Market","smart":"market"}   (Expiration exit pricing = MARKET)
+  epsdays          ""
+  dtype            short
+  text             "Profits: 50%, Expiration: 10 minutes"
+sig: profits|smprofits|normal|dprofit|price|stoploss|dstop|tstop|touch|expdays|smexpdays|smart|market|text|Market|epsdays|Profits:+50%25,+Expiration:+10+minutes|dtype|short^^0.5|0.01^$0|J|1|2|3|-4|4|-4|5|-4|6|-4|7|-4|8|-4|9|K|A|$B|C|D|E]|F|-4|D|G|H|I]
+NOTE: this side's sig has NO xevents key and reads "Profits:". ScannerA's has an xevents key
+and reads "Profit:". That asymmetry is the 2026-08-04 re-serialization on ScannerA ONLY.
+Numeric payload on both sides is ^^0.5|0.01^$0 — identical.
+
+--- ACTION: ENTRY CRITERIA ---
+ALL SEVEN UNCHECKED: cap=false · chposLimit=false (posLimit=1) · chposLimitDay=false
+  (posLimitDay=1) · chsymLimit=false (symLimit=1) · posleg=false · chvix=false · chivr=false
+
+--- ACTION: POSITION CRITERIA ---
+CHECKED (1 of 16):
+  [x] Mid price is between $ 0.08  -  $ <blank, no max>       (chprice=true, minPrice=0.08)
+UNCHECKED (15): chbidask · chspread · chotmpct · eps · fomc · exdiv · chalpha · chev ·
+  chrwr · chfavrwr · chpop · chpmp · chpml · chmaxprofit · chmaxloss
+
+--- STEP 5c VERDICT (pricing) ---
+Only Market-priced exit is the Expiration (15:50) exit. PT50 is SmartPricing "normal".
+Entry is Price=Market — an entry, outside 7's letter, unchanged.

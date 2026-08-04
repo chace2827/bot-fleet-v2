@@ -6,6 +6,26 @@ Last updated 2026-08-04 (Tier 2 product verification).*
 
 ## ⚠️ FOUR DECISIONS PENDING REVIEW — opened 2026-08-04 by Tier-2 verification
 
+> ### ✅ UPDATE 2026-08-04 (pilot part 4) — D-1's gates are CLOSED and D-3 is EXECUTED.
+> **D-1 gates G1–G4 all answered** (detail: `session-log.md` 2026-08-04 part 4, finding 2).
+> **G1 YES, server-confirmed** — an EMPTY Exit-Options bundle saves and survives a hard reload, so
+> Option A can express the `ride` arm and the memo's G1 fallback is not needed.
+> **G3 COMPATIBLE** — a bundle input and a named Preset compose on the same action.
+> **G4 NO propagation** — the `exits` payload stores no preset reference at all [STRUCTURAL].
+> **⚠️ G2 IS THE ONE THAT BITES: the action stores a REFERENCE, not values** —
+> `{"type":"input","input":"IN…","text":"<label>","oldValue":{…}}`. A capture that reads only the
+> action records the input's NAME. `bots_config_v2.csv`, the capture-diff and the drift detector
+> must ALSO read the input object's value, or every arm diffs as identical. **`oldValue` is a trap:
+> it is a pre-link snapshot and goes stale.**
+>
+> **D-3 EXECUTED 2026-08-04** (ruled to Claude's call; memo recommendation taken):
+> **`itmpaper` = `market`**, verified by hard reload + `input.value` re-read, before/after
+> screenshots in `data/captures/2026-08-03-pilot/06-clone-final/`. **`itmlive` UNTOUCHED at `auto`
+> — that remains the Day-0 gate.**
+> ⚠️ **New Day-0 watch item:** the setting closes ITM positions *"10 minutes before the close"* —
+> the SAME instant as the bot's own Expiration exit, also Market. Two Market closes now aim at the
+> same moment. Use `oa-ops-runbook.md` §4.4's timestamp-gap test.
+
 *Read this block first. Each one is a product fact that invalidates something this project had
 already decided or assumed. None can be closed by more research; each needs Andy's call.*
 
@@ -164,7 +184,54 @@ as a big-bang extraction. Do not queue it as a standalone task.
 
 ## Open items
 
-### Pilot clone — parts 1 and 2 done, ritual still incomplete
+### ⭐ PILOT CLONE — RITUAL COMPLETE 2026-08-04. Archive confirmed; nothing outstanding.
+
+**Steps 5c, 6, 7, 8, 9 and FINISH are ALL DONE — the ritual is complete end to end.** Full record:
+`docs/session-log.md` 2026-08-04 part 4. Capture-diff:
+`data/captures/2026-08-03-pilot/FINISH-capture-diff-2026-08-04.md` — **verdict: no unintended
+edits**; every difference outside the exit block is a known clone trap already ruled on, a
+deliberate prior-session act, or this session's authorized work.
+
+- **The clone now holds the production name `QQQ-IC-0DTE-Fortress`** (`BOTfw5TkkCRF2717857919585029021`).
+  The original is renamed `QQQ-IC-0DTE-Fortress-ARCHIVED-2026-08-03` (`BOTfw5TkkCRF817734373392552121`).
+  `data/archive/rename_map.csv` row written.
+- **✅ ARCHIVE DONE 2026-08-04 — by Andy, manually** (Claude could not fire `archiveBot`; see
+  below). **Verified read-only from `/bots` immediately after:** footer **`35 active bots`** (was
+  36) · **exactly one** bot named `QQQ-IC-0DTE-Fortress`, resolving to
+  **`BOTfw5TkkCRF2717857919585029021`** (the clone) · the `-ARCHIVED-2026-08-03` name no longer
+  listed · Trap-8 collision guard clean (`60min-ORB-10W-Paper-v1` and `Opening Range Breakout 60m`
+  both present, neither touched) · `-NoPT50`, `IC-SPX-FastPT25-S2` and `-130PM` all present.
+- **[RESOLVED 2026-08-04 — kept for the method record, because the failure is the finding]**
+  **`archiveBot` would not fire from Claude.** `Archive` on the bot
+  `...` menu would not fire across three attempts and three distinct mechanisms (dispatched event
+  sequence on the item; the same on the hit-tested target; `computer.left_click` by element ref).
+  No error, no dialog, `/bots` unchanged at `36 active bots`. Stopped at three per the standing
+  rule. **A coordinate fallback was deliberately refused** — `Delete` sits ~29px below `Archive`
+  and would have destroyed 41 positions of history. The rename is verified, so the production
+  name is already free; the archive is hygiene, not a blocker.
+- **⚠️ NEW OPEN CHECK, NOT RUN — is a template a frozen snapshot?** The template page’s
+  automation rows carry `rid=RTfw5TkkCRF2717857919585272551` — **the same object id as the bot’s
+  live ScannerA.** Whether editing the bot’s automation later changes what the template describes
+  is **untested**. Recorded against `oa-ops-runbook.md` §2.3 and as the successor row in its §7
+  open-checks table. **Do not assume a template freezes anything.**
+- **Template `QQQ-IC-0DTE-Fortress` V1** = `Tfw5TkkCRF2617858650531245641`, Notes carry PR-03
+  **byte-exact (1574/1574 chars, verified after hard reload)**.
+- **⛔ `PR-03` IS NOT EXPRESSIBLE AS AN OA TAG.** The widget normalises to **`pr 03`** (lowercase,
+  non-alphanumerics → spaces). `pre-registration-ledger.md` §2 and `oa-ops-runbook.md` §2.1 both
+  assume the bare ID. **The tag was NOT written** — a silent substitution at a platform limit is
+  what the card forbids at the time it was found. Notes carry the literal `ID               PR-03`,
+  so the template IS greppable, via Notes not Tags.
+  **→ THEN RULED (Andy, 2026-08-04): ADOPT `pr 03`.** Written and verified — template tags read
+  `experiment,pr 03` after a hard reload, and Notes re-verified **byte-exact 1574/1574** after the
+  tag write. Convention **`PR-NN` → `pr nn` in tags, literal `PR-NN` in Notes** appended to
+  `oa-ops-runbook.md` §2.1. The tag is a search handle; Notes are the record.
+- **Step 5c PASS, nothing changed.** Only Market-priced exits are the two Expiration (15:50) exits
+  and the 15:52 backstop. PT50 is SmartPricing `normal` on both sides. Entries remain `Market` —
+  an entry, outside §7's letter, untouched.
+- **Step 6 PDF NOT produced** — `⌘P` is outside the browser tool's reach. Substituted a DOM read of
+  the same modal, every field expanded, and said so in the file. Recorded as a substitution.
+
+### [SUPERSEDED 2026-08-04 — kept for the record] Pilot clone — parts 1 and 2 done, ritual still incomplete
 - **BOTH Decision Points are ANSWERED** (2026-08-03 part 2).
   - **A — an Exit Option Preset control EXISTS.** A `Presets` picker plus a
     `Save as presets for short option positions` checkbox. Account holds **zero** presets
@@ -300,6 +367,28 @@ position-open/close emails are not reaching Andy.
 positions, so it is a Day-0 check. The **DST / "Market Time (EST)"** question also still needs a
 Day-0 observation; nothing this session touched it.
 
+### ⚠️ WRITES MADE 2026-08-04 (pilot part 4) — all authorized, all logged
+
+**On the production bot** (`QQQ-IC-0DTE-Fortress`, ex-clone): ScannerA renamed back to
+`Fortress-ScannerA-PutSpread` · Tags restored to `experiment` · renamed to the production name ·
+Template V1 saved and bound. **Bot Group deliberately left `None`** until the Phase 4 sweep.
+**On the original**: renamed to `QQQ-IC-0DTE-Fortress-ARCHIVED-2026-08-03`. **Not yet archived.**
+**On the account**: `itmpaper` = `market`.
+**On `TEST QQQ-IC-0DTE-HedgeC-S3 Clone` ONLY** (authorized probe, delete-list bot): automation
+input **`CLAUDE-G1-EMPTY-EXITS`** (`IN178586615441261`) created on `HedgeC-Scan-Put`'s Open
+Position action with an **EMPTY** Exit-Options default. **NOT REVERTED.** That action now carries
+no exit options. Zero behavioural risk — AUTOMATIONS OFF, account inactive, bot is delete-list.
+The pre-link config survives in the param's `oldValue`. Revert on request.
+
+### ⭐ ANSWERED 2026-08-04 — saving a template does NOT disturb the bot, and `BUILD_ID` is free
+`oa-ops-runbook.md` §2.3's `[EXPECTED, not confirmed]` question is closed. Every bot field re-read
+identical after the template save. What changed is an **addition**: a `Template` panel now shows
+`QQQ-IC-0DTE-Fortress` + `BOT VERSION 1, Aug 4, 2026` on the bot's settings page.
+**That is §2.2's `BUILD_ID` mirror, native and platform-maintained.** §2.2's whole failure mode was
+that hand-mirroring would be forgotten. **Do not build the hand-mirrored `BUILD_ID`.**
+Also closed: the preset NAME field exists — `input[name="pretext"]`, hidden until `defs` is ticked.
+`build-plan.md` §2B/§8.1's NAMED preset is expressible. Observed, not inferred.
+
 ### ⚠️ WRITES MADE TO THE CLONE 2026-08-04 — Andy's call, not reverted
 1. Account now holds Exit Option preset **`TIER2-CHECK4-PUTSIDE`**
    (`UIfw5TkkCRF1517858152565216101`). The account previously held **zero** presets.
@@ -400,6 +489,23 @@ single match before relying on them.
   but the cited failure mechanism is order-type-specific. A future pre-registered decision.
 
 ### Capture discipline
+- **⛔ ELEMENT REFS ARE NOT SUFFICIENT ON THIS APP — found 2026-08-04.** `oa-ops-runbook.md` §4.0
+  says "use element refs for every click, never raw coordinates." Correct about coordinates,
+  **incomplete about refs**: `computer.left_click` by element ref reported success and **nothing
+  happened** — on automation rows, on node cards, and on the archive item. No error. **A tool's
+  success message is not evidence the app received the click.** What works is dispatching
+  `pointerdown → mousedown → pointerup → mouseup → click` on the element with `clientX/clientY` at
+  its bounding-rect centre. Every write of 2026-08-04 went through that path. Same wall the
+  2026-08-03 part-2 session hit; read it as a standing property, not session degradation.
+- **`computer.type` lands intermittently — found 2026-08-04.** It committed one rename, then
+  silently failed twice with the correct input focused. `form_input` worked every time.
+  **Prefer `form_input`, and re-read `.value` after every text entry.**
+- **⛔ OA's HTML sanitizer DECODES THEN STRIPS — found 2026-08-04.** Pasting `&lt;capture&gt;` into
+  template Notes round-tripped to nothing: it was decoded to `<capture>` and removed as markup.
+  The panel looked fine. **Caught only by a byte-exact 1574-character compare.** Double-escape
+  (`&amp;lt;`) to survive one decode pass, and always assert byte-exact on write-backs, not just
+  on quotes read out.
+
 - **A THIRD `innerText` trap, found 2026-08-04.** The bot log's `Date` / `Time` / `Type` filter
   chips render their labels via CSS, so `innerText` on them is the **empty string**; they are
   `div.input-ct.filterbtn-ct` wrappers around hidden inputs `date` / `time` / `autotypes`. A
