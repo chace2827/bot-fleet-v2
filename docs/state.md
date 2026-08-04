@@ -2,7 +2,7 @@
 
 *The live facts. Updated whenever a stated fact changes (CLAUDE.md §9.1). Numbers live in
 `STATUS.md`; the plan in `docs/build-plan.md`; progress in the `bot-fleet-migration` tracker.
-Last updated 2026-08-03 (pilot session, part 4).*
+Last updated 2026-08-04 (Phase 6 reconciliation).*
 
 ## Account
 - OA subscription **INACTIVE**. Andy reactivates **~mid-Aug**. The reactivation date is
@@ -79,6 +79,75 @@ Last updated 2026-08-03 (pilot session, part 4).*
   `startDate 2026-08-03T20:52:00.000Z` = 15:52 at UTC-5, but August is EDT (UTC-4), where that is
   **16:52 ET — after the close**. `ntime=1552` is the operative field and the `startDate` time may
   be a stamp only. **Requires a Day-0 observation**; do not assume.
+
+### TIER 1 AUDIT DONE 2026-08-04 — diagnosis: **partial-page reading, not fabrication**
+All 9 cited OA doc pages re-read in full. **The file's quotations are substantially accurate.** The
+defect class is **quoting a page correctly then missing the adjacent sentence that reverses the
+conclusion** — §4.1, §6.1, §6.2 and §6.4 are all the same shape. **Single defect class, single fix:
+completion, not replacement.** This also explains why the 2026-07-31 from-scratch rewrite did not
+help — rewriting prose does not re-read sources. **Do not rewrite this file again.**
+- **§4.1 upgraded CONTESTED → CONFIRMED FALSE.** `tools/bots/automations.md` — the page §4.1 quotes
+  — says *"In your settings, you can customize when automations run, from as early as 9:31 am EST
+  until 5 minutes before the market close."* 9:40/3:50 are DEFAULTS. **§8.2's premise collapses.**
+  It also gives the platform cap **15:55**, matching the observed `max="15:55"`; **15:52 is inside
+  it**, so the backstop is legal, not lucky.
+- **⚠️ Biggest missing fact: timing is not guaranteed.** *"All user automations are pushed into a
+  distributed work queue and executed in parallel… no guarantee an automation will run exactly on
+  the 15-minute marks."* The 15:52 backstop has an **8-minute buffer, not a slot**, and this
+  compounds with the DST question. Any exact-timestamp rule (incl. §8.3's sibling-close test) reads
+  a jittered clock.
+- **Three windows, do not conflate:** scan cadence ends **15:45** · automations customizable to
+  **15:55** · Exit Options run to **~15:59**.
+- **Recovered and written in:** failsafe **re-trips same day** after re-enabling and the count
+  resets next trading day, with errors surfaced on the homepage/dashboard (the surface §9 #8
+  needed); the **allocation** limit also trips scanners **and displays a warning**; logs filter by
+  date too; the docs name position+allocation limits as the designed anti-loop defence,
+  **corroborating §5.4's interlock**.
+- **Tags needing change, flagged in place:** §3's percentage-allocation-shrinking claim is
+  **[UNVERIFIED]** with no source — **sizing must not rest on it**; §5.3's "entire memory of the
+  platform" is **[PROJECT-RULE], not [DOCUMENTED]** (§0.1 and §11 rest on it); §5.3's second quote
+  and §4.5's quote **could not be reproduced verbatim** — re-verify or drop the quote marks.
+  **→ OVERTURNED IN PART by Phase 6 (2026-08-04):** the allocation-shrinking claim IS documented
+  (`automation-behavior`, OA-0083) — sizing may rest on it; §5.3's second quote resolves to
+  *"Tags can be used in conjunction with decisions to create powerful and flexible automations"*
+  (OA-0819) — drop the old quote marks. The [PROJECT-RULE] retag of "entire memory" stands.
+- **Confirmed correct:** §4.2 execution order · §5.2 input chain and both its [DOCS-SILENT] tags ·
+  §4.4 retention genuinely open · §3 limits · §5.1 indicators · §5.3's nine tag actions · §4.7 ·
+  §0.1. **The file got more right than wrong.**
+- **NEW LEAD, not a finding:** a 🔗 link icon sits on the **Exit Options row** of the Open Position
+  panel, and any automation input can be upgraded to a bot input via that button — **suggests §9 #3
+  is YES**, which would unblock the greenfield "PT% as a Bot Input" spec. Inference from a
+  screenshot; **one click settles it.**
+
+### PHASE 6 RECONCILIATION DONE 2026-08-04 — all six judgment docs vs the 1,548-fact corpus
+The OA docs ground-truth program is complete: 100/100 pages read (Waves 1–4), and Phase 6 marked
+every platform claim in the six judgment docs CONFIRMED / CONTRADICTED / UNSOURCED against
+`data/oa_facts.csv`. Two new files, both hash-verified on device: **`docs/oa-reconciliation-report.md`**
+(findings R-01–R-20, CONTRADICTED-first) and **`docs/oa-platform-reference-v3-DRAFT.md`** (the v2
+file byte-preserved + 30 fact-cited annotation blocks + new §13; `oa-platform-reference.md` itself
+untouched). Headlines:
+- **The per-bot `EXIT OPTIONS` toggle IS documented** (OA-0871/OA-0896) — §10 and ops-runbook
+  §1.6's "absent from docs / single-source" claims are false. The causal lapse claim stays
+  one-rep-only; Day-0 Trades-list gate unchanged.
+- **Two [PROJECT-RULE] tags were wrong the other way:** SmartPricing modes/counts/timings
+  (OA-0785–0787) and Exit-Options mid-price evaluation (OA-0872) are fully documented.
+- **⛔ NEW RISK CLASS (draft §13):** the default Options Expiration Protocol sends **no closing
+  order** for expiring ITM positions (OA-0157/OA-0231) and bots are assignment-blind
+  (OA-0245/0246) — a QQQ position that outlives its exits rides into physical settlement. The
+  Exit-Options **PDT checkbox** delays closes ≥1 day (OA-0890). Both added to §8.3-class
+  verification; Day-0 must read the expiration-protocol Setting.
+- **Limits above 10 are UNSOURCED** (OA-0763/OA-0764) — gates any daily-limit-20 re-entry spec.
+- **Exit Options window start is a docs-internal [CONFLICT]** (9:31 OA-0870 vs 9:40 OA-0085).
+- Touch semantics are blog-sourced (outside the corpus); `Profit Taking $ / Stop Loss $` and
+  `Avoid Events` are corpus-absent — verify in UI before fixed-$ rungs are pre-registered.
+- **No CONTRADICTED finding touches `build-plan.md`'s frozen decisions.**
+New §9-class checks queued: #9 limits>10 · #10 $-exits/Avoid-Events exist? · #11 read the
+expiration-protocol Setting. The R-01…R-07 doc edits remain gated on Andy's authorization.
+
+### TIER 2 — NOT STARTED (product verification, needs the account)
+§9 #3, #5, #7, #8, plus: is market open/close actually configurable in Settings · does
+"Market Time (EST)" drift under DST · does one preset serve both Open Position actions. Minutes
+each now that DOM reads are reliable; the inactive account makes them consequence-free.
 
 ### `oa-platform-reference.md` — UNFROZEN 2026-08-03, and amended
 

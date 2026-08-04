@@ -1813,3 +1813,181 @@ before substitution, not against the earlier read.
   amended — it was not in scope for this authorization.
 - **The pilot card's Step 2** likewise still contains the void fork step.
 - The **§8.2 attribution-guard** decision (15:50 exit already prices at Market) is still Andy's.
+
+---
+
+## 2026-08-04 — TIER 1 AUDIT of `oa-platform-reference.md`: all 9 cited OA pages re-read
+
+**Andy's call**, after asking whether the OA files are good enough and whether the fix is an audit
+or a "continuously learning" skill. Answer given: the audit is necessary; a skill cannot hold
+knowledge (only procedure), and the project already has three homes for rules. **Tier 1 = re-fetch
+every OA page this file cites, in full, following links out one level.** No account needed.
+
+### ⭐ THE DIAGNOSIS — and it is better news than 2026-08-03 suggested
+
+**The file's quotations are substantially accurate. This is not a fabrication problem.**
+Of 9 cited OA pages re-read in full, the quoted text checked out on essentially all of them.
+
+**The defect is PARTIAL-PAGE READING** — quoting a page correctly, then missing the adjacent
+sentence that qualifies or reverses the conclusion drawn from it. Four instances, all the same
+shape:
+- **§4.1** quoted the trigger list from `tools/bots/automations.md` and missed, **on that same
+  page**, *"In your settings, you can customize when automations run…"*
+- **§6.1** quoted the presets sentence and stopped **one sentence short** of *"You can name your
+  presets for easy identification."*
+- **§6.2** declared Touch undocumented while the definition sat **one link away** from a page
+  already in the swept corpus.
+- **§6.4** tagged the 2-minute order lifetime "not doc-verified" while it is stated verbatim on
+  `exit-options.md` — a page this file cites **five times**.
+
+**Why this matters more than the individual errors:** it is a *single, nameable defect class with a
+single fix*, and the fix is completion, not replacement. **It also explains why the 2026-07-31
+from-scratch rewrite did not help** — rewriting prose does not re-read sources. **Recommendation:
+do NOT rewrite this file again.** Finish reading it.
+
+### A. ⛔⛔ §4.1 UPGRADED FROM "CONTESTED" TO **CONFIRMED FALSE**
+
+`tools/bots/automations.md` states: *"In your settings, you can customize when automations run,
+from as early as 9:31 am EST until **5 minutes before the market close**."* and *"Market open
+automations run first **at the time you specify** automations to begin."*
+
+**9:40am / 3:50pm are DEFAULTS, not fixed times. "Neither is adjustable" is false** — and was
+falsifiable from the source §4.1 already cites. **§8.2's premise collapses entirely.**
+
+⚠️ **It also yields the platform-wide cap: 5 minutes before close = 15:55** — matching the observed
+`max="15:55"` on the Custom time input exactly. Two independent sources agreeing. **15:52 is inside
+the cap, so the 2026-08-03 backstop is legal rather than lucky.**
+
+### B. ⚠️ THE SINGLE MOST IMPORTANT MISSING FACT — timing is not guaranteed
+
+> *"All user automations are pushed into a **distributed work queue and executed in parallel by
+> worker processes. There is no guarantee an automation will run exactly on the 15-minute
+> marks**."* — `automation-behavior.md` [DOCUMENTED]
+
+**A scheduled automation is not promised to fire at its stamped minute.** The 15:52 backstop has an
+8-minute buffer to the bell, **not a guaranteed slot** — probably ample, but it is a buffer, and it
+compounds with the open DST question. And any rule keyed to an exact timestamp — including §8.3's
+`:00`/`:00` vs `:01–:02` sibling-close test — is reading a jittered clock. The gap test survives;
+the precision claim does not.
+
+⚠️ **Three different windows now exist and must not be conflated:** default scan cadence ends
+**15:45** · automations customizable to **15:55** · Exit Options run to **~15:59**.
+
+### C. Other facts recovered, all written in
+- **§4.5** — re-enabling after the failsafe **re-trips if another error occurs the same day** (a bot
+  turned back on can die again, silently); the count **resets next trading day**; and errors surface
+  **on the homepage / dashboard activity summary** — which is the surface §9 check #8 needed and
+  nobody had recorded.
+- **§3** — the **allocation** limit trips scanners too, not just position limits, **and a warning is
+  displayed** (a detectable signal for the §4.4 liveness work).
+- **§4.4** — logs are filterable by **date** as well as type and errors.
+- **§4.7** — the documented consequence is the bot hitting its position limit, and the docs name
+  position + allocation limits as the designed defence. **This corroborates §5.4's interlock** —
+  daily-limit-2 is the platform's own stated remedy, not a project invention.
+- **§5.1** — the intraday toggle **shifts all bars forward**; the previous wording omitted that.
+
+### D. Tags that need changing (flagged in place, not silently fixed)
+- **§3's percentage-allocation-shrinking claim is [UNVERIFIED]** — not on the safeguards page, no
+  source anywhere in the file, sitting among [DOCUMENTED] claims so it reads as documented.
+  **Sizing decisions must not rest on it.**
+- **§5.3's "This is the entire memory of the platform" is [PROJECT-RULE], not [DOCUMENTED].** The
+  tags page makes no such claim. **§0.1 and §11 both rest on it**, so the tier matters. Also
+  [DOCS-SILENT] on that page and directly relevant to the clone ritual: **whether tags persist
+  across a clone.**
+- **§5.3's second quotation could not be located** on re-read; the page returned a different
+  sentence with the same meaning. Re-verify or drop the quotation marks.
+- **§4.5's quotation wording differs** from the live page (same meaning, different words). Same
+  issue.
+
+### E. Tags CONFIRMED CORRECT — no action
+§4.2 execution order (*"Exit Options, Scheduled Events, Monitors and Scanners"*) · §5.2's input
+chain **and both its [DOCS-SILENT] tags** (whether a broken link blocks the run; whether Exit
+Options can take a Bot Input) · §4.4 log retention genuinely [DOCS-SILENT] — §9 #7 stands ·
+§3 limits/closing/allocation-at-entry · §5.1 daily cached indicators · §5.3's nine tag actions ·
+§4.7 event loops · §0.1's Smart Stops exception.
+
+**Worth stating plainly: the file got more right than wrong.** The tier system worked where it was
+used honestly; it failed where a tag was applied to an inference or to an unread page.
+
+### F. NEW LEAD on §9 #3 — recorded as a lead, NOT as a finding
+The 2026-08-03 capture of the Open Position panel shows a **🔗 link icon on the `Exit Options` row
+itself**, and the Bot Inputs panel says any automation input can be upgraded to a bot input via that
+button. **Strongly suggestive that Exit Options CAN reference a Bot Input** — which would unblock the
+greenfield "PT% as a Bot Input" spec. **This is an inference from a screenshot, not an observation**,
+and §0.2 now forbids writing it as fact. **One click settles it.**
+
+### Disposition
+All of the above written into `oa-platform-reference.md` (828 → 913 lines) as dated appends and
+banners under the 2026-08-03 policy. **Nothing deleted. §8's build instructions still untouched.**
+
+**Tier 2 (product verification) not started** — §9 #3, #5, #7, #8 plus the Settings market-time
+check, the DST question, and the preset cross-action test. All are minutes each now that DOM reads
+are reliable, and the inactive account makes them consequence-free.
+
+## 2026-08-04 — PHASE 6: reconciliation of all six judgment docs against the 1,548-fact corpus
+
+**The synthesis pass the extraction waves were deliberately blind to.** First-ever read of the six
+OA judgment docs by a corpus-equipped session; every platform claim marked CONFIRMED /
+CONTRADICTED / UNSOURCED against `data/oa_facts.csv` (sha256 `435abe0d…527b` re-verified by direct
+`device_bash` read at session start; all six doc hashes verified device-vs-staged byte-identical
+before quoting).
+
+### Deliverables (both on disk, hash-verified on device via `device_bash`)
+- **`docs/oa-reconciliation-report.md`** (new, sha256 `bcaaf529…c1a5`) — findings register
+  R-01–R-20, CONTRADICTED-first, executed docs ranked above merely-read; plus the docs-internal
+  conflict list and the missing-facts risk list.
+- **`docs/oa-platform-reference-v3-DRAFT.md`** (new, sha256 `675eb2a6…59fc`) — the v2 file
+  **byte-preserved** (all 913 lines verbatim, in order — machine-verified) with 30 inserted
+  `📎 PHASE 6` annotation blocks citing 143 fact IDs, plus a new §13. **`oa-platform-reference.md`
+  itself untouched** (hash `1330dc59…7386` unchanged).
+
+### Headline findings
+1. **R-01 — the per-bot `EXIT OPTIONS` toggle IS documented** (OA-0871, OA-0896:
+   *"you can enable and disable Exit Options from the main Bots page, inside of the bot… or
+   individually within each position"*). §10's "appears nowhere in the docs" and ops-runbook
+   §1.6's "single-source claim" are both false. The **causal** lapse claim stays one-rep-only
+   (corpus has nothing on subscription lapse) — Day-0 Trades-list gate unchanged.
+2. **R-03/R-04 — two [PROJECT-RULE] tags were wrong the other way:** the SmartPricing
+   mode/count/timing table (OA-0785–0787) and Exit-Options mid-price evaluation (OA-0872) are
+   both fully [DOCUMENTED].
+3. **R-05 — the Tier-1 audit's [UNVERIFIED] flag on >50% allocation shrinking is overturned** —
+   documented on `automation-behavior` (OA-0083). Sizing may rest on it.
+4. **R-11 — limits above 10 are UNSOURCED.** Docs give 10/10 (OA-0763) and never say the limit
+   can be raised (OA-0764 DOCS-SILENT). Gates any 10-re-entry / daily-limit-20 spec. New §9
+   check.
+5. **NEW RISK CLASS (report §5 / draft §13): the default Options Expiration Protocol sends NO
+   closing order for expiring ITM positions** — estimated-P/L only (OA-0157, OA-0231); bots are
+   assignment-blind (OA-0245/0246, broker API silent OA-0145). If PT + 15:50 + 15:52 all fail on
+   a QQQ position, the default setting rides it into physical settlement while reporting a tidy
+   number. Day-0: read the Settings value. Also new: the Exit-Options **PDT checkbox** delays
+   closes ≥1 day (OA-0890) — must be confirmed UNCHECKED on every 0DTE bot; **Expiration-trigger
+   exits retry all day** (OA-0879) — which trigger class the 15:50 exit uses is now worth
+   recording.
+6. **R-06 — the Exit Options window start is a docs-internal [CONFLICT]** (9:31 OA-0870 vs 9:40
+   OA-0085).
+7. **R-02/R-07 — clone-shares-by-reference remains corpus-unsourced** and stays falsified
+   first-hand; the docs affirmatively claim clones arrive *"complete with all the settings"*
+   (OA-0845), which the observed allocation/Group/Tags resets contradict — a docs defect, not
+   docs silence. Pilot card Step 2 / runbook §2 step 2 / ops §5 Trap 1 still await authorized
+   edits.
+8. Touch semantics are **blog-sourced, outside the corpus** (R-12) — resolution stands on its
+   own citation; `Profit Taking $ / Stop Loss $` and `Avoid Events` are corpus-absent (R-13) —
+   verify in UI before fixed-$ SL rungs are pre-registered.
+
+**No CONTRADICTED finding touches `build-plan.md`'s frozen decisions.** The v2 reference got far
+more right than wrong: ~40 load-bearing claims CONFIRMED with fact IDs (report §3).
+
+### Process notes
+- Quote discipline held: every quotation in both deliverables machine-checked as an exact
+  substring of either the corpus quote column or a project doc (0 mismatches; 143 + 176 cited
+  fact IDs all valid). The v3 draft was generated by anchored insertion, never retyping — the
+  preservation check asserts all 913 v2 lines survive verbatim, in order.
+- `device_stage_files` served correct bytes this session (all 11 staged files hash-matched
+  direct device reads). The §9.1a rule was applied anyway; no stage-back was trusted.
+- Wave-1 fingerprint mismatch on 2 pages: treated as informational per handoff; facts cited
+  normally.
+
+### Still open after Phase 6
+Tier 2 product checks (§9 #3/#4/#5/#7/#8 + new #9 limits>10, #10 $-exits, #11 expiration-protocol
+setting) · the authorized edits queued by R-01…R-07 · Phase 2 deliverables
+(`bots_config_v2.csv`, `mirror_baseline.csv`) unchanged.
