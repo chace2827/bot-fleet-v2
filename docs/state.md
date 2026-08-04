@@ -4,7 +4,7 @@
 `STATUS.md`; the plan in `docs/build-plan.md`; progress in the `bot-fleet-migration` tracker.
 Last updated 2026-08-04 (Tier 2 product verification).*
 
-## ⚠️ FOUR DECISIONS PENDING REVIEW — opened 2026-08-04 by Tier-2 verification
+## ✅ FOUR DECISIONS — ALL DECIDED 2026-08-04 (opened same day by Tier-2 verification)
 
 > ### ✅ UPDATE 2026-08-04 (pilot part 4) — D-1's gates are CLOSED and D-3 is EXECUTED.
 > **D-1 gates G1–G4 all answered** (detail: `session-log.md` 2026-08-04 part 4, finding 2).
@@ -31,43 +31,46 @@ already decided or assumed. None can be closed by more research; each needs Andy
 
 | # | Decision | What forces it | Where it bites |
 |---|---|---|---|
-| **D-1** | **What replaces "PT% as a Bot Input"?** | The 🔗 on the Exit Options row makes the **whole exit bundle** an input; there is no 🔗 on Profit Taking % or any single field. | `build-plan.md` §5.2 / §8.1. The only expressible form swaps entire exit configurations instead of tuning a number — a materially different mechanic. Plan is **frozen**, so this needs an explicit *"amend the plan"* either way, **including a decision to drop the bot-input idea**. ⛔ **DEFECT FLAGGED 2026-08-04 (in place, row not rewritten): `build-plan.md` has NO §5.2 and NO §8.1** — its headings run §1–§6 and the strings `5.2`/`8.1` return 0 matches in that file. Those anchors belong to `oa-platform-reference.md`; the same broken citation is replicated in `session-log.md` and `sprint-2026-08-04.md`. `PT% as a Bot Input` appears nowhere in the frozen plan, so **D-1 is not by itself a plan amendment** — the frozen text at stake is §2D's `arms differing / in exactly one input value`, and which option is ruled decides whether an amendment is needed at all. 📝 **MEMO WRITTEN 2026-08-04 — UNRULED.** Recommendation (Option A, Exit-Options-SET as a Bot Input, gated on G1–G4) + ruling slot: `docs/decision-memo-2026-08-04.md`. |
+| ~~**D-1**~~ ✅ **DECIDED 2026-08-04: Option A — Exit-Options-SET as a Bot Input.** Gates closed first: G1 YES (empty bundle saves, server-confirmed — the `ride` arm IS expressible), G3 compatible, G4 no propagation. ⚠️ **RIDER, forced by G2 (REFERENCE not values): every capture surface — `bots_config_v2.csv`, the capture-diff and the drift detector — must read the INPUT OBJECT, not just the action, or every arm diffs as identical; and `oldValue` must never be read as current config (stale pre-link snapshot).** | The 🔗 on the Exit Options row makes the **whole exit bundle** an input; there is no 🔗 on Profit Taking % or any single field. | `build-plan.md` §5.2 / §8.1. The only expressible form swaps entire exit configurations instead of tuning a number — a materially different mechanic. Plan is **frozen**, so this needs an explicit *"amend the plan"* either way, **including a decision to drop the bot-input idea**. ⛔ **DEFECT FLAGGED 2026-08-04 (in place, row not rewritten): `build-plan.md` has NO §5.2 and NO §8.1** — its headings run §1–§6 and the strings `5.2`/`8.1` return 0 matches in that file. Those anchors belong to `oa-platform-reference.md`; the same broken citation is replicated in `session-log.md` and `sprint-2026-08-04.md`. `PT% as a Bot Input` appears nowhere in the frozen plan, so **D-1 is not by itself a plan amendment** — the frozen text at stake is §2D's `arms differing / in exactly one input value`, and which option is ruled decides whether an amendment is needed at all. ✅ **RULED 2026-08-04 — ruling + the G2 rider recorded in `docs/decision-memo-2026-08-04.md`.** ⚠️ The broken-citation defect flagged above is **still unruled** and still present in three files. |
 | ~~**D-2**~~ ✅ **DECIDED 2026-08-04: cap at 5 ICs/day, ONE bot.** Accept the platform ceiling; do not split a strategy across two bots to reach 10. Rationale: one bot = one config row = one pre-registration entry = one ledger identity, so the unit stays "condor" with no cross-bot aggregation and the drift detector keeps a single subject. Revisit only if a spec genuinely needs >5 entries in a session. | **Re-scope every re-entry spec to 5 ICs/day.** | `posLimitDay` / `posLimit` are **1–10 pickers**, no free-text path. An IC is two positions. | §3's [PROJECT-RULE] "ten IC re-entries = a daily limit of 20" is correct arithmetic and **unconfigurable**. Real ceiling is **5 ICs/day per bot**. Anything above that must be redesigned or split across bots. |
-| **D-3** | **Set the In-the-money Position Action before capital is live.** | `itmpaper` = `itmlive` = **`auto`** — *"Calculate estimated P/L from underlying close price"*, which sends **no closing order**. `market` is the only option that closes. | **Day-0, hard gate.** A QQQ condor outliving its exits rides into **physical settlement**. Note `market` fires at **15:50** — same instant as the clone's Expiration exit; they would race. §13.1. 📝 **MEMO WRITTEN 2026-08-04 — UNRULED.** Recommendation (paper `market` now; `itmlive` = `market` as a hard Day-0 gate) + two ruling slots: `docs/decision-memo-2026-08-04.md`. |
-| **D-4** | **Retire the Excessive Errors Failsafe as a live hypothesis.** | Newest error on either Fortress bot is **`Apr 16, 2026 3:55PM`**. Error days: Apr 16 (91) + Mar 16 (138+); `-NoPT50` Apr 16 (91). **Zero in June.** | §4.5 and every pre-registration entry that still carries it as the candidate cause of the 2026-06-12 lapse. The mechanism is real and this fleet tripped it — in March/April, on **entry scanners**. The June cause is still **unknown**. 📝 **MEMO WRITTEN 2026-08-04 — UNRULED.** Recommendation (retire as June cause, keep as mechanism), the full doc-by-doc carrier list, replacement wording, and a ranked six-candidate shortlist with Day-0 discriminators: `docs/decision-memo-2026-08-04.md`. ⚠️ Note for downstream sessions: **no pre-registration entry carries the failsafe as the June cause** — one mention only, PR-05's liveness kill criterion, which stays. |
+| ~~**D-3**~~ ✅ **DECIDED AND PART-EXECUTED 2026-08-04: `itmpaper` = `market` (done, hard-reload + `input.value` verified, before/after screenshots on file). `itmlive` = `market` is a HARD DAY-0 GATE — deliberately left at `auto`; it must be set before any capital is live.** | `itmpaper` = `itmlive` = **`auto`** — *"Calculate estimated P/L from underlying close price"*, which sends **no closing order**. `market` is the only option that closes. | **Day-0, hard gate.** A QQQ condor outliving its exits rides into **physical settlement**. Note `market` fires at **15:50** — same instant as the clone's Expiration exit; they would race. §13.1. ✅ **RULED 2026-08-04 — both slots recorded in `docs/decision-memo-2026-08-04.md`.** ⚠️ Day-0 watch item stands: two Market closes now aim at 15:50 (ITM action + the bot's Expiration exit) — use `oa-ops-runbook.md` §4.4's timestamp-gap test. |
+| ~~**D-4**~~ ✅ **DECIDED 2026-08-04: RETIRED as the 2026-06-12 lapse cause. KEPT as a real, documented mechanism this fleet has tripped — March/April, on entry scanners. June cause: UNKNOWN.** | Newest error on either Fortress bot is **`Apr 16, 2026 3:55PM`**. Error days: Apr 16 (91) + Mar 16 (138+); `-NoPT50` Apr 16 (91). **Zero in June.** | §4.5 and every pre-registration entry that still carries it as the candidate cause of the 2026-06-12 lapse. The mechanism is real and this fleet tripped it — in March/April, on **entry scanners**. The June cause is still **unknown**. ✅ **RULED 2026-08-04.** Doc-by-doc carrier list, replacement wording and the ranked six-candidate shortlist with Day-0 discriminators: `docs/decision-memo-2026-08-04.md`. **Propagation NOT yet done.** ⚠️ Note for downstream sessions: **no pre-registration entry carries the failsafe as the June cause** — one mention only, PR-05's liveness kill criterion, which stays. |
 
 **Also awaiting a call, lower stakes:** the two writes left on the clone by check #4 (preset
 `TIER2-CHECK4-PUTSIDE`; `Fortress-ScannerA-PutSpread-CLONE` saved with a re-serialized `exits`
 blob) — detail under *WRITES MADE TO THE CLONE* below.
 
-> ### 📝 DECISION MEMO WRITTEN 2026-08-04 — `docs/decision-memo-2026-08-04.md`. **NOTHING RULED YET.**
-> 886 lines, sha256 `ed5b2a3a…a449`, verified by direct device read. Covers **seven** decisions —
-> D-1, D-3, D-4 above plus the tournament shared-automation conflict, entry pricing, the §8.2
-> attribution guard, and the clone residue — each with the forcing fact, options, a recommendation,
-> draft amendment text, and a one-line ruling slot. **15 ruling slots, all empty.** Every amendment
-> in it is draft only; the two touching frozen or gated surfaces are marked
-> `EXECUTES ONLY ON ANDY'S "amend the plan"`. **No memo recommendation has been applied and no
-> frozen or gated doc was touched.**
+> ### ✅ DECISION MEMO RULED 2026-08-04 — `docs/decision-memo-2026-08-04.md`. **ALL SEVEN DECIDED.**
+> 886-line memo, 15 ruling slots. **Seven decisions ruled; four secondary slots left open and
+> marked NOT RULED** (fix the broken §5.2/§8.1 citations · Day-0 no-touch ordering before the
+> re-arm sweep · build the arm-distinctness assert · the ungrouped-export UI check). The
+> re-serialized `exits` blob was **not separately ruled** and is recorded as unruled, not as
+> ruled-by-silence.
 >
-> **Two draft recommendations were REVERSED by adversarial review** (memo Appendix A): D-1 →
-> **Option A**, Exit-Options-SET as a Bot Input (the arm set `hard-PT vs trailing vs ride` populates
-> *different* fields, so "exactly one input value" is true only at bundle granularity — Option A is
-> the choice needing no plan amendment); tournament → **Architecture E**, share the ENTRY automation
-> and differ on exits (per-arm copies would trip PR-18's kill criterion at build time). **The two
-> rulings are coupled — rule them together.**
+> **D-1 → Option A**, Exit-Options-SET as a Bot Input, with the **G2 rider** (read the input
+> object, never `oldValue`) — see the D-1 row above. **Decision 4 → Architecture E**, share the
+> entry automation and differ on exits; consistent with D-1 as the coupling required.
+> **Decision 5 → the Market-pricing ban extends to ENTRIES**, recorded as a **MECHANISM decision,
+> not evidence** (n=1 position, n=2 fixture — below the T2 gate). **Decision 6 → re-price the
+> 15:50 Expiration exit off Market, backstop keeps Market — ⏸ EXECUTION DEFERRED**: Template V1 /
+> PR-03's config hash is frozen, so it lands as **Template V2 with an amended pre-registration
+> before Day-0**, not as a quiet edit. **Decision 7 → RULED AND EXECUTED**: ScannerA name and tag
+> reverted, preset `TIER2-CHECK4-PUTSIDE` kept, **Bot Group stays unset until the Phase 4 sweep**.
 >
-> ⚠️ **GATES G1–G4 are QUEUED TO RUN IN THE PILOT SESSION.** None is answerable from the folder;
-> each needs the live UI. G1 can a bundle Bot Input hold an EMPTY value (required for the `ride`
-> arm — this is the fallback trigger) · G2 does the capture record field-level values or an input
-> reference · G3 are a bundle input and a NAMED Preset compatible on the same Open Position action ·
-> G4 does editing a preset propagate to attached actions. Related and already tracked: §9 **#5**.
+> ⚠️ **NOT YET PROPAGATED — the rulings are recorded, the docs are not yet amended.** D-1, D-4,
+> Decision 4 and Decision 5 all imply edits to `build-plan.md`, `oa-platform-reference.md`,
+> `hedge-research.md`, `oa-ops-runbook.md`, `pre-registration-ledger.md` and
+> `reactivation-runbook.md` that have **not** been made. The memo carries the ready-to-paste text;
+> the two touching frozen or gated surfaces still require an explicit *"amend the plan"*.
 >
-> **Three load-bearing findings opened, none acted on** (memo Appendix B has all seven): the broken
-> `build-plan.md` §5.2/§8.1 citation flagged on the D-1 row above · **"Range075 as a preset" looks
-> unbuildable** — presets are an Exit Options object while `hedge-research.md` §8 specifies Range075
-> as an entry decision, hitting frozen §2D and §5.2 rule 3 · **the arm-distinctness assert
-> `oa-ops-runbook.md` §3 promises does not exist** — `execution_audit.py` has 13 rules and none is
-> config-based, so §3 cannot be cited as a proof leg until it is built.
+> **Three load-bearing findings remain open** (memo Appendix B has all seven): the broken
+> `build-plan.md` §5.2/§8.1 citation, flagged on the D-1 row above and still present in three
+> files · **"Range075 as a preset" looks unbuildable** — presets are an Exit Options object while
+> `hedge-research.md` §8 specifies Range075 as an entry decision, hitting frozen §2D and §5.2
+> rule 3 · **the arm-distinctness assert `oa-ops-runbook.md` §3 promises does not exist** —
+> `execution_audit.py` has 13 rules and none is config-based, so §3 cannot be cited as a proof leg
+> until it is built. ⚠️ **G2's REFERENCE result raises the stakes on the second and third:** an
+> arm-matching proof that reads the action alone now returns identical for every arm.
 
 ---
 

@@ -1,7 +1,14 @@
 # Decision memo — 2026-08-04
 
-*Seven open decisions, one ruling line each. Nothing in this memo has been executed.
-No OA edit was made, no frozen doc was touched, no git command was run.*
+*Seven open decisions, one ruling line each.*
+
+> ### ✅ RULED BY ANDY 2026-08-04 — all seven decided. Rulings are recorded in the slots below.
+> **Superseding the original note that "nothing in this memo has been executed":** D-3 and
+> Decision 7 were **ruled AND executed** in the pilot session; Decision 6 is ruled with execution
+> **deferred to Template V2**; D-1, D-4, Decision 4 and Decision 5 are ruled and not yet
+> propagated. **Gates G1–G4 are CLOSED** — see the D-1 slot. Four secondary slots remain
+> unruled and are marked as such. No frozen doc has been amended and no git command was run in
+> the session that wrote this memo.
 
 **How to use this.** Each section gives the forcing fact (cited file + section), the options,
 a recommendation, and a `RULING` line. Write one line per section. Amendment text is **draft
@@ -39,7 +46,8 @@ says about the greenfield family is §2D:
 whether an amendment becomes necessary — see D-1.
 
 **RULING (Andy) — fix the broken §5.2/§8.1 citations in `state.md` and `session-log.md`?**
-`.........................................................................................`
+⏳ **NOT RULED as of 2026-08-04.** Slot left open deliberately — it was not among the seven
+rulings. `.................................................................................`
 
 ---
 
@@ -160,9 +168,21 @@ value, and the one-differing-input proof is asserted across the remaining arms o
 Nothing else in this plan changed.*
 ```
 
-**RULING (Andy) — D-1:** `..............................................................`
+**RULING (Andy) — D-1:** ✅ **RULED 2026-08-04 — Option A. Exit-Options-SET as a Bot Input**, per
+the recommendation. Gates closed first: **G1 YES** (server-confirmed — an empty bundle saved on the
+TEST bot and survived a hard reload, so the `ride` arm IS expressible and the G1 fallback is not
+needed) · **G3 compatible** · **G4 no propagation**.
+
+> ⚠️ **REQUIRED RIDER, forced by G2 — part of this ruling, not commentary.**
+> **G2 came back REFERENCE, not values.** The action stores
+> `{"type":"input","input":"IN…"}`, so a capture that reads only the action records the input's
+> **name**. **Every capture surface — `bots_config_v2.csv`, the capture-diff, and the drift
+> detector — must read the INPUT OBJECT, not just the action, or every arm diffs as identical.**
+> **`oldValue` must never be read as current config: it is a stale pre-link snapshot.**
 **RULING (Andy) — authorize the one UI session to close G1–G4 before the greenfield build?**
-`.........................................................................................`
+✅ **SUPERSEDED — the gates were RUN AND CLOSED in the pilot session, 2026-08-04.** G1 YES
+(server-confirmed) · **G2 REFERENCE not values — see the rider on the D-1 ruling above** · G3
+compatible · G4 no propagation. Full detail in `state.md`'s pilot entry.
 
 ---
 
@@ -253,8 +273,10 @@ currently appear in no capture: `itmlive`, `itmpaper`, `maxexits`. Draft line:
   read `0` = Unlimited on 2026-08-04).
 ```
 
-**RULING (Andy) — paper setting:** `.................................................`
-**RULING (Andy) — live/Day-0 stance:** `.............................................`
+**RULING (Andy) — paper setting:** ✅ **RULED AND EXECUTED 2026-08-04 — `itmpaper` = `market`.**
+Verified by hard reload + `input.value` re-read, with before/after screenshots on file.
+**RULING (Andy) — live/Day-0 stance:** ✅ **RULED — `itmlive` = `market` is a hard Day-0 gate.**
+**Left UNTOUCHED at `auto`; the gate stands and must be set before any capital is live.**
 
 ---
 
@@ -364,9 +386,13 @@ anything — otherwise re-arm and reactivation are confounded and candidate 1 an
 become permanently indistinguishable. **This is a concrete change to Day-0 ordering and it is
 free.**
 
-**RULING (Andy) — retire as June cause, keep as mechanism:** `.........................`
+**RULING (Andy) — retire as June cause, keep as mechanism:** ✅ **RULED 2026-08-04 — retire the
+Excessive Errors Failsafe as the 2026-06-12 lapse cause; KEEP it as a real, documented mechanism
+this fleet has tripped** (March/April, on entry scanners). **June cause: UNKNOWN**, per the ranked
+candidate shortlist above.
 **RULING (Andy) — Day-0 ordering: one no-touch observation before the re-arm sweep?**
-`.........................................................................................`
+⏳ **NOT RULED as of 2026-08-04.** Slot left open deliberately — it was not among the seven
+rulings. `.................................................................................`
 
 ---
 
@@ -519,9 +545,12 @@ is unchanged in substance and strengthened in enforcement: carried once in the s
 automation rather than repeated per arm. Nothing else in this plan changed.*
 ```
 
-**RULING (Andy) — tournament architecture (coupled to D-1):** `.........................`
+**RULING (Andy) — tournament architecture (coupled to D-1):** ✅ **RULED 2026-08-04 —
+Architecture E. Share the entry automation, differ on exits.** Consistent with D-1 = Option A, as
+the coupling required.
 **RULING (Andy) — build the arm-distinctness assert before the tournament trades?**
-`.........................................................................................`
+⏳ **NOT RULED as of 2026-08-04.** Slot left open deliberately — it was not among the seven
+rulings. `.................................................................................`
 
 ---
 
@@ -610,7 +639,9 @@ not gated, but the wording is quoted verbatim by `oa-ops-runbook.md` §5 trap 6 
 **`docs/oa-ops-runbook.md` §5 trap 6, counter column** — replacement for one cell:
 `**Market pricing is banned on every entry and every exit except a hard end-of-day flat close**`
 
-**RULING (Andy) — Decision 5:** `.....................................................`
+**RULING (Andy) — Decision 5:** ✅ **RULED 2026-08-04 — extend the Market-pricing ban to
+ENTRIES.** Recorded as a **MECHANISM decision, not an evidence-backed one** (n=1 position for the
+$5.05 figure, n=2 in the frozen fixture — below `CLAUDE.md` §4's T2 gate), per the memo's wording.
 
 ---
 
@@ -694,7 +725,11 @@ gated, so the section text is **not edited** — the draft append is recorded fo
 > `event_backstop` as separate config columns.
 ```
 
-**RULING (Andy) — Decision 6:** `.....................................................`
+**RULING (Andy) — Decision 6:** ✅ **RULED 2026-08-04 — re-price the 15:50 Expiration exit OFF
+Market; the 15:52 backstop KEEPS Market.**
+⏸ **EXECUTION DEFERRED, and the deferral is part of the ruling.** The pilot's **Template V1 /
+PR-03 config hash is now frozen**, so this is a **spec change, not a config tweak**. It lands as
+**Template V2 with an amended pre-registration, before Day-0** — **not as a quiet edit now.**
 
 ---
 
@@ -764,10 +799,18 @@ Cheap, reversible, and tags are the only writable state on the platform
 (`oa-platform-reference.md` §5.3). An untagged pilot is invisible to any tag-based query and to
 any future tag-ladder mechanic. No reason to leave it empty.
 
-**RULING (Andy) — preset:** `.........................................................`
-**RULING (Andy) — exits blob:** `.....................................................`
-**RULING (Andy) — `-CLONE` name / Bot Group / Tags:** `...............................`
-**RULING (Andy) — add the ungrouped-export UI check?** `..............................`
+**RULING (Andy) — preset:** ✅ **RULED AND EXECUTED 2026-08-04 — `TIER2-CHECK4-PUTSIDE` KEPT.**
+**RULING (Andy) — exits blob:** ⏳ **NOT SEPARATELY RULED.** Decision 7's ruling names the
+ScannerA name, the tag, the Bot Group and the preset; the re-serialized `exits` blob is not among
+them and no revert was reported. It stands as-is — which is also what the recommendation above
+concluded, since a re-serialization cannot be reverted by saving. **Recorded as unruled, not as
+ruled-by-silence.** `.......................................................................`
+**RULING (Andy) — `-CLONE` name / Bot Group / Tags:** ✅ **RULED AND EXECUTED 2026-08-04 —
+ScannerA name REVERTED and tag REVERTED. Bot Group stays UNSET until the Phase 4 sweep**, per
+`oa-ops-runbook.md` §3's sequencing.
+**RULING (Andy) — add the ungrouped-export UI check?** ⏳ **NOT RULED as of 2026-08-04.** Slot
+left open deliberately — it was not among the seven rulings. ⚠️ Still live: the pilot's Bot Group
+remains unset by the ruling above. `...................................................`
 
 ---
 
