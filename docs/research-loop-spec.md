@@ -139,6 +139,36 @@ matter how good anything looks in October.
 
 ---
 
+## 5a. 📝 APPENDED 2026-08-04 — defects found by building against this spec
+
+*Recorded here rather than silently corrected. All five are in the tracker as the blocking review
+item; none is applied to the signed text above except where the code had to choose something.*
+
+1. **The fixed-$ rungs as signed are redundant.** §3 wrote them as "1.0×credit and 1.5×credit",
+   which is arithmetically identical to SL100 and SL150 — a percentage of credit by another name.
+   As written they duplicate the SL family and waste two of twelve slots. `research_loop.py`
+   implements **0.50× and 0.75× RISK** instead, a genuinely independent axis matching
+   `hedge-research.md` §9's intent. **This amendment is unsigned.**
+2. **The count was wrong.** §3's prose lists 11 experimental variants while stating 12. The twelfth
+   is now `CONTROL`, which earns its slot as the engine's self-test: it must reproduce the realised
+   P/L, and a mismatch means the engine is wrong rather than the strategy underperforming.
+3. **Both `TIME_*` variants are structurally undecidable.** MFE/MAE give extremes and their
+   timestamps; the mark *at* 15:45 is neither and is recorded nowhere in the export. The first dry
+   run returned 2,508 of 15,048 cells `UNDECIDABLE` — exactly those two variants × 1,254 positions.
+   Decide whether they keep their slots as a standing reminder that **time-exit questions require a
+   Track B arm**, or are replaced.
+4. **§10's margin and start condition were filled in by Claude, not Andy** — flagged there already.
+5. **The export's sign convention is now documented** in `docs/oa-export-schema.md`
+   (machine-verified, 0 mismatches on 1,386 rows). §6 below should be read alongside it.
+
+**One defect was real code and is fixed:** the nightly summary printed a mean with no `n`, so a mean
+over 7 positions and a mean over 1,254 rendered identically. `research_loop.py` now prints the
+decidable count beside every mean, and its fixture carries a **verbatim real capture row** — the 18
+synthetic checks were fully green while the harness was wrong, because every row in them was
+hand-authored with a positive credit.
+
+---
+
 ## 6. Known limits of MFE/MAE as evidence
 
 1. **They are OA's numbers.** This project already refuses OA's `risk` column and derives risk from
