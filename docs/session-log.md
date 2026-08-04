@@ -2791,3 +2791,265 @@ does not miss it. Proposed card wording: name the DOM read as the primary and th
 ### Files changed by this close-out
 `docs/oa-ops-runbook.md` (§2.1, §2.2, §2.3, §4.0, §7) · `docs/session-log.md` · `docs/state.md`.
 No frozen or gated doc was edited. No git was run.
+
+---
+
+## 2026-08-04 — Greenfield IC family + hedge-arm build spec (sprint task 6)
+
+**Produced `docs/greenfield-family-spec.md`** — 1,548 lines, sha256
+`aee1d7635bc7c335761cbc65c4658e4e18a0fe12222f378f6b5237284d251fdb`, verified by direct on-device
+`shasum -a 256`, not by a tool success message. **No frozen doc edited. No OA surface touched. No
+git command run.**
+
+### Ruling gate
+
+`docs/decision-memo-2026-08-04.md` read first, per the task's STOP condition. **D-1 RULED**
+(memo line 171 — Option A, Exit-Options-SET as a Bot Input, with the G2 rider) and **Decision 4
+RULED** (line 548 — Architecture E). Both present; the spec proceeded. Decisions 5, 6, 7, D-3 and
+D-4 also consumed. The four `NOT RULED` slots are named in the spec's §12 where they bite.
+
+### Date discrepancy, recorded
+
+The sprint's task-6 prompt states "Today is 2026-08-06". The device clock and session environment
+both read **2026-08-04**. The file is stamped 2026-08-04 and carries a note saying so. No literal
+was written from the prompt's assumed date.
+
+### The design, in one paragraph
+
+**Seven fresh bots as ONE matched family, not two builds.** `build-plan.md` §2D's "greenfield IC
+family" and "rebuilt hedge tournament arms" are treated as two views of the same family, which is
+what makes the hedge arms matched to a no-hedge control without spending extra slots — and what
+makes 4 IC arms + 2 hedge arms + 1 canary fit inside §2D's 5–7 fresh ceiling with no remainder.
+Arms: `GF-QQQ-IC-Ride` (control, PR-14) · `-PT50` (PR-15) · `-Trail` (PR-16) · `-Touch0` (PR-17) ·
+`-SL100` (PR-18) · `-SL200` (PR-19) · `-Canary` (PR-20). Underlying **QQQ**, specified with its
+cost stated (physical settlement) because the 15:52 flat close is a QQQ-only mechanic per
+`hedge-research.md` §11 and the pilot's entry tree is already verified.
+
+Four shared Library automations (two entry scanners, the 15:52 Repeating backstop, a
+Position-closed sibling-close) attached to all seven bots; the **only** per-bot variable is a
+bundle-typed exit input. Entry pricing moved off `Market` per Decision 5; Expiration exits priced
+`speedy` per Decision 6 from birth (no Template-V2 deferral, since these are fresh builds).
+
+### Findings this task opened or sharpened
+
+1. **⭐ `build-plan.md` §2D's arithmetic is ambiguous.** "Greenfield IC family (4–6 bots)" plus
+   hedge arms plus canary does not obviously fit "5–7 fresh". Resolved in the spec by the
+   one-family reading (4+2 = 6, inside "4–6"). **If Andy reads §2D as two families, an amendment
+   is needed.** Flagged, not decided.
+2. **⭐ `oa-ops-runbook.md` §3 contains an internal tension.** It requires `Group = Pillar` *and*
+   "tournament arms live in one group so they can be queried as a set". A bot is in exactly one
+   group, so under Pillar grouping the group cannot also be the cohort handle. Resolved
+   operationally: **Group = `IC`, cohort handle = tag `gfam`.** §3's wording is flagged, not
+   amended.
+3. **⭐ `research-loop-spec.md` §10's signed 0.10R margin is unreachable for this structure.** Max
+   per-condor return = total credit ⇒ **R_max ≈ +0.083 to +0.162**. A 0.10R winning margin is 62%+
+   of the theoretical maximum and strictly impossible at the `$0.08` credit floor. `state.md`
+   already records the same conclusion from the effect-size side. **Needs a ruling on a signed
+   document.**
+4. **⭐ The family meets `research-loop-spec.md` §4's own definition of Track B arms**, so it
+   consumes **7 of the 8 signed Track B slots**, and `GF-SL200` duplicates a variant already in
+   the signed Track A §3 set. **This directly constrains sprint task 7.**
+5. **⭐ No regime-change criterion exists anywhere in the folder.** `build-plan.md` §5's gate is
+   conjunctive (n≥100 **and** ≥6 months **and** a regime change) and the third conjunct is
+   undefined in every document. Not invented here.
+6. **⭐ `pre-registration-ledger.md` PR-14…PR-17's family-level kill criterion is vacuously
+   unfireable.** It reads "more than one differing input"; under Option A each arm holds exactly
+   one exit input, so that state cannot be reached — the identical defect the memo used to reject
+   Options B and C. It survived the D-1 ruling unnoticed. The spec rewrites it at field
+   granularity; **the ledger needs the same correction at signing.**
+7. **N-3 confirmed as binding.** The arm-distinctness assert `oa-ops-runbook.md` §3 promises still
+   does not exist, so §3 may not be cited as a proof leg. The spec specifies it as rules **A1–A8**
+   (grown from A1–A5 under review) and places it before Day-0, noting that whether it *must*
+   precede trading is one of the memo's unruled slots.
+8. **N-2 handled without an amendment.** Range075 is implemented as **two Symbol-change-% decision
+   nodes in the shared entry automation** — the substitute primitive, named explicitly per the
+   HedgeD rule. Frozen §2D's "as a preset" wording is left untouched and flagged.
+
+### Adversarial review — two subagents, both succeeded
+
+Spawned per the task instruction: one on platform expressibility, one on confound/matching.
+**Between them: 10 FATAL and 24 MATERIAL objections.** Roughly two-thirds were fixed in the text;
+the remainder are carried as named limitations in the spec's **§11**, with a "attacks that failed"
+list so the review is auditable in both directions.
+
+**The five that changed the design most:**
+
+- **PE-1 (FATAL) — the BOT INPUT tier was never observed.** G1/G2/G3 all tested the *Automation*
+  Input; `state.md`'s bot-input line is explicitly *"Inference from a screenshot"*, and §5.2's
+  *"Whether Exit Options can reference Bot Inputs is [DOCS-SILENT] and unverified"* is unstruck.
+  The draft's Phase 0 did not check the one primitive the whole family rests on. **Now blocking
+  check C0a, with a STOP — not a fallback**, because per-arm copies void the tournament at build
+  time under PR-18's kill criterion.
+- **PE-2 (FATAL) — one Automation Input cannot span two automations.** Put and call sides need
+  separate inputs, and a put=Ride / call=PT50 asymmetry would have diffed clean. Now a two-input
+  design with an intra-arm equality assert (A8).
+- **PE-4 (FATAL) — position limits bound OPENINGS only.** §3 verbatim: *"Position limits are for
+  opening positions only; there is no limit on the amount of closing positions."* Two of
+  sibling-close's three "mandatory interlocks" were one interlock and a procedural test. Rewritten.
+- **CF-1 (FATAL, NOT FIXABLE) — the exit-pricing regime is confounded with the arm variable.** The
+  ITM Market action and the 15:52 Market backstop reach only positions still open at 15:50/15:52,
+  so `Ride` and `PT50` are heavily exposed to Market fills while `Touch0` is ~never exposed. The
+  arms hypothesising "capping the tail helps" are the arms systematically spared the fleet's worst
+  execution mechanic. `auto` does not help — it makes the same subset modeled instead of slipped.
+  **There is no `itmpaper` value under which the tail measurement is arm-neutral.** This is
+  `hedge-research.md` §5.1 defect 2 in a new form. Carried with instrumentation, not fixed. **It
+  bounds what this family can conclude and it should be read before any ranking is published.**
+- **CF-4 (FATAL, NOT FIXABLE) — sibling-close destroys the anchor PR-18 imports.** Sandvand's rung
+  is called *Breakeven* because stopping the tested spread leaves the untested side to decay to
+  zero; close-both forfeits that decay, so the arm **cannot reach breakeven by construction** and
+  is biased downward against its published comparable. The arm is renamed in substance to
+  "SL100-close-both" with an instruction not to publish it under the anchor's name.
+
+**Two claims in the draft were affirmatively withdrawn as false:** that the account-wide ITM
+setting *"cannot confound the ranking between arms"* (its incidence is arm-dependent), and that
+sibling-close *"changes what every arm means, equally"* (it is an effect modifier — it never fires
+meaningfully on the control and fires on every trigger event elsewhere).
+
+**Also caught:** the capture-diff tested *distinctness* rather than *one-field difference*, so an
+arm carrying a stray extra trigger would have passed (both reviewers found this independently);
+`GF-SiblingClose` was priced identically to the Expiration exit, falsifying the attribution
+stance's first rule; the sizing fallback is not deterministic above a $0.75 credit and can put one
+arm at 1 lot and another at 2 on the same day; the entry tree had no upper time bound, degrading
+Range075 from a gap filter and collapsing all arms toward Ride on late entries; n=100 is
+underpowered by 2–30× and the draft never said whether the analysis was paired; and an *armed*
+trailing stop is on §11's not-expressible list by the spec's own §3.1 reasoning, so the draft's
+"no mechanic appears on the list" claim was false until PR-16 was rescoped to a plain trail.
+
+### What the spec does not close
+
+Fifteen items in §12, of which the load-bearing ones are: **C0a can stop the architecture
+outright**; **three of seven arms are not arms yet** under `hedge-research.md` §5.2's own
+definition, because `tstop`'s shape, `stoploss`'s unit and four arms' exit-pricing sub-field are
+unconfirmed; and **the comparative machinery does not exist** — no surface produces a cross-bot
+paired ΔR with a bootstrap CI, `research_loop.py` is advisory-only and must not be wired in, and
+the liveness rule needs an exit-reason field the export may not carry. That last one is the
+largest piece of unbuilt work the spec implies, and `pre-registration-ledger.md` §7 item 3 makes
+it a signing gate.
+
+### Method
+
+Every quoted phrase asserted against the device file before use. No claim sourced from a screen
+that was not opened — three arms' primitives are marked UNCONFIRMED rather than assumed, which is
+the HedgeD rule applied to this spec's own drafting. The written file verified by direct
+`shasum -a 256` on device, matching the container's, per `CLAUDE.md` §9.1a.
+
+---
+
+## 2026-08-04 — Task 7: Track B first arms (`docs/track-b-arms-spec.md`)
+
+**Ruling gate cleared.** The task said *if unruled, STOP*. All seven rulings are recorded in
+`research-loop-review-2026-08-04.md` §0 and R-1/R-2 are applied to `research-loop-spec.md` §3 as
+dated amendments. Proceeded. ⚠️ **Both slot-determining rulings landed against the shape the task
+anticipated**: the task's "RISK-basis rung ruling" was in fact R-1 **REJECTING** the RISK basis
+(0.50×risk ≈ 720% of credit at the fleet's median credit/risk of 0.070, n=1,254) in favour of
+**1.00×/1.50× the trailing-90-day median CREDIT in dollars**; and `TIME_*` was not merely dropped
+but **moved into this document's budget** — R-2 funds it *"from the Track B allocation in §10"*.
+
+### Done
+
+- Wrote `docs/track-b-arms-spec.md` (877 lines). Two first arms, both loss side, both matched to
+  controls that exist on paper in `greenfield-family-spec.md`, both DRAFT and unsigned.
+  - **ARM-B2 `GF-QQQ-IC-Exp1545`** — `expdays` 0.01 → **0.015** (15:45) against `GF-QQQ-IC-Ride`.
+    **Exactly ONE field differs and its pricing sub-field does not** — the cleanest arm-vs-control
+    comparison in the program; greenfield §8.1 concedes every one of its own is a two-field delta.
+    Answers the only question that is `UNDECIDABLE` **1,254/1,254** in Track A. **The one proposed
+    arm that does not double-test a signed §3 variant**, since R-2 retired `TIME_*` from §3.
+  - **ARM-B1 `GF-QQQ-IC-DStop100`** — `DSTOP_100` on R-1's credit-dollar basis, primary control
+    `GF-QQQ-IC-Ride`. PR-21/PR-22 proposed.
+
+### The finding that mattered most — the slots are already spent
+
+`greenfield-family-spec.md` §12 item 11 states its seven bots **consume 7 of the 8 signed Track B
+slots**, and names this task as what it constrains. **The greenfield spec contradicts itself here**:
+§12-11 counts the family inside Track B while §3.1 and §12-9 hand the fixed-$ rungs *out* to Track B
+as somewhere else. Two readings, 1 free slot vs 8. **Recommended Reading B** (greenfield is
+`build-plan.md` §2D fresh builds; Track B's 8 is separate) — otherwise the research loop's entire
+allocation is spent before the loop produces one observation, on the day three rulings created three
+new Track B obligations (R-1, R-2, R-6).
+
+⛔ **And under BOTH readings the fleet lands outside `build-plan.md` §2D's frozen "≈18–20 active"**
+(21 under A, 22 under B, ceiling 28). **No Track B arm — not one — is buildable without an "amend
+the plan" on §2D or a ruling that Track B sits outside its disposition arithmetic.** n_used stated
+from the disposition table: **20** = 4 clones + 9 untouched + 7 greenfield (18 at §2D's floor).
+
+### Four defects / stale items found while specifying
+
+1. ⛔ **The `0.005` (15:55) half of R-2 is NOT buildable in this family.** The shared 15:52
+   Events-class backstop closes both legs flat **three minutes before** a 15:55 Exit Option could
+   fire — the arm variable is erased on every day the backstop works. R-2's time question is funded
+   in its earlier direction only. Deferred with the reason, not silently dropped.
+2. ⛔ **ARM-B2 reintroduces the sibling-close race the gate exists to prevent** — and it is new.
+   `GF-SiblingClose` is gated `before 3:50pm`; Ride's legs close at 15:50 and are excluded, but a
+   15:45 close is **inside** the window, so leg 1's close fires `Position closed` → sibling-close
+   issues a `patient` close on leg 2 while leg 2's own `speedy` order is still working (orders live
+   2 min, N-6). Arm-specific ⇒ a **confound**, not just an ops risk. **Named fix: move the gate to
+   `before 3:44pm` in Phase A**, cost bounded at ≤6 minutes' later sibling close on triggered arms.
+   ⚠️ Shared object — recommended, **not applied**; it is Andy's.
+3. ⛔ **`dstop`'s UNIT and pricing sub-field were never observed.** §6.1a confirms Stop Loss $
+   **exists** and read it *empty*; per-contract vs per-position is unknown (**C10**), and C3 covers
+   `tstop`/`touch`/`stoploss` but **not** `dstop` (**C11**). Per `hedge-research.md` §5.2, ARM-B1
+   **is not an arm until both close** — the HedgeD rule applied to this spec's own drafting.
+4. ⭐ **`greenfield-family-spec.md` §12 item 10 is STALE.** It concludes *"nothing here can ever
+   graduate"* against the superseded `≥0.10R` margin; **R-3 lowered it to +0.015R**, which that
+   family's +0.083R–+0.162R range clears. The **effect-size** objection is resolved; the **power**
+   objection is not (n=100 → ±0.026R; ~307 matched condors for ±0.015R). Flagged, not edited.
+
+### Two more blockers surfaced
+
+- **C12 — do ARCHIVED bots count against the Pro 50-bot cap?** Nothing in the repo records it. If
+  they do: 36 roster + 7 fresh = 43, and **≤8 does not fit** (51). "We can afford it" is currently
+  an inference from a plan tier, not an observed slot count. One screen read.
+- ⛔ **`<D100>` cannot be stamped at Day-0.** R-1's basis is a trailing-90-day median credit;
+  `data/trades.csv` is **n=0** and v1 is never a reporting input. Resolved via Architecture E — the
+  arm shares its control's entry automation, so **the control's realised credit distribution IS the
+  arm's**: built at Day-0 and left OFF, stamped from `GF-QQQ-IC-Ride`'s first 90 post-cutover days,
+  switched on at Day-0+90. Forfeits 90 days of pairing; cost accepted, not hidden. ⚠️ Needs one word
+  from Andy on whether R-1's "trailing-90-day median" is a one-time calibration (assumed) or rolling
+  (which makes every re-stamp a new pre-registration under §10a).
+
+### Time arm — the task's direct question, answered
+
+**YES, and it should be built FIRST.** §4 nominates `Stop Loss $` on priority, so ARM-B1 ranks first
+*on the merits*; but ARM-B2 is stampable today, has an enumerated first-hand primitive, differs in
+one field, and is not double-tested — while ARM-B1 needs 90 days of calibration and carries two
+unobserved primitives. **Build order B2 → B1 is a readiness ordering, not a priority reversal**, and
+it costs nothing: B1's calibration window runs while B2 collects. Under Reading A's 1-slot budget,
+**B2 is the arm that survives**. The time exit is also loss-side, not an exception to §4 — on the
+ride control it is the only loss control there is.
+
+### Rejections, each with its reason
+
+`SL150` (buys ~28–79 positions of separation for a slot) · `DSTOP_150` (needs a nonexistent `SL150`
+partner ⇒ 2 slots) · `COND_*` (⛔ **not expressible** — §11's no-mid-trade-branching and
+no-condition-on-its-own-past rows; **Track-A-only by construction**, the one place Track A is the
+sole instrument) · **R-6's combined-MFE condor** (⛔ not expressible as an arm of this family — OA
+models each spread as a separate position and the pairing is a `trade_id` project construct; needs a
+**native `ironcondor`** entry, so it cannot share `GF-ScannerA`/`B` and costs **2 slots**. Context:
+only **102 of 1,386** v1 export rows are native IC vs **1,246** single-sided legs) · `PT40/60/70`
+(profit side) · ⛔ **`SL50`/`SL75` — forbidden and the program pays for it**: the review's own
+measurement makes the **SL50→SL75 gap (159 positions unsampled, n=1,254)** the highest-information
+loss rung, and it is `hedge-research.md` §9's **#1 sweep item** — but neither is in the signed §3 set
+and no ruling added them. Recorded as **a cost of the freeze**, not a design choice.
+
+### Loss-tail rationale, with its n
+
+`data/mirror_baseline.csv`, **n=174 positions / 10 mirrors**, read from the CSV not from prose.
+**Four mirrors carry a positive median R and a negative mean R** — `60min-ORB-10W` (n=12, 83.3% win,
+mean −0.0328 / median +0.0786), `Opening Range Breakout 60m` (n=19, 68.4%, −0.1107 / +0.0676),
+`Trendy` (n=15, 80.0%, −0.0365 / +0.0405), `Weekly-IB-SPY` (n=18, 50.0%, −0.0770 / +0.0217):
+**n=64 of 174, −$4,415**, against **+$6,284 across all n=174**. They win most trades and lose money;
+the whole mean–median gap is the loss tail. ⚠️ **Directional and analogical only** — OA-Mirror is
+multi-day, watch-only, other structures. Not a prior, and not offered as one.
+
+### Method
+
+Every source read **directly from the device** via `device_bash`, never from a staged copy —
+`state.md` records a staged read returning text that is not in the file. Every quoted phrase re-read
+in place before use. Every aggregate carries its n; every capture figure labelled **v1, demonstration
+only**. Three primitives marked **UNCONFIRMED rather than assumed**. Nothing built, no OA surface
+opened, no spec edited, `research_loop.py` not wired, **no `git` run**. File verified by direct
+on-device `shasum -a 256` matching the container's:
+`6115682091c639aba041c981b791239036e69b404fa80ca52923729daf67d225`, 877 lines.
+
+**Changed files for Andy's commit:** `docs/track-b-arms-spec.md` (new) ·
+`docs/session-log.md` (appended).

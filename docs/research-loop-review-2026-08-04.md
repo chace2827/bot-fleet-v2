@@ -14,6 +14,18 @@ statistics, design, code-vs-spec — each prompted to refute rather than summari
 
 ---
 
+## 0. RULINGS — ALL SEVEN RECORDED 2026-08-04
+
+Andy ruled all seven slots in conversation 2026-08-04: **R-1 SIGN · R-2 SIGN · R-3 SIGN · R-4 SIGN ·
+R-5 SIGN · R-6 RULE position, combined MFE is a Track B question · R-7 SIGN.**
+
+**Applied to `research-loop-spec.md` as dated amendments** (§3 and §10 only, per the authorisation):
+R-1, R-2 → §3 · R-3 → §10 bullet 2 · R-4 → §10 bullet 5 · R-5 → new §10a · R-6, R-7 → recorded in
+§10's amendment note. **The §3 set remains 12, so the §10 freeze holds without a count change.**
+
+**NOT applied — signed or found, but outside the §3/§10 scope. Listed in §9.** These leave the spec
+internally inconsistent in four places until ruled on separately.
+
 ## 1. Verdict
 
 **Do not wire it in.** The signature is not the blocker — three defects are, and none of them is in
@@ -118,7 +130,7 @@ population `hedge-research.md` §9 item 6 exists to test. A RISK-basis rung is n
 no-stop boundary.
 ```
 
-☐ SIGN as above ☐ SIGN a different value: ________ ☐ REJECT — revert to signed text verbatim
+☑ **RULED 2026-08-04 — SIGN as above.** Applied to `research-loop-spec.md` §3 as a dated amendment.
 
 ---
 
@@ -162,7 +174,7 @@ are funded instead from the Track B allocation in §10: `Expiration` 0.015 and 0
 0.01 incumbent, a one-field edit on a cloned bot and the cheapest arm in the §9 sweep.
 ```
 
-☐ SIGN as above ☐ Keep `TIME_*` as reminders ☐ Drop to 10 ☐ Other: ________
+☑ **RULED 2026-08-04 — SIGN as above.** Applied to `research-loop-spec.md` §3 as a dated amendment. Set stays at 12; `TIME_*` retired to Track B.
 
 ---
 
@@ -223,7 +235,7 @@ nothing above is what it would print today.
       0.10R was unreachable by construction. Declared here, before any post-cutover data.
 ```
 
-☐ SIGN as above ☐ Different margin: ________ ☐ Keep 0.10R and accept the gate never opens
+☑ **RULED 2026-08-04 — SIGN as above.** Applied to `research-loop-spec.md` §10 bullet 2 as a dated amendment.
 
 ---
 
@@ -258,7 +270,7 @@ qualified in the signed text.
   `trade_id` group and risk is the larger side, **and**
 ```
 
-☐ SIGN as above ☐ Different threshold: ________ ☐ Confirm as originally written
+☑ **RULED 2026-08-04 — SIGN as above.** §10 bullet 5 amended. ⚠️ The companion §5 line (`- n ≥ 100 positions, **and**`) is signed but sits in §5, outside the §3/§10 application scope — NOT yet applied, see §9.
 
 ---
 
@@ -301,7 +313,7 @@ offsetting (2) and (3).
    not a fixed-n CI.
 ```
 
-☐ SIGN as above ☐ Keep Bonferroni, corrected to the ~180 family ☐ Other: ________
+☑ **RULED 2026-08-04 — SIGN as above.** Added to `research-loop-spec.md` as new §10a.
 
 ---
 
@@ -326,8 +338,7 @@ PT family**, and Track A's decidable population shrinks toward native `ironcondo
 genuinely single-sided bots. That is a real reduction in scope. It is also the correct answer, and
 it is the same class of error the 2026-07-31 denominator fix already corrected once.
 
-☐ RULE: position, accept the scope loss ☐ RULE: position, and treat combined MFE as a Track B question
-☐ Keep per-leg and label every output `per leg, raw` ☐ Other: ________
+☑ **RULED 2026-08-04 — RULE: position, and treat combined MFE as a Track B question.** Recorded in §10's amendment note. ⚠️ No pre-written replacement block existed for this slot; spec text for §4/§6 still needs drafting — see §9.
 
 ---
 
@@ -347,7 +358,7 @@ rows that show what the tape would have offered an unstopped bot.
 comparison, but retain the rows in `counterfactuals.csv` under an explicit `expired` stratum, and
 report the stratum's size beside every aggregate.
 
-☐ SIGN as above ☐ Exclude entirely ☐ Include as closes ☐ Other: ________
+☑ **RULED 2026-08-04 — SIGN as above.** Stratify: excluded from counts and the PT comparison, retained under an `expired` stratum. Recorded in §10's amendment note.
 
 ---
 
@@ -639,3 +650,25 @@ scale).
   `research_loop.py` and `daily.sh` are untouched.
 
 **Changed files for Andy's commit:** `docs/research-loop-review-2026-08-04.md` (new).
+
+---
+
+## 9. Not applied — the spec is internally inconsistent until these are ruled
+
+Andy's authorisation covered the signed REPLACEMENT TEXT blocks for **§3 and §10**. These four sit
+elsewhere and were deliberately left alone. Each is one word from being applied.
+
+1. **§5's gate line** — `- n ≥ 100 positions, **and**`. Signed verbatim inside R-4's block, but it
+   lands in §5. Until applied, §10 says "positions are `trade_id` groups, `expired` excluded" while
+   §5 still says "n ≥ 100 positions" unqualified.
+2. **§5's `**adjusted for the 12-variant count**`** — now contradicted by §10a, which sets the
+   family at 9 × bots and applies no Bonferroni term. Not covered by any signed block.
+3. **§6 limit 5, the censoring block (D-8)** — drafted in §5 of this sheet, never put to signature
+   because it was a finding rather than a ruling slot. ⚠️ **R-2's applied text references `(§6.5)`,
+   which does not yet exist** — that reference dangles until this block is added. R-6's ruling
+   ("combined MFE is a Track B question") is the same territory and argues for adding it.
+4. **§1a's recovery figures (D-14)** and **§5a defect 2's rewrite** — both drafted here, neither
+   signed. §1a still reads `74 (19%)`, which is not reproducible from its own stated definition;
+   the correct value is 101/394 = 25.6%.
+
+Recommended: rule 1–3 together, since each is a direct consequence of a ruling already signed.

@@ -1,0 +1,1548 @@
+# Greenfield family — build spec
+
+*Written 2026-08-04. The design document Phase 4's fresh builds are built from, mechanically.
+It **implements** `build-plan.md` §2D and §5; it does not amend them. Nothing here has been
+built, and no OA surface was touched in the session that wrote it.*
+
+> ### Date note, once
+> The task that commissioned this file states "Today is 2026-08-06". The device clock and the
+> session environment both read **2026-08-04**. Every date stamped in this file is the
+> verifiable one. If the build runs on a later day, the `<date>` literals in §10 are stale —
+> re-stamp them at the head of the build session, not mid-ritual (the pilot card's rule).
+
+> ### ⚠️ THIS IS THE POST-ADVERSARIAL-REVIEW TEXT. READ §11 BEFORE BUILDING.
+> Two adversarial subagents attacked the finished draft and returned **10 FATAL** and **24
+> MATERIAL** objections between them. Roughly two-thirds are fixed in the text above; the rest are
+> **carried as named limitations**, because they are properties of the platform or of the
+> question, not of the wording. **Six blocking Phase-0 checks now exist that the draft did not
+> have, and one of them — C0a — can stop the architecture outright.** Three of the seven arms are
+> **not arms yet** under `hedge-research.md` §5.2's own definition, because their platform
+> primitives are unconfirmed. None of that is hidden in an appendix: §11 is the record and §12 is
+> what remains open.
+
+> ### ✅ RULING GATE — CLEARED
+> `docs/decision-memo-2026-08-04.md` was read first. **D-1 is RULED** (line 171: Option A,
+> Exit-Options-SET as a Bot Input, with the G2 rider) and **Decision 4 is RULED** (line 548:
+> Architecture E, share the entry automation, differ on exits). Decisions 5, 6, 7 and D-3, D-4
+> are also ruled. The four secondary slots the memo marks `NOT RULED` are named where they
+> bite (§12). This spec therefore proceeds.
+
+---
+
+## 0. What this document is, in six lines
+
+Seven fresh bots, built as **one matched family**, not two families.
+
+Every bot shares **the same entry automations, the same backstop, the same sibling-close, the
+same bot settings, and the same sizing** — shared as Library objects, so they are identical *by
+construction* rather than by repetition. Each bot differs in **exactly one mechanic**: the value
+of a per-bot input whose type is the whole Exit-Options bundle (one per side, asserted equal).
+
+The "greenfield IC family" and the "rebuilt hedge tournament arms" of `build-plan.md` §2D are
+**two views of this one family**, not two builds. That is what makes the hedge arms matched to a
+no-hedge control without spending extra slots on one.
+
+---
+
+## 1. The mechanism, stated before the bots
+
+This is the part a build session must understand before it clicks anything. Everything else is
+consequence.
+
+### 1.1 The input chain — where the arm variable actually lives
+
+`oa-platform-reference.md` §5.2, [DOCUMENTED]:
+
+> *"the decision input is linked to the Automation Input, which is linked to the Bot Input – and
+> the Bot Input value takes priority."*
+
+So: **one shared Open Position action → one Automation Input → N Bot Inputs, one per arm.**
+
+```
+   Fortress-family ScannerA-PutSpread      (ONE Library automation object, shared by all 7 bots)
+      └─ Open Short Put Spread
+           └─ Exit Options  =  🔗 automation input  GF_EXITS_PUT
+                                    (ScannerB carries its own GF_EXITS_CALL — see §4.1)
+                                    │
+        ┌───────────────────────────┼───────────────────────────┐
+        ▼                           ▼                           ▼
+   bot GF-Ride                 bot GF-PT50                 bot GF-Touch0     …
+   Bot Input GF_EXITS_* =      Bot Input GF_EXITS_* =      Bot Input GF_EXITS_* =
+   {time exit only}            {time exit + PT 50%}        {time exit + Touch $0}
+   (put and call, equal)       (put and call, equal)       (put and call, equal)
+```
+
+The exit configuration is the **only** object that varies. Entry logic, strike selection,
+sizing, credit floor, entry pricing, the Range075 filter, the backstop and the sibling-close all
+live in shared objects and cannot drift apart without an edit that changes every arm at once.
+
+**Why this is the design and not a per-arm copy:** `hedge-research.md` §6 — `HedgeA-S1` ≈
+`HedgeD` ≈ `HedgeTest`, 73/73/70 identical positions across three bots, invisible for four
+months — was produced by independently hand-set bots with **no inputs at all**. Hand-setting is
+the pathogen. A shared definition plus one differing variable makes a three-way identity
+arithmetically impossible.
+
+### 1.2 ⛔ The G2 rider — binding on every capture surface in this spec
+
+`state.md` (pilot part-4 block), and the rider attached to the D-1 ruling:
+
+> the action stores a **REFERENCE**, not values —
+> `{"type":"input","input":"IN…","text":"<label>","oldValue":{…}}`
+
+**Consequence, and it is the single most dangerous thing in this document:** a capture-diff that
+reads the Open Position action returns **identical for every arm**, because every arm's action
+holds the same reference to the same automation input. It will look like a clean pass. It proves
+nothing.
+
+**Binding rules:**
+
+1. `bots_config_v2.csv`, the capture-diff, the drift detector and the arm-matching proof of §8
+   **must read the BOT INPUT OBJECT's value** — the per-bot end of the chain — and decode it.
+2. **`oldValue` is never config.** It is a pre-link snapshot and goes stale the moment the link
+   is made. Any parser that falls back to `oldValue` when the input object is missing is
+   reporting history as state.
+3. The diff **decodes the payload; it never compares rendered labels.** Finding N-4: OA
+   re-serialises an `exits` blob on save even when nothing changed — the pilot's label drifted
+   `"Profits: 50%, …"` → `"Profit: 50%, …"` with the numeric payload byte-identical
+   (`^^0.5|0.01^$0` before and after). A differing line does not entail a differing value, and
+   an identical value does not entail an identical line.
+4. Any parser keying on the string `"fast"` for SmartPricing **silently misses it** — the
+   internal value is `speedy` (§7, first-hand).
+
+### 1.3 The sentinel — and ⛔ the half of §5.2 it CANNOT discharge
+
+§5.2's failure mode: *"The Default Values are not used UNLESS the Automation/Bot Input link is
+broken"*, and **a broken link does not error.** It silently reverts to the stale Default and
+keeps trading.
+
+**§5.2's mitigation, quoted with the clause that matters:**
+
+> *"make each Default Value a distinctive sentinel (`-999`) **that a decision explicitly tests
+> for and refuses to trade on**."*
+
+⛔ **The refusal half is NOT EXPRESSIBLE for a bundle-typed input, and this spec does not pretend
+otherwise.** Exit Options are not a decision family (§5.1), and §9 row 3 established there is no
+🔗 on any individual exit field — *"Inside the Default Value editor, `i.fa-link` count is 0"* —
+so **no decision node can read this input's value**. There is no pre-trade refusal available. Any
+design that claims one would be a substitution at a platform limit performed on the very rule
+written to prevent them.
+
+**What is available is a post-hoc signature, and it is strictly weaker:**
+
+> **`GF_EXITS` Automation-Input Default Value = `SENTINEL-SL1`** — an Exit-Options bundle whose
+> only content is **Stop Loss % = 1**.
+
+A broken link then produces an unmistakable, same-day, harmless signature: that arm's positions
+close within minutes of opening, every day, on the first adverse tick. It is loud in the ledger
+and cheap at 1 lot. **Stop Loss, not Profit Taking**, because a low PT is behaviourally
+indistinguishable from the Canary arm (PR-20), and a sentinel that looks like a legitimate arm is
+not a sentinel.
+
+⛔ **Do NOT use an EMPTY bundle as the sentinel**, even though G1 confirmed the server accepts
+one: an empty bundle is behaviourally indistinguishable from a legitimate no-management arm — the
+silent, plausible-looking fallback §5.2 exists to prevent.
+
+> ### ⛔ THE RESIDUAL HOLE, STATED RATHER THAN PAPERED OVER
+> When the link breaks, the **Bot Input object still holds the arm's correct value** — the
+> runtime falls back to the Default, the stored config does not. So §8.2's read (which is
+> mandated to read exactly that object) records the intended bundle and **passes**. §8.3's
+> assert A4 therefore catches only a *typo* — someone stamping the sentinel as an arm value —
+> **not the broken link it is named for.**
+>
+> **The only detector for a broken link is behavioural: the SL1 signature in the Trades list and
+> the ledger, one trading day after it happens.** That is a genuine uncovered hole between the
+> break and the next day's brief, it is a property of the platform's silent-fallback design and
+> not of this spec, and it is why the §9 SENTINEL criterion is written as a *ledger* criterion
+> rather than a config one.
+
+### 1.4 Where G1's empty-bundle result is and is not used
+
+G1 came back **YES, server-confirmed** — an empty bundle saves and survives a hard reload — and
+`state.md` records this as meaning "the `ride` arm IS expressible". **This spec deliberately does
+not use it.**
+
+An empty bundle would give the ride arm no time exit, so the ride arm would differ from every
+other arm in **two** things: the absence of a management trigger *and* the absence of a 15:50
+time exit. Its positions would live two minutes longer than every other arm's and would exit
+through a **Market** backstop while the other arms exit through **SmartPricing** — a pricing
+confound layered on an exposure confound, in the one arm that is supposed to be the control.
+
+Instead: **every arm's bundle carries the identical time exit**, and the arms differ by the
+presence and identity of one management trigger on top of it. The ride arm is the base; each
+other arm is base + exactly one trigger. G1 remains recorded as an available escape hatch and is
+not relied upon.
+
+**This is a spec choice, not a ruling, and Andy may overrule it.** If overruled, §11's
+confound-A objection applies in full and must be written into PR-14's pre-registration.
+
+---
+
+## 2. Scope decision — QQQ, and the reason, because it is not free
+
+`build-plan.md` §2 does not name an underlying for the greenfield family. It archives the SPX
+Fortress arms saying `Roles superseded — the greenfield family supplies the new control and A/B
+arms` and archives the old QQQ Range075 experiments as `Superseded by the greenfield family`.
+Both lines are satisfied by either choice, so the choice is this spec's to make and to justify.
+
+**Specified: QQQ.** Three reasons, in order of weight:
+
+1. **The 15:52 flat-close backstop is a QQQ mechanic.** `hedge-research.md` §11:
+   `The 3:50 PM flat rule is QQQ-only. It backfires on SPX cash settlement.` The backstop is
+   load-bearing in every arm of this family. On SPX it would pay to close condors that would
+   have settled worthless.
+2. **The entry tree already exists and is verified.** The pilot's ScannerA tree was read at the
+   value layer on 2026-08-04 and is reproduced verbatim in §4. Reusing a verified tree is the
+   single largest risk reduction available to this build.
+3. **Cross-readability.** `QQQ-IC-0DTE-Fortress` and `-NoPT50` are QQQ clones in the same
+   pillar; the family's ride arm and the Fortress clones become legible against each other.
+
+**The cost, stated:** QQQ is a physically-settled ETF, so the family carries assignment risk that
+an SPX family would not. That risk is entirely governed by the ITM Position Action — see §7,
+which is why that section is a hard gate rather than a note.
+
+**If Andy prefers SPX:** it is not a one-line change. The backstop mechanic must be re-designed
+(reason 1), the strike width moves $2 → $5 (`hedge-research.md` §11), and the sizing arithmetic
+in §5.4 changes with it. Do not substitute the underlying at build time — that is the HedgeD
+error shape.
+
+---
+
+## 3. The roster — seven bots, and how they fit `build-plan.md` §2D's arithmetic
+
+§2D allows **5–7 fresh builds** total, covering the greenfield IC family (4–6 bots), the rebuilt
+hedge tournament arms, and the optional canary. Four + hedge arms + canary does not obviously fit
+inside seven. It fits here because the hedge arms are arms of the same family, sharing the same
+control.
+
+| # | Bot name | Role | Arm variable (the whole bundle) | PR |
+|---|---|---|---|---|
+| 1 | `GF-QQQ-IC-Ride` | **control** | time exit only | PR-14 |
+| 2 | `GF-QQQ-IC-PT50` | experiment | time exit + Profit Taking % 50 | PR-15 |
+| 3 | `GF-QQQ-IC-Trail` | experiment | time exit + Trailing Stop | PR-16 |
+| 4 | `GF-QQQ-IC-Touch0` | experiment | time exit + Touch $0 | PR-17 |
+| 5 | `GF-QQQ-IC-SL100` | experiment (hedge arm) | time exit + Stop Loss 100 | PR-18 |
+| 6 | `GF-QQQ-IC-SL200` | experiment (hedge arm) | time exit + Stop Loss 200 | PR-19 |
+| 7 | `GF-QQQ-IC-Canary` | instrument | time exit + Profit Taking % 5 | PR-20 |
+
+**Total fresh = 7.** At §2D's ceiling, with no remainder. `build-plan.md` §2's accounting —
+35 = 20 archived + 2 deleted + 4 cloned + 9 untouched — is untouched; end state is 20 active
+bots (4 clones + 9 untouched + 7 fresh), inside §2D's `≈18–20`.
+
+> ⚠️ **Finding, not an amendment.** §2D's `Greenfield IC family (4–6 bots)` reads most naturally
+> as 4–6 bots *before* the hedge arms and the canary, which would exceed the 5–7 total in the
+> same paragraph. This spec resolves the tension by treating the IC family and the hedge arms as
+> one matched set (4 IC arms + 2 hedge arms = 6, inside "4–6"), plus the canary. **If Andy reads
+> §2D as requiring separate families, the arithmetic needs an "amend the plan" and this spec's
+> §3 is what changes.** Flagged, not decided here.
+
+**Arm IDs.** `pre-registration-ledger.md` §8 item 1 holds PR-14…PR-17 for the IC family and
+`PR-18 onward` for the hedge arms, with the literals unstamped until the counts are decided.
+The literals above are **PROPOSED**, consistent with those ranges, and become final when Andy
+fixes the count.
+
+### 3.1 What is deliberately NOT an arm
+
+| Excluded | Why | Authority |
+|---|---|---|
+| **`Conditional` / sustained-touch** | The platform cannot express time persistence at all. The only build path is a ~10-rung tag ladder that consumes the whole 1-minute scan budget and **fails safe-looking at every rung**. | §11; `hedge-research.md` §7, §7.1; `pre-registration-ledger.md` §6 warning |
+| **Defang** (close shorts ~$0.05, longs ride) | `True "defang" as a single action` is **NOT NATIVE** — multi-leg workaround required. A workaround here would be an undocumented substitution at a platform limit. | §11 row 5 |
+| **SL130** (Pearce) | Fits the slot budget nowhere in wave 1. Queued as the first wave-2 arm if a slot frees. | §3's ceiling |
+| **Fixed-$ stop rungs** (`dstop`) | Belongs to Track B, whose rung basis is itself under an unsigned amendment (RISK-basis, not credit-basis). Building it here would pre-empt a ruling. | `research-loop-spec.md` §4, §5a item 1 |
+| **Armed trailing stop** ("arm @ 40%, then trail 15%") | A two-stage mid-trade state change. **Excluded by the same two §11 rows §3.1 uses against stop-tightening.** PR-16 is scoped to a plain, always-on trail instead. Added under review — the draft treated this as an open question the folder already answers. | §11 rows 4, 6 |
+| **VIX filter** | Redundant once Range075 is present; validated. | `hedge-research.md` §11 |
+| **Intraday stop-tightening schedule** | Requires mid-trade state change; no primitive. Backtest-only (`hedge-research.md` §9 item 3). | §11 rows 4, 6 |
+
+---
+
+## 4. The shared objects — built once, attached to all seven
+
+Four Library automations. Every one of them is identical across all arms **because it is the same
+object**, not because it was copied correctly.
+
+### 4.1 `GF-ScannerA-PutSpread` — the shared entry automation, put side
+
+Reproduced from the pilot's verified tree (`session-log.md` 2026-08-03 part 2, read at the value
+layer from `input.value` / hidden-field payloads, not `innerText`), with the two changes the
+rulings force.
+
+```
+Loop QQQ
+ └─ Current market time is after 1:30pm                                    [General decision]
+     └─ YES → Current market time is before 2:00pm            ⭐ ADDED      [General decision]
+         └─ YES → Symbol change % > -0.75 since previous close              [Symbol decision]
+             └─ YES → Symbol change % < 0.75 since previous close           [Symbol decision]
+                 └─ YES → Bot opened a position with tag `put side` today  ⚠️ C7
+                     └─ NO → Open QQQ Short Put Spread
+```
+
+> ⭐ **The 2:00pm upper bound is ADDED to the pilot's tree, deliberately, and it is a spec change.**
+> The pilot's tree has no upper bound, so the scanner re-evaluates every minute until the
+> automations window closes at 15:55. Two consequences the family cannot carry:
+> **(a) Range075 stops being a gap filter.** A day is excluded only if |Δ%| stays outside ±0.75%
+> for the *whole* post-1:30 window. A day that opens −1.4% and mean-reverts to −0.6% at 14:40
+> **passes and is entered late** — and those are the high-realised-vol days the filter exists to
+> avoid. `state.md` records the fleet paying for exactly this: *6/17 opened +0.7%, passed the
+> filter, Fortress entered 1:31 and ate −$7,530.*
+> **(b) Late entries neutralise the arm variable.** A condor opened at 14:40 has ~70 minutes
+> before the 15:50 exit; one opened at 13:31 has ~140. PT/Trail/SL/Touch can only differentiate
+> inside that window, so on late-entry days **all seven arms converge toward Ride** — a dilution
+> whose incidence is set by the tape rather than by design. The bound caps the time-to-exit
+> spread at ~1.4×, not 4×.
+> **Cost, accepted:** fewer qualifying days, which §11-C9's arithmetic already shows is the
+> binding constraint on sample size. That is a smaller problem than an entry-time confounder.
+
+`Open Short Put Spread` action:
+
+| Field | Value | Note |
+|---|---|---|
+| Symbol | `QQQ` | carried in the automation, not the Symbols panel |
+| Expiration | `exactly 0 days` | 0DTE |
+| Short put | `0.75% below underlying price` | matches the champion structure |
+| Long put | `$2.00 below short put leg` | $2-wide, most hedgeable on QQQ (`hedge-research.md` §11) |
+| Size | **1 contract** — see §5.4 for the primitive and its fallback | ⚠️ Phase-0 check C4 |
+| Minimum credit | `Mid price is between $0.08 – (no max)` | the pilot's live floor, carried |
+| **Entry pricing** | **SmartPricing `normal`**, Final Price `pct` = `100` (the control's default) | ⛔ **CHANGED from the pilot's `Price: Market`** — Decision 5 |
+| Exit Options | **🔗 automation input `GF_EXITS_PUT`** | the arm variable; §1.1. ScannerB carries `GF_EXITS_CALL` |
+| Tag | `put side` | consumed by the re-entry gate above |
+
+`GF-ScannerB-CallSpread` is the mirror image: short call `0.75% above underlying price`, long
+call `$2.00 above short call leg`, tag `call side`, everything else identical.
+
+> ### ⛔ TWO INPUTS, NOT ONE — corrected under review
+> The draft of this spec said ScannerB carries *"the same `GF_EXITS` input"*. **That is almost
+> certainly not expressible.** The object is an **Automation** Input; the one instance ever
+> created (`IN178586615441261`) was scoped to a single automation's action, and OA's id
+> namespaces are scope markers — §9 row 4 makes the point in the platform's own vocabulary:
+> *"the id namespace: **`UI…`**, not `BOT…` or `RT…` — presets are **account-scoped** user
+> objects, not bot- or automation-scoped."* Nothing establishes that an `IN…` object crosses
+> automations. Two Library automations means **two** automation inputs, necessarily.
+>
+> **Specified: `GF_EXITS_PUT` on ScannerA, `GF_EXITS_CALL` on ScannerB**, each linking to a
+> per-bot Bot Input of the same name. **Every arm therefore holds TWO exit variables, and they
+> must be equal to each other.**
+>
+> ⛔ **This creates a failure mode the draft's diff was blind to:** a bot whose put side is set to
+> Ride and whose call side is set to PT50 has two well-formed, non-identical, correctly-decoding
+> bundles, and would have **passed** a cross-arm diff. §8.2 now carries an intra-arm equality
+> test and §8.3 carries assert **A8** for exactly this. If Phase-0 check **C0b** shows one input
+> *can* span both automations, collapse to a single `GF_EXITS` and A8 becomes trivially true —
+> keep the assert either way.
+
+> **Range075 — the primitive, named.** Range075 is built from **two Symbol-change-% decision
+> nodes in this shared entry automation**. It is **not** an Exit-Options preset.
+> `build-plan.md` §2D's phrase `Range075 as a preset` names a primitive that cannot express the
+> mechanic: presets are an Exit Options object (§6.1) and Range075 is an entry decision
+> (`hedge-research.md` §8: `implement as a symbol %-change decision, not a high-low range
+> check`). This is memo finding **N-2**, and it is the same defect class as the `Conditional`
+> correction of record. **The substance is stronger under Architecture E, not weaker:** carried
+> once in the shared entry automation, Range075 is identical across arms by construction rather
+> than by per-arm repetition. `build-plan.md` §2D is **not edited** — the wording correction
+> requires Andy's "amend the plan"; draft text is in the memo, Decision 4 amendment (c).
+
+> ⛔ **Entry pricing changed, and it is a spec change, not a carry-forward.** The pilot enters at
+> `Price: Market` on both sides. Decision 5 is RULED — the Market-pricing ban extends to entries.
+> No family bot enters at Market. Recorded there as a **MECHANISM decision, not an
+> evidence-backed one** (n=1 position for the $5.05 figure, n=2 in the frozen fixture — below
+> `CLAUDE.md` §4's T2 gate). **Accepted cost:** a limit entry that does not fill biases the
+> sample toward tight-spread days. **Mitigation, required:** log non-fills so the bias is
+> measurable rather than invisible (§8.4).
+
+### 4.2 `GF-Backstop-1552-FlatClose` — the shared Events-class backstop
+
+Built exactly as it was built and reload-verified on the pilot
+(`Fortress-Backstop-1552-FlatClose`, automation id `RTfw5TkkCRF1785795329406099999991`):
+
+```
+Trigger   Repeating → Pattern → Market Time (EST) → Custom → 15:52
+          Every week on Mon-Fri, 3:52pm EST · holidays = skip · no end date
+          (commits as ntime=1552; the visible 5-minute grid is a convenience list, not the
+          constraint — native <input type="time" min="09:31" max="15:55">, 1-minute step)
+Tree      Positions loop (unrestricted) → Close Position
+Action    Market · 100% · memo `1552 backstop flat close`
+```
+
+**Why the Events class and not an Exit Option:** §6, [DOCUMENTED] —
+*"Exit Options always run, even if your automations inside a bot are turned off."* The inverse is
+the point: v1's failure was Exit Options dead while automations ran, so a backstop living
+*inside* Exit Options would have died with them. `0.008` = "8 minutes before" exists in the
+Expiration dropdown, so a 15:52 Exit Option **was** expressible all along — the objection was
+never impossibility, it is architectural, and the architecture is unchanged.
+
+**Market pricing here is inside §7's carve-out** — `a hard end-of-day flat close, where fill
+certainty beats fill quality`. Decision 6 keeps it. Do not "fix" it.
+
+⚠️ **Two known unresolved properties:**
+
+- **⛔ DST — and it is promoted to a FIRST-DAY observation, not a later one.** The saved trigger
+  serialised `startDate 2026-08-03T20:52:00.000Z` = 15:52 at UTC−5 (EST), but Day-0 falls in
+  **EDT (UTC−4)**, where that is **16:52 ET — after the close**. `ntime=1552` is the operative
+  field and `startDate`'s time component may be a stamp only. **If the literal-EST reading is
+  right the backstop never fires, on all seven arms at once, and the absence looks exactly like
+  "nothing needed closing."** `itmpaper = market` does not cover it — §7 says so in its own
+  words: *"`market` is not a substitute for the 15:52 backstop."* **Build order D6 is therefore
+  ordered BEFORE the arms are switched on** (revised under review), observed on the first
+  session-day the account is active.
+- **Jitter.** *"no guarantee an automation will run exactly on the 15-minute marks."* The
+  reference's own figure is *"an **8-minute buffer to the bell**"* — 15:52 → 16:00. The draft
+  attributed that 8 minutes to the **15:59 Exit-Options window edge**, which is (a) 7 minutes,
+  not 8, and (b) the wrong boundary: the backstop is an **Events-class automation**, so the
+  Exit-Options window is not one of its bounds at all. Corrected. **Three windows exist and the
+  reference forbids conflating them: scan cadence ends 15:45 · automations customizable to
+  15:55 · Exit Options run to ~15:59.** The backstop's governing bound is the 15:55 automations
+  cap, which 15:52 clears by three minutes.
+
+### 4.3 `GF-SiblingClose` — the shared condor-close automation
+
+`build-plan.md` §8.1 item 3 and §5.4. An IC is two positions; closing "the whole condor"
+requires an explicit mechanism, and in v1 this was an *emergent side effect* of a 2-minute
+Cleanup monitor — unnamed, undocumented, load-bearing.
+
+```
+Trigger   Position closed
+Tree      Positions loop (the bot's open positions)          ⭐ REQUIRED — supplies the target
+           └─ Current market time is before 3:50pm            ⭐ ADDED — de-races the backstop
+               └─ YES → position's side tag != the closed position's side tag   ⚠️ C8
+                   └─ YES → position opened today                               ⚠️ C8
+                       └─ YES → Close Position (SmartPricing `patient`, 100%,
+                                                 memo `sibling close`)   ⭐ patient, not speedy
+```
+
+⭐ **Three corrections to the draft, all forced under review:**
+
+**(a) The Positions loop is not optional — the draft omitted it.** The one automation in this
+project that was actually built and reload-verified reads *"tree = **Positions loop
+(unrestricted)** → Close Position"* (`state.md`, the 15:52 backstop). A bare `Close Position`
+inside a `Position closed` automation has no stated referent — the position that triggered it is
+already gone. The loop is what supplies the action a target.
+
+**(b) ⛔ OA has no "sibling" relation.** §3: *"OA models **each spread as a separate position**."*
+The pairing is a **project** construct (`trade_id` in the ledger), not a platform one. "Sibling
+still open" must be built from **position-loop decisions on the side tag**, which is why the tree
+above tests `side tag != the closed position's side tag` rather than naming a relation that does
+not exist. **Whether that comparison and the "opened today" scope are real decision nodes is
+Phase-0 check C8** — it is not assumed here. `oa-ops-runbook.md` §5 trap 7 is this exact failure:
+*"A time gate that was never implemented — the v1 11:00 gate did not exist; 20+ sessions of entry
+drift."*
+
+**(c) The 3:50pm gate de-races the backstop.** Without it: the 15:52 backstop's unrestricted
+Positions loop closes leg 1 → that fires `Position closed` → sibling-close sees leg 2 still open
+and issues a **SmartPricing** close on it **while the backstop's loop issues a Market close on
+the same leg.** §4.2's redundant-position check is the only defence and the reference disclaims
+it in the same breath: *"Note this did not prevent the 7/01 orphan loop."* Gating sibling-close
+to before 15:50 removes the race entirely, at zero cost — after 15:50 the backstop closes both
+legs anyway.
+
+⛔ **This is the highest-risk shared object in the family and it is §4.7's exact shape** — a
+position-closed trigger that closes a position can re-trigger itself.
+
+> ### ⛔ CORRECTION OF RECORD — the draft cited an interlock the platform says does not exist
+> The draft's interlock 2 read: *"Bot daily position limit stays at 2. The docs name position and
+> allocation limits as the designed anti-loop defence."* **That is false for this loop.** §3,
+> quoted verbatim from `tools/bots/safeguards`:
+>
+> > *"**Position limits are for opening positions only; there is no limit on the amount of
+> > closing positions.**"*
+>
+> and, same section: *"**There is no limit on closing.**"* The documented loop limits defend
+> against is close→**open**→close (§4.7: *"an event could automatically open a position when
+> another is closed"*). §4.3's mechanism is close→**close**. A limit of 2 constrains nothing on
+> that path. The **allocation** limit is equally inert here (§5's corrected note): with
+> `posLimit` = 2 and IC = 2 positions the bot can never hold more than one condor, so the
+> position limit binds at ~17% of allocation, always, first.
+>
+> **Two of the three "mandatory interlocks" were one interlock and a procedural test.** The
+> honest interlock set is now:
+
+1. **Structural:** the tree gates on side-tag inequality **and** opened-today **and** before-15:50
+   — three decision nodes, each of which must be confirmed to exist (C8) and each of which must
+   be verified as *a real node* in build step A4, not assumed.
+2. **Temporal:** the 3:50pm gate bounds the loop's lifetime to the trading day and removes the
+   backstop race.
+3. **Procedural:** **test on a dead bot first** — build-order step A4, before it is attached to
+   any arm. This is now load-bearing rather than belt-and-braces, because the platform-level
+   defence the draft leaned on is not there.
+
+⚠️ **If C8 shows the side-tag or opened-today comparison is not expressible, STOP.** Do not
+substitute position age (`open 30 minutes or more`) — that is the literal substitution that cost
+−$15,376 (§11 correction of record). The named fallback is: **build the family without
+sibling-close**, accept that the unit of account becomes the spread rather than the condor for
+early exits, and re-stamp all seven MECHANISM blocks before build.
+
+> ### ⛔ CONSEQUENCE — and the draft's claim that it "cannot confound" is WITHDRAWN
+> With sibling-close on every arm, every arm is a **close-both (S2-shaped) family**.
+> `GF-QQQ-IC-Touch0` is therefore S2, not S1. `GF-QQQ-IC-PT50` is "PT50 on either side closes the
+> condor", not "PT50 per spread". **Each pre-registration says this in its MECHANISM block**,
+> because the bare mechanic name would name something the bot is not running — the HedgeD rule.
+>
+> The draft then said it *"cannot confound the ranking … it changes what every arm means,
+> equally."* **That is wrong and it is withdrawn. Identical treatment is not equal effect.**
+> Sibling-close **never fires meaningfully on the Ride control** — both legs close at 15:50
+> anyway — and **fires on every trigger event** on PT50, Trail, Touch0, SL100 and SL200. It is an
+> **effect modifier**, not a constant.
+>
+> **Concretely, it breaks the ★★★★★ anchor PR-18 imports.** `hedge-research.md` §2 names it *"the
+> **~100%-of-credit 'Breakeven' stop**"* — and the name *is* the mechanic. Put credit $15,
+> stopped at 100% of credit ⇒ −$15 on that spread while the untested call side decays to zero ⇒
+> the condor nets ≈ **$0**. That is why it is called Breakeven. With sibling-close, the call side
+> is force-closed at its then-current mid the instant the put stops, and **the arm cannot reach
+> breakeven by construction.** SL100 and SL200 are therefore biased **downward** relative to their
+> published comparables by the forfeited untested-side decay.
+>
+> **This is not repaired by removing sibling-close from those arms** — that would break matching,
+> which is worse. It is carried as a **named limitation on the transfer of the operator anchors**,
+> written into PR-18 and PR-19, and recorded in §11 as surviving objection **CF-4**.
+
+### 4.4 The exit bundles — per arm, the only thing that varies
+
+Every bundle is expressed **only** in fields confirmed to exist on the live modal
+(`oa-platform-reference.md` §6.1a, [FIRST-HAND 2026-08-04]).
+
+**The common base, identical in all seven bundles:**
+
+| # | UI label | Field | Value |
+|---|---|---|---|
+| 8 | Expiration | `expdays` | `0.01` (= 10 minutes before close = 15:50) |
+| 8b | ↳ PRICING | `smexpdays` | **`speedy`** (SmartPricing Fast — ⛔ **not** `market`) |
+| 11 | ☐ Wait at least 1 day to avoid pattern day trading | `chposLimitDay` | **unchecked** |
+| 12 | ☐ Disable exit options if bid/ask exceeds $ | `chbidask` / `bidask` | **unchecked / empty** |
+| 13 | ☐ Save as presets | `pretext` | see §4.5 |
+
+⛔ **The Bid-Ask Guard stays OFF on every arm.** §6.3: while the spread exceeds the configured
+width, Exit Options are **disabled** and high%/low% tracking **pauses**, with no error. On a
+touch-class arm that is *"the worst-timed possible failure"* — a hedge that stops working exactly
+when the market is fast. Off on all arms, identically, and recorded as a decision rather than a
+default.
+
+⛔ **Item 11 is the PDT checkbox.** Checked, it delays closes by ≥1 day, which on a 0DTE program
+is total failure. Unchecked on every arm, and read back per bot in the §10 verification.
+
+**Per-arm addition — exactly one trigger on top of the base:**
+
+| Bot | Adds | Field | Value | Pricing |
+|---|---|---|---|---|
+| `GF-QQQ-IC-Ride` | — nothing — | — | — | — |
+| `GF-QQQ-IC-PT50` | Profit Taking % | `profits` | `0.5` | `smprofits` = `speedy` |
+| `GF-QQQ-IC-Trail` | Trailing Stop | `tstop` | ⚠️ **Phase-0 check C2** | ⚠️ C3 |
+| `GF-QQQ-IC-Touch0` | Touch | `touch` | `$0` | ⚠️ C3 |
+| `GF-QQQ-IC-SL100` | Stop Loss % | `stoploss` | `100` ⚠️ **C1** | ⚠️ C3 |
+| `GF-QQQ-IC-SL200` | Stop Loss % | `stoploss` | `200` ⚠️ **C1** | ⚠️ C3 |
+| `GF-QQQ-IC-Canary` | Profit Taking % | `profits` | `0.05` | `smprofits` = `speedy` |
+
+**Touch $0, what it means, quoted rather than assumed** — §6.2, resolved 2026-08-03 from OA's own
+published material: *"The new 'Touch' Exit Option references the underlying price relative to a
+position's strike price(s)."* It fires when the underlying is `$X` or `X%` from in-the-money or
+less; **`$0` exits on the first 1-minute evaluation at which the position is ITM.** ⚠️ *"The
+moment"* is the draft's wording and it is **wrong**: Exit Options are *"evaluated every **1 market
+minute**"* (§6) and §11 row 3 rules out *"Sub-second strike-touch with a latch — **NOT NATIVE.**
+1-minute cadence at best."* On 0DTE QQQ a full minute past the strike is material to the very
+quantity this arm is measured on, and the arm must be described as a **1-minute-sampled** touch
+hedge, never as an instantaneous one. Each position's Touch references its own
+strike, so "the challenged side" is expressed by the trigger's own semantics — no cross-leg
+mechanic is required or implied. ⚠️ Whether a Touch on one spread can close its **sibling** is
+unresolved; this spec **assumes not** and uses §4.3's mechanism, per §6.2's own instruction.
+
+### 4.5 Presets — used, and what they are and are not doing
+
+§9 check #4, answered 2026-08-04: one preset serves **both** Open Position actions across **two
+different automations**; the `UI…` id namespace means presets are **account-scoped**. G3
+confirmed a bundle input and a named preset **compose** on the same action. G4 confirmed **no
+propagation** — presets are load-by-value, so editing a preset never reaches an attached action.
+
+**Therefore:** presets are used here as a **build-time convenience only** — a way to load the
+seven bundles without retyping them, reducing typo surface at the moment of stamping. They are
+**not** a matching guarantee and are **not** cited as a proof leg anywhere in §8.
+
+> §6.1: `**A preset makes the VALUES consistent, not the ATTACHMENT.**` And G4's no-propagation
+> result means a per-arm preset gives **no ongoing guarantee at all** — the value is copied in
+> once and thereafter drifts freely. The proof of matching is the decoded bot-input diff of §8,
+> and nothing else.
+
+**Naming convention, decided here because Decision 7 deferred it to this spec:**
+`GF-<ARM>-EXITS` — `GF-RIDE-EXITS`, `GF-PT50-EXITS`, `GF-TRAIL-EXITS`, `GF-TOUCH0-EXITS`,
+`GF-SL100-EXITS`, `GF-SL200-EXITS`, `GF-CANARY-EXITS`, plus `GF-SENTINEL-SL1`.
+The residual test preset `TIER2-CHECK4-PUTSIDE` is **KEPT** (ruled 2026-08-04) and is now an
+obvious non-member of this namespace, which is what Decision 7 item 1 wanted.
+⚠️ **Whether a preset can be renamed at all was never observed.** Do not plan on renaming
+`TIER2-CHECK4-PUTSIDE`; leave it.
+
+---
+
+## 5. Per-bot configuration — identical on every arm
+
+These are **bot-level settings**, which the Library automations do **not** carry. They are set by
+hand per bot and are therefore a real matching surface: **§8's capture-diff must cover them, not
+just the exit input.**
+
+| Setting | Value on every arm | Why this value |
+|---|---|---|
+| Account | Paper | Day-0 is paper; the whole family is Track-B-class evidence |
+| Allocation (`seed`) | **$2,500** | `min="250" max="100000"`. ⚠️ **Not an interlock** — corrected under review. With `posLimit` = 2 and IC = 2 positions the bot can never hold more than one condor (~$400 gross entry risk), so the **position limit binds first, always, at ~17% of allocation.** The value is set identically across arms per `build-plan.md` §5 and for capture legibility; it does not defend anything |
+| Daily Position Limit (`posLimitDay`) | **2** | IC = 2 positions. One condor per day |
+| Total Position Limit (`posLimit`) | **2** | Same. Also interlock 2 of §4.3 |
+| Scan Speed | **Every 1m** (both) | Matches the pilot; the entry gate is time-based so cadence only affects promptness |
+| Day Trading | **Allowed** | 0DTE requires it |
+| Symbols panel | (empty — `QQQ` is carried in the automation) | Matches the pilot. ⚠️ trap 2 does not bite fresh builds, but verify anyway |
+| Bot Group | **`IC`** | §5.2 below |
+| Bot Tags | `experiment`, `gfam`, `arm <role>`, `pr nn` | §5.1 below |
+| `AUTOMATIONS` toggle | **OFF until Day-0** | The account is inactive; nothing may trade before signing |
+| `EXIT OPTIONS` toggle | **ON** | Matches the pilot's verified state |
+
+### 5.1 Tags — and the platform limit they hit
+
+⛔ **OA normalises tags: lowercase, every non-alphanumeric becomes a space.** `PR-14` is **not
+expressible** as a tag; the widget offers exactly `pr 14`. Ruled 2026-08-04:
+**`PR-NN` → `pr nn` in OA tags, literal `PR-NN` in Notes.** The tag is a *search handle*; the
+record is the pre-registration entry pasted verbatim into template Notes, which carries the
+literal `ID               PR-14` line.
+
+Per-bot tags, in order: `experiment` · `gfam` · `arm ride` (or `arm pt50`, `arm trail`,
+`arm touch0`, `arm sl100`, `arm sl200`, `arm canary`) · `pr 14` (…`pr 20`).
+Template tags: `experiment,pr nn,gfam`.
+
+⚠️ **Tag widgets need per-character `input` events to open their suggestion menu; a bulk
+`form_input` + Enter does not commit.** Drive them by clicking the suggestion item, then re-read
+`input[name=tags].value` after a hard reload.
+
+### 5.2 Bot Group — and the internal tension in `oa-ops-runbook.md` §3, resolved
+
+§3 says two things that cannot both be satisfied by the group field:
+
+> `**Convention: `Group = Pillar`** — `IC` · `Directional` · `OA-Mirror` · `Lab`.`
+
+and
+
+> `Tournament arms live in one group so they can be queried as a set`
+
+A bot is in exactly one group (single-select). Under Pillar grouping, *every* IC bot shares `IC`,
+so the group cannot also be the cohort handle.
+
+**Resolved here: Group = `IC` (the convention wins, and it is what reconciles to
+`bots_meta.csv`'s `pillar` column). The cohort handle is the tag `gfam`.** §3's second use is
+served by the tag, not the group. Flagged as a §3 wording tension; **not amended.**
+
+⚠️ Set the group **at creation**, not at the sweep. §3's "do the group reorganisation as part of
+the Phase 4 sweep, not before it" is about *not sorting bots you are about to archive* — these
+are new bots that survive the sweep. Setting `IC` at birth also sidesteps memo finding **N-5**
+(whether an ungrouped bot appears in an all-groups export is **unobserved**, and an ungrouped bot
+silently missing from the export would erase the family from the ledger). The pilot's group
+remains unset by Decision 7's ruling; that is a separate open item and is not this family's.
+
+### 5.3 Position limits — the ceiling, and why it does not bite here
+
+§9 check #9, answered 2026-08-04: `posLimitDay` and `posLimit` are **hidden inputs behind
+1–10 pickers** — no `max` attribute, no free-text path. Combined with IC = 2 positions, the real
+ceiling is **5 ICs/day per bot**, not ten. D-2 ruled: **cap at 5 ICs/day, one bot** — do not split
+a strategy across two bots to reach ten.
+
+This family runs **one condor per day per arm**, enforced twice over: by the
+`Bot opened a position with tag <side> today → NO` gate in the shared entry tree, and by the 2/2
+limits. The ceiling is nowhere near binding. Recorded so a later "add re-entries" idea meets the
+constraint before it meets the build.
+
+### 5.4 Sizing — 1 lot, identical, and the primitive it is built from
+
+`build-plan.md` §5: **experiments 1 lot; tournament arms always identical allocation.**
+
+Size is set in the **shared** Open Position action, so it is identical across arms **by
+construction** — this is one of Architecture E's largest wins and it retires the
+`CallVIXdrop` allocation-mismatch class of defect (`pre-registration-ledger.md` §8 item 4) for
+this family entirely.
+
+⚠️ **The primitive is a Phase-0 check (C4), not an assumption.** The pilot's live action uses
+`Up to $5,000 risk`. Whether a **fixed contract count** is selectable in the same control has
+**not been observed**, and this file will not assert it.
+
+- **If a contract-count option exists:** set **1 contract**.
+- **If it does not:** set **`Up to $250 risk`** — with the failure band below stated, not hidden.
+- **Either way, record which primitive was used in every pre-registration's MECHANISM block
+  before the build**, not after. That is the HedgeD rule: a substitution at a platform limit has
+  to have something to contradict.
+
+> ### ⛔ THE $-RISK FALLBACK IS NOT DETERMINISTIC — corrected under review
+> Max risk per contract = $200 − 100·c, for credit `c`. Two contracts fit under a $250 cap when
+> `2 × (200 − 100c) ≤ 250`, i.e. **c ≥ $0.75**. The credit filter is
+> `Mid price is between $0.08 – (no max)` — no upper bound — and `hedge-research.md` §11 records
+> *"Min-credit filter hurts — winners averaged **lower** credit than losers"*, so high-credit days
+> are admitted on purpose. A $0.75 credit on a $2-wide 0.75%-OTM QQQ 0DTE spread is unusual, not
+> impossible, in a high-IV regime.
+>
+> **And on such a day the arms can diverge from each other**, because §8.4-H1 concedes the seven
+> SmartPricing ladders fill independently: at $0.74 vs $0.76 across two arms, one sizes 1 lot and
+> the other sizes 2. **A shared *action* does not guarantee a shared *contract count* when the
+> sizing primitive is risk-denominated and the denominator is the fill.** The draft's claim that
+> this *"retires the `CallVIXdrop` allocation-mismatch class of defect for this family entirely"*
+> is **false under the fallback** and is withdrawn; it holds only if C4 returns a contract-count
+> primitive.
+>
+> **Guard, mandatory under the fallback:** nightly assert **A6** — every `gfam` arm opened
+> **exactly 1 contract per leg** today, or RED. This is computable from the export's quantity
+> field and it converts a silent tail-day divergence into a same-day alarm.
+
+---
+
+## 6. Pricing and the 15:50 / 15:52 attribution stance
+
+### 6.1 What is priced how, and why
+
+| Mechanic | Class | Pricing | Authority |
+|---|---|---|---|
+| Entry (both sides) | Scanner action | **SmartPricing `normal`**, final price `pct` = 100 | Decision 5 — ban extends to entries |
+| Profit Taking % | Exit Option | `speedy` | §7 ban; §7's guidance *"Fast for 0DTE exits where fill certainty matters"* |
+| Expiration 15:50 | Exit Option | **`speedy`** — ⛔ **not Market** | **Decision 6** |
+| Trailing / Touch / Stop Loss | Exit Option | non-Market, exact control per Phase-0 check C3 | §7 ban |
+| 15:52 flat close | **Events** | **`Market`** | §7's single carve-out; Decision 6 keeps it |
+| ITM Position Action, 15:50 | **Account-level** | `market` | D-3 — see §7 |
+
+Decision 6, verbatim in its ruling: **re-price the 15:50 Expiration exit OFF Market; the 15:52
+backstop KEEPS Market.** For the pilot this is deferred to Template V2 pre-Day-0, because PR-03's
+config hash is frozen and it is a spec change rather than a config tweak. **The family specifies
+non-Market Expiration pricing from birth**, so no deferral applies here.
+
+### 6.2 The attribution stance — three mechanics aimed at two minutes
+
+§8.2's guard: *"Give the Event a **distinct SmartPricing setting** from the Exit Option so the
+Trades list distinguishes them."* On this family, **four** mechanics can close a position between
+15:50 and 15:52 — the draft counted three and its Rule 1 was false as a result:
+
+1. **Expiration Exit Option, 15:50, `speedy`** — SmartPricing.
+2. **ITM Position Action, 15:50, `market`** — account-level, expiring-ITM positions only.
+3. **15:52 Events backstop, `Market`**, memo `1552 backstop flat close`.
+4. **⭐ `GF-SiblingClose`** — fires on `Position closed`, so it fires *precisely when* mechanic
+   1, 2 or 3 closes the first leg. The draft priced it `speedy`, i.e. **identical to mechanic 1**,
+   which made "the Expiration exit is the only SmartPricing close in that window" untrue for all
+   seven arms and left §8.5's Ride artifact satisfiable by either mechanic.
+
+**The stance, in four rules:**
+
+- **Rule 0 — ⭐ sibling-close is re-priced `patient` and gated to before 15:50** (§4.3). Two
+  changes, one purpose: the gate removes it from the window entirely, and the distinct pricing
+  keeps it distinguishable from mechanic 1 in the rest of the day, when it *is* the mechanic that
+  closes second legs. `patient` (up to 5 prices / 20s each) is a documented mode, is non-Market,
+  and is used nowhere else in this family.
+- **Rule 1 — pricing separates mechanic 1 from mechanics 2 and 3.** With Rule 0 applied, the
+  Expiration exit is the only `speedy` close in the window. §8.2 is satisfied at the pricing
+  level, which it was not on the pilot (both were `Market`).
+- **Rule 2 — the memo separates mechanic 3 from mechanic 2.** The backstop's Close Position
+  action carries `1552 backstop flat close`; the account-level ITM action carries no bot memo.
+  ⚠️ **Open Day-0 check (D-2 in §12):** whether the ITM action appears in the position's Trades
+  list at all, and under what label, is **unobserved**. Rule 2 is provisional until it is read.
+- **Rule 3 — ⛔ ambiguous fills are NOT assigned.** Memo finding **N-6**: an exit-option order
+  stays live **two minutes** (§6.4, [DOCUMENTED] — *"no additional orders will be sent to your
+  broker"*), so the 15:50 order is **still working when the backstop fires at 15:52**. The
+  mechanics genuinely overlap. `oa-ops-runbook.md` §4.4's timestamp-gap test is calibrated on
+  `:00`/`:01–:02` gaps and sits *on* a 2-minute designed gap, not clear of it. Automation timing
+  is jittered anyway.
+  **Any Market-priced close in [15:50, 15:53] without the backstop memo is bucketed
+  `UNATTRIBUTED` and counted, never assigned to a mechanic.** The count is reported in the daily
+  brief. `execution_audit.py`'s `rule_C5_backstop_caught_it` continues to read `time_exit` and
+  `event_backstop` as separate config columns; a third bucket is added rather than forcing a
+  binary.
+
+**Why not just remove the 15:50 exit and let 15:52 be the only time close** (memo Decision 6
+option D): it loses the PT-independent time exit and makes the Events class a single point of
+failure. Rejected there; rejected here.
+
+---
+
+## 7. ITM Position Action — the assumption, stated explicitly
+
+**This family is specified on two assumptions about an account-wide setting it does not
+control:**
+
+1. **`itmpaper` = `market`.** ✅ **RULED AND EXECUTED 2026-08-04** — verified by hard reload +
+   `input.value` re-read, before/after screenshots in
+   `data/captures/2026-08-03-pilot/06-clone-final/`.
+2. **`itmlive` = `market` before any capital is live.** ⏳ **NOT YET SET — deliberately left at
+   `auto`.** It is a **hard Day-0 gate**, not a preference.
+
+**What breaks if assumption 1 regresses.** Under `auto` an ITM-expiring position's P/L is
+*estimated from the underlying close price* — a modeled number, not a fill — and it lands in the
+export and therefore in the ledger. **ITM-at-expiry is by definition the losing tail of a credit
+condor**, and the loss tail is exactly what separates these arms: SL100 from SL200 from ride.
+Under `auto` the tail is synthetic and **the ranking measures a model, not the arms.** The mirror
+baseline (n=174 positions, 10 mirrors, zero excluded) found four mirrors with positive median R
+and negative mean R — they win most trades and lose money. The tail is where the answer lives.
+
+**What breaks if assumption 2 is missed.** QQQ is a physically-settled ETF and the bot is
+assignment-blind (§13.1). `auto` means real stock delivered. This is the single largest reason
+§2's QQQ choice carries a cost.
+
+> ### ⛔ THE DRAFT SAID THIS "CANNOT CONFOUND THE RANKING". THAT IS WRONG AND IT IS WITHDRAWN.
+> The draft argued: the setting is account-wide, it overrides nothing per-bot, therefore it
+> degrades every arm's tail identically. **The setting is account-wide; its INCIDENCE is not.**
+>
+> §13.1: `market` closes *"Positions expiring in-the-money"*, 10 minutes before the close. So it
+> reaches a position only if that position is **still open at 15:50 AND in-the-money**. Trace the
+> incidence:
+>
+> | Arm | Share of the loss tail still open & ITM at 15:50 |
+> |---|---|
+> | `Ride` | ~all of it |
+> | `PT50` | ~all of it — PT truncates winners, not losers |
+> | `SL100` / `SL200` | much less — truncated by the stop |
+> | `Touch0` | **~none, by construction** — Touch `$0` closes as the position goes ITM |
+>
+> **The arms whose hypothesis is "capping the loss tail raises Exp(R)" are the same arms that are
+> systematically NOT exposed to the fleet's own worst documented execution mechanic** — the
+> Market fill that came in *"$5.05/contract beyond the worst mark the position ever traded at"*,
+> R −1.63. The same asymmetry applies to the 15:52 backstop, which is also `Market` and also only
+> touches positions still open at 15:52.
+>
+> **And it is not repairable by choosing the other setting.** Under `auto` the identical
+> ride-heavy, touch-free subset gets a *modeled* P/L instead of a *slipped* one. **There is no
+> value of `itmpaper` under which the tail measurement is arm-neutral.**
+>
+> This is `hedge-research.md` §5.1 defect 2 wearing new clothes — *"S3's win is inseparable from
+> its execution class"* — and it is the single most serious surviving objection against this
+> design. It is carried as **CF-1** in §11 with its mitigation, not dismissed.
+
+⚠️ **`market` is not a substitute for the 15:52 backstop.** It covers only *expiring ITM*
+positions on expiration day. The backstop covers everything else.
+
+**Add to the capture set, every sweep** (D-3 amendment b, drafted and not yet applied):
+`itmlive` · `itmpaper` · `maxexits` · `scanstart`/`scanend`/`exitstart`/`exitend`. `maxexits`
+reads `0` = Unlimited today and is a single account-wide switch that can silently cap every
+bot's ability to close — the exact failure shape §0.3 and §10 are about.
+
+---
+
+## 8. The arm-matching mechanism and its PROOF procedure
+
+`hedge-research.md` §5.2 is the definition of done. An arm may enter a ranking only when **all
+five** hold. Here is each, and what discharges it.
+
+| # | §5.2 requirement | Discharged by |
+|---|---|---|
+| 1 | Shared automation, shared inputs; arms differ in exactly one input value, proven by capture-diff | §1.1 (shared Library objects) + §8.2 (the diff) |
+| 2 | Same execution class — all Exit Options or all Monitors, never mixed | **All seven arms are Exit Options.** §9 row 1 resolved `Touch` as an Exit Option, which is what dissolved v1's confound. Moving any arm to Monitor class would re-introduce it |
+| 3 | Range075 on every arm | §4.1 — in the shared entry automation, identical by construction. The `as a preset` wording is N-2 |
+| 4 | Pre-registration naming the hypothesis, kill criterion, sample target, review date **and the platform primitive** | ⛔ **NOT DISCHARGED FOR THREE ARMS.** §9 names the primitive for Ride, PT50, Touch0 and the Canary. For **Trail** the primitive is unconfirmed (C2), and for **SL100/SL200** the *unit* of `stoploss` is unconfirmed (C1); C3 leaves the pricing sub-field unknown on four arms. §5.2's own closing sentence governs: an arm failing any of the five is *"not a weak arm, it is not an arm."* **Those three arms are not arms until Phase 0 closes.** The draft marked this row discharged; corrected |
+| 5 | A proof-of-fire artifact identified in advance, checked on the first live position | §8.5 |
+
+### 8.1 What "one differing input" means here, precisely
+
+**Granularity: the bundle.** `hard-PT vs trailing vs ride` populate *different* Exit-Options
+fields — at field granularity these arms differ in two or three fields **by construction**. The
+bundle is the only object type under which §2D's `arms differing / in exactly one input value` is
+literally true, which is why Option A required no amendment to the frozen plan.
+
+**Consequence that must be stated and carried — corrected under review:**
+
+> **Arm-vs-control comparisons are ONE-TRIGGER, TWO-FIELD deltas. Arm-vs-arm comparisons are
+> three- or four-field.**
+>
+> The draft claimed arm-vs-control was a "single-field delta". §4.4's own table refutes it: each
+> trigger comes with its own pricing sub-field, so `PT50` vs `Ride` differs in **`profits` AND
+> `smprofits`** — two fields. For Trail, Touch0, SL100 and SL200 the second field is currently
+> **unknown** (Phase-0 check C3), so four of six experiment arms have an unspecified pricing
+> field in their bundle as this is written.
+>
+> Every experiment arm = Ride's base bundle + exactly **one mechanic** (trigger + its pricing).
+> `SL100` vs `SL200` differs in one field's *value* only — that pair is the cleanest comparison
+> in the family. `PT50` vs `Trail` differs in **four** fields.
+>
+> **The family is designed for arm-vs-control readings.** A direct PT50-vs-Trail ranking is a
+> comparison of *policies*, not of one parameter, and **must be caveated as such wherever it is
+> published.** The CI on it is not the CI on a single-variable experiment.
+>
+> ⚠️ **Arithmetic correction:** seven arms give **21 unordered pairs** and **42 ordered** ones.
+> The draft said "21 ordered". The diff runs over the 21 unordered pairs.
+
+### 8.2 The capture-diff — the procedure, step by step
+
+Run pairwise across all seven arms (**21 unordered pairs**) at build completion, and again at
+every sweep.
+
+```
+FOR each arm:
+  1. Capture the bot page and every automation, every caret expanded (trap 3).
+  2. Read BOTH BOT INPUT objects — GF_EXITS_PUT and GF_EXITS_CALL — their VALUES, from the
+     per-bot input surface.
+     ⛔ NOT the Open Position action (it holds {"type":"input",...} — identical on every arm).
+     ⛔ NOT `oldValue` (stale pre-link snapshot).
+  3. DECODE both exits payloads to FIELDS. The blob is decodable: the pilot's `^^0.5|0.01^$0`
+     decodes to 50% PT / 10-minute expiration. A ~20-line parser feature, not an opacity problem.
+  4. INTRA-ARM: assert decoded(PUT) == decoded(CALL).            ⭐ per-side asymmetry check
+  5. Read the bot-level settings block: seed · posLimitDay · posLimit · scan speeds ·
+     day trading · group · tags · toggles.
+  6. Read the attached-automation id list (rid values) — proving the SAME objects, not copies.
+  7. Write the row into data/bots_config_v2.csv, carrying the DECODED FIELD SET, not the blob.
+
+FOR each unordered pair (A,B):
+  Let dA, dB be the decoded FIELD SETS (base fields + the arm's one mechanic).
+  PASS  iff  symmetric_difference(dA, dB) is confined to EXACTLY ONE MECHANIC       ⭐
+             (a trigger field and, if present, its own pricing sub-field — nothing else)
+        AND  every base field (expdays, smexpdays, chposLimitDay, chbidask) is EQUAL
+        AND  every bot-level setting in step 5 is EQUAL except name / arm tag / PR tag
+        AND  the rid lists in step 6 are EQUAL (same shared objects, not copies)
+  Any other outcome is a FAIL and the family does not trade.
+```
+
+> ⭐ **The PASS condition is rewritten. The draft's test was `decoded_bundle(A) != decoded_bundle(B)`
+> — DISTINCTNESS, not `build-plan.md` §2D's "arms differing in exactly one input value".** Under
+> the draft's test, an SL100 arm that also accidentally carried a Touch, or a different
+> `smexpdays`, or a stray PT, **passed**. The diff detected only the v1 failure (arms that are
+> *identical*) and was structurally blind to the failure this architecture actually invites —
+> arms differing in *more than one* mechanic. Both adversarial reviewers found this independently.
+> The condition above tests **one-mechanic difference at field granularity**, which is what §2D
+> and `hedge-research.md` §5.2 rule 1 actually require.
+
+⚠️ **Two known failure modes of the diff itself, both already paid for once:**
+
+- **False positive (N-4).** OA re-serialises an `exits` blob on save even when nothing changed;
+  labels drift while payloads are byte-identical. **Compare decoded payloads, never rendered
+  labels.**
+- **False negative — and it is the one the diff cannot fix.** `hedge-research.md` §7: HedgeD's
+  *"config record and automation tree agreed with each other and both were wrong about the
+  intent"*, −$15,376. **A capture-diff between arms passes clean if every arm was mistyped
+  identically.** The diff is **necessary and not sufficient.** The defences are (a) §8.3 rule 3,
+  which compares each arm to its *pre-registration* rather than to its siblings, and (b) §5.2
+  rule 4 — every pre-registration names the platform primitive.
+
+### 8.3 The nightly arm-distinctness assert — ⛔ it does not exist and must be built
+
+`oa-ops-runbook.md` §3 promises the nightly script can `assert arm-level parameter distinctness.`
+and claims this makes the S1 ≈ HedgeD failure detectable `instead of four months late.`
+**Nothing in `scripts/` implements it** (memo finding **N-3**). `execution_audit.py` has 13 rules
+(S1–S8, C1–C5); the nearest, `rule_S7_duplicate_arm`, is post-hoc and outcome-based
+(`(open_date[:16], pnl, structure)`), **silent until 5 identical trading days**
+(`DUP_MIN_DAYS = 5`), **AMBER**, and its own remedy is
+`verify_by="a capture-diff of the two bots' automation trees"`.
+
+**Until it is built, §3 may not be cited as a proof leg by this spec or by any pre-registration.**
+
+**Specification of the missing assert** (a new config-based rule set, reading
+`data/bots_config_v2.csv`, run in `daily.sh` and fail-loud RED):
+
+| Rule | Assertion | Catches |
+|---|---|---|
+| **A1** | For every unordered pair of `gfam` arms, the decoded field sets differ in **exactly one mechanic** | Two arms that are one arm (the S1 ≈ HedgeD class) **and** two arms that differ in more than one thing, on day 1 |
+| **A2** | Every non-bundle field (rid list, seed, both limits, scan speeds, day trading, entry-action payload) is equal across all `gfam` arms | Silent divergence in the "shared" half |
+| **A3** | Each arm's decoded field set **equals its pre-registered field set**, value-by-value | ⭐ **The all-arms-mistyped-identically hole.** A1 and A2 both pass in that case; A3 is the only rule that fires |
+| **A4** | No arm's stored bundle equals `SENTINEL-SL1` | A *typo* stamping the sentinel as an arm value. ⛔ **NOT a broken link** — see §1.3's residual hole; the link detector is behavioural (A4b) |
+| **A4b** | ⭐ No arm shows a ledger day of stop-outs within minutes of open with no `stoploss` in its config | The **broken input link** — the runtime fell back to the Default while the stored config still reads correct |
+| **A5** | `itmpaper`, `itmlive`, `maxexits` match their recorded values | Account-wide regressions |
+| **A6** | ⭐ Every arm opened **exactly 1 contract per leg** today | The $-risk sizing fallback silently sizing 2 lots on a high-credit day (§5.4) — and doing it on *some* arms only |
+| **A7** | ⭐ The **payload hash of each shared automation** matches its recorded baseline | **Architecture E's own blind spot** — see below |
+| **A8** | ⭐ For each arm, `decoded(GF_EXITS_PUT) == decoded(GF_EXITS_CALL)` | Per-side exit asymmetry inside one arm (§4.1), which A1 and A3 cannot see |
+
+**A3 is the load-bearing one** and it is the direct answer to the surviving adversarial objection
+in the memo's Appendix A item 6 — *"nothing catches a day-1 hand-set error under ANY
+architecture"*. A3 catches it because it compares each arm to a written intention, not to its
+siblings.
+
+> ### ⭐ A7 exists because Architecture E creates a failure mode per-arm copies do not have
+> An edit to a shared automation — strike distance, credit floor, entry pricing, a Range075
+> threshold — changes **all seven arms simultaneously**. Trace it against A1–A6: A1 compares arms
+> to each other (all seven changed together → **pass**). A2 asserts the shared half is *equal
+> across arms* (still equal → **pass**). A3 compares the **exit bundle**, which is not what
+> changed → **pass**. A4/A5/A6 are unrelated.
+>
+> **Every assert in the draft's set passed on a mid-sample edit that silently splices two
+> different experiments into one n=100 sample**, with no boundary recorded anywhere — and, per
+> the Phase-B note, possibly with no template version bump either, since template rows carry the
+> live `rid`. A7 is the only detector, and it is why the shared-object payload hashes must be
+> recorded as a baseline at build completion (build step C7).
+
+⚠️ **Ordering: the assert is a precondition, not a follow-up.** `oa-ops-runbook.md` §2.2's
+governing logic — `**If that assert is not built, do not build the BUILD_ID mechanism at all.**`
+— was about a self-report nobody checks manufacturing confidence. The same logic applies to
+citing "the nightly assert" as a proof leg. **Whether the assert must be built before the
+tournament trades is one of the memo's four `NOT RULED` slots** (Decision 4, second ruling line).
+This spec's build order (§10) places it before Day-0 as the safe default and marks it as awaiting
+that ruling.
+
+### 8.4 Two matching hazards the diff cannot see
+
+**H1 — entry-credit dispersion, and it moves TRIGGERS as well as denominators.** All seven bots
+run the same signal but fill **independently**: seven SmartPricing ladders walking separately
+produce seven possibly-different entry credits. `ror` is return on **risk**, so a differing credit
+moves the denominator. ⭐ **And it does more than that, which the draft missed:** `profits`,
+`stoploss` and `tstop` are all **credit-referenced**, while `touch` and the Ride base are not. At
+$0.30 vs $0.34 fills, PT50 and SL100 are not merely scored on different denominators — **their
+trigger levels are different prices.** Tick quantisation compounds it: 50% of a $0.15 credit is
+$0.075, off the penny grid, so the *realised* PT% and SL% vary with credit day to day and arm to
+arm. **Required instrumentation:** log entry credit per arm per day; assert nightly that cross-arm
+credit dispersion on matched days stays inside a pre-declared band; report breaches.
+
+**H2 — non-fill selection, and it is NOT family-level.** The draft claimed *"a non-fill day is a
+non-fill day for the whole family — the bias is on the family's day distribution, not between
+arms."* **That contradicts H1 four lines above and it is withdrawn.** Seven independent ladders
+produce seven independent fill/no-fill outcomes; a limit that fills for four bots and not three
+is the normal case. Worse, the *signal evaluation* is independent too — §4.2, [DOCUMENTED]:
+*"All user automations are pushed into a **distributed work queue and executed in parallel** …
+There is no guarantee an automation will run exactly on the 15-minute marks."* Sharing a Library
+*object* does not share an evaluation *instant*. On a day where |Δ%| sits near the 0.75% band
+edge, bot A evaluates at 13:31:05 with Δ = 0.74% and opens while bot B evaluates at 13:31:50 with
+Δ = 0.76% and does not — **arm-specific selection on precisely the highest-information days.**
+**Required:** define "matched day" explicitly (below), log non-fills per arm, and report unequal n.
+
+> ⭐ **"Matched day", defined — the draft used the phrase in every SAMPLE TARGET line without
+> defining it.** A trading day is **matched** iff **all seven arms opened a condor on it.** All
+> primary arm-vs-control comparisons run on matched days only, **paired by day** (§9's analysis
+> convention). Unmatched days are logged, counted per arm, and **excluded from the primary
+> comparison** — never silently absorbed. The matched-day count, not the per-arm position count,
+> is the sample size that matters, and §11-CF9's arithmetic is stated against it.
+
+**H3 — live-only, recorded now.** Seven identical condors entered at the same second create
+fill-queue interaction if this family ever leaves paper. Matching degrades the moment it goes
+live. Day-0 is paper; this is a gate on any funding decision, not a build issue.
+
+### 8.5 Proof-of-fire, per arm — declared in advance
+
+`hedge-research.md` philosophy §6: *a hedge that cannot be proven to have fired is not a hedge.*
+Every artifact below is read from the position's **Trades list**. ⛔ **The Exit Options panel is
+never evidence** — §0.3, `oa-ops-runbook.md` §4.2: in v1, Fortress positions generated **no exit
+orders at all** — not sent-and-unfilled, **never sent** — while the panel still displayed
+`PROFIT % 50%`.
+
+| Arm | Artifact that proves it is running its declared mechanic |
+|---|---|
+| `Ride` | **Inverted check:** NO profit-taking row, NO trail row, NO touch row, NO stop row; **and** a close row at ~15:50 priced **`speedy`** (the Expiration exit). ⚠️ Read `speedy` specifically, not "SmartPricing" — sibling-close is `patient` and the draft's shared `speedy` made this artifact satisfiable by either mechanic (§6.2 Rule 0) |
+| `PT50` | A profit-taking row at 50% |
+| `Trail` | A trailing-stop row |
+| `Touch0` | A touch row **within 2 minutes** of the first 1-minute bar on which the underlying is at or through the short strike. ⚠️ The tolerance is explicit because the control is 1-minute-sampled (§4.4) and automation timing is jittered; "immediately after" has no testable meaning |
+| `SL100` / `SL200` | A stop-loss row |
+| `Canary` | A profit-taking fill **on day 1** |
+| **all** | A `sibling close` memo row on the second leg, priced **`patient`**, timestamped `:00`/`:00` against the first — `oa-ops-runbook.md` §4.4's designed-vs-emergent test. ⚠️ Only on closes **before 15:50**; after that the backstop closes both legs and sibling-close is gated off (§4.3) |
+
+---
+
+## 9. DRAFT pre-registration entries — all seven, unsigned
+
+*Format per `pre-registration-ledger.md` §2. Every entry below is **DRAFT — unsigned**. Signing
+is Andy's, at Day-0, per §7 of that ledger: config hash filled from the bot's own capture, every
+placeholder resolved, kill criterion re-read against the daily loop, max-loss filled, then signed
+— and only then may the bot be switched ON. **Signed ≠ verified**: the Trades-list artifact is
+read before it may take a position.*
+
+**Conventions applying to all seven, stated once so each entry stays readable:**
+
+- **Unit: the POSITION = the CONDOR** (the two spread rows paired by `trade_id`); **risk = the
+  larger side**. Every `Exp(R)` below is **per condor, ex-artifact**. `R` basis is `ror` (return
+  on **risk**), never `returnPct` (return on credit).
+- ⭐ **ANALYSIS CONVENTION — PAIRED BY DAY, on matched days only** (§8.4's definition). The draft
+  never said whether the analysis was paired, and pairing is the only thing that makes this
+  family statistically tractable at all — see the power note below.
+- ⭐ **COMPARATIVE CRITERION** (added — the draft had only an absolute one; see §11-CF2):
+  *Arm X beats the Ride control iff the paired per-condor ΔR (arm − control) has a bootstrap 95%
+  CI entirely above 0 after Bonferroni correction across the 6 arm-vs-control tests, on matched
+  days, at the declared n.* This is the form `pre-registration-ledger.md` PR-02 already uses
+  (*"not better than the 11:00 arm's by ≥0.01 at n≥60 with non-overlapping bootstrap CIs"*).
+- **SAMPLE TARGET** n = 100 **matched days** per arm. ⚠️ **Declared with its power, not without
+  it** (§11-CF3): at SD(R) ≈ 0.30 and day-pairing at ρ ≈ 0.90, n = 100 gives a 95% CI half-width
+  on ΔR of **±0.026R** — against a largest-ever-measured effect in this program of **+0.0150R**
+  (`state.md`, SL75, n = 1,254). **n = 100 is underpowered for the effects this program actually
+  sees, by roughly 2–3×**, and reaching ±0.015R needs ~307 matched days paired, ~560 with
+  Bonferroni. n = 100 is therefore a **first-read** target, not a decision target; the
+  graduation gate is `build-plan.md` §5's, and it is not reachable inside six months.
+- **REVIEW DATE** Day-0 + 6 months, interim read at n = 60 matched days.
+- **MAX LOSS** 1 lot. Per-condor risk ≈ $200 gross per side less credit (≈$185 net) on a $2-wide
+  QQQ spread; daily aggregate per bot = one condor.
+- **SIZING TIER** 1 lot — experiment. **IDENTICAL across all arms**, enforced by the shared entry
+  action (§5.4).
+- **CONFIG HASH** `<capture> @ <hash>` — filled at signing from the arm's own capture file.
+  ⚠️ **Not from the template.** Templates do **not** freeze automations: template rows carry the
+  **same `rid`** as the bot's live automation (`oa-ops-runbook.md` §2.3 append; successor check
+  open in §7). **The capture is the snapshot.**
+- ⭐ **FAMILY-LEVEL KILL CRITERION**, carried identically on all seven — **rewritten at FIELD
+  granularity**: *if a capture-diff ever shows two arms differing in **more than one mechanic**
+  (a trigger field and, if present, its own pricing sub-field), or if any of §8.3's A1, A2, A3,
+  A7 or A8 fires, the family's ranking is **VOID** and all arms are re-based — the comparison,
+  not the bots, is what dies.*
+  > ⛔ **The draft's wording — "more than one differing **input**" — was vacuously unfireable and
+  > both reviewers found it independently.** Under Option A each arm holds exactly one exit input,
+  > so "more than one differing input" is a state the family cannot reach. This is the identical
+  > defect the memo used to *reject* Options B and C (*"with no inputs it can never fire"*); one
+  > input has the same property as zero for a rule that counts inputs. It survived the ruling
+  > unnoticed and is corrected here. `pre-registration-ledger.md` PR-14…PR-17's existing wording
+  > carries the same defect and needs the same correction at signing.
+- ⭐ **LIVENESS KILL CRITERION**, carried identically — **rewritten to stop censoring
+  informatively** (§11-CF12): *zero exit-trigger rows of the arm's declared type across 10
+  consecutive matched days **on which the ledger shows the arm's threshold was breached** →
+  **RED**, bot switched off pending investigation.*
+  > The draft's version — a bare 10-day dry spell — deletes arms during **calm regimes**, which
+  > is exactly the sample a stop arm needs to look good, in a known direction, with no re-entry
+  > rule. Conditioning on *threshold breached* makes it a genuine liveness test rather than a
+  > regime filter. ⚠️ It requires MFE/MAE, which the ledger carries.
+  > **The `Ride` control's inverted version is fenced:** *any profit-taking, trail, touch or stop
+  > row → RED — **EXCEPT** rows attributable to the account-level ITM action*, whose Trades-list
+  > label is **unobserved** (§6.2 rule 2, Day-0 check D2). ⛔ **Until D2 is answered the inverted
+  > rule is ADVISORY, not fireable** — otherwise a mislabelled ITM close kills the control on day
+  > one and every comparison in the family loses its referent.
+- ⭐ **SENTINEL KILL CRITERION**, carried identically — **written as a LEDGER criterion, not a
+  config one**: *the arm's positions close within 5 minutes of open on ≥ 2 consecutive days while
+  its stored config carries no `stoploss` → **RED**, bot off* (§8.3 A4b). Plus the config form:
+  *stored bundle == `SENTINEL-SL1` → RED* (A4). §1.3 explains why the config form alone cannot
+  detect the failure it is named for.
+
+---
+
+```
+### GF-QQQ-IC-Ride
+ID               PR-14  (proposed)
+DISPOSITION      fresh build
+PILLAR / ROLE    IC · control
+STATUS           DRAFT — unsigned
+
+HYPOTHESIS       A QQQ 0DTE iron condor entered after 1:30pm on Range075-passing days, with NO
+                 active management and a 15:50 time exit, has Exp(R) per condor ≥ 0 over
+                 n≥100 condors. This arm is the control every other arm is read against; if it
+                 is not measurable, no ranking in this family is.
+MECHANISM        Short-premium VRP on 0DTE QQQ, harvested by time decay with no intervention.
+                 PRIMITIVES: shared Library entry automation (Loop → time decision → two
+                 Symbol-change-% decisions = Range075 → position-tag re-entry gate → Open Short
+                 Put/Call Spread, SmartPricing `normal` entry) + a bundle-typed Bot Input
+                 `GF_EXITS` holding {Expiration `expdays`=0.01, `smexpdays`=speedy} and nothing
+                 else + a Repeating Events-class 15:52 Market flat close + a Position-closed
+                 sibling-close automation with all three §5.4 interlocks. Size primitive per
+                 §5.4 check C4 — RECORD WHICH ONE WAS USED BEFORE BUILD.
+KILL CRITERION   Exp(R) per condor < 0 with the CI entirely below 0 at n ≥ 60 condors.
+                 Plus the family-level, liveness (inverted) and sentinel criteria above.
+SAMPLE TARGET    n = 100 condors.
+REVIEW DATE      Day-0 + 6 months; interim at n = 60.
+MAX LOSS         ≈$185 net risk per condor; 1 condor/day.
+SIZING TIER      1 lot — IDENTICAL across arms.
+CONFIG HASH      <capture> @ <hash>
+VERIFICATION     INVERTED Trades-list check: no PT / trail / touch / stop row, and a ~15:50
+                 SmartPricing close row. Plus the pairwise capture-diff of §8.2.
+SIGNED           ..............................
+```
+
+```
+### GF-QQQ-IC-PT50
+ID               PR-15  (proposed)
+DISPOSITION      fresh build      PILLAR/ROLE  IC · experiment      STATUS  DRAFT — unsigned
+
+HYPOTHESIS       Taking profit at 50% of credit raises Exp(R) per condor above the Ride control
+                 over n≥100 matched condors. (Directionally contested: `hedge-research.md` §11
+                 records `PT50 killed across all configs except Scalp`, and the archived
+                 tournament put Ride above the tight-cut arm — this arm exists to re-ask that
+                 on post-cutover evidence, not to confirm it.)
+MECHANISM        Converts a probabilistic tail into a booked mid-day gain, trading the last 50%
+                 of decay for removal of late-day gamma risk. PRIMITIVE: the Ride base bundle
+                 plus ONE field — Exit Options `profits` = 0.5, `smprofits` = speedy. Sibling
+                 close means this is "PT50 on either side closes the CONDOR", not per spread.
+KILL CRITERION   Exp(R) per condor < 0 with CI entirely below 0 at n ≥ 60. Plus family-level,
+                 liveness and sentinel.
+VERIFICATION     A 50% profit-taking row in the first new position's Trades list.
+SIGNED           ..............................
+```
+
+```
+### GF-QQQ-IC-Trail
+ID               PR-16  (proposed)
+DISPOSITION      fresh build      PILLAR/ROLE  IC · experiment      STATUS  DRAFT — unsigned
+
+HYPOTHESIS       A trailing stop on position profit raises Exp(R) per condor above BOTH the Ride
+                 control and PT50, by letting winners keep decaying while holding a floor.
+                 Judge on the LOSS TAIL and maxDD-R, not mean R — `hedge-research.md` §14.1:
+                 the mechanic is nearly free on calm tape and bites in the fast-move tail, and
+                 the tail is where IC losses already live.
+MECHANISM        Ratchets a floor under an open profit instead of closing flat.
+                 PRIMITIVE: the Ride base bundle plus ONE mechanic — Exit Options `tstop`
+                 (+ its pricing sub-field, if it has one — C3).
+                 ⛔ THE MECHANIC IS SCOPED TO A PLAIN, ALWAYS-ON TRAILING STOP — a single field,
+                 no arming threshold. AN "ARM AT 40%, THEN TRAIL 15%" SHAPE IS NOT SOUGHT AND
+                 MUST NOT BE BUILT: that is a two-stage mid-trade state change, which §11 rules
+                 out twice — "Regime-conditional branching at a breach | NOT NATIVE. No mid-trade
+                 branching" and "Any condition referencing its own past | NOT NATIVE" — and it is
+                 the same reasoning §3.1 uses to exclude the intraday stop-tightening schedule.
+                 The draft treated the armed trail as an open question; the folder already
+                 answers it against us, and the correction is recorded rather than absorbed.
+                 ⛔ `tstop`'s UNITS are still UNOBSERVED (§6.1a records the field as existing and
+                 EMPTY). Phase-0 C2 settles them, and hedge-research.md §14.1's standing
+                 instruction is unmet until it does: "Verify whether OA supports a true intraday
+                 trailing stop on a 4-leg condor before assuming."
+                 ⛔ IF C2 SHOWS NO PLAIN TRAILING STOP ON A 4-LEG CONDOR, DO NOT SUBSTITUTE
+                 ANYTHING AT BUILD TIME. Named fallback: replace this arm with SL130 (Pearce,
+                 ★★★★), re-stamp THIS pre-registration first, then build. That is the HedgeD
+                 rule; −$15,376 is what ignoring it cost.
+KILL CRITERION   Exp(R) per condor < 0 with CI entirely below 0 at n ≥ 60. Plus family-level,
+                 liveness and sentinel. Plus: worst-condor-R worse than the Ride control's at
+                 n ≥ 60 → the "no new risk" claim is refuted and the arm is retired.
+VERIFICATION     A trailing-stop row in the first new position's Trades list.
+SIGNED           ..............................
+```
+
+```
+### GF-QQQ-IC-Touch0
+ID               PR-17  (proposed)
+DISPOSITION      fresh build      PILLAR/ROLE  IC · experiment      STATUS  DRAFT — unsigned
+
+HYPOTHESIS       Closing the condor on the first 1-minute evaluation at which either short
+                 strike is ITM (this fleet's S2, sampled at the platform's cadence — NOT an
+                 instantaneous touch; see §4.4 and §11 row 3)
+                 raises Exp(R) per condor above the Ride control. The archived S2 diagnostic
+                 (n=326 legs, 2026-06-10) found S2 MECHANICALLY sound — worst loss ror −0.47,
+                 no −1.0 blowups, false-fires only 7 legs / −$400 — but EXPECTANCY-UNPROVEN,
+                 and concluded the bleed was ENTRY, not the hedge. This arm re-asks expectancy
+                 on post-cutover data. It is not a re-tune of the hedge to solve an entry
+                 problem — `hedge-research.md` §4's standing rule forbids that.
+MECHANISM        Caps the loss at first breach instead of at expiry.
+                 PRIMITIVE: the Ride base bundle plus ONE field — Exit Options `touch` = $0.
+                 Touch references the UNDERLYING relative to the position's own strike(s)
+                 (§6.2, from OA's published material); $0 exits on the first 1-minute
+                 evaluation at which the position is ITM. Cross-leg close is NOT assumed — the condor is closed by §4.3's
+                 Position-closed sibling automation, so this arm is S2-shaped, not S1.
+                 ⚠️ Bid-Ask Guard is OFF on this arm (as on all arms) — §6.3: a touch hedge
+                 silently suppressed exactly when the market is fast is the worst-timed failure
+                 available.
+KILL CRITERION   Exp(R) per condor < 0 with CI entirely below 0 at n ≥ 60. Plus family-level,
+                 liveness and sentinel.
+VERIFICATION     A touch row at/after the underlying crosses the short strike, plus a
+                 `sibling close` row on the second leg at `:00`/`:00`.
+SIGNED           ..............................
+```
+
+```
+### GF-QQQ-IC-SL100
+ID               PR-18  (proposed)
+DISPOSITION      fresh build      PILLAR/ROLE  IC · experiment (hedge arm)   STATUS  DRAFT
+
+HYPOTHESIS       A stop at Sandvand's ~100%-of-credit level, APPLIED CLOSE-BOTH, raises Exp(R)
+                 per condor above the Ride control. The rung is the SL spectrum's best-evidenced
+                 (★★★★★, ~9,100 documented 0DTE SPX IC trades, Apr 2021 – Feb 2026) and the
+                 fleet has never run it — the fleet's SL50 sits BELOW the lower bound of every
+                 rigorously documented operator.
+                 ⛔ TWO PRIORS THIS ARM IS RUN AGAINST, NAMED SO THE ARM IS NOT READ AS
+                 CONFIRMATORY. (1) hedge-research.md §11, validated: "Stop losses are
+                 counterproductive on the Fortress structure — sizing and hedging are the risk
+                 management there." This family reuses the Fortress structure verbatim. §11 opens
+                 "Confirm each still holds before relying on it," so re-asking is legitimate —
+                 but the prior says this arm should lose, and it is recorded here rather than
+                 omitted. (2) §5.1: every v1 arm's Exp(R) was negative INCLUDING no-hedge.
+                 ⛔ THE ANCHOR DOES NOT TRANSFER CLEANLY, AND THE NAME IS WITHHELD BECAUSE OF IT.
+                 Sandvand's rung is called "BREAKEVEN" because stopping the tested spread at
+                 100% of credit leaves the UNTESTED side to decay to zero, netting ≈ $0 on the
+                 condor. §4.3's sibling-close force-closes the untested side at its then-current
+                 mid, so THIS ARM CANNOT REACH BREAKEVEN BY CONSTRUCTION and is biased downward
+                 against its published comparable by the forfeited decay. This arm is
+                 "SL100-close-both", not "Breakeven". Do not publish it under the anchor's name.
+MECHANISM        Caps the loss at a level calibrated by the largest public 0DTE IC dataset,
+                 wrapped in a close-both exit.
+                 PRIMITIVE: the Ride base bundle plus ONE field — Exit Options `stoploss`.
+                 ⛔ THE UNIT OF `stoploss` IS UNCONFIRMED. §6.1a records the field as existing
+                 and EMPTY on the pilot; whether it is % of CREDIT or % of RISK is not
+                 established anywhere in this folder, and the operator anchors are % of CREDIT.
+                 Phase-0 check C1 settles it. IF THE CONTROL IS %-OF-RISK, THE RUNG VALUES ARE
+                 RE-DERIVED AND THIS ENTRY IS RE-STAMPED BEFORE BUILD — not adjusted after.
+KILL CRITERION   Exp(R) per condor < 0 with CI entirely below 0 at n ≥ 60. Plus family-level,
+                 liveness and sentinel.
+VERIFICATION     A stop-loss row in the first new position's Trades list.
+SIGNED           ..............................
+```
+
+```
+### GF-QQQ-IC-SL200
+ID               PR-19  (proposed)
+DISPOSITION      fresh build      PILLAR/ROLE  IC · experiment (hedge arm)   STATUS  DRAFT
+
+HYPOTHESIS       A stop at Chambless's SL200 raises Exp(R) per condor above the Ride control —
+                 AND, the second question this arm answers, SL200 does NOT collapse to the Ride
+                 arm. `hedge-research.md` §2.1: above ~200% is effectively no-stop on a $5-wide
+                 SPX IC; whether that also holds on a $2-wide QQQ condor is unknown and is
+                 directly measurable here, because Ride is a matched sibling.
+MECHANISM        As PR-18, at the loose end of the documented spectrum.
+                 PRIMITIVE: the Ride base bundle plus ONE field — Exit Options `stoploss`.
+                 Same C1 unit caveat as PR-18, and the same re-stamp-before-build rule.
+KILL CRITERION   Exp(R) per condor < 0 with CI entirely below 0 at n ≥ 60 matched days. Plus
+                 family-level and sentinel.
+                 ⭐ LIVENESS IS DISAPPLIED ON THIS ARM, DELIBERATELY. The shared liveness rule
+                 kills an arm that stops firing — but "SL200 rarely fires" IS this arm's
+                 hypothesis (hedge-research.md §2.1: "Above ~200% is effectively no-stop"). The
+                 draft's version would have switched the arm off precisely when it was
+                 CONFIRMING itself. Replaced by the degeneracy criterion below, which measures
+                 the same thing in the right direction.
+                 ⭐ DEGENERACY CRITERION, REWRITTEN TO BE FIREABLE: if this arm's per-condor R
+                 is within ±0.005R of the Ride control's on ≥ 20 of any 40 consecutive MATCHED
+                 days, AND its stop-loss row count over that window is 0, the arm carries no
+                 information and is retired.
+                 ⛔ The draft's version — "identical P/L, structure and entry minute" — was
+                 unfireable three times over: identical P/L is impossible given H1's independent
+                 fills; identical entry minute is impossible given §4.2's parallel work queue;
+                 and no rule implementing it exists (the nearest, rule_S7_duplicate_arm, is
+                 post-hoc, outcome-based, AMBER and silent below 5 identical days). The version
+                 above uses a TOLERANCE and a CONFIG-BACKED second condition, both computable
+                 from the ledger the daily loop already writes.
+VERIFICATION     A stop-loss row in the first new position's Trades list.
+SIGNED           ..............................
+```
+
+```
+### GF-QQQ-IC-Canary
+ID               PR-20  (proposed)
+DISPOSITION      fresh build      PILLAR/ROLE  IC · control (instrument)     STATUS  DRAFT
+
+HYPOTHESIS       Not a strategy hypothesis — an INSTRUMENT hypothesis. A bot whose 5% profit
+                 target should fill every single day will stop filling the day the exit engine
+                 dies, giving SAME-DAY detection of the failure that ran six invisible sessions
+                 in v1. `build-plan.md` §2D: `whose PT should fill every single day. If it stops
+                 filling, the exit engine died.`
+MECHANISM        n/a — this bot is NOT run for edge. Its P/L is expected to be ~flat and is not
+                 evidence about anything. PRIMITIVE: the Ride base bundle plus ONE mechanic —
+                 Exit Options `profits` = 0.05, `smprofits` = speedy.
+                 ⚠️ THE THRESHOLD IS SUB-TICK, AND THAT IS STATED RATHER THAN DISCOVERED. 5% of
+                 the admissible credit range is $0.004–$0.0075, below QQQ's $0.01 increment, and
+                 §6.4 evaluates Exit Options on the MID. So the effective trigger is "the first
+                 tick of favourable movement", set by the tick grid and the quoted spread, not by
+                 the number 0.05. That is acceptable FOR A CANARY — it is what makes it fill
+                 daily — but it means a no-fill day is AMBIGUOUS between "the exit engine died"
+                 and "the spread widened by a cent." The instrument's false-negative rate is
+                 UNMEASURED, and that is a real limit on the only forward discriminator this
+                 project has for candidate 2 of the June-lapse shortlist (a platform-side
+                 regression in the Exit Options engine) — which remains the argument for building
+                 it in the FIRST wave rather than treating it as optional.
+KILL CRITERION   NONE ON P/L. Exempt by design, stated here so it cannot later be mistaken for a
+                 losing bot nobody killed. Retired when the detector's Tier C rules cover the
+                 same ground with a live config.
+                 ⭐ BUT IT CARRIES A CODE-FIREABLE ALERT, added under review: no profit-taking
+                 fill on ≥ 2 consecutive days on which it held a position → RED, escalated in
+                 the brief as a candidate exit-engine failure. pre-registration-ledger.md §2
+                 requires every kill criterion to "fire in code with no human in the loop"; a
+                 detector whose own failure rule is human judgement is the thing it exists to
+                 prevent. It also carries the family-level and sentinel criteria.
+SAMPLE TARGET    n/a — daily fill / no-fill is the output.
+REVIEW DATE      Day-0 + 3 months: is it still earning its slot?
+VERIFICATION     A profit-taking fill on DAY 1, read from the Trades list.
+SIGNED           ..............................
+```
+
+---
+
+## 10. Build order — executable per-bot, zero design decisions left open
+
+*Every step ends in a **two-layer verification** per `oa-ops-runbook.md` §4. Layer 1 is the
+immediate self-check: re-observe the changed value **from OA itself** — a fresh screenshot for
+toggle/UI state, a fresh capture or export for text-capturable fields. **A save confirmation, a
+toast, or a tool-success message is never Layer 1** (`CLAUDE.md` §9.1a). Layer 2 is the
+behavioural check: the first NEW position's Trades list.*
+
+> ⏸ **Layer 2 is DEFERRED to Day-0 for every step in this build.** The OA account is INACTIVE
+> and holds no post-cutover positions, so order-level verification is **impossible on build
+> day** — the pilot card's rule. Do not attempt a test-fire. Every deferred Layer 2 is **queued
+> and tracked**, and per `CLAUDE.md` §5 it is **repeated at the top of every brief until closed**.
+
+> ⚠️ **Method warnings, all first-hand, all reproduced on this app.** Element-ref clicks
+> **silently no-op** — `computer.left_click` returns `Clicked on element ref_N` and nothing
+> happens. Dispatch the full sequence instead:
+> `pointerdown → mousedown → pointerup → mouseup → click`, each a `MouseEvent` with
+> `bubbles:true, cancelable:true, view:window` and `clientX`/`clientY` at the element's
+> `getBoundingClientRect()` centre. Use `form_input` for text, never `computer.type`, and re-read
+> `.value` after every entry. **If an action resists all three methods, STOP — do not fall back
+> to coordinates.** Notes editors decode entities then strip unknown tags: double-escape
+> (`&amp;lt;`) and verify every paste by a **byte-exact length-and-content compare**, not by
+> reading the rendered panel.
+
+### Phase 0 — blocking checks. No value is stamped until every one is answered.
+
+Each is a read, not a write. Each has a named outcome and a named fallback. **If a check cannot
+be answered, STOP and report — do not improvise a spec on the fly.**
+
+| # | Check | If it fails |
+|---|---|---|
+| **⛔ C0a** | **THE LOAD-BEARING ONE. Can an Exit-Options Automation Input be upgraded to a BOT INPUT, and can two bots resolve the same shared automation to DIFFERENT values?** Build it on two dead bots and read both. | ⛔ **STOP. Architecture E is not buildable and the tournament architecture returns to Andy.** Do **not** fall back to per-arm copies — `pre-registration-ledger.md` PR-18's kill criterion voids the tournament at build time under copies (memo Decision 4: *"under C the tournament is void on day one, before it trades"*). |
+| **⛔ C0b** | **Can ONE Automation Input be referenced from TWO automations** (ScannerA and ScannerB)? | Expected NO — proceed with the two-input design of §4.1, and assert **A8** (put bundle == call bundle) nightly. Not a blocker, but it changes the build and the diff. |
+| **C0c** | **Does a `Presets` picker render inside the BOT INPUT value editor**, or only on the Open Position action? G3 tested the action. | §4.5's typo-reduction disappears and B4 becomes seven manual field-by-field entries — **hand-setting, the pathogen of §1.1, at the one place the design still touches values by hand.** Compensate by running the §8.2 diff after *each* arm rather than at the end. |
+| **C1** | **Unit of Exit Options `stoploss`** — read the control's own label and any suffix on the live modal. % of CREDIT or % of RISK? | Re-derive the SL100/SL200 rungs on the actual basis and **re-stamp PR-18/PR-19 before build.** |
+| **C2** | **Unit and shape of `tstop`** — %? $? Does an ARMING threshold exist (the backtester's "arm @ 40%, trail 15%")? | If no armed trail is expressible: **replace the Trail arm with SL130, re-stamp PR-16 first.** Do not substitute silently. |
+| **C3** | **Do `tstop`, `touch` and `stoploss` carry their own SmartPricing sub-controls** (as `profits`→`smprofits` and `expdays`→`smexpdays` do), or inherit a default? **What is that default?** | ⛔ If any inherits **`market`**, that arm violates §7 and Decision 5 *and* confounds the family with a pricing difference. **Stop. Report. Do not build that arm.** |
+| **C4** | **Size control options** on Open Position — is a fixed CONTRACT COUNT selectable? | Use `Up to $250 risk` (§5.4 arithmetic). **Record which primitive was used in all seven MECHANISM blocks before build.** |
+| **C5** | **Can one Library automation be attached to N bots?** Attach `GF-ScannerA` to two dead bots and re-read both bots' automation lists for the SAME `rid`. | ⛔ Architecture E is not buildable. **STOP — the tournament architecture returns to Andy.** Do not fall back to per-arm copies: `pre-registration-ledger.md` PR-18's kill criterion voids the tournament at build time under copies. |
+| **C6** | **Does a bundle-typed Automation Input accept a Default Value that is a non-empty bundle** (`SENTINEL-SL1`)? G1 proved EMPTY is accepted; non-empty is not proven. | If only empty is accepted, the sentinel becomes the empty bundle **and §1.3's objection stands in full** — record it as an accepted silent-fallback risk in every entry, and rely on A4b's behavioural detector alone. |
+| **⛔ C7** | **Is `Bot opened a position with tag <side> today` a real decision node** — bot-scoped AND day-scoped? It is one of the two enforcers of the one-condor-per-day cadence and it is sourced from the pilot's tree, not from the platform reference. | ⛔ **STOP.** `oa-ops-runbook.md` §5 trap 7 is this exact failure — *"A time gate that was never implemented — the v1 11:00 gate did not exist; 20+ sessions of entry drift."* If "today" is not expressible, the nearest substitutions (an unscoped tag → never re-enters; a position-count gate → different semantics) change the family's entry behaviour on all seven bots identically, which is precisely the failure the arms cannot detect. |
+| **⛔ C8** | **Are §4.3's sibling-close nodes real?** A Positions loop inside a `Position closed` automation; a comparison of a looped position's **side tag** against the closed position's; and an **opened-today** scope. | ⛔ **STOP. Do NOT substitute position age** (`open 30 minutes or more`) — that is the literal substitution that cost −$15,376. Named fallback: **build the family without sibling-close**, accept the spread (not the condor) as the unit for early exits, and re-stamp all seven MECHANISM blocks before build. |
+| **C9** | **Does the `Position closed` trigger fire on a position closed by an EVENTS-class automation and by the account-level ITM action**, or only by Exit Options? | Changes whether §4.3's 3:50pm gate is needed at all, and whether second legs are left open at 15:50 on early-exit arms. Read it; do not infer it. |
+
+**Layer 1 for Phase 0:** each answer is a fresh screenshot or DOM read filed to
+`data/captures/edit-verify/<date>/phase0_C<n>.png|.txt`, with the read value written into the
+session log. **Nothing is answered from memory or from this document.**
+
+### Phase A — the shared objects (build once)
+
+| Step | Do | Layer 1 verification |
+|---|---|---|
+| **A1** | Create Automation Input `GF_EXITS_PUT` on `GF-ScannerA-PutSpread` (and `GF_EXITS_CALL` on ScannerB at A3); set each **Default Value = `SENTINEL-SL1`** (§1.3, subject to C6) | Fresh capture; read each input object's default back and decode it. Screenshot the 🔗 state on the Exit Options row |
+| **A2** | Build `GF-ScannerA-PutSpread` per §4.1, every field. **Entry pricing SmartPricing `normal`, NOT Market** | Fresh capture with **every caret expanded** (trap 3). Diff every field against §4.1's table, reading `input.value` / `data-value`, **never `innerText`** |
+| **A3** | Build `GF-ScannerB-CallSpread` — mirror image, own `GF_EXITS_CALL` input (or the shared one if C0b said yes) | As A2, plus record whether the two actions reference the same or different input ids — this sets whether A8 is substantive or trivial |
+| **A4** | Build `GF-SiblingClose` per §4.3 — **Positions loop, 3:50pm gate, side-tag comparison, opened-today, `patient` pricing, memo** — **and test it on a dead bot first** | Fresh capture; confirm **each gate is an actual decision node**, not assumed (trap 7). Then fire it on the dead bot and read the resulting Trades list: exactly one close, no re-trigger. **This is now load-bearing, because the platform-level limit defence does not apply to closes** (§4.3) |
+| **A5** | Build `GF-Backstop-1552-FlatClose` per §4.2 | Fresh capture + **hard reload**; read `ntime=1552`, `holidays=skip`, memo string, `Market`, warnings 0 |
+| **A6** | Save the seven exit-bundle presets of §4.5 (skip if C0c said the picker is absent from the input editor) | Re-open each from the picker on a **different** automation and read its decoded payload back |
+| **A7** | ⭐ **Record the payload hash of each of the four shared automations** as the A7 baseline | Hash written to `data/bots_config_v2.csv`'s shared-object rows; re-read and re-hash once after a hard reload to confirm stability |
+
+### Phase B — per arm, seven times, in this order: Ride first, then PT50, Trail, Touch0, SL100, SL200, Canary
+
+*Ride first because it is the control and every other arm is its base plus one field. Canary last
+because it is an instrument, not an arm.*
+
+| Step | Do | Layer 1 verification |
+|---|---|---|
+| **B1** | Create the bot. Name per §3 | `/bots` read-back: exactly one bot with that name, resolving to one bot_id. Trap 8 — read the **full** name |
+| **B2** | Set every bot-level setting of §5 — allocation `$2,500`, limits 2/2, scan 1m both, Day Trading Allowed, Group `IC`, tags per §5.1 | Fresh capture of the settings page; **assert values, not presence** (§4.5 — a broken input link does not error, it falls back to a stale Default and keeps trading) |
+| **B3** | Attach the four shared Library automations from Phase A. **Attach, do not copy** | Read the bot's automation list and confirm the `rid` values are **identical to Phase A's objects.** A different `rid` means a copy, and a copy breaks Architecture E |
+| **B4** | Create the **Bot Inputs** `GF_EXITS_PUT` and `GF_EXITS_CALL` on this bot and set **both** to this arm's bundle (§4.4), loading from the arm's preset if C0c allows | ⛔ **Read back BOTH BOT INPUT OBJECTS' values and DECODE them** — not the action (which holds a reference), not `oldValue`. Compare field-by-field against §4.4, **and assert put == call** (A8). Hard reload, then read again |
+| **B5** | Confirm `EXIT OPTIONS` toggle ON, `AUTOMATIONS` toggle **OFF** | **Screenshot both toggles** — §1.6, this is the one config state that does not survive text capture. File to `data/captures/edit-verify/<date>/<bot>_toggles.png` |
+| **B6** | Take the arm's full capture into `data/captures/<date>-greenfield/<bot>/` | One `.txt` per automation; open one and confirm **actual decision text** is present, not just names |
+| **B7** | Write the arm's row into `data/bots_config_v2.csv` — including the **decoded** bundle from B4 | Re-read the row; assert the decoded bundle matches B4's read |
+| **B8** | Save **Template V1**; paste the arm's §9 entry verbatim into **Notes**; set template tags `experiment,pr nn,gfam` | **Byte-exact length-and-content compare** of Notes against the source (the pilot lost `<capture>`/`<hash>` silently and it was caught only by a 1574-character compare). Re-read `input[name=tags].value` after a hard reload. Then confirm the bot's settings page gained its `Template / BOT VERSION` panel |
+
+> ⚠️ **Templates are not a config snapshot here, and under Architecture E they are less of one
+> than usual.** Template rows carry the same `rid` as the live automation, and this family's
+> automations are **shared across seven bots** — so a later edit to one shared automation changes
+> all seven bots and may change all seven templates, with no template version bump to show it.
+> **The capture (B6) and the nightly assert (§8.3) are the only detectors.** This is a designed
+> consequence of Architecture E and is the strongest argument for §8.3 being a precondition.
+
+### Phase C — the proof
+
+| Step | Do | Verification |
+|---|---|---|
+| **C1** | Run the pairwise capture-diff of §8.2 across all **21 unordered pairs**, plus the intra-arm put==call test on each of the seven | Every pair PASSes on all four conditions, or the family does not trade |
+| **C2** | Build and run the §8.3 nightly assert (rules **A1–A8**) against `bots_config_v2.csv` | All eight green. ⏳ **Whether this must precede trading is one of the memo's four NOT-RULED slots** — this spec places it before Day-0 |
+| **C3** | ⭐ Record the shared-automation payload hashes as the **A7 baseline** and wire A7 into `daily.sh` | Baseline re-read and re-hashed after a hard reload |
+| **C4** | ⭐ Declare and record the analysis convention: **paired by day, matched days only**, Bonferroni across the 6 arm-vs-control tests, and the §8.4 matched-day definition | Written into all seven pre-registrations before signing, not after |
+| **C5** | Add the account-settings rows to the capture set: `itmlive` · `itmpaper` · `maxexits` · `scanstart`/`scanend`/`exitstart`/`exitend` | Read back from `/settings`; `itmpaper` = `market` confirmed |
+| **C6** | Append seven rows to `data/archive/rename_map.csv`? **No** — these are fresh builds with no original. Append seven rows to `bots_meta.csv` instead, with `pillar = IC`, and reconcile group counts | Group counts == `bots_meta.csv` pillar counts |
+
+### Phase D — Day-0, and not before
+
+| Step | Do |
+|---|---|
+| **D1** | Set `LEDGER_START` in `build_ledger.py` — the Day-0 first action, before anything else |
+| **D2** | ⛔ **Set `itmlive` = `market`** before any capital is live (§7, hard gate) |
+| **D3** | ⭐ **BEFORE the arms are switched on: observe the 15:52 backstop's actual fire time** on the pilot — the DST / `Market Time (EST)` question (§4.2). **Reordered under review.** If it fires at 16:52 or not at all, seven arms would otherwise run a full day with no flat close and the absence would look like "nothing needed closing" |
+| **D4** | Read whether the ITM Position Action appears in a Trades list, and under what label (§6.2 rule 2). **Until this is answered the Ride control's inverted liveness rule is ADVISORY, not fireable** (§9) |
+| **D5** | Andy signs each of PR-14…PR-20 per `pre-registration-ledger.md` §7. **Only then may a bot be switched ON** |
+| **D6** | Switch `AUTOMATIONS` ON per arm; read **each arm's first new position's Trades list** against §8.5. **Signed ≠ verified** |
+| **D7** | Record the `UNATTRIBUTED` bucket count for [15:50, 15:53] Market closes (§6.2 rule 3), and the per-arm count of Market-priced closes — the CF-1 instrumentation |
+
+---
+
+## 11. Adversarial review — what survived
+
+*Two subagents were spawned against the finished draft with instructions to **refute** it,
+defaulting to "this is wrong" — one on platform expressibility, one on confound and matching
+defects. **Both succeeded.** Between them they returned **10 FATAL** and **24 MATERIAL**
+objections. The spec above is the post-review text. What follows is the record: what was fixed,
+what could not be fixed and is carried as a named limitation, and what was refuted.*
+
+**Reading key:** **FIXED** — the spec changed. **CARRIED** — real, unfixable at this design's
+level, travels with the family as a stated limitation. **PARTIAL** — mitigated, not closed.
+
+### 11.1 Platform-expressibility review — surviving objections
+
+| # | Objection | Status |
+|---|---|---|
+| **PE-1** | **FATAL — the BOT INPUT tier was never observed.** G1/G2/G3 all tested the *Automation* Input; `state.md`'s bot-input line is *"Inference from a screenshot."* §5.2's caveat is unstruck: *"Whether Exit Options can reference **Bot Inputs** is [DOCS-SILENT] and unverified."* The draft's Phase 0 did not check the one primitive the whole family rests on | **FIXED** — added as blocking check **C0a**, with STOP (not fallback) if it fails |
+| **PE-2** | **FATAL — one Automation Input cannot span two automations.** So put and call sides need separate inputs, and a put=Ride / call=PT50 asymmetry would have diffed clean | **FIXED** — §4.1 two-input design, §8.2 intra-arm test, assert **A8**, check **C0b** |
+| **PE-3** | **FATAL — the sentinel discharges neither half of §5.2, and A4 cannot fire on a broken link** (the Bot Input object still holds the correct value; the capture reads that object and passes) | **FIXED in part, CARRIED in part** — §1.3 rewritten to state the refusal clause is not expressible, sentinel changed to `SENTINEL-SL1`, behavioural detector **A4b** added. **The window between a link breaking and the next day's ledger is a genuine uncovered hole and is now named as one** |
+| **PE-4** | **FATAL — position limits bound OPENINGS only.** §3, verbatim: *"Position limits are for opening positions only; there is no limit on the amount of closing positions."* Two of §4.3's three "mandatory interlocks" were one interlock and a procedural test | **FIXED** — §4.3's correction-of-record box; interlocks rewritten as structural / temporal / procedural |
+| **PE-5** | **FATAL — §4.3's tree had no Positions loop**, and "sibling" is not an OA relation (*"OA models each spread as a separate position"*); "opened today" is unconfirmed | **FIXED** — tree redrawn with the loop and a side-tag comparison; blocking check **C8** with an explicit no-substitution STOP |
+| **PE-6** | **MATERIAL — the $250 sizing fallback is not deterministic.** Two contracts fit when credit ≥ $0.75, and independent fills can put one arm at 1 lot and another at 2 on the same day | **FIXED** — §5.4's failure band stated; nightly assert **A6** |
+| **PE-7** | **MATERIAL — four mechanics in the 15:50–15:52 window, not three.** `GF-SiblingClose` was priced `speedy`, identical to the Expiration exit, falsifying Rule 1 for all seven arms | **FIXED** — sibling-close re-priced `patient` and gated before 15:50; §6.2 Rule 0 added |
+| **PE-8** | **MATERIAL — backstop / sibling-close race.** The backstop's unrestricted loop closes leg 1, which triggers sibling-close on leg 2 while the loop also closes it. §4.2's redundant-position check *"did not prevent the 7/01 orphan loop"* | **FIXED** — the 3:50pm gate removes the overlap entirely |
+| **PE-9** | **MATERIAL — an armed trailing stop is on §11's not-expressible list by the spec's own §3.1 reasoning**, so §13's "no mechanic appears on the list" was false | **FIXED** — PR-16 scoped to a plain always-on trail; the armed shape explicitly excluded; §13 corrected |
+| **PE-10** | **MATERIAL — "Touch $0 exits the moment the position goes ITM" overstates a 1-minute-cadence control.** §11 row 3: *"Sub-second strike-touch with a latch — NOT NATIVE. 1-minute cadence at best"* | **FIXED** — §4.4 and PR-17 restated with the cadence and a defined artifact tolerance |
+| **PE-11** | **MATERIAL — the family-level kill criterion is vacuously unfireable** with exactly one input, exactly as Options B and C were rejected for | **FIXED** — rewritten at field/mechanic granularity in §9. ⚠️ **`pre-registration-ledger.md` PR-14…PR-17 carry the same defective wording and need the same correction at signing** |
+| **PE-12** | **MATERIAL — presets inside the Bot Input value editor were never observed.** G3 tested the *action* | **FIXED** — check **C0c**, with the consequence (B4 becomes hand-entry) named |
+| **PE-13** | **MATERIAL — the allocation "interlock" is inert**; the position limit binds first, always | **FIXED** — §5's justification corrected |
+| **PE-14** | **MATERIAL — DST was deferred to a step AFTER switch-on.** If the literal-EST reading holds, the backstop never fires on all seven arms and the absence is invisible | **FIXED** — reordered to **D3**, before any arm is switched on |
+| **PE-15** | **MATERIAL — the 8-minute buffer was stated against the wrong boundary** (15:52→15:59 is 7 minutes, and the Exit-Options window is not an Events-class bound) | **FIXED** — §4.2 corrected to the 15:55 automations cap |
+| **PE-16** | **MATERIAL — the entry tree is sourced from `session-log.md`, outside the reference set, and its `opened today` gate is unconfirmed** — `oa-ops-runbook.md` §5 trap 7's exact shape | **FIXED** — blocking check **C7** with a STOP |
+| **PE-17** | **WEAK — the sentinel bundle carries no time exit, so a broken-link arm is backstop-only and Market-priced** — the state §1.4 calls unacceptable for the Ride arm | **CARRIED** — accepted; a sentinel is meant to be an abnormal state, and A4b flags it within a day |
+
+### 11.2 Confound / matching review — surviving objections
+
+| # | Objection | Status |
+|---|---|---|
+| **CF-1** | ⛔ **FATAL, AND NOT FIXABLE — the exit-pricing regime is confounded with the arm variable.** The ITM Market action and the 15:52 Market backstop reach only positions still open at 15:50/15:52, so `Ride` and `PT50` are heavily exposed to Market fills while `Touch0` is ~never exposed and the SL arms much less. **The arms hypothesising "capping the tail helps" are the arms systematically spared the fleet's worst execution mechanic** (the fill *"$5.05/contract beyond the worst mark"*, R −1.63). `auto` does not help — it makes the same subset *modeled* instead of *slipped*. **There is no setting under which the tail measurement is arm-neutral.** | **CARRIED — the most serious surviving objection.** §7's "cannot confound" claim withdrawn. **Mitigation, not a fix:** D7 records the per-arm count and R-contribution of Market-priced and ITM-action closes; every arm-vs-control ΔR is reported **alongside** that count; and no tail-based ranking is published without it. This is `hedge-research.md` §5.1 defect 2 in a new form and it should be treated as a standing limit on what this family can conclude |
+| **CF-2** | **FATAL — no ranking procedure existed.** Hypotheses were comparative, kill criteria absolute; the two are anti-correlated exactly where it matters, so the criteria would fire on the winners. And the only signed margin in the folder (`research-loop-spec.md` §10, **0.10R**) is arithmetically unreachable here: max per-condor return = total credit ⇒ **R_max ≈ +0.083 to +0.162**, so a 0.10R winning margin is 62%+ of the theoretical maximum | **FIXED in part, OPEN in part** — a comparative criterion in PR-02's form is added to §9. ⏳ **The §10-margin collision is Andy's**: `state.md` already records *"the §10 gate as signed can never fire … ~7× the largest effect measured."* Added to §12 |
+| **CF-3** | **FATAL — n = 100 is underpowered by 2–30×**, and the draft never said whether the analysis was paired. Paired at ρ=0.90, n=100 gives ±0.026R against a largest-ever-measured effect of +0.0150R; ±0.015R needs ~307 paired days, ~560 with Bonferroni | **FIXED** — §9 declares day-pairing, states the CI arithmetic, and reframes n=100 as a first-read rather than a decision target |
+| **CF-4** | **FATAL — sibling-close is a shared treatment with an arm-dependent effect**, and it destroys the ★★★★★ anchor PR-18 imports: Sandvand's rung is called *Breakeven* because the untested side decays to zero, which close-both forfeits | **CARRIED, and named** — §4.3's "cannot confound" claim withdrawn; PR-18/PR-19 renamed in substance to "SL100/SL200-close-both" with an explicit instruction not to publish under the anchor's name |
+| **CF-5** | **FATAL — the diff tested DIFFERENCE, not ONE-FIELD difference.** An SL100 arm also carrying a stray Touch would have passed | **FIXED** — §8.2's PASS condition rewritten at mechanic granularity; **A1** rewritten to match |
+| **CF-6** | **MATERIAL — Architecture E's own blind spot: a mid-sample edit to a shared object passes every assert**, changes all seven arms at once, and may not bump any template version | **FIXED** — assert **A7** (shared-object payload hash vs a recorded baseline), build steps A7 and C3 |
+| **CF-7** | **MATERIAL — H1 and H2 contradicted each other**, and §4.2's parallel work queue means the arms do not even evaluate the entry signal at the same instant — arm-specific selection on days near the 0.75% band edge | **FIXED** — H2 rewritten; **"matched day" now defined** and the analysis restricted to matched days |
+| **CF-8** | **MATERIAL — the entry window had no upper bound**, so Range075 degraded from a gap filter to an any-time-it-dips filter, and late entries collapse all arms toward Ride | **FIXED** — `before 2:00pm` node added to the shared tree, with its cost stated |
+| **CF-9** | **MATERIAL — n = 100 in 6 months needs a 79% qualifying-day rate** (100/126 trading days) before non-fills, the credit floor, or the matched-day requirement; under a strict matched-day reading the per-arm rate needed rises to ~98%. And `build-plan.md` §5's gate is conjunctive — n≥100 **and** 6 months **and** a regime change — with no regime-change criterion anywhere | **CARRIED** — arithmetic stated in §9 and §12; **the review date will arrive with n below target on most plausible pass rates.** The regime-change criterion is added to §12 as an open item, not invented here |
+| **CF-10** | **MATERIAL — 21 comparisons and ≥30 simultaneous decision rules with no correction** (FWER 66% at 21 pairs); the family silently consumes **7 of the 8 signed Track B slots**; and `GF-SL200` duplicates a variant already in the signed Track A §3 set | **FIXED in part** — Bonferroni declared in §9's comparative criterion and in build step C4. **CARRIED:** the slot-budget collision and the Track A duplication are recorded in §12 for Andy, since both bind documents this spec may not amend |
+| **CF-11** | **MATERIAL — PR-19's degeneracy criterion was unfireable three ways, and its liveness criterion cancelled its own hypothesis** (SL200 rarely firing *is* the hypothesis) | **FIXED** — liveness disapplied on PR-19 with the reason stated; degeneracy rewritten with a tolerance and a config-backed second condition |
+| **CF-12** | **MATERIAL — informative censoring.** A stop arm's 10-day dry spell is a *calm regime*, not a failure; and the Ride control's inverted rule could kill the control via a mislabelled ITM close | **FIXED** — liveness now conditions on *threshold breached*; the control's inverted rule is **advisory until D4** |
+| **CF-13** | **MATERIAL — §8's table marked §5.2 rule 4 discharged for all seven arms** when three have unconfirmed primitives. §5.2: *"An arm failing any of these is not a weak arm, it is not an arm."* | **FIXED** — table row 4 corrected; those three are not arms until Phase 0 closes |
+| **CF-14** | **MATERIAL — selective citation of `hedge-research.md` §11.** The one line that bears on the stop arms — *"Stop losses are counterproductive on the Fortress structure"* — was the one line not quoted, while PR-15 modelled the correct discipline for PT50 | **FIXED** — both contested priors written into PR-18/PR-19 |
+| **CF-15** | **MATERIAL — the $0.08 credit floor contradicts a validated decision** (*"Min-credit filter hurts — winners averaged lower credit than losers"*) and was carried purely by inheritance; and credit dispersion moves **trigger levels**, not just denominators, because `profits`/`stoploss`/`tstop` are credit-referenced while `touch` is not | **FIXED in part** — H1 rewritten to state the trigger-level effect and tick quantisation. **CARRIED:** the floor is retained for comparability with the pilot line, and the contradiction is now recorded rather than silent. Added to §12 |
+| **CF-16** | **MATERIAL — "single-field delta" was false** (each trigger carries a pricing sub-field), and 7 arms give 21 *unordered* / 42 *ordered* pairs, not "21 ordered" | **FIXED** — §8.1 restated as one-mechanic/two-field; arithmetic corrected throughout |
+| **CF-17** | **MATERIAL — the "hedge tournament" view is two rungs of ONE mechanic, and the control is not a no-hedge control** — `Ride` carries a time exit, a Market backstop, an ITM action and sibling-close, so every hedge effect is measured against an already-hedged baseline and biased toward zero | **CARRIED** — real and structural. Recorded in §12: the hedge lane's own question (*"rank mechanics"*, `pre-registration-ledger.md` §6) is **not** answered by this family, and a null result here means "no help *beyond* the existing three mechanics", not "hedges don't help" |
+| **CF-18** | **MATERIAL — the canary's 5% threshold is sub-tick** across the whole admissible credit range, so its real trigger is the tick grid; a no-fill day is ambiguous between engine death and a one-cent spread widening; and it carried no code-fireable rule | **FIXED in part** — PR-20 states the sub-tick reality and adds a 2-consecutive-day RED. **CARRIED:** the false-negative rate of the fleet's only forward exit-engine detector remains unmeasured |
+| **CF-19** | **MATERIAL — the hypotheses are not computable from anything the loop produces.** No surface generates a cross-bot paired statistic; `research_loop.py` is advisory-only and *"must not"* be wired in; and the liveness rule needs an **exit-reason field the export may not carry** | **CARRIED, and it is a signing gate** — `pre-registration-ledger.md` §7 item 3: *"does the loop actually produce that number? If not, fix one of the two now."* Added to §12 as the largest piece of unbuilt work this spec implies |
+
+### 11.3 Attacks that failed
+
+Recorded because a review that only reports hits is not a review.
+
+- **"15:52 is unreachable / the Repeating trigger cannot express it."** Defeated — built and
+  reload-verified on the pilot, `ntime=1552`, `max="15:55"` corroborated twice.
+- **"One Library automation cannot be attached to N bots."** Defeated — the Library reports
+  per-automation usage and already contained a shared automation attached to **2 bots**. C5 is
+  conservatism, not doubt.
+- **"The Bot Schedule's 15:55 cap kills the Repeating backstop."** Defeated by the footnote read
+  verbatim: *"Repeating and date/time scheduled automations are **not affected by this
+  schedule**."*
+- **"Presets cannot cross automations / cannot be named."** Defeated — §9 check #4, first-hand.
+- **"The spec cites presets as a matching guarantee."** Defeated — §4.5 demotes them to build-time
+  convenience and refuses them as a proof leg. Both reviewers called this the correct discharge
+  of Appendix A's G4 objection.
+- **"The capture-diff will read the action and see identical arms."** Defeated — the G2 rider is
+  applied in §1.2, §8.2 and B4, and `oldValue` is forbidden in all three.
+- **"Range075-as-a-preset is a category error the spec commits."** Defeated — the spec identifies
+  it as N-2, implements the correct primitive, and declines to edit frozen §2D.
+- **"The spec cites the Exit Options panel as evidence somewhere."** Defeated — every verification
+  path routes to a capture, a screenshot, or the Trades list.
+- **"Seven bots × four automations breaches OA's per-bot automation slots."** Defeated —
+  Scanner 2/5, Repeating 0/10, Position-closed 0/5 leaves room.
+- **"The arms are not all in one execution class."** Defeated as stated — the *arm variable* is an
+  Exit Option on all seven, which is what §5.2 rule 2 asks. The real defect is differential
+  *exposure* to the other classes, which is CF-1.
+
+---
+
+## 12. Open items this spec does not close
+
+| # | Item | Why it is not closed here |
+|---|---|---|
+| **1** | The four memo slots marked `NOT RULED` — fix the broken `build-plan.md` §5.2/§8.1 citations · Day-0 no-touch ordering before the re-arm sweep · **build the arm-distinctness assert before the tournament trades** · the ungrouped-export UI check | Andy's. Item 3 bites §8.3 directly; this spec assumes YES as the safe default and says so |
+| **2** | **N-2 — `Range075 as a preset`** in frozen §2D and `hedge-research.md` §5.2 rule 3 | The substance is implemented correctly (§4.1); the **wording** in a frozen doc needs an "amend the plan". Draft text is in the memo |
+| **3** | **§3's arithmetic reading of §2D** — 4–6 IC bots *plus* hedge arms *plus* canary vs 5–7 fresh total | Resolved here by treating them as one family. If Andy reads §2D as two families, §3 changes and an amendment is needed |
+| **4** | §2's **QQQ-vs-SPX** scope choice | Specified with reasons; overrulable, but not at build time (§2's last paragraph) |
+| **5** | §1.4's **ride arm = time-exit-only, not empty bundle** | A spec choice departing from `state.md`'s framing of G1. Overrulable; §11's confound-A objection applies if overruled |
+| **6** | `oa-ops-runbook.md` §3's Pillar-vs-cohort tension | Resolved operationally (§5.2) by using a tag; the §3 wording is flagged, not amended |
+| **7** | The **successor template check** — does a template store a REFERENCE to the bot's live automation objects? | Open in `oa-ops-runbook.md` §7. Under Architecture E it matters more than usual (Phase B note) |
+| **8** | §9 check **#5** — is re-applying `Update Position Exit Options` side-effect-free? | Needs positions; Day-0 |
+| **9** | **SL130** and the fixed-$ rungs | Deferred: SL130 to wave 2 on slot budget, fixed-$ to Track B pending its own unsigned amendment |
+| **10** | ⭐ **The `research-loop-spec.md` §10 margin collides with this family's arithmetic.** The signed gate requires **≥0.10R**; this structure's *theoretical maximum* per-condor return is **+0.083R to +0.162R**. `state.md` already records the same conclusion from the other direction. **Andy's** — either the margin is re-declared for this family or nothing here can ever graduate | Requires a ruling on a signed document |
+| **11** | ⭐ **Slot budget and double-testing.** These seven bots meet `research-loop-spec.md` §4's definition of Track B arms, so the family consumes **7 of the 8 signed Track B slots**; and `GF-SL200` duplicates a variant already in the signed Track A §3 set, pooling error rates nowhere | Binds two signed documents; **Andy's**, and it directly constrains Task 7's Track B arms |
+| **12** | ⭐ **No regime-change criterion exists anywhere.** `build-plan.md` §5's gate is conjunctive — n≥100 **and** ≥6 months **and** a regime change — and the third conjunct is undefined in every document | Must be defined before any arm can graduate; not invented here |
+| **13** | ⭐ **The comparative machinery does not exist.** No surface produces a cross-bot paired ΔR with a bootstrap CI; `research_loop.py` is advisory-only and must not be wired in; and the liveness rule needs an **exit-reason field the export may not carry** (`oa-export-schema.md` was not in this session's reference set). **This is the largest piece of unbuilt work the spec implies**, and `pre-registration-ledger.md` §7 item 3 makes it a signing gate | Needs scoping as its own task before Day-0 |
+| **14** | ⭐ **The `$0.08` credit floor contradicts `hedge-research.md` §11's validated "min-credit filter hurts"** and was carried by inheritance from the pilot | Retained for comparability; the contradiction is now recorded rather than silent. Andy's to keep or drop |
+| **15** | ⭐ **CF-1 and CF-4 are structural limits, not open questions.** The exit-pricing/ITM exposure asymmetry and the close-both wrapper on the SL arms cannot be designed away at this level | Carried with named mitigations; they bound what this family may conclude |
+
+---
+
+## 13. What this spec is measured against
+
+- `build-plan.md` §2D and §5 — **implemented, not amended.** No text in that file was edited.
+- `hedge-research.md` §5.2's five conditions — §8's table maps each to what discharges it.
+- `oa-platform-reference.md` §11 — **no mechanic in this spec appears on the not-expressible
+  list.** ⚠️ **This claim was FALSE in the draft** and is true only after review: PR-16's target
+  was an *armed* trailing stop, which §11 rows 4 and 6 rule out and which §3.1 already used those
+  rows to exclude elsewhere. PR-16 is now scoped to a plain always-on trail and the armed shape
+  is explicitly excluded (§3.1, PR-16). **Three further candidate mechanics were excluded for §11
+  reasons** and are named in §3.1.
+  ⚠️ **Every mechanic names the primitive it is built from — but three arms' primitives are
+  UNCONFIRMED** (Trail's `tstop` shape, SL100/SL200's `stoploss` unit, and four arms' exit-pricing
+  sub-field). Per `hedge-research.md` §5.2's closing sentence they are **not arms until Phase 0
+  closes**, and §8's table says so.
+- `oa-ops-runbook.md` §4 — every build step ends in a two-layer verification, with Layer 2
+  deferred to Day-0 and tracked.
+- `CLAUDE.md` §9.1a — no write in this spec's build order is reported done on the strength of the
+  tool call that made it.
+- **No mechanic anywhere in this document depends on the Exit Options panel as evidence.**

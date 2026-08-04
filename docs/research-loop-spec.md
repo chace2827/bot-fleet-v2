@@ -86,10 +86,30 @@ The variants are decided in advance and held constant. Choosing variants *after*
 storytelling, not experiment.
 
 **Profit side** — PT40 · PT60 · PT70 (incumbent PT50 is the control)
-**Loss side** — SL 150% · SL 200% · SL 250% · fixed-$ stop at 1.0×credit and 1.5×credit (`dstop`,
-confirmed to exist 2026-08-04)
-**Time** — exit 15:45 · 15:50 (control) · 15:55
-**Conditional** — "stop only if MAE breached before 14:00" (the non-recovery hypothesis from §1a)
+**Loss side** — SL 100% · SL 150% · SL 200% · fixed-$ stop (`dstop`) at **1.00× and 1.50× the bot's
+trailing-90-day MEDIAN credit, in dollars, held constant across positions** (`dstop` confirmed to
+exist 2026-08-04). The dollar rungs are deliberately pinned to the SAME AVERAGE LEVEL as SL100 /
+SL150: they are not a looser stop, they are the same stop anchored in dollars instead of percent,
+and they differ only on positions whose credit departs from the bot's median — which is exactly the
+population `hedge-research.md` §9 item 6 exists to test. A RISK-basis rung is not this contrast:
+0.50×risk lands at ~720% of credit at the fleet's median credit/risk of 0.070 (n=1,254), beyond the
+no-stop boundary.
+
+**Conditional (trough-timing rungs)** — stop at 100% if the trough came before 13:00 · stop at 100%
+if the trough came before 14:00 · stop at 200% if the trough came before 14:00. This is the §1a
+non-recovery hypothesis given a proper level × cutoff rung set: measured on the v1 capture (n=394
+same-day losers, demonstration only), a trough before 14:00 recovers 17.2% of the time and a trough
+at or after 14:00 recovers 66.2% — the strongest discriminator the export contains.
+
+**Time — NOT A TRACK A VARIANT.** Time exits are structurally undecidable from MFE/MAE (§6.5) and
+are funded instead from the Track B allocation in §10: `Expiration` 0.015 and 0.005 against the
+0.01 incumbent, a one-field edit on a cloned bot and the cheapest arm in the §9 sweep.
+
+*📝 AMENDED 2026-08-04 by Andy's rulings **R-1** and **R-2** on
+`docs/research-loop-review-2026-08-04.md`. **The set remains 12** — CONTROL · PT40 · PT60 · PT70 ·
+SL100 · SL150 · SL200 · DSTOP_100 · DSTOP_150 · COND_100_1300 · COND_100_1400 · COND_200_1400 —
+so the §10 freeze holds without a count change. `COND_200_1400` is the former `COND_MAE_1400`,
+renamed; the two `TIME_*` slots are retired to Track B, not deleted from the programme.*
 
 That is 12 variants. **The count matters and must be recorded.** Testing 12 variants across ~20
 bots is 240 comparisons per day; at any conventional threshold some will look like winners by pure
@@ -221,17 +241,56 @@ fleet of twenty bots that are all the same idea.
 - [x] **The §3 variant set is FROZEN at 12**, exactly as written. Adding a variant requires a new
       signature and resets nothing — but it weakens every other variant's evidence, so the count is
       deliberately expensive to change.
-- [x] **Pre-declared margin:** a variant beats the control only if it wins on **both mean and
-      median R**, by **≥ 0.10R per position**, with a 95% confidence interval that excludes zero
-      **after Bonferroni correction for the 12-variant count**. Declared here, before any data —
-      not to be renegotiated on inspection.
+- [x] **Pre-declared margin.** A variant beats the control only if all three hold:
+      (a) its **mean ΔR ≥ +0.015R per position** over that bot's full post-cutover population;
+      (b) a **paired bootstrap 95% CI on that mean excludes zero** under the §10a procedure; and
+      (c) on the **subpopulation where the variant actually fires**, a paired sign test against the
+      control is significant at the same level.
+      **The median-ΔR test is WITHDRAWN.** A non-triggering position contributes an exact 0.0, so
+      the median is pinned at 0.0000R for any variant firing on under half of positions — measured
+      0.0000R for 11 of 11 variants on n=1,254 v1 rows. It is not a statistic.
+      **+0.015R is calibrated, not chosen:** the arithmetic ceiling on a PT50→PT70 move at the
+      fleet's median credit/risk of 0.070 is 0.014R per fired position, so the previously declared
+      0.10R was unreachable by construction. Declared here, before any post-cutover data.
+      *(AMENDED 2026-08-04 — ruling R-3.)*
 - [x] **Track B may consume ≤ 8 bot slots**, leaving headroom under the 50-bot plan cap.
 - [x] **Track A output is advisory-only.** It never enters an instruction card and never appears in
       the three verdicts.
-- [x] **`research_loop.py` runs nightly from Day-0, but emits nothing until n ≥ 30 post-cutover
-      closed positions.** Before that it prints a single suppressed-output line, so the stage is
-      exercised daily without publishing noise.
+- [x] **`research_loop.py` runs nightly from Day-0, but emits nothing until the working ledger
+      holds n ≥ 30 post-cutover CLOSED POSITIONS fleet-wide**, where a position is a `trade_id`
+      group (`CLAUDE.md` §4) and `expired` rows are excluded from the count
+      (`oa-export-schema.md` §6). Before that it prints a single suppressed-output line, so the
+      stage is exercised daily without publishing noise.
+      *(AMENDED 2026-08-04 — rulings R-4, R-6 and R-7.)*
 
 *Signed in conversation 2026-08-04 ("agreed with all"). The two values that were blank at drafting
 — the margin and the start condition — were filled by Claude to the above and are subject to Andy's
 correction; everything else is as Andy read it.*
+
+*📝 AMENDED 2026-08-04 — those two values have now been corrected by Andy on
+`docs/research-loop-review-2026-08-04.md`: rulings **R-3** (margin) and **R-4** (start condition).
+The bullets above are the ruled text. Ruling **R-6** sets the unit of account to the POSITION
+(a `trade_id` group, risk = the larger side) and rules that **combined MFE for a paired condor is a
+Track B question**, so paired condors are honestly `UNDECIDABLE` for the PT family in Track A.
+Ruling **R-7** stratifies `expired`: excluded from every count and from the PT family's comparison,
+retained in `counterfactuals.csv` under an explicit `expired` stratum. §10a below is new and
+carries ruling **R-5**.*
+
+---
+
+### §10a — Multiplicity and sequential control
+
+*Added 2026-08-04 by ruling **R-5**, replacing "Bonferroni correction for the 12-variant count".*
+
+1. **The family is the 9 computable variants × every bot under test**, re-stated in each night's
+   log. `CONTROL` and any structurally-undecidable slot are not comparisons and are not counted.
+2. **No nightly gate evaluation.** Track A output is descriptive every night. The gate is evaluated
+   ONCE, at the pre-declared n=100 for that (bot, variant), on a date written into
+   `pre-registration-ledger.md` BEFORE n reaches 100. Re-running a failed gate is a new
+   pre-registration.
+3. **The test is a stratified paired sign-flip permutation test** on the per-position ΔR vector,
+   strata = bot, with max-T across all variants and bots, 10,000 sign-flips. It is exactly
+   calibrated on a zero-inflated skewed distribution (no normal approximation) and the max-T null
+   absorbs the inter-variant correlation, so **no Bonferroni term is applied**.
+4. Any nightly monitoring of the gate statistic must use an **always-valid confidence sequence**,
+   not a fixed-n CI.

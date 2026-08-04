@@ -74,45 +74,122 @@ blob) — detail under *WRITES MADE TO THE CLONE* below.
 
 ---
 
-## Research loop — REVIEWED 2026-08-04, ⛔ DO NOT WIRE IN, 7 RULINGS OPEN
+## ⭐ GREENFIELD FAMILY SPEC — WRITTEN 2026-08-04. Design closed; SIX blocking checks before build.
 
-`docs/research-loop-spec.md` (237 lines) is signed. `scripts/research_loop.py` is
-**`0.1.0-DRAFT`, NOT frozen**, 23/23 validation checks, writes `data/counterfactuals.csv` and
-nothing else, silent below n=30. **It is not wired into `daily.sh` and must not be.**
+`docs/greenfield-family-spec.md` (1,548 lines, sha256 `aee1d763…4d251fdb`, on-device verified).
+**The design document Phase 4's fresh builds are built from.** It **implements** `build-plan.md`
+§2D and §5 — no frozen doc was edited, no OA surface touched, no git command run.
 
-**The deeper review is DONE: `docs/research-loop-review-2026-08-04.md`** (three adversarial
-reviewers — statistics, design, code-vs-spec; 27 quotes asserted byte-exact single-match; every
-figure recomputed from the n=1,386 capture). It rules on all five §5a defects and records **nine
-further defects §5a does not**, three of them fatal:
+**Seven bots as ONE matched family, not two builds.** The "greenfield IC family" and the "rebuilt
+hedge tournament arms" are two views of the same family, which is what fits 4 IC arms + 2 hedge
+arms + 1 canary inside §2D's 5–7 fresh ceiling with no remainder. Underlying **QQQ**. Arms:
+`GF-QQQ-IC-Ride` (control, PR-14) · `-PT50` (PR-15) · `-Trail` (PR-16) · `-Touch0` (PR-17) ·
+`-SL100` (PR-18) · `-SL200` (PR-19) · `-Canary` (PR-20). Four shared Library automations attached
+to all seven; the only per-bot variable is a bundle-typed exit input, per D-1 Option A and
+Decision 4 Architecture E.
+
+> ### ⛔ DO NOT START THE BUILD. Phase 0 has SIX blocking checks and one can stop the architecture.
+> **C0a — the BOT INPUT tier has never been observed.** G1/G2/G3 all tested the *Automation*
+> Input; this file's own bot-input line is *"Inference from a screenshot"*, and
+> `oa-platform-reference.md` §5.2's *"Whether Exit Options can reference Bot Inputs is
+> [DOCS-SILENT] and unverified"* is unstruck. **If C0a fails, Architecture E is not buildable and
+> the tournament architecture returns to Andy — do NOT fall back to per-arm copies**, which void
+> the tournament at build time under PR-18's kill criterion.
+> Also blocking: **C0b** (can one input span two automations — expected NO, hence two inputs per
+> arm) · **C0c** (presets inside the input editor) · **C1** `stoploss` unit · **C2** `tstop` shape
+> · **C3** exit-pricing sub-fields · **C7** the `opened today` entry gate · **C8** the
+> sibling-close nodes. C7 and C8 also carry explicit no-substitution STOPs.
+
+**⚠️ Three of the seven are not arms yet** under `hedge-research.md` §5.2's own definition —
+Trail's `tstop` shape, SL100/SL200's `stoploss` unit, and four arms' exit-pricing sub-field are
+unconfirmed primitives. §5.2: *"An arm failing any of these is not a weak arm, it is not an arm."*
+
+**Adversarial review: 2 subagents, 10 FATAL + 24 MATERIAL objections, ~2/3 fixed.** Full record in
+the spec's §11, including the attacks that failed. **Two structural limits are CARRIED, not
+fixed:**
+- **CF-1 — the exit-pricing regime is confounded with the arm variable.** The ITM Market action
+  and the 15:52 Market backstop reach only positions still open at 15:50/15:52, so `Ride`/`PT50`
+  are heavily exposed to Market fills while `Touch0` is ~never exposed. The arms hypothesising
+  "capping the tail helps" are the arms spared the fleet's worst execution mechanic. **`auto` does
+  not help — there is no `itmpaper` value under which the tail measurement is arm-neutral.** This
+  is `hedge-research.md` §5.1 defect 2 in a new form and it bounds what the family can conclude.
+- **CF-4 — sibling-close destroys the anchor PR-18 imports.** Sandvand's rung is called
+  *Breakeven* because the untested side decays to zero; close-both forfeits that, so the arm
+  cannot reach breakeven by construction. Renamed in substance to "SL100-close-both"; **do not
+  publish it under the anchor's name.**
+
+**Six findings for Andy, none acted on:**
+
+1. **§2D's arithmetic is ambiguous** — "IC family (4–6)" + hedge arms + canary vs "5–7 fresh".
+   Resolved by the one-family reading; **a two-family reading needs an amendment.**
+2. **⛔ `pre-registration-ledger.md` PR-14…PR-17's family-level kill criterion is vacuously
+   unfireable.** It reads "more than one differing **input**"; under Option A each arm holds
+   exactly one exit input, so that state cannot be reached — the identical defect the memo used to
+   *reject* Options B and C. **It survived the D-1 ruling unnoticed.** The spec rewrites it at
+   field granularity; the ledger needs the same correction at signing.
+3. **`research-loop-spec.md` §10's signed 0.10R margin is unreachable here.** Max per-condor
+   return = total credit ⇒ **R_max ≈ +0.083 to +0.162**. Either the margin is re-declared for this
+   family or nothing here can ever graduate.
+4. **The family consumes 7 of the 8 signed Track B slots** (it meets §4's own definition of a
+   Track B arm), and `GF-SL200` duplicates a variant in the signed Track A §3 set. **This
+   constrains the Track B task directly.**
+5. **No regime-change criterion exists anywhere** — `build-plan.md` §5's gate is conjunctive and
+   the third conjunct is undefined in every document.
+6. **`oa-ops-runbook.md` §3 has an internal tension** — `Group = Pillar` vs "arms live in one
+   group so they can be queried as a set". Resolved operationally (Group `IC`, cohort tag `gfam`);
+   §3's wording flagged, not amended.
+
+**N-3 is confirmed binding.** The arm-distinctness assert §3 promises still does not exist, so §3
+may not be cited as a proof leg. The spec specifies it as rules **A1–A8** and places it before
+Day-0 — noting that whether it *must* precede trading is one of the memo's four unruled slots.
+**N-2 handled without an amendment:** Range075 is implemented as two Symbol-change-% decision
+nodes in the shared entry automation, the substitute primitive named explicitly.
+
+---
+
+## Research loop — ALL 7 RULINGS SIGNED 2026-08-04, spec amended, ⛔ STILL DO NOT WIRE IN
+
+`docs/research-loop-spec.md` is signed **and amended 2026-08-04** by Andy's seven rulings.
+`scripts/research_loop.py` is **`0.1.0-DRAFT`, NOT frozen**, 23/23 validation checks, writes
+`data/counterfactuals.csv` and nothing else, silent below n=30. **It is not wired into `daily.sh`
+and must not be — the rulings fixed the SPEC, not the ENGINE.** Three fatal code defects stand.
+
+**Review: `docs/research-loop-review-2026-08-04.md`** (three adversarial reviewers; 27 quotes
+byte-exact single-match; every figure recomputed from the n=1,386 capture). Five §5a defects ruled,
+nine further defects recorded. **Three fatal, all still unfixed in code:**
 
 - **every `cf`/`delta` is off by 100 × quantity** — `credit` is a per-contract price, `pnl` is
-  dollars, and `quantity` is never read. `delta ≈ -pnl` on every FILLED row
-- **`CONTROL` is a tautology** — `abs(pnl - pnl) < 1e-9`. The one check justified as the engine
-  self-test compares a variable to itself, so it did not catch the units bug
-- **MFE/MAE are censored by the incumbent exit** — Track A can only evaluate variants TIGHTER
-  than the bot already runs. Measured: MFE ≥ 0.70 on 65/80 positions for the unstopped
-  `Raw-HoldToExp` bot vs 0/70 for the PT25 `-130PM` clone (median MFE 0.250). This is not fixable
-  in code and invalidates roughly half the current slots
+  dollars, `quantity` is never read. `delta ≈ -pnl` on every FILLED row; `DSTOP_*` fires 0/1,254
+- **`CONTROL` is a tautology** — `abs(pnl - pnl) < 1e-9`; the self-test compares a variable to
+  itself, so it did not catch the units bug
+- **MFE/MAE are censored by the incumbent exit** — Track A can only evaluate variants TIGHTER than
+  the bot already runs. MFE ≥ 0.70 on 65/80 for unstopped `Raw-HoldToExp` vs **0/70** for the PT25
+  `-130PM` clone (median MFE 0.250). Not fixable in code
 
-**Also: the §10 gate as signed can never fire** — median ΔR is exactly 0.0000 for 11 of 11
-variants (non-triggering positions contribute exact zeros), and the 0.10R margin is ~7× the
-largest effect measured (SL75, +0.0150R, n=1,254). **7 ruling slots await Andy**, not the 2
-previously recorded: fixed-$ rungs (reject both as-coded and as-signed) · `TIME_*` (replace,
-fund in Track B) · §10 margin · §10 start condition · the Bonferroni family (~180, not 12) ·
-row-vs-position unit · `expired` disposition. **The §3 set changes only by signature.**
+**Rulings, all SIGNED 2026-08-04 and applied to spec §3/§10 as dated amendments:** R-1 fixed-$ rungs
+→ dollar stop at 1.00×/1.50× the bot's trailing-90-day median credit (the unsigned 0.50×/0.75× RISK
+substitution is REJECTED) · R-2 `TIME_*` replaced by trough-timing rungs, time question retired to
+Track B · R-3 margin → mean ΔR ≥ +0.015R, **median test withdrawn** · R-4 start condition → n ≥ 30
+closed POSITIONS fleet-wide · R-5 → new §10a, permutation max-T, **no Bonferroni term** · R-6 unit
+of account is the POSITION and **combined MFE for a paired condor is a Track B question** · R-7
+`expired` stratified. **The §3 set remains 12, so the freeze holds without a count change.**
+
+⚠️ **Four consequential edits NOT applied** (outside the §3/§10 authorisation) — spec is internally
+inconsistent until ruled: §5's `n ≥ 100 positions` line · §5's `12-variant count` phrase · §6's
+censoring limit, which R-2's applied text already references as `(§6.5)` — **that reference
+currently dangles** · §1a's `74 (19%)` figure, correctly 101/394 = 25.6%. Listed in the review's §9.
+
+**Next on the engine, in order:** fix units + `CONTROL` before anything else, add real-row VALUE
+assertions to the fixture, then the `censored` flag — which **depends on `bots_config_v2.csv`** to
+know each bot's incumbent exit, so Track A's honesty is gated on Phase-2 config capture.
 
 **Track B is the better half and is unstarted:** run the variant as a real paper bot rather than
 simulating it. Pro allows 50 bots, the fleet uses ~20, Day-0 is paper, so a slot costs only
 configuration. Cap ≤8 slots. **First arms go on the LOSS side** (`Stop Loss $`, `Touch`) — both
 confirmed to exist 2026-08-04, and the mirror baseline independently says the tail is where the
 money goes. **Nothing in the review applies to an arm** — every finding is a limit on Track A, so
-the review argues for starting Track B sooner, not later.
-
-**Track B is the better half and is unstarted:** run the variant as a real paper bot rather than
-simulating it. Pro allows 50 bots, the fleet uses ~20, Day-0 is paper, so a slot costs only
-configuration. Cap ≤8 slots. **First arms go on the LOSS side** (`Stop Loss $`, `Touch`) — both
-confirmed to exist 2026-08-04, and the mirror baseline independently says the tail is where the
-money goes.
+the review argues for starting Track B sooner, not later. R-2 and R-6 now put two further questions
+in Track B by ruling: the time exits, and combined MFE for paired condors.
 
 ## Data conventions — `docs/oa-export-schema.md` (new 2026-08-04)
 
