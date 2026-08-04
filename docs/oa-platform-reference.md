@@ -177,6 +177,16 @@ bots. Editing a shared automation changes it in **every** bot that uses it. **Co
 | Scan Speed | Bot-level interval for Scanners and Monitors. Default **15 min**, down to **1 min**. |
 | Symbols | Tickers the bot may trade. |
 
+> ### 📝 APPENDED 2026-08-04 (Tier 1 audit) — the trip condition is broader than stated below.
+> > *"If a bot has reached an **allocation or position limit**, the scanner turns off **and a
+> > warning is displayed**."* — `tools/bots/safeguards` [DOCUMENTED]
+>
+> Two additions: **the allocation limit trips scanners too**, not only the position limits; and
+> **a warning is displayed** — a detectable signal, which matters for the liveness work in §4.4,
+> since it distinguishes "scanner off because it hit a limit" from "scanner off because the bot is
+> dead". Also verbatim: *"Position limits are for opening positions only; there is no limit on the
+> amount of closing positions."*
+
 **Defaults allow 10 daily / 10 total, both editable. There is no limit on closing.** When a
 limit trips, **scanners are automatically turned off** until there is room [DOCUMENTED,
 `§ safeguards`] — which makes the daily limit a usable interlock (§5.4).
@@ -187,9 +197,33 @@ limit trips, **scanners are automatically turned off** until there is room [DOCU
 > side never opens. Ten re-entries of a single IC is a daily limit of **20**, not 10.
 > Docs are silent on this; the project rule stands and is load-bearing everywhere.
 
+> ### ✅ §9 CHECK #9 ANSWERED 2026-08-04 — **limits CANNOT exceed 10.**
+> **[FIRST-HAND — Bot Safeguards panel on `QQQ-IC-0DTE-Fortress Clone`, 2026-08-04.]**
+> Both limits are **hidden inputs behind pickers**, not number fields — so there is no `max`
+> attribute to read and nothing to type a larger value into:
+>
+> - `posLimitDay` (Daily Positions) — picker offers **`1` … `10` only**. Read `2`.
+> - `posLimit` (Position Limit) — picker offers **`1` … `10` only**. Read `2`.
+> - `seed` (Allocation) — `type=number` **`min="250" max="100000"`**. Read `100000`. The ceiling
+>   is the Pro plan's per-bot cap (`Settings → Membership: PER BOT $100k`), enforced client-side.
+> - Day Trading — two-item picker, `0` **Allowed** / `1` **Blocked**. Read `Allowed`.
+>
+> ⛔ **This bites the §3 [PROJECT-RULE] box directly above.** "Ten re-entries of a single IC is a
+> daily limit of **20**, not 10" is arithmetically right and **not expressible**. The product caps
+> the field at 10, so an IC bot's real ceiling is **five** re-entries per day, not ten. Any
+> re-entry spec above 5 ICs/day must be redesigned or split across bots — it cannot be configured.
+>
+> Verified by hard reload: Safeguards still read $100,000 / 2 per day / 2 at once / Allowed.
+> Nothing was saved.
+
 **Allocation caveat.** Max risk is an *at-expiration* concept. Exit-side risk can exceed entry
 allocation when spreads blow out. With percentage allocation above 50%, OA deliberately shrinks
 later positions to avoid exceeding 100%.
+
+> ⚠️ **[UNVERIFIED] — flagged 2026-08-04 (Tier 1 audit).** The percentage-allocation-shrinking
+> claim is **not on the safeguards page** and carries no source anywhere in this file. It sits in a
+> section whose other claims are all [DOCUMENTED], which makes it read as documented. **Treat as
+> unsourced until someone finds the page or observes it.** Sizing decisions must not rest on it.
 
 ---
 
@@ -219,9 +253,24 @@ Two of these are richer than this project previously assumed:
 > **(ii) OA's own current documentation.** The Exit Options page states the 9:31am→1-minute-before-
 > close window is **customizable via Settings** (§6). Both point at the same Settings surface.
 >
-> **Not yet verified in Settings directly** — that is the open check this replaces §9 #2 with. If
-> it holds, it is a **second independent route** to the 15:52 spec and §8.2's premise collapses.
-> The quotation above is accurate *as a quotation*; the **conclusion drawn from it** is contested.
+> ### ⛔⛔ UPGRADED TO **CONFIRMED FALSE** 2026-08-04 (Tier 1 audit) — third line of evidence,
+> ### and it was on the file's OWN cited page all along.
+> `tools/bots/automations.md` — the page the quotation above is taken from — also says:
+> > *"In your settings, you can customize when automations run, from as early as 9:31 am EST until
+> > **5 minutes before the market close**."* [DOCUMENTED]
+> and *"Market open automations run first **at the time you specify** automations to begin."*
+>
+> **"Neither is adjustable" is not merely contested — it is false, and it was falsifiable from the
+> source this section already cites.** The 9:40am/3:50pm figures are DEFAULTS, not fixed times.
+> **§8.2's premise collapses entirely.**
+>
+> ⚠️ **And it hands us the platform-wide cap:** automations may run until **5 minutes before the
+> close = 15:55** — exactly the `max="15:55"` observed on the Custom time input. Two independent
+> sources agreeing. **15:52 sits inside the cap**, which is why the backstop built on 2026-08-03 is
+> legal rather than lucky.
+>
+> *Original 2026-08-03 note, superseded: "not yet verified in Settings directly… the conclusion
+> drawn from it is contested."*
 
 > **📝 Observed 2026-08-03 — the live trigger vocabulary, with undocumented per-bot SLOT LIMITS.**
 > `Scanner` — Every scan to find new positions — **2/5** · `Monitor` — Every scan to monitor open
@@ -231,6 +280,37 @@ Two of these are richer than this project previously assumed:
 > (a tenth type absent from the documented list quoted above).
 > **Each bot has a bounded budget per trigger class.** The 15:52 backstop spends 1 of 10 Repeating
 > slots. Nothing in OA's docs states these limits.
+> ### ✅ RESOLVED IN THE PRODUCT 2026-08-04 — the Settings surface is real, it is called
+> ### **Bot Schedule**, and it carries TWO INDEPENDENT WINDOWS, not one.
+> **[FIRST-HAND — DOM read of `app.optionalpha.com/settings`, 2026-08-04.]** Values are the
+> `input.value` of each named field, not label text:
+>
+> | Control | Field | Value read | Bounds read |
+> |---|---|---|---|
+> | Automations — start | `scanstart` | `09:31` | `type=time min="09:31" max="15:30"` |
+> | Automations — end | `scanend` | `5` (“5 minutes before market close”) | picker floor **5** → **15:55** |
+> | Exit Options — start | `exitstart` | `09:31` | `type=time min="09:31" max="15:30"` |
+> | Exit Options — end | `exitend` | `1` (“1 minute before market close”) | picker floor **1** → **15:59** |
+>
+> Both end-pickers offer `5,6,7,8,9,10,15,20,25,30,45,60` minutes before the close (the Exit
+> Options one also offers `1,2,3,4`). **9:40 / 3:50 are neither fixed nor even the current
+> setting** — this account runs 09:31. The claim struck above is closed on a third line of
+> evidence, this one first-hand.
+>
+> ⚠️ **This file has been treating one window where the product has two.** The automation
+> window and the Exit Options window are configured separately and currently differ by four
+> minutes at the close. §6's “9:31am to 1 minute before market close” and §4.1's automation cap
+> are **not the same setting**.
+>
+> ⚠️ **And a footnote nobody had read**, verbatim from the same card:
+> > *"Repeating and date/time scheduled automations are not affected by this schedule and run at
+> > the selected date and time even if it's outside the range defined above"*
+>
+> The 15:52 backstop is a **Repeating** trigger, so the Bot Schedule does not bind it at all.
+> (The `max="15:55"` on the Custom time input still does. Two different limits — do not merge them.)
+>
+> Verified by hard reload: all seven fields unchanged afterwards. Nothing was saved.
+
 - **Position opened / Position closed** are native triggers. They are the designed replacement
   for the emergent Cleanup-monitor behaviour, and are how a sibling-spread close should be
   built (§5.4).
@@ -251,6 +331,26 @@ Before each execution OA runs a **redundant position check** and blocks an actio
 flight. Note this did **not** prevent the 7/01 orphan loop — close and open are not identical
 actions.
 
+> ### ⚠️ APPENDED 2026-08-04 (Tier 1 audit) — TIMING IS NOT GUARANTEED. This was missing entirely.
+> > *"All user automations are pushed into a **distributed work queue and executed in parallel by
+> > worker processes. There is no guarantee an automation will run exactly on the 15-minute
+> > marks**."*
+> > — `technical-documentation/platform/automation-behavior.md` [DOCUMENTED]
+>
+> **A scheduled automation is not promised to fire at its stamped minute.** Consequences:
+> - **The 15:52 flat-close backstop has an 8-minute buffer to the bell, not a guaranteed slot.**
+>   That is probably ample, but it is a buffer, and it compounds with the unresolved DST question
+>   (§8.2). Do not design a backstop whose margin is smaller than the scheduling jitter.
+> - Any attribution rule keyed on an exact timestamp — including the `:00`/`:00` vs `:01–:02`
+>   sibling-close test in §8.3 — is reading a **jittered** clock. The test is still sound (the gap
+>   is what matters, not the absolute minute) but it is not a precision instrument.
+>
+> Same page, also missing here: the default scan interval runs *"beginning approximately 15 minutes
+> after the market opens, and ending at 15 minutes before the market close"*, with the last interval
+> at **3:45 ET**. ⚠️ **Three different windows now exist in this document and they are not the
+> same:** default scan cadence ends **15:45**; automations are customizable until **15:55**;
+> Exit Options run until **1 minute before close (~15:59)**. Do not conflate them.
+
 ### 4.3 Loops
 
 **Position loop** (oldest → newest, always), **Symbol loop**, and **Bot Symbol Loop** over a
@@ -260,7 +360,7 @@ the tree before the next.
 ### 4.4 Bot logs record NON-actions [DOCUMENTED]
 
 > *"Bot logs offer a detailed automation history, allowing you to see exactly **what actions
-> your bot has taken—or not taken—during each automation run**."* Filterable by type
+> your bot has taken—or not taken—during each automation run**."* Filterable by **date**, by type
 > (Scanner / Monitor / Event / Button) and by errors or warnings. — `tools/bots/automation-logs.md`
 
 This is the **only** way to distinguish a correctly-gated bot from a switched-off one.
@@ -271,6 +371,31 @@ fired — from position data alone that is indistinguishable from a dead bot. Th
 ⚠️ **Log retention window is [DOCS-SILENT].** Any monitoring design that depends on looking
 back more than a few days is unproven.
 
+> ### ✅ §9 CHECK #7 ANSWERED 2026-08-04 — and the answer is **two different numbers.**
+> **[FIRST-HAND — bot Log tab, `QQQ-IC-0DTE-Fortress`, 2026-08-04.]**
+>
+> - **The date FILTER reaches back exactly 3 weeks of weekdays.** It offers `Today`, then
+>   `LAST WEEK` (Fri Jul 31 → Mon Jul 27), `2 WEEKS AGO` (Fri Jul 24 → Mon Jul 20), `3 WEEKS AGO`
+>   (Fri Jul 17 → **Mon Jul 13**). `scrollHeight === clientHeight`, so nothing is hidden below.
+>   Note **Mon Aug 3 — the immediately preceding weekday — is NOT offered**: the grouping starts at
+>   "last week", so the current week's earlier days fall through the gap.
+> - **The stored data goes back at least 141 days.** The unfiltered stream still serves Jul 2 in
+>   full, and the error stream reaches **`Mar 16, 2026`**.
+>
+> **Retention is not the constraint — the filter is.** Anything looking back more than 3 weeks
+> must page the raw stream via a `Load more` button, which is slow and, at ~229 rows in, stopped
+> yielding while still displaying the button. Treat "reachable by filter" and "still stored" as
+> two separate budgets in any liveness design.
+>
+> 📝 **Capture handle:** every log row carries a `title` attribute holding a **year-bearing
+> timestamp** (e.g. `Apr 16, 2026 3:55PM`). Use it. The visible date *group header* is unreliable —
+> on one bot it did not render at all, on another it re-rendered mid-scroll and changed value.
+>
+> 📝 **Third `innerText` trap, same family as the two already recorded.** The `Date`, `Time` and
+> `Type` filter chips render their labels via CSS, so `innerText` on them is the **empty string**.
+> They are `div.input-ct.filterbtn-ct` wrappers around hidden inputs named `date`, `time`,
+> `autotypes`. A reader trusting `innerText` concludes the filters do not exist.
+
 ### 4.5 The Excessive Errors Failsafe [DOCUMENTED]
 
 > *"The 'excessive errors failsafe' is an automatic protection mechanism that **disables all
@@ -279,6 +404,18 @@ back more than a few days is unproven.
 
 Ten errors in one day, on one bot, disables **all** its automations. **Re-enabling is manual.**
 
+> ### 📝 APPENDED 2026-08-04 (Tier 1 audit) — three facts from the same page, none of them here.
+> - **Re-enabling does not make it safe: it re-trips.** You *"can always turn automations on
+>   again"*, but **if another error occurs that same day the automations turn off again.** A bot
+>   switched back on can die a second time the same session, silently.
+> - **The error count resets *"the next trading day."*** So the counter is per-day, not cumulative.
+> - **Where to look:** errors surface **on the homepage** and via **"errors" in the bot dashboard's
+>   activity summary**, with detail in the bot log and automation log. ⚠️ **This is the surface for
+>   §9 check #8** (did the Fortress bots show ≥10 errors in June) — that check was never actionable
+>   before because nobody had recorded where the counter lives.
+> - The page refers specifically to *"automation error"*, which suggests **not all error types count
+>   toward the threshold**; which are excluded is [DOCS-SILENT].
+
 This is a documented mechanism by which a working bot silently stops firing, and it was unknown
 to this project until 2026-07-29 — including to the OA support rep consulted about the lapse.
 
@@ -286,6 +423,30 @@ to this project until 2026-07-29 — including to the OA support rep consulted a
 > the answer. Fortress kept emitting *entry* orders through 6/26 while emitting no exit orders,
 > which is not a whole-bot shutdown. State it as a hypothesis in pre-registration and check the
 > June error counter before claiming it.
+
+> ### ⛔ §9 CHECK #8 ANSWERED 2026-08-04 — **the hypothesis is DEAD. No June errors, on either bot.**
+> **[FIRST-HAND — bot Log → `Errors` filter (`?status=,error`), 2026-08-04.]** The list is
+> newest-first, and every row's `title` attribute carries the year.
+>
+> | Bot | Error days found | Count | Window |
+> |---|---|---|---|
+> | `QQQ-IC-0DTE-Fortress` | **Apr 16, 2026** | 91 | 1:31PM – 3:55PM |
+> | `QQQ-IC-0DTE-Fortress` | **Mar 16, 2026** | 138 (+ more unloaded) | 1:31PM – 2:40PM |
+> | `QQQ-IC-0DTE-Fortress-NoPT50` | **Apr 16, 2026** | 91 | 1:31PM – 3:55PM |
+>
+> **The newest error on either bot is `Apr 16, 2026 3:55PM`.** Because the list is newest-first, a
+> June error would have to sit above these rows. There are none. **Neither Fortress bot logged a
+> single error in June 2026.**
+>
+> → The Excessive Errors Failsafe is **not** the explanation for the 2026-06-12 exit-order
+> regression. The caveat directly above — that entry orders kept flowing while exits stopped,
+> which is not a whole-bot shutdown — was the right instinct, and the counter now confirms it.
+> **Do not carry this into pre-registration as a live hypothesis; carry it as a closed one.**
+>
+> ⚠️ **What the counter DOES show is still worth keeping.** Both March and April days are far
+> above the 10-error threshold, so the failsafe plausibly *did* fire on those days — on the **entry
+> scanners** (`Fortress-ScannerB-CallSpread`, `FortNoPT-Scan-Call`), months before the lapse. The
+> mechanism is real and this fleet has tripped it. It just did not trip it in June.
 
 ### 4.6 Instant Exit Options are live-bots-only [DOCUMENTED]
 
@@ -302,6 +463,13 @@ claim does not transfer cleanly to live.
 > could trigger another event that immediately opens a new position, thereby causing the bot to
 > enter and exit positions in an **endless loop**."*
 > — `technical-documentation/troubleshooting/bot-event-loops.md`
+
+> **📝 Appended 2026-08-04 (Tier 1 audit):** the documented *consequence* is that a looping bot
+> *"reach[es] its daily and/or total position limit"*, and the docs name **position limits and
+> capital allocation limits** as the designed safeguard against exactly this. **That corroborates
+> §5.4's interlock** — keeping the daily limit at 2 is not a project invention, it is the
+> platform's own stated defence. The docs' other advice is procedural: test automations and paper
+> trade first.
 
 OA documents this fleet's 7/01 orphan-loop class directly. It is a standing caution against
 position-opened/closed trigger designs — which is exactly the shape §5.4 recommends. Build the
@@ -324,7 +492,9 @@ with `exactly · or-higher · or-lower` rounding control.
 > ### ⛔ ALL INDICATORS ARE DAILY, CACHED PRE-MARKET [DOCUMENTED]
 > *"All historical daily indicators in the auto trading platform are cached pre-market based on
 > yesterday's close… The autotrading platform's indicators are based on a Daily (D) time
-> frame."* The "intraday" toggle only substitutes the current price as the final bar; a true
+> frame."* The "intraday" toggle **shifts all indicator bars forward** and substitutes the current
+> market price for the most recent close as the final daily bar *(mechanic corrected 2026-08-04 —
+> the previous wording omitted the forward shift)*; a true
 > intraday indicator *"would be plotted using an aggregation period of less than 1 day"*, which
 > is explicitly not what the platform does. — `technical-documentation/indicators.md`
 >
@@ -362,6 +532,20 @@ Tag / Untag / Reset × Bot / Position / Symbol = **9 tag actions** [DOCUMENTED].
 
 **This is the entire memory of the platform.** It is also the one build path for a sustain
 condition — see §6.2.
+
+> ⚠️ **[PROJECT-RULE] — retagged 2026-08-04 (Tier 1 audit).** "The entire memory of the platform"
+> is **this project's inference, not a documented statement.** The tags page does not claim tags are
+> the sole writable state; it says only that bot tags persist and can be used in decisions. The
+> inference is well-supported by §0.1's keyword sweep and is probably right — but it sits inside a
+> `[DOCUMENTED]` section and reads as quoted fact. **§0.1 and §11 both rest on it**, so its tier
+> matters. Also unverified on the same page: tag limits, expiry, and **whether tags persist across
+> a clone** — the last is directly relevant to the clone ritual and is [DOCS-SILENT].
+>
+> ⚠️ The **second** quotation above (*"The tagging system… can be used to track information,
+> categorize items, and make decisions within your automations"*) **could not be located** in the
+> 2026-08-04 re-read, which returned *"Tags can be used in conjunction with decisions to create
+> powerful and flexible automations."* Same meaning, different sentence. **Re-verify or drop the
+> quotation marks.**
 
 ### 5.4 Closing a sibling spread — use the Position-closed trigger
 
@@ -441,9 +625,89 @@ unverified, and the greenfield spec assumes it can.
 > by **position type**, which is suggestive for the cross-automation question (both an IC's put and
 > call spreads are short option positions) **but is not observation. §9 check #4 stands.**
 
+> ### ✅ §9 CHECK #4 ANSWERED 2026-08-04 — **YES, and wider than the check asked.**
+> **[FIRST-HAND — direct test on `QQQ-IC-0DTE-Fortress Clone`, 2026-08-04.]**
+>
+> 1. Baseline re-confirmed on the put side: `"No presets found for short option positions"`.
+> 2. Ticked `Save as presets for short option positions`. **A name field appeared** — `name="pretext"`,
+>    pre-filled `Profit: 50%, Expiration: 10 minutes`. Set to `TIER2-CHECK4-PUTSIDE`. Saved the
+>    modal → the action → the automation.
+> 3. Hard-reloaded. Opened the **call side** — a **different automation**
+>    (`Fortress-ScannerB-CallSpread` → `Open Short Call Spread`) — and opened its `Presets` picker.
+>
+> The picker returned `{"data-value": "UIfw5TkkCRF1517858152565216101", "text": "TIER2-CHECK4-PUTSIDE"}`.
+>
+> **One preset serves both Open Position actions, across two separate automations.** Note the id
+> namespace: **`UI…`**, not `BOT…` or `RT…` — presets are **account-scoped user objects**, not
+> bot- or automation-scoped. §6.1's cross-automation [DOCS-SILENT] is closed and the greenfield
+> spec's assumption holds. The naming step also confirms the 2026-08-03 retraction was correct.
+>
+> 📝 **Residue from this test, recorded rather than tidied away:** the account now holds preset
+> `TIER2-CHECK4-PUTSIDE`; `Fortress-ScannerA-PutSpread-CLONE` was saved and its Open Position
+> `exits` blob **re-serialized** — numeric payload byte-identical (`^^0.5|0.01^$0` before and
+> after), but the `text` label changed `"Profits: 50%, …"` → `"Profit: 50%, …"` and the sig gained
+> an `xevents` key. Cosmetic on inspection, persisted through a hard reload, **and it is still a
+> diff on a pilot bot.** `Fortress-ScannerB-CallSpread` was closed without saving.
+
 > **A preset makes the VALUES consistent, not the ATTACHMENT.** A preset can still be attached
 > to one Open action and omitted from the other. It converts a silent asymmetry into a visible
 > one — a smaller failure class, not none. The per-side fire-rate assertion still has to run.
+
+### 6.1a The complete Exit Options panel, field by field — [FIRST-HAND 2026-08-04]
+
+*Read from the live modal on `QQQ-IC-0DTE-Fortress Clone` → `Open Short Put Spread`, 2026-08-04.
+Values are `input.value` on the named hidden fields, not label text. This closes §9 check #10.*
+
+The modal's own header, verbatim:
+
+> *"Your bot checks your position every 1 minute from 9:31am to 1 minute before market close and
+> automatically attempts to close it if any of these criteria are met."*
+
+— and `9:31am to 1 minute before market close` **is a hyperlink**, not prose. It renders live from
+the Bot Schedule (§4.1's resolution block): `exitstart` = `09:31`, `exitend` = `1`. The two
+surfaces agree. This was §6 defect (d), predicted 2026-08-03 and now confirmed.
+
+| # | UI label | Field | Value on the put side |
+|---|---|---|---|
+| 1 | Profit Taking % | `profits` | `0.5` |
+| 1b | ↳ PRICING | `smprofits` | `normal` |
+| 2 | **Profit Taking $** | `dprofit` | empty |
+| 3 | Price Target | *(read blocked)* | empty |
+| 4 | Stop Loss % | `stoploss` | empty |
+| 5 | **Stop Loss $** | `dstop` | empty |
+| 6 | Trailing Stop | `tstop` | empty |
+| 7 | Touch | `touch` | empty |
+| 8 | Expiration | `expdays` | `0.01` |
+| 8b | ↳ PRICING | `smexpdays` | `{"text":"Market","smart":"market"}` |
+| 9 | **Avoid Events** | — | None |
+| 10 | Earnings | `epsdays` | empty |
+| 11 | ☐ Wait at least 1 day to avoid pattern day trading | `chposLimitDay` | unchecked |
+| 12 | ☐ Disable exit options if bid/ask exceeds $ | `chbidask` / `bidask` | unchecked / empty |
+| 13 | ☐ Save as presets for short option positions | → reveals `pretext` | unchecked |
+
+**`Profit Taking $` and `Stop Loss $` both exist.** They were absent from the 100-page docs corpus
+(Phase 6, R-13) and are now first-hand confirmed — `hedge-research.md` §9's fixed-$ stop rungs are
+buildable. **`Avoid Events` exists** and opens a sub-modal: *"Close positions on the day before an
+important event. Select the event(s) below and a time to close the position."* with a multi-select
+— `FOMC Meeting`, `CPI Release`, `PPI Release`, `PCE Release`, `Nonfarm Payrolls`, `Triple
+Witching`, `Monthly Expiration`, `End of Month`, `End of Quarter`, `First Weekly`, `Full Moon` —
+and a separate "Time … before market close" picker (default `1 hour`).
+
+⚠️ **Item 11 is the PDT checkbox** (Phase 6 / OA-0890). It is **unchecked** on the pilot clone,
+which is what a 0DTE program wants; on any bot where it *is* checked it delays closes by ≥1 day.
+Add it to the §8.3 per-bot verification read.
+
+> ### 📝 The Expiration dropdown, finally enumerated — [FIRST-HAND 2026-08-04]
+> §8.2 notes this control's options *"were NOT read"*. They are, near expiry, 1-minute granular:
+> `0.005` **5 minutes before** · `0.006` 6 · `0.007` 7 · **`0.008` 8 minutes before** · `0.009` 9 ·
+> `0.01` **10** (the current value) · `0.011`–`0.015` 11–15 · then `0.02` 20 · `0.025` 25 · `0.03` 30 ·
+> `0.035` 35 · `0.04` 40 · `0.045` 45 · `0.1` 1 hour · … · `0.6` 6 hours · `1`–`15`+ days.
+>
+> **`8 minutes before` exists**, so an Exit Option firing at 15:52 was expressible all along.
+> §8.2's stated objection — that such an exit "does not exist" — is falsified **by the control
+> itself**, not merely by inference from the window bounds. §8 is gated, so it is not edited here;
+> this note records the observation against it. The architectural objection (we do not *want* the
+> backstop in the Exit Options execution class) is untouched and remains the real reason.
 
 ### 6.2 THE TOUCH TRIGGER — the highest-value open question in this document
 
@@ -710,12 +974,15 @@ Nothing below is answerable from documentation. Each is a few minutes in the acc
 |---|---|---|
 | ~~**1**~~ | ✅ **ANSWERED 2026-08-03 — `Touch` references the UNDERLYING relative to the position's strike(s).** Not a UI check; it was in OA's own docs. | **Resolved in favour of the tournament.** S1/S2 stop needing monitors, become 1-minute Exit Options running first in the cycle, and the execution-class confound dissolves (§6.2). Sibling-close via Touch still unresolved. |
 | ~~**2**~~ | ✅ **ANSWERED 2026-08-03 — YES**, via `Repeating` → `Market Time (EST)` → `Custom` → native time input, `min=09:31 max=15:55`, 1-minute step. Built as `Fortress-Backstop-1552-FlatClose`. | **Both clone specs unblocked** (§8.2). ⚠️ **Replaced by a new check: is the Market open/close time configurable in Settings?** (§4.1 contested) — and **does "Market Time (EST)" mean 15:52 ET year-round, or drift under DST?** |
-| **3** | **Can Exit Options reference a Bot Input?** | The greenfield "PT% as a Bot Input" spec (§5.2). Nowhere documented. |
-| **4** | **Can one Exit Option Preset be referenced from two different Open Position actions?** **STANDS.** Partial 2026-08-03: the control exists, presets **are nameable**, the account holds zero, and the picker is scoped "for short option positions" — suggestive, not observation. | The preset-as-unit-of-attachment design (§6.1). **Cheapest test: save one on the put side and look at the call side.** |
+| ~~**3**~~ | ✅ **ANSWERED 2026-08-04 — YES, but the input's TYPE is the whole Exit-Options bundle, not a scalar.** The 🔗 on the Exit Options row (`a.btn.gray.opts-btn.param-opts` → `i.fa-link`) opens `Inputs` → `Add Input`, headed **`Add Input / Exit Options`**, with Label · Default Value · Description. Inside the Default Value editor, **`i.fa-link` count is 0** — there is no 🔗 on Profit Taking % or any individual field. | ⛔ **The greenfield "PT% as a Bot Input" spec (§5.2) is NOT expressible.** What IS expressible is "Exit-Options-SET as a Bot Input" — one variable holding a whole exit configuration, swapped as a unit. **Different design; needs an explicit decision before it is written into the spec.** |
+| ~~**4**~~ | ✅ **ANSWERED 2026-08-04 — YES, and across two different AUTOMATIONS, not just two actions.** Preset `TIER2-CHECK4-PUTSIDE` saved on the put side appeared in the call side's picker as `UIfw5TkkCRF1517858152565216101`. The `UI…` namespace means presets are **account-scoped**. | **§6.1's preset-as-unit-of-attachment design is confirmed.** Its cross-automation [DOCS-SILENT] is closed. |
 | **5** | **Is re-applying Update Position Exit Options side-effect-free?** | Any re-assertion watchdog (§6.5). |
 | ~~**6**~~ | ✅ **ANSWERED 2026-08-03 — `min="50" max="150"`.** The v1 file's 150% was right; the docs are wrong. **Floor is 50 (mid)**, so a better-than-mid final price is not settable. | **§7 conflict RESOLVED.** |
-| **7** | **What is the automation-log retention window?** | Any liveness monitoring that looks back more than a day (§4.4). |
-| **8** | **Does the June error counter show ≥10 on the Fortress bots in June?** | Confirms or kills the Excessive Errors Failsafe hypothesis (§4.5). |
+| ~~**7**~~ | ✅ **ANSWERED 2026-08-04 — TWO numbers, not one.** Date **filter** reaches 3 weeks of weekdays (oldest `Mon Jul 13`, and yesterday `Mon Aug 3` is not offered). Stored **data** reaches `Mar 16, 2026` — ≥141 days. | **§4.4 answered.** The filter, not retention, is the constraint. Beyond 3 weeks you must page `Load more`, which stalls. |
+| ~~**8**~~ | ⛔ **ANSWERED 2026-08-04 — NO. Zero June errors on either Fortress bot.** Newest error on either is `Apr 16, 2026 3:55PM`. Error days found: Apr 16 (91) and Mar 16 (138+) on `QQQ-IC-0DTE-Fortress`; Apr 16 (91) on `-NoPT50`. | **KILLS the Excessive Errors Failsafe hypothesis for the 2026-06-12 lapse (§4.5).** The mechanism is real and this fleet has tripped it — in March and April, on entry scanners, not in June. |
+| ~~**9**~~ | ⛔ **ANSWERED 2026-08-04 — NO. Daily and total position limits are pickers capped at `10`.** `posLimitDay` / `posLimit` are hidden inputs behind 1–10 pickers; there is no free-text path. `seed` (Allocation) is `min="250" max="100000"`. | **Kills any daily-limit-20 re-entry spec (R-11).** §3's [PROJECT-RULE] "ten IC re-entries = a daily limit of 20" is correct arithmetic and **unconfigurable** — the real ceiling is **5 ICs/day per bot**. |
+| ~~**10**~~ | ✅ **ANSWERED 2026-08-04 — all three EXIST.** `Profit Taking $` (`dprofit`), `Stop Loss $` (`dstop`) and `Avoid Events` are live controls in the Exit Options panel. Full field roster in §6.1a. | **`hedge-research.md` §9's fixed-$ stop rungs are buildable.** Corpus-absence (R-13) was a docs gap, not a product gap. |
+| ~~**11**~~ | ⛔ **ANSWERED 2026-08-04 — the account is on the setting that sends NO closing order.** `itmpaper` = `itmlive` = **`auto`** = *"Calculate estimated P/L from underlying close price"*. See §13. | **Confirms the Phase 6 §13 risk class first-hand.** A QQQ position that outlives its exits rides into settlement. **Day-0 must decide this setting before capital is live.** |
 
 ---
 
@@ -818,6 +1085,69 @@ Recorded so nobody spends a build day rediscovering it.
 - **OA outage = no execution and no broker-side protection** unless a broker-level bracket
   (Tradier OTOCO) sits behind the bot. OTOCO behaviour on multi-leg spreads is unverified and
   is a broker-side question, not an OA one.
+
+---
+
+## 13. Account-level settings — the surface this file never had [FIRST-HAND 2026-08-04]
+
+*Everything below is an `input.value` read from `app.optionalpha.com/settings` on 2026-08-04,
+re-read after a hard reload. Nothing was changed. This page is account-wide: it overrides nothing
+per-bot, and no bot setting overrides it.*
+
+### 13.1 ⛔ In-the-money Position Action — the assignment-risk setting
+
+The page's own description:
+
+> *"Positions expiring in-the-money are subject to assignment and/or broker intervention based on
+> the contract type and your account balance. Use this setting to auto-close ITM positions 10
+> minutes before the close on expiration day OR estimate P/L from the underlying closing price on
+> expiration day OR auto-override and manually enter the position results later."*
+
+**Two independent controls, one for paper and one for live**, each with the same three options:
+
+| Internal value | Label | Sends a closing order? |
+|---|---|---|
+| **`auto`** | Calculate estimated P/L from underlying close price | **NO** |
+| `release` | Override position and manually enter results | **NO** |
+| `market` | Close position with a market order | **YES** — 10 min before the close on expiration day |
+
+**Read 2026-08-04: `itmpaper` = `auto`, `itmlive` = `auto`.**
+
+⛔ **The account is on the option that sends no closing order.** Only `market` closes an expiring
+ITM position. This is the first-hand confirmation of the Phase 6 risk class (OA-0157 / OA-0231,
+draft §13): a QQQ iron condor whose exits fail to fire rides into **physical settlement** with the
+bot blind to the assignment (OA-0245 / OA-0246). On QQQ — an ETF, physically settled — that is
+real stock delivered, not a cash adjustment.
+
+**This is a Day-0 decision, not a preference.** §8.3-class verification must read `itmlive`
+before any capital is live, and `build-plan.md`'s exit stack should state which of the three the
+program intends. Note also that `market` fires at **10 minutes before the close = 15:50**, which is
+the same instant as the clone's existing Expiration exit — the two would race.
+
+### 13.2 Maximum Exit Options Close Attempts — undocumented anywhere in this folder
+
+> *"Limit the number of times a bot will attempt to close a position in a single day. This setting
+> can be useful to avoid hitting the 390 rule if you're a very active trader."*
+
+`maxexits` — read **`0`** = `Unlimited`. Picker offers `0` Unlimited · `1`–`10` per day · `15` ·
+`20` · `25` per day.
+
+**This is an account-wide throttle on exit attempts and it appears in no other document here.**
+At `Unlimited` it is currently inert, but it is a single switch that can silently cap every bot's
+ability to close — exactly the failure shape §0.3 and §10 are about. Add it to the capture set.
+
+### 13.3 Bot Schedule
+
+Recorded in full in §4.1's `✅ RESOLVED IN THE PRODUCT 2026-08-04` block — `scanstart` / `scanend`
+/ `exitstart` / `exitend`, two independent windows, and the Repeating-trigger carve-out.
+
+### 13.4 Also read, lower stakes
+
+`openclose` (email on position open/close) = **checked** · `botalert` (custom automation
+notifications) = unchecked · `paper` (notifications for paper trading) = **unchecked** — note the
+fleet is entirely paper right now, so **position-open/close emails are not reaching Andy for the
+bots that actually exist.** Membership reads `Pro (Monthly Plan)` · `BOTS 50` · `PER BOT $100k`,
+which is where §3's `seed max="100000"` comes from.
 
 ---
 

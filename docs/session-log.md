@@ -1991,3 +1991,108 @@ more right than wrong: ~40 load-bearing claims CONFIRMED with fact IDs (report �
 Tier 2 product checks (§9 #3/#4/#5/#7/#8 + new #9 limits>10, #10 $-exits, #11 expiration-protocol
 setting) · the authorized edits queued by R-01…R-07 · Phase 2 deliverables
 (`bots_config_v2.csv`, `mirror_baseline.csv`) unchanged.
+---
+
+## 2026-08-04 — TIER 2 PRODUCT VERIFICATION: eight §9 checks run in the live UI, seven answered
+
+**Mode:** Chrome-direct against the inactive OA account, per the 2026-08-03 released mode. Work
+confined to `QQQ-IC-0DTE-Fortress Clone` (`BOTfw5TkkCRF2717857919585029021`) plus read-only visits
+to `QQQ-IC-0DTE-Fortress` and `-NoPT50`. The original Fortress was **never edited**.
+
+### Results — §9 rows 3, 4, 7, 8 struck; new rows 9, 10, 11 added and struck. Only #5 remains open.
+
+1. **#3 — Can Exit Options reference a Bot Input? YES, with a caveat that changes the spec.**
+   The 🔗 on the Exit Options row opens `Inputs → Add Input`, headed `Add Input / Exit Options`.
+   But inside the Default Value editor **`i.fa-link` count is 0** — no per-field 🔗. The input's
+   type is the **whole Exit-Options bundle**, not a scalar. ⛔ **`build-plan.md` §5.2's greenfield
+   "PT% as a Bot Input" is NOT expressible.** "Exit-Options-SET as a Bot Input" is. Different
+   design; flagged for Andy's decision, not written into the spec.
+
+2. **#11 — Options Expiration Protocol: `itmpaper` = `itmlive` = `auto`.** Three options exist:
+   `auto` (estimate P/L from underlying close — **no closing order**), `release` (manual entry),
+   `market` (close with a market order 10 min before the close). The account sits on `auto`.
+   **First-hand confirmation of the Phase 6 §13 risk class.** Written up as a new **§13** in the
+   reference. Day-0 must decide this before capital is live.
+
+3. **#6b / §4.1 — the Settings surface is real and it is called Bot Schedule.** Two independent
+   windows: Automations `scanstart` `09:31` → `scanend` `5` (floor 15:55); Exit Options
+   `exitstart` `09:31` → `exitend` `1` (floor 15:59). Both `type=time min="09:31" max="15:30"`.
+   §4.1's "neither is adjustable" now has a **third**, first-hand line of falsification.
+   ⚠️ **This file had been treating one window where the product has two.**
+   Bonus footnote, verbatim: *"Repeating and date/time scheduled automations are not affected by
+   this schedule"* — the 15:52 backstop is Repeating, so the Bot Schedule does not bind it.
+
+4. **#9 — limits CANNOT exceed 10.** `posLimitDay` / `posLimit` are hidden inputs behind 1–10
+   pickers; no free-text path, no `max` attribute to read. `seed` (Allocation) is
+   `min="250" max="100000"`. ⛔ **§3's [PROJECT-RULE] "ten IC re-entries = a daily limit of 20"
+   is right arithmetic and unconfigurable** — the real ceiling is **5 ICs/day per bot**. Kills any
+   daily-limit-20 re-entry spec (R-11).
+
+5. **#4 — one preset serves BOTH Open Position actions, across two different automations.**
+   Saved `TIER2-CHECK4-PUTSIDE` on the put side; it appeared in the call side's picker as
+   `UIfw5TkkCRF1517858152565216101`. The **`UI…` namespace means presets are account-scoped**, not
+   bot- or automation-scoped. §6.1's cross-automation [DOCS-SILENT] closed. The naming step also
+   re-confirms the 2026-08-03 retraction: the name field appears **only after** the checkbox is
+   ticked.
+
+6. **#10 — `Profit Taking $`, `Stop Loss $` and `Avoid Events` all EXIST.** Full 13-field roster
+   with hidden-input names written up as new **§6.1a**. `hedge-research.md` §9's fixed-$ rungs are
+   buildable; R-13's corpus-absence was a docs gap, not a product gap. Avoid Events offers FOMC /
+   CPI / PPI / PCE / Nonfarm Payrolls / Triple Witching / Monthly Expiration / End of Month /
+   End of Quarter / First Weekly / Full Moon.
+
+7. **#7 — log retention is TWO numbers.** The date **filter** reaches 3 weeks of weekdays (oldest
+   `Mon Jul 13`; **yesterday, `Mon Aug 3`, is not offered**). The stored **data** reaches
+   `Mar 16, 2026` — ≥141 days. Retention is not the constraint; the filter is.
+
+8. **#8 — ⛔ the Excessive Errors Failsafe hypothesis is DEAD.** Newest error on either Fortress
+   bot is `Apr 16, 2026 3:55PM`. Error days: `QQQ-IC-0DTE-Fortress` Apr 16 (91) + Mar 16 (138+);
+   `-NoPT50` Apr 16 (91). **Zero June errors on either.** §4.5's own caveat — entries kept flowing
+   while exits stopped, which is not a whole-bot shutdown — was the right instinct. The mechanism
+   is real and this fleet has tripped it, in March and April, on entry scanners. Not in June.
+
+### Bonus findings, none of them queued
+- **`maxexits`** — "Maximum Exit Options Close Attempts", account-wide, read `0` = Unlimited,
+  picker to 25/day. **Appears in no other document in this folder.** A single switch that can cap
+  every bot's ability to close. Written into §13.2.
+- **The Expiration dropdown, finally enumerated** — 1-minute granular near expiry, `0.005`
+  (5 min) through `0.015` (15 min). **`0.008` = "8 minutes before" exists**, so a 15:52 Exit
+  Option was expressible all along. §8.2's stated objection is falsified by the control itself.
+  §8 is gated, so this is recorded in §6.1a against it, not edited into §8.
+- **The Exit Options modal header renders the Bot Schedule live**, with
+  `9:31am to 1 minute before market close` as a **hyperlink** — §6 defect (d), predicted
+  2026-08-03, confirmed.
+- `paper` (notifications for paper trading) is **unchecked** while the whole fleet is paper —
+  position-open/close emails are not reaching Andy for the bots that exist.
+
+### Capture discipline
+- **A third `innerText` trap.** The log's `Date` / `Time` / `Type` filter chips render labels via
+  CSS; `innerText` on them is the **empty string**. They are `div.input-ct.filterbtn-ct` wrappers
+  around hidden inputs `date` / `time` / `autotypes`. A reader trusting `innerText` concludes the
+  filters do not exist. Extend the standing rule again.
+- **Log rows carry a `title` attribute with a year-bearing timestamp** (`Apr 16, 2026 3:55PM`).
+  Use it. The visible date *group header* is unreliable — on `-NoPT50` it did not render at all,
+  and on `Fortress` it changed value mid-scroll. The #8 result rests on `title`, not on headers.
+- Every read-only probe was closed with a **hard reload** and the values re-read; Settings and
+  Safeguards both confirmed unchanged. No save banner was trusted.
+- `Load more` on the raw log **stalls**: it stopped yielding at ~229 rows while still displaying
+  the button. Any design that depends on paging deep history should assume this.
+
+### Writes made — all on the clone, all reported before and after
+1. Account now holds Exit Option preset **`TIER2-CHECK4-PUTSIDE`** (`UIfw5TkkCRF1517858152565216101`).
+   Previously zero presets.
+2. **`Fortress-ScannerA-PutSpread-CLONE` was saved.** Its Open Position `exits` blob
+   **re-serialized**: numeric payload byte-identical (`^^0.5|0.01^$0` before and after — 50% PT,
+   10-min expiration, Market pricing all unchanged), but the `text` label changed
+   `"Profits: 50%, …"` → `"Profit: 50%, …"` and the sig gained an `xevents` key. Cosmetic on
+   inspection; persisted through a hard reload; **still a diff on a pilot bot.**
+3. `Fortress-ScannerB-CallSpread` opened read-only and closed **without saving**.
+
+Neither the preset nor the ScannerA save has been reverted — Andy's call, alongside the clone's
+three existing loose ends.
+
+### Files changed
+`docs/oa-platform-reference.md` (914 → 1159 lines, nothing deleted; 6 evidence-backed appends
+under §0.2, 4 §9 rows struck-and-rewritten, 3 new §9 rows, new §6.1a, new §13) ·
+`docs/session-log.md` · `docs/state.md`.
+
