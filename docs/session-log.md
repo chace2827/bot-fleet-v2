@@ -2264,3 +2264,171 @@ research-loop-spec, platform-reference §9/§13, export-schema, bots_meta.csv, t
   pre-regs, Day-0 observations.
 
 **Files changed:** docs/sprint-2026-08-04.md (new) · docs/session-log.md.
+
+
+---
+
+## 2026-08-04 — Research-loop spec: deep adversarial review (sprint Task 2)
+
+Andy asked for a proper review of `docs/research-loop-spec.md` before `scripts/research_loop.py`
+is wired into `daily.sh`. The spec was signed fast ("agreed with all") and building against it had
+already surfaced five defects (§5a). Ran **three adversarial subagent reviewers** — statistics
+(the §10 gate), design (are the 12 variants the right 12), code-vs-spec (does the engine implement
+the signed text) — each prompted to refute rather than summarise.
+
+**Wrote `docs/research-loop-review-2026-08-04.md`** (641 lines, sha256 `df0b7398…136e`, verified
+by direct device read, not a stage-back). It rules on all five §5a defects with exact replacement
+text, opens **7 ruling slots** (Andy asked for a minimum of 3), and records **9 defects §5a does
+not**.
+
+**Three fatal findings, none of them in §5a:**
+
+- **Units.** `cf = param * credit` subtracts dollars from a per-contract price; `quantity` is never
+  read. On the fixture's own verbatim real row the engine reports `PT70 delta = -34.65` for a
+  position that closed at exactly PT70 (true delta 0.00). `delta ≈ -pnl` on every FILLED row — the
+  delta column is not a counterfactual. `DSTOP_50R`/`DSTOP_75R` are algebraically incapable of
+  firing: **0 fires in n=1,254**.
+- **`CONTROL` is a tautology** — `abs(pnl - pnl) < 1e-9`. `CONTROL_MISMATCH` is unreachable and the
+  "THE ENGINE IS WRONG" abort is dead code. The one check that would have caught the units bug was
+  disabled at birth. Fixture checks V4/V21 assert `"CONTROL_OK" == "CONTROL_OK"`.
+- **Censoring by the incumbent exit** — the finding with the longest reach, and not fixable in
+  code. MFE/MAE accumulate only until the position closed, so Track A can only evaluate variants
+  *tighter* than the bot already runs. Measured by bot on same-day rows: `Raw-HoldToExp` (no PT)
+  MFE ≥ 0.70 on 65/80 (81.2%, median MFE 1.000); `IC-SPX-FastPT25-S2` (PT25) 39/364 (10.7%,
+  median 0.286); `-130PM` clone **0/70 (0.0%, median 0.250)**. Runs opposite to the §6.2 bias the
+  spec documents, and is larger.
+
+**And the §10 gate as signed can never fire.** Median ΔR is **exactly 0.0000 for 11 of 11
+variants** (non-triggering positions yield exact zeros, so the median is nonzero only above a 50%
+trigger rate — and PT40 at 59.7% still medians 0.0000). The 0.10R margin is ~7× the largest effect
+measured (SL75 +0.0150R, n=1,254) and ~50× the arithmetic ceiling for a PT50→PT70 move at the
+fleet's median credit/risk of 0.0695. Bonferroni-for-12 is wrong three ways: the within-bot family
+is 9, the real family is ~180 (9 × ~20 bots — the spec's own §3 says 240/day and then §10 corrects
+for 12), and the dominant inflation is **sequential** (nightly re-evaluation toward n=100 is
+unlimited optional stopping), which §10 does not address at all.
+
+**§5a defect 1's premise is half wrong.** "1.0×credit" ≡ SL100 only *per position*; across a
+population with dispersed credit a fixed dollar stop and a percentage stop are different rules —
+which is exactly what `hedge-research.md` §9 item 6 wants tested. The signed text was
+under-specified, not redundant, and the unsigned RISK substitution is worse than what it replaced
+(0.50×risk ≈ 720% of credit at the fleet's median credit/risk). Recommendation: reject both, sign
+a dollar stop pinned to the bot's trailing-90-day median credit.
+
+**Also found:** §1a's `74 (19%)` recovery figure is **not reproducible from its own stated
+definition** — `lowReturnPct < returnPct` gives **101/394 = 25.6%**; 74 appears only at an
+undeclared −0.05 epsilon. The corrected number *strengthens* §1a's conclusion (one loser in four,
+not five). Plus: the nightly line is a descending top-4 leaderboard (§7 forbids exactly that);
+`COND_*` uses trough time as a proxy for breach time and so systematically under-counts fills;
+`mfe_date` is never read, so §1's headline "was it there *before the exit*" capability is
+unimplemented; no same-day/0DTE filter despite §6.4 asking for one; `run()` reprocesses the whole
+ledger nightly with `"w"` and clobbers the engine-hash history; `data/research_log.md` is never
+written.
+
+**Verification.** 27 quotations asserted byte-exact **and single-match** against their source files
+(0 failures). Every empirical figure recomputed independently from
+`data/captures/oa_export_positions_2026-07-30.csv` (n=1,386) rather than taken from a reviewer —
+two reviewer figures (PT40's trigger rate, the trough-timing recovery split) disagreed and the
+recomputed values were used. All capture figures are **v1 pre-cutover, demonstration only**;
+`data/trades.csv` holds n=0.
+
+**Not done, deliberately:** `research-loop-spec.md` NOT edited (the rulings are Andy's; §5a already
+records the defects), nothing wired into `daily.sh`, `research_loop.py` NOT frozen, no git run.
+Tracker artifact refresh remains sprint Task 11 and needs Andy's visual confirmation.
+
+**Files changed:** `docs/research-loop-review-2026-08-04.md` (new) · `docs/state.md` ·
+`docs/session-log.md`.
+
+---
+
+## 2026-08-04 — Decision memo: seven open decisions, and two recommendations reversed under review
+
+Andy asked for a memo covering the seven decisions blocking the greenfield build, each rulable in
+one line. **Wrote `docs/decision-memo-2026-08-04.md`** (886 lines, sha256 `ed5b2a3a…a449`,
+verified by direct device read + `sha256sum` on the mounted path, not by a write-tool response and
+not by a stage-back). 15 ruling slots across the seven decisions plus a reading note. **Nothing was
+executed** — every amendment in it is draft text, and the two that touch frozen or gated surfaces
+are marked `EXECUTES ONLY ON ANDY'S "amend the plan"`.
+
+**Read fresh, never from memory:** `CLAUDE.md` §3/§4/§5 · `docs/state.md` (the D-1…D-4 table, the
+TIER 2 block, WRITES MADE TO THE CLONE) · `docs/build-plan.md` (all six sections) ·
+`docs/oa-platform-reference.md` §2, §4.5, §5.2, §6.1–§6.5, §7, §8, §9, §10, §13 ·
+`docs/oa-ops-runbook.md` §2–§5, §7 · `docs/research-loop-spec.md` §4 · `docs/hedge-research.md`
+§5.2, §6, §7, §8, §12, §13 · `docs/pre-registration-ledger.md` (PR-03/04/05, PR-14…PR-17, PR-18) ·
+`docs/reactivation-runbook.md` §1–§2 · `scripts/execution_audit.py` · `data/bots_config_v2.template.csv`.
+
+### Two adversarial subagents were spawned to REFUTE the draft. Both succeeded.
+
+- **D-1 — draft recommended per-arm hand-set values. REVERSED to Option A (Exit-Options-SET as a
+  Bot Input), gated on G1–G4.** *Why the draft was wrong:* §2D's arm set is `hard-PT vs trailing vs
+  ride`, which populate **different** Exit-Options fields — so "exactly one input value" is
+  literally true only at bundle granularity, making Option A the choice that needs **no** plan
+  amendment and the draft the one that did. Two corroborating hits: the S1≈HedgeD≈HedgeTest
+  identity class (73/73/70 identical positions, 3 bots) was produced by **hand-set bots with no
+  inputs at all**, so hand-setting is the pathogen not the cure; and PR-14…PR-17's family-level
+  kill criterion reads `more than one differing input`, which is vacuously unfireable when the arms
+  have no inputs.
+- **Decision 4 (tournament) — draft called the conflict "verbal" and chose per-arm copies.
+  REVERSED to Architecture E: share the ENTRY automation, differ on exits.** *Why the draft was
+  wrong:* it assumed the shared object had to be the object carrying the difference. It does not —
+  sharing the entry scanner satisfies frozen §2D clause by clause with no amendment. The draft also
+  **omitted the binding document**: `pre-registration-ledger.md` PR-18 voids the tournament if
+  `shared automation · one differing input proven by` capture-diff fails, so per-arm copies would
+  have voided it at build time, before it traded.
+
+Surviving objections are recorded in the memo's Appendix A rather than discarded — including two
+that constrain the ruling either way: **nothing catches a day-1 hand-set error under any
+architecture** (`rule_S7_duplicate_arm` needs `DUP_MIN_DAYS         = 5` identical trading days, is
+AMBER, and detects only accidental sameness), and **the capture-diff cannot catch the v1 failure
+class** — `hedge-research.md` §7's `**This is a distinct failure pattern: an undocumented
+substitution made at a platform limit.**`, where config and tree agreed with each other and both
+were wrong about intent.
+
+### The other five recommendations
+
+**D-3** `itmpaper` = `market` now (paper's job is honest data; `auto` guarantees the loss tail is
+modeled rather than filled), `itmlive` = `market` as a hard Day-0 gate before capital.
+**D-4** retire as the June cause, keep as a mechanism — with a ranked shortlist of six remaining
+candidates and the Day-0 evidence that discriminates each. **Decision 5** extend the Market-pricing
+ban to entries, explicitly labelled a **mechanism decision, not an evidence-backed one** (n=1
+position for the $5.05 figure, n=2 in the frozen fixture — below `CLAUDE.md` §4's T2 gate).
+**Decision 6** re-price the 15:50 Expiration exit to SmartPricing, not the backstop — §7's
+carve-out is for the hard flat close only. **Decision 7** keep the preset and the re-serialized
+blob, revert the `-CLONE` name and the tags, defer Bot Group to the Phase 4 sweep.
+
+### Three load-bearing findings, none acted on (memo Appendix B has all seven)
+
+- **`build-plan.md` has no §5.2 and no §8.1** — its headings run §1–§6 and the strings `5.2`/`8.1`
+  return 0 matches. The citation is broken in **three files** (`state.md` D-1, `session-log.md`,
+  `sprint-2026-08-04.md`). Consequence: `PT% as a Bot Input` appears nowhere in the frozen plan, so
+  D-1 is not by itself a plan amendment — which option is picked decides whether one is needed.
+- **"Range075 as a preset" looks unbuildable.** Presets are an Exit Options object
+  (`Save your Exit Option criteria as a Preset to be reused for`); `hedge-research.md` §8 specifies
+  Range075 as `a symbol %-change` decision — an entry node. Same defect class as §7's `Conditional`
+  correction of record. Bites `build-plan.md` §2D (frozen) and `hedge-research.md` §5.2 rule 3.
+- **The arm-distinctness assert `oa-ops-runbook.md` §3 promises does not exist.**
+  `execution_audit.py` has 13 rules (S1–S8, C1–C5); none is config- or parameter-based. The nearest
+  is `rule_S7_duplicate_arm` — post-hoc, outcome-keyed, AMBER, silent below 5 identical days, and
+  blind until Day-0. §3 cannot be cited as a proof leg until it is built.
+
+**Also opened:** OA re-serializes an `exits` blob on save even when nothing changed (so any
+capture-diff comparing rendered labels reports false differences); whether an ungrouped bot appears
+in an all-groups export is unobserved and the pilot is currently `Bot Group = None`; a 15:50 exit
+order is still live at 15:52 under the two-minute order lifetime, so the backstop's timestamp gap
+never cleanly separated the mechanics; and `sprint-2026-08-04.md` Task 5's premise is wrong — no
+pre-registration entry carries the failsafe as the June cause (one mention, in a different role, as
+PR-05's liveness kill criterion).
+
+**Verification.** 61 quoted phrases asserted **byte-exact and single-match** against their source
+files on the mounted path. Four failed the first pass — all reconstructions across source line
+wraps — and were corrected against the file, then re-asserted (0 remaining failures). Anchored
+edits only, each with a uniqueness assert before writing.
+
+**Not done, deliberately:** no memo recommendation applied · `build-plan.md`,
+`oa-platform-reference.md` (§8 included), `hedge-research.md`, `oa-ops-runbook.md`,
+`pre-registration-ledger.md` and `reactivation-runbook.md` **untouched** · no OA edit, no Chrome
+session, nothing inferred from a screen not opened · **G1–G4 queued to run in the pilot session**,
+since they need the live UI · no git. Tracker refresh remains sprint Task 11 and needs Andy's
+visual confirmation to be complete (`CLAUDE.md` §9.1a).
+
+**Files changed:** `docs/decision-memo-2026-08-04.md` (new) · `docs/state.md` ·
+`docs/session-log.md`.
