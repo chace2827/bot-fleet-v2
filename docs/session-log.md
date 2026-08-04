@@ -2239,3 +2239,28 @@ the tracker instead and left the per-item retag for Andy's next pass.
 **Files changed:** `CLAUDE.md` · `docs/build-plan.md` · `docs/daily-loop-spec.md` ·
 `docs/oa-ops-runbook.md` · `docs/state.md` · `docs/session-log.md` · tracker artifact banner.
 
+
+---
+
+## 2026-08-04 — Sprint plan for the Max→Pro downgrade window (through 2026-08-07)
+
+Planning session. Read fresh: CLAUDE.md, state.md, build-plan, ops-runbook, pilot card,
+research-loop-spec, platform-reference §9/§13, export-schema, bots_meta.csv, tracker artifact.
+
+- **Authority amendment re-verified on device** (grep + sha256, 10/10 staged/device matches):
+  the 2026-08-04 Chrome-direct amendment is present in CLAUDE.md §5, build-plan §5,
+  ops-runbook, state.md, and this log. Nothing re-written.
+- **Tracker lags state.md** on ≥3 items (git remote, Chrome-direct decision,
+  mirror_baseline.csv) — consistent with the earlier session's banner-only update, not the
+  caching bug. Refresh queued as sprint Task 11; Andy's visual confirmation still required.
+- **Wrote `docs/sprint-2026-08-04.md`** (537 lines, sha256 3f3006b0…f82a024, verified by
+  direct device read): ranked 14-item triage, day-by-day schedule Aug 4 eve → Aug 7, and 12
+  self-contained task prompts with model routing. Approved by Andy in session (no reorder).
+  Front-loaded to strongest model: seven-decision memo (D-1/D-3/D-4 + tournament conflict +
+  entry pricing + §8.2 attribution + clone residue), research-loop deep review, pilot clone
+  completion via Chrome, Day-0 runbook adversarial audit, greenfield family spec, R-01…R-07
+  package, Track B arms, mirror funding memo. Deferred past Aug 7 as safe: archive sweep,
+  2 deletions, 3 remaining clones, research_loop freeze/wire, Blocks 3–4, untouched-nine
+  pre-regs, Day-0 observations.
+
+**Files changed:** docs/sprint-2026-08-04.md (new) · docs/session-log.md.
