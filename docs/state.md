@@ -22,6 +22,50 @@ blob) — detail under *WRITES MADE TO THE CLONE* below.
 
 ---
 
+## Research loop — SPEC SIGNED, ENGINE BUILT, ⚠️ NOT LIVE (2026-08-04)
+
+`docs/research-loop-spec.md` (237 lines) is signed. `scripts/research_loop.py` is
+**`0.1.0-DRAFT`, NOT frozen**, 23/23 validation checks, writes `data/counterfactuals.csv` and
+nothing else, silent below n=30. **It is not wired into `daily.sh` and must not be until Andy's
+deeper review is done** — building against the spec surfaced five defects, recorded in the spec's
+own §5a and as the tracker's blocking item. The two that need a ruling:
+
+- the fixed-$ rungs as signed ("1.0×credit / 1.5×credit") are **arithmetically identical to
+  SL100/SL150**; the code substitutes **0.50× / 0.75× RISK** and that amendment is **unsigned**
+- both `TIME_*` variants are **structurally undecidable** from MFE/MAE (2,508 of 15,048 cells came
+  back `UNDECIDABLE` on the dry run, exactly those two) — **time-exit questions require a Track B
+  arm**, so decide whether they keep their slots as a reminder or get replaced
+
+**Track B is the better half and is unstarted:** run the variant as a real paper bot rather than
+simulating it. Pro allows 50 bots, the fleet uses ~20, Day-0 is paper, so a slot costs only
+configuration. Cap ≤8 slots. **First arms go on the LOSS side** (`Stop Loss $`, `Touch`) — both
+confirmed to exist 2026-08-04, and the mirror baseline independently says the tail is where the
+money goes.
+
+## Data conventions — `docs/oa-export-schema.md` (new 2026-08-04)
+
+Machine-verified, **0 mismatches on 1,386 rows**. The one that bites: **`premium` is SIGNED and
+negative for every credit structure**; use `openPrice` (positive on 1,386/1,386) for a magnitude.
+`build_ledger.py` already writes the ledger's `credit` from `openPrice`, so anything reading
+`trades.csv` is safe — but a harness mapping straight off the raw export is not, and one did.
+Also: **`returnPct` is return on CREDIT, `ror` is return on RISK.** `CLAUDE.md` §4's R convention
+is the **`ror`** basis. Do not grab the wrong denominator.
+
+## Mirror baseline — WRITTEN 2026-08-04, do not recompute
+
+`data/mirror_baseline.csv` via `scripts/build_mirror_baseline.py` + receipt. 174 positions, 10
+mirrors, zero excluded. **It is an anchor, not a metric** — the script refuses to overwrite without
+`--force`, because recomputing it against a later export silently moves the baseline every future
+comparison is measured against. Finding: **four mirrors have positive median R and negative mean
+R** — they win most trades and lose money.
+
+## ⚠️ `bots_config_v2.csv` is BLOCKED, not neglected
+
+A 2026-08-04 session called it the oldest neglected deliverable. **Wrong.** The `/bots` roster
+capture carries names and P/L and **no Exit Options values**, and the file describes the
+*post-Phase-4* fleet, which does not exist yet. It is written **per-bot as each bot is built**, not
+as a big-bang extraction. Do not queue it as a standalone task.
+
 ## Account
 - OA subscription **INACTIVE**. Andy reactivates **~mid-Aug**. The reactivation date is
   **Day-0 = `LEDGER_START`**.

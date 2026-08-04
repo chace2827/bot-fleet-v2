@@ -2095,4 +2095,105 @@ three existing loose ends.
 `docs/oa-platform-reference.md` (914 → 1159 lines, nothing deleted; 6 evidence-backed appends
 under §0.2, 4 §9 rows struck-and-rewritten, 3 new §9 rows, new §6.1a, new §13) ·
 `docs/session-log.md` · `docs/state.md`.
+---
+
+## 2026-08-04 — SAME SESSION, part 2: off-machine backup, mirror anchor, and the research loop
+
+*Continues the Tier-2 entry above. Commits `5b6959f` → `c290429` → `ef19f10` → `1cd25ef`.*
+
+### 1. The repo has an off-machine copy for the first time
+Private **`chace2827/bot-fleet-v2`**, `origin` over HTTPS, `master` tracking `origin/master`.
+Raised three times across two sessions before it happened.
+
+**The catch worth recording:** `data/oa_facts.csv` and `data/oa_docs_coverage.csv` were
+**untracked**. `.gitignore` ignores `*.csv` with a `!data/**/*.csv` negation, so they were eligible
+and simply never added — the 1,548-fact corpus, 100 pages of extraction, had **no off-machine copy
+and would not have gone up** with a naive `gh repo create --push`. Added before the first push.
+`.env` verified absent from the index beforehand by grepping `.git/index` directly (no `git`
+invoked — the bridge cannot delete, so a stranded `index.lock` is the standing hazard).
+
+### 2. D-2 DECIDED — cap at 5 ICs/day, one bot
+Andy's call. Do **not** split a strategy across two bots to reach 10: one bot = one config row =
+one pre-registration entry = one ledger identity, so the unit stays "condor" with no cross-bot
+aggregation and the detector keeps a single subject. Revisit only if a spec genuinely needs >5
+entries in a session.
+
+### 3. `data/mirror_baseline.csv` — the pre-cutover anchor, written
+`scripts/build_mirror_baseline.py` + receipt. 174 positions across 10 mirrors, **zero excluded**
+(every row had valid risk). Refuses to overwrite without `--force`: it is an **anchor, not a
+metric**, and recomputing it against a later export would silently move the baseline every future
+comparison is measured against.
+
+**Finding that fell out of it:** four mirrors have **positive median R and negative mean R** —
+`Opening Range Breakout 60m` (−0.111 / +0.068), `Weekly-IB-SPY` (−0.077 / +0.022), `Trendy`
+(−0.037 / +0.041), `60min-ORB-10W` (−0.033 / +0.079). They win most trades and lose money; the tail
+eats everything. This independently corroborates spending the first Track B arms on the **loss
+side**, which had been argued from theory up to that point.
+
+### 4. ⚠️ I gave a wrong priority call and the folder corrected me
+I told Andy `bots_config_v2.csv` was the oldest neglected deliverable and should be next. It is
+**not neglected — it is correctly blocked.** The `/bots` roster capture carries names and P/L and
+**no Exit Options values at all**, and more fundamentally the file describes the *post-Phase-4*
+fleet, which does not exist yet. It gets written per-bot as each bot is built. Recorded because the
+error was mine and the reasoning that fixed it came from reading the capture, not from thinking
+harder.
+
+### 5. The research loop — spec signed, engine built, five defects found by building it
+`docs/research-loop-spec.md` (208→237 lines) signed by Andy, then **building against it immediately
+surfaced defects**, now recorded in the spec's own §5a and as the tracker's blocking review item:
+
+1. The fixed-$ rungs were written as "1.0×credit and 1.5×credit" — **arithmetically identical to
+   SL100/SL150**, so as signed they duplicate the SL family and waste two of twelve slots. Code
+   implements **0.50× and 0.75× RISK**. *Amendment unsigned.*
+2. The prose listed **11** experimental variants while stating 12. The twelfth is now `CONTROL`,
+   which earns its slot as the engine's self-test.
+3. Both `TIME_*` variants are **structurally undecidable** — 2,508 of 15,048 cells came back
+   `UNDECIDABLE` on the dry run, exactly those two. **Time-exit questions require a Track B arm**;
+   no arithmetic substitutes.
+4. §10's margin and start condition were filled in by Claude, not Andy.
+5. The export sign convention is now documented separately.
+
+`scripts/research_loop.py` — `0.1.0-DRAFT`, **not frozen**, 23/23 validation checks, writes
+`data/counterfactuals.csv` and nothing else, silent below n=30.
+
+### 6. 🔴 The near-miss, and what it actually was
+A dry-run harness hand-mapped `credit = premium` off the raw export. **`premium` is signed —
+negative for every credit structure** — so a `credit <= 0` guard rejected **1,247 of 1,254**
+positions, and the engine printed `DSTOP_50R +89/pos`: a mean over **seven** positions, rendered
+identically to a mean over all 1,254.
+
+**Severity: low, and I initially overstated it.** `build_ledger.py` writes the ledger's `credit`
+from **`openPrice`**, which is positive on 1,386/1,386 rows, so `execution_audit.py` was never
+exposed and `research_loop.py` running against `trades.csv` would have been fine. The bug lived in
+my scratch harness. `execution_audit.py` was checked and deliberately **not touched** — reopening a
+frozen 21/21 detector on a false alarm is worse than the alarm.
+
+**Two real fixes came out of it:**
+- **Never print an aggregate without its `n`.** A mean over 7 and a mean over 1,254 rendered
+  identically. Fixed.
+- **Every fixture must carry at least one verbatim real capture row.** The 18 synthetic checks were
+  fully green while the harness was wrong, because every row in them was hand-authored with a
+  positive credit. `research_loop.py` now has five checks on a real `3DTE $140-$350` ironcondor,
+  one of which pins the raw-export form specifically.
+
+### 7. `docs/oa-export-schema.md` — new
+The folder documented a convention for every platform behaviour and **none for its own primary data
+source**, which is what let the mis-map happen. Machine-verified, **0 mismatches on 1,386 rows**:
+`premium == ∓openPrice×100×qty` by structure · `pnl == (open−close)×100×qty` · `returnPct ==
+pnl/abs(premium)` · `ror == pnl/risk`. **`returnPct` is return on CREDIT and `ror` is return on
+RISK** — different denominators, and `CLAUDE.md` §4's R convention is the `ror` basis.
+
+### 8. Bridge behaviour — I had it backwards, corrected
+Three `update_artifact` calls reported success; `device_stage_files` then served a **pre-update**
+copy, so I told Andy the updates had probably not landed. Andy uploaded the live file: **all of
+them had landed.** The **write path is trustworthy and the read-back is not** — the reverse of what
+I reported. Third occurrence of the caching bug. Verify artifacts by asking Andy for the file, not
+by staging it back.
+
+### Files changed
+`docs/oa-export-schema.md` (new) · `docs/research-loop-spec.md` (new, then §5a) ·
+`scripts/research_loop.py` (new) · `scripts/build_mirror_baseline.py` (new) ·
+`data/mirror_baseline.csv` (new) · `data/receipts/mirror-baseline.txt` (new) ·
+`data/oa_facts.csv` + `data/oa_docs_coverage.csv` (finally tracked) · `docs/state.md` ·
+`docs/session-log.md`.
 
