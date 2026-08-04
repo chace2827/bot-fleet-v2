@@ -12,7 +12,7 @@ already decided or assumed. None can be closed by more research; each needs Andy
 | # | Decision | What forces it | Where it bites |
 |---|---|---|---|
 | **D-1** | **What replaces "PT% as a Bot Input"?** | The 🔗 on the Exit Options row makes the **whole exit bundle** an input; there is no 🔗 on Profit Taking % or any single field. | `build-plan.md` §5.2 / §8.1. The only expressible form swaps entire exit configurations instead of tuning a number — a materially different mechanic. Plan is **frozen**, so this needs an explicit *"amend the plan"* either way, **including a decision to drop the bot-input idea**. |
-| **D-2** | **Re-scope every re-entry spec to 5 ICs/day.** | `posLimitDay` / `posLimit` are **1–10 pickers**, no free-text path. An IC is two positions. | §3's [PROJECT-RULE] "ten IC re-entries = a daily limit of 20" is correct arithmetic and **unconfigurable**. Real ceiling is **5 ICs/day per bot**. Anything above that must be redesigned or split across bots. |
+| ~~**D-2**~~ ✅ **DECIDED 2026-08-04: cap at 5 ICs/day, ONE bot.** Accept the platform ceiling; do not split a strategy across two bots to reach 10. Rationale: one bot = one config row = one pre-registration entry = one ledger identity, so the unit stays "condor" with no cross-bot aggregation and the drift detector keeps a single subject. Revisit only if a spec genuinely needs >5 entries in a session. | **Re-scope every re-entry spec to 5 ICs/day.** | `posLimitDay` / `posLimit` are **1–10 pickers**, no free-text path. An IC is two positions. | §3's [PROJECT-RULE] "ten IC re-entries = a daily limit of 20" is correct arithmetic and **unconfigurable**. Real ceiling is **5 ICs/day per bot**. Anything above that must be redesigned or split across bots. |
 | **D-3** | **Set the In-the-money Position Action before capital is live.** | `itmpaper` = `itmlive` = **`auto`** — *"Calculate estimated P/L from underlying close price"*, which sends **no closing order**. `market` is the only option that closes. | **Day-0, hard gate.** A QQQ condor outliving its exits rides into **physical settlement**. Note `market` fires at **15:50** — same instant as the clone's Expiration exit; they would race. §13.1. |
 | **D-4** | **Retire the Excessive Errors Failsafe as a live hypothesis.** | Newest error on either Fortress bot is **`Apr 16, 2026 3:55PM`**. Error days: Apr 16 (91) + Mar 16 (138+); `-NoPT50` Apr 16 (91). **Zero in June.** | §4.5 and every pre-registration entry that still carries it as the candidate cause of the 2026-06-12 lapse. The mechanism is real and this fleet tripped it — in March/April, on **entry scanners**. The June cause is still **unknown**. |
 
@@ -340,9 +340,14 @@ single match before relying on them.
   Noted, closed as a loss.
 - RoE `$` blanks stand by decision (an active audit-gate H3 failure — `evidence-standards.md`
   §10 item 4). Notion's role in v2 is undecided.
-- **`bot-fleet-v2` HAS NO GIT REMOTE — the folder exists on one disk only.**
-  Discovered 2026-08-03: `.git/config` carries only `[core]` and `[user]`, no `[remote]`.
-  `CLAUDE.md` §8's remote (`chace2827/bot-fleet`) belongs to the **archive**, not to v2.
-  Fix: create a private repo, then `git remote add origin <url>` + `git push -u origin master`.
+- ✅ **RESOLVED 2026-08-04 — `bot-fleet-v2` now has a remote.** Private repo
+  **`chace2827/bot-fleet-v2`**, `origin` → `https://github.com/chace2827/bot-fleet-v2.git`,
+  branch `master` tracking `origin/master`. First push 2026-08-04 at commit `c290429`:
+  227 objects, 920 KiB. **`data/oa_facts.csv` and `data/oa_docs_coverage.csv` went up with it** —
+  they had been untracked since extraction, so the 100-page corpus had no off-machine copy at all.
+  `.env` verified absent from the index before pushing (`.gitignore` covers `.env`, `.env.*`,
+  `*.env`, `*.pem`, `*.key`, `*_token*`, `*_secret*`).
+  *(Was: no remote at all, discovered 2026-08-03 — `CLAUDE.md` §8's `chace2827/bot-fleet` is the
+  ARCHIVE's remote, not v2's. Do not confuse them.)*
   Confirm `.gitignore` covers `.env` before the first push.
 - **HOLD in force on the builder chat.**

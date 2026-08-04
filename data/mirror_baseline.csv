@@ -1,0 +1,11 @@
+bot,pillar,status_at_capture,unit,n_positions,n_with_R,n_excluded_no_risk,first_close,last_close,sum_pnl,mean_R,median_R,win_rate,epoch_boundary,capture_file,capture_sha256
+1-45pm-Sandwich-Paper-v1,OA-Mirror,OFF,position,9,9,0,2026-05-12,2026-05-22,-473.0,-0.4125,-1.0,0.2222,,oa_export_positions_2026-07-30.csv,dca69adaf771f064e39184851fe97fd8cdbb85ee71ab85bc0d850bbecedfcadc
+3DTE $140-$350,OA-Mirror,ON,position,46,46,0,2026-04-22,2026-07-13,695.0,0.0156,0.0423,0.9565,,oa_export_positions_2026-07-30.csv,dca69adaf771f064e39184851fe97fd8cdbb85ee71ab85bc0d850bbecedfcadc
+60min-ORB-10W-Paper-v1,OA-Mirror,ON,position,12,12,0,2026-05-13,2026-06-30,-448.0,-0.0328,0.0786,0.8333,,oa_export_positions_2026-07-30.csv,dca69adaf771f064e39184851fe97fd8cdbb85ee71ab85bc0d850bbecedfcadc
+Friday 14 DTE Broken Wing IB (B-70),OA-Mirror,ON,position,7,7,0,2026-04-27,2026-06-29,1120.0,0.0893,0.0773,1.0,,oa_export_positions_2026-07-30.csv,dca69adaf771f064e39184851fe97fd8cdbb85ee71ab85bc0d850bbecedfcadc
+Nigiri-Paper-v1,OA-Mirror,ON,position,38,38,0,2026-04-21,2026-07-13,1890.0,0.0102,0.0102,0.9474,,oa_export_positions_2026-07-30.csv,dca69adaf771f064e39184851fe97fd8cdbb85ee71ab85bc0d850bbecedfcadc
+Opening Range Breakout 60m,OA-Mirror,OFF,position,19,19,0,2026-04-20,2026-05-21,-2602.0,-0.1107,0.0676,0.6842,,oa_export_positions_2026-07-30.csv,dca69adaf771f064e39184851fe97fd8cdbb85ee71ab85bc0d850bbecedfcadc
+QQQ long call,OA-Mirror,ON,position,6,6,0,2026-04-24,2026-06-22,5967.0,0.3401,0.3045,1.0,,oa_export_positions_2026-07-30.csv,dca69adaf771f064e39184851fe97fd8cdbb85ee71ab85bc0d850bbecedfcadc
+Tasty Condor,OA-Mirror,ON,position,4,4,0,2026-06-18,2026-07-27,1500.0,0.3468,0.3794,1.0,,oa_export_positions_2026-07-30.csv,dca69adaf771f064e39184851fe97fd8cdbb85ee71ab85bc0d850bbecedfcadc
+Trendy-Paper-v1,OA-Mirror,ON,position,15,15,0,2026-04-28,2026-07-13,-119.0,-0.0365,0.0405,0.8,,oa_export_positions_2026-07-30.csv,dca69adaf771f064e39184851fe97fd8cdbb85ee71ab85bc0d850bbecedfcadc
+Weekly-IB-SPY-Paper-v1,OA-Mirror,OFF,position,18,18,0,2026-05-15,2026-06-17,-1246.0,-0.077,0.0217,0.5,,oa_export_positions_2026-07-30.csv,dca69adaf771f064e39184851fe97fd8cdbb85ee71ab85bc0d850bbecedfcadc

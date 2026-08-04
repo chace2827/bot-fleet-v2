@@ -1,0 +1,14 @@
+MIRROR BASELINE — pre-cutover anchor
+built            : 2026-08-04T15:57:00
+export           : oa_export_positions_2026-07-30.csv
+export sha256    : dca69adaf771f064e39184851fe97fd8cdbb85ee71ab85bc0d850bbecedfcadc
+meta             : bots_meta.csv
+mirrors          : 10
+positions        : 174
+with R           : 174
+excluded (no risk): 0
+out              : data/mirror_baseline.csv
+out sha256       : cdceb0a8d444e57047697c9d9f2d2f7211355858d1235c26f9c51e571eefadf3
+EXCLUSIONS: none
+
+This file is an ANCHOR. Do not recompute it against a later export.
