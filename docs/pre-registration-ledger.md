@@ -320,9 +320,12 @@ MECHANISM        Short-premium VRP on 0DTE. The arms share every other input, so
                  challenged side · time exit) + a flat-close Scheduled Event backstop + a
                  position-closed-trigger automation to close the sibling spread.
 KILL CRITERION   Per arm: Exp(R) per condor < 0 with CI entirely below 0 at n≥60.
-                 FAMILY-LEVEL: if a capture-diff ever shows more than one differing input
-                 between two arms, the family's ranking is VOID and all arms are re-based —
-                 the comparison, not the bots, is what dies.
+                 FAMILY-LEVEL (REPLACED 2026-08-05 — see the banner below this entry):
+                 if a capture-diff ever shows two arms differing in MORE THAN ONE MECHANIC
+                 (a trigger field and, if present, its own pricing sub-field), or if any of
+                 greenfield-family-spec.md §8.3's A1, A2, A3, A7 or A8 fires, the family's
+                 ranking is VOID and all arms are re-based — the comparison, not the bots,
+                 is what dies.
 SAMPLE TARGET    n = 100 positions per arm, on matched days.
 REVIEW DATE      Day-0 + 6 months, interim at n=60.
 MAX LOSS         1 lot per arm until one clears its interim read; then ≈$5K risk/position.
@@ -332,6 +335,27 @@ VERIFICATION     A CAPTURE-DIFF showing exactly ONE differing line between any t
                  claim, a diff. Plus each arm's first-position Trades list.
 SIGNED           ..............................
 ```
+> ### ⛔ FAMILY-LEVEL KILL CRITERION REPLACED 2026-08-05 — the original was vacuously unfireable
+> **Original wording:** *"FAMILY-LEVEL: if a capture-diff ever shows more than one differing input
+> between two arms, the family's ranking is VOID and all arms are re-based — the comparison, not
+> the bots, is what dies."*
+>
+> **Why it could never fire.** Under **D-1 Option A** each arm holds **exactly one** exit input, so
+> *"more than one differing input"* is a state the family cannot reach. This is the identical defect
+> `docs/decision-memo-2026-08-04.md` used to **reject** Options B and C (*"with no inputs it can
+> never fire"*) — it survived in the criterion that was supposed to catch it, and two independent
+> reviewers found it separately (`greenfield-family-spec.md` §11-CF2, §9).
+>
+> **The replacement is `greenfield-family-spec.md` §9's comparative form, at FIELD granularity** —
+> "more than one **mechanic**" (a trigger field plus, if present, its own pricing sub-field), plus
+> the §8.3 assert rules A1/A2/A3/A7/A8. It is fireable because arms genuinely can differ in two
+> mechanics, and the §8.3 asserts are machine-checkable against `bots_config_v2.csv`.
+>
+> ⚠️ **STATUS: DRAFT — UNSIGNED**, exactly as before. This edit changes the *text* of an unsigned
+> draft entry; it signs nothing and authorizes no build. Signing remains Andy's at Day-0 per §7,
+> and §7 item 3's gate still applies: **does the loop actually produce the number this criterion
+> needs?** Authorized by Andy 2026-08-05 (row S-5).
+
 > ⛔ **This is where the v1 tournament died.** Three arms turned out to be one arm
 > (`HedgeA-S1` ≈ `HedgeD` ≈ `HedgeTest`, 70–73 identical positions), and one ran in a different
 > execution class. The capture-diff requirement is not bureaucracy — a single diff would have

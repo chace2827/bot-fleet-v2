@@ -54,13 +54,19 @@ detected** — a toggle screenshot is necessary but not sufficient. Keep the ord
 
 ## 2. The per-clone checklist — run this for each of the 4 clones
 
-Order matters. Two of these steps exist because of traps that will silently produce a broken bot.
+Order matters. One of these steps exists because of a trap that will silently produce a broken bot.
+*(Was "Two of these steps" — amended 2026-08-05 with step 2's correction below; the shared-automations
+trap was falsified 2026-08-03 and step 2 is now a Library check, not a fork ritual.)*
 
 1. **Clone** the original bot.
-2. **Fork ALL automations via Copy.** ⚠️ **THE TRAP: clones share automations by reference.** Edit one and
-   you have edited the original too — or worse, the original's later edit silently changes your clone.
-   Copy every automation so the clone owns its own, then confirm the clone's automation list points at the
-   copies.
+2. **Check the Automation Library before editing anything.** ⚠️ **Corrected 2026-08-05, at Andy's
+   authorization — the old step here said "clones share automations by reference." That is FALSE**
+   (direct test 2026-08-03; OA-0681 / OA-0682 / OA-0683 / OA-0845; `oa-ops-runbook.md` §5 Trap 1 as
+   corrected). **Cloning copies.** Sharing is opt-in via the Library only. For each automation on the
+   clone: if it is **in the Library**, use **Copy** to fork it before editing — a Library edit
+   propagates to every bot using it (OA-0682). If it is **not** in the Library — the default for a
+   clone — **edit it directly; no fork is needed.** Then confirm the ORIGINAL's automation list is
+   unchanged. That confirmation is now a sanity check, not a trap counter, and it costs one page load.
 3. **Re-add Symbols.** ⚠️ They drop silently on clone. A bot with no Symbols looks configured and simply
    never scans.
 4. **Apply the spec** from `build-plan.md` §2B. Nothing beyond the spec.

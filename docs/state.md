@@ -2,7 +2,7 @@
 
 *The live facts. Updated whenever a stated fact changes (CLAUDE.md §9.1). Numbers live in
 `STATUS.md`; the plan in `docs/build-plan.md`; progress in the `bot-fleet-migration` tracker.
-Last updated 2026-08-04 (Tier 2 product verification).*
+Last updated 2026-08-05 (R-edit package applied + edit-policy split).*
 
 ## ✅ FOUR DECISIONS — ALL DECIDED 2026-08-04 (opened same day by Tier-2 verification)
 
@@ -74,9 +74,15 @@ blob) — detail under *WRITES MADE TO THE CLONE* below.
 
 ---
 
-## ⭐ GREENFIELD FAMILY SPEC — WRITTEN 2026-08-04. Design closed; SIX blocking checks before build.
+## ⭐ GREENFIELD FAMILY SPEC — WRITTEN + AMENDED ×3 2026-08-04. Design closed; SIX blocking checks before build.
 
-`docs/greenfield-family-spec.md` (1,548 lines, sha256 `aee1d763…4d251fdb`, on-device verified).
+`docs/greenfield-family-spec.md` — **1,585 lines, sha256
+`da3c440e099c4e69dfdf13595afc763a5db2eda5d50d35c9adeecbb02f3c8123`**, on-device verified.
+📝 **AMENDED THREE TIMES after writing, same day** — each because a document it had *staged*
+was amended after staging. Hash chain: as-written `aee1d763…` (1,548) → R-1/R-3 correction
+`84ea156a…` (1,558) → 15:44 gate move `d9c686ac…` (1,584) → S-1 slot correction
+**`da3c440e…` (1,585)**. Full record: `session-log.md` 2026-08-04, *amended three times
+post-write*.
 **The design document Phase 4's fresh builds are built from.** It **implements** `build-plan.md`
 §2D and §5 — no frozen doc was edited, no OA surface touched, no git command run.
 
@@ -127,12 +133,36 @@ fixed:**
    exactly one exit input, so that state cannot be reached — the identical defect the memo used to
    *reject* Options B and C. **It survived the D-1 ruling unnoticed.** The spec rewrites it at
    field granularity; the ledger needs the same correction at signing.
-3. **`research-loop-spec.md` §10's signed 0.10R margin is unreachable here.** Max per-condor
-   return = total credit ⇒ **R_max ≈ +0.083 to +0.162**. Either the margin is re-declared for this
-   family or nothing here can ever graduate.
-4. **The family consumes 7 of the 8 signed Track B slots** (it meets §4's own definition of a
-   Track B arm), and `GF-SL200` duplicates a variant in the signed Track A §3 set. **This
-   constrains the Track B task directly.**
+3. ~~**`research-loop-spec.md` §10's signed 0.10R margin is unreachable here.**~~ ✅ **RESOLVED
+   2026-08-04 by ruling R-3** — 0.10R replaced by mean ΔR ≥ **+0.015R** per position + paired
+   bootstrap 95% CI excluding zero + paired sign test on the fired subpopulation; median test
+   withdrawn. **+0.015R < R_max at every credit this structure admits**, and R-3 reached the same
+   defect independently from the fleet-median side. ⚠️ **But the power problem is SHARPER, not
+   softer** (new spec §12 row 16): +0.015R is also the largest effect this program has ever
+   measured (SL75, n=1,254) and sits *below* the family's CI half-width at n=100 (±0.026R paired);
+   ≈307 paired matched days are needed to resolve it, ≈560 under Bonferroni. **Also: R-3's test is
+   per position over a bot's full population; the family's is per condor, day-paired, matched days
+   only. Different statistics — do not score the family against R-3's gate without restating it.**
+4. ~~**The family consumes 7 of the 8 signed Track B slots**~~ 📝 **SUPERSEDED 2026-08-04 by
+   ruling S-1** (`track-b-arms-spec.md` §3.3): *"the seven family bots are `build-plan.md` §2D
+   fresh builds; Track B's 8 slots are yours, `n_used=20` confirmed."* **Separate allocation —
+   Track B keeps all 8**, `n_used = 20` confirmed by ruling. ⭐ **THE SECOND CLAUSE STANDS AND IS
+   STILL OPEN:** `GF-SL100`/`GF-SL200` duplicate signed Track A §3 variants and **pool error rates
+   nowhere** — one hypothesis, two engines, no shared multiplicity accounting; ARM-B1
+   (`DSTOP_100`) has the identical defect. **S-1 unblocked the allocation; it did not touch the
+   double-testing.**
+   ~~⭐ **NEW, opened by S-1's arithmetic (spec §12 row 17): the end-state count breaks under EVERY
+   reading.**~~ ✅ **RESOLVED — the amendment LANDED 2026-08-05, within the hour.**
+   `build-plan.md` §2D now carries a **`🔓 SCOPING AMENDMENT 2026-08-05 — "amend the plan",
+   Andy's explicit words`** block naming Track B as a **separate allocation**, citing this spec's
+   §12 item 11 as the finding that forced it. Operative figures: *"≈18–20 plan bots · wave-1
+   Track B spend **2** · **ceiling 28**"*. The plan-bot arithmetic is unchanged; what changed is
+   that Track B is now **named** rather than silently colliding with the count.
+   ⚠️ **The amendment scopes a count and authorizes no build** — every Track B arm still needs its
+   own signed pre-registration. ⛔ **STILL BLOCKING: C12**, whether ARCHIVED bots count against the
+   Pro 50-bot cap. The headroom claim rests on the reading that they do not, and the amendment says
+   *"that reading is not verified"*: if they do, Day-0 is 36 + 7 = **43** and ≤8 does not fit
+   (43 + 8 = 51).
 5. **No regime-change criterion exists anywhere** — `build-plan.md` §5's gate is conjunctive and
    the third conjunct is undefined in every document.
 6. **`oa-ops-runbook.md` §3 has an internal tension** — `Group = Pillar` vs "arms live in one
@@ -144,6 +174,26 @@ may not be cited as a proof leg. The spec specifies it as rules **A1–A8** and 
 Day-0 — noting that whether it *must* precede trading is one of the memo's four unruled slots.
 **N-2 handled without an amendment:** Range075 is implemented as two Symbol-change-% decision
 nodes in the shared entry automation, the substitute primitive named explicitly.
+
+> ### 📝 AMENDED 2026-08-04 — `GF-SiblingClose` gate moved **15:50 → 15:44**. Ruled. PHASE A.
+> Source: `track-b-arms-spec.md` §6.6, which found the defect and correctly declined to apply it
+> to a shared object it could not amend. **`before 3:50pm` was not tight enough.** ARM-B2
+> (`expdays 0.015`) closes both legs at ~**15:45**, which **is** before 15:50 — so leg 1's fill
+> fires `Position closed`, sibling-close issues a `patient` close on leg 2 **while leg 2's own
+> `speedy` Expiration order is still working** (N-6: exit-option orders stay live two minutes).
+> The 7/01 orphan-loop shape at 15:45. **It bites that arm and NOT its Ride control, so it is a
+> mechanic difference between arm and control** — a confound in the one comparison the arm exists
+> to make, not merely an operational risk.
+> **Cost:** a trigger firing in **[15:44, 15:50)** on the five triggered arms leaves the sibling
+> until its own 15:50 Expiration exit — the condor still closes, at worst six minutes later, **no
+> orphan.**
+> ⛔ **Ten dependent references in the spec, not one** — tree, rationale, interlock 2, §6.2 Rule 0,
+> §8.5 artifact, C9, build step A4, PE-7, PE-8. Editing the diagram alone would have left eight
+> passages contradicting it.
+> ⛔ **It mutates a SHARED object: apply in Phase A BEFORE any arm is switched on**, never as a
+> later edit, and take a **fresh A7 payload-hash baseline** with re-verification of every attached
+> arm. Applying it post-Day-0 would splice two experiments into one sample — what A7 exists to
+> detect.
 
 ---
 
@@ -369,6 +419,10 @@ help — rewriting prose does not re-read sources. **Do not rewrite this file ag
   (`automation-behavior`, OA-0083) — sizing may rest on it; §5.3's second quote resolves to
   *"Tags can be used in conjunction with decisions to create powerful and flexible automations"*
   (OA-0819) — drop the old quote marks. The [PROJECT-RULE] retag of "entire memory" stands.
+  **→ ✅ WRITTEN INTO THE REFERENCE 2026-08-05 (R-05, authorized).** `oa-platform-reference.md` §3
+  now carries the OA-0083 quote beneath the [UNVERIFIED] flag, and the flag is lifted — **sizing may
+  rest on the allocation-shrink behavior as documented platform behavior.** The §5.3 quote-marks fix
+  is NOT yet applied; it was not in the R-package and remains open.
 - **Confirmed correct:** §4.2 execution order · §5.2 input chain and both its [DOCS-SILENT] tags ·
   §4.4 retention genuinely open · §3 limits · §5.1 indicators · §5.3's nine tag actions · §4.7 ·
   §0.1. **The file got more right than wrong.**
@@ -504,14 +558,62 @@ came back accurate, so it was localised — which is the dangerous shape, not th
 **Standing mitigation:** derive quotation anchors from the device file itself and assert an exact
 single match before relying on them.
 
+### ✅ AUTHORIZED AND APPLIED 2026-08-05 — the R-edit package (was "Still needing authorization")
+**Ruled per-item by Andy 2026-08-05 against `docs/r-edit-authorization-2026-08-05.md`; all sixteen
+rows YES, applied the same day.** Every edit carries a dated banner, cites a `oa_facts.csv` fact ID
+or a dated first-hand observation, and was verified by direct `device_bash` sha256 + single-match
+grep. **No `git` run.**
+
+- ~~**`oa-ops-runbook.md` §5 Trap 1** still asserts the false shared-automations claim.~~
+  **CORRECTED** — row rewritten (cloning copies; sharing is Library opt-in), original preserved in
+  the dated note beneath the trap table. R-02a/S1.
+- ~~**`pilot-clone-card-qqq-fortress.md` Step 2** still contains the void fork step.~~
+  **VOIDED IN PLACE** — banner added; the step is left standing because the card is the record of
+  what was executed 2026-08-03. R-02b/S2.
+- ~~**`build-plan.md` §2B**'s "restored exits" justification wording is still inaccurate.~~
+  **CORRECTED on an explicit "amend the plan"** — wording only; the build is unchanged. S3.
+- **Also applied:** R-01a/b/c (the `EXIT OPTIONS` toggle IS documented — OA-0871/0896) ·
+  R-02c (`reactivation-runbook.md` §2 step 2 rewritten — the Day-0 script no longer instructs a
+  no-op fork) · R-02d (ops-runbook §3 narrowed to Library-shared only) · R-03 (SmartPricing table
+  → **[DOCUMENTED + FIRST-HAND]**, OA-0784–0787) · R-04 (mid-price → [DOCUMENTED], OA-0872) ·
+  R-05 (allocation-shrink sourced, OA-0083 — **sizing may rest on it again**) · R-06 (Exit Options
+  START time retagged **[CONFLICT]**, OA-0870 vs OA-0085; settled first-hand at 09:31 for this
+  account) · R-07 (clone completeness is a **docs defect**, OA-0845, not silence).
+- **NEW §14 in `oa-platform-reference.md`** — the Phase 6 documented-facts payload cherry-picked
+  from the v3 draft: assignment blindness, the expiration protocol's documented half, partial
+  fills, quote staleness, in-flight invisibility, UTC-anchored scheduled events, SPX nickel
+  granularity, the empty core pages.
+- ⛔ **`oa-platform-reference-v3-DRAFT.md` IS A STALE BRANCH — do not adopt it.** Ruled **ALT: NO**.
+  It was generated off base sha `1330dc59…7386` at 02:57 on 2026-08-04; the live reference was
+  rewritten at 03:55 the same day. The draft has **0** `ANSWERED 2026-08-04` §9 rows (live has 11),
+  **no §6.1a**, and a **§13 that collides** with the live §13. Adopting it wholesale would have
+  deleted the `itmlive`=`auto` finding and the PDT check. Its unique content now lives in §14;
+  **the draft itself is superseded and should not be cited as "the reference with Phase 6
+  applied."**
+- **`CLAUDE.md` §5 + `oa-platform-reference.md` §0.2 — POLICY SPLIT APPLIED.** Decisions stay
+  gated behind "amend the plan"; evidence-backed corrections of falsified claims may be applied
+  directly under five conditions, with **Andy's veto moved to commit review**. §8 still gated.
+  Inference from absence still forbidden.
+- **Three new rows ruled the same day:** **S4** — `build-plan.md` §2D fleet count scoped to
+  *"≈18–20 plan bots plus ≤8 pre-registered Track B arms, ceiling 28"* on an explicit "amend the
+  plan"; this **discharges `track-b-arms-spec.md` §3.5's S-2 condition**, so ARM-B2's slot
+  accounting is no longer conditional. **S5** — `pre-registration-ledger.md` PR-14…PR-17's
+  family-level kill criterion replaced (the old *"more than one differing input"* was vacuously
+  unfireable under D-1 Option A); still **DRAFT, unsigned**. **S6** — `research-loop-spec.md`
+  annotated: the Track B `Expiration 0.005` (15:55) rung is **unreachable** under the 15:52
+  backstop, so R-2's time question is served by **0.015 (15:45) alone**.
+
 ### Still needing authorization (NOT amended)
-- **`oa-ops-runbook.md` §5 Trap 1** still asserts the false shared-automations claim.
-- **`pilot-clone-card-qqq-fortress.md` Step 2** still contains the void fork step.
-- **`build-plan.md` §2B**'s "restored exits" justification wording is still inaccurate.
 - ⚠️ **`_to_delete/index.lock.stranded-2026-08-03`** — Claude ran `git status` against the standing
   instruction not to, stranding `.git/index.lock`; the lock was moved out (the bridge cannot
   delete) and `.git/index.lock` confirmed gone. **Andy should delete `_to_delete/`** — untracked,
   not in `.gitignore`.
+- **Tournament doc conflict, still open.** `oa-ops-runbook.md` §3 (fork so arms are NOT shared) vs
+  `build-plan.md` §2D + `hedge-research.md` §5.2 (shared automation **required**). R-02d clarified
+  the mechanics but **did not decide the design** — that is a build decision, gated.
+- ⚠️ **C12 — do archived bots count against the Pro 50-bot cap?** Unowned, blocking. If they do,
+  the Day-0 arithmetic is 36 + 7 = 43 and the ≤8 Track B allocation does not fit (43 + 8 = 51).
+  S4's ceiling of 28 assumes they do not. `track-b-arms-spec.md` §10.
 
 ### Findings previously queued — now written into the reference
 - **TRAP 1 IS FALSE — cloned bots do NOT share automations by reference** (direct test,

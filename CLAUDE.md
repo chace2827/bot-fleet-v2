@@ -74,6 +74,34 @@ platform change): `docs/evidence-standards.md` §1, §9.2. The audit itself: `do
   closed. **Andy retains revoke authority** — globally or per-bot, at any time; until revoked, no
   edit is queued for Andy to click manually. Full procedure: `docs/oa-ops-runbook.md` §4. Supersedes
   "Andy makes ALL OA edits"; prior operating history: `docs/state.md`.
+- **Doc-edit authority — AMENDED 2026-08-05, at Andy's explicit instruction.** The
+  edit-authorization regime splits in two. The gate is on **decisions**, not on **corrections**.
+  - **DECISIONS STAY GATED.** Anything that changes *what gets built* requires an explicit
+    **"amend the plan"** from Andy: `docs/build-plan.md` in any part; `docs/oa-platform-reference.md`
+    **§8** (build instructions); any spec, sizing rule, kill criterion, pre-registration text, or
+    go-live gate. Unchanged.
+  - **EVIDENCE-BACKED CORRECTIONS OF FALSIFIED CLAIMS MAY BE APPLIED DIRECTLY**, with no pre-edit
+    authorization, when **all five** hold:
+    1. The claim is falsified by a **quotable sentence** — a `data/oa_facts.csv` fact ID with its
+       verbatim quote — or by a **dated first-hand observation of a value that was read** (a DOM
+       field, a hidden-input payload, a screenshot).
+    2. The correction is carried as a **dated banner**, and **the original text is left standing**
+       wherever the doc's own convention requires it (`oa-platform-reference.md` §0.2; and in any
+       doc that is a record of something executed, e.g. `docs/pilot-clone-card-qqq-fortress.md`).
+    3. The **evidence is cited in the edit itself** — fact ID or dated observation. **Never another
+       project document**: two documents vouching for each other is a citation loop
+       (`oa-platform-reference.md` §0.2 provenance rule).
+    4. The edited file is verified by a **direct `device_bash` sha256 plus a single-match grep of
+       the new text**. Never the write tool's response; never a stage-back or cached read (§9.1a).
+    5. The edit **changes no decision.** If it would, it is a decision, and it is gated. When it is
+       ambiguous, it is gated.
+  - **Andy's veto moves to commit review — it is replaced, not removed.** Every directly-applied
+    correction is listed in the close-out hand-off (§9.1 step 3) with its file, its anchor, its
+    evidence and its verification hash, and Andy may reject any of them at commit.
+  - **Inference from absence is never an evidence-backed correction.** "I did not see a control" is
+    not an observation; it is a screen that was not opened (`oa-platform-reference.md` §0.2).
+  - **Andy retains revoke authority** — globally or per-file, at any time.
+  Worked example, sixteen edits ruled per-item: `docs/r-edit-authorization-2026-08-05.md`.
 - **Standing exception**: the legacy champion (`IC-SPX-FastPT25-S2`) and its `-130PM` clone are
   deliberately **Exit-Option-free ride+S2 controls**. Do not "fix" them, do not re-arm them. See §Day-0
   in `docs/reactivation-runbook.md`.

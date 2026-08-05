@@ -3053,3 +3053,405 @@ on-device `shasum -a 256` matching the container's:
 
 **Changed files for Andy's commit:** `docs/track-b-arms-spec.md` (new) ·
 `docs/session-log.md` (appended).
+
+### 2026-08-04 (same day, second pass) — Andy's rulings S-1…S-5 recorded
+
+Five rulings returned on `docs/track-b-arms-spec.md`. Recorded at the sections they govern, indexed
+in a new header block. **Superseded text is struck and labelled, not deleted**, so the record shows
+what changed. File: **1,023 lines**, sha256 `8aab4449…89b8` (was 877 / `61156820…d225`).
+
+- **S-1 — SEPARATE ALLOCATION (Reading B).** The seven family bots are `build-plan.md` §2D fresh
+  builds; **Track B's 8 slots are this spec's**. `n_used = 20` **confirmed**. ⇒ Reading A closed;
+  both arms funded; 6 slots held. `greenfield-family-spec.md` §12-11's **first** clause superseded —
+  its **second** (double-testing) survives, and applies to ARM-B1 too.
+- **S-2 — the §2D fleet-count consequence goes to the Task 4 batch** as an explicit "amend the plan"
+  scoping amendment. **Slot accounting recorded as CONDITIONAL on it.** ⛔ **Still blocking: no arm
+  may be built until it lands.** Assigned ≠ cleared. `pre-registration-ledger.md` §3 carries the
+  same stale "≈18–20" and should be scoped with it.
+- **S-3 — build order B2 → B1 approved.** Recorded with the caveat that approved order ≠ approved
+  to build.
+- **S-4 — the 15:44 gate move ruled YES**, edit assigned to the greenfield spec's own session.
+- **S-5 — C10/C11 (`dstop` unit + pricing sub-field) assigned to the C0a probe session.** Assignment
+  is not an answer: **ARM-B1 is still not an arm** under `hedge-research.md` §5.2.
+
+**Verified, not assumed: the greenfield session LANDED the gate move.** That file moved 1,548 →
+**1,584 lines**, mtime 20:51 → **23:43**, sha256 `d9c686ac…d7a` — **by its owner, not by this
+session, which read it twice and wrote it never.** All four handoff items checked present on the
+device file: §4.3 tree `before 3:44pm`, §6.2 Rule 0 `before 15:44`, §8.5 proof-of-fire `before
+15:44` with the `[15:44, 15:50)` behaviour spelled out, Phase-A A4 `NOT 3:50pm`, plus the A7
+payload-hash re-baseline. **C13 DISCHARGED.** Its amendment block credits the Track B task for the
+find and for declining to apply it to a shared object.
+
+⛔ **NEW, found at close — `greenfield-family-spec.md` still asserts it consumes 7 of the 8 Track B
+slots**, in **two** places (§12 item 11 and §11 CF-10). S-1 supersedes both. Caught only because
+that file changed after the first draft, so every quotation taken from it was re-checked against the
+current device file rather than the earlier read. **Not this session's file to edit** — same
+boundary S-4 drew; assigned to the greenfield owner with S-1 attached. ⚠️ The **second clause** of
+each row must not be deleted with the first: `GF-SL100`/`GF-SL200` still duplicate signed §3
+variants. **Left uncorrected, the two specs disagree on whether Track B has 1 free slot or 6.**
+
+**This is the second stale cross-document figure to outlive the ruling that killed it** — the first
+being greenfield §12-10 against R-3's margin. A ruling recorded in one document does not propagate
+to another, and nothing in the repo currently checks for that.
+
+⚠️ **C12 was not addressed by any ruling and still has no owner.** Do archived bots count against
+the Pro 50-bot cap? If they do, 36 roster + 7 fresh + 2 arms = 45 of 50 and the six held slots do
+not fit. It is the only open item that can still invalidate the ≤8 allocation outright.
+
+**Net state: both arms funded and ordered, neither buildable.** B2 gated on S-2's amendment; B1
+additionally on C10/C11 and its Day-0+90 calibration. Nothing built, no OA surface opened, no other
+doc edited, `research_loop.py` not wired, **no `git` run**. Holding.
+
+**Changed files for Andy's commit:** `docs/track-b-arms-spec.md` (revised) ·
+`docs/session-log.md` (appended). *(`docs/greenfield-family-spec.md` also changed today — by its own
+session, not this one.)*
+
+
+---
+
+# 2026-08-05 — R-edit authorization package, ruled per-item and applied
+
+**Task.** Prepare the authorization package for the R-01…R-07 doc edits plus the three standing
+items, get Andy's per-item authorization, apply exactly what he authorized. Governing policy read
+first: `oa-platform-reference.md` §0.2.
+
+## 1. The package
+
+`docs/r-edit-authorization-2026-08-05.md` (831 lines). R-01…R-07 plus the three `state.md`
+"Still needing authorization" items collapse to **13 rows, not 10** — two standing items *are*
+R-02's targets (ops-runbook §5 Trap 1 = R-02a; pilot card Step 2 = R-02b), presented as merged
+rows rather than duplicated. Andy added three more at ruling time (S4, S5, S6), for **16 applied
+edits** across **9 files**.
+
+Each row carried: exact current text asserted **single-match** by direct `device_bash`, exact
+replacement, fact IDs from `data/oa_facts.csv` (sha256 `435abe0d…3527b`) or a dated first-hand
+observation, and the §0.2 class (free append vs gated rewrite). **20 anchors asserted, all n=1.**
+
+## 2. Three findings the package produced that the reconciliation report did not have
+
+1. ⛔ **`oa-platform-reference-v3-DRAFT.md` is a stale branch.** It declares its own base as sha
+   `1330dc59…7386` (02:57, 2026-08-04); the live reference was rewritten at **03:55 the same day**
+   by the first-hand Settings/DOM session. Measured on the device: the draft has **0**
+   `ANSWERED 2026-08-04` §9 rows (live has **11**), **no §6.1a**, and a **§13 that collides** with
+   the live §13. **Adopting it wholesale would have deleted the `itmlive`=`auto` finding and the
+   PDT check** — the two most consequential first-hand results in the file. Ruled **ALT: NO**;
+   its unique content cherry-picked into a new **§14** instead.
+2. **The reconciliation report is stale on R-11 and R-13.** Both were answered first-hand on
+   2026-08-04 (§9 checks #9 and #10) and are already in the live file. The report's instruction to
+   add them to the §9 open-checks table would have re-opened closed questions. No edit made.
+3. **R-06 had to be narrowed.** The report asked for a `[CONFLICT]` retag on the Exit Options start
+   time as an open question. It is **settled for this account**: §4.1's first-hand DOM read has
+   `exitstart` = `09:31`, and §6.1a confirms the modal header renders live from the same Bot
+   Schedule. Applied as a docs-defect note, not an open question. Andy ruled "YES as narrowed".
+
+## 3. ⚠️ Baseline drift caught mid-session — the re-assert step earned itself
+
+`oa-ops-runbook.md` (20,630 → 27,553 B) and `state.md` (32,372 → 47,916 B) **both changed on disk
+while the package was being written**, from the 2026-08-04 part-4 work — not from this session.
+All anchors were re-asserted against the new bytes and all still returned n=1, so the package
+stayed valid, **but line numbers shifted** (§5 traps 293 → 389; "Still needing authorization"
+289 → 434, then 507). Recorded in the package itself as a standing lesson: **apply by exact-text
+match, never by line number, and re-assert immediately before every write.**
+
+## 4. What was applied
+
+**Free appends (dated banners; original text left standing per §0.2):** R-01a, R-01b, R-01c,
+R-02b/S2, R-02d, R-04, R-05, R-06, R-07.
+**Gated rewrites (authorized):** R-02a/S1, R-02c, R-03.
+**Plan amendments (explicit "amend the plan"):** S3 (§2B justification, wording only — the build
+is unchanged), S4 (§2D fleet-count scoping).
+**Policy:** the edit-authorization split, `CLAUDE.md` §5 + `oa-platform-reference.md` §0.2.
+**New rows:** S5 (ledger PR-14…PR-17 family kill criterion — the old "more than one differing
+input" was vacuously unfireable under D-1 Option A; replaced with §9's field-granularity form,
+**still DRAFT/unsigned**), S6 (`research-loop-spec.md` annotated — the Track B `Expiration 0.005`
+(15:55) rung is **unreachable** under the 15:52 Repeating backstop, so R-2's time question is
+served by **0.015 (15:45) alone**).
+
+**S4 discharges `track-b-arms-spec.md` §3.5's S-2 condition** — ARM-B2's slot accounting is no
+longer conditional. C12 (do archived bots count against the 50-bot cap?) remains open and unowned,
+and can still invalidate the ≤8 allocation.
+
+## 5. Verification
+
+Every file: assert anchor n==1 → write → **direct `device_bash` sha256 + single-match grep of the
+new text**. Never the write tool's response, never a stage-back
+([[device_bridge_caching_bug]] — the read-back path is the untrustworthy one, not the write path).
+
+| File | before | after | lines |
+|---|---|---|---|
+| `docs/oa-platform-reference.md` | `57a9576c…1986e` | `c22d32f9…f7607` | 1158 → 1333 |
+| `docs/oa-ops-runbook.md` | `57399940…64d4` | `fb5f915c…2d6b` | → 499 |
+| `docs/pilot-clone-card-qqq-fortress.md` | `52e1bc65…9391` | `156663ec…42f4` | → 434 |
+| `docs/reactivation-runbook.md` | `160b49f6…f9c8` | `117cbaf7…48bf` | — |
+| `docs/build-plan.md` | `588d2740…7eaa` | `33aafcb6…5954f` | → 270 |
+| `CLAUDE.md` | `8cb0a1a4…650c` | `a95e6c6e…45b4` | → 224 |
+| `docs/pre-registration-ledger.md` | `f04f49ef…1699` | `9185213f…2bca` | → 457 |
+| `docs/research-loop-spec.md` | `4fe4b3e5…4176` | `d0f5d5a6…a995` | → 320 |
+| `docs/state.md` | `d0fe2fda…897b` | `d996114b…e7da` | → 690 |
+
+**§8 of the platform reference was not touched.** No inference from absence was appended anywhere.
+**No `git` run.**
+
+## 6. Open, carried forward
+
+- **`_to_delete/`** — Andy deletes; the bridge cannot.
+- **Tournament doc conflict** (ops-runbook §3 vs build-plan §2D + hedge-research §5.2) — R-02d
+  clarified the mechanics, did **not** decide the design. Gated.
+- **C12** — archived bots vs the 50-bot cap. Blocking on the ≤8 Track B allocation.
+- **R-10** — the lapse mechanism is still UNSOURCED; the Day-0 Trades-list check remains the only
+  test.
+- **`itmlive` = `auto`** — the account sends **no closing order** on expiring ITM positions. Day-0
+  decision, unchanged. §13.1.
+- `oa-platform-reference-v3-DRAFT.md` is superseded and should be re-labelled or retired; the
+  reconciliation report's closing line still points at it as if current.
+
+**Changed files for Andy's commit:** `docs/oa-platform-reference.md` · `docs/oa-ops-runbook.md` ·
+`docs/pilot-clone-card-qqq-fortress.md` · `docs/reactivation-runbook.md` · `docs/build-plan.md` ·
+`CLAUDE.md` · `docs/pre-registration-ledger.md` · `docs/research-loop-spec.md` · `docs/state.md` ·
+`docs/r-edit-authorization-2026-08-05.md` (new) · `docs/session-log.md` (appended). Holding.
+
+---
+
+## 2026-08-04 — `greenfield-family-spec.md` amended three times post-write (same day)
+
+The spec was written earlier this session at sha256 `aee1d763…4d251fdb`. Three ruled amendments
+landed after it was written, each because a document it had *staged* was amended after staging.
+**Final state: sha256 `da3c440e099c4e69dfdf13595afc763a5db2eda5d50d35c9adeecbb02f3c8123`, 1,585
+lines / 134,583 bytes**, verified by direct on-device `shasum -a 256`. No frozen doc edited, no OA
+surface touched, no git command run.
+
+**Hash chain, for audit:**
+
+| Stage | sha256 | Lines |
+|---|---|---|
+| As written | `aee1d763…4d251fdb` | 1,548 |
+| + R-1 / R-3 correction | `84ea156a…53707492` | 1,558 |
+| + 15:44 gate move | `d9c686ac…af373d7a` | 1,584 |
+| + S-1 slot correction | **`da3c440e…2f3c8123`** | **1,585** |
+
+### Amendment 1 — R-1 / R-3 (`research-loop-spec.md`, amended after staging)
+
+Source of truth re-read on device at `4fe4b3e5…1d314176`, 296 lines. My staged copy was 12,516
+bytes; the device file is 16,941. **Same drift class as `state.md` earlier this session — the
+staged snapshot was stale and only a device re-read caught it.**
+
+- **R-1** signed the fixed-$ rungs as **1.00× and 1.50× the bot's trailing-90-day MEDIAN credit,
+  in dollars**, and **rejected the RISK basis**: *"0.50×risk lands at ~720% of credit at the
+  fleet's median credit/risk of 0.070 (n=1,254), beyond the no-stop boundary."* The spec had
+  recorded the rung basis as an open unsigned amendment. Corrected at §3.1; the exclusion itself
+  stands on the unchanged ground that `DSTOP_100`/`DSTOP_150` are **Track A's**.
+- **R-3** replaced the 0.10R margin with a three-part test: mean ΔR ≥ **+0.015R** per position, a
+  **paired bootstrap 95% CI excluding zero**, and a **paired sign test on the fired
+  subpopulation**. The median-ΔR test is **withdrawn** as *"not a statistic"*.
+
+**⭐ The margin collision the spec raised is RESOLVED.** §12 row 10 is struck and marked ✅.
++0.015R sits below R_max at every credit this structure admits. Worth recording that **R-3 found
+the same defect independently from the fleet-median side** — its calibration text says the 0.10R
+*"was unreachable by construction"*. This family's credit/risk (≈0.083–0.162) is *above* the 0.070
+fleet median the new margin was calibrated on, so it has more headroom than the calibration case.
+
+**But two things were added rather than just closing the row, because closing it alone would have
+overstated the result** — new **§12 row 16**:
+1. **+0.015R is finer than this family can resolve at n=100.** It is also the largest effect this
+   program has ever measured (SL75, +0.0150R, n=1,254), and it sits *below* CF-3's CI half-width
+   for the family at the declared sample (**±0.026R** paired at ρ=0.90). CF-3's arithmetic:
+   ~307 paired matched days to resolve ±0.015R, ~560 under Bonferroni. **The margin question is
+   closed; the sample-size question it was standing in for is not.**
+2. **R-3's test and the family's are different statistics.** R-3 is **per position over a bot's
+   full population**; the family's §9 criterion is **per condor, day-paired, matched days only**.
+   The family must not be scored against R-3's gate without restating it.
+
+Knock-on: R-1 also puts **SL150** in the frozen Track A set, so the spec's deferred wave-2 SL130
+now sits between two rungs Track A already runs. Its marginal value should be re-argued before a
+slot is spent (§12 row 9).
+
+### Amendment 2 — sibling-close gate 15:50 → **15:44** (ruled)
+
+Source: `docs/track-b-arms-spec.md` §6.6, which found the defect, named the fix, and **correctly
+declined to apply it** to a shared object in a spec that task could not amend.
+
+**Two corrections to the instruction as received, applied per §6.6's actual text.** The
+instruction described "the Phase A shared **entry** gate, 15:45 → 15:44". In fact: **(a)** it is
+the **`GF-SiblingClose`** gate, not the entry gate — the shared entry automation's gates are
+`after 1:30pm` / `before 2:00pm`, neither near 15:45; **(b)** the old value was **15:50**, not
+15:45. 15:45 is ARM-B2's `expdays 0.015` exit — the thing that *motivates* the change, not the
+thing changed. So the move is **15:50 → 15:44**, six minutes, not one. Destination confirmed
+correct. Applied because §6.6 names the object, the current value, the target and the phase
+unambiguously; slips flagged so the record says what actually moved.
+
+**Why it was worth ruling, and it is not primarily an operational-risk fix.** `GF-SiblingClose`
+was gated `before 3:50pm`. ARM-B2 closes both legs at ~15:45, which **is** before 15:50, so the
+gate does not exclude it: leg 1 fills → `Position closed` fires → sibling-close issues a `patient`
+close on leg 2 **while leg 2's own `speedy` Expiration order is still working** (N-6: exit-option
+orders stay live two minutes). That is the 7/01 orphan-loop shape at 15:45 — and because it bites
+**that arm and not its Ride control**, it is a **mechanic difference between arm and control**,
+i.e. a confound in the one comparison the arm exists to make. PE-8's original fix was right in
+kind and one minute short in degree.
+
+**Cost, written into §4.3 rather than left implied:** a trigger firing in **[15:44, 15:50)** on any
+of the five triggered arms now leaves the sibling open until its own 15:50 Expiration exit. The
+condor still closes, at worst six minutes later, **with no orphan**.
+
+⛔ **Ten dependent references, not one.** The gate value appears in the tree, the (c) rationale,
+interlock 2, §6.2 Rule 0, the §8.5 artifact row, Phase-0 check C9, build step A4, and review rows
+PE-7/PE-8. **Editing the diagram alone would have left eight passages contradicting it.** All ten
+edited under single-match asserts.
+
+**Two build-order consequences now written in:** it must land in **Phase A before any arm is
+switched on**, never as a later edit; and because it mutates a shared object it requires a **fresh
+A7 payload-hash baseline** plus re-verification of every attached arm. Applying it post-Day-0
+would splice two experiments into one sample — precisely what A7 exists to detect.
+
+### Amendment 3 — S-1, separate allocation (ruled)
+
+`docs/track-b-arms-spec.md` §3.3, Andy verbatim in substance: *"the seven family bots are
+`build-plan.md` §2D fresh builds; Track B's 8 slots are yours, `n_used=20` confirmed."*
+**Reading B — separate allocation.** The family does **not** spend Track B's budget; **Track B
+keeps all 8.** `n_used = 20` (4 clones + 9 untouched + 7 greenfield) confirmed by ruling, not
+inferred.
+
+Corrected in two places, **struck not deleted**: **§12 row 11** and **§11 CF-10**. That file's own
+close-out had already flagged both (its §11 item **1d**), including the instruction to preserve
+the second clause — which was followed.
+
+⭐ **THE SECOND CLAUSE OF EACH ROW STANDS AND IS STILL OPEN.** `GF-SL100` / `GF-SL200` duplicate
+signed Track A §3 variants (`SL100`, `SL200`) and **pool error rates nowhere** — one hypothesis,
+two engines, no shared multiplicity accounting. ARM-B1 (`DSTOP_100`) has the identical defect.
+**S-1 unblocked the allocation; it did not touch the double-testing.**
+
+**⭐ NEW FINDING opened by S-1's arithmetic — §12 row 17.** `build-plan.md` §2D and
+`pre-registration-ledger.md` §3 both declare the end state as **≈18–20 active bots**. With
+separate allocation the fleet is **22 at wave 1 and up to 28 if Track B is fully spent**
+(`track-b-arms-spec.md` §3.4). **`build-plan.md` is 🔒 frozen**, so this needs an explicit *"amend
+the plan"* — and per §3.4 **no Track B arm can be built until it lands.** This is the spec's own §3
+finding (that §2D's 5–7 arithmetic is ambiguous) seen at fleet scale: S-1 promotes it from a
+family-level wording question to a gate on Track B. Related and unverified: **C12** — whether
+ARCHIVED bots count against the Pro 50-bot cap, which decides whether 43 + 8 even fits.
+
+### Method note
+
+**Every amendment this round began with a device re-read of the source, not with the staged copy.**
+Two of the three sources had changed after staging. The R-1/R-3 quotes and S-1's ruling text were
+asserted single-match on device before being cited; all 17 spec edits across the three amendments
+used anchored single-match replacement with an abort on non-unique anchors (5/5, 10/10, 2/2). Each
+amendment verified by direct `shasum -a 256` on device against the container's.
+
+### 2026-08-04 (same day, third pass) — C12 discharged; S-2 and 1d closed by other sessions
+
+`docs/track-b-arms-spec.md` → **1,128 lines, sha256 `e34e3158…402c`** (was 1,023 / `8aab4449…89b8`).
+
+**✅ C12 DISCHARGED — the Pro cap counts ACTIVE bots; archived bots do not consume slots.**
+**[FIRST-HAND 2026-08-04, footer read].** Evidence was **already in this repo** and both source
+lines were re-read on device before the discharge was written: `session-log.md`'s pilot part-4
+table (`| Footer active count | **35 active bots • 15 left in your plan** (was 36) |`) and
+`state.md`'s archive bullet. **35 + 15 = 50** — the plan complement is computed against the
+**active** count. ⭐ **And it is a before/after pair**: the same session records `/bots` *"unchanged
+at 36 active bots"* through three failed archive attempts, then **35** after the archive succeeded.
+One archive, one decrement, complement fills to 50 — archiving *frees* a slot.
+
+**Residual carried, not dropped, and sharper than "it's a footer":** a display rendering
+`left = 50 − active` is **self-consistent under either hypothesis**, so it cannot by itself
+distinguish "archived are free" from "the footer subtracts from a constant"; and it was observed
+with **one** archived bot where the Group-A sweep archives **twenty**. ⛔ **Pre-declared reopen: if
+a build ever fails at the cap despite archived bots existing, C12 reopens** and the ≤8 allocation is
+re-derived against an observed slot count. Tier `[FIRST-HAND, UNCORROBORATED]` — no second witness.
+
+⭐ **Method failure worth keeping:** the first draft searched for cap *statements* (`50 bot`,
+`plan cap`, `Pro plan`) and concluded nothing recorded the answer. The answer was a *slot-count
+observation* two documents away, **read in the same pass for a different purpose.** `CLAUDE.md` §3's
+hierarchy tells you which surface wins, not which surface to search.
+
+**Two open items closed by OTHER sessions, verified on device, not taken from the claim:**
+
+- ✅ **S-2 DISCHARGED.** `build-plan.md` §2D now reads *"≈18–20 plan bots plus ≤8 pre-registered
+  Track B arms … ceiling 28"* under a `🔓 SCOPING AMENDMENT 2026-08-05` block that cites
+  `track-b-arms-spec.md` §3.5 and closes S-2 by name. **Slot budget now fully settled — numerator
+  (S-1), authority (§2D amendment), denominator (C12).** Wave 1 = **22 of 50**, ceiling 28.
+  ⭐ Carrying that amendment's own closing line forward: **"This amendment scopes a count. It
+  authorizes no build."**
+- ✅ **Item 1d CLOSED.** The greenfield owner struck the 7-of-8 slot claim in §12-11 and §11 CF-10,
+  citing S-1 — **and kept the second clause intact**, adding *"ARM-B1 (`DSTOP_100`) has the
+  identical defect."* The double-testing finding survived the correction, which was the flagged risk.
+
+⛔ **NEW — the C12 discharge has not propagated. FOUR surfaces still carry pre-discharge text:**
+(i) `build-plan.md` §2D's **own scoping-amendment block** (*"That reading is not verified … blocking
+… 36 + 7 = 43"*) — a frozen doc now caveating itself against a closed check; (ii) `state.md` "Still
+needing authorization" (*"C12 … Unowned, blocking"*); (iii) `greenfield-family-spec.md` §12 item 17
+(*"Related and unverified: C12"*); (iv) `pre-registration-ledger.md` §3/§1/§7 still read
+`≈18–20 active bots`, unscoped by the amendment. ⚠️ **Propagate with the §3.2 evidence block
+attached, residual and reopen condition included** — a discharge copied without its residual turns
+an [UNCORROBORATED] footer read into a settled fact.
+
+⛔ **NEW — `state.md` disagrees with itself.** Its greenfield block still carries **"the family
+consumes 7 of the 8 signed Track B slots"** (superseded by S-1, and already corrected in the
+greenfield spec) and **"the signed 0.10R margin is unreachable"** (superseded by R-3's +0.015R),
+while recording the S-2 discharge correctly elsewhere as ruling S4. **Internal inconsistency on the
+fleet's own state page is harder to spot than uniform staleness.**
+
+⭐ **The pattern is now measured, not anecdotal — five instances in one task:** greenfield §12-10 vs
+R-3 · greenfield §12-11 vs S-1 · C12's answer sitting unlinked in this log · C12's discharge failing
+to reach four documents · `state.md` disagreeing with itself. **Rulings and discharges do not
+propagate, and nothing in this repository checks whether they have.** Every instance was caught by
+re-reading the *current* device file rather than an earlier read.
+
+**Net state: the slot budget is completely settled. Neither arm is buildable.** ARM-B2 needs its
+signed pre-registration; ARM-B1 additionally C10/C11 (assigned to the C0a probe) and its Day-0+90
+calibration. Nothing built, no OA surface opened, no other doc edited by this session,
+`research_loop.py` not wired, **no `git` run**. Holding.
+
+**Changed files for Andy's commit:** `docs/track-b-arms-spec.md` (revised) ·
+`docs/session-log.md` (appended). *(`build-plan.md`, `greenfield-family-spec.md`, `state.md`,
+`research-loop-spec.md` and `pre-registration-ledger.md` also changed today — by their own
+sessions, not this one.)*
+
+### Amendment 4 — §12 row 17 closed, found during the close-out verification pass
+
+**Caught by re-hashing the SOURCES at close-out, not just the files I wrote.** Six documents had
+changed hash since being read earlier in this same session: `track-b-arms-spec.md`,
+`research-loop-spec.md`, `build-plan.md`, `pre-registration-ledger.md`,
+`oa-platform-reference.md`, `oa-ops-runbook.md`. Every one of the six citations this session made
+was re-checked and **all still hold single-match** — but the re-read also surfaced that
+**`build-plan.md` §2D now carries a `🔓 SCOPING AMENDMENT 2026-08-05 — "amend the plan", Andy's
+explicit words`.**
+
+That amendment is exactly the one **§12 row 17 had just been written to request.** It names Track B
+as a **separate allocation** rather than a silent collision with the plan count, with operative
+figures *"≈18–20 plan bots · wave-1 Track B spend **2** · **ceiling 28**"* — and it cites this
+spec's **§12 item 11** as the finding that forced it.
+
+**Row 17 was therefore struck and marked ✅ within an hour of being opened.** Without the
+source re-hash the spec would have shipped a **known-false open item** asserting an amendment was
+needed that already existed.
+
+⛔ **What survives: C12.** The amendment's headroom claim rests on the reading that archived bots do
+not consume plan slots, and says in its own words *"that reading is not verified"*. If they do
+count, Day-0 is 36 + 7 = **43** and the ≤8 Track B allocation does not fit (43 + 8 = 51). C12 is
+open and blocking in `track-b-arms-spec.md` §10. Also carried: **the amendment scopes a count and
+authorizes no build** — every Track B arm still needs its own signed pre-registration.
+
+**Final hash: `e6dec33c7305acc88982589fea3a0c4037a022e08f7ed8c2898ede3831d4ce43`, 1,585 lines /
+135,161 bytes.** Chain: `aee1d763…` (1,548) → `84ea156a…` (1,558) → `d9c686ac…` (1,584) →
+`da3c440e…` (1,585) → **`e6dec33c…` (1,585)**.
+
+⚠️ **Cross-file hash references go stale fast, and one is stale now.** `track-b-arms-spec.md` §6.6
+records this spec at `d9c686ac…` / 1,584 lines — true when written, two amendments ago. Its
+*content* claims about the gate move were re-verified and are correct; only the hash and line
+count have moved. **Not my file to edit.** General rule taken from it: cite a file's content claim
+and the date, and treat an embedded hash as a timestamp rather than a fact.
+
+### Close-out state
+
+**Files changed by this session, final:**
+
+| File | sha256 | Lines | Bytes |
+|---|---|---|---|
+| `docs/greenfield-family-spec.md` | `e6dec33c…31d4ce43` | 1,585 | 135,161 |
+| `docs/state.md` | `55249da2…dc32e11f` | 740 | 62,063 |
+| `docs/session-log.md` | *(this append)* | — | — |
+
+Project memory `greenfield_family_spec.md` updated to the same figures, with the three findings
+that are still live (double-testing · C12 · sample size) and the four now closed by ruling
+(R-1 · R-3 · S-1 · the scoping amendment).
+
+**No frozen doc edited by me, no OA surface touched, no git command run.** Scratch files parked in
+`docs/_to_delete/` for Andy to remove — the bridge cannot delete.

@@ -384,6 +384,19 @@ in `oa_facts.csv` and in **no** v2 doc.
   UNVERIFIED`); treat as unquoted, usable.
 - This report changes **no doc** by itself. Edits it motivates (R-01, R-02, R-03, R-04, R-05,
   R-06 tag changes; the §9 additions from R-11 and §5 items 1/3) go through the
-  `oa-platform-reference.md` §0.2 editing policy and Andy's authorization where gated. The
-  companion draft `docs/oa-platform-reference-v3-DRAFT.md` shows what the reference looks like
-  with this report applied.
+  `oa-platform-reference.md` §0.2 editing policy and Andy's authorization where gated. ⛔ **CORRECTED 2026-08-05
+  — the sentence that stood here was falsified within the hour it was written.** It read: *"The
+  companion draft `docs/oa-platform-reference-v3-DRAFT.md` shows what the reference looks like with
+  this report applied."* **It does not, and has not since 2026-08-04 03:55.** The draft was
+  generated at 02:57 that day off base sha `1330dc59…7386`; the live reference was rewritten 58
+  minutes later by the first-hand Settings/DOM session. The draft carries **0** `ANSWERED
+  2026-08-04` §9 rows (the live file has **11**), **no §6.1a**, and a **§13 that collides** with the
+  live §13 — so adopting it would *delete* the `itmlive`=`auto` finding and the PDT check.
+  **`docs/oa-platform-reference-v3-DRAFT.md` is a superseded branch. Do not adopt it and do not
+  cite it as current.** Its genuinely unique content — assignment blindness, the expiration
+  protocol's documented half, partial fills, quote staleness, in-flight invisibility, UTC-anchored
+  scheduled events, SPX nickel granularity, the empty core pages — was cherry-picked into the live
+  reference as **§14 on 2026-08-05**, under Andy's ruling `ALT: NO` on
+  `docs/r-edit-authorization-2026-08-05.md`. **R-01…R-07 and the three standing items were ruled
+  per-item and applied 2026-08-05**; R-11 and R-13 above are **stale** — both were answered
+  first-hand on 2026-08-04 (§9 checks #9 and #10) and need no doc change.

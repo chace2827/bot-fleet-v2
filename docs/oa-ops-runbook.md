@@ -116,6 +116,24 @@ a **single-source claim** — one OA support rep, absent from OA's documentation
 (`oa-platform-reference.md` §10). If it is not on the dashboard at Day-0, the lapse mechanism is
 **unexplained, not solved.** Keep §4's order-level verification as the actual proof.
 
+> ### ⛔ CONTESTED 2026-08-05 — "single-source" and "absent from OA's documentation" are BOTH false.
+> **The toggle is [DOCUMENTED].** Verbatim, `tools/managing-positions/exit-options`:
+> > *"Exit Options always run, even if your automations inside a bot are turned off… **unless you
+> > turn off Exit Options in your bot**"* — **OA-0871**
+> > *"Additionally, you can enable and disable Exit Options from **the main Bots page, inside of
+> > the bot** as shown below, or individually within each position"* — **OA-0896**
+>
+> Three documented control surfaces, one of them bot-level. The 2026-07-31 sweep missed the page.
+> "Single-source" was already wrong on a second count — `oa-platform-reference.md` §10 has carried
+> **[FIRST-HAND ×2]** since 2026-07-31 (the rep's screenshot + Andy's fleet-wide read of all 35
+> bots). This paragraph had been lagging its own cited source.
+>
+> ✅ **What does NOT change — the operative half of this warning stands.** The *causal* lapse claim
+> — that resubscription restores only `AUTOMATIONS` — is still **UNSOURCED** (R-10: zero corpus
+> facts on subscription lapse, deactivation or billing state). **§4's order-level verification
+> remains the only actual proof and is not weakened by this correction.**
+> `oa-reconciliation-report.md` R-01 · `data/oa_facts.csv` sha256 `435abe0d…3527b`.
+
 ### 1.7 Export Data — the ledger source
 
 `Export Data`, **all bot groups selected**, → `data/raw/YYYY-MM-DD.csv`.
@@ -278,6 +296,20 @@ then check group counts against the CSV.
 > single edit** — edit one and all arms change. Fork via **Copy** (§5, trap 1), and let the group
 > be the thing that makes the arms *queryable*, not the thing that makes them *shared*.
 
+> **📝 NARROWED 2026-08-05 — the warning is right; its scope was too wide.** It applies to
+> automations that are **in the Automation Library**, and only those: **OA-0682** — *"Any changes
+> made to an automation will flow through anywhere the automation is used, including other bots."*
+> It does **not** apply to cohort arms built by cloning — **cloning copies** (direct test
+> 2026-08-03; **OA-0683**, **OA-0845**; §5 Trap 1 as corrected 2026-08-05). The cross-reference
+> above to "§5, trap 1" now points at the corrected trap. **Tournament arms built by cloning are
+> already independent; arms built from a Library automation are not.** The arm-level
+> parameter-distinctness assertion is what proves which you have — keep it either way.
+>
+> ⚠️ **This does NOT decide the tournament design.** `state.md` records an open conflict between
+> this section (fork so arms are NOT shared) and `build-plan.md` §2D + `hedge-research.md` §5.2
+> (shared automation **required**). That is a build decision, gated behind "amend the plan", and it
+> remains open.
+
 ---
 
 ## 4. Edit verification — the procedure that is not optional
@@ -390,7 +422,7 @@ does not error — it silently falls back to a stale Default and keeps trading**
 
 | # | Trap | What it does | The counter |
 |---|---|---|---|
-| **1** | **Clones share automations by reference** | Edit the clone, you edited the original — or the original's later edit silently changes your clone | **Fork every automation via Copy** immediately after cloning, then confirm the clone's list points at the copies |
+| **1** | ~~**Clones share automations by reference**~~ — **FALSE. Corrected 2026-08-05.** Cloning **copies**; sharing is **opt-in via the Automation Library** | The old counter was a **no-op ritual**. The real risk is narrower and still real: editing an automation you have added to the Library changes it in **every** bot that uses it | **Before editing any automation, check whether it is in the Library.** In-Library → **Copy to fork**. Not in the Library (the default for a clone) → edit it directly; no fork is needed. Verify by the §4 two-layer check, never by assumption |
 | **2** | **Symbols drop silently on clone** | The bot looks fully configured and **simply never scans** | **Re-add Symbols.** Verify, don't assume |
 | **3** | **Collapsed nodes may not be in the DOM** | A branch missing from the capture with no error | **Expand every caret** before clicking OA Grab |
 | **4** | **The export respects the group filter** | A subset export rebuilds the ledger and erases history | **All groups selected**, every time |
@@ -399,6 +431,30 @@ does not error — it silently falls back to a stale Default and keeps trading**
 | **7** | **A time gate that was never implemented** | The v1 11:00 gate did not exist; 20+ sessions of entry drift | Confirm the gate is **a real decision node**, then check the first five entry timestamps |
 | **8** | **Name collision on archive** | `Opening Range Breakout 60m` is archived; **`60min-ORB-10W-Paper-v1` stays live** | **Read the full name** before archiving |
 | **9** | **Zero-trade ≠ worthless** | `DIR-SPX-PutVIX22-SL75` has 0 positions because its VIX≥22 gate **correctly never fired** | Delete only bots that are **both** zero-trade **and** absent from the disposition table |
+
+> ### ⛔ TRAP 1 CORRECTED 2026-08-05 — the original wording is preserved here, struck above.
+> **Original:** *"Clones share automations by reference | Edit the clone, you edited the original
+> — or the original's later edit silently changes your clone | Fork every automation via Copy
+> immediately after cloning, then confirm the clone's list points at the copies."*
+>
+> **Falsified first-hand, 2026-08-03 (part 1).** The CLONE's `ScannerA` was renamed, saved and
+> hard-reloaded; the ORIGINAL read back **unchanged** in both name and allocation. A shared object
+> would have propagated. **Corroborated structurally:** the Automation Library is opt-in ("Add to
+> My Library"), reports per-automation usage, and contained exactly **one** shared automation
+> fleet-wide (`Defang-Mon-S2-StrikeTouch` → 2 bots).
+>
+> **Corroborated in the docs** — `tools/bots/automations`, `tools/clone-bot-templates`:
+> **OA-0681** *"Automations can also be shared across multiple bots."* ·
+> **OA-0682** *"Any changes made to an automation will flow through anywhere the automation is
+> used, including other bots."* ·
+> **OA-0683** *"You can copy an automation and make changes to the new version without impacting
+> the original."* ·
+> **OA-0845** a clone arrives *"complete with all the settings and strategies of the original
+> bot."*
+> **No fact in the 1,548-fact corpus states that a clone shares by reference.**
+> `oa-reconciliation-report.md` R-02 · `data/oa_facts.csv` sha256 `435abe0d…3527b`.
+> Downstream corrections applied the same day: `pilot-clone-card-qqq-fortress.md` STEP 2 (voided),
+> `reactivation-runbook.md` §2 step 2 (rewritten), §3 below (narrowed).
 
 ---
 

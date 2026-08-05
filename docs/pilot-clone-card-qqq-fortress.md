@@ -116,6 +116,22 @@ CLONE'S TEMPORARY NAME: ______________________________
 
 ## STEP 2 — ⚠️ TRAP 1: fork EVERY automation via Copy
 
+> ### ⛔ VOID 2026-08-05 — THIS STEP'S PREMISE IS FALSE. It was executed 2026-08-03 as a no-op.
+> **Clones do NOT share automations by reference.** The direct test run the same day (part 1)
+> renamed the clone's `ScannerA`, saved, hard-reloaded — and the ORIGINAL read back unchanged.
+> Corroborated by the docs: **OA-0681 / OA-0682 / OA-0683** (sharing is a *Library* feature; Copy
+> forks) and **OA-0845** (a clone arrives complete with the original's settings). No fact in the
+> 1,548-fact corpus supports the premise. `oa-reconciliation-report.md` R-02.
+>
+> **The step and its confirm-checks are LEFT STANDING because this card is the record of what was
+> actually executed on 2026-08-03.** Do not run this step on the remaining three clones.
+>
+> **What replaces it:** before editing an automation, check whether it is in the **Automation
+> Library**. In-Library → **Copy to fork** (OA-0682: Library edits propagate). Not in the Library —
+> the default — → edit directly. The Step 0-vs-Step 2 "original unchanged" check is still worth one
+> page load per clone; it is now a **confirmation**, not a trap counter.
+> Superseding rule: `oa-ops-runbook.md` §5 Trap 1, as corrected 2026-08-05.
+
 > ### ⛔ THE TRAP
 > **Clones share automations BY REFERENCE.** Right now, the clone and the original point at the
 > *same* automation objects. Edit the clone's automation and **you have edited the original
@@ -330,6 +346,12 @@ both.
 > The `EXIT OPTIONS` toggle's **existence is established** — the support rep's screenshot of both
 > toggles on a bot dashboard, plus your own fleet-wide observation of both toggles OFF on all 35
 > bots. Two independent observations. Nothing to report here.
+>
+> **📝 2026-08-05 — a third source exists: the docs.** **OA-0871** and **OA-0896** document the
+> toggle and its three control surfaces (`tools/managing-positions/exit-options`). The evidence set
+> is **[DOCUMENTED + FIRST-HAND ×2]**, not two first-hand observations alone.
+> `oa-reconciliation-report.md` R-01. **The ⚠️ below is unchanged** — the causal claim is still
+> untested, still a Day-0 Trades-list question.
 >
 > ⚠️ **What is still unverified is the CAUSAL claim** — that flipping `EXIT OPTIONS` back ON
 > actually re-arms exit-order generation. A toggle can exist, read ON, and still not produce

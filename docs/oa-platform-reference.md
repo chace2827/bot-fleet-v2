@@ -85,6 +85,29 @@ and a doc disagree, **the doc wins**.
 > Appends backed by a value that was read or a sentence that can be quoted need no authorization.
 > **§8 stays gated** — it is build-plan-adjacent. §8.2 below is *marked* but not rewritten.
 
+> ### 📝 AMENDED 2026-08-05 — the authorization split, at Andy's explicit instruction
+> **The gate is on decisions, not on corrections.**
+>
+> - **Correcting a claim in this file that has been falsified needs no authorization** — provided it
+>   is a **dated banner** citing a **quotable sentence** (an `oa_facts.csv` fact ID with its
+>   verbatim quote) or **a value that was read first-hand on a stated date**, and the original text
+>   is **left standing beneath it** per the convention above. This makes explicit what every
+>   2026-08-03 `⛔ CONTESTED` block already did: the banner that says *"the claim above is false,
+>   and here is the quote"* is an append, and appends backed by a quotable sentence were already
+>   free.
+> - **Replacing or deleting the original text still requires Andy's authorization.** Marking is
+>   free; overwriting is not. The record must stay auditable.
+> - **§8 stays gated**, unchanged — it is build-plan-adjacent, and `build-plan.md` changes require
+>   an explicit "amend the plan".
+> - **Inference from absence is never a correction.** The provenance rule above is unaffected and
+>   is not relaxed by anything in this block.
+> - **Verification is unchanged and not optional:** a direct `device_bash` sha256 plus a
+>   single-match grep of the new text. A tool success message is not verification (`CLAUDE.md`
+>   §9.1a). Every directly-applied correction is listed at commit review, where Andy may veto it.
+>
+> Full regime: `CLAUDE.md` §5, *"Doc-edit authority"*. Worked example of the split applied to
+> sixteen concrete edits: `docs/r-edit-authorization-2026-08-05.md`.
+
 ### 0.3 The Exit Options panel is NOT evidence
 
 > *"When using Exit Options in an Open Position action, all positions opened in the automation
@@ -163,6 +186,20 @@ bots. Editing a shared automation changes it in **every** bot that uses it. **Co
 > **Tags drop to empty**. Of the two traps this file *does* document, one is false (above) and one
 > is inapplicable here — while the three that bite were undocumented.
 
+> ### 📝 SHARPENED 2026-08-05 — it is worse than silence. The docs address cloning and get it wrong.
+> **OA-0845** [DOCUMENTED], `tools/clone-bot-templates`:
+> > *"With a single click, you can add a cloned bot to your portfolio, complete with all the
+> > settings and strategies of the original bot."*
+>
+> Allocation reset to a flat `1000`, Bot Group dropped to `None` and Tags dropped to empty are
+> **not** "all the settings and strategies". Per §0.2 the screenshot beats the doc and the three
+> traps stand **[FIRST-HAND 2026-08-03]** — but record this as a **documented claim contradicted by
+> observation**, which is stronger ammunition than "appears in NO document". Doc-side corroboration
+> that clone drift is a known problem: **OA-0721** — users are told to confirm Automation and Bot
+> Input values after upgrading or cloning a bot, *"not only can this result in subpar performance
+> for you, but it can also misrepresent the bot template's performance on the Top Bots page."*
+> `oa-reconciliation-report.md` R-07.
+
 ---
 
 ## 3. Bot settings and safeguards
@@ -224,6 +261,18 @@ later positions to avoid exceeding 100%.
 > claim is **not on the safeguards page** and carries no source anywhere in this file. It sits in a
 > section whose other claims are all [DOCUMENTED], which makes it read as documented. **Treat as
 > unsourced until someone finds the page or observes it.** Sizing decisions must not rest on it.
+
+> ### ✅ RESOLVED 2026-08-05 — the claim IS sourced. The audit looked on the wrong page.
+> It is not on `tools/bots/safeguards`. It is on
+> `technical-documentation/platform/automation-behavior`, verbatim:
+> > *"If you attempt to open multiple positions using a percentage-based allocation greater than
+> > 50%, the contract/share amount of a subsequent position is intentionally reduced to avoid
+> > allocating more than 100% of bot capital."* — **OA-0083** [DOCUMENTED]
+>
+> **Retag [DOCUMENTED]. The [UNVERIFIED] flag above is lifted** — sizing may rest on this again, as
+> documented platform behavior rather than folklore. The flag's own release condition ("until
+> someone finds the page") is met. `oa-reconciliation-report.md` R-05. `docs/state.md`'s Tier-1
+> list is updated in the same pass.
 
 ---
 
@@ -572,6 +621,27 @@ Per-position rules, evaluated every **1 market minute**, running **first** in th
 *(The v1 file said "roughly 9:40 AM–3:58 PM ET". The docs are more precise; adopt them. This
 change matters — see §8.2.)*
 
+> ### 📝 [CONFLICT] 2026-08-05 — the START time is docs-internal-contradictory. The product settles it.
+> Two DOCUMENTED pages disagree on the start:
+> > *"Exit Options can run from 9:31 am ET until 1 minute before the market close. You can
+> > customize the Exit Options schedule in your Settings."*
+> > — `tools/managing-positions/exit-options` — **OA-0870**
+> > *"The user-defined parameters are checked every one market minute between 9:40 AM and 3:59 PM
+> > Eastern."*
+> > — `technical-documentation/platform/automation-behavior` — **OA-0085**
+>
+> The **end** (~15:59 / 3:59 PM) agrees. The **start** is 9:31 on one page and 9:40 on the other.
+> Retag the START **[CONFLICT]**; the sentence above may no longer be read as a single documented
+> window. The §4.2 "three windows" append gains a fourth number.
+>
+> ✅ **For THIS account the product has already settled it, first-hand.** §4.1's
+> `✅ RESOLVED IN THE PRODUCT 2026-08-04` block reads `exitstart` = `09:31`
+> (`type=time min="09:31" max="15:30"`) and `exitend` = `1` → 15:59; §6.1a confirms the modal
+> header renders `9:31am to 1 minute before market close` **live from that same Bot Schedule**.
+> **09:31 is the operative value here — read, not inferred.** The conflict is a docs defect to
+> carry, not an open question about this account. No project design depends on the start minute.
+> `oa-reconciliation-report.md` R-06. Applied as narrowed, at Andy's explicit ruling 2026-08-05.
+
 > **📝 Appended 2026-08-03 — TWO documented facts this section was missing.**
 >
 > **1. THE WINDOW IS CUSTOMIZABLE.** The docs give the window and then state it is **customizable
@@ -791,6 +861,16 @@ rate on thin credits, so they are probably right — but they are not documented
 > [PROJECT-RULE] until it can be quoted directly** — half a claim being documented does not
 > document the other half.
 
+> ### ✅ RESOLVED 2026-08-05 — the mid-price half CAN now be quoted directly. Promote it.
+> The condition the block above sets is met, verbatim from `tools/managing-positions/exit-options`:
+> > *"Exit Options use a position's mid-price when evaluating returns."* — **OA-0872** [DOCUMENTED]
+>
+> **Both halves of §6.4 are now [DOCUMENTED]**: the 2-minute order lifetime (OA-0877 / OA-0883 /
+> OA-0878, quoted in the ⛔ block above) and mid-price evaluation (OA-0872). The
+> ⚠️ **[PROJECT-RULE, not doc-verified.]** tag at the head of this section is therefore wrong on
+> **both** counts and is superseded by this block together with the ⛔ block above it.
+> `oa-reconciliation-report.md` R-04.
+
 ### 6.5 Re-applying Exit Options — the highest-value unverified operation
 
 Whether **Update Position Exit Options** can be re-applied repeatedly without generating
@@ -815,8 +895,17 @@ cancelling and re-sending until filled or exhausted.
 | Off | single limit order | — |
 | **Market** | immediate market order | — |
 
-⚠️ **[PROJECT-RULE, not doc-verified.]** These mode names, price counts and timings come from
-project files. The docs do not state them.
+✅ **[DOCUMENTED + FIRST-HAND].** Every cell above is stated verbatim on `tools/bots/smartpricing`:
+**OA-0785** *"Normal will try up to 4 prices, 10 seconds each."* · **OA-0786** *"Fast will try up
+to 3 prices, 5 seconds each."* · **OA-0787** *"Patient will try up to 5 prices, 20 seconds each."*
+· **OA-0784** *"…turn SmartPricing off and use a single limit, or send a market order."*
+Independently confirmed cell-for-cell by the first-hand read recorded immediately below — docs and
+product agree, which is rare enough in this file to be worth stating.
+
+*(⛔ Corrected 2026-08-05, authorized by Andy. This line previously read:* ⚠️ *"**[PROJECT-RULE, not
+doc-verified.]** These mode names, price counts and timings come from project files. The docs do not
+state them." That was wrong on both counts —* `oa-reconciliation-report.md` *R-03. The `speedy`
+internal value remains **[FIRST-HAND]** only; the docs do not give internal values.)*
 
 > ### ✅ VERIFIED FIRST-HAND 2026-08-03 — the table above is correct in every cell.
 > Read verbatim off the live SmartPricing selector on `QQQ-IC-0DTE-Fortress Clone`, with each
@@ -1005,6 +1094,23 @@ dashboard, visible only there and never in the editor. **Two independent observa
 docs gap, not an evidence gap: the docs demonstrably lag the product in at least three other
 confirmed places (§0.2), and a first-hand observation beats a stale doc.
 
+> ### ⛔ CONTESTED 2026-08-05 — THE PARAGRAPH ABOVE IS FALSE. The toggle IS documented.
+> The 2026-07-31 sweep missed `tools/managing-positions/exit-options`. Verbatim:
+> > *"Exit Options always run, even if your automations inside a bot are turned off… **unless you
+> > turn off Exit Options in your bot**"* — **OA-0871** [DOCUMENTED]
+> > *"Additionally, you can enable and disable Exit Options from **the main Bots page, inside of
+> > the bot** as shown below, or individually within each position"* — **OA-0896** [DOCUMENTED]
+>
+> **Existence retags to [DOCUMENTED + FIRST-HAND ×2]** — the strongest tier any claim in this file
+> holds. Three documented control surfaces: the main Bots page, inside the bot, per position.
+>
+> ⚠️ **The section heading still stands, unchanged.** *"MECHANISM still unverified"* is untouched:
+> the docs establish the toggle's existence and its surfaces and say **nothing** about subscription
+> lapse, deactivation, or what resubscription restores (R-10 — zero corpus facts; the only adjacent
+> row, OA-0423, is DOCS-SILENT and about broker authorization). The ⚠️ CAUSAL block below is
+> unmodified, and **§8.3's Day-0 Trades-list check remains the only test that settles it.**
+> `oa-reconciliation-report.md` R-01 · `data/oa_facts.csv` sha256 `435abe0d…3527b`.
+
 > ### ⚠️ WHAT REMAINS UNVERIFIED IS THE CAUSAL CLAIM
 > That **flipping the toggle back ON re-arms exit-order generation** is the explanation for the
 > lapse, and it is **not established.** A toggle can exist, read ON, and still produce no orders
@@ -1148,6 +1254,75 @@ notifications) = unchecked · `paper` (notifications for paper trading) = **unch
 fleet is entirely paper right now, so **position-open/close emails are not reaching Andy for the
 bots that actually exist.** Membership reads `Pro (Monthly Plan)` · `BOTS 50` · `PER BOT $100k`,
 which is where §3's `seed max="100000"` comes from.
+
+---
+
+## 14. 📎 Documented facts this file was missing — PHASE 6 corpus, added 2026-08-05
+
+*Cherry-picked from `oa-platform-reference-v3-DRAFT.md` §13 at Andy's ruling 2026-08-05 (**ALT: NO**
+— the draft is a stale branch off base sha `1330dc59…7386` and adopting it wholesale would have
+deleted §6.1a, §13 and eleven `ANSWERED 2026-08-04` §9 rows; only its unique content is carried
+here). Every claim below is [DOCUMENTED] with a `data/oa_facts.csv` fact ID. Full register:
+`docs/oa-reconciliation-report.md` §5. **Nothing here is an inference from absence.***
+
+### 14.1 ⛔ Bots are blind to assignment
+
+Bots *"do not support"* and are *"unaware of"* assignment [**OA-0245**, **OA-0246**]; the broker
+API does not report assignment events to OA [**OA-0145**]. Assignment can occur on OTM legs, before
+or after the close [**OA-0097**, **OA-0239**]. After an assignment the bot keeps tracking the
+pre-assignment position, still attempts exits against it, and errors [**OA-0146**, **OA-0147**,
+**OA-0251**]. OA tracks positions independently of the broker [**OA-0247**] — **OA-side position
+state can silently diverge from broker truth**, and only a broker-side check detects it. The daily
+loop's drift audit reads OA exports; **it cannot see this class.** Recorded as a known blind spot,
+not a fixable one.
+
+### 14.2 The expiration protocol — the documented half
+
+§13.1 records this account's setting first-hand (`itmpaper` = `itmlive` = `auto`). The corpus adds
+the surrounding facts: three Settings options [**OA-0233**]; the **default sends no closing order**
+and reports a synthetic estimated P/L [**OA-0157**, **OA-0230**, **OA-0231**]; OTM positions are
+never closed [**OA-0236**]; last moneyness check 10 minutes before the close [**OA-0238**]; which
+price decides ITM is DOCS-SILENT [**OA-0252**], as is what happens if the market-order variant
+fails to fill [**OA-0161**].
+
+⚠️ **[CONFLICT] worth carrying:** `automation-behavior` says bots *"attempt to close the entire
+position"* when a leg is ITM on expiration day [**OA-0097**] — presumably describing the
+non-default setting, but as written the two pages disagree [vs **OA-0231**].
+
+### 14.3 The rest, briefly
+
+- **Partial fills.** Opening-order partials reset a 2-minute timeout; at expiry the remainder is
+  **canceled** and the position flips to "open" **with the partial quantity** [**OA-0140**–**OA-0142**].
+  Closing-order partial behavior is DOCS-SILENT [**OA-0144**]. A half-filled condor leg is a live
+  lopsided-risk event **no detector rule currently names**.
+- **Quote staleness.** Contract data updates at most every 500ms **unless no new market update
+  arrived** — thin, far-OTM contracts (this fleet's short strikes on quiet days) can sit stale
+  [**OA-0105**–**OA-0107**]; bot-vs-broker display mismatch is expected by design [**OA-0108**].
+  Relevant to every *"the mark was X at the trigger minute"* forensic.
+- **Externally-closed positions.** The bot keeps honoring close instructions and ITM handling as if
+  the position were open, errors at the broker, and needs a manual override to stop
+  [**OA-0131**–**OA-0133**]. Relevant to any manual intervention mid-pilot or during Day-0.
+- **In-flight invisibility.** A position released to the broker service is temporarily unknown to
+  the bot, and other automations do not see it as Open [**OA-0136**–**OA-0138**] — the documented
+  mechanism behind the 7/01 orphan-loop shape, sharper than §4.2's "redundant position check".
+- **Manual override frees limits.** An overridden position stops counting against position and
+  allocation limits [**OA-0130**, **OA-0759**] — overriding a runaway position *raises* the bot's
+  capacity to open more.
+- **The 10-symbol daily limit counts everything** — opening, analyzing, monitoring and custom
+  inputs alike [**OA-0347**]; at 10 assigned, symbol swaps must wait for after-hours [**OA-0351**].
+- **Scheduled events are UTC-anchored.** *"A UTC offset is employed for all Scheduled events"* — a
+  next-day automation must exist before UTC 00:00 [**OA-0059**]. This is the closest documented
+  evidence bearing on §8.2's DST question and **does not resolve** whether `ntime=1552` tracks
+  market time across the boundary. The Day-0 observation stands.
+- **SPX pricing granularity.** Legs fill in nickels; the "mid" of an SPX leg with a $0.10–$0.15
+  spread is $0.15 buying / $0.10 selling — not the arithmetic mid [**OA-0801**–**OA-0806**].
+- **Silent-by-design paths.** The 'Opportunity is available' check fails without alerting
+  [**OA-0382**]; the four named Warnings never count toward the failsafe [**OA-0324**].
+- **Calendar-day exits.** Before Expiration / Before Earnings compute in **calendar days**
+  [**OA-0886**] — matters for any DTE-specified time exit on a Friday-weekend boundary.
+- **Empty core pages.** The "Automated Trading" concept page has zero body content [**OA-0632**],
+  as do Screener, Trade Grid, Top Strategies and both Guides pages. **No canonical first-party
+  definition of a bot exists** — this file is the substitute, which is why it carries fact IDs.
 
 ---
 

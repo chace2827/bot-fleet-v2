@@ -99,7 +99,7 @@ The clone takes the production name; the original is renamed with an `-ARCHIVED-
 |---|---|---|
 | `IC-SPX-FastPT25-S2` | **ride + S2**, and **only** the two safety fixes: scanner re-entry gate → `opened this side today`, and Cleanup pricing Market → SmartPricing | **No new exit architecture. It is a control.** PT25 removed from the Open Position action explicitly — not left dead behind an off toggle. **Do NOT touch Cleanup itself** — S2 depends on it |
 | `IC-SPX-FastPT25-S2-130PM` | Identical, 1:30 PM entry | The entry-time A/B partner. Same two fixes, same Exit-Option-free spec |
-| `QQQ-IC-0DTE-Fortress` | **Restored exits: PT50 + 15:50 time exit + 15:52 flat-close Scheduled Event backstop** | The restoration the forensic called for, now built into a clean bot instead of patched into a broken one |
+| `QQQ-IC-0DTE-Fortress` | **Restored exits: PT50 + 15:50 time exit + 15:52 flat-close Scheduled Event backstop** | ⛔ **Justification corrected 2026-08-05 on Andy's "amend the plan" — wording only; the build is unchanged.** *Original: "The restoration the forensic called for, now built into a clean bot instead of patched into a broken one."* **The clone's exits already existed:** both Open Position actions carry PT50 + a 15:50 time exit, read first-hand 2026-08-03. Only the **15:52 Scheduled Event backstop** was new work. What died in v1 was **execution, not configuration** (`oa-platform-reference.md` §0.3 — a dead profit target displayed correctly for four months). The forensic called for the backstop and for **order-level proof that the configured exits actually fire** — not for restoring exits that were never absent from the config. Day-0 Trades-list verification is the deliverable this row depends on. |
 | `QQQ-IC-0DTE-Fortress-NoPT50` | **15:50 time exit + 15:52 Scheduled Event backstop. NO PT50.** | **RESOLVED 2026-07-30.** This restores the bot's declared no-PT design and preserves the real A/B: PT50 vs none, against the Fortress clone, with everything else matched. Name stays — it is now accurate |
 
 ### C. Leave in place, untouched (9)
@@ -120,9 +120,33 @@ Validated builds with negligible or specially-treated history. No clone, no spec
   preset. Proof of matching is a capture-diff showing one differing input. No ranking until then.
 - **Optional 1-lot canary** whose PT should fill every single day. If it stops filling, the exit engine died.
 
-**End state: ≈18–20 active bots** (4 clones + 9 untouched + 5–7 fresh).
+**End state: ≈18–20 plan bots plus ≤8 pre-registered Track B arms
+(`research-loop-spec.md` §10, signed), ceiling 28.**
 **Accounting: 35 on the roster = 20 archived + 2 deleted + 4 cloned (originals archived) + 9 untouched.**
 Confirmed against the 2026-07-30 capture. No remainder.
+
+> ### 🔓 SCOPING AMENDMENT 2026-08-05 — "amend the plan", Andy's explicit words
+> **This row previously read:** *"End state: ≈18–20 active bots (4 clones + 9 untouched + 5–7
+> fresh)."* The plan-bot arithmetic is unchanged; what changed is that **Track B arms are now named
+> as a separate allocation rather than silently colliding with this count.**
+>
+> **Why.** `research-loop-spec.md` §10 (signed 2026-08-04) reserves **≤8 bot slots for Track B**.
+> `greenfield-family-spec.md` §12 item 11 found that the seven greenfield family bots meet
+> `research-loop-spec.md` §4's definition of a Track B arm, so on one reading the family consumed
+> **7 of those 8 slots** — leaving one slot to fund three questions rulings R-1, R-2 and R-6 had
+> just created. `track-b-arms-spec.md` §3.5 ruled that reading out: **S-1 — separate allocation
+> (Reading B)**, the seven family bots are §2D fresh builds and Track B's 8 slots are Track B's,
+> with `n_used = 20` confirmed. **S-2** recorded that this spec's slot accounting was
+> **CONDITIONAL on an "amend the plan" scoping amendment to this section.** This is that amendment.
+>
+> **Operative figures:** ≈18–20 plan bots · wave-1 Track B spend **2** · **ceiling 28** if Track B
+> is fully spent. Well inside the Pro plan's 50-bot cap on the reading where archived bots do not
+> count against it. ⚠️ **That reading is not verified** — whether archived bots consume plan slots
+> is check **C12** in `track-b-arms-spec.md` §10, blocking, because if they do count the Day-0
+> arithmetic is 36 + 7 = 43 and the ≤8 allocation does not fit (43 + 8 = 51).
+>
+> **This amendment scopes a count. It authorizes no build.** Every Track B arm still needs its own
+> signed pre-registration entry before it may be switched on.
 
 ---
 

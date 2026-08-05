@@ -105,6 +105,30 @@ at or after 14:00 recovers 66.2% — the strongest discriminator the export cont
 are funded instead from the Track B allocation in §10: `Expiration` 0.015 and 0.005 against the
 0.01 incumbent, a one-field edit on a cloned bot and the cheapest arm in the §9 sweep.
 
+> ### 📝 ANNOTATED 2026-08-05 — the `0.005` (15:55) rung is UNREACHABLE. Only `0.015` funds R-2.
+> **This is an annotation, not a restructure.** R-2 stands as ruled; the sentence above is
+> unchanged; the Track B allocation is unchanged.
+>
+> **The finding.** `Expiration 0.005` fires at **15:55**. The greenfield family's
+> `GF-Backstop-1552-FlatClose` is a **Repeating Events-class** automation firing at **15:52** —
+> three minutes earlier — and it flat-closes the position. **A 15:55 Exit Option can therefore
+> never observe a position in this family**; the backstop has already closed it. The rung is not
+> merely low-information, it is structurally unobservable.
+> Source: `track-b-arms-spec.md` §6.4 (*"The `0.005` (15:55) half of R-2 is NOT buildable in this
+> family"*) and its §2 candidate table, row *"Time `expdays` 0.005 … ⛔ NO in this family … drop —
+> §6.4, backstop preempts it"*. Corroborated by `oa-platform-reference.md` §4.1: Repeating triggers
+> are **not** bound by the Bot Schedule, so the 15:52 backstop fires regardless of the Exit Options
+> window.
+>
+> **Consequence.** **R-2's time question is served by `Expiration` 0.015 (15:45) alone** — that is
+> ARM-B2. The 15:55 rung is **deferred with a stated reason**: it requires a family whose backstop
+> is later than 15:55, which this family is not and should not become. It is recorded as a **cost,
+> not an oversight** (`track-b-arms-spec.md` §11 item 10) and needs a decision Andy has not been
+> asked for — a later-backstop family — before it can be funded.
+>
+> Annotation authorized by Andy 2026-08-05 (row S-6). **§10's signature and the 12-variant §3
+> freeze are untouched.**
+
 *📝 AMENDED 2026-08-04 by Andy's rulings **R-1** and **R-2** on
 `docs/research-loop-review-2026-08-04.md`. **The set remains 12** — CONTROL · PT40 · PT60 · PT70 ·
 SL100 · SL150 · SL200 · DSTOP_100 · DSTOP_150 · COND_100_1300 · COND_100_1400 · COND_200_1400 —
