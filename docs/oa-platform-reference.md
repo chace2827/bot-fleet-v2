@@ -1261,7 +1261,18 @@ The page's own description:
 | `release` | Override position and manually enter results | **NO** |
 | `market` | Close position with a market order | **YES** — 10 min before the close on expiration day |
 
-**Read 2026-08-04: `itmpaper` = `auto`, `itmlive` = `auto`.**
+~~**Read 2026-08-04: `itmpaper` = `auto`, `itmlive` = `auto`.**~~
+
+⚠️ **SUPERSEDED THE SAME DAY — corrected 2026-08-05.** **[FIRST-HAND 2026-08-04: `itmpaper` SET
+to `market`, verified by hard reload + `input.value` re-read, before/after screenshots on file in
+`data/captures/2026-08-03-pilot/06-clone-final/`.]**
+**Current: `itmpaper` = `market` · `itmlive` = `auto`.** The struck line was true at the moment of
+the first read and false by the end of the same session.
+
+⛔ **`itmlive` remains at `auto` deliberately — it is the hard Day-0 gate, and it is unchanged by
+this correction.**
+⚠️ **`itmpaper` = `market` is what created the 15:50 race** (this ITM action vs the bot's own
+Expiration exit, both Market). That race exists *because* of this correction, not despite it.
 
 ⛔ **The account is on the option that sends no closing order.** Only `market` closes an expiring
 ITM position. This is the first-hand confirmation of the Phase 6 risk class (OA-0157 / OA-0231,

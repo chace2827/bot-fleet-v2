@@ -436,15 +436,129 @@ as a big-bang extraction. Do not queue it as a standalone task.
   Blocks 3–4 (ops-doc trims, reference merges) deferred until after the pilot / Day-0.
 
 ## Not built yet — do not go looking for them
-- `data/bots_config_v2.csv` (Phase 2 — written from capture, never by hand) and
-  `data/mirror_baseline.csv` (one-time frozen mirror snapshot, built from
-  `data/captures/oa_export_positions_2026-07-30.csv`, **not** from the archived ledger).
+- `data/bots_config_v2.csv` (Phase 2 — written from capture, never by hand). See
+  §`bots_config_v2.csv` is BLOCKED, not neglected — it is written **per-bot as each bot is built**.
+- ~~`data/mirror_baseline.csv` (one-time frozen mirror snapshot, built from
+  `data/captures/oa_export_positions_2026-07-30.csv`, **not** from the archived ledger).~~
+  ⚠️ **CORRECTED 2026-08-05 — this limb was stale and contradicted this same file.**
+  **[FIRST-HAND 2026-08-04: `data/mirror_baseline.csv` written via
+  `scripts/build_mirror_baseline.py` + receipt — 174 positions, 10 mirrors, zero excluded.]**
+  It **exists**. See §Mirror baseline — WRITTEN 2026-08-04, do not recompute.
+  ⛔ **Do not rebuild it.** It is an anchor, not a metric; the script refuses to overwrite without
+  `--force`, because recomputing it against a later export silently moves the baseline every future
+  comparison is measured against.
 - The liveness check is half-done: the `SILENT_BOT` rule ships, but the bot-log side needs a
   log source the detector does not have.
 
 ## Day-0 first action
 **Set `LEDGER_START` in `build_ledger.py` before anything else.** Then
 `reactivation-runbook.md` top to bottom.
+
+## ⭐ DAY-0 RUNBOOK AUDIT — 2026-08-05. 36 findings. ✅ ALL 28 GATED ITEMS RULED AND APPLIED SAME DAY.
+
+> ### ✅ RELEASE SHEET RULED IN FULL 2026-08-05 — D0 through D6, all RELEASE. Applied and verified.
+> `docs/day0-release-2026-08-05.md` (28 items → 7 decisions). **Every one released.** The runbook
+> went **223 → 801 lines**; `STOP` went from **0 occurrences to 11**; **6 fleet-halt branches** now
+> exist where there were none. Applied hash `919349b6bc5f1e46`, 13 anchored single-match edits, all
+> verified by direct `device_bash` sha256 + single-match grep.
+>
+> - **D0 — the no-touch observation: OBSERVE FIRST.** The `NOT RULED` slot is now ruled. New
+>   **Step 2c**, placed before any toggle moves, with all three branches. ⚠️ Account settings are
+>   explicitly carved out as *not* toggle intervention, so Step 0a does not spoil it.
+> - **D1 — propagation, all three.** `itmlive` = `market` is now **Step 0a**, a hard gate before
+>   capital is live · **Template V2** is §2 step 6a and a ⛔ checklist box · the fleet count is
+>   ≈18–20 plan bots **plus ≤8 Track B arms, ceiling 28**.
+> - **D2 — the failure-branch set, FULL version with fleet-halt branches.** §4 opens with a
+>   how-to-read block defining *bot stays OFF* vs *fleet stays OFF* and **"a check you could not run
+>   is NOT a pass."** §1's heading corrected from *"ANSWERED"* to **EXISTENCE ESTABLISHED, CAUSE
+>   STILL UNVERIFIED**, with **Step 6a** added to settle it and a full REFUTED branch.
+> - **D3 — the swap, and the nine are NOT exempt from Step 6.** Step 3 arms **`EXIT OPTIONS` only**;
+>   `AUTOMATIONS` → ON moved to **Step 7**, per bot, only for bots that passed. The exemption
+>   question is now answered in the document: *"a pre-existing bot is not a proven bot."*
+> - **D4 — all four observations.** DST (**Step 5a**) · the `/settings` capture set incl.
+>   **`maxexits`** · C10's `dstop` read (**Step 6b**) · Phase 0 + A7 in the **Step 4** gate.
+> - **D5 — the sweep deletes `CLAUDE-C5-SHARED-SCRATCH`** after both scratch bots, in that order,
+>   with a verify-back to exactly one shared automation and a do-not-force branch.
+> - **D6 — the remainder, all nine.**
+>
+> ⏸ **One new DRAFT, ruled 2026-08-05 and NOT in force:** a **cadence-scaled graduation bar
+> (Tier M)** for the mirror class, drafted as §7a of `docs/mirror-funding-memo-2026-08-05.md`.
+> ⛔ **`docs/evidence-standards.md` is UNTOUCHED — verified `7d6c4f139a076975`, mtime Aug 3 — and
+> the n≥100 bar remains in force as written. Andy signs Tier M separately.**
+
+`docs/day0-audit-2026-08-05.md` (1,174 lines). Four parallel lenses against
+`docs/reactivation-runbook.md`: new facts · deferred observations · sequencing · failure branches.
+**44 raw findings, 3 refuted or narrowed, 36 carried — CRITICAL 7 · HIGH 13 · MEDIUM 12 · LOW 4.**
+
+**The three that matter most, all CRITICAL, all still GATED:**
+1. ⛔ **`itmlive` = `market` — the ruled hard Day-0 gate — is absent from the Day-0 runbook.**
+   Zero matches for `itmlive` in 223 lines. Amendment drafted as Step 0a (audit F-1).
+2. ⛔ **41 of 44 checks (93%) have no usable failure branch**, the word `STOP` appears **zero**
+   times, and there is **no fleet-level abort anywhere** — every disposition is per-bot (F-3…F-10).
+3. ⛔ **Step 3 arms nine bots 24 lines before Step 6/7 authorizes them.** `AUTOMATIONS` ON *is* the
+   entry authorization. The fix is one swap: **Step 3 arms `EXIT OPTIONS` only; `AUTOMATIONS` goes
+   ON in Step 7, per bot, only for bots that passed** (F-2).
+
+**Applied directly** (evidence = dated first-hand observation of a value read; no decision changed;
+`CLAUDE.md` §5): runbook — pilot ritual is DONE (F-21) · C0a stale gate superseded, build still
+gated on C0c/C2/C7/C8/C9 + C10 (F-11) · three clone traps incl. the silent 100× Allocation reset
+(F-19) · `archiveBot` hazard, no coordinate fallback (F-20) · Library residue is not just two bots
+(F-22) · Bot Schedule is two windows (F-14). Plus `oa-platform-reference.md` §13.1 (F-30) and this
+file's "Not built yet" list (F-31).
+
+~~**GATED, needs Andy**~~ ✅ **ALL RELEASED AND APPLIED 2026-08-05** — see the banner above.
+**F-1** `itmlive` Step 0a · **F-12** Template V2 · **F-32** the ceiling-28 count · **F-2** the
+Step 3/7 swap · **F-3…F-10** the failure-branch set · **F-7** DST · **F-13** the `/settings` capture
+set incl. `maxexits` · **F-15** the Library-object delete · **F-16** C10's `dstop` read · **F-18**
+Phase 0 + A7 in the Step 4 gate · **F-17, F-24…F-28, F-33…F-35** the remainder.
+✅ **F-36 is RULED — OBSERVE FIRST.** It was the one genuinely unruled slot; Step 3 as written would
+have resolved it by acting and made the toggle and billing candidates permanently
+indistinguishable. It is now **Step 2c**, before any toggle moves.
+
+**Nothing touching `build-plan.md` was written.**
+
+## ⭐ MIRROR FUNDING MEMO — 2026-08-05. Verdict: no mirror funding decision is due at Day-0.
+
+`docs/mirror-funding-memo-2026-08-05.md` (289 lines). Sprint Rank 8 / Task 9, pulled forward two days
+because the Day-0 audit made it a Step-2 dependency.
+
+⛔ **Zero of ten mirrors clears `CLAUDE.md` §4's bar** (n≥100 / 6 months / a regime change). Best n is
+**46** (`3DTE`); best span **83 days** (`Nigiri`). The 7 live mirrors hold **n=128 between them**.
+**No FUND verdict exists for any mirror, and none can until late Oct 2026 at the earliest.**
+**Day-0 mirror action: re-arm the seven, watch-only, size nothing.**
+
+⚠️ **The asymmetry that keeps it actionable:** the bar gates *funding*, not *withholding*. DO-NOT-FUND
+and KILL are available on weaker evidence. **For an already-running bot, "insufficient evidence" read
+as "do nothing" means CONTINUE — a capital decision by default.** Memo recommends an explicit runbook
+line.
+
+⛔ **`QQQ long call`'s record is structurally incomplete — do not read its +0.3401.** Best-looking
+mirror in the fleet (6/6 wins, zero drawdown) **and** the bot holding ~$13K risk / ~−$10.8K unrealized
+across 4 open positions. **The export contains only closed positions — all 174 rows have a close date,
+zero open** — so the open book was never in the source. Estimated effect: sum R +2.040 → ≈ **−1.3 over
+10 positions; the sign flips.** **Its funding verdict is blocked until Andy's ride-or-close is
+executed** (audit F-34: Step 2 requires the call *logged*, never *executed*, and Step 3 then arms this
+bot).
+
+📝 **The positive-median/negative-mean four, narrowed:** the two that are **structural** are both
+already OFF (`Opening Range Breakout 60m`, `Weekly-IB-SPY-Paper-v1` — mean-R-ex-worst stays negative).
+The two **in scope** (`60min-ORB-10W-Paper-v1`, `Trendy-Paper-v1`) flip positive on removal of one
+max-loss position — **single-event, UNDETERMINED, undeterminable at n=12/n=15.**
+
+⏳ **NEEDS A RULING (not before Day-0 — before late Oct):** at their own observed trade rates,
+**four of the seven live mirrors need >1 year to reach n≥100; three need >2.5 years** (`Friday 14 DTE`
+27.5 mo · `QQQ long call` 30.4 · `Tasty Condor` 30.7). **Under the rule as written they are
+permanently un-fundable** — the n≥100 bar was set against 0DTE cadence. Three options in §7: accept
+it · a time-based equivalent for low-frequency strategies (**an explicit weakening of the evidence
+law**) · never fund from the mirror pillar.
+
+**DRAFT kills, all on OFF bots, permitted by the asymmetry:** `1-45pm-Sandwich-Paper-v1` KILL
+(median R **−1.0000**, 22.2% win, maxDD 5.4667R) · `Opening Range Breakout 60m` KILL (already
+dispositioned to archive) · `Weekly-IB-SPY-Paper-v1` DO NOT FUND.
+
+✅ **Anchor cross-check PASS — 10 of 10 mirrors reproduced exactly** from the source export
+(`dca69adaf771f064…`, matching the hash the anchor cites). **`mirror_baseline.csv` unchanged
+(`cdceb0a8d444e570…`); `--force` not used; nothing written to `data/`.**
 
 ## Open items
 

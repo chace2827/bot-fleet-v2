@@ -3926,3 +3926,256 @@ delete-list bots. ⚠️ **The Library object does NOT** — see the residue lin
   state rather than re-firing the action — re-firing a save is how a double write happens.
 
 **HOLDING for Andy's commit.**
+
+---
+
+## 2026-08-05 — part 3: adversarial Day-0 audit of `reactivation-runbook.md`
+
+**Why now.** Second-to-last day of strong-model capacity. Day-0 (~mid-Aug) executes on a weaker
+model, so every judgment call has to be front-loaded into the runbook while there is still capacity
+to make it. The runbook was last substantively written 2026-07-30 and carries two 2026-08-05
+patches; everything learned on 08-04/08-05 about the **account** — as opposed to the bots — was
+never propagated into it.
+
+### Method
+Four parallel lens subagents, each prompted to find what the runbook **misses**, each required to
+quote byte-exact with `file:line`, each forbidden to infer from absence:
+(a) new facts since it was written · (b) deferred observations and whether each carries a two-branch
+decision tree · (c) sequencing / unset preconditions · (d) failure branches.
+**44 raw findings. 3 refuted or narrowed. 41 carried, deduped to 33. 3 more found in adjudication
+(F-2 is a lens finding; F-11, F-30, F-31 are mine). Total 36 — CRITICAL 7 · HIGH 13 · MEDIUM 12 ·
+LOW 4.** Written up in `docs/day0-audit-2026-08-05.md` (1,174 lines), every finding with
+ready-to-paste amendment text.
+
+### The three headline findings
+1. **`itmlive` = `market` — a ruled hard Day-0 gate — is absent from the Day-0 runbook.**
+   `grep -n "itmlive\|itmpaper" reactivation-runbook.md` → exit 1, zero matches. Under `auto` a
+   QQQ condor that outlives its exits rides into physical settlement, and every ITM expiry enters
+   the export as a modelled P/L rather than a fill, so the loss tail is synthetic and the arm
+   ranking measures a model. **Gated** — the falsifying evidence is a ruling.
+2. **The word `STOP` does not appear in the runbook.** Not once in 223 lines across **44** checks.
+   **41 of 44 (93%) have no usable failure branch**, and there is **no fleet-level abort anywhere** —
+   every disposition offered is per-bot, so a systemic failure (three bots, same missing PT row)
+   is dispositioned as three independent misses and the sweep continues.
+3. **Step 3 switches nine bots ON 24 lines before the gate that authorizes them.** `AUTOMATIONS`
+   ON *is* the entry authorization; by the time the executor reaches Step 6 the "first new
+   position" already exists and was taken unproven. That is the v1 failure (−$9,618) reproduced on
+   Day-0 with Step 7 gating nothing.
+
+25 absence greps run against the runbook, **all zero**: `itmlive` `itmpaper` `maxexits` `DST`
+`15:55` `15:59` `Bot Schedule` `Repeating` `Template V2` `CLAUDE-C5` `Phase 0` `C10` `A7`
+`no-touch` `STOP` `Bot Group` `side-effect` `watchdog` `Allocation` `15:50` `ntime` `1552` and
+three variants.
+
+### What was applied, and the line that decided it
+`CLAUDE.md` §5 as amended 2026-08-05 gates on **what the falsifying evidence is**, not on how
+settled the conclusion is. **Applied directly** only where the evidence is a fact ID or a dated
+first-hand observation of a value that was read, and no decision changes. **Gated** wherever the
+evidence is a ruling recorded in another project document (§5 condition 3 — the citation loop), and
+wherever the amendment adds or reorders a Day-0 step, adds a delete instruction, or changes a
+disposition. On the **D-1 precedent** — where even a substring replacement carrying a ruling needed
+explicit release — nothing ruling-backed was applied.
+
+**8 applied · 28 gated. Nothing touching `build-plan.md` was written.**
+
+### Two defects found in adjudication, not by any lens
+- **`oa-platform-reference.md:1264` was a stale live assertion** — *"Read 2026-08-04: `itmpaper` =
+  `auto`, `itmlive` = `auto`"* — falsified the same day by the D-3 execution. This is the fact-tier
+  document a weaker model consults on Day-0: left standing it says the paper setting still needs
+  setting (re-setting it is a write against a verified value) and it **hides the 15:50 race, which
+  exists only because `itmpaper` is now `market`.** Lens (b) built an entire ITM decision tree on
+  that line and got the disposition wrong — its branch told the executor to go ask for a ruling
+  that already exists, which would have stalled Day-0. Corrected; original struck.
+- **`state.md` contradicted itself on `data/mirror_baseline.csv`** — §Mirror baseline says
+  *"WRITTEN 2026-08-04, do not recompute"*, while the "Not built yet" list still carried it. A
+  weaker model landing on the second one concludes the anchor does not exist, and the natural
+  repair is to **build** it — which recomputes the anchor against a later export and silently moves
+  the baseline every future comparison is measured against. Limb struck; `bots_config_v2.csv` left
+  standing, because that one is genuinely not built.
+
+### Refuted, and why
+- **Lens (b)'s ITM disposition** — refuted (above). Its *race* half survives as F-17.
+- **Lens (a)'s claim that the timestamp-gap test is defeated by the 15:50 collision** — narrowed.
+  *"A designed 2-minute gap sits on its threshold"* is an inference about §4.4's calibration, not an
+  observation of it; nobody has run the gap test against this pair. Carried as: record both rows,
+  attribute by the gap, and note that **pricing** only becomes the discriminator after Template V2.
+- **Lens (d)'s toggle-revert branch** — carried with its provenance marked. The lens disclosed
+  honestly that the corpus has zero matches for it; the remedy is invented, not cited. Kept because
+  a branch beats silence, flagged so it is not mistaken for procedure.
+
+### Method notes worth carrying
+- **Every one of the four lenses independently found the same `itmlive` hole** (a/A1, c/C3, d/D6),
+  from three different starting questions. A gap that three unrelated lenses trip over is usually
+  structural, not an oversight — here it is: the runbook was written before the account-settings
+  surface was known to exist at all.
+- **A lens reasoning correctly from a stale line produces a confidently wrong branch.** That is the
+  argument for correcting stale live assertions in the fact-tier docs *before* Day-0, not for
+  trusting the executor to notice.
+- **Pre-edit hashes matched the read-time hashes exactly on all three files** — no drift under this
+  session, for once.
+
+**HOLDING for Andy's commit.**
+
+---
+
+## 2026-08-05 — part 4: mirror funding memo (sprint Rank 8 / Task 9)
+
+**Why now, two days early.** Task 9 is written for 2026-08-07. The Day-0 audit (part 3, F-34) made
+mirror funding a **Day-0 Step-2 dependency** — Step 3 arms `QQQ long call` and `Tasty Condor`, the
+two bots holding the five open positions — so it moved ahead of Rank 9/10/11. File dated for the day
+it was written, not the day the prompt assumed; the deviation is stated in the memo's header.
+
+`docs/mirror-funding-memo-2026-08-05.md`, 289 lines.
+
+### The headline: the decision as posed cannot be made
+**Zero of ten mirrors clears the evidence bar.** `CLAUDE.md` §4 requires n≥100 positions / 6 months /
+a regime change for a live-capital decision. Best n in the fleet is **46** (`3DTE $140-$350`); best
+span is **83 days** (`Nigiri-Paper-v1`, 2.7 months). The seven live mirrors hold **n=128 between
+them**. **No FUND verdict is available for any mirror, and none can be until late October 2026 at the
+earliest** — so **mirror funding is not a Day-0 decision at all.** Day-0's mirror action reduces to:
+re-arm the seven, watch-only, size nothing.
+
+### The asymmetry that keeps the memo actionable
+The bar gates **live-capital and growth** decisions; it does **not** gate withholding capital. So
+DO-NOT-FUND and KILL are available on weaker evidence than FUND. Every actionable verdict in the memo
+comes from that asymmetry — and the natural weak-model error is to read "insufficient evidence" as
+"do nothing", which for an already-running bot means **continue**, which is a capital decision made
+by default. Recommended as an explicit runbook line.
+
+### ⛔ The finding that changes a verdict
+**`QQQ long call` is the best-looking mirror in the fleet and its record is structurally incomplete.**
+mean R **+0.3401**, **6 of 6** wins, **zero drawdown** — and it is the bot carrying **~$13K risk /
+~−$10.8K unrealized** across 4 open positions. **The export contains only closed positions: all 174
+rows have a close date, zero open.** The open book was never in the source, so the baseline cannot see
+it and does not claim to. On `build-plan.md` §3's figures the open exposure sits near **−0.83R
+aggregate**, which would take lifetime sum R from +2.040 to roughly **−1.3 over 10 positions** — **the
+sign flips and 100% becomes 6-of-10.** Marked as an ESTIMATE throughout; per-position open data is in
+no file read this session. The baseline is not wrong; **one inference off it is**, and it is exactly
+the inference a funding decision would make.
+
+### The positive-median/negative-mean four, narrowed to two
+Confirmed exactly four. **Two are already OFF, and they are the two where the tail is structural** —
+mean-R-ex-worst stays negative (`Opening Range Breakout 60m` −0.0613 on 6 losses of 19;
+`Weekly-IB-SPY-Paper-v1` −0.0459 on a 50% win rate). The two **in funding scope**
+(`60min-ORB-10W-Paper-v1`, `Trendy-Paper-v1`) both **flip positive when a single max-loss position is
+removed** — single-event, not structural. ⚠️ "Single-event" is not "fine": at n=12 and n=15, with 2
+and 3 losses, healthy-strategy-took-one-bad-loss and loss-frequency-hasn't-shown-up-yet are not
+separable. Verdict: **UNDETERMINED and undeterminable at this n.**
+
+### ⛔ The structural problem that needs a ruling (not before Day-0, but cheap to make now)
+Days to n≥100 at each mirror's own observed trade rate: `3DTE` **3.2 months** · `Nigiri` **4.4** ·
+`60min-ORB` **11.6** · `Trendy` **14.1** · `Friday 14 DTE` **27.5** · `QQQ long call` **30.4** ·
+`Tasty Condor` **30.7**. **Four of seven need over a year; three need over two and a half.** They are
+low-frequency by construction — 14-DTE broken wings and long calls do not produce 100 positions on a
+useful horizon. **Under the rule as written those four are permanently un-fundable**, which is a real
+consequence and probably not the intent: the n≥100 bar was set against 0DTE cadence. Three options
+put to Andy (accept it · a time-based equivalent for low-frequency strategies, written explicitly as
+a weakening of the evidence law · never fund from the mirror pillar). **Not resolved here — it is a
+decision.**
+
+### Two risk shapes the mean hides
+- **`3DTE $140-$350`** — 95.7% win rate, mean win **+0.0411R**, one **−1.0000R** loss. **One max loss
+  erases ~24 average wins**, and at n=46 the strategy has seen exactly **2** losing positions. Its
+  whole question is a tail that has barely been sampled; the extra 54 positions are almost entirely
+  about observing tail frequency.
+- **`Nigiri-Paper-v1`** — **never a losing position** in n=38. Worst R **0.0000**, maxDD **0.0000**,
+  sd **0.0065** against a mean of **+0.0102**; mean and median identical to four decimals. ⚠️ A record
+  with no losses at all should raise whether the loss mode is outside the window rather than absent.
+
+### Verification
+Recomputed `n_with_R`, `mean_R`, `median_R`, `win_rate` from the source export
+(sha `dca69adaf771f064…`, **matching the hash the anchor cites**) — **reproduced the anchor exactly on
+all 10 of 10 mirrors, zero mismatches.** Derived columns (sd, worst, maxDD on the chronological
+cumulative-R curve, quantiles, tail decomposition, trade rates) are new this session and labelled.
+**The anchor was read only — `cdceb0a8d444e570…` unchanged after the session; `--force` not used; no
+write to `data/`.** No OA, no git.
+
+### Method note worth carrying
+**"The export excludes open positions" is not a filter to work around — it is a property of what an
+export is.** The instinct on seeing a 100%-win-rate bot was that the baseline had dropped its open
+rows; checking showed the source never had them. The correct move was to stop treating it as a data
+defect and start treating it as a **scope statement about what the anchor can support**. Any future
+statistic built off a positions export inherits the same blind spot.
+
+**HOLDING for Andy's commit.**
+
+---
+
+## 2026-08-05 — part 5: release sheet ruled in full; all 28 gated items applied
+
+Andy ruled `docs/day0-release-2026-08-05.md` end to end — **D0 through D6, every one RELEASE** —
+plus one new drafting instruction. Everything applied the same session.
+
+### What changed, in one number each
+`docs/reactivation-runbook.md`: **223 lines at session start → 301 after the audit's 8 direct edits →
+801 after the rulings.** The word **`STOP` went from 0 occurrences to 11.** **Six fleet-halt
+branches** now exist where the document previously had **none** — every disposition it offered was
+per-bot, so a systemic failure would have been dispositioned as N independent misses.
+**13 anchored single-match edits**, `ed30534e3d27bad8` → `919349b6bc5f1e46`.
+
+### The rulings
+- **D0 — no-touch observation: OBSERVE FIRST.** This was the only genuinely *unruled* slot on the
+  sheet (`NOT RULED as of 2026-08-04`) and the only item where waiting destroyed information. It is
+  now **Step 2c**, sequenced before any toggle moves, with branches for reads-ON, reads-OFF and
+  unreadable. ⚠️ Account settings are explicitly carved out as **not** toggle intervention, so
+  Step 0a's `itmlive` write does not spoil the observation — that carve-out is load-bearing and was
+  not in the drafted text.
+- **D1 — propagation, all three.** `itmlive` = `market` is **Step 0a**, before capital is live, with
+  a fleet-halt branch if it will not persist through a hard reload. Template **V2** is §2 step 6a
+  **and** a ⛔ checklist box, since the ruling put it before Day-0. Count corrected to ≈18–20 plan
+  bots **plus ≤8 Track B arms, ceiling 28**, with the *"scopes a count, authorizes no build"* rider.
+- **D2 — failure branches, FULL version, fleet-halt included.** §4 now opens with a how-to-read block
+  defining *bot stays OFF* vs *fleet stays OFF*, and stating **"a check you could not run is NOT a
+  pass."** §1's heading went from *"ANSWERED"* to **EXISTENCE ESTABLISHED, CAUSE STILL UNVERIFIED**,
+  and **Step 6a** was added to settle it — including the REFUTED branch that halts the fleet, blocks
+  the clones as well, and checks the four competing mechanisms in order. §0's *"the re-arm mechanism
+  is known"* was corrected to *"the procedure is known; the CAUSE is not"* for consistency.
+- **D3 — the swap, and the exemption question answered.** Step 3 arms **`EXIT OPTIONS` only**;
+  `AUTOMATIONS` → ON is now **Step 7**, per bot, only for bots that passed Step 6. Andy ruled the
+  nine are **NOT** exempt from Step 6, so that is stated in the document with its reason: *"a
+  pre-existing bot is not a proven bot — these nine are the only bots that lived through the lapse,
+  which makes them the most in need of the check, not the least."*
+- **D4 — all four observations.** DST as **Step 5a** (with the unread-check-is-a-failure branch) ·
+  the seven-field `/settings` capture set incl. **`maxexits`** · C10's `dstop` read as **Step 6b**,
+  which converts the *"Optional 1-lot canary"* into the C10 instrument · Phase 0 + A7 baselines
+  folded into the **Step 4** gate.
+- **D5 — the Library object is deleted.** Written with **order** (bots first, object second, because
+  deleting a shared object while a bot references it is an edit to a live binding), a **verify-back**
+  to exactly one shared automation, and a **do-not-force** branch — an orphan is harmless, a wrong
+  delete in a shared-object list is not.
+- **D6 — the remainder, all nine.**
+
+### The new draft
+Ruled: the n≥100 bar was set against 0DTE cadence and is unreachable for the multi-week mirrors.
+Drafted **Tier M** as **§7a of `docs/mirror-funding-memo-2026-08-05.md`** — a DRAFT amendment slot,
+not in force, Andy signs separately.
+⛔ **`docs/evidence-standards.md` was NOT touched — verified `7d6c4f139a076975`, mtime Aug 3.**
+
+The design point worth keeping: **n≥100 is a proxy, and the thing it proxies for is observations of
+the loss tail.** So Tier M counts what the proxy was standing in for — **M1** n≥30 floor · **M2**
+≥9 months (raised, not lowered, because low cadence means fewer observations per unit time) ·
+**M3 ≥6 losing positions, OR a defined-risk structure whose max loss has been observed once** ·
+**M4** worst drawdown stated in R and explicitly accepted at sizing.
+
+**M3's carve-out is the load-bearing clause.** Without it a bot that has never lost could never
+graduate at any n — and **three of the five Tier-M mirrors have zero losing positions**, as does
+`Nigiri` at n=38. With it, a defined-risk structure substitutes *"max loss is bounded by construction
+and I have seen it once"* for *"I have seen six."* The memo takes an explicit position that the
+carve-out must **not** extend to stop-managed strategies: a stop is an execution promise, and this
+fleet has already paid for the gap between a promised exit and an executed one.
+
+**Membership test keeps the draft honest:** `3DTE` (0.561/day) and `Nigiri` (0.458/day) are **not**
+Tier M and stay on the full n≥100 bar, which they reach in 3–4 months. **The draft weakens nothing
+for any bot that can meet the existing bar.** The five Tier-M mirrors become assessable **Jan–Apr
+2027** instead of **Aug 2027–Mar 2029**. Five open questions were left for Andy rather than resolved,
+including whether M2 should be 9 months or 12 and whether Tier M should carry its own tier label so
+the exception stays visible downstream.
+
+### Method note
+**The session-log append guard fired and refused a write, correctly.** Part 3's append had made
+`**HOLDING for Andy's commit.**` non-unique, so the `count == 1` assertion aborted rather than
+appending blind. Re-run against a **tail assertion** (file must END with the anchor) plus a
+not-already-present check. **A uniqueness assertion is the wrong guard for an append to a growing
+log** — the right one is positional. Both closeouts since have used it.
+
+**HOLDING for Andy's commit.**
