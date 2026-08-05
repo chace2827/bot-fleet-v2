@@ -42,16 +42,33 @@ worthless. No intraday feed is required.
 
 ### 1a. What it already says — DEMONSTRATION ONLY, NOT EVIDENCE
 
-Run over the 1,254 same-day closed positions in that capture:
+> ### 📝 CORRECTED 2026-08-05 (ruling batch release) — D-14. **The figures were right; the
+> ### LABEL and one division were wrong.** Original struck below, per convention.
+> **`74 (19%)` is not reproducible from its own stated definition.** Recomputed on the stated rule
+> `lowReturnPct < returnPct`, n=394 same-day losers: **101, i.e. 25.6%.** The value 74 appears only
+> at `lowReturnPct < returnPct − 0.05`, an **undeclared 5-point epsilon** (n=74, 18.8%); other
+> epsilons give 79 at 0.02 and 66 at 0.10, and **none gives 74 under the stated rule.** Separately,
+> `1,254 same-day **closed** positions` mislabels the population — 1,254 is same-day **all
+> statuses**; same-day **and** `status == closed` is **n=1,136** (`expired` is not a close,
+> `oa-export-schema.md` §6). The +0.111 / +1.182 medians are correct **for the all-status
+> population**, so the numbers stand and only the label was wrong.
+> ⭐ **The correction strengthens the conclusion below rather than weakening it:** the recovery
+> rate is **roughly one loser in four**, not one in five.
 
-- median `MFE − realised return` = **+0.111** (11 points of credit left on the table at the median)
-- 90th percentile = **+1.182**
-- of 394 losers, **74 (19%) dipped further than they finished** — they recovered into the close
+~~Run over the 1,254 same-day closed positions in that capture:~~
+Run over the 1,254 same-day positions in that capture (all statuses; same-day AND `status ==
+closed` is n=1,136 — `expired` is not a close, `oa-export-schema.md` §6):
+
+- median `MFE − realised return` = **+0.111** on the credit basis, n=1,254 (closed-only: **+0.125**,
+  n=1,136) — 11 points of credit left on the table at the median
+- 90th percentile = **+1.182**, n=1,254 (closed-only: **+1.167**, n=1,136)
+- ~~of 394 losers, **74 (19%) dipped further than they finished**~~ of 394 losers,
+  **101 (25.6%) had `lowReturnPct < returnPct`** — they recovered into the close
 
 ⛔ **This is frozen v1 data, pre-cutover, and it spans the June regression when exits were not
 firing.** Under this project's own rules it cannot support a decision. It is reproduced here to
 prove the pipeline computes, and for one directional hint worth carrying into design: **roughly
-one loser in five recovers**, so a naive stop-loss would convert recoveries into realised losses.
+one loser in four recovers** (~~five~~ — corrected 2026-08-05, D-14), so a naive stop-loss would convert recoveries into realised losses.
 The loss-side question is therefore not "add a stop" but "add a stop *only where MAE predicts
 non-recovery*" — which is a testable hypothesis, not a setting.
 
@@ -169,11 +186,36 @@ where the fleet currently has the least evidence.
 
 A variant or arm becomes a **proposal** only when it clears, unchanged from `CLAUDE.md` §4:
 
-- n ≥ 100 positions, **and**
+- ~~n ≥ 100 positions, **and**~~
+  **n ≥ 100 closed positions for that specific (bot, variant) pair**, where a position is a
+  `trade_id` group and risk is the larger side, **and**
 - ≥ 6 months elapsed, **and**
 - the window spans a regime change, **and**
-- it beats the control by a margin exceeding the noise, **adjusted for the 12-variant count**, with
-  the margin **pre-declared** rather than chosen on inspection.
+- it beats the control by a margin exceeding the noise, ~~**adjusted for the 12-variant count**~~
+  **as tested by §10a's stratified paired sign-flip permutation test with max-T across all
+  variants and bots — no Bonferroni term**, with the margin **pre-declared** rather than chosen on
+  inspection.
+
+> ### 📝 APPLIED 2026-08-05 on Andy's explicit release — two signed consequences that had been
+> ### stranded in §5. **Originals struck above.**
+> **1. The `n` line is R-4's signed companion text**, verbatim from
+> `research-loop-review-2026-08-04.md` R-4's REPLACEMENT TEXT block. R-4 was **SIGNED 2026-08-04**
+> and its §10 half was applied the same day; this half *"is signed but sits in §5, outside the
+> §3/§10 application scope"* and was held. It closes the mismatch where §10 said positions are
+> `trade_id` groups with `expired` excluded while §5 still said *"n ≥ 100 positions"* unqualified.
+> ⚠️ **Three populations shared one symbol** before this: ledger **rows** vs **positions**; with
+> vs without `expired`; **fleet-wide pooled** vs **per (bot, variant)**. This line is the last of
+> the three — it is the **per-pair** gate `n`, and it is **not** §10's fleet-wide start condition
+> of `n ≥ 30`. Do not conflate them.
+> **2. The multiplicity clause is replaced by §10a**, added 2026-08-04 by ruling **R-5**, which
+> sets the family at **9 computable variants × every bot under test** and states in its own words
+> that **no Bonferroni term is applied** — so *"adjusted for the 12-variant count"* contradicted a
+> signed section of this same document. ⚠️ **§10a item 2 also binds this gate: it is evaluated
+> ONCE**, at a date written into `pre-registration-ledger.md` **before** n reaches 100. Re-running
+> a failed gate is a new pre-registration.
+> *Nothing else in §5 changed — the 6-month conjunct and the regime-change conjunct stand, and the
+> third of those remains **undefined in every document** (`build-plan.md` §5, greenfield §12-12,
+> `track-b-arms-spec.md` §11-6). **The gate cannot fire until it is written and signed.***
 
 On graduation it does **not** become a config change. It becomes a **drafted, unsigned
 pre-registration entry** in `pre-registration-ledger.md` for Andy to sign or reject.
@@ -188,19 +230,44 @@ matter how good anything looks in October.
 *Recorded here rather than silently corrected. All five are in the tracker as the blocking review
 item; none is applied to the signed text above except where the code had to choose something.*
 
+> **📝 STATUS UPDATED 2026-08-05 on Andy's explicit release.** Items **1** and **3** were
+> **ruled 2026-08-04** (R-1 and R-2) and had gone stale as written — each now carries its ruling
+> beneath the struck text. Item **4** is discharged: §10 is **SIGNED**, and §10a exists. Items
+> **2** and **5** stand as written. *The rulings correct the SPEC; **`research_loop.py` is still
+> `0.1.0-DRAFT` with three fatal defects and is still not wired into `daily.sh`.***
+
 1. **The fixed-$ rungs as signed are redundant.** §3 wrote them as "1.0×credit and 1.5×credit",
    which is arithmetically identical to SL100 and SL150 — a percentage of credit by another name.
    As written they duplicate the SL family and waste two of twelve slots. `research_loop.py`
    implements **0.50× and 0.75× RISK** instead, a genuinely independent axis matching
-   `hedge-research.md` §9's intent. **This amendment is unsigned.**
+   `hedge-research.md` §9's intent. ~~**This amendment is unsigned.**~~
+   **📝 RULED 2026-08-04 by R-1 — applied here 2026-08-05 on Andy's explicit release.
+   R-1 REJECTED BOTH the signed text AND the code's substitution.** The RISK basis is **rejected
+   outright**: *"0.50×risk lands at ~720% of credit at the fleet's median credit/risk of 0.070
+   (n=1,254), beyond the no-stop boundary"* — 0.75×risk is ~1,080%, and the substitution **fired
+   0 times in n=1,254**, which is why the self-test never caught it. **The signed basis is
+   `DSTOP_100` / `DSTOP_150` at 1.00× and 1.50× the bot's trailing-90-day MEDIAN CREDIT, in
+   dollars**, applied to §3 as a dated amendment. ⚠️ **The code still implements the rejected
+   RISK rungs** — this is a spec correction, not a code fix; `research_loop.py` is
+   `0.1.0-DRAFT` and unfixed. ⚠️ **Open, one word from Andy** (`track-b-arms-spec.md` §11-8):
+   is *"trailing-90-day median"* a **one-time** calibration or **rolling**? Rolling makes every
+   re-stamp a new pre-registration under §10a.
 2. **The count was wrong.** §3's prose lists 11 experimental variants while stating 12. The twelfth
    is now `CONTROL`, which earns its slot as the engine's self-test: it must reproduce the realised
    P/L, and a mismatch means the engine is wrong rather than the strategy underperforming.
 3. **Both `TIME_*` variants are structurally undecidable.** MFE/MAE give extremes and their
    timestamps; the mark *at* 15:45 is neither and is recorded nowhere in the export. The first dry
    run returned 2,508 of 15,048 cells `UNDECIDABLE` — exactly those two variants × 1,254 positions.
-   Decide whether they keep their slots as a standing reminder that **time-exit questions require a
-   Track B arm**, or are replaced.
+   ~~Decide whether they keep their slots as a standing reminder that **time-exit questions require a
+   Track B arm**, or are replaced.~~
+   **📝 DECIDED 2026-08-04 by R-2 — applied here 2026-08-05 on Andy's explicit release:
+   REPLACE BOTH, and buy the question with Track B slots.** `UNDECIDABLE` on **1,254 of 1,254**,
+   confirmed. Both `TIME_*` slots are **retired from Track A** — not deleted from the programme —
+   and the time question is funded *"instead from the Track B allocation in §10."* The freed slots
+   went to trough-timing rungs; **the §3 set remains 12**, so the §10 freeze holds without a count
+   change (`COND_200_1400` is the former `COND_MAE_1400`, renamed). ⚠️ **Only half the question is
+   buyable:** R-2's `Expiration 0.005` (15:55) rung is **unreachable under the 15:52 backstop**, so
+   the time question is served by **0.015 (15:45) alone** — `track-b-arms-spec.md` §6.4, ARM-B2.
 4. **§10's margin and start condition were filled in by Claude, not Andy** — flagged there already.
 5. **The export's sign convention is now documented** in `docs/oa-export-schema.md`
    (machine-verified, 0 mismatches on 1,386 rows). §6 below should be read alongside it.
@@ -226,6 +293,34 @@ hand-authored with a positive credit.
    hence the `UNDECIDABLE` verdict class.
 4. **Same-day identification is by `openDate` == `closeDate`.** For 0DTE that is right; verify it
    does not silently capture non-0DTE same-day closes.
+5. **⛔ CENSORING BY THE INCUMBENT EXIT — the largest bias, and it runs opposite to §6.2.**
+   MFE/MAE accumulate only until the position closed. A position the incumbent PT closed at +50%
+   has `mfe_pct ≈ 0.50` and can never evidence 0.70. **Track A can only evaluate variants TIGHTER
+   than the incumbent exit on the same side; every looser variant is right-censored and its
+   `NEVER_REACHED` verdict is a false negative, not a null result.** A `delta = 0.0` on a censored
+   cell is a fabricated zero (`CLAUDE.md` §3). Measured on the v1 capture, demonstration only:
+   `QQQ-IC-0DTE-Raw-HoldToExp` (no PT) shows MFE ≥ 0.70 on 65/80 positions (81.2%, median MFE
+   1.000); `IC-SPX-FastPT25-S2` (PT25) on 39/364 (10.7%, median MFE 0.286); its `-130PM` clone on
+   0/70 (0.0%, median MFE 0.250). The difference is the exit, not the tape.
+   **Rule: the engine must carry a per-position `censored` flag and every looser-side variant must
+   report `CENSORED`, never `NEVER_REACHED`. Looser-side questions are Track B questions.**
+
+> ### 📝 ADDED 2026-08-05 on Andy's explicit release — **§6.5, and it closes a dangling
+> ### reference.** *Verbatim from `research-loop-review-2026-08-04.md`'s D-8 REPLACEMENT TEXT.*
+> **This block did not exist, and R-2's applied §3 text already cited it as `(§6.5)`** — that
+> reference had been dangling since 2026-08-04. It is now resolved.
+> **Why it is limit 5 and not a footnote:** D-8 was rated **FATAL** and is *"the finding with the
+> longest reach."* The 81.2% → 0.0% collapse in apparent PT70 reachability across three bots is
+> not a market fact; **it is the exit erasing the evidence**, and the median MFE of 0.250 on a
+> PT25 bot is the signature. ⚠️ **It runs OPPOSITE to §6.2 and is much larger** — §6.2 warns of
+> optimism on *tighter* targets; this censors *looser* ones out of existence entirely.
+> ⛔ **Not fixable in code.** The `censored` flag **depends on `bots_config_v2.csv`** to know each
+> bot's incumbent exit, and that file is written per-bot as each bot is built — so **Track A's
+> honesty is gated on Phase-2 config capture.** Ruling **R-6** ("combined MFE for a paired condor
+> is a Track B question") sits in the same territory and points the same way.
+> ⚠️ **Consequence for the engine, unfixed:** `research_loop.py` is `0.1.0-DRAFT` and still carries
+> its three fatal defects (units × 100 × quantity · the tautological `CONTROL` · this censoring).
+> **It is not wired into `daily.sh` and must not be.**
 
 ---
 

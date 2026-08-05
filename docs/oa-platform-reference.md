@@ -1061,7 +1061,32 @@ For a sibling-close mechanism, the **timestamp gap is the test**: a designed clo
 
 ### 8.4 Clone checklist — the platform-level traps
 
-1. **Fork ALL automations via Copy** (§2 — shared by reference).
+> ### 📝 CORRECTED 2026-08-05 — **AUTHORIZED §8 EDIT, Andy's explicit release, step 1 only.**
+> *§8 is otherwise gated and nothing else in it was touched. Original struck in place per §0.2.*
+> **Step 1 restated a claim falsified 2026-08-03 and corrected everywhere else in this folder** —
+> it was the last surviving instance in the tree, and it sat in the build instructions.
+>
+> **Evidence — [FIRST-HAND 2026-08-03, direct test]:** the CLONE's ScannerA was renamed, saved and
+> hard-reloaded, and the ORIGINAL read back **unchanged** in both name and allocation. A shared
+> object would have propagated. Corroborated structurally: the Automation Library is **opt-in**
+> ("Add to My Library"), reports per-automation usage, and contained exactly **one** shared
+> automation fleet-wide (`Defang-Mon-S2-StrikeTouch` → 2 bots). **[DOCUMENTED]** corroboration
+> that Library-shared automations *do* propagate: **OA-0682**. **No fact in the 1,548-fact corpus
+> states that a clone shares by reference.**
+>
+> ⚠️ **The fork step was a NO-OP RITUAL, and removing it removes a `Delete` from the procedure** —
+> the fork produced copies that then had to be cleaned up. **The real risk is narrower and still
+> real:** editing an automation you have **added to the Library** changes it in **every** bot that
+> uses it. That is the check that replaces the fork.
+> ⭐ **This is also where the citation-loop rule came from:** §2's `[FIRST-HAND]` tag on the same
+> claim cited `runbook §2 step 2` — the other document asserting it — with no observation behind
+> either. See §0.2's provenance rule. **Steps 2–5 below are unchanged and all still stand.**
+
+1. ~~**Fork ALL automations via Copy** (§2 — shared by reference).~~
+   **⛔ FALSE — corrected 2026-08-05. Cloning COPIES; sharing is opt-in via the Automation
+   Library.** Replace this step with: **before editing any automation, check whether it is in the
+   Library.** In-Library → **Copy to fork**. Not in the Library (the default for a clone) → **edit
+   it directly; no fork is needed.** Verify by `oa-ops-runbook.md` §4's two-layer check.
 2. **Re-add Symbols** (§2 — they drop silently).
 3. Set **Daily / Total limits with 2 positions per IC** in mind (§3).
 4. Confirm every time gate is a **real decision node**, not assumed. *(The 11 AM gate on the

@@ -110,9 +110,30 @@ Two traps in this step, both of which destroy something if you move fast:
 
 ### Step C — Build the rest
 The remaining 3 clones per §2, then the 5–7 fresh builds. Greenfield exits are a named **Exit Option Preset
-in the Open Position action** (PT% as a Bot Input · Touch $0 on the challenged side · time exit), plus the
+in the Open Position action** (~~PT% as a Bot Input~~ **the Exit-Options SET as a Bot Input** · Touch $0 on
+the challenged side · time exit), plus the
 **15:52 flat-close Scheduled Event backstop**, plus a **position-closed-trigger automation** to close the
 sibling spread. Optional 1-lot canary.
+
+> ### 📝 D-1 PROPAGATED 2026-08-05 — substring replaced on Andy's explicit release
+> *From `docs/decision-memo-2026-08-04.md`'s draft amendment (b), one occurrence. Original struck
+> in place. **The Day-0 sequence is otherwise unchanged.***
+>
+> **D-1 ruled 2026-08-04 → Option A.** *"PT% as a Bot Input"* is **not expressible** — **[FIRST-HAND
+> 2026-08-04, Exit Options editor on `QQQ-IC-0DTE-Fortress Clone`]**: the 🔗 sits on the Exit
+> Options **row**, and inside the Default Value editor `i.fa-link` count is **0**. There is no 🔗 on
+> Profit Taking % or any individual field, so the linkable unit is the **whole exit bundle**.
+>
+> ⛔ **G2 rider, and it changes what Day-0 must capture.** The saved action stores a **REFERENCE,
+> not values** — `{"type":"input","input":"IN…","text":"<label>","oldValue":{…}}`. **A capture that
+> reads only the action records the input's NAME, so every arm diffs as identical.** Any Day-0
+> capture, capture-diff or drift-audit run against these bots must **also read the input object's
+> value**. ⚠️ **Never read `oldValue` as current config** — it is a pre-link snapshot and goes
+> stale.
+>
+> ⛔ **Build gate unchanged and still binding: greenfield check C0a — the BOT-INPUT tier has never
+> been observed.** The finding above is at the *Automation* Input tier. If C0a fails, Architecture E
+> is not buildable and Step C's fresh builds return to Andy (`greenfield-family-spec.md` §10).
 
 ### Step D — Pre-register everything
 Draft a pre-registration entry for all ≈18 active bots during this window, so **Day-0 is signing, not

@@ -10,8 +10,20 @@
 > hash. **Until then it authorises nothing.**
 >
 > **No entry, no restart.** A bot without a signed entry stays OFF on Day-0, regardless of how
-> ready it looks. This is `build-plan.md` §5 and `CLAUDE.md` §5, and it applies to all ≈18–20
-> active bots **including the nine untouched ones**.
+> ready it looks. This is `build-plan.md` §5 and `CLAUDE.md` §5, and it applies to all ~~≈18–20
+> active bots~~ **≈18–20 plan bots plus up to 8 pre-registered Track B arms — ceiling 28** —
+> **including the nine untouched ones**, and including every Track B arm.
+>
+> > **📝 SCOPED 2026-08-05 on Andy's explicit release — `build-plan.md` §2D's
+> > `🔓 SCOPING AMENDMENT 2026-08-05` ("amend the plan", Andy's explicit words).** §2D now reads
+> > *"End state: ≈18–20 plan bots plus ≤8 pre-registered Track B arms (`research-loop-spec.md`
+> > §10, signed), ceiling 28."* Track B is a **separate allocation**, not a silent collision with
+> > the plan count (ruling **S-1**; `track-b-arms-spec.md` §3.3/§3.5). Operative figures:
+> > **≈18–20 plan bots · wave-1 Track B spend 2 · ceiling 28**, against a Pro cap of 50 that
+> > counts **active** bots only (**C12 discharged** — `[FIRST-HAND, UNCORROBORATED]`, residual and
+> > reopen condition at `track-b-arms-spec.md` §3.2). **Wave 1 is 22 of 50.**
+> > ⛔ **The amendment scopes a count. It authorizes no build** — and it changes nothing about
+> > *this* document's rule: **no entry, no restart**, for plan bots and Track B arms alike.
 
 ---
 
@@ -73,15 +85,43 @@ SIGNED           <date> ................................  ← blank until Andy s
 
 ---
 
-## 3. The roster — ≈18–20 active bots
+## 3. The roster — ≈18–20 plan bots, plus ≤8 Track B arms. Ceiling 28.
 
-Per `build-plan.md` §2, under decision freeze: **4 clones + 9 untouched + 5–7 fresh.**
+~~Per `build-plan.md` §2, under decision freeze: **4 clones + 9 untouched + 5–7 fresh.**~~
+Per `build-plan.md` §2 as amended 2026-08-05: **4 clones + 9 untouched + 5–7 fresh
+= ≈18–20 plan bots**, **plus ≤8 pre-registered Track B arms** as a separate allocation.
 
 | Group | Count | Entries below |
 |---|--:|---|
 | **B — clone-to-spec** (original archived) | 4 | §4 |
 | **C — untouched** (validated, lived through the lapse) | 9 | §5 |
 | **D — fresh builds** | 5–7 | §6 |
+| **plan-bot subtotal** | **≈18–20** | |
+| **Track B arms** (separate allocation, `research-loop-spec.md` §10) | **≤8** | `track-b-arms-spec.md` §9 — PR-21 / PR-22 proposed, wave-1 spend **2** |
+| **ceiling** | **28** | |
+
+> ### 📝 SCOPED 2026-08-05 — S-2's count amendment propagated here on Andy's explicit release
+> **This heading and line previously read `≈18–20 active bots` / `4 clones + 9 untouched + 5–7
+> fresh`, struck above.** `build-plan.md` §2D now carries a
+> `🔓 SCOPING AMENDMENT 2026-08-05 — "amend the plan", Andy's explicit words` block reading
+> **`End state: ≈18–20 plan bots plus ≤8 pre-registered Track B arms (research-loop-spec.md §10,
+> signed), ceiling 28.`** It cites `track-b-arms-spec.md` §3.5 and closes **S-2** by name.
+> Ruling **S-1** established the separation: the seven greenfield family bots are §2D **fresh
+> builds** (Group D above), **not** Track B spend, so `n_used = 20` and **Track B keeps all 8**.
+>
+> **Against the Pro 50-bot cap: wave 1 is 22 of 50, ceiling 28 of 50.** The denominator counts
+> **ACTIVE** bots — **C12 discharged**, `[FIRST-HAND 2026-08-04, `/bots` footer read]`:
+> `35 active bots • 15 left in your plan` immediately after the Fortress original was archived
+> (against `36 active` through three failed attempts), so **35 + 15 = 50** and archived bots do
+> not consume slots. ⚠️ **Residual, carried:** tier `[FIRST-HAND, UNCORROBORATED]` — that is the
+> footer's *accounting*, not OA's *enforcement* (`left = 50 − active` renders identically under
+> either hypothesis), observed with **one** archived bot where the Group-A sweep archives
+> **twenty**. ⛔ **Pre-declared reopen: if a build ever fails at the cap despite archived bots
+> existing, C12 reopens.** Full block: `track-b-arms-spec.md` §3.2.
+>
+> ⛔ **This scopes a count and authorizes no build.** Every Track B arm needs its own signed
+> entry here before it may be switched on — PR-21 and PR-22 are **DRAFT and unsigned**, and
+> ARM-B1 is **not an arm** until C10/C11 close (`track-b-arms-spec.md` §10).
 
 ---
 
@@ -316,7 +356,7 @@ HYPOTHESIS       Across four arms differing in EXACTLY ONE input value — the e
                  readable. Arms: hard-PT · trailing · ride · <fourth, Andy's call>.
 MECHANISM        Short-premium VRP on 0DTE. The arms share every other input, so any Exp(R)
                  difference is attributable to exit policy alone. Primitives: a NAMED Exit
-                 Option Preset in the Open Position action (PT% as a Bot Input · Touch on the
+                 Option Preset in the Open Position action (the Exit-Options SET as a Bot Input · Touch on the
                  challenged side · time exit) + a flat-close Scheduled Event backstop + a
                  position-closed-trigger automation to close the sibling spread.
 KILL CRITERION   Per arm: Exp(R) per condor < 0 with CI entirely below 0 at n≥60.
@@ -335,6 +375,35 @@ VERIFICATION     A CAPTURE-DIFF showing exactly ONE differing line between any t
                  claim, a diff. Plus each arm's first-position Trades list.
 SIGNED           ..............................
 ```
+> ### 📝 D-1 RULED 2026-08-04 — the arm variable is the WHOLE Exit-Options bundle, not PT%.
+> *Applied 2026-08-05 on Andy's explicit release, from `docs/decision-memo-2026-08-04.md`'s draft
+> amendment (a). The `MECHANISM` substring above was changed from `PT% as a Bot Input` to
+> `the Exit-Options SET as a Bot Input`; nothing else in the entry moved. **This entry is still
+> DRAFT and unsigned.***
+>
+> **D-1 → Option A: Exit-Options-SET as a Bot Input.** Per-field 🔗 does not exist — **[FIRST-HAND
+> 2026-08-04, Exit Options editor on `QQQ-IC-0DTE-Fortress Clone`]**: the 🔗 on the Exit Options
+> row opens `Add Input / Exit Options`, and inside the Default Value editor `i.fa-link` count is
+> **0**. The linkable unit is the whole bundle (`oa-platform-reference.md` §9 row 3).
+> The FAMILY-LEVEL kill criterion below reads "one differing input" at **BUNDLE** granularity;
+> **the capture-diff must therefore decode the exits payload, not compare rendered labels.**
+>
+> ⛔ **THE G2 RIDER, and it is the one that bites.** The saved action stores a **REFERENCE, not
+> values** — `{"type":"input","input":"IN…","text":"<label>","oldValue":{…}}`. **A capture that
+> reads only the action records the input's NAME, so every arm diffs as identical.**
+> `bots_config_v2.csv`, the capture-diff and the drift detector must **also read the input
+> object's value**. ⚠️ **`oldValue` is a trap** — a pre-link snapshot that goes stale; never read
+> it as current config.
+>
+> **Gate status at application:** G1 **YES** (an empty bundle saves and survives a hard reload, so
+> the `ride` arm IS expressible — the memo's G1 fallback is not needed) · G3 **compatible** (a
+> bundle input and a named Preset compose on the same action) · G4 **no propagation** (the `exits`
+> payload stores no preset reference). ⛔ **Still blocking before this entry is signed:
+> greenfield check C0a — the BOT-INPUT tier has never been observed.** G1/G2/G3 and §9 row 3 all
+> exercised the *Automation* Input; `oa-platform-reference.md` §5.2's `[DOCS-SILENT]` tag on the
+> Bot-Input tier stands. **If C0a fails, Architecture E is not buildable and this entry returns to
+> Andy — do NOT fall back to per-arm copies** (`greenfield-family-spec.md` §10 Phase 0).
+
 > ### ⛔ FAMILY-LEVEL KILL CRITERION REPLACED 2026-08-05 — the original was vacuously unfireable
 > **Original wording:** *"FAMILY-LEVEL: if a capture-diff ever shows more than one differing input
 > between two arms, the family's ranking is VOID and all arms are re-based — the comparison, not
@@ -361,10 +430,24 @@ SIGNED           ..............................
 > execution class. The capture-diff requirement is not bureaucracy — a single diff would have
 > caught it on day one. `hedge-research.md` §5.2 and §6.
 >
-> ⚠️ **Two spec dependencies are unverified and must be resolved before signing:** whether Exit
+> ~~⚠️ **Two spec dependencies are unverified and must be resolved before signing:** whether Exit
 > Options can reference a Bot Input at all (the "PT% as a Bot Input" design), and whether one
 > Preset can be referenced from both the call-side and put-side Open actions.
-> `oa-platform-reference.md` §9 items 3 and 4.
+> `oa-platform-reference.md` §9 items 3 and 4.~~
+>
+> > **✅ BOTH ANSWERED 2026-08-04; struck 2026-08-05. One replacement dependency, and it is
+> > sharper.** **[FIRST-HAND 2026-08-04, live UI on `QQQ-IC-0DTE-Fortress Clone`.]**
+> > **#3 — YES, but the input's TYPE is the whole Exit-Options bundle**: `i.fa-link` count is
+> > **0** inside the Default Value editor, so *"PT% as a Bot Input"* is **not expressible** and
+> > the design is D-1 Option A, **Exit-Options-SET as a Bot Input** (see the D-1 banner above).
+> > **#4 — YES, one preset serves BOTH Open Position actions, across two automations**; presets
+> > are **account-scoped** (`UI…` id namespace), so the cross-automation `[DOCS-SILENT]` is
+> > closed. Preset naming is confirmed too — `input[name="pretext"]`, hidden until `defs` is
+> > ticked.
+> > ⛔ **REPLACEMENT DEPENDENCY, still unverified and still blocking this signature: greenfield
+> > check C0a — the BOT-INPUT tier has never been observed.** Everything above tested the
+> > **Automation** Input. `oa-platform-reference.md` §5.2's `[DOCS-SILENT]` tag on the Bot-Input
+> > tier is deliberately unstruck. **C0a can stop Architecture E outright.**
 
 ### Rebuilt hedge tournament arms (count TBD)
 ```
@@ -418,7 +501,9 @@ SIGNED           ..............................
 
 ## 7. Signing checklist — Day-0
 
-For each of the ≈18–20 bots, in this order:
+For each of the ~~≈18–20~~ **≈18–20 plan bots and every Track B arm — up to 28 in total**
+(scoped 2026-08-05; `build-plan.md` §2D's `🔓 SCOPING AMENDMENT 2026-08-05`, §3 above), in this
+order:
 
 1. **Config hash filled** from the bot's own capture file. Not from memory, not from
    `bots_config.csv`.

@@ -3630,3 +3630,130 @@ the commit and the gated batch above.** The standing rule that produced it stand
 
 **HOLDING per `CLAUDE.md` §9.2.** No further writes until Andy releases. The gated list above is
 the next decision batch.
+
+
+### GATED BATCH RELEASED BY ANDY — applied same day, 2026-08-05. Four items, five more files.
+
+**Andy authorized the full gated list in one release**, then hold. Every item below was on the
+sweep's own *"deliberately not applied"* table two hours earlier; the release is what changed, not
+the evidence. Same discipline throughout: sources read fresh from the device, **anchored
+single-match replacement with the match re-asserted inside the process that writes**, verification
+by direct `device_bash` sha256 **plus** a single-match grep. Originals **struck, never deleted**.
+
+**1. S-2's count scoping → `pre-registration-ledger.md` §1 / §3 / §7.** All three now read
+**≈18–20 plan bots plus ≤8 pre-registered Track B arms, ceiling 28**, citing `build-plan.md` §2D's
+`🔓 SCOPING AMENDMENT 2026-08-05` and ruling **S-1**'s separation (the seven greenfield bots are
+§2D fresh builds, `n_used = 20`, Track B keeps all 8). §3's roster table gained a plan-bot subtotal,
+a Track B row and a ceiling row. The **C12 denominator travels with it** — 22 of 50, with the
+`[FIRST-HAND, UNCORROBORATED]` tier, both residual limbs and the reopen condition restated in place.
+⭐ **This closes `track-b-arms-spec.md` §11-1f item (iv) — all four of that item's surfaces are now
+propagated**, and §11-1f is fully closed. ⚠️ **The count is all that moved:** PR-21/PR-22 are still
+DRAFT and unsigned; *"this amendment scopes a count, it authorizes no build."*
+
+**2. D-1 → `reactivation-runbook.md` Step C + `pre-registration-ledger.md` §6.** The memo's paste
+text (a) and (b), applied as written: `PT% as a Bot Input` → **`the Exit-Options SET as a Bot
+Input`**, one occurrence each. Both carry the ruling's evidence — **[FIRST-HAND 2026-08-04, Exit
+Options editor]**: the 🔗 sits on the Exit Options **row**, and `i.fa-link` count is **0** inside
+the Default Value editor, so the linkable unit is the whole bundle.
+⛔ **The G2 rider went into both, because it is the half that bites operationally:** the saved
+action stores a **REFERENCE, not values**, so a capture reading only the action records the input's
+NAME and **every arm diffs as identical**; `bots_config_v2.csv`, the capture-diff and the drift
+detector must read the input **object**, and **`oldValue` is a stale pre-link trap.**
+⭐ **`pre-registration-ledger.md` §6's "two unverified dependencies" block was struck and replaced
+rather than deleted:** both #3 and #4 are answered (#4 — one preset serves **both** Open Position
+actions, presets are **account-scoped**), and the **replacement** dependency is named — **C0a, the
+BOT-INPUT tier, never observed.** ⛔ **C0a is preserved as the live blocker in all three files**,
+and `oa-platform-reference.md` §5.2's `[DOCS-SILENT]` Bot-Input tag is deliberately **left
+unstruck**. Closing it by accident was the specific risk in this item.
+
+**3. `research-loop-spec.md` — six corrections, and the spec is now internally consistent.**
+
+| # | Where | Was | Now |
+|---|---|---|---|
+| §5a-1 | fixed-$ rungs | *"This amendment is unsigned"* | **R-1 REJECTED both** the signed text and the code's `0.50×/0.75× RISK` substitution (~720% / ~1,080% of credit at the fleet median; **0 fires in n=1,254**). Signed basis: **1.00×/1.50× trailing-90-day MEDIAN CREDIT, in dollars** |
+| §5a-3 | `TIME_*` | *"Decide whether they keep their slots"* | **R-2 REPLACED BOTH**, question bought with Track B slots; set stays **12** |
+| §5 gate | `n` | `n ≥ 100 positions` | **R-4's signed companion — `n ≥ 100 closed positions for that specific (bot, variant) pair`**, `trade_id` group, risk = larger side |
+| §5 gate | multiplicity | *"adjusted for the 12-variant count"* | **§10a's stratified paired sign-flip permutation test, max-T, no Bonferroni** |
+| §6 | limit 5 | *(did not exist)* | **The censoring block (D-8), verbatim** — resolves the dangling `(§6.5)` |
+| §1a | recovery figure | `74 (19%)` | **101/394 = 25.6%**; population relabelled — 1,254 is all-status, closed-only is **n=1,136** |
+
+⭐ **Three of these were one symbol meaning three different things.** `n` was: ledger **rows** vs
+**positions**; with vs without `expired`; **fleet-wide pooled** vs **per (bot, variant)**. §10's
+start condition (`n ≥ 30` fleet-wide) and §5's gate (`n ≥ 100` per pair) are now distinguishable on
+the page. **Do not conflate them.**
+⭐ **D-14 strengthens its own conclusion:** the recovery rate is roughly **one loser in four**, not
+one in five, so the case against a naive stop-loss got stronger, not weaker. The figures were never
+wrong — an **undeclared 5-point epsilon** and a mislabelled population were.
+⚠️ **None of this touches the engine.** `research_loop.py` is still `0.1.0-DRAFT` with **three
+fatal defects** and is still **not wired into `daily.sh`**. The new §6.5 `censored` flag **depends
+on `bots_config_v2.csv`**, so **Track A's honesty stays gated on Phase-2 config capture** — the
+correction makes the limit legible, it does not lift it.
+
+**4. `oa-platform-reference.md` §8.4 step 1 — the authorized §8 edit.**
+*"Fork ALL automations via Copy (§2 — shared by reference)"* struck in place and replaced by the
+Library check. **[FIRST-HAND 2026-08-03, direct test]**: the CLONE's ScannerA was renamed, saved and
+hard-reloaded; the ORIGINAL read back unchanged. Structural corroboration: the Library is opt-in,
+reports per-automation usage, and held exactly **one** shared automation fleet-wide.
+**[DOCUMENTED] OA-0682** confirms Library-shared automations *do* propagate — which is the real,
+narrower risk that replaces the fork. **No fact in the 1,548-fact corpus states a clone shares by
+reference.** ⭐ **This was the last surviving instance in the tree and it sat in the build
+instructions** — the one place a no-op ritual costs a `Delete` on every clone.
+⛔ **Scope held: §8.4 step 1 only.** Steps 2–5 unchanged, §8.1/§8.2/§8.3 untouched — asserted by
+line range, not by recollection (the only `2026-08-05` markers inside 977–1102 are the two this
+edit added, both in §8.4).
+
+### Verification record
+
+- **Every source re-hashed at close-out.** `CLAUDE.md` `a95e6c6e…`, `decision-memo-2026-08-04.md`
+  `cd39b972…`, `research-loop-review-2026-08-04.md` `ad0fd68d…` — **all identical to session-start.**
+  `build-plan.md` `289b701a…` — identical to this session's own earlier write, so **no source
+  drifted under either pass.**
+- Every applied item verified by sha256 **plus** single-match grep of the new text (19 anchors),
+  and every struck original confirmed still present (6 anchors).
+- **No live survivor remains** of `(PT% as a Bot Input` in either propagated file, or of
+  *"shared by reference"* as a §8 instruction.
+- Nothing built. No OA surface opened. No `git` run. No scratch files.
+
+### Per-file hash table — final, direct `device_bash sha256`
+
+| File | sha256 | Lines | Bytes |
+|---|---|--:|--:|
+| `docs/build-plan.md` | `289b701a74b29a3f23d8ebe446bed3a6c78185b2573ca0f5cf337f9094d3e5f2` | 300 | 21,504 |
+| `docs/state.md` | `9e64fdf63da3f83d3190beda0d2561868abb53899f23398a613f8bb5733bc7f9` | 861 | 72,304 |
+| `docs/greenfield-family-spec.md` | `99abab8fd35e2d9c5ee5cc34b9c9bee24393e460af422dc6c13c5c705a0eeb1f` | 1,585 | 136,274 |
+| `docs/track-b-arms-spec.md` | `e2753227556ecb93d7854383c87c83978db819ab0a45d1efaa9eab8e611cf759` | 1,173 | 94,475 |
+| `docs/oa-reconciliation-report.md` | `6359d6fcadff3218bc215b078b077e452f715b78c1cf1c8bcbbf1da88a141b98` | 424 | 33,573 |
+| `docs/oa-platform-reference.md` | `b649a11bd59d27973e9d14088831e51f5ac39f583e3d43d64498489ecdc18357` | 1,377 | 90,357 |
+| `docs/oa-ops-runbook.md` | `489501882c99fa8e4a913162a7db2eb907441a0ca2f4c3e7056fb48c7b4bd3d8` | 499 | 32,909 |
+| `docs/oa-export-schema.md` | `13a47071622cfffdf1d8fbc88525bafdd5e601b899c84bc04851a2ffd16a0b76` | 113 | 6,776 |
+| `docs/pre-registration-ledger.md` | `e16bd23ca61f6ab59b953486b91344ee29d3a3abf93484c3af6eb2c8ebe26eed` | 542 | 34,434 |
+| `docs/reactivation-runbook.md` | `f160141caec2ace45a539bfba88fbdd2bed9763b6f19cfd1d14e53871abf14f9` | 223 | 14,108 |
+| `docs/research-loop-spec.md` | `3fe3369ada262ac7397e5b6cbf7f5a1940044d42db78882407ba9268289d7937` | 415 | 26,959 |
+| `docs/session-log.md` | *(this append)* | — | — |
+
+**Changed files for Andy's commit — twelve:** the eight from the sweep, plus
+`docs/pre-registration-ledger.md` · `docs/reactivation-runbook.md` · `docs/research-loop-spec.md`
+*(and `docs/session-log.md`, already in the eight)*.
+
+### What is left, after both passes
+
+**No propagation debt remains from the 2026-08-04/05 rulings.** Every surface named by
+`track-b-arms-spec.md` §11-1f and §11-1g, by the memo's D-1/D-4 carrier lists, and by the review's
+§9 is now either applied or explicitly recorded as unreachable. What remains is **work, not
+staleness**:
+
+1. ⛔ **C0a — the BOT-INPUT tier has never been observed.** It can stop Architecture E outright.
+   Assigned to the probe session with **C10/C11** (`dstop` unit and pricing sub-field).
+2. ⛔ **`research_loop.py`'s three fatal defects**, in order: units + `CONTROL` first, then real-row
+   VALUE assertions in the fixture, then the `censored` flag — which is gated on
+   `bots_config_v2.csv`.
+3. ⛔ **The comparative machinery does not exist.** Nothing produces a cross-bot paired ΔR with a
+   bootstrap CI; §10a's permutation test is unimplemented. `pre-registration-ledger.md` §7 item 3
+   makes it a **signing** gate, so this blocks PR-21/PR-22's signatures, not just their analysis.
+4. ⛔ **"Regime change" is undefined in every document** — §5's third conjunct. **No variant and no
+   arm can graduate until it is written and signed**, regardless of n or elapsed time.
+5. **Still Andy's, untouched by either pass:** the `GF-SL100`/`GF-SL200`/ARM-B1 **double-testing**
+   across two engines that pool error rates nowhere; the tournament doc conflict (ops-runbook §3
+   fork vs §2D shared automation); §2D's one-family-vs-two-family arithmetic reading.
+
+**HOLDING per `CLAUDE.md` §9.2.** No further writes until Andy releases.

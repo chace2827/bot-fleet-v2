@@ -2,8 +2,9 @@
 
 *The live facts. Updated whenever a stated fact changes (CLAUDE.md §9.1). Numbers live in
 `STATUS.md`; the plan in `docs/build-plan.md`; progress in the `bot-fleet-migration` tracker.
-Last updated 2026-08-05 (propagation sweep — C12 discharge propagated, stale cross-references
-corrected; earlier the same day: R-edit package applied + edit-policy split).*
+Last updated 2026-08-05 (propagation sweep + the released gated batch — C12 and S-2 propagated to
+every surface, D-1 propagated, `research-loop-spec.md` corrected ×6, §8.4 step 1 corrected on
+explicit authorization; earlier the same day: R-edit package applied + edit-policy split).*
 
 ## 🔁 PROPAGATION SWEEP — 2026-08-05. Eight files reconciled to the 08-04/05 rulings.
 
@@ -37,7 +38,38 @@ condition. **A discharge propagated without its residual is worse than no propag
    moved to `e6dec33c…`), which is the same defect as the `track-b` §6.6 citation the sweep was
    sent to fix. **Nothing in this repository re-hashes a cross-reference.**
 
-⛔ **DELIBERATELY NOT APPLIED — gated, and each needs Andy.** `pre-registration-ledger.md`
+> ### ✅ THE GATED BATCH BELOW WAS RELEASED BY ANDY AND APPLIED, 2026-08-05, SAME DAY.
+> **All four items authorized in one release; all four applied and device-verified.** **Three
+> files new to the commit** — `pre-registration-ledger.md` · `reactivation-runbook.md` ·
+> `research-loop-spec.md` — plus second edits to `oa-platform-reference.md` (§8.4, **explicitly
+> authorized as a §8 edit**), `track-b-arms-spec.md` (§11-1f item (iv) closed), this page and the
+> log, all four of which the sweep had already changed. **TWELVE files total for the commit.**
+> - **S-2 count scoping propagated** to `pre-registration-ledger.md` §1 / §3 / §7 —
+>   *"≈18–20 plan bots plus ≤8 Track B arms, ceiling 28"*, citing `build-plan.md` §2D's
+>   `🔓 SCOPING AMENDMENT 2026-08-05`. **§11-1f item (iv) is now closed; all four surfaces are
+>   propagated.**
+> - **D-1 propagated** to `reactivation-runbook.md` Step C and `pre-registration-ledger.md` §6
+>   from the memo's paste text (a)/(b): `PT% as a Bot Input` → **`the Exit-Options SET as a Bot
+>   Input`**, with the **G2 rider** (the action stores a REFERENCE, not values — every capture
+>   surface must read the input OBJECT; `oldValue` is a stale trap) carried into both.
+>   ⛔ **C0a is preserved as the live blocker in both**, and §5.2's `[DOCS-SILENT]` Bot-Input tag
+>   stays unstruck.
+> - **`research-loop-spec.md`: six corrections.** §1a D-14 (`74 (19%)` → **101/394 = 25.6%**;
+>   population relabelled 1,254 all-status / n=1,136 closed-only) · §5's gate `n` → R-4's signed
+>   companion, **per (bot, variant)** · §5's *"12-variant count"* → §10a's permutation test, **no
+>   Bonferroni** · **new §6 limit 5, the censoring block — the dangling `(§6.5)` reference is
+>   resolved** · §5a items 1 and 3 status-corrected against R-1 and R-2.
+> - **`oa-platform-reference.md` §8.4 step 1** — the last surviving *"shared by reference"* in the
+>   tree, and it sat in the build instructions. Struck in place, replaced by the Library check.
+>   **Nothing else in §8 touched.**
+>
+> ⚠️ **The spec corrections do NOT touch the engine.** `research_loop.py` is still `0.1.0-DRAFT`
+> with **three fatal defects** (units × 100 × quantity · the tautological `CONTROL` · censoring),
+> still **not wired into `daily.sh`**, and must not be. The `censored` flag depends on
+> `bots_config_v2.csv`, so **Track A's honesty remains gated on Phase-2 config capture.**
+
+⛔ ~~**DELIBERATELY NOT APPLIED — gated, and each needs Andy.**~~ **APPLIED 2026-08-05 — the list
+below is the record of what was released, kept for audit:** `pre-registration-ledger.md`
 §3/§1/§7 `≈18–20 active bots` (pre-registration text; needs the S-2 count scoping, not C12) ·
 `reactivation-runbook.md` Step C and `pre-registration-ledger.md` §6 / §6-preamble
 `PT% as a Bot Input`
