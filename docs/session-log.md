@@ -3455,3 +3455,178 @@ that are still live (double-testing · C12 · sample size) and the four now clos
 
 **No frozen doc edited by me, no OA surface touched, no git command run.** Scratch files parked in
 `docs/_to_delete/` for Andy to remove — the bridge cannot delete.
+
+
+---
+
+## 2026-08-05 — PROPAGATION SWEEP. Eight files reconciled to the 2026-08-04/05 rulings.
+
+**Commissioned because three independent sessions caught the same defect class in one task: a
+ruling that reaches the document it is recorded in and no further.** Five instances were counted
+in `track-b-arms-spec.md` §12.3. This pass was sent to find and fix all of them, not only the five.
+
+**Method, unchanged from what caught them:** every source read **fresh from the device via
+`device_bash`**, never a staged copy (`state.md` records a staged read once returning text that is
+not in the file). Every edit was an **anchored single-match replacement with the match re-asserted
+inside the same process that performed the write**. Every edited file verified afterwards by direct
+`device_bash` sha256 **plus** a single-match grep of the new text. No `git`, no OA surface, no
+scratch files written outside `docs/`.
+
+**Authority.** All eleven applied edits are **evidence-backed corrections of falsified claims**
+under `CLAUDE.md` §5 (amended 2026-08-05): dated banner, original text struck rather than deleted,
+evidence cited **in the edit itself** as a fact ID or a dated first-hand observation — never
+another project document — and **no decision changed.** Andy's veto is at commit review.
+
+### What was fixed, and against what evidence
+
+**1. C12's discharge propagated to all three ungated surfaces, each WITH its residual.**
+C12 — *do archived bots count against the Pro 50-bot cap?* — was discharged in
+`track-b-arms-spec.md` §3.2 and stayed there. Evidence carried into each surface verbatim:
+**[FIRST-HAND 2026-08-04, `/bots` footer read]** — `35 active bots • 15 left in your plan`, read
+read-only immediately after the Fortress original was archived, against `36 active bots` through
+three failed archive attempts. **35 + 15 = 50**; one archive decremented the active count by one.
+
+- **`build-plan.md` §2D** — the scoping amendment's own caveat (*"that reading is not verified …
+  36 + 7 = 43 … 43 + 8 = 51"*) struck in place with the discharge beneath it. ⛔ **This was the
+  sharpest instance: a frozen document's amendment block caveating itself against a check its own
+  dependency had already closed.** Authorized as factual reconciliation of that block only; **no
+  operative figure changed, and nothing else in `build-plan.md` was touched.**
+- **`state.md`** — both sites: the greenfield block's item 4, and the *"Still needing
+  authorization"* row, which is retired.
+- **`greenfield-family-spec.md` §12 row 17.**
+
+⚠️ **The residual travelled with the discharge every time** — tier `[FIRST-HAND, UNCORROBORATED]`,
+both limbs (a footer rendering `left = 50 − active` is self-consistent under *both* hypotheses and
+cannot distinguish them; it was observed with **one** archived bot where the Group-A sweep archives
+**twenty**), and the pre-declared reopen condition. **A discharge copied without its residual turns
+an uncorroborated footer read into settled fact, which is exactly what the tiering exists to
+prevent.**
+
+**2. `track-b-arms-spec.md` §6.6's cross-reference to the greenfield spec was two amendments
+behind** — `d9c686ac…` / 1,584, stated in the present tense (*"is now"*). Corrected to the current
+device hash with the full chain, and the same correction pointered from §10 C13. ⭐ **The four
+handoff items §6.6 asserts were re-verified in place and all four still hold single-match**
+(`Current market time is before 3:44pm` · `gated to before 15:44` · `Only on closes **before
+15:44**` · `3:44pm gate (amended 2026-08-04, NOT 3:50pm)`) — only the hash moved.
+
+**3. `state.md`'s own greenfield hash was one amendment behind** (`da3c440e…` for a file that had
+moved to `e6dec33c…`), and the block read *"AMENDED ×3"* for a file amended four times. **Same
+defect as the one the sweep was sent to fix, on the fleet's own state page.** Corrected, chain
+extended, and the file re-hashed again at close-out after this sweep's own edit to it.
+
+**4. D-2's ceiling — the one surviving site.** A tree-wide grep for a daily re-entry limit above 10
+or *"ten IC re-entries = 20/day"* returned **exactly one live survivor**:
+`oa-reconciliation-report.md` **R-11**, which still read *"any 10-re-entry spec (daily limit 20)
+rests on an unverified assumption"* and queued the check *"open the safeguard input and type 20."*
+⛔ **That check was run 2026-08-04 and came back NO** — **[FIRST-HAND, Bot Safeguards panel on
+`QQQ-IC-0DTE-Fortress Clone`]**: `posLimitDay` and `posLimit` are **hidden inputs behind `1`…`10`
+pickers**, so there is no free-text path and the proposed check is not performable as written.
+Corrected, with D-2's ruling (**5 ICs/day, one bot**) stated. `oa-platform-reference.md` §3 already
+carried its correction; `build-plan.md` §2B, named by R-11 as the downstream surface, was checked
+on the device and **carries no re-entry count**. `hedge-research.md` — the task's expected site —
+**carries none either** (grepped; two unrelated hits).
+
+**5. Sweep survivors outside the known debt (four more, all fixed).**
+- `track-b-arms-spec.md` **§0 and §1** still framed the document around *"the slots are already
+  spent … 7 of the 8"*, superseded by that same file's ruling **S-1** at §3.3 — internal
+  inconsistency, and it sits in the first fifty lines a cold reader hits.
+- `track-b-arms-spec.md`'s **ruling-index block** still said *"S-2 leaves the build blocked"* four
+  lines below its own row marking S-2 **DISCHARGED**.
+- `oa-platform-reference.md` **§5.2** still said the *"PT% as a Bot Input"* design *"has not been
+  checked."* It has — §9 row 3, first-hand: the 🔗 exists on the Exit Options row but
+  `i.fa-link` count is **0** inside the Default Value editor, so the input's type is the **whole
+  bundle** and PT%-as-a-scalar is **not expressible**. ⛔ **The correction was deliberately
+  narrowed to that one sentence: the `[DOCS-SILENT]` Bot-Input tag above it was LEFT STANDING**,
+  because greenfield check **C0a** — the BOT-INPUT tier, never observed, able to stop
+  Architecture E outright — rests on it being unstruck. Half-propagating this one would have
+  silently closed C0a.
+- `oa-ops-runbook.md` **§7** still listed *"Do the Fortress bots show ≥10 errors in June?"* as an
+  open check. **Answered 2026-08-04: zero.** Corrected with D-4's shape preserved — the mechanism
+  is real and this fleet tripped it in March/April on entry scanners; **only the June-cause
+  hypothesis is dead, and the June cause is UNKNOWN** — plus the log-retention caveat the result
+  rests on.
+- `oa-export-schema.md` cited the `TIME_*` variants as current members of the Track A set; **R-2
+  retired both to Track B.** Cross-reference reconciled; the schema claim itself is unchanged.
+
+### ⭐ Two findings this sweep produced that were not on its list
+
+**A. A propagation FLAG goes stale on the same clock as the thing it flags — and nothing re-reads
+the flag.** `track-b-arms-spec.md` §11 item **1g** asserted that `state.md` still carried the
+7-of-8 slot claim and the 0.10R margin. **[FIRST-HAND 2026-08-05, direct device read]**: it does
+not, and did not — `state.md`'s owner struck both and recorded S-1 and R-3 beneath them **at
+23:57, two minutes after `track-b-arms-spec.md` was written at 23:55.** The row was true when
+written and false within the same task. It is now closed *as stale*, with the finding kept: this is
+a **sixth** instance of the class and a **new shape** — the previous five were rulings failing to
+reach a document; this is a *report of staleness* outliving the staleness. **Corollary, now written
+into that file: date-stamp the observation and name the hash you read it at.**
+
+**B. Nothing in this repository re-hashes a cross-reference.** Three embedded hashes were checked
+this session; **two were stale** (`track-b` §6.6, `state.md`'s greenfield block) and both were
+stale in the *present tense*. The ones that survived — `greenfield` §header on
+`research-loop-spec.md`, `oa-ops-runbook.md` on `data/oa_facts.csv` — survived because they are
+phrased as **dated verification records**, not as current facts. That is the difference, and it is
+the rule worth keeping.
+
+### ⛔ Deliberately NOT applied — gated, and each needs Andy
+
+Each of these fails `CLAUDE.md` §5 condition **3** (the falsifying evidence is *another project
+document* — a ruling — not a fact ID or a first-hand observation) or condition **5** (applying it
+changes what gets built). **When it is ambiguous, it is gated.**
+
+| Surface | What is stale | Why not applied |
+|---|---|---|
+| `pre-registration-ledger.md` §3 / §1 / §7 | `≈18–20 active bots`, unscoped by the S-2 amendment | **Pre-registration text — gated.** Needs the S-2 count scoping, not the C12 discharge. §11-1f item (iv) |
+| `reactivation-runbook.md` Step C · `pre-registration-ledger.md` §6 | `PT% as a Bot Input` | **D-1 propagation.** Ready-to-paste replacement text is in `decision-memo-2026-08-04.md`; it changes what gets built |
+| `research-loop-spec.md` §5a items 1 and 3 | *"this amendment is unsigned"* (R-1 rejected the RISK basis) · *"decide whether `TIME_*` keep their slots"* (R-2 decided) | Signed live-gating spec; **the only evidence is a ruling in another document** |
+| `research-loop-spec.md` §5 · §6 · §1a | the four consequential edits from review §9 — `n ≥ 100 positions`, the `12-variant count` phrase, the **dangling `(§6.5)` reference**, `74 (19%)` → **101/394 = 25.6%** | Outside the §3/§10 authorisation; review §9 recommends ruling 1–3 together |
+| `oa-platform-reference.md` §8.4 | *"Fork ALL automations via Copy (§2 — shared by reference)"* — the no-op ritual | **§8 is gated** (build instructions). Every other instance of this claim tree-wide is corrected |
+
+### Verification record
+
+- **Every source re-hashed at close-out.** `CLAUDE.md` `a95e6c6e…`,
+  `decision-memo-2026-08-04.md` `cd39b972…`, `research-loop-review-2026-08-04.md` `ad0fd68d…`,
+  `hedge-research.md` `7d3e751f…` — **all identical to their session-start reads. No source
+  drifted under this session**, which is the first time today that has been true.
+- Untouched-but-read at close-out: `research-loop-spec.md` `d0f5d5a6…`,
+  `pre-registration-ledger.md` `9185213f…`, `reactivation-runbook.md` `117cbaf7…`,
+  `pilot-clone-card-qqq-fortress.md` `156663ec…`, `r-edit-authorization-2026-08-05.md` `b61a45b6…`.
+- `oa-platform-reference.md` **§8 confirmed untouched** — the sole edit lands at line 573 (§5.2);
+  the §8 span carries no `2026-08-05` marker.
+- **Every C12 discharge carries its residual and reopen condition** — asserted by grep on all three
+  files, not by recollection.
+- No aggregate is stated without its n. Nothing was built. No OA surface opened. No `git` run.
+  **No scratch files created, so none needed parking in `_to_delete/`** — and a close-out `find`
+  showed **that directory no longer exists** (see below).
+
+### Per-file hash table — final, direct `device_bash sha256`
+
+| File | sha256 | Lines | Bytes |
+|---|---|--:|--:|
+| `docs/build-plan.md` | `289b701a74b29a3f23d8ebe446bed3a6c78185b2573ca0f5cf337f9094d3e5f2` | 300 | 21,504 |
+| `docs/state.md` | `c460f37d0a11133a2e206a98c41669c2bb29a1f4d15544e4bb5ba46c44d40d09` | 829 | 69,633 |
+| `docs/greenfield-family-spec.md` | `99abab8fd35e2d9c5ee5cc34b9c9bee24393e460af422dc6c13c5c705a0eeb1f` | 1,585 | 136,274 |
+| `docs/track-b-arms-spec.md` | `3256579c1b6706cdd234515fe45783a34103274dfc4c0602c1bf214abfff98e3` | 1,173 | 93,635 |
+| `docs/oa-reconciliation-report.md` | `6359d6fcadff3218bc215b078b077e452f715b78c1cf1c8bcbbf1da88a141b98` | 424 | 33,573 |
+| `docs/oa-platform-reference.md` | `fbf9bb55630826b7572069cf2fe64ca0f48ca3fcb1b8ff6c6284849b65bc1106` | 1,352 | 88,300 |
+| `docs/oa-ops-runbook.md` | `489501882c99fa8e4a913162a7db2eb907441a0ca2f4c3e7056fb48c7b4bd3d8` | 499 | 32,909 |
+| `docs/oa-export-schema.md` | `13a47071622cfffdf1d8fbc88525bafdd5e601b899c84bc04851a2ffd16a0b76` | 113 | 6,776 |
+| `docs/session-log.md` | *(this append)* | — | — |
+
+*(`state.md`'s figure is post-sweep-record. Its greenfield cross-reference cites
+`greenfield-family-spec.md` at `99abab8f…`, which is that file's final hash above — the two agree
+as of this close-out, and per finding **B** that agreement is a timestamp, not a guarantee.)*
+
+**Changed files for Andy's commit — nine:** `docs/build-plan.md` · `docs/state.md` ·
+`docs/greenfield-family-spec.md` · `docs/track-b-arms-spec.md` ·
+`docs/oa-reconciliation-report.md` · `docs/oa-platform-reference.md` · `docs/oa-ops-runbook.md` ·
+`docs/oa-export-schema.md` · `docs/session-log.md` *(appended)*.
+⭐ **One more propagation miss, found at close-out by looking at the filesystem instead of at the
+document describing it.** `state.md` still asked Andy to **delete `_to_delete/`** (the stranded
+`.git/index.lock` from 2026-08-03). **[FIRST-HAND 2026-08-05, `find` at depth 3 across the repo]**:
+**no `_to_delete` directory and no `*stranded*` file exists anywhere in `bot-fleet-v2`.** Andy did
+it; nothing told the state page. Row retired there. **Nothing is now awaiting Andy's hand except
+the commit and the gated batch above.** The standing rule that produced it stands: **do not run
+`git` from this side** — the bridge cannot unlink, so a stranded lock needs Andy.
+
+**HOLDING per `CLAUDE.md` §9.2.** No further writes until Andy releases. The gated list above is
+the next decision batch.

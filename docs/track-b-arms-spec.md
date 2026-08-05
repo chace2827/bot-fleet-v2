@@ -38,9 +38,12 @@ and `daily.sh` are **unmodified** by this session.*
 > | **S-4** | **The 15:44 sibling-close gate move is RULED YES.** ⛔ Recorded in `greenfield-family-spec.md` **by that spec's own session — not by this one.** | §6.6, §10 C13, §11-1 |
 > | **S-5** | **The `dstop` unit / pricing-sub-field observation (C10, C11) is ASSIGNED to the C0a probe session.** | §10, §9 PR-21 |
 >
-> ⛔ **What these rulings do NOT do.** S-1 unblocks the *allocation*; **S-2 leaves the build
-> blocked** until the Task 4 amendment lands. S-4 rules the gate move but **assigns the edit
-> elsewhere** — this session did not and must not touch `greenfield-family-spec.md`. S-5 assigns
+> ⛔ **What these rulings do NOT do.** S-1 unblocks the *allocation*; ~~**S-2 leaves the build
+> blocked** until the Task 4 amendment lands.~~ **📝 RECONCILED 2026-08-05 — S-2's amendment
+> landed (row above); the build is no longer blocked *on the count*. It remains blocked on every
+> arm's own signed pre-registration, per the §2D amendment's own closing line —
+> `This amendment scopes a count. It authorizes no build.`** S-4 rules the gate move but
+> **assigns the edit elsewhere** — this session did not and must not touch `greenfield-family-spec.md`. S-5 assigns
 > C10/C11 but does not answer them, so **ARM-B1 is still not an arm** under
 > `hedge-research.md` §5.2. **No bot may be built on the strength of this block.**
 
@@ -52,10 +55,19 @@ Two first arms, both on the **loss side**, both matched to controls that already
 in `greenfield-family-spec.md`, both inside the signed §3 variant set or added to Track B by a
 signed ruling.
 
-The hard part of this task turned out not to be designing arms. It was **discovering that the
+The hard part of this task turned out not to be designing arms. It was ~~**discovering that the
 slots are already spent** — `greenfield-family-spec.md` §12 item 11 states that its seven bots
-consume **7 of the 8** signed Track B slots. §3 below is therefore the load-bearing section, and
-its answer is a ruling request, not a design.
+consume **7 of the 8** signed Track B slots.~~ **discovering an unruled boundary between two
+signed documents.** §3 below is therefore the load-bearing section, and its answer is a ruling
+request, not a design.
+
+> **📝 RECONCILED 2026-08-05 — the struck clause was the pre-ruling framing and is superseded.**
+> **Ruling S-1 (§3.3): SEPARATE ALLOCATION, Reading B** — the seven family bots are
+> `build-plan.md` §2D fresh builds and **Track B keeps all 8 slots**; `n_used = 20` confirmed.
+> The greenfield owner struck the same clause in its own §12 item 11 and §11 CF-10.
+> ⚠️ **The second clause of that item survives untouched and is still Andy's:** `GF-SL100` /
+> `GF-SL200` duplicate signed Track A §3 variants and **pool error rates nowhere**, and ARM-B1
+> (`DSTOP_100`) has the identical defect (§6.3).
 
 ---
 
@@ -71,8 +83,12 @@ its answer is a ruling request, not a design.
 | **R-6** | Unit = the POSITION (`trade_id` group, risk = larger side), and **combined MFE for a paired condor is a Track B question**. ⇒ a *third* ruled Track B question. §8 finds it **not expressible as an arm of this family** and defers it with the reason. |
 | **R-7** | `expired` stratified — excluded from counts and from the PT comparison, retained as a stratum. ⇒ affects Track A bookkeeping only; no arm consequence. |
 
-**Net: the rulings created three new Track B obligations (R-1, R-2, R-6) at the same moment the
-greenfield spec spent 7 of the 8 slots.** That is the whole tension in this document.
+**Net: the rulings created three new Track B obligations (R-1, R-2, R-6)** ~~at the same moment the
+greenfield spec spent 7 of the 8 slots.~~ **📝 RECONCILED 2026-08-05 — superseded by ruling S-1
+(§3.3): the greenfield family spends none of Track B's 8 slots, so all three obligations are
+funded.** That tension was this document's reason for existing; **it is resolved, and what
+remains is that funded ≠ buildable** — ARM-B2 needs its signed pre-registration, ARM-B1 that plus
+C10/C11 (§3.5).
 
 ---
 
@@ -613,8 +629,9 @@ control**, i.e. a confound in the one comparison the arm exists to make.
 > that file and its §4.3, §8.5 and Phase-A build steps.
 >
 > ### ✅ LANDED — verified on device 2026-08-04 23:43
-> The owning session **applied it**. `greenfield-family-spec.md` is now 1,584 lines,
-> sha256 `d9c686ac…d7a`, and carries `📝 AMENDED 2026-08-04 — gate moved 15:50 → 15:44. Ruled by
+> The owning session **applied it**. `greenfield-family-spec.md` carried 1,584 lines,
+> sha256 `d9c686ac…d7a` **when this paragraph was written 2026-08-04**, and carries
+> `📝 AMENDED 2026-08-04 — gate moved 15:50 → 15:44. Ruled by
 > Andy. Apply in PHASE A.` **All four handoff items below were checked on the device file and all
 > four are present** — §4.3's tree now reads `Current market time is before 3:44pm`, §6.2 Rule 0
 > reads `gated to before 15:44`, §8.5's all-arms row reads `Only on closes **before 15:44**`
@@ -625,6 +642,17 @@ control**, i.e. a confound in the one comparison the arm exists to make.
 > ⚠️ Verified by reading the device file, **not** by the ruling saying it would happen —
 > `CLAUDE.md` §9.1a. ARM-B2's PR-22 V4 remains the *behavioural* proof at build time; this is the
 > *documentary* one.
+>
+> > **📝 CROSS-REFERENCE CORRECTED 2026-08-05 — hash and line count only.** The `d9c686ac…` /
+> > 1,584 figure above was two amendments behind. **[FIRST-HAND 2026-08-05, `device_bash sha256`
+> > of the device file]**: `greenfield-family-spec.md` is **1,585 lines / 136,274 bytes, sha256
+> > `99abab8fd35e2d9c5ee5cc34b9c9bee24393e460af422dc6c13c5c705a0eeb1f`**. Chain since:
+> > `d9c686ac…` (1,584) → S-1 slot correction `da3c440e…` (1,585) → §12 row 17 closed
+> > `e6dec33c…` (1,585) → C12 discharge propagated `99abab8f…` (1,585).
+> > ⭐ **The CONTENT claims above were re-verified in place against the current device file and
+> > all four handoff items still hold single-match** — only the hash and line count moved.
+> > **General rule taken from this:** cite a file's content claim and the date it was read, and
+> > treat an embedded hash as a timestamp rather than a fact.
 >
 > **What the owning session had to carry, and did:**
 > 1. §4.3's tree gate `Current market time is before 3:50pm` → **`before 3:44pm`**, verified as a
@@ -976,7 +1004,7 @@ session log. Nothing is answered from memory or from this document.
 | **⛔ C10**<br>✅ **ASSIGNED** | **The UNIT of Exit Options `dstop` (Stop Loss $)** — per **contract**, per **position**, or per **leg**? Read the live modal's own label and any suffix, plus any helper text. §6.1a read the field as *empty*; **its semantics were never observed.** ⭐ **RULED S-4/S-5 2026-08-04: assigned to the C0a probe session.** | R-1's rung is specified *"in dollars"*. A per-contract unit puts `<D100>` off by the contract count and the arm silently tests a different level. **Re-derive `<D100>` on the actual basis and re-stamp PR-21 before build.** This is the D-6 units failure one layer up — the same class that made every Track A counterfactual wrong by 100 × quantity. |
 | **⛔ C11**<br>✅ **ASSIGNED** | **Does `dstop` carry its own SmartPricing sub-field** (as `profits`→`smprofits` and `expdays`→`smexpdays` do), or inherit a default — and **what is that default**? C3 covers `tstop`, `touch` and `stoploss`; **it does not cover `dstop`.** ⭐ **RULED S-5 2026-08-04: assigned to the C0a probe session.** | ⛔ If it inherits **`market`**, ARM-B1 violates §7's Market ban and Decision 5, **and** confounds the comparison with a pricing difference its control does not have. **Stop. Report. Do not build the arm.** |
 | ~~**C12**~~<br>✅ **DISCHARGED** | **Do ARCHIVED bots count against the Pro plan's 50-bot cap?** ⭐ **ANSWERED — NO.** `35 active bots • 15 left in your plan` read from `/bots` immediately after the 2026-08-04 archive (was `36 active`): **35 + 15 = 50**, so the complement is computed against the **active** count. **[FIRST-HAND 2026-08-04, footer read]**, §3.2. | ⭐ **No longer a check.** Wave 1 is **22 of 50** and the six held slots fit. ⚠️ **Residual carried, not dropped:** this is the footer's *accounting*, not OA's *enforcement*, and it was observed with **one** archived bot where the sweep archives **20**. ⛔ **Pre-declared reopen: if a build ever fails at the cap despite archived bots, C12 reopens.** |
-| ~~**C13**~~<br>✅ **DISCHARGED** | **The `GF-SiblingClose` gate move, 15:50 → 15:44** (§6.6). ⭐ **RULED S-4 2026-08-04 — approved. LANDED and verified on device the same day** in `greenfield-family-spec.md` (1,584 lines, sha256 `d9c686ac…d7a`): §4.3 tree, §6.2 Rule 0, §8.5 proof-of-fire, Phase-A A4 and the A7 re-baseline all updated. | ⭐ **No longer a check.** It is a build step owned by the greenfield session, which applied it. **This session did not edit that file.** Residual work is verification-at-build only: confirm `before 3:44pm` is **a real decision node** (C8 discipline, step A4) and re-record the A7 payload-hash baseline, since a shared-object edit changes all seven arms at once. |
+| ~~**C13**~~<br>✅ **DISCHARGED** | **The `GF-SiblingClose` gate move, 15:50 → 15:44** (§6.6). ⭐ **RULED S-4 2026-08-04 — approved. LANDED and verified on device the same day** in `greenfield-family-spec.md` (1,584 lines, sha256 `d9c686ac…d7a` **as read 2026-08-04**; that file is now 1,585 lines / `99abab8f…` — cross-reference corrected 2026-08-05 at §6.6, content claims re-verified and unchanged): §4.3 tree, §6.2 Rule 0, §8.5 proof-of-fire, Phase-A A4 and the A7 re-baseline all updated. | ⭐ **No longer a check.** It is a build step owned by the greenfield session, which applied it. **This session did not edit that file.** Residual work is verification-at-build only: confirm `before 3:44pm` is **a real decision node** (C8 discipline, step A4) and re-record the A7 payload-hash baseline, since a shared-object edit changes all seven arms at once. |
 
 > ✅ **C12 is DISCHARGED** (§3.2). S-1 confirmed the numerator (`n_used = 20`) and the pilot
 > session's footer read settles the denominator: **the cap counts active bots, 35 + 15 = 50.**
@@ -1004,9 +1032,9 @@ return to Andy with the tournament. **C1** gates ARM-B1's secondary reading only
 | **1c** | ~~The 15:44 sibling-close gate move (§6.6)~~ | ✅ **CLOSED — RULED YES (S-4) and LANDED.** Applied by the `greenfield-family-spec.md` session, **not this one**; verified on the device file, all four handoff items present (§6.6, §10 C13). |
 | **1e** | ~~**C12** — do archived bots count against the 50-bot cap?~~ | ✅ **CLOSED 2026-08-04 — NO.** Discharged on the pilot session's `/bots` footer read (`35 active • 15 left` = 50), **[FIRST-HAND 2026-08-04, footer read]**, §3.2 / §10 / §12.2. Wave 1 is **22 of 50**; the six held slots fit. ⚠️ Residual and pre-declared reopen condition carried at §3.2 — this is the footer's accounting, not OA's enforcement, observed at one archived bot against a sweep of twenty. |
 | **1d** | ~~`greenfield-family-spec.md` still asserts it consumes 7 of the 8 Track B slots (§12-11, §11 CF-10)~~ | ✅ **CLOSED — corrected by the greenfield owner, verified on device.** Both rows now strike the slot clause and cite ruling S-1 and this spec's §3.3 by name. ⭐ **And both kept the second clause exactly as asked** — `GF-SL100`/`GF-SL200` still duplicate signed §3 variants and pool error rates nowhere, with §12-11 adding *"ARM-B1 (`DSTOP_100`) has the identical defect"*. **That half is still open and still Andy's** (§6.3). |
-| **1f** | ⛔ ⭐ **NEW — C12's discharge has not propagated. FOUR surfaces still carry the pre-discharge text**, three of them written or revised *after* this spec first flagged C12: **(i)** `build-plan.md` §2D's own scoping-amendment block — *"⚠️ That reading is not verified … blocking, because if they do count the Day-0 arithmetic is 36 + 7 = 43"*; **(ii)** `state.md` "Still needing authorization" — *"⚠️ C12 … **Unowned, blocking**"*; **(iii)** `greenfield-family-spec.md` §12 item 17 — *"Related and unverified: C12 … which decides whether 43 + 8 even fits"*; **(iv)** `pre-registration-ledger.md` §3 / §1 / §7 still read `≈18–20 active bots`, unscoped by the S-2 amendment. | **This spec discharged C12; the discharge is local to this file.** None of the four is this session's to edit. ⚠️ **(i) is the sharpest**: a frozen document's own amendment block now carries a caveat its own dependency has retired, so §2D reads as conditional on a check that is closed. **Assign with the §3.2 evidence block attached**, including its residual and reopen condition — a discharge propagated *without* its residual is worse than no propagation. |
+| **1f** | ⛔ ⭐ **NEW — C12's discharge has not propagated. FOUR surfaces still carry the pre-discharge text**, three of them written or revised *after* this spec first flagged C12: **(i)** `build-plan.md` §2D's own scoping-amendment block — *"⚠️ That reading is not verified … blocking, because if they do count the Day-0 arithmetic is 36 + 7 = 43"*; **(ii)** `state.md` "Still needing authorization" — *"⚠️ C12 … **Unowned, blocking**"*; **(iii)** `greenfield-family-spec.md` §12 item 17 — *"Related and unverified: C12 … which decides whether 43 + 8 even fits"*; **(iv)** `pre-registration-ledger.md` §3 / §1 / §7 still read `≈18–20 active bots`, unscoped by the S-2 amendment. | **This spec discharged C12; the discharge is local to this file.** None of the four was that session's to edit. ⚠️ **(i) is the sharpest**: a frozen document's own amendment block now carries a caveat its own dependency has retired, so §2D reads as conditional on a check that is closed. **Assign with the §3.2 evidence block attached**, including its residual and reopen condition — a discharge propagated *without* its residual is worse than no propagation.<br><br>📝 **UPDATED 2026-08-05 — THREE OF THE FOUR ARE NOW PROPAGATED, each with the §3.2 residual and reopen condition attached. [FIRST-HAND 2026-08-05, `device_bash` single-match grep + sha256 of each file].** **(i) `build-plan.md` §2D — DONE**, as factual reconciliation of its own amendment block: the caveat is struck in place, the discharge added with the `35 active • 15 left` footer read, the `[FIRST-HAND, UNCORROBORATED]` tier, both residual limbs and the reopen condition; no operative figure changed and no build authorized. **(ii) `state.md` — DONE** in both places (the greenfield block's item 4 and the "Still needing authorization" row, the latter retired). **(iii) `greenfield-family-spec.md` §12 row 17 — DONE.** ⛔ **(iv) `pre-registration-ledger.md` §3 / §1 / §7 REMAINS OPEN and is deliberately NOT applied** — it is pre-registration text, which `CLAUDE.md` §5 keeps **gated** behind an explicit "amend the plan"; it also requires the S-2 count scoping rather than the C12 discharge. **Andy's.** |
 | **2** | ⛔ **The four consequential edits still NOT applied to `research-loop-spec.md`** (review §9): §5's `n ≥ 100 positions` line · §5's `**adjusted for the 12-variant count**` phrase, now contradicted by §10a · **§6 limit 5, the censoring block — R-2's applied §3 text already references it as `(§6.5)` and that reference dangles** · §1a's `74 (19%)`, correctly **101/394 = 25.6%** | Outside the §3/§10 authorisation. **Both SAMPLE TARGETs above are written against the signed-but-unapplied §5 wording**, so until item 1 of that list is applied, this spec's targets and §5's text disagree on their face. Review §9 recommends ruling 1–3 together. |
-| **1g** | ⛔ ⭐ **NEW — `state.md` still carries TWO figures its own rulings retired.** Its greenfield block, item 4: *"**The family consumes 7 of the 8 signed Track B slots**"* — superseded by S-1, and **corrected in `greenfield-family-spec.md` but not in `state.md`**. Same block, item 3: *"`research-loop-spec.md` §10's signed **0.10R** margin is unreachable here"* — superseded by **R-3** (+0.015R), the same staleness as item 3 below. | `state.md` is the fleet's own state page and the first thing a cold session reads. **Two retired figures on it outrank two retired figures in an appendix.** Not this session's file to edit. ⚠️ Note `state.md` *elsewhere* records the S-2 discharge correctly (as ruling S4) — so the file is internally inconsistent, which is harder to spot than uniformly stale. |
+| **1g** | ⛔ ⭐ **NEW — `state.md` still carries TWO figures its own rulings retired.** Its greenfield block, item 4: *"**The family consumes 7 of the 8 signed Track B slots**"* — superseded by S-1, and **corrected in `greenfield-family-spec.md` but not in `state.md`**. Same block, item 3: *"`research-loop-spec.md` §10's signed **0.10R** margin is unreachable here"* — superseded by **R-3** (+0.015R), the same staleness as item 3 below. | ~~`state.md` is the fleet's own state page and the first thing a cold session reads. **Two retired figures on it outrank two retired figures in an appendix.** Not this session's file to edit. ⚠️ Note `state.md` *elsewhere* records the S-2 discharge correctly (as ruling S4) — so the file is internally inconsistent, which is harder to spot than uniformly stale.~~<br><br>✅ **CLOSED — and this item was itself STALE. Corrected 2026-08-05.** **[FIRST-HAND 2026-08-05, direct `device_bash` read of `docs/state.md`]**: both figures are already carried **struck and superseded**, not asserted. Item 4 reads `~~The family consumes 7 of the 8 signed Track B slots~~ 📝 **SUPERSEDED 2026-08-04 by ruling S-1**`, and item 3 reads `~~…§10's signed 0.10R margin is unreachable here.~~ ✅ **RESOLVED 2026-08-04 by ruling R-3**` with the +0.015R replacement spelled out. **`state.md` was corrected by its own owner at 23:57, two minutes after this spec was written at 23:55** — so this row was true when written and false within the same task. ⭐ **The finding survives as a method result, not as a defect:** a propagation flag is itself a propagation dependency, and it goes stale on the same clock as the thing it flags. **What `state.md` WAS still carrying, and what this sweep fixed:** its greenfield-spec hash (`da3c440e…`, one amendment behind) and the C12 caveat in two places (§11 item **1f**). |
 | **3** | ⭐ **`greenfield-family-spec.md` §12 item 10 is STALE** — it is written against the superseded `≥0.10R` margin and concludes *"nothing here can ever graduate"*. **R-3 lowered the margin to +0.015R**, which that family's theoretical range (+0.083R to +0.162R) clears comfortably. The item should be re-scoped: the **effect-size** objection is resolved; the **power** objection is not (n=100 → ±0.026R; ~307 matched condors for ±0.015R; ~560 with Bonferroni) | Not this spec's file to edit. Flagged so the greenfield build does not carry a resolved blocker as if it were live — and so the surviving half is not lost with it. |
 | **4** | **PR-21 / PR-22 ID literals are PROPOSED.** `pre-registration-ledger.md` §8 item 1: PR-01…PR-13 are stamped and final; §6's are ranges until the fresh-build counts are fixed. Greenfield proposes PR-14…PR-20 | These follow greenfield's block and become final when Andy fixes both counts. **If the greenfield count lands below 7, these shift down.** |
 | **5** | **`pre-registration-ledger.md` §2's template has no GATE EVALUATION DATE field**, which §10a item 2 now requires *before* n reaches 100 | Editing that template is a change to a signed document. Both entries above carry the field anyway, marked ⭐, so nothing is lost if the template is amended later. |
@@ -1109,13 +1137,30 @@ Re-checked at close because five repository documents changed within two minutes
   finding survived the correction, which was the risk flagged when it was handed over.
 - ⛔ **But C12's discharge created four new stale surfaces** (§11 item **1f**), including
   `build-plan.md` §2D's *own amendment block*, which now caveats itself against a closed check.
-  And `state.md` still carries the 7-of-8 slot claim and the 0.10R margin (§11 item **1g**).
+  ~~And `state.md` still carries the 7-of-8 slot claim and the 0.10R margin (§11 item **1g**).~~
 - ⭐ **The pattern is now measured, not anecdotal: five instances in one task.** greenfield §12-10
   vs R-3 · greenfield §12-11 vs S-1 · C12's answer sitting unlinked in `session-log.md` · C12's
   discharge failing to reach four documents · `state.md` disagreeing with itself. **Rulings and
   discharges do not propagate, and nothing in this repository checks whether they have.** Every
   instance was caught by re-reading the current device file rather than an earlier read. That is a
   procedure, and it is the only defence currently operating.
+
+> ### 📝 UPDATED 2026-08-05 — the propagation sweep ran; three of the four surfaces are closed
+> **[FIRST-HAND 2026-08-05, `device_bash` sha256 + single-match grep on every file named.]**
+> - **Three of §11-1f's four surfaces are propagated** — `build-plan.md` §2D, `state.md` (both
+>   sites) and `greenfield-family-spec.md` §12 row 17 — **each carrying the §3.2 residual, its
+>   `[FIRST-HAND, UNCORROBORATED]` tier and its pre-declared reopen condition.** The fourth,
+>   `pre-registration-ledger.md` §3/§1/§7, is **pre-registration text and stays gated**
+>   (`CLAUDE.md` §5); it needs the S-2 count scoping, not the C12 discharge, and it is Andy's.
+> - **§11 item 1g was itself stale.** `state.md` already carried both figures **struck and
+>   superseded**; it was corrected by its owner at 23:57, two minutes after this spec was written
+>   at 23:55. The strikethrough above records that. What `state.md` *was* still carrying — its
+>   greenfield-spec hash, one amendment behind — is now fixed.
+> - ⭐ **Sixth instance of the class, and it is a new shape: the propagation FLAG went stale on the
+>   same clock as the thing it flagged.** A document that records "file X is stale" becomes wrong
+>   the moment X is fixed, and nothing re-reads the flag. **Corollary for anyone writing one:
+>   date-stamp the observation and name the hash you read it at** — this spec's own §6.6 hash
+>   citation is the same failure in the other direction, corrected in the same sweep.
 - ⚠️ **Corollary this spec must state about itself: this file is now a propagation dependency for
   others.** Its §3.2 C12 block is the only place the discharge, its residual and its reopen
   condition are written down. **Anyone propagating it must carry all three** — a discharge copied

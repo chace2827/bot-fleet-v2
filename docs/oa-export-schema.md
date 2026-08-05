@@ -58,7 +58,17 @@ denominators and the project's R convention (`CLAUDE.md` §4) is the **`ror` bas
 profit-target or stop-loss counterfactual decidable — if the mark reached the level at any point,
 the order fills. It does **not** make a *time-exit* counterfactual decidable: the mark at 15:45 is
 not an extreme and is not recorded anywhere in this export. Time-exit questions require a live A/B
-arm. (`research-loop-spec.md` §2; the `TIME_*` variants return `UNDECIDABLE` by design.)
+arm. (`research-loop-spec.md` §2; the `TIME_*` variants returned `UNDECIDABLE` on 1,254 of 1,254
+positions.)
+
+> **📝 CROSS-REFERENCE RECONCILED 2026-08-05 — `TIME_*` is no longer in the Track A set.** Ruling
+> **R-2** (signed 2026-08-04, applied to `research-loop-spec.md` §3 as a dated amendment) **retired
+> both `TIME_*` slots from Track A** and funds the time question from the **Track B** allocation
+> instead — which is the conclusion the paragraph above reaches on its own evidence. The set
+> remains **12**: `CONTROL · PT40 · PT60 · PT70 · SL100 · SL150 · SL200 · DSTOP_100 · DSTOP_150 ·
+> COND_100_1300 · COND_100_1400 · COND_200_1400`. **Nothing in this schema changes** — the
+> censoring property described above is a property of the export, not of the variant list.
+
 
 ⚠️ **MFE/MAE are marks, not fills**, and are sampled at the bot's Scan Speed (1/5/15 min), so they
 are the max *observed*, not the true intraday max. The error is **one-sided: it flatters tighter

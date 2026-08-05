@@ -156,8 +156,30 @@ and the IC box: *"Ten re-entries of a single IC is a daily limit of 20"*) · dow
 "manually selected and modified" / "safeguards edited") · **OA-0764** — DOCS-SILENT on whether
 10 is a ceiling or a default.
 **Verdict:** "editable" is CONFIRMED; **editable-above-10 is UNSOURCED**. The pilot clone
-(2/2) is unaffected; any 10-re-entry spec (daily limit 20) rests on an unverified assumption.
-**One-click UI check: open the safeguard input and type 20.** Add to the §9 open-checks table.
+(2/2) is unaffected; ~~any 10-re-entry spec (daily limit 20) rests on an unverified assumption.
+**One-click UI check: open the safeguard input and type 20.** Add to the §9 open-checks table.~~
+
+> ### ⛔ CORRECTED 2026-08-05 — the check was run, and it came back NO. Limits **cannot** exceed 10.
+> *Struck text left standing above per this file's convention. Correction only — the R-11 verdict
+> on the DOCS ("editable-above-10 is UNSOURCED") is unchanged and still correct; what changes is
+> that the product question behind it is no longer open.*
+>
+> **[FIRST-HAND 2026-08-04 — Bot Safeguards panel read on `QQQ-IC-0DTE-Fortress Clone`.]**
+> `posLimitDay` (Daily Positions) and `posLimit` (Position Limit) are **hidden inputs behind
+> pickers offering `1` … `10` only** — not number fields. There is no `max` attribute to read and
+> **no free-text path to type `20` into**, so the one-click check proposed above is not
+> performable as written; the picker itself is the answer. (`seed` read `type=number
+> min="250" max="100000"`; Day Trading is a two-item picker.) Re-read identical after a hard
+> reload; nothing was saved.
+>
+> ⛔ **Consequence — this is ruling D-2's basis.** An IC is **2 positions**, so a daily cap of 10
+> positions is a real ceiling of **5 ICs/day per bot**, not ten. *"Ten re-entries of a single IC
+> is a daily limit of 20"* is arithmetically correct and **unconfigurable**. **D-2 ruled
+> 2026-08-04: cap at 5 ICs/day, ONE bot** — do not split a strategy across two bots to reach ten.
+> **Any spec assuming a daily re-entry limit above 10, or a 20/day IC ceiling, must be
+> re-scoped to 5 ICs/day.** The downstream surface this row names — `build-plan.md` §2B re-entry
+> sizing — was checked on the device 2026-08-05 and **states no re-entry count**, so nothing is
+> carried there.
 
 ### R-12 ⚠️ Touch semantics are blog-sourced — outside the docs corpus
 **Where:** `oa-platform-reference.md` §6.2 ✅ RESOLVED block · `hedge-research.md` §7.2 ·

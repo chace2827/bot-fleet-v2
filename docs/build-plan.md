@@ -141,9 +141,39 @@ Confirmed against the 2026-07-30 capture. No remainder.
 >
 > **Operative figures:** ≈18–20 plan bots · wave-1 Track B spend **2** · **ceiling 28** if Track B
 > is fully spent. Well inside the Pro plan's 50-bot cap on the reading where archived bots do not
-> count against it. ⚠️ **That reading is not verified** — whether archived bots consume plan slots
+> count against it. ~~⚠️ **That reading is not verified** — whether archived bots consume plan slots
 > is check **C12** in `track-b-arms-spec.md` §10, blocking, because if they do count the Day-0
-> arithmetic is 36 + 7 = 43 and the ≤8 allocation does not fit (43 + 8 = 51).
+> arithmetic is 36 + 7 = 43 and the ≤8 allocation does not fit (43 + 8 = 51).~~
+>
+> > ### 📝 C12 DISCHARGED — correction applied 2026-08-05
+> > *Factual reconciliation of this amendment block only, under `CLAUDE.md` §5's corrections
+> > clause. **No operative figure in this amendment changes** and no build is authorized. The
+> > struck caveat above is retired; it is left standing per the doc convention.*
+> >
+> > **Evidence — [FIRST-HAND 2026-08-04, `/bots` footer read].** Immediately after the original
+> > `QQQ-IC-0DTE-Fortress` was archived, the `/bots` footer was read read-only as
+> > **`35 active bots • 15 left in your plan`**; it had read **`36 active bots`** throughout the
+> > three preceding failed archive attempts. **35 + 15 = 50** — the plan complement is computed
+> > against the **ACTIVE** count, and one archive decremented that count by exactly one.
+> > **Archived bots do not consume plan slots.**
+> >
+> > **Consequence:** wave 1 is **22 of 50**, ceiling **28 of 50**. The `36 + 7 = 43` Day-0
+> > arithmetic and the `43 + 8 = 51` overflow scenario struck above are **void**.
+> >
+> > ⚠️ **RESIDUAL — carried, not dropped. Tier: [FIRST-HAND, UNCORROBORATED]** (no second
+> > witness). This reads the footer's **accounting**, not OA's **enforcement**, and two limits
+> > bound the inference: (1) a footer rendering `left = 50 − active` is self-consistent under
+> > *both* hypotheses — "archived are free" and "the display subtracts from a constant 50"
+> > produce the identical string, so only a *create* attempt at the boundary can distinguish
+> > them, and none has been made; (2) it was observed with **one** archived bot in existence,
+> > where the Group-A sweep archives **twenty** — nothing demonstrates the accounting holds at
+> > that scale. Per `CLAUDE.md` §3 item 3 a footer is a panel, and a panel is intent.
+> >
+> > ⛔ **REOPEN CONDITION, pre-declared:** *if a bot build ever fails at the cap despite archived
+> > bots existing, **C12 reopens** and the ≤8 allocation is re-derived against an observed slot
+> > count.* Full evidence block, residual and reopen condition: `track-b-arms-spec.md` §3.2.
+> >
+> > **This amendment still scopes a count. It still authorizes no build.**
 >
 > **This amendment scopes a count. It authorizes no build.** Every Track B arm still needs its own
 > signed pre-registration entry before it may be switched on.

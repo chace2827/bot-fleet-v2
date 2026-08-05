@@ -567,8 +567,27 @@ value"* — but whether the run is **blocked** is [DOCS-SILENT]. Do not rely on 
 
 ⚠️ **Whether Exit Options can reference Bot Inputs is [DOCS-SILENT] and unverified.** The
 documented chain terminates at a *decision* input; Exit Options are never named as a consumer.
-The greenfield spec ("PT% as a Bot Input") **depends on this and it has not been checked.**
+~~The greenfield spec ("PT% as a Bot Input") **depends on this and it has not been checked.**~~
 See §9.
+
+> ### 📝 CORRECTED 2026-08-05 — the LAST SENTENCE only. **Read the split carefully.**
+> *Struck text left standing per §0.2. This correction narrows a status claim; it decides nothing
+> and it does NOT lift the [DOCS-SILENT] tag above, which is load-bearing for greenfield check
+> **C0a**.*
+>
+> **✅ CHECKED, at the AUTOMATION-Input tier — [FIRST-HAND 2026-08-04, Exit Options editor on
+> `QQQ-IC-0DTE-Fortress Clone`; §9 row 3].** Exit Options **can** be linked: the 🔗 on the Exit
+> Options row (`a.btn.gray.opts-btn.param-opts` → `i.fa-link`) opens `Add Input / Exit Options`.
+> ⛔ **But the input's TYPE is the WHOLE exit bundle** — inside the Default Value editor
+> `i.fa-link` count is **0**, so there is no 🔗 on Profit Taking % or on any individual field.
+> **The "PT% as a Bot Input" design is therefore NOT EXPRESSIBLE.** What is expressible is
+> **"Exit-Options-SET as a Bot Input"**, one variable holding a whole exit configuration swapped
+> as a unit — a materially different mechanic, **ruled 2026-08-04 as D-1 Option A**.
+>
+> ⛔ **STILL UNVERIFIED, and the sentence above must not be read as closing it: the BOT-INPUT
+> tier has never been observed.** G1/G2/G3 and §9 row 3 all exercised the **Automation** Input.
+> Whether an Exit-Options input can be promoted to a **Bot** Input is greenfield check **C0a**,
+> and **C0a can stop that architecture outright.** The [DOCS-SILENT] tag above stays as written.
 
 ### 5.3 Tags — the only writable state on the platform [DOCUMENTED]
 
