@@ -3757,3 +3757,172 @@ staleness**:
    fork vs §2D shared automation); §2D's one-family-vs-two-family arithmetic reading.
 
 **HOLDING per `CLAUDE.md` §9.2.** No further writes until Andy releases.
+
+---
+
+## 2026-08-05 — part 2: the C0a probe session. Phase 0 half-answered; Architecture E cleared.
+
+**Scope:** one probe, authorized to two delete-list scratch bots only. `CLAUDE.md` §5 Chrome-direct,
+`oa-ops-runbook.md` §4.0 methods throughout — dispatched `pointerdown→mousedown→pointerup→mouseup→click`
+for every click, native-setter + `input`/`change` for every text entry, `input.value` / `data-value` /
+the client model for every read, **never `innerText`**. Layer 2 (Trades list) **deferred to Day-0** on
+every write below: the account is inactive and nothing trades.
+
+**Bots touched — two, both delete-list, no third bot opened for writing:**
+`TEST QQQ-IC-0DTE-HedgeC-S3 Clone` = `BOTfw5TkkCRF2217852702121253931` ·
+`QQQ-IC-0DTE-InvFilter-Wide150` = `BOTfw5TkkCRF4517755136823526783`.
+Both names read in full off `/bots` and confirmed to resolve to exactly one bot each (trap 8).
+
+### 1. ⭐ C0a CLAUSE ONE — PASS. The BOT INPUT tier exists and is typed as the whole bundle.
+
+**Where the control actually lives, and why G1/G2/G3 missed it.** The upgrade button is **not** in
+the automation editor's Inputs sidebar, **not** in its `Edit Inputs` modal, and **not** on the
+action's Exit Options 🔗 — that menu is headed `Inputs` and offers only `Add Input` under a section
+`Automation Inputs`. It is on the **bot's** automation row → ⚙ `editSettings` → section
+`Automation Inputs` → the `fa-link` button beside the input, which opens a menu headed **`Bot Inputs`**
+whose one item is **`Add Bot Input` — "Add an input to the bot's setting screen"**. Three earlier
+sessions searched the automation scope for a control that only renders in the bot scope.
+
+The app's own copy, read verbatim off the bot settings page's `ct.botinputs` panel:
+
+> *"Bot inputs are variables shared by your bot's automations. Any automation input can be upgraded
+> to a bot input by clicking the 🔗 button next to the input on an automation's settings screen."*
+
+**Persisted bot input, read from `a5.bots.bot.inputs` after a hard reload (fresh page load, not the
+save response — `CLAUDE.md` §9.1a):**
+
+```json
+{"id":"IN178588971538691","label":"CLAUDE-C0A-BOT-EXITS","type":"exits",
+ "defaultValue":{"profits":0.5,"smprofits":"normal","dprofit":"","price":"","stoploss":"",
+  "dstop":{"value":-137,"text":"-$137"},
+  "smdstop":{"limitType":"pct","limit":100,"smart":"normal","text":"100% of bid/ask"},
+  "tstop":"","touch":"","expdays":"","xevents":"","epsdays":"",
+  "text":"Profit: 50%, Stop Loss: -$137","dtype":"short","sig":"…"}}
+```
+
+`type` is **`exits`** — the whole Exit-Options bundle as one variable. This is D-1 Option A's
+mechanism, observed rather than inferred.
+
+**The reference from the automation, same reload:**
+
+```json
+{"type":"input","nid":"bot","input":"IN178588971538691",
+ "text":"CLAUDE-C0A-BOT-EXITS","oldValue":{ …the pre-link empty bundle… }}
+```
+
+`nid:"bot"` is the tier marker. Chain confirmed end to end: action `exits` param → automation input
+`IN178586615441261` → bot input `IN178588971538691` → bundle value.
+
+⚠️ **THE G2 RIDER NOW HAS A SECOND LAYER.** The binding record carries the bot input's **id and label
+only**, plus an `oldValue` that is a stale pre-link snapshot. A capture that stops at the automation
+input reads a NAME, and a capture that stops at the action reads a different NAME. `bots_config_v2.csv`,
+the capture-diff and the drift detector must resolve **two** hops, not one.
+
+### 2. ⭐ C0a CLAUSE TWO and C5 — PASS. One shared object, two bots, different values.
+
+Built a **new** Library automation rather than reusing the account's only existing shared object
+(`Defang-Mon-S2-StrikeTouch`, attached to 2 non-scratch bots) — the library page's own warning is
+*"These automations are shared by your bots. Modifications affect all bots using them."*
+`HedgeC-Scan-Put` was confirmed **bot-owned, not shared**: the Add-Automation picker separates
+`THIS BOT` from `MY LIBRARY` and lists it under the former.
+
+| | Bot A — TEST HedgeC-S3 Clone | Bot B — InvFilter-Wide150 |
+|---|---|---|
+| Library automation `rid` | `RTfw5TkkCRF178589028977611` | `RTfw5TkkCRF178589028977611` — **identical** |
+| Automation input id | `IN178589048006251` | `IN178589048006251` — **identical** |
+| Bot input id | `IN178589092511981` | `IN178589106268631` — **distinct** |
+| Resolved value | `profits: 0.25` · `"Profit: 25%"` | `profits: 0.75` · `"Profit: 75%"` |
+
+Bindings, verbatim, off each bot's Edit Settings form after a hard reload:
+
+```json
+A: {"type":"input","nid":"bot","input":"IN178589092511981","text":"C5_BOTVAL_TESTCLONE","oldValue":""}
+B: {"type":"input","nid":"bot","input":"IN178589106268631","text":"C5_BOTVAL_INVFILTER","oldValue":""}
+```
+
+Same `rid`, same automation-input id, different bot input, different value. **Attach, not copy** —
+the failure that would have voided PR-18's kill criterion at build time. Independently confirmed on
+the library page: `CLAUDE-C5-SHARED-SCRATCH · 2 bots`, one row, one rid.
+
+**Architecture E is buildable. The tournament does not return to Andy.**
+
+### 3. C11 — ANSWERED. `dstop` carries its own pricing sub-field, defaulting to `normal`.
+
+The exits form's full field set, read off the live DOM: `profits · smprofits · dprofit · smdprofit ·
+price · smprice · stoploss · smstoploss · dstop · smdstop · tstop · smtstop · touch · smtouch ·
+expdays · smexpdays · xevents · smxevents · epsdays · smepsdays`. **Every exit mechanic has an `sm*`
+sibling.** `smdstop`'s value, read blank-form and again off the saved payload:
+
+```json
+{"limitType":"pct","limit":100,"smart":"normal","text":"100% of bid/ask"}
+```
+
+`smart:"normal"`, **not `market`**. ARM-B1 does not trip §7's Market ban or Decision 5, and carries no
+pricing confound against a `normal`-priced control. **This also answers C3** for `tstop`, `touch` and
+`stoploss` — same shape, same default.
+
+### 4. ⛔ C10 — NOT ANSWERED. ARM-B1 stays blocked to a Day-0 behavioural read.
+
+The spec's prescribed method was run and came back empty. The control's own modal is headed
+**`Stop Loss Amount`**; the only unit marker is a bare `$`; `step=1`, no `min`, no `max`, no suffix,
+no helper text, no tooltip, **and no per-contract / per-position / per-leg qualifier anywhere on it.**
+OA's own rendered label for the saved value is `"Stop Loss: -$137"` — the same silence.
+
+One structural observation, recorded as **suggestive and inadmissible as the answer**: `dstop`
+persists as a **negative** number, `{"value":-137,"text":"-$137"}`. A signed P/L threshold reads more
+naturally as position-level than as a per-contract price. That is an inference about semantics from a
+sign convention. `CLAUDE.md` §5 forbids it as evidence. **C10 needs a live position with a known
+contract count, or OA support. `<D100>` cannot be derived and PR-21 cannot be re-stamped until then.**
+
+### 5. Bonus answers, unqueued
+
+- **C4 — a fixed CONTRACT COUNT is selectable.** The Open Position action's Position Size defaulted to
+  **`1 contract`**. §5.4's `Up to $250 risk` arithmetic is a choice, not a necessity. Read off the live
+  form.
+- **C1 — Profit Taking % is `% of CREDIT`.** The picker enumerates `2.5% of credit … 50% of credit …`;
+  selecting `50% of credit` wrote `profits: 0.5`. (`stoploss`'s own unit is still C1's literal
+  question and was **not** read — do not treat this as closing it.)
+- **C6 — a non-empty bundle IS accepted as a Default Value.** G1 proved empty; the C0a input carries
+  `profits/dstop/smdstop` populated and survived reload.
+- **C0b — YES by implication, not by direct test.** Bot A's 🔗 menu offered the *existing*
+  `CLAUDE-C0A-BOT-EXITS`, created against a **different** automation, for reuse by the new one; Bot B's
+  menu offered nothing, having no bot inputs. One bot input can drive two automations on one bot.
+  **The literal C0b question — one AUTOMATION input spanning two automations — was not tested.**
+
+### Every write this session — eight, all on scratch objects
+
+**On `TEST QQQ-IC-0DTE-HedgeC-S3 Clone`:**
+1. Bot input `CLAUDE-C0A-BOT-EXITS` (`IN178588971538691`) created, type `exits`.
+2. Its default bundle set: `profits=0.5`, `dstop=-137`.
+3. Automation `HedgeC-Scan-Put`'s bot-level Edit Settings saved, binding `IN178586615441261` → that bot input.
+4. `CLAUDE-C5-SHARED-SCRATCH` attached as instance `fw5TkkCRF3317858909367702271`, schedule Scanner Mon-Fri.
+5. Bot input `C5_BOTVAL_TESTCLONE` (`IN178589092511981`) created = `Profit: 25%`.
+
+**On `QQQ-IC-0DTE-InvFilter-Wide150`:**
+6. `CLAUDE-C5-SHARED-SCRATCH` attached as instance `fw5TkkCRF3317858910757101732`, schedule Scanner Mon-Fri.
+7. Bot input `C5_BOTVAL_INVFILTER` (`IN178589106268631`) created = `Profit: 75%`.
+
+**In the Automation Library:**
+8. **New shared automation `CLAUDE-C5-SHARED-SCRATCH` (`RTfw5TkkCRF178589028977611`)** — one Open
+   Position action, QQQ short put spread, expiration `exactly 0 days`, size `1 contract`, price
+   `100% of bid/ask`; automation input `C5_EXITS` (`IN178589048006251`, type `exits`, default empty).
+
+**Layer 1 self-check on all eight: MATCH**, every one after a hard reload, from `input.value` or the
+client model, never a save banner. **Post-state on both bots:** `status:"off"`, `AUTOMATIONS OFF`,
+`EXIT OPTIONS OFF`, `closedCount: 0`. Nothing can fire.
+
+**Andy's ruling 2026-08-05: the writes STAY, not unwound** — the bot-local residue dies with the two
+delete-list bots. ⚠️ **The Library object does NOT** — see the residue lines in `state.md`.
+
+### Method notes worth carrying
+
+- **`overlay.innerText` goes stale while the drawer animates.** Two clicks were judged "no-op" from a
+  text read and had in fact committed — a screenshot showed the submenu open. **Screenshot before
+  concluding a click failed**; the runbook's ref-click warning does not cover this failure mode.
+- **The title editor commits on BLUR, not on Enter.** `edit-title-input` took the new value, ignored
+  `keydown Enter` twice, and committed the moment `blur`/`focusout` was dispatched. A rename that
+  looks lost is probably just uncommitted.
+- Three `Runtime.evaluate` calls timed out at 45s mid-probe with the page healthy afterwards. Re-read
+  state rather than re-firing the action — re-firing a save is how a double write happens.
+
+**HOLDING for Andy's commit.**

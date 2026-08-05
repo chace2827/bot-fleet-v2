@@ -2,7 +2,9 @@
 
 *The live facts. Updated whenever a stated fact changes (CLAUDE.md §9.1). Numbers live in
 `STATUS.md`; the plan in `docs/build-plan.md`; progress in the `bot-fleet-migration` tracker.
-Last updated 2026-08-05 (propagation sweep + the released gated batch — C12 and S-2 propagated to
+Last updated 2026-08-05 (part 2: the C0a probe — Architecture E CLEARED, C0a both clauses PASS,
+C5 PASS, C11/C4/C6 answered, C10 still blocking ARM-B1; earlier the same day: propagation sweep +
+the released gated batch — C12 and S-2 propagated to
 every surface, D-1 propagated, `research-loop-spec.md` corrected ×6, §8.4 step 1 corrected on
 explicit authorization; earlier the same day: R-edit package applied + edit-policy split).*
 
@@ -193,6 +195,39 @@ Decision 4 Architecture E.
 > arm) · **C0c** (presets inside the input editor) · **C1** `stoploss` unit · **C2** `tstop` shape
 > · **C3** exit-pricing sub-fields · **C7** the `opened today` entry gate · **C8** the
 > sibling-close nodes. C7 and C8 also carry explicit no-substitution STOPs.
+
+> ### ✅ SUPERSEDED IN PART, 2026-08-05 (C0a probe session). The block above is LEFT STANDING as the
+> state it was written in; these are the answers.
+> **⭐ C0a PASSES ON BOTH CLAUSES. Architecture E is buildable and does NOT return to Andy.**
+> - **Clause one — the BOT INPUT tier exists and is typed `exits`,** the whole bundle. Bot input
+>   `IN178588971538691` on the TEST clone, read from `a5.bots.bot.inputs` after a hard reload.
+>   The control is on the **bot's** automation row → ⚙ Edit Settings → the 🔗 beside the input →
+>   menu `Bot Inputs` → `Add Bot Input`. **G1/G2/G3 missed it because they searched the automation
+>   scope for a control that only renders in the bot scope.**
+> - **Clause two + C5 — one Library automation, two bots, DIFFERENT values.**
+>   `rid RTfw5TkkCRF178589028977611` and automation input `IN178589048006251` are **identical** on
+>   both scratch bots; the bot inputs are **distinct** (`IN178589092511981` = `Profit: 25%` vs
+>   `IN178589106268631` = `Profit: 75%`). **Attach, not copy.** Library page agrees: `2 bots`, one rid.
+> - **C11 — `dstop` HAS its own pricing sub-field `smdstop`, defaulting to `{"smart":"normal"}`,
+>   NOT `market`.** Every exit mechanic has an `sm*` sibling — **this answers C3 too.**
+> - **C6 — a non-empty bundle IS accepted as a Default Value.** **C4 — `1 contract` IS selectable.**
+>   **C1 — Profit Taking % is `% of CREDIT`** *(this does NOT close C1, whose literal subject is
+>   `stoploss`'s unit — that was not read)*. **C0b — YES by implication only** (one BOT input drove
+>   two automations on one bot); the literal question, one AUTOMATION input spanning two automations,
+>   **is still worth one direct look.**
+> - ⛔ **C10 REMAINS OPEN AND BLOCKS ARM-B1.** The `dstop` modal is headed `Stop Loss Amount`, unit
+>   marker a bare `$`, `step=1`, no min/max/suffix/helper/tooltip and **no per-contract vs
+>   per-position qualifier anywhere.** The prescribed method returns nothing. `dstop` persisting as a
+>   **negative** number is *suggestive* of a position-level P/L threshold and is **inadmissible as the
+>   answer** (`CLAUDE.md` §5 — inference is not observation). **Needs a Day-0 behavioural read
+>   against a known contract count.** `<D100>` cannot be derived and PR-21 cannot be re-stamped.
+> - **Still untouched:** C0c · C2 · C7 · C8 · C9. Full record: `session-log.md` 2026-08-05 part 2.
+
+**⚠️ AMENDED 2026-08-05 — the G2 rider is now TWO hops, not one.** Once a param is driven by a bot
+input the chain is action → automation input → **bot input**, and the binding record carries only the
+bot input's **id and label** plus a stale `oldValue`. A capture that stops at the action reads one
+name; a capture that stops at the automation input reads another. `bots_config_v2.csv`, the
+capture-diff and the drift detector must resolve **both** hops or every arm diffs as identical.
 
 **⚠️ Three of the seven are not arms yet** under `hedge-research.md` §5.2's own definition —
 Trail's `tstop` shape, SL100/SL200's `stoploss` unit, and four arms' exit-pricing sub-field are
@@ -599,6 +634,24 @@ position-open/close emails are not reaching Andy.
 **⚠️ STILL OPEN: §9 #5** (is re-applying Update Position Exit Options side-effect-free) — needs
 positions, so it is a Day-0 check. The **DST / "Market Time (EST)"** question also still needs a
 Day-0 observation; nothing this session touched it.
+
+### ⚠️ OA RESIDUE FROM THE C0a PROBE — 2026-08-05. Andy ruled it STAYS; two lines the sweep needs.
+
+Eight writes, all on scratch objects, all logged in `session-log.md` 2026-08-05 part 2. Both scratch
+bots re-read post-state `status:"off"`, `AUTOMATIONS OFF`, `EXIT OPTIONS OFF`, `closedCount: 0`.
+
+1. ⛔ **`CLAUDE-C5-SHARED-SCRATCH` (`RTfw5TkkCRF178589028977611`) IS A LIBRARY OBJECT AND DOES NOT DIE
+   WITH THE TWO SCRATCH BOTS.** It is an account-level shared automation carrying automation input
+   `C5_EXITS` (`IN178589048006251`). **The Phase 4 sweep must DELETE IT EXPLICITLY** after
+   `TEST QQQ-IC-0DTE-HedgeC-S3 Clone` and `QQQ-IC-0DTE-InvFilter-Wide150` are deleted, or it orphans
+   in `My Automations` — where the account previously held exactly one shared automation
+   (`Defang-Mon-S2-StrikeTouch`), so an orphan is conspicuous and will be mistaken for a real object.
+2. **Both scratch bots now carry C5 bindings, and those DIE with the bots' deletion — no sweep action
+   needed for these.** TEST clone: bot inputs `CLAUDE-C0A-BOT-EXITS` (`IN178588971538691`) and
+   `C5_BOTVAL_TESTCLONE` (`IN178589092511981`), plus instance `fw5TkkCRF3317858909367702271`.
+   InvFilter-Wide150: bot input `C5_BOTVAL_INVFILTER` (`IN178589106268631`), plus instance
+   `fw5TkkCRF3317858910757101732`. The 2026-08-04 `CLAUDE-G1-EMPTY-EXITS` residue is unchanged and is
+   also in this class.
 
 ### ⚠️ WRITES MADE 2026-08-04 (pilot part 4) — all authorized, all logged
 
