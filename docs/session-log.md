@@ -4559,3 +4559,53 @@ about the mechanics and operations and testing of how OA fully operates."*
 ### Files changed this session
 `docs/session-log.md` (this entry) + the `bot-fleet-migration` tracker artifact (needs Andy's
 visual confirmation per `CLAUDE.md` §9.1a).
+
+---
+
+## 2026-08-06 (late) — Housekeeping: three mechanical doc tasks from Phase A findings (F-1, F-3, sizing stamp)
+
+**Mode:** doc edits only, all via direct `device_bash` read-modify-write with a fresh re-read,
+a single-match assert, and a post-write `sha256` + single-match grep, per `CLAUDE.md` §5/§9.1a.
+No git run, in any form. No OA surface touched.
+
+**F-1 — `decision-card-2026-08-06.md`'s RULING SHEET filled.** The top RULING SHEET block
+(`## RULING SHEET — copy, fill, send`) was a blank template; filled from `state.md`'s recorded
+rulings, dated 2026-08-06: 1 YES / 1a APPLY NOW / 2 CONFIRM / 3 CONFIRM / 4 AUTHORIZE (package
+1–8, amended: separate build session + deletions-before-Phase-A sequencing) / 4a YES CLEAN /
+5 RETIRE-SCOPED / 6 DEFER W/ TRIGGER as drafted, superseded same session — B3 RATIFIED as the
+regime-change definition with a detector-trigger deadline / 7 GO, re-ordered. Added a dated line
+noting the same-night rulings made outside this card's seven slots: C8 (build without
+sibling-close), PR-16 (re-scoped to the armed trail), F-4 (probe-first — left unimplemented,
+Default Value NONE, still an open Day-0 blocker, not decided). **Scope note:** only the top sheet
+was filled — the inline `RULING SLOT 4` / `RULING SLOT 4a` lines inside §4's adversarial record
+(still ~lines 240–241) were left as option lists; out of this pass's scope. `state.md`'s F-1
+finding updated to record the partial resolution.
+
+**F-3 — `greenfield-family-spec.md` §8.3 A2 amended, Andy-authorized.** Added trigger config
+(class/time/repeat/days) to the A2 assertion's field list, dated, original standing — trigger
+lives at the bot (SCANNERS/MONITORS), not the shared Library object, so neither §8.2 step 6's
+rid-list diff nor the un-amended A2 covered the backstop's 15:52/Mon–Fri/holidays-skip config,
+an undetected matching hazard on all seven arms. `state.md`'s F-3 finding updated: closed.
+
+**Sizing stamp — `pre-registration-ledger.md`'s three Group D templates re-stamped.** The
+PR-14…17 four-arm block, the PR-18-onward hedge/SL block, and the canary block (together
+covering all seven greenfield-family arms, PR-14…PR-20) each got a dated note: the sizing
+primitive in use is the FIXED CONTRACT COUNT = 1, not the `Up to $250 risk` fallback (spec
+§5.4/C4), observed first-hand on `GF-ScannerA-PutSpread` in tonight's Phase A build. Matches
+`greenfield-family-spec.md`'s own C4 instruction to record this in all seven MECHANISM blocks
+before signing. `state.md`'s Phase A close-out block updated to mark the stamp done.
+
+**Verification.** Every edit: fresh read immediately before writing, `str.count()` == 1 assert
+on the anchor text, write, then an independent `device_bash` `shasum -a 256` + single-match
+`grep -c` in a separate call (not the write script's own printed confirmation). All four files'
+before/after hashes:
+- `decision-card-2026-08-06.md`: `5dda6b82…dcfbdd` → `ab7ab955…ba68dbc`
+- `greenfield-family-spec.md`: `e1c53a4e…ff78e52` → `9b04ac3a…f065768`
+- `pre-registration-ledger.md`: `e16bd23c…8ebe26eed` → `c4c39867…f26e485d0`
+- `state.md`: `382d3d0f…080ba14004a` → `d3caa5bc…88ce13c1e` (two edits, both independently verified)
+
+### Files changed this session
+`docs/decision-card-2026-08-06.md` · `docs/greenfield-family-spec.md` ·
+`docs/pre-registration-ledger.md` · `docs/state.md` · `docs/session-log.md` (this entry).
+
+**HOLDING for Andy's commit.**

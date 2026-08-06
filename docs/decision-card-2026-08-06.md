@@ -20,16 +20,45 @@ ruling authorizes. Gated surfaces move only under an explicit **"amend the plan"
 
 ```
 1. Propagation grant (memo → 6 docs, list §1):        AMEND THE PLAN: YES / NO / strike items: ___
+   → RULED 2026-08-06: YES, in full (no items struck).
    1a. build-plan §2D Range075 wording now vs hold:    APPLY NOW / HOLD for the UI check
+   → RULED 2026-08-06: APPLY NOW.
 2. Ledger §1/§3/§7 count scoping:                      NO ACTION NEEDED — CONFIRM / reopen: ___
+   → RULED 2026-08-06: CONFIRM.
 3. PR-14…17 family kill criterion:                     NO ACTION NEEDED — CONFIRM / reopen: ___
+   → RULED 2026-08-06: CONFIRM.
 4. Greenfield build session (package §4):              AUTHORIZE / PROBE-ONLY / DEFER
+   → RULED 2026-08-06: AUTHORIZE, package items 1–8. Amended, two parts from Andy: (i) the OA
+     build itself (Phase 0 probes onward) runs in a SEPARATE session — this session applied doc
+     edits only, touched no OA surface, ran no browser tool; (ii) sequencing per slot 7 —
+     C0b look, 2 deletions, and the C5 Library delete + exactly-one verify-back run tonight,
+     before Phase A, in that separate session.
    4a. Pilot declared clean (runbook §3 Step A):       YES, CLEAN / NOT YET
+   → RULED 2026-08-06: YES, CLEAN — on the ritual-complete record and the FINISH capture-diff
+     no-unintended-edits verdict (reactivation-runbook.md §3 Step A gate).
 5. Double-testing:                                     RETIRE FROM TRACK A (rec) / PRECEDENCE ONLY /
                                                        DROP AN ARM / ACCEPT+DOCUMENT
+   → RULED 2026-08-06: RETIRE-SCOPED, package parts 1–4 (research-loop-spec.md §10a).
 6. Regime-change criterion:                            DEFER W/ TRIGGER (rec) / DEFINE NOW / other
+   → RULED 2026-08-06: DEFER W/ TRIGGER as drafted — then SUPERSEDED same session when the
+     card's "undefined everywhere" premise was found false (evidence-standards.md §4 gate B3
+     already defines regime change). Andy's fresh ruling: B3 RATIFIED as the regime-change
+     conjunct's definition; the deferral narrows to a detector question — wire B3 to a scripts/
+     detector, or a recorded manual-evaluation protocol run at each review date, before the
+     earlier of any arm's/variant's first n=60 interim read or 2026-11-30.
 7. Tomorrow-morning mechanical sweep:                  GO / NO-GO / GO minus: ___
+   → RULED 2026-08-06: GO, re-ordered — see slot 4 amendment (ii).
 ```
+
+**Same-night rulings outside this card's seven slots — 2026-08-06.** Made by Andy during
+tonight's Phase A OA build session (a separate session from this card), recorded in
+`docs/state.md` and `docs/session-log.md`'s 2026-08-06 (late) entry, noted here so this card
+and the live-facts page do not diverge:
+- **C8** — build without sibling-close; the spread, not the condor, is the unit for early exits
+  (`greenfield-family-spec.md` §4.3).
+- **PR-16** — re-scoped to the armed trail, target=40 / trail=15.
+- **F-4** — probe-first: `SENTINEL-SL1` left unimplemented, Default Value = NONE, flagged as an
+  open Day-0 blocker — not yet decided, must be ruled before any arm's `AUTOMATIONS` goes ON.
 
 ---
 

@@ -263,7 +263,9 @@ entry is the other session's work, not an unexpected diff.
 > `greenfield-family-spec.md` §4.1 node-for-node. Action `open-shortputspread`:
 > `exactly 0 days` · short put `0.75% below underlying price` · long put `$2.00 below short put
 > leg` · **`amount` = 1 contract — the SIZING PRIMITIVE IN USE IS THE FIXED CONTRACT COUNT**, not
-> the `$250 risk` fallback (stamp this in all seven MECHANISM blocks) · `price`
+> the `$250 risk` fallback (stamp this in all seven MECHANISM blocks ✅ **done 2026-08-06**,
+> late-night Sonnet housekeeping session — `pre-registration-ledger.md`'s three Group D
+> templates covering PR-14…PR-20, dated note each, device-hash-verified) · `price`
 > `{"limit":100,"smart":"normal"}` — **not Market**, Decision 5 holds · `tags` `put side` ·
 > `filter {"minPrice":0.08}` · `exits` = a **REFERENCE** to automation input `IN178605447966781`
 > (`GF_EXITS_PUT`, type `exits`) — **the G2 rider reproduced first-hand on a new object.**
@@ -290,10 +292,19 @@ entry is the other session's work, not an unexpected diff.
 > all seven bots**, and neither §8.2 step 6 (rid lists) nor §8.3 **A2** enumerates trigger config.
 > **A2 needs a trigger clause or the family has an undetected matching hazard in its only
 > backstop.** Spec text — Andy's, not amended here.
+> ✅ **APPLIED 2026-08-06 (late-night Sonnet housekeeping session, Andy authorized):** A2 amended
+> in `greenfield-family-spec.md` §8.3 to add trigger config (class/time/repeat/days) to the
+> comparison, dated, original standing. Device-hash-verified, single-match grep. F-3 closed.
 >
 > ⚠️ **F-1 — the slot-4 gate surface.** `decision-card-2026-08-06.md` is an **unfilled** ruling
 > sheet (lines 240–241 still read the option lists); the rulings live on **this page**. This
 > session proceeded on this page and flags the divergence. See `session-log.md` 2026-08-06 (late).
+> ✅ **PARTIALLY APPLIED 2026-08-06 (late-night Sonnet housekeeping session):** the card's top
+> RULING SHEET (lines ~21–32) is now filled from this page's recorded rulings, dated, plus a
+> line noting the same-night rulings (C8, PR-16, F-4) made outside the card's seven slots. The
+> inline `RULING SLOT 4` / `RULING SLOT 4a` lines inside §4's adversarial record (still ~lines
+> 240–241) were **not** touched — out of this pass's scope; the top sheet is the named gate
+> surface and now agrees with this page.
 >
 > Also read first-hand and unchanged: `itmpaper` = `market` ✅ · `itmlive` = `auto` ✅ ·
 > `maxexits` = `0` · Bot Schedule `09:31`/`5`, `09:31`/`1`. `/bots` = **33 active bots**;

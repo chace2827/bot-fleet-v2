@@ -359,6 +359,11 @@ MECHANISM        Short-premium VRP on 0DTE. The arms share every other input, so
                  Option Preset in the Open Position action (the Exit-Options SET as a Bot Input · Touch on the
                  challenged side · time exit) + a flat-close Scheduled Event backstop + a
                  position-closed-trigger automation to close the sibling spread.
+                 📝 SIZING STAMP 2026-08-06: primitive observed FIRST-HAND as the FIXED
+                 CONTRACT COUNT (1), not the `Up to $250 risk` fallback (spec §5.4/C4) —
+                 `GF-ScannerA-PutSpread`, Phase A build, `amount:{"type":"quantity",
+                 "quantity":1}`. Applies to all seven greenfield-family arms, PR-14…PR-20
+                 (`greenfield-family-spec.md` C4, memory row).
 KILL CRITERION   Per arm: Exp(R) per condor < 0 with CI entirely below 0 at n≥60.
                  FAMILY-LEVEL (REPLACED 2026-08-05 — see the banner below this entry):
                  if a capture-diff ever shows two arms differing in MORE THAN ONE MECHANIC
@@ -459,6 +464,11 @@ HYPOTHESIS       With matched arms in a single execution class, the hedge tourna
                  question askable again — not an answer to it.
 MECHANISM        Per arm, one hedge mechanic from the library. Shared automation, shared inputs,
                  Range075 carried as a preset on every arm.
+                 📝 SIZING STAMP 2026-08-06: primitive observed FIRST-HAND as the FIXED
+                 CONTRACT COUNT (1), not the `Up to $250 risk` fallback (spec §5.4/C4) —
+                 `GF-ScannerA-PutSpread`, Phase A build, `amount:{"type":"quantity",
+                 "quantity":1}`. Applies to all seven greenfield-family arms, PR-14…PR-20
+                 (`greenfield-family-spec.md` C4, memory row).
 KILL CRITERION   The tournament is VOID (not the bots) if any of hedge-research.md §5.2's five
                  conditions fails: shared automation · one differing input proven by
                  capture-diff · same execution class · Range075 on every arm · a proof-of-fire
@@ -485,6 +495,11 @@ HYPOTHESIS       Not a strategy hypothesis — an INSTRUMENT hypothesis: a bot w
                  same-day detection of the failure that ran six invisible sessions in v1.
 MECHANISM        n/a — this bot is not run for edge. Its P/L is expected to be ~flat and is not
                  evidence about anything.
+                 📝 SIZING STAMP 2026-08-06: primitive observed FIRST-HAND as the FIXED
+                 CONTRACT COUNT (1), not the `Up to $250 risk` fallback (spec §5.4/C4) —
+                 `GF-ScannerA-PutSpread`, Phase A build, `amount:{"type":"quantity",
+                 "quantity":1}`. Applies to all seven greenfield-family arms, PR-14…PR-20
+                 (`greenfield-family-spec.md` C4, memory row).
 KILL CRITERION   None on P/L — it is exempt by design, and that exemption is stated here so it
                  cannot later be mistaken for a losing bot nobody killed. It is retired when the
                  detector's Tier C rules cover the same ground with a live config.
