@@ -4289,3 +4289,120 @@ at signing, not now.
 
 **HOLDING for Andy's commit.** Fourteen files touched this session (list above, three files
 touched twice or three times); none via `git`.
+
+## 2026-08-06 — part 2: Phase 0 CLOSED (second probe session), two rulings applied, slot-7 sweep executed
+
+**Scope:** close every Phase 0 check answerable in the UI; then apply Andy's two rulings; then the
+slot-7 deletions. `CLAUDE.md` §5 Chrome-direct throughout — every click dispatched
+`pointerdown→mousedown→pointerup→mouseup→click` on an element selected **by identity**, every value
+read from `input.value` / `data-value` / the client model, **never `innerText`**. C10 explicitly out
+of scope. **One bot touched for writing: `BOTfw5TkkCRF2217852702121253931`** (delete-list scratch).
+
+### The answers
+
+| Check | Verdict |
+|---|---|
+| **C1** | ✅ **`% of CREDIT`.** Label `Stop Loss %`, `input[name=stoploss]`; picker `-5% of credit`=0.05 … `-100%`=1 … `-200%`=2 … `-500%`=5. **SL100=1, SL200=2.** `dstop` is the separate `Stop Loss $` control — C10 untouched |
+| **C2** | ✅ **An ARMING THRESHOLD EXISTS and is NATIVE.** `tstop` opens a sub-form: `target` (min 0, ph 50) "Activate at __ % of credit"; `trail` (min 1, ph 15) "Close on __ % pullback"; optional `minr`, `maxtrail` |
+| **C7** | ✅ **PASS.** Recipe `postagtoday` (group Bot): `Bot [opened\|closed] a position with [tag] today`. **Already running live** in `HedgeC-Scan-Call` |
+| **C8** | ⛔ **STOP on clause 2.** Loop ✓ and opened-today ✓, but **the closed position is not an addressable referent** |
+| **C0c** | ✅ **PASS.** Presets picker IS in the bot-input value editor; `TIER2-CHECK4-PUTSIDE` = `UIfw5TkkCRF1517858152565216101` |
+| **C0b literal** | ✅ **Answer NO.** *"No compatible inputs found."* |
+| **C9** | ⏳ Not answerable in the UI. Day-0, same class as C10 |
+| runbook §7 template | ⏳ **NOT RUN** — needs a template saved from a delete-list bot (fresh residue on the eve of the sweep) or a production bot, which this session was barred from |
+
+Evidence files: `data/captures/edit-verify/2026-08-06/phase0_C1.txt · _C2 · _C7 · _C8 · _C0bc · _C9`.
+
+### The two findings that changed the build
+
+**1. C8's STOP is real and it is not an arm cut.** The position-referent picker inside a
+`Position closed` automation offers exactly two entries — `Lookup a position` (literal Symbol /
+Position Type / Tag filters) and `Opened Position`, greyed, with OA's own copy *"Only available in
+automations scheduled with the 'position opened' trigger"*. **There is no "Closed Position"
+referent.** Inside a Positions loop the referent auto-binds to the looped position
+(`em.ex.output.n-posrepeater`) with no picker at all. And no recipe compares a tag to another
+position's tag — `postag` takes a literal list, `posprop2prop` compares numeric `posprop`s.
+**Scopes opened before recording the negative:** bot scope · automation scope · the referent picker
+at top level · the in-loop binding · the Position Lookup sub-form · **all 127 recipes in all 6
+groups**. The enumeration is closed and the exclusion is stated in OA's own copy — this is a bounded
+negative, not an unopened screen. **RULED (Andy): build without sibling-close; the spread is the
+unit for early exits.**
+
+**2. C2 falsified a review "fix".** PE-9 forced PR-16 down to a plain always-on trail on the reading
+that an armed trail is a two-stage mid-trade state change caught by `oa-platform-reference.md` §11
+rows 4 and 6. It is not: OA implements the armed trail as a **native exit primitive**. §11 rows 4
+and 6 bound what **decision nodes** express, not what a native primitive does internally, and
+`maxtrail` ("Pullback is more than __ % from high") is direct evidence the platform tracks a
+high-water mark natively. **RULED (Andy): PR-16 re-scoped to the armed trail, `target`=40 /
+`trail`=15.** ⚠️ **Recorded as a method lesson: a folder-derived exclusion is not an observation.**
+An adversarial review can be *right about the draft* and *wrong about the platform*, and only a
+first-hand read separates the two.
+
+⚠️ **NOT observed, and flagged rather than assumed:** whether a *plain* non-armed trail is
+expressible at all (whether `target` may be left blank). If the armed values cannot be entered as
+specified at build time, **STOP** — do not fall back by leaving a field empty.
+
+### PR-18/PR-19 basis check (asked for explicitly)
+
+**No flag needed.** Both entries were written against the operator anchors' **% OF CREDIT** basis
+and make re-stamping conditional on *"IF THE CONTROL IS %-OF-RISK"*. C1 confirms % of credit, so the
+condition is **not triggered**; the rungs stand as `stoploss` = 1 and 2. The caveat blocks are marked
+answered in place.
+
+### Edits applied (all under the two rulings; original text left standing throughout)
+
+`greenfield-family-spec.md` — Phase 0 banner + all 7 rows marked in place · §4.3 ruling banner (build
+without sibling-close, with the full consequence list) · CF-4 block superseded · §6.2 Rule 0 moot ·
+§8 row 4 discharged for all seven · §3.1 armed-trail exclusion struck · Phase A **A4 struck**, A7/B3
+corrected to **three** shared automations · §8.5's `sibling close` artifact **VOID** · §9 header
+re-stamps all seven MECHANISM blocks · PR-16 re-scoped · PR-17 S2→**S1** · PR-18 Breakeven objection
+**resolved** · PR-18/19 C1 caveats answered · §11 PE-5 / PE-7 / PE-8 / PE-9 marked · §12 row 15
+CF-4 **discharged** · §13 re-corrected.
+`track-b-arms-spec.md` — imported-correction header · §5.5 CF-4 discharged · §6.3 + §5.5
+non-equivalence narrowed · ARM-B2's sibling-close precondition discharged by removal · ARM-B1's
+close-both note corrected · V4 artifact **VOID**.
+`state.md` — Phase 0 CLOSED block · "three not arms yet" resolved · four→three shared automations ·
+residue block fully swept.
+
+⛔ **TWO THINGS FLAGGED FOR ANDY, NOT RULED HERE.** (1) The **double-testing retirement's stated
+reason is narrowed**: with sibling-close gone, the greenfield SL arms and ARM-B1 are **per-spread,
+the same exit unit as Track A's counterfactuals**, so the "close-both vs per-spread" leg of the
+non-equivalence argument falls away. The retirement ruling itself is untouched; what survives it is
+a different incumbent, a different engine, and the self-comparison degeneracy. (2) **PR-18's name**
+— the construction objection that withheld the "Breakeven" label is gone; whether it may now be
+published under the anchor's name is Andy's.
+
+### The sweep — executed in the ordered sequence, capture first
+
+1. `/bots` capture **before any deletion** (build-plan §2): **35 active bots**, expected 35 ✅.
+   `data/captures/2026-08-06/oa_Bots_2026-08-06-17-21-38.txt`, sha256 `ad6f2a40…f0f5` — **verified
+   byte-exact against the hash computed in the page**, not merely written.
+2. `TEST QQQ-IC-0DTE-HedgeC-S3 Clone` deleted → 34. 3. `QQQ-IC-0DTE-InvFilter-Wide150` deleted → 33.
+4. `CLAUDE-C5-SHARED-SCRATCH` (read `Unused` after the bot deletions) deleted from My Library.
+5. **Verify-back after a hard reload: `My Automations` = EXACTLY ONE ROW, `Defang-Mon-S2-StrikeTouch`
+   (2 bots).** ✅
+`DIR-SPX-PutVIX22-SL75`, the champion and its `-130PM` clone re-confirmed present. No Phase A work
+started.
+
+### Method notes worth carrying
+
+- **The recipe catalogue is readable in bulk from the client model** — `a5.bots._recipes` is 127
+  objects of `{type, format, group}`. That is how C7 and C8 were answered exhaustively rather than by
+  clicking through menus, and it is what makes "I opened every scope" a checkable claim.
+- **Referent chips encode their source node in a class** — `em.ex.output.n-posrepeater`. When a field
+  auto-binds instead of offering a picker, the class tells you what it bound to.
+- **The DOM/screenshot coordinate ratio measured 1.654 this session** (`innerWidth` 2560 vs
+  screenshot 1548), consistent with the recorded ~1.675. Selecting by attribute rather than by
+  coordinate made it irrelevant — which is the point.
+- **The editor's Close discards through the app's own "Save Changes?" dialog**, so an unsaved probe
+  automation leaves nothing behind. Verified by hard reload plus a Library check, not by assumption.
+- ⚠️ **Two tool-bridge dropouts mid-session** (Chrome extension, then the device bridge, then Chrome
+  again). Neither corrupted anything, but the deletions were **held** while the capture could not be
+  written to disk — capture-before-deletion is a build-plan §2 ordering constraint and a browser
+  variable is not disk.
+- ⚠️ **A concurrent session was editing this folder tonight** and committed as `76bdf5c`. Every file
+  was re-read fresh immediately before its edit; every anchor was asserted to match **exactly once**
+  before any write, and each file was verified afterwards by `device_bash` sha256 + single-match
+  grep. **Diffs from that session are expected, not anomalies.**
+
+**HOLDING for Andy's commit.**

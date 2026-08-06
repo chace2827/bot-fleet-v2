@@ -1,0 +1,58 @@
+# Phase 0 — C8 : are the GF-SiblingClose nodes real?  -> STOP on clause 2
+captured: 2026-08-06, Chrome-direct DOM read + full recipe-catalogue enumeration
+bot: BOTfw5TkkCRF2217852702121253931 (delete-list scratch)
+build used: a NEW unsaved automation, trigger `Position closed` (closepos), named
+  CLAUDE-C8-SCRATCH, discarded at the end via the app's own Save-Changes -> Discard.
+
+CLAUSE 1 -- a Positions loop inside a `Position closed` automation.  ==> REAL.
+  The Add-Step panel for a closepos automation lists, under "Loops":
+    "Positions -- Run subsequent actions for open positions."   data-value="posrepeater"
+  Added it; the tree node renders "Repeat for each position".
+  Its config panel is headed "Run all subsequent actions for each position matching:"
+  with filters Symbol / Position Type / Tags ("Includes positions with any tag").
+
+CLAUSE 3 -- an opened-today scope on a looped position.  ==> REAL.
+  { "type":"posopendays", "group":"Positions",
+    "format":[ {"id":"position","type":"position"}, "has been open",
+               {"id":"cop","type":"mlee"}, {"id":"days","type":"cmdays","zero":true} ] }
+  zero:true => "has been open 0 market days" is selectable. Unit is MARKET DAYS.
+  (Also present and explicitly NOT to be used: `posopentime` -- "[position] has been open
+  [N] minutes" -- the position-age primitive that the -15,376 substitution used.)
+
+CLAUSE 2 -- compare a looped position's side tag against THE CLOSED POSITION'S.  ==> NOT
+EXPRESSIBLE. The closed position is not an addressable referent.
+
+  The position-referent picker, opened at TOP LEVEL of a `Position closed` automation
+  (recipe `postag` = "[position] has any of these tags: [tags]"), offers exactly two
+  entries, both under a heading "Bot":
+
+    1. "Lookup a position"  >
+         opens a sub-form headed "Position Lookup", copy verbatim:
+         "Finds the first position that matches these filters:"  Symbol / Position Type /
+         Tag.  These are LITERAL filters -- no reference to the triggering position.
+
+    2. "Opened Position"    -- greyed, with this copy verbatim in red:
+         "Only available in automations scheduled with the "position opened" trigger"
+
+  There is NO "Closed Position" entry. The trigger's position is exposed only for the
+  `position opened` trigger, and is unavailable under `position closed`.
+
+  INSIDE the Positions loop the referent does not offer a picker at all: it auto-binds to
+  the looped position, rendered as a chip whose class is `em.ex.output.n-posrepeater`
+  -- i.e. "the output of the posrepeater node". Clicking it opens nothing.
+
+  AND no recipe in the catalogue compares a tag to another position's tag:
+    `postag`        -- "[position] has [any|all] of these tags: [tags]"  (LITERAL list)
+    `posprop2prop`  -- "[position] [posprop] is [cop] [posprop]"  (both operands are
+                       numeric `posprop`s tagged PickMath: open P/L, EV, mid price, ...;
+                       tags are a separate field type and are not members of posprop)
+
+SCOPES OPENED, so this is not an inference from absence:
+  bot scope (bot settings, Bot Inputs panel) | automation scope (editor, Add Step, recipe
+  picker) | the referent picker at TOP LEVEL | the referent binding INSIDE the loop |
+  the Position Lookup sub-form | the complete recipe catalogue, all 127 recipes across all
+  6 groups. The referent enumeration is closed and the exclusion is stated in OA's own copy.
+
+ANSWER: C8 clause 2 returns the spec's no-substitution STOP. Clauses 1 and 3 pass.
+RULED 2026-08-06 (Andy): take the spec's named fallback -- BUILD WITHOUT SIBLING-CLOSE;
+  the spread, not the condor, is the unit for early exits.

@@ -483,12 +483,25 @@ If Andy means (b), this arm's design changes and PR-21 must be re-drafted before
 
 ### 5.5 What this arm cannot conclude
 
-⛔ **CF-4 applies unchanged.** `GF-SiblingClose` force-closes the untested side the instant the
+> ### ⛔ IMPORTED CORRECTION 2026-08-06 — `GF-SiblingClose` IS NOT BUILT. Ruled by Andy on
+> Phase-0 check **C8**, in `greenfield-family-spec.md` §4.3. **This spec's arms attach that shared
+> object, so the correction propagates here.** Every close-both / S2 claim below that rests on
+> sibling-close is **falsified**; each is marked in place and left standing per convention.
+> Evidence: `data/captures/edit-verify/2026-08-06/phase0_C8.txt` — the closed position is not an
+> addressable referent in a `Position closed` automation (OA offers only `Lookup a position` and
+> `Opened Position`, the latter *"Only available in automations scheduled with the 'position
+> opened' trigger"*). ⚠️ **This is a propagated correction, not a Track B ruling** — nothing about
+> ARM-B1/ARM-B2's own dispositions is decided here.
+
+⭐ **CF-4 IS DISCHARGED 2026-08-06, NOT "UNCHANGED".** With sibling-close not built, this arm is **NOT close-both**: the dollar stop closes the tested **spread**, and the untested side is left to decay to its own 15:50 Expiration exit or the 15:52 backstop. The downward bias against published dollar-stop comparables **is removed**, and the arm may be read on its own terms. ⚠️ It must still never be published under a bare "fixed-$ stop" name while **C10** (`dstop`'s unit) is open. Original, left standing:
+
+~~⛔ **CF-4 applies unchanged.** `GF-SiblingClose` force-closes the untested side the instant the
 tested side stops, so this arm is **"DStop100-close-both"**, an S2-shaped mechanic. Like `GF-SL100`
 and `GF-SL200` it forfeits the untested side's decay and is biased **downward** against any
 published dollar-stop comparable. It must never be published under a bare "fixed-$ stop" name.
 This is carried, not fixed — removing sibling-close from this arm alone would break matching,
-which is worse.
+which is worse.~~ 📝 *(Resolved 2026-08-06: sibling-close is removed from **every** arm at once, so
+matching is not broken — which is precisely why the ruling was available.)*
 
 ⚠️ **The secondary DiD is gated on C1.** If `stoploss` turns out to be a percent of **RISK** rather
 than of **CREDIT**, then `GF-SL100` is not "100% of credit" and R-1's *"pinned to the SAME AVERAGE
@@ -502,9 +515,15 @@ it for its secondary reading only.
 > **scoped retirement, R-2 precedent**: this arm's ledger is excluded from `research-loop-spec.md`
 > §10a's computed family for the `DSTOP_100` variant, so the arm's own ledger no longer re-enters
 > Track A's family carrying its own variant. **This is not deduplication of one hypothesis** — the
-> CF-4 paragraph above already establishes `DStop100-close-both` as a distinct mechanic from
+> ⚠️ **CORRECTED 2026-08-06 — THE CLOSE-BOTH LEG OF THIS ARGUMENT IS FALSIFIED (C8 ruling); the
+> retirement ruling itself is UNCHANGED and stands.** Sibling-close is not built, so this arm is
+> **per-spread, the same exit unit as Track A's `DSTOP_100` counterfactual**. What survives the
+> correction: a different incumbent, a different engine, and the self-comparison degeneracy the
+> retirement was granted to remove. ⛔ **FLAGGED FOR ANDY, not re-ruled here:** whether the
+> surviving grounds alone still support "non-equivalent estimators". Original, left standing:
+> ~~CF-4 paragraph above already establishes `DStop100-close-both` as a distinct mechanic from
 > Track A's per-spread `DSTOP_100` counterfactual; the two are non-equivalent estimators, carried
-> as a limitation, not solved. **No-influence rule:** a Track A advisory read on `DSTOP_100` may
+> as a limitation, not solved.~~ **No-influence rule:** a Track A advisory read on `DSTOP_100` may
 > not trigger, accelerate, or veto this arm's disposition before its own pre-declared gate date —
 > which in any case cannot arrive before C10/C11 close and `<D100>` is stamped (§5.4).
 
@@ -564,7 +583,8 @@ decisive, and it is §7's answer.
 > `GF-SL200` on `SL100`/`SL200`, and any Track B arm on `DSTOP_100` (this spec's ARM-B1, §5.5).
 > **ARM-B2 is no longer the only arm tested in exactly one place — it is joined by these, by
 > exclusion rather than by never having collided.** ⚠️ **Not solved, only scoped:** the arms and
-> Track A's variants are non-equivalent estimands (CF-4: close-both vs per-spread), so this
+> Track A's variants are non-equivalent estimands (~~CF-4: close-both vs per-spread~~ 📝 **that
+> ground is FALSIFIED 2026-08-06 — both are now per-spread; see §5.5 and §6.3. FLAGGED for Andy**), so this
 > retirement is not a claim that one engine's result stands in for the other's; no cross-engine
 > multiplicity accounting exists or is created by this ruling. A no-influence rule bars Track A
 > advisory reads from affecting arm dispositions before each arm's own pre-declared gate date.
@@ -870,12 +890,18 @@ MECHANISM        The arm buys removal of terminal gamma exposure at the price of
                  + bundle-typed Bot Inputs GF_EXITS_PUT / GF_EXITS_CALL holding
                  {Expiration `expdays`=0.015, `smexpdays`=speedy} AND NOTHING ELSE
                  + the shared Events-class 15:52 Market flat close
-                 + the shared GF-SiblingClose (⚠️ gate moved 15:50 -> 15:44 — RULED YES 2026-08-04,
+                 ⛔ CORRECTED 2026-08-06 — THE SHARED GF-SiblingClose IS NOT BUILT (C8 ruling).
+                   THIS ARM'S BUILD PRECONDITION IS THEREFORE DISCHARGED BY REMOVAL, NOT BY THE
+                   GATE EDIT: there is no sibling-close object and no 15:44 gate to verify. The
+                   15:45 Expiration exit closes the tested spread; the other spread runs to its
+                   own 15:50 exit or the 15:52 backstop. §6.6's race CANNOT OCCUR. Left standing:
+                 ~~+ the shared GF-SiblingClose (⚠️ gate moved 15:50 -> 15:44 — RULED YES 2026-08-04,
                    S-4; recorded by the greenfield spec's own session. THIS ARM MAY NOT BE BUILT
-                   UNTIL THAT EDIT LANDS AND IS VERIFIED — §6.6)
+                   UNTIL THAT EDIT LANDS AND IS VERIFIED — §6.6)~~
                  Size primitive per C4 — RECORD WHICH ONE WAS USED BEFORE BUILD.
-                 ⚠️ This is a close-both (S2-shaped) mechanic; sibling-close is on. Do not
-                 publish it as a bare "earlier time exit" result.
+                 📝 CORRECTED 2026-08-06: ~~This is a close-both (S2-shaped) mechanic;
+                 sibling-close is on.~~ IT IS NOT — sibling-close is not built, so this arm is
+                 S1 / per-spread. Do not publish it as a bare "earlier time exit" result.
 KILL CRITERION   R-based, computable from the daily loop, fires with no human in the loop:
                  (K1) paired per-condor mean ΔR vs GF-QQQ-IC-Ride < 0 with the bootstrap 95% CI
                       entirely below 0 at n >= 60 matched condors -> RED, bot off.
@@ -956,10 +982,13 @@ MECHANISM        hedge-research.md §9 item 6 ("Fixed-$ SL variants alongside th
                  UNOBSERVED — checks C10 and C11, ASSIGNED to the C0a probe session (RULED S-5,
                  2026-08-04). Per hedge-research.md §5.2 this is NOT AN ARM until both close —
                  assignment is not an answer.
-                 ⚠️ Close-both (S2-shaped): sibling-close force-closes the untested side the
-                 instant the tested side stops, forfeiting its decay. Biased DOWNWARD against any
-                 published fixed-$ comparable (CF-4). Never publish under a bare "fixed-$ stop"
-                 name. Size primitive per C4 — RECORD WHICH ONE WAS USED BEFORE BUILD.
+                 📝 CORRECTED 2026-08-06 (C8 ruling): NOT close-both. Sibling-close is not built;
+                 this arm is S1 / per-spread and the untested side keeps its decay, so the
+                 downward bias is REMOVED. Never publish under a bare "fixed-$ stop" name anyway —
+                 C10 (`dstop`'s unit) is still open. Left standing: ~~Close-both (S2-shaped):
+                 sibling-close force-closes the untested side the instant the tested side stops,
+                 forfeiting its decay. Biased DOWNWARD against any published fixed-$ comparable
+                 (CF-4).~~ Size primitive per C4 — RECORD WHICH ONE WAS USED BEFORE BUILD.
 KILL CRITERION   (K1) paired per-condor mean ΔR vs GF-QQQ-IC-Ride < 0 with the bootstrap 95% CI
                       entirely below 0 at n >= 60 matched condors -> RED, bot off.
                  (K2) LIVENESS, conditioned so it cannot fire on a calm regime: zero stop rows
@@ -1007,7 +1036,10 @@ VERIFICATION     Trades list, never the Exit Options panel:
                       bundle (a percent stop here would silently answer a different question);
                  (V3) the pairwise capture-diff of greenfield §8.2 against BOTH GF-QQQ-IC-Ride
                       (primary) and GF-QQQ-IC-SL100 (secondary), decoding the BOT INPUT value;
-                 (V4) a `sibling close` memo row on the second leg priced `patient`.
+                 (V4) ⛔ VOID 2026-08-06 — ~~a `sibling close` memo row on the second leg priced
+                      `patient`~~. That row will not exist; sibling-close is not built. Replacement:
+                      confirm the second leg closes at its OWN ~15:50 Expiration exit or the 15:52
+                      backstop, and treat any `:00`/`:01–02` emergent close-both as a FINDING.
 SIGNED           ..............................
 ```
 

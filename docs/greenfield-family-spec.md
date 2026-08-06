@@ -257,7 +257,7 @@ fixes the count.
 | **Defang** (close shorts ~$0.05, longs ride) | `True "defang" as a single action` is **NOT NATIVE** — multi-leg workaround required. A workaround here would be an undocumented substitution at a platform limit. | §11 row 5 |
 | **SL130** (Pearce) | Fits the slot budget nowhere in wave 1. Queued as the first wave-2 arm if a slot frees. | §3's ceiling |
 | **Fixed-$ stop rungs** (`dstop`) | 📝 **CORRECTED 2026-08-04** — the draft said the rung basis was "under an unsigned amendment (RISK-basis, not credit-basis)". **It is now SIGNED.** Ruling **R-1** fixed the rungs at **1.00× and 1.50× the bot's trailing-90-day MEDIAN credit, in dollars**, and **REJECTED the RISK basis** outright: *"0.50×risk lands at ~720% of credit at the fleet's median credit/risk of 0.070 (n=1,254), beyond the no-stop boundary."* `DSTOP_100` / `DSTOP_150` are members of the **frozen 12-variant Track A set**. Excluded here for the unchanged reason — **they are Track A's, and building them as family arms would double-test them across two engines whose error rates pool nowhere** (§11-CF10). | `research-loop-spec.md` §3 as amended 2026-08-04 (R-1), §10 |
-| **Armed trailing stop** ("arm @ 40%, then trail 15%") | A two-stage mid-trade state change. **Excluded by the same two §11 rows §3.1 uses against stop-tightening.** PR-16 is scoped to a plain, always-on trail instead. Added under review — the draft treated this as an open question the folder already answers. | §11 rows 4, 6 |
+| ~~**Armed trailing stop** ("arm @ 40%, then trail 15%")~~ | ⭐ **FALSIFIED AND REINSTATED 2026-08-06 by Phase-0 check C2.** OA implements the armed trail as a **native Exit-Options primitive**: `tstop` opens a sub-form with **`target`** ("Activate at __ % of credit") and **`trail`** ("Close on __ % pullback"). §11 rows 4 and 6 bound what **decision nodes** can express; they do not bound what a native exit primitive does internally — and `maxtrail` ("Pullback is more than __ % from high") is direct evidence the platform tracks a high-water mark natively. **RULED 2026-08-06: PR-16 is re-scoped to the ARMED trail, `target`=40 / `trail`=15.** Rows 4 and 6 themselves are untouched by this. Original exclusion, now struck: ~~A two-stage mid-trade state change. **Excluded by the same two §11 rows §3.1 uses against stop-tightening.** PR-16 is scoped to a plain, always-on trail instead.~~ | §11 rows 4, 6 — **misapplied here**; `phase0_C2.txt` |
 | **VIX filter** | Redundant once Range075 is present; validated. | `hedge-research.md` §11 |
 | **Intraday stop-tightening schedule** | Requires mid-trade state change; no primitive. Backtest-only (`hedge-research.md` §9 item 3). | §11 rows 4, 6 |
 
@@ -402,6 +402,32 @@ certainty beats fill quality`. Decision 6 keeps it. Do not "fix" it.
 
 ### 4.3 `GF-SiblingClose` — the shared condor-close automation
 
+> ### ⛔ RULED 2026-08-06 — BUILD WITHOUT SIBLING-CLOSE. C8's STOP was returned; the spec's own
+> named fallback is TAKEN, on Andy's explicit ruling. **The spread, not the condor, is the unit for
+> early exits.** Everything below is LEFT STANDING as the design that was specified and is now
+> superseded — per this file's convention, and because §11 PE-5's fix is the thing that failed.
+> **Cause:** the closed position is not an addressable referent in a `Position closed` automation —
+> OA offers only `Lookup a position` (literal filters) and `Opened Position`, the latter explicitly
+> *"Only available in automations scheduled with the 'position opened' trigger"*. Clauses 1 and 3
+> (the Positions loop, the opened-today scope) are real; clause 2 is not expressible.
+> Evidence: `data/captures/edit-verify/2026-08-06/phase0_C8.txt`; `session-log.md` 2026-08-06.
+>
+> **CONSEQUENCES, all of which change the build:**
+> - **Phase A builds THREE shared automations, not four.** `GF-SiblingClose` is not built. Step
+>   **A4 is struck**; the **A7** payload-hash baseline covers **three** objects; **B3** attaches three.
+>   Post-Phase-A the Automation Library holds **4** rows (the 3 shared + `Defang-Mon-S2-StrikeTouch`),
+>   not 5.
+> - **The 15:44 gate is MOOT** — recorded, not deleted, because it is the record of a ruling (S-4).
+> - **The arms are no longer close-both.** `Touch0` is **S1, not S2**; `PT50` is **PT50 per spread**,
+>   not "PT50 on either side closes the condor"; `SL100`/`SL200` are **no longer wrapped in a
+>   close-both exit**. All seven MECHANISM blocks are re-stamped below.
+> - ⭐ **CF-4 is DISCHARGED, not carried** — the anchor-transfer defect it named was *caused by*
+>   sibling-close. Without it, the untested side is left to decay and PR-18 **can** reach the
+>   Breakeven shape its ★★★★★ anchor describes. See §4.3's CONSEQUENCE block and §12 row 15.
+> - **A second leg left open by an early exit now closes at its own 15:50 Expiration exit**, or at
+>   the 15:52 backstop. That is the accepted cost of the fallback and it is what makes the spread
+>   the unit.
+
 `build-plan.md` §8.1 item 3 and §5.4. An IC is two positions; closing "the whole condor"
 requires an explicit mechanism, and in v1 this was an *emergent side effect* of a 2-minute
 Cleanup monitor — unnamed, undocumented, load-bearing.
@@ -501,6 +527,14 @@ substitute position age (`open 30 minutes or more`) — that is the literal subs
 sibling-close**, accept that the unit of account becomes the spread rather than the condor for
 early exits, and re-stamp all seven MECHANISM blocks before build.
 
+> ### 📝 SUPERSEDED 2026-08-06 BY THE C8 RULING — the whole block below is MOOT, and left standing.
+> Sibling-close is **not built**. The arms are **not** close-both: `Touch0` is S1, `PT50` is per
+> spread, and **`SL100`/`SL200` CAN now reach the Breakeven shape** their anchor describes, because
+> the untested side is left to decay exactly as `hedge-research.md` §2 assumes. ⭐ **CF-4 is
+> therefore DISCHARGED rather than carried** — it was an artefact of sibling-close, not of the
+> structure. The text below is the analysis that made the case *for* carrying it, and it is the
+> reason the ruling went the way it did; it is preserved, not deleted.
+>
 > ### ⛔ CONSEQUENCE — and the draft's claim that it "cannot confound" is WITHDRAWN
 > With sibling-close on every arm, every arm is a **close-both (S2-shaped) family**.
 > `GF-QQQ-IC-Touch0` is therefore S2, not S1. `GF-QQQ-IC-PT50` is "PT50 on either side closes the
@@ -747,6 +781,9 @@ Trades list distinguishes them."* On this family, **four** mechanics can close a
 
 **The stance, in four rules:**
 
+- 📝 **SUPERSEDED 2026-08-06 — Rule 0 is MOOT: sibling-close is not built (C8 ruling, §4.3). The
+  15:50–15:52 window now holds THREE mechanics, not four, and Rule 1 is satisfied without it.
+  Left standing below.**
 - **Rule 0 — ⭐ sibling-close is re-priced `patient` and gated to before 15:44** (§4.3, amended
   2026-08-04 from 15:50 — the tighter gate also clears the 15:45 `Expiration 0.015` exit class).
   Two
@@ -851,7 +888,7 @@ five** hold. Here is each, and what discharges it.
 | 1 | Shared automation, shared inputs; arms differ in exactly one input value, proven by capture-diff | §1.1 (shared Library objects) + §8.2 (the diff) |
 | 2 | Same execution class — all Exit Options or all Monitors, never mixed | **All seven arms are Exit Options.** §9 row 1 resolved `Touch` as an Exit Option, which is what dissolved v1's confound. Moving any arm to Monitor class would re-introduce it |
 | 3 | Range075 on every arm | §4.1 — in the shared entry automation, identical by construction. The `as a preset` wording is N-2 |
-| 4 | Pre-registration naming the hypothesis, kill criterion, sample target, review date **and the platform primitive** | ⛔ **NOT DISCHARGED FOR THREE ARMS.** §9 names the primitive for Ride, PT50, Touch0 and the Canary. For **Trail** the primitive is unconfirmed (C2), and for **SL100/SL200** the *unit* of `stoploss` is unconfirmed (C1); C3 leaves the pricing sub-field unknown on four arms. §5.2's own closing sentence governs: an arm failing any of the five is *"not a weak arm, it is not an arm."* **Those three arms are not arms until Phase 0 closes.** The draft marked this row discharged; corrected |
+| 4 | Pre-registration naming the hypothesis, kill criterion, sample target, review date **and the platform primitive** | ✅ **DISCHARGED FOR ALL SEVEN, 2026-08-06.** C1 confirms `stoploss` = **% of credit** (SL100 = `1`, SL200 = `2`), C2 confirms `tstop` carries a **native arming threshold** (`target` % of credit + `trail` % pullback), and C3 closed the pricing sub-field on 2026-08-05. **Trail, SL100 and SL200 are arms.** The row's original text is left standing below. ⛔ **Separately — and this is NOT a §5.2 failure — C8's STOP removed `GF-SiblingClose`, so all seven MECHANISM blocks are re-stamped** (§4.3 ruling). <br>~~⛔ **NOT DISCHARGED FOR THREE ARMS.**~~ §9 names the primitive for Ride, PT50, Touch0 and the Canary. For **Trail** the primitive is unconfirmed (C2), and for **SL100/SL200** the *unit* of `stoploss` is unconfirmed (C1); C3 leaves the pricing sub-field unknown on four arms. §5.2's own closing sentence governs: an arm failing any of the five is *"not a weak arm, it is not an arm."* **Those three arms are not arms until Phase 0 closes.** The draft marked this row discharged; corrected |
 | 5 | A proof-of-fire artifact identified in advance, checked on the first live position | §8.5 |
 
 ### 8.1 What "one differing input" means here, precisely
@@ -1033,13 +1070,13 @@ orders at all** — not sent-and-unfilled, **never sent** — while the panel st
 
 | Arm | Artifact that proves it is running its declared mechanic |
 |---|---|
-| `Ride` | **Inverted check:** NO profit-taking row, NO trail row, NO touch row, NO stop row; **and** a close row at ~15:50 priced **`speedy`** (the Expiration exit). ⚠️ Read `speedy` specifically, not "SmartPricing" — sibling-close is `patient` and the draft's shared `speedy` made this artifact satisfiable by either mechanic (§6.2 Rule 0) |
+| `Ride` | **Inverted check:** NO profit-taking row, NO trail row, NO touch row, NO stop row; **and** a close row at ~15:50 priced **`speedy`** (the Expiration exit). ⚠️ Read `speedy` specifically, not "SmartPricing". 📝 **2026-08-06: the ambiguity this warning guarded against is GONE — sibling-close is not built, so `speedy` at ~15:50 can only be the Expiration exit.** The warning is kept because reading the pricing field is still the check. Original: ~~sibling-close is `patient` and the draft's shared `speedy` made this artifact satisfiable by either mechanic (§6.2 Rule 0)~~ |
 | `PT50` | A profit-taking row at 50% |
 | `Trail` | A trailing-stop row |
 | `Touch0` | A touch row **within 2 minutes** of the first 1-minute bar on which the underlying is at or through the short strike. ⚠️ The tolerance is explicit because the control is 1-minute-sampled (§4.4) and automation timing is jittered; "immediately after" has no testable meaning |
 | `SL100` / `SL200` | A stop-loss row |
 | `Canary` | A profit-taking fill **on day 1** |
-| **all** | A `sibling close` memo row on the second leg, priced **`patient`**, timestamped `:00`/`:00` against the first — `oa-ops-runbook.md` §4.4's designed-vs-emergent test. ⚠️ Only on closes **before 15:44** (amended 2026-08-04 from 15:50); in **[15:44, 15:50)** the sibling is left to its own 15:50 Expiration exit, and after 15:50 the backstop closes both legs — sibling-close is gated off in both cases (§4.3) |
+| ~~**all**~~ | ⛔ **VOID 2026-08-06 — this artifact will not exist. Sibling-close is not built (C8 ruling, §4.3), so there is no `sibling close` memo row on any arm.** Replacement artifact for early-exit arms: the tested spread's own exit row, and the **second leg closing at its own ~15:50 Expiration exit or the 15:52 backstop** — which is what "the spread is the unit" looks like in the Trades list. `oa-ops-runbook.md` §4.4's designed-vs-emergent timestamp test no longer applies to this family; **an emergent `:00`/`:01–02` close-both pattern is now a FINDING, not a pass.** Original left standing: ~~A `sibling close` memo row on the second leg, priced **`patient`**, timestamped `:00`/`:00` against the first — `oa-ops-runbook.md` §4.4's designed-vs-emergent test. ⚠️ Only on closes **before 15:44** (amended 2026-08-04 from 15:50); in **[15:44, 15:50)** the sibling is left to its own 15:50 Expiration exit, and after 15:50 the backstop closes both legs — sibling-close is gated off in both cases (§4.3)~~ |
 
 ---
 
@@ -1050,6 +1087,26 @@ is Andy's, at Day-0, per §7 of that ledger: config hash filled from the bot's o
 placeholder resolved, kill criterion re-read against the daily loop, max-loss filled, then signed
 — and only then may the bot be switched ON. **Signed ≠ verified**: the Trades-list artifact is
 read before it may take a position.*
+
+> ### ⭐ ALL SEVEN MECHANISM BLOCKS RE-STAMPED 2026-08-06 — two rulings, both Andy's, both applied.
+> Every entry below is still **DRAFT — unsigned**; this is a re-stamp of the drafts, not a signing.
+>
+> **1 · C8 ruling — BUILD WITHOUT SIBLING-CLOSE (§4.3).** `GF-SiblingClose` is not built, so
+> **no arm is a close-both mechanic**. Applying to all seven: the **spread**, not the condor, is
+> the unit for **early exits**; a second leg left open by an early exit closes at its own 15:50
+> Expiration exit or at the 15:52 backstop. Concretely — `Touch0` is **S1, not S2**; `PT50` is
+> **PT50 per spread**; `SL100`/`SL200` are **not** wrapped in a close-both exit and **can** reach
+> the Breakeven shape their anchor describes; `Ride` and the `Canary` are unaffected (sibling-close
+> never fired meaningfully on Ride). ⚠️ **The reporting unit is unchanged** — every `Exp(R)` below
+> is still **per condor, ex-artifact**; what changed is the *exit mechanic's* unit, not the
+> analysis unit. Any VERIFICATION line calling for a `sibling close` row is void; those rows will
+> not exist.
+>
+> **2 · PR-16 ruling — RE-SCOPED TO THE ARMED TRAIL** (`target`=40, `trail`=15, % of credit), on
+> Phase-0 check **C2**, which found the armed shape is a native primitive. See PR-16 below.
+>
+> Evidence for both: `data/captures/edit-verify/2026-08-06/phase0_C8.txt` and `phase0_C2.txt`;
+> `session-log.md` 2026-08-06. **Original text throughout §9 is LEFT STANDING per convention.**
 
 **Conventions applying to all seven, stated once so each entry stays readable:**
 
@@ -1177,18 +1234,36 @@ HYPOTHESIS       A trailing stop on position profit raises Exp(R) per condor abo
 MECHANISM        Ratchets a floor under an open profit instead of closing flat.
                  PRIMITIVE: the Ride base bundle plus ONE mechanic — Exit Options `tstop`
                  (+ its pricing sub-field, if it has one — C3).
-                 ⛔ THE MECHANIC IS SCOPED TO A PLAIN, ALWAYS-ON TRAILING STOP — a single field,
+                 ⭐ RE-SCOPED 2026-08-06, RULED BY ANDY, ON PHASE-0 CHECK C2. THE MECHANIC IS THE
+                 ARMED TRAIL: Exit Options `tstop` sub-form, `target` = 40 ("Activate at 40 % of
+                 credit"), `trail` = 15 ("Close on 15 % pullback"). Both are % of CREDIT / % of
+                 pullback-from-high, read first-hand off the live sub-form
+                 (data/captures/edit-verify/2026-08-06/phase0_C2.txt).
+                 THE EXCLUSION BELOW IS FALSIFIED AND IS STRUCK: OA implements the armed trail as
+                 a NATIVE exit primitive, so §11 rows 4 and 6 -- which bound what DECISION NODES
+                 can express -- never applied to it. `maxtrail` ("Pullback is more than __ % from
+                 high") is direct evidence the platform tracks a high-water mark natively.
+                 §11 rows 4 and 6 themselves are untouched by this and still stand.
+                 ⚠️ NOT OBSERVED, AND NOT TO BE ASSUMED: whether a PLAIN non-armed trail is
+                 expressible at all (whether `target` may be left blank). `target` has min=0 and
+                 a placeholder of 50. If the armed values above cannot be entered as specified,
+                 STOP and return to Andy -- do not fall back to a plain trail by leaving a field
+                 empty and hoping.
+                 ~~⛔ THE MECHANIC IS SCOPED TO A PLAIN, ALWAYS-ON TRAILING STOP — a single field,
                  no arming threshold. AN "ARM AT 40%, THEN TRAIL 15%" SHAPE IS NOT SOUGHT AND
                  MUST NOT BE BUILT: that is a two-stage mid-trade state change, which §11 rules
                  out twice — "Regime-conditional branching at a breach | NOT NATIVE. No mid-trade
                  branching" and "Any condition referencing its own past | NOT NATIVE" — and it is
                  the same reasoning §3.1 uses to exclude the intraday stop-tightening schedule.
                  The draft treated the armed trail as an open question; the folder already
-                 answers it against us, and the correction is recorded rather than absorbed.
-                 ⛔ `tstop`'s UNITS are still UNOBSERVED (§6.1a records the field as existing and
+                 answers it against us, and the correction is recorded rather than absorbed.~~
+                 ✅ `tstop`'s UNITS ARE NOW OBSERVED (C2, 2026-08-06): arming threshold in % of
+                 CREDIT, trail in % PULLBACK from the high. hedge-research.md §14.1's standing
+                 instruction is MET.
+                 ~~⛔ `tstop`'s UNITS are still UNOBSERVED (§6.1a records the field as existing and
                  EMPTY). Phase-0 C2 settles them, and hedge-research.md §14.1's standing
                  instruction is unmet until it does: "Verify whether OA supports a true intraday
-                 trailing stop on a 4-leg condor before assuming."
+                 trailing stop on a 4-leg condor before assuming."~~
                  ⛔ IF C2 SHOWS NO PLAIN TRAILING STOP ON A 4-LEG CONDOR, DO NOT SUBSTITUTE
                  ANYTHING AT BUILD TIME. Named fallback: replace this arm with SL130 (Pearce,
                  ★★★★), re-stamp THIS pre-registration first, then build. That is the HedgeD
@@ -1218,15 +1293,19 @@ MECHANISM        Caps the loss at first breach instead of at expiry.
                  PRIMITIVE: the Ride base bundle plus ONE field — Exit Options `touch` = $0.
                  Touch references the UNDERLYING relative to the position's own strike(s)
                  (§6.2, from OA's published material); $0 exits on the first 1-minute
-                 evaluation at which the position is ITM. Cross-leg close is NOT assumed — the condor is closed by §4.3's
-                 Position-closed sibling automation, so this arm is S2-shaped, not S1.
+                 evaluation at which the position is ITM. 📝 CORRECTED 2026-08-06 (C8 ruling): sibling-close is NOT
+                 BUILT, so THIS ARM IS S1, NOT S2. A touch closes the touched SPREAD; the other
+                 spread runs to its own 15:50 Expiration exit or the 15:52 backstop. Cross-leg
+                 close is still NOT assumed. Original, left standing: ~~the condor is closed by
+                 §4.3's Position-closed sibling automation, so this arm is S2-shaped, not S1.~~
                  ⚠️ Bid-Ask Guard is OFF on this arm (as on all arms) — §6.3: a touch hedge
                  silently suppressed exactly when the market is fast is the worst-timed failure
                  available.
 KILL CRITERION   Exp(R) per condor < 0 with CI entirely below 0 at n ≥ 60. Plus family-level,
                  liveness and sentinel.
-VERIFICATION     A touch row at/after the underlying crosses the short strike, plus a
-                 `sibling close` row on the second leg at `:00`/`:00`.
+VERIFICATION     A touch row at/after the underlying crosses the short strike.
+                 📝 CORRECTED 2026-08-06: ~~plus a `sibling close` row on the second leg at
+                 `:00`/`:00`~~ — VOID, that row will not exist (C8 ruling).
 SIGNED           ..............................
 ```
 
@@ -1250,18 +1329,29 @@ HYPOTHESIS       A stop at Sandvand's ~100%-of-credit level, APPLIED CLOSE-BOTH,
                  ⛔ THE ANCHOR DOES NOT TRANSFER CLEANLY, AND THE NAME IS WITHHELD BECAUSE OF IT.
                  Sandvand's rung is called "BREAKEVEN" because stopping the tested spread at
                  100% of credit leaves the UNTESTED side to decay to zero, netting ≈ $0 on the
-                 condor. §4.3's sibling-close force-closes the untested side at its then-current
-                 mid, so THIS ARM CANNOT REACH BREAKEVEN BY CONSTRUCTION and is biased downward
-                 against its published comparable by the forfeited decay. This arm is
-                 "SL100-close-both", not "Breakeven". Do not publish it under the anchor's name.
-MECHANISM        Caps the loss at a level calibrated by the largest public 0DTE IC dataset,
-                 wrapped in a close-both exit.
+                 condor. ⭐ RESOLVED 2026-08-06 BY THE C8 RULING: sibling-close is NOT BUILT, so
+                 the untested side IS left to decay exactly as the anchor assumes. THIS ARM CAN
+                 NOW REACH BREAKEVEN, the downward bias is removed, and CF-4 is DISCHARGED. The
+                 arm may be read against Sandvand's rung on its own terms. Original objection,
+                 left standing: ~~§4.3's sibling-close force-closes the untested side at its
+                 then-current mid, so THIS ARM CANNOT REACH BREAKEVEN BY CONSTRUCTION and is
+                 biased downward against its published comparable by the forfeited decay. This
+                 arm is "SL100-close-both", not "Breakeven". Do not publish it under the anchor's
+                 name.~~ ⚠️ The name is still withheld pending Andy's read of how it should be
+                 published now that the construction objection is gone.
+MECHANISM        Caps the loss at a level calibrated by the largest public 0DTE IC dataset.
+                 📝 CORRECTED 2026-08-06: ~~wrapped in a close-both exit~~ — NOT close-both; the
+                 stop closes the tested SPREAD only (C8 ruling, §4.3).
                  PRIMITIVE: the Ride base bundle plus ONE field — Exit Options `stoploss`.
-                 ⛔ THE UNIT OF `stoploss` IS UNCONFIRMED. §6.1a records the field as existing
+                 ✅ THE UNIT OF `stoploss` IS CONFIRMED % OF CREDIT (C1, 2026-08-06): the control
+                 is labelled "Stop Loss %" and its picker enumerates "-100% of credit" = 1.
+                 THE RE-STAMP CONDITION IS NOT TRIGGERED — this entry was written against the
+                 operator anchors' % OF CREDIT basis and the control matches it. RUNG: stoploss = 1.
+                 ~~⛔ THE UNIT OF `stoploss` IS UNCONFIRMED. §6.1a records the field as existing
                  and EMPTY on the pilot; whether it is % of CREDIT or % of RISK is not
                  established anywhere in this folder, and the operator anchors are % of CREDIT.
                  Phase-0 check C1 settles it. IF THE CONTROL IS %-OF-RISK, THE RUNG VALUES ARE
-                 RE-DERIVED AND THIS ENTRY IS RE-STAMPED BEFORE BUILD — not adjusted after.
+                 RE-DERIVED AND THIS ENTRY IS RE-STAMPED BEFORE BUILD — not adjusted after.~~
 KILL CRITERION   Exp(R) per condor < 0 with CI entirely below 0 at n ≥ 60. Plus family-level,
                  liveness and sentinel.
 VERIFICATION     A stop-loss row in the first new position's Trades list.
@@ -1280,7 +1370,9 @@ HYPOTHESIS       A stop at Chambless's SL200 raises Exp(R) per condor above the 
                  directly measurable here, because Ride is a matched sibling.
 MECHANISM        As PR-18, at the loose end of the documented spectrum.
                  PRIMITIVE: the Ride base bundle plus ONE field — Exit Options `stoploss`.
-                 Same C1 unit caveat as PR-18, and the same re-stamp-before-build rule.
+                 ✅ C1 ANSWERED 2026-08-06 — % OF CREDIT. RUNG: stoploss = 2 ("-200% of credit").
+                 The re-stamp-before-build rule is NOT triggered.
+                 📝 CORRECTED 2026-08-06: this arm is likewise NOT close-both (C8 ruling).
 KILL CRITERION   Exp(R) per condor < 0 with CI entirely below 0 at n ≥ 60 matched days. Plus
                  family-level and sentinel.
                  ⭐ LIVENESS IS DISAPPLIED ON THIS ARM, DELIBERATELY. The shared liveness rule
@@ -1310,10 +1402,18 @@ SIGNED           ..............................
 > `research-loop-spec.md` §10a now excludes these two (bot, variant) pairs from Track A's computed
 > family, so PR-18/PR-19's own ledgers no longer re-enter Track A's family carrying their own
 > variant. **This is not a claim that Track A and these arms test the same thing.** PR-18's
-> HYPOTHESIS block above already establishes the arms as **close-both** mechanics
-> (`SL100-close-both` / by extension `SL200-close-both`) — Track A's `SL100`/`SL200`
-> counterfactuals are computed **per-spread**, against a different incumbent. The two remain
-> non-equivalent estimators; retirement removes a degenerate self-comparison, not a duplicate
+> ⚠️ **CORRECTED 2026-08-06 — THIS PARAGRAPH'S STATED REASON IS NARROWED BY THE C8 RULING, WHICH
+> POSTDATES IT. The retirement ruling itself is UNCHANGED and stands.** With `GF-SiblingClose` not
+> built, these arms are **no longer close-both** — the stop closes the tested spread only, i.e.
+> **per-spread, the same exit unit as Track A's counterfactuals**. The close-both leg of the
+> non-equivalence argument therefore **falls away**. What survives it: a **different incumbent**, a
+> **different engine**, and the **self-comparison degeneracy** the retirement was granted to remove.
+> ⛔ **FLAGGED FOR ANDY — not resolved here:** whether the surviving grounds alone still support
+> "non-equivalent estimands". This edit records the falsified premise; it does **not** re-rule the
+> retirement, which is Andy's. Original, left standing: ~~HYPOTHESIS block above already
+> establishes the arms as **close-both** mechanics (`SL100-close-both` / by extension
+> `SL200-close-both`) — Track A's `SL100`/`SL200` counterfactuals are computed **per-spread**,
+> against a different incumbent. The two remain non-equivalent estimators;~~ retirement removes a degenerate self-comparison, not a duplicate
 > measurement. **No-influence rule:** a Track A advisory read on `SL100`/`SL200` may not trigger,
 > accelerate, or veto either arm's disposition before that arm's own pre-declared gate date; kill
 > authority stays with each arm's own pre-registered criteria (this entry's KILL CRITERION line).
@@ -1410,17 +1510,17 @@ be answered, STOP and report — do not improvise a spec on the fly.**
 | # | Check | If it fails |
 |---|---|---|
 | ~~**⛔ C0a**~~<br>✅ **PASS 2026-08-05 — BOTH CLAUSES.** Bot input `IN178588971538691`, **`type:"exits"`** (whole bundle), survived hard reload. Control lives on the **bot's** automation row → ⚙ Edit Settings → 🔗 → menu `Bot Inputs` → `Add Bot Input`, **not** in the automation editor. Clause two: shared Library automation `rid RTfw5TkkCRF178589028977611` + automation input `IN178589048006251` **identical on both scratch bots**, bot inputs **distinct** (`Profit: 25%` vs `Profit: 75%`). **Attach, not copy.** | **THE LOAD-BEARING ONE. Can an Exit-Options Automation Input be upgraded to a BOT INPUT, and can two bots resolve the same shared automation to DIFFERENT values?** Build it on two dead bots and read both. | ⛔ **STOP. Architecture E is not buildable and the tournament architecture returns to Andy.** Do **not** fall back to per-arm copies — `pre-registration-ledger.md` PR-18's kill criterion voids the tournament at build time under copies (memo Decision 4: *"under C the tournament is void on day one, before it trades"*). |
-| ~~**⛔ C0b**~~<br>⚠️ **YES BY IMPLICATION 2026-08-05, NOT DIRECTLY TESTED.** One BOT input (`CLAUDE-C0A-BOT-EXITS`) was offered for reuse by a **second, different** automation on the same bot. The literal question — one AUTOMATION input spanning two automations — was not run. **Worth one direct look before B4.** | **Can ONE Automation Input be referenced from TWO automations** (ScannerA and ScannerB)? | Expected NO — proceed with the two-input design of §4.1, and assert **A8** (put bundle == call bundle) nightly. Not a blocker, but it changes the build and the diff. |
-| **C0c** | **Does a `Presets` picker render inside the BOT INPUT value editor**, or only on the Open Position action? G3 tested the action. | §4.5's typo-reduction disappears and B4 becomes seven manual field-by-field entries — **hand-setting, the pathogen of §1.1, at the one place the design still touches values by hand.** Compensate by running the §8.2 diff after *each* arm rather than at the end. |
-| ~~**C1**~~<br>⚠️ **PARTIAL 2026-08-05 — NOT CLOSED.** What was read is **Profit Taking %**, whose picker enumerates `% of credit` (`50% of credit` → `profits: 0.5`). **`stoploss`'s own unit — this row's literal subject — was NOT read.** SL100/SL200 stay underived. | **Unit of Exit Options `stoploss`** — read the control's own label and any suffix on the live modal. % of CREDIT or % of RISK? | Re-derive the SL100/SL200 rungs on the actual basis and **re-stamp PR-18/PR-19 before build.** |
-| **C2** | **Unit and shape of `tstop`** — %? $? Does an ARMING threshold exist (the backtester's "arm @ 40%, trail 15%")? | If no armed trail is expressible: **replace the Trail arm with SL130, re-stamp PR-16 first.** Do not substitute silently. |
+| ~~**⛔ C0b**~~<br>✅ **CLOSED 2026-08-06 — THE LITERAL TEST WAS RUN. THE ANSWER IS NO.** On `HedgeC-Scan-Call`'s Open Position action, the Exit Options 🔗 Inputs panel reads verbatim *"Select an existing input or add one to **your automation** for this value."* and **"No compatible inputs found."** — `CLAUDE-G1-EMPTY-EXITS` (`IN178586615441261`), an `exits`-typed **automation** input on the sibling automation `HedgeC-Scan-Put` **on the same bot**, is **not offered**. Type-compatible, same bot, not listed. **The two-input design of §4.1 stands and assert A8 stays SUBSTANTIVE.** [FIRST-HAND 2026-08-06 — `phase0_C0bc.txt`]<br>⚠️ **YES BY IMPLICATION 2026-08-05, NOT DIRECTLY TESTED.** One BOT input (`CLAUDE-C0A-BOT-EXITS`) was offered for reuse by a **second, different** automation on the same bot. The literal question — one AUTOMATION input spanning two automations — was not run. **Worth one direct look before B4.** | **Can ONE Automation Input be referenced from TWO automations** (ScannerA and ScannerB)? | Expected NO — proceed with the two-input design of §4.1, and assert **A8** (put bundle == call bundle) nightly. Not a blocker, but it changes the build and the diff. |
+| ~~**C0c**~~<br>✅ **ANSWERED 2026-08-06 — YES, IT DOES.** The bot-input value editor opens the Exit Options modal, whose header carries a **`Presets`** control; opening it enumerates the account-scoped preset `TIER2-CHECK4-PUTSIDE` = **`UIfw5TkkCRF1517858152565216101`** (the `UI…` namespace, matching §9 row 4). The same modal also carries **"Save as presets for short option positions"**, so presets can be **created** from the input editor too. **§4.5's typo-reduction survives; B4 does NOT become seven manual entries; A6 is executable from this screen.** [FIRST-HAND 2026-08-06 — `phase0_C0bc.txt`] | **Does a `Presets` picker render inside the BOT INPUT value editor**, or only on the Open Position action? G3 tested the action. | §4.5's typo-reduction disappears and B4 becomes seven manual field-by-field entries — **hand-setting, the pathogen of §1.1, at the one place the design still touches values by hand.** Compensate by running the §8.2 diff after *each* arm rather than at the end. |
+| ~~**C1**~~<br>✅ **CLOSED 2026-08-06 — `% of CREDIT`.** The control's own label is **`Stop Loss %`** (`input[name="stoploss"]`), and its picker enumerates credit: `-5% of credit`→`0.05` … `-100% of credit`→`1` … `-200% of credit`→`2` … `-500% of credit`→`5` (5% steps to 100%, 10% to 200%, 25% beyond; 42 entries, every one negative). **SL100 = `stoploss: 1`, SL200 = `stoploss: 2` — both exactly selectable, no re-derivation needed.** ⭐ **PR-18/PR-19's re-stamp condition is NOT triggered**: both entries name `% of CREDIT` as the operator-anchor basis and make re-stamping conditional on *"IF THE CONTROL IS %-OF-RISK"*. `dstop` is a **separate** control labelled `Stop Loss $` — that is C10's subject and stays open. [FIRST-HAND 2026-08-06 — `phase0_C1.txt`]<br>⚠️ **PARTIAL 2026-08-05 — NOT CLOSED.** What was read is **Profit Taking %**, whose picker enumerates `% of credit` (`50% of credit` → `profits: 0.5`). **`stoploss`'s own unit — this row's literal subject — was NOT read.** SL100/SL200 stay underived. | **Unit of Exit Options `stoploss`** — read the control's own label and any suffix on the live modal. % of CREDIT or % of RISK? | Re-derive the SL100/SL200 rungs on the actual basis and **re-stamp PR-18/PR-19 before build.** |
+| ~~**C2**~~<br>✅ **CLOSED 2026-08-06 — AN ARMING THRESHOLD EXISTS, AND IT IS NATIVE.** `tstop` is **not a scalar** — it opens a sub-form headed `Trailing Stop` with four number inputs: **`target`** (min 0, step 1, placeholder 50) rendered **"Activate at __ % of credit"** — *the arming threshold*; **`trail`** (min 1, step 1, placeholder 15) rendered **"Close on __ % pullback"**; plus two optional disable conditions, **`minr`** ("Return % is less than __ % of credit") and **`maxtrail`** ("Pullback is more than __ % from high"). Buttons Cancel / Clear / Apply. **The backtester's "arm @ 40%, trail 15%" maps directly: `target`=40, `trail`=15.** ⭐ **This falsifies the exclusion of the armed shape** — `§11` rows 4 and 6 bound what DECISION NODES can express, not what a native exit primitive does internally, and `maxtrail` is direct evidence the platform tracks a high-water mark natively. **RULED 2026-08-06 (Andy): PR-16 IS RE-SCOPED TO THE ARMED TRAIL.** ⚠️ **NOT observed:** whether a *plain* non-armed trail is expressible (whether `target` may be left blank) — do not assume it. [FIRST-HAND 2026-08-06 — `phase0_C2.txt`] | **Unit and shape of `tstop`** — %? $? Does an ARMING threshold exist (the backtester's "arm @ 40%, trail 15%")? | If no armed trail is expressible: **replace the Trail arm with SL130, re-stamp PR-16 first.** Do not substitute silently. |
 | ~~**C3**~~<br>✅ **ANSWERED 2026-08-05 — YES, and the default is `normal`, NOT `market`.** Every exit mechanic carries an `sm*` sibling: `smprofits · smdprofit · smprice · smstoploss · smdstop · smtstop · smtouch · smexpdays · smxevents · smepsdays`, each defaulting to `{"limitType":"pct","limit":100,"smart":"normal","text":"100% of bid/ask"}`. **No arm inherits `market`; §7 and Decision 5 are not tripped.** | **Do `tstop`, `touch` and `stoploss` carry their own SmartPricing sub-controls** (as `profits`→`smprofits` and `expdays`→`smexpdays` do), or inherit a default? **What is that default?** | ⛔ If any inherits **`market`**, that arm violates §7 and Decision 5 *and* confounds the family with a pricing difference. **Stop. Report. Do not build that arm.** |
 | ~~**C4**~~<br>✅ **ANSWERED 2026-08-05 — YES, a fixed CONTRACT COUNT is selectable.** The Open Position action's Position Size defaulted to **`1 contract`**. §5.4's `Up to $250 risk` arithmetic is a **choice, not a necessity** — record which primitive is used in all seven MECHANISM blocks either way. | **Size control options** on Open Position — is a fixed CONTRACT COUNT selectable? | Use `Up to $250 risk` (§5.4 arithmetic). **Record which primitive was used in all seven MECHANISM blocks before build.** |
 | ~~**C5**~~<br>✅ **PASS 2026-08-05.** `CLAUDE-C5-SHARED-SCRATCH` attached to both scratch bots; both instances resolve to the **same `rid RTfw5TkkCRF178589028977611`**; library page reads `2 bots`, one row. **Attach, not copy — confirmed.** | **Can one Library automation be attached to N bots?** Attach `GF-ScannerA` to two dead bots and re-read both bots' automation lists for the SAME `rid`. | ⛔ Architecture E is not buildable. **STOP — the tournament architecture returns to Andy.** Do not fall back to per-arm copies: `pre-registration-ledger.md` PR-18's kill criterion voids the tournament at build time under copies. |
 | ~~**C6**~~<br>✅ **ANSWERED 2026-08-05 — YES, non-empty is accepted.** The C0a bot input persisted `profits: 0.5` + `dstop: {"value":-137}` + `smdstop` through a hard reload. **§1.3's silent-fallback objection does not stand in full; a distinctive non-empty sentinel IS expressible.** | **Does a bundle-typed Automation Input accept a Default Value that is a non-empty bundle** (`SENTINEL-SL1`)? G1 proved EMPTY is accepted; non-empty is not proven. | If only empty is accepted, the sentinel becomes the empty bundle **and §1.3's objection stands in full** — record it as an accepted silent-fallback risk in every entry, and rely on A4b's behavioural detector alone. |
-| **⛔ C7** | **Is `Bot opened a position with tag <side> today` a real decision node** — bot-scoped AND day-scoped? It is one of the two enforcers of the one-condor-per-day cadence and it is sourced from the pilot's tree, not from the platform reference. | ⛔ **STOP.** `oa-ops-runbook.md` §5 trap 7 is this exact failure — *"A time gate that was never implemented — the v1 11:00 gate did not exist; 20+ sessions of entry drift."* If "today" is not expressible, the nearest substitutions (an unscoped tag → never re-enters; a position-count gate → different semantics) change the family's entry behaviour on all seven bots identically, which is precisely the failure the arms cannot detect. |
-| **⛔ C8** | **Are §4.3's sibling-close nodes real?** A Positions loop inside a `Position closed` automation; a comparison of a looped position's **side tag** against the closed position's; and an **opened-today** scope. | ⛔ **STOP. Do NOT substitute position age** (`open 30 minutes or more`) — that is the literal substitution that cost −$15,376. Named fallback: **build the family without sibling-close**, accept the spread (not the condor) as the unit for early exits, and re-stamp all seven MECHANISM blocks before build. |
-| **C9** | **Does the `Position closed` trigger fire on a position closed by an EVENTS-class automation and by the account-level ITM action**, or only by Exit Options? | Changes whether §4.3's 3:44pm gate is needed at all, and whether second legs are left open at 15:50 on early-exit arms. Read it; do not infer it. |
+| ~~**⛔ C7**~~<br>✅ **PASS 2026-08-06 — IT IS A REAL NODE, VERBATIM.** Recipe **`postagtoday`**, group `Bot`, format `Bot [oc: opened|closed, default "opened"] a position with [tag: tags, limit 1] today`. Bot-scoped, tag-scoped and day-scoped, exactly as §4.1's tree assumes. ⭐ **Corroborated as already running on this account, not merely available:** `HedgeC-Scan-Call` contains the live node **"Bot opened a position with call side today"** whose `NO` branch leads to `Open QQQ Short Call Spread`. **No STOP, no substitution.** [FIRST-HAND 2026-08-06 — `phase0_C7.txt`] | **Is `Bot opened a position with tag <side> today` a real decision node** — bot-scoped AND day-scoped? It is one of the two enforcers of the one-condor-per-day cadence and it is sourced from the pilot's tree, not from the platform reference. | ⛔ **STOP.** `oa-ops-runbook.md` §5 trap 7 is this exact failure — *"A time gate that was never implemented — the v1 11:00 gate did not exist; 20+ sessions of entry drift."* If "today" is not expressible, the nearest substitutions (an unscoped tag → never re-enters; a position-count gate → different semantics) change the family's entry behaviour on all seven bots identically, which is precisely the failure the arms cannot detect. |
+| ~~**⛔ C8**~~<br>⛔ **STOP RETURNED 2026-08-06 — CLAUSE 2 IS NOT EXPRESSIBLE. Clauses 1 and 3 pass.** **Clause 1 ✓** `posrepeater` ("Positions — Run subsequent actions for open positions") IS available inside a `Position closed` automation; built, renders "Repeat for each position". **Clause 3 ✓** `posopendays` = `[position] has been open [cop] [days]` carries `zero:true`, so "open **0 market days**" is the opened-today scope. **Clause 2 ⛔ — the closed position is not an addressable referent.** The position picker in a closepos automation offers exactly two entries under `Bot`: **"Lookup a position"** (a `Position Lookup` sub-form — *"Finds the first position that matches these filters"*, Symbol / Position Type / Tag, all **literal**) and **"Opened Position"**, greyed, with OA's own copy *"**Only available in automations scheduled with the "position opened" trigger**"*. **There is no "Closed Position" entry.** Inside the loop the referent auto-binds to the looped position (`em.ex.output.n-posrepeater`) with no picker at all. And **no recipe compares a tag to another position's tag** — `postag` takes a literal tag list; `posprop2prop` compares numeric `posprop`s only. **Scopes opened** (so this is not inference from absence): bot scope · automation scope · the referent picker at top level · the binding inside the loop · the Position Lookup sub-form · **all 127 recipes across all 6 groups**. The enumeration is closed and the exclusion is stated in OA's own copy. ⭐ **RULED 2026-08-06 (Andy): TAKE THE NAMED FALLBACK — BUILD WITHOUT SIBLING-CLOSE.** See §4.3. [FIRST-HAND 2026-08-06 — `phase0_C8.txt`] | **Are §4.3's sibling-close nodes real?** A Positions loop inside a `Position closed` automation; a comparison of a looped position's **side tag** against the closed position's; and an **opened-today** scope. | ⛔ **STOP. Do NOT substitute position age** (`open 30 minutes or more`) — that is the literal substitution that cost −$15,376. Named fallback: **build the family without sibling-close**, accept the spread (not the condor) as the unit for early exits, and re-stamp all seven MECHANISM blocks before build. |
+| ~~**C9**~~<br>⏳ **NOT ANSWERABLE IN THE UI — DAY-0 BEHAVIOURAL READ, same class as C10.** The only copy the app offers is the trigger's own description, verbatim **"After the bot closes a position"** (slot counter `0/5`, no help control). The closepos trigger's settings expose only a **`Position Type`** filter — there is **no "closed by" filter** — and no recipe in the 127-recipe catalogue distinguishes the provenance of a close. **Scopes opened:** the Add-Automation schedule picker (all 12 trigger types with descriptions) · the closepos trigger's own settings · the full recipe catalogue. ⚠️ That the copy says "the **bot** closes" reads as excluding the *account-level* ITM action — recorded as **suggestive and INADMISSIBLE** (`CLAUDE.md` §5). ⭐ Under the 2026-08-06 C8 ruling the 3:44pm-gate half of this check is **moot**; the second-legs-open-at-15:50 half survives and still needs Day-0. [2026-08-06 — `phase0_C9.txt`] | **Does the `Position closed` trigger fire on a position closed by an EVENTS-class automation and by the account-level ITM action**, or only by Exit Options? | Changes whether §4.3's 3:44pm gate is needed at all, and whether second legs are left open at 15:50 on early-exit arms. Read it; do not infer it. |
 
 > ### ⛔ C10 — `dstop`'s UNIT — IS OPEN AND BLOCKS ARM-B1. Recorded here because it gates a Track B
 > arm that shares this family's controls. **Read 2026-08-05:** the modal is headed `Stop Loss Amount`,
@@ -1431,6 +1531,25 @@ be answered, STOP and report — do not improvise a spec on the fly.**
 > the answer** — inference from a sign convention is not an observation (`CLAUDE.md` §5).
 > **Needs a Day-0 behavioural read against a known contract count.** Until then `<D100>` is underived
 > and PR-21 is unstampable. Owner: `track-b-arms-spec.md` §10 C10.
+
+> ### ✅ PHASE 0 CLOSED 2026-08-06 — the second probe session. Every remaining check that is
+> answerable in the UI is answered. **The 2026-08-05 block above is LEFT STANDING; rows are marked
+> in place below.**
+> Evidence: first-hand DOM / value-layer reads, all on the delete-list scratch bot
+> `BOTfw5TkkCRF2217852702121253931`, filed to
+> `data/captures/edit-verify/2026-08-06/phase0_C1.txt · _C2 · _C7 · _C8 · _C0bc · _C9`.
+> Full record: `session-log.md` 2026-08-06.
+>
+> ✅ **C1** `% of CREDIT` · ✅ **C2** an **armed** trail is native · ✅ **C7** the node is real and is
+> already running on this account · ✅ **C0c** the Presets picker IS in the input editor ·
+> ✅ **C0b literal** — **NO**, one automation input cannot span two automations ·
+> ⛔ **C8 clause 2 — STOP** · ⏳ **C9** and the runbook §7 template check — not answerable in the UI.
+>
+> ⭐ **THE THREE "NOT ARMS YET" ARE NOW ARMS.** C1 confirms SL100/SL200's primitive and C2 confirms
+> Trail's; C3 closed the pricing sub-field on 2026-08-05. §8's table row 4 is corrected accordingly.
+>
+> ⛔ **C8's STOP IS FAMILY-WIDE, NOT AN ARM CUT** — it removes a *shared object*. **RULED 2026-08-06
+> (Andy): take the spec's named fallback — BUILD WITHOUT SIBLING-CLOSE.** See §4.3's ruling banner.
 
 **Layer 1 for Phase 0:** each answer is a fresh screenshot or DOM read filed to
 `data/captures/edit-verify/<date>/phase0_C<n>.png|.txt`, with the read value written into the
@@ -1443,10 +1562,10 @@ session log. **Nothing is answered from memory or from this document.**
 | **A1** | Create Automation Input `GF_EXITS_PUT` on `GF-ScannerA-PutSpread` (and `GF_EXITS_CALL` on ScannerB at A3); set each **Default Value = `SENTINEL-SL1`** (§1.3, subject to C6) | Fresh capture; read each input object's default back and decode it. Screenshot the 🔗 state on the Exit Options row |
 | **A2** | Build `GF-ScannerA-PutSpread` per §4.1, every field. **Entry pricing SmartPricing `normal`, NOT Market** | Fresh capture with **every caret expanded** (trap 3). Diff every field against §4.1's table, reading `input.value` / `data-value`, **never `innerText`** |
 | **A3** | Build `GF-ScannerB-CallSpread` — mirror image, own `GF_EXITS_CALL` input (or the shared one if C0b said yes) | As A2, plus record whether the two actions reference the same or different input ids — this sets whether A8 is substantive or trivial |
-| **A4** | Build `GF-SiblingClose` per §4.3 — **Positions loop, 3:44pm gate (amended 2026-08-04, NOT 3:50pm), side-tag comparison, opened-today, `patient` pricing, memo** — **and test it on a dead bot first** | Fresh capture; confirm **each gate is an actual decision node**, not assumed (trap 7). Then fire it on the dead bot and read the resulting Trades list: exactly one close, no re-trigger. **This is now load-bearing, because the platform-level limit defence does not apply to closes** (§4.3) |
+| ~~**A4**~~ | ⛔ **STRUCK 2026-08-06 — DO NOT BUILD. C8 ruling (§4.3): the family is built without sibling-close.** Original step left standing: ~~Build `GF-SiblingClose` per §4.3 — **Positions loop, 3:44pm gate (amended 2026-08-04, NOT 3:50pm), side-tag comparison, opened-today, `patient` pricing, memo** — **and test it on a dead bot first** | Fresh capture; confirm **each gate is an actual decision node**, not assumed (trap 7). Then fire it on the dead bot and read the resulting Trades list: exactly one close, no re-trigger. **This is now load-bearing, because the platform-level limit defence does not apply to closes** (§4.3)~~ |
 | **A5** | Build `GF-Backstop-1552-FlatClose` per §4.2 | Fresh capture + **hard reload**; read `ntime=1552`, `holidays=skip`, memo string, `Market`, warnings 0 |
 | **A6** | Save the seven exit-bundle presets of §4.5 (skip if C0c said the picker is absent from the input editor) | Re-open each from the picker on a **different** automation and read its decoded payload back |
-| **A7** | ⭐ **Record the payload hash of each of the four shared automations** as the A7 baseline | Hash written to `data/bots_config_v2.csv`'s shared-object rows; re-read and re-hash once after a hard reload to confirm stability |
+| **A7** | ⭐ **Record the payload hash of each of the ~~four~~ **THREE** shared automations** as the A7 baseline (📝 **three, not four, 2026-08-06** — A4 is struck) | Hash written to `data/bots_config_v2.csv`'s shared-object rows; re-read and re-hash once after a hard reload to confirm stability |
 
 ### Phase B — per arm, seven times, in this order: Ride first, then PT50, Trail, Touch0, SL100, SL200, Canary
 
@@ -1457,7 +1576,7 @@ because it is an instrument, not an arm.*
 |---|---|---|
 | **B1** | Create the bot. Name per §3 | `/bots` read-back: exactly one bot with that name, resolving to one bot_id. Trap 8 — read the **full** name |
 | **B2** | Set every bot-level setting of §5 — allocation `$2,500`, limits 2/2, scan 1m both, Day Trading Allowed, Group `IC`, tags per §5.1 | Fresh capture of the settings page; **assert values, not presence** (§4.5 — a broken input link does not error, it falls back to a stale Default and keeps trading) |
-| **B3** | Attach the four shared Library automations from Phase A. **Attach, do not copy** | Read the bot's automation list and confirm the `rid` values are **identical to Phase A's objects.** A different `rid` means a copy, and a copy breaks Architecture E |
+| **B3** | Attach the ~~four~~ **three** shared Library automations from Phase A (📝 **three, 2026-08-06 — C8 ruling**). **Attach, do not copy** | Read the bot's automation list and confirm the `rid` values are **identical to Phase A's objects.** A different `rid` means a copy, and a copy breaks Architecture E |
 | **B4** | Create the **Bot Inputs** `GF_EXITS_PUT` and `GF_EXITS_CALL` on this bot and set **both** to this arm's bundle (§4.4), loading from the arm's preset if C0c allows | ⛔ **Read back BOTH BOT INPUT OBJECTS' values and DECODE them** — not the action (which holds a reference), not `oldValue`. Compare field-by-field against §4.4, **and assert put == call** (A8). Hard reload, then read again |
 | **B5** | Confirm `EXIT OPTIONS` toggle ON, `AUTOMATIONS` toggle **OFF** | **Screenshot both toggles** — §1.6, this is the one config state that does not survive text capture. File to `data/captures/edit-verify/<date>/<bot>_toggles.png` |
 | **B6** | Take the arm's full capture into `data/captures/<date>-greenfield/<bot>/` | One `.txt` per automation; open one and confirm **actual decision text** is present, not just names |
@@ -1515,11 +1634,11 @@ level, travels with the family as a stated limitation. **PARTIAL** — mitigated
 | **PE-2** | **FATAL — one Automation Input cannot span two automations.** So put and call sides need separate inputs, and a put=Ride / call=PT50 asymmetry would have diffed clean | **FIXED** — §4.1 two-input design, §8.2 intra-arm test, assert **A8**, check **C0b** |
 | **PE-3** | **FATAL — the sentinel discharges neither half of §5.2, and A4 cannot fire on a broken link** (the Bot Input object still holds the correct value; the capture reads that object and passes) | **FIXED in part, CARRIED in part** — §1.3 rewritten to state the refusal clause is not expressible, sentinel changed to `SENTINEL-SL1`, behavioural detector **A4b** added. **The window between a link breaking and the next day's ledger is a genuine uncovered hole and is now named as one** |
 | **PE-4** | **FATAL — position limits bound OPENINGS only.** §3, verbatim: *"Position limits are for opening positions only; there is no limit on the amount of closing positions."* Two of §4.3's three "mandatory interlocks" were one interlock and a procedural test | **FIXED** — §4.3's correction-of-record box; interlocks rewritten as structural / temporal / procedural |
-| **PE-5** | **FATAL — §4.3's tree had no Positions loop**, and "sibling" is not an OA relation (*"OA models each spread as a separate position"*); "opened today" is unconfirmed | **FIXED** — tree redrawn with the loop and a side-tag comparison; blocking check **C8** with an explicit no-substitution STOP |
+| ~~**PE-5**~~<br>⛔ **THE FIX FAILED AT PHASE 0, 2026-08-06.** C8 confirmed the Positions loop and the opened-today scope are real, but the **side-tag comparison against the closed position is NOT expressible** — the closed position is not an addressable referent. PE-5 was right that the draft's tree was wrong; the redrawn tree is *also* not buildable. **Resolved by ruling: build without sibling-close (§4.3).** | **FATAL — §4.3's tree had no Positions loop**, and "sibling" is not an OA relation (*"OA models each spread as a separate position"*); "opened today" is unconfirmed | **FIXED** — tree redrawn with the loop and a side-tag comparison; blocking check **C8** with an explicit no-substitution STOP |
 | **PE-6** | **MATERIAL — the $250 sizing fallback is not deterministic.** Two contracts fit when credit ≥ $0.75, and independent fills can put one arm at 1 lot and another at 2 on the same day | **FIXED** — §5.4's failure band stated; nightly assert **A6** |
-| **PE-7** | **MATERIAL — four mechanics in the 15:50–15:52 window, not three.** `GF-SiblingClose` was priced `speedy`, identical to the Expiration exit, falsifying Rule 1 for all seven arms | **FIXED** — sibling-close re-priced `patient` and gated before 15:50, **tightened to 15:44 on 2026-08-04** (§4.3); §6.2 Rule 0 added |
-| **PE-8** | **MATERIAL — backstop / sibling-close race.** The backstop's unrestricted loop closes leg 1, which triggers sibling-close on leg 2 while the loop also closes it. §4.2's redundant-position check *"did not prevent the 7/01 orphan loop"* | **FIXED** — the gate removes the overlap entirely. ⭐ **Tightened 3:50pm → 3:44pm on 2026-08-04**: the Track B task found the 15:50 value left the race open for any arm exiting before 15:50 (ARM-B2 at 15:45), so PE-8's fix was correct in kind and one minute short in degree |
-| **PE-9** | **MATERIAL — an armed trailing stop is on §11's not-expressible list by the spec's own §3.1 reasoning**, so §13's "no mechanic appears on the list" was false | **FIXED** — PR-16 scoped to a plain always-on trail; the armed shape explicitly excluded; §13 corrected |
+| ~~**PE-7**~~<br>📝 **MOOT 2026-08-06 — sibling-close is not built, so there are three mechanics in the window, which is what Rule 1 wanted.** | **MATERIAL — four mechanics in the 15:50–15:52 window, not three.** `GF-SiblingClose` was priced `speedy`, identical to the Expiration exit, falsifying Rule 1 for all seven arms | **FIXED** — sibling-close re-priced `patient` and gated before 15:50, **tightened to 15:44 on 2026-08-04** (§4.3); §6.2 Rule 0 added |
+| ~~**PE-8**~~<br>📝 **MOOT 2026-08-06 — the race is removed with the object. The 15:44 gate (ruling S-4) is recorded, not deleted.** | **MATERIAL — backstop / sibling-close race.** The backstop's unrestricted loop closes leg 1, which triggers sibling-close on leg 2 while the loop also closes it. §4.2's redundant-position check *"did not prevent the 7/01 orphan loop"* | **FIXED** — the gate removes the overlap entirely. ⭐ **Tightened 3:50pm → 3:44pm on 2026-08-04**: the Track B task found the 15:50 value left the race open for any arm exiting before 15:50 (ARM-B2 at 15:45), so PE-8's fix was correct in kind and one minute short in degree |
+| ~~**PE-9**~~<br>⛔ **OBJECTION FALSIFIED 2026-08-06 by Phase-0 check C2 — the armed trail is a NATIVE primitive and was never on §11's list.** Recorded as an attack that *succeeded in review and was wrong in fact*; the "fix" it forced has been reverted by ruling. **A folder-derived exclusion is not an observation** — that is the lesson. | **MATERIAL — an armed trailing stop is on §11's not-expressible list by the spec's own §3.1 reasoning**, so §13's "no mechanic appears on the list" was false | **FIXED** — PR-16 scoped to a plain always-on trail; the armed shape explicitly excluded; §13 corrected |
 | **PE-10** | **MATERIAL — "Touch $0 exits the moment the position goes ITM" overstates a 1-minute-cadence control.** §11 row 3: *"Sub-second strike-touch with a latch — NOT NATIVE. 1-minute cadence at best"* | **FIXED** — §4.4 and PR-17 restated with the cadence and a defined artifact tolerance |
 | **PE-11** | **MATERIAL — the family-level kill criterion is vacuously unfireable** with exactly one input, exactly as Options B and C were rejected for | **FIXED** — rewritten at field/mechanic granularity in §9. ⚠️ **`pre-registration-ledger.md` PR-14…PR-17 carry the same defective wording and need the same correction at signing** |
 | **PE-12** | **MATERIAL — presets inside the Bot Input value editor were never observed.** G3 tested the *action* | **FIXED** — check **C0c**, with the consequence (B4 becomes hand-entry) named |
@@ -1603,7 +1722,7 @@ Recorded because a review that only reports hits is not a review.
 | **12** | ~~⭐ **No regime-change criterion exists anywhere.**~~ 📝 **CORRECTED 2026-08-06 — FALSE. `evidence-standards.md` §4 gate B3 already defines it**: *"a VIX move of ≥ 10 points peak-to-trough, or both a sub-15 and an above-25 VIX period"*, cross-referenced by that file's own T3.3. `build-plan.md` §5's gate is still conjunctive — n≥100 **and** ≥6 months **and** a regime change — but the third conjunct has a definition; it lacks a `scripts/` detector and a pre-registration citation by name. | ~~Must be defined before any arm can graduate; not invented here~~ **Must be WIRED (detector) and CITED (at signing) before any arm can graduate — the definition itself already exists.** `decision-card-2026-08-06.md` slot 6 deferred a definition on a false premise; Andy's fresh read is needed on the wiring question. |
 | **13** | ⭐ **The comparative machinery does not exist.** No surface produces a cross-bot paired ΔR with a bootstrap CI; `research_loop.py` is advisory-only and must not be wired in; and the liveness rule needs an **exit-reason field the export may not carry** (`oa-export-schema.md` was not in this session's reference set). **This is the largest piece of unbuilt work the spec implies**, and `pre-registration-ledger.md` §7 item 3 makes it a signing gate | Needs scoping as its own task before Day-0 |
 | **14** | ⭐ **The `$0.08` credit floor contradicts `hedge-research.md` §11's validated "min-credit filter hurts"** and was carried by inheritance from the pilot | Retained for comparability; the contradiction is now recorded rather than silent. Andy's to keep or drop |
-| **15** | ⭐ **CF-1 and CF-4 are structural limits, not open questions.** The exit-pricing/ITM exposure asymmetry and the close-both wrapper on the SL arms cannot be designed away at this level | Carried with named mitigations; they bound what this family may conclude |
+| **15** | ⭐ **CF-1 stands as a structural limit. ~~CF-4~~ is ✅ DISCHARGED 2026-08-06** — the close-both wrapper on the SL arms was an artefact of `GF-SiblingClose`, which the C8 ruling removes; PR-18/PR-19 can now reach the Breakeven shape their anchor describes. **CF-1 is unaffected** — the exit-pricing / ITM exposure asymmetry has nothing to do with sibling-close. Original text left standing: ~~The exit-pricing/ITM exposure asymmetry and the close-both wrapper on the SL arms cannot be designed away at this level~~ | CF-1 carried with named mitigations; CF-4 discharged (§4.3 ruling) |
 
 ---
 
@@ -1612,15 +1731,23 @@ Recorded because a review that only reports hits is not a review.
 - `build-plan.md` §2D and §5 — **implemented, not amended.** No text in that file was edited.
 - `hedge-research.md` §5.2's five conditions — §8's table maps each to what discharges it.
 - `oa-platform-reference.md` §11 — **no mechanic in this spec appears on the not-expressible
-  list.** ⚠️ **This claim was FALSE in the draft** and is true only after review: PR-16's target
+  list.** ~~⚠️ **This claim was FALSE in the draft** and is true only after review: PR-16's target
   was an *armed* trailing stop, which §11 rows 4 and 6 rule out and which §3.1 already used those
   rows to exclude elsewhere. PR-16 is now scoped to a plain always-on trail and the armed shape
-  is explicitly excluded (§3.1, PR-16). **Three further candidate mechanics were excluded for §11
+  is explicitly excluded (§3.1, PR-16).~~
+  ⭐ **RE-CORRECTED 2026-08-06 — the review's correction was ITSELF WRONG, and Phase-0 check C2
+  falsified it.** The armed trailing stop **is** expressible: OA implements it as a native
+  Exit-Options primitive (`tstop` → `target` "Activate at __ % of credit" + `trail` "Close on __ %
+  pullback"). §11 rows 4 and 6 bound what **decision nodes** express, not what a native exit
+  primitive does internally. **PR-16 is re-scoped to the ARMED trail (ruled 2026-08-06)**, and
+  §13's headline claim stands for the ORIGINAL reason — no mechanic in this spec is on §11's list. **Three further candidate mechanics were excluded for §11
   reasons** and are named in §3.1.
-  ⚠️ **Every mechanic names the primitive it is built from — but three arms' primitives are
+  ✅ **2026-08-06 — EVERY ARM'S PRIMITIVE IS NOW CONFIRMED** (C1 `stoploss` = % of credit, C2
+  `tstop` = armed sub-form, C3 the pricing sub-fields). **All seven are arms.** Left standing:
+  ~~⚠️ **Every mechanic names the primitive it is built from — but three arms' primitives are
   UNCONFIRMED** (Trail's `tstop` shape, SL100/SL200's `stoploss` unit, and four arms' exit-pricing
   sub-field). Per `hedge-research.md` §5.2's closing sentence they are **not arms until Phase 0
-  closes**, and §8's table says so.
+  closes**, and §8's table says so.~~
 - `oa-ops-runbook.md` §4 — every build step ends in a two-layer verification, with Layer 2
   deferred to Day-0 and tracked.
 - `CLAUDE.md` §9.1a — no write in this spec's build order is reported done on the strength of the

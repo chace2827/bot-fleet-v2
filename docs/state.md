@@ -288,7 +288,8 @@ date it was read.
 hedge tournament arms" are two views of the same family, which is what fits 4 IC arms + 2 hedge
 arms + 1 canary inside §2D's 5–7 fresh ceiling with no remainder. Underlying **QQQ**. Arms:
 `GF-QQQ-IC-Ride` (control, PR-14) · `-PT50` (PR-15) · `-Trail` (PR-16) · `-Touch0` (PR-17) ·
-`-SL100` (PR-18) · `-SL200` (PR-19) · `-Canary` (PR-20). Four shared Library automations attached
+`-SL100` (PR-18) · `-SL200` (PR-19) · `-Canary` (PR-20). ~~Four~~ 📝 **THREE (2026-08-06 — C8 ruling
+removed `GF-SiblingClose`)** shared Library automations attached
 to all seven; the only per-bot variable is a bundle-typed exit input, per D-1 Option A and
 Decision 4 Architecture E.
 
@@ -331,15 +332,65 @@ Decision 4 Architecture E.
 >   against a known contract count.** `<D100>` cannot be derived and PR-21 cannot be re-stamped.
 > - **Still untouched:** C0c · C2 · C7 · C8 · C9. Full record: `session-log.md` 2026-08-05 part 2.
 
+> ### ✅ PHASE 0 CLOSED — 2026-08-06, the second probe session. Both blocks above are LEFT STANDING.
+> Every remaining check answerable in the UI is answered. First-hand DOM / value-layer reads on the
+> delete-list scratch bot `BOTfw5TkkCRF2217852702121253931`, filed to
+> `data/captures/edit-verify/2026-08-06/phase0_C1.txt · _C2 · _C7 · _C8 · _C0bc · _C9`.
+> Full record: `session-log.md` 2026-08-06.
+>
+> - ✅ **C1 CLOSED — `stoploss` is `% of CREDIT`.** Control label `Stop Loss %`; picker enumerates
+>   `-5% of credit`=0.05 … `-100% of credit`=1 … `-200% of credit`=2 … `-500% of credit`=5.
+>   **SL100 = `stoploss: 1`, SL200 = `stoploss: 2`.** PR-18/PR-19's re-stamp condition (*"IF THE
+>   CONTROL IS %-OF-RISK"*) is **NOT triggered** — both were written against the credit basis.
+>   `dstop` is the separate `Stop Loss $` control; **C10 stays open.**
+> - ✅ **C2 CLOSED — an ARMING THRESHOLD EXISTS and is NATIVE.** `tstop` opens a sub-form:
+>   `target` (min 0, step 1, ph 50) = "Activate at __ **% of credit**"; `trail` (min 1, step 1,
+>   ph 15) = "Close on __ **% pullback**"; optional `minr` and `maxtrail`. **"Arm @ 40%, trail 15%"
+>   is expressible.** ⭐ **RULED 2026-08-06 (Andy): PR-16 RE-SCOPED TO THE ARMED TRAIL**, target=40 /
+>   trail=15. This falsifies the §11-rows-4-and-6 exclusion *as applied to the armed trail* — those
+>   rows bound decision nodes, not native exit primitives. ⚠️ Whether a *plain* non-armed trail is
+>   expressible was **NOT** observed; do not assume it.
+> - ✅ **C7 PASS — the node is real, and is already running on this account.** Recipe `postagtoday`
+>   (group Bot): `Bot [opened|closed] a position with [tag, limit 1] today`. Corroborated live:
+>   `HedgeC-Scan-Call` contains "Bot opened a position with call side today" → NO → Open.
+> - ⛔ **C8 — STOP RETURNED ON CLAUSE 2.** Clause 1 (`posrepeater` inside a `Position closed`
+>   automation) and clause 3 (`posopendays`, `zero:true` = "open 0 market days") are **real**. But
+>   **the closed position is NOT an addressable referent**: the picker offers only `Lookup a
+>   position` (literal Symbol/Type/Tag filters) and `Opened Position`, greyed — *"Only available in
+>   automations scheduled with the 'position opened' trigger"*. No recipe compares a tag to another
+>   position's tag. Scopes opened: bot · automation · top-level referent picker · in-loop binding ·
+>   Position Lookup · all 127 recipes in all 6 groups. **⭐ RULED 2026-08-06 (Andy): BUILD WITHOUT
+>   SIBLING-CLOSE** — the spec's named fallback; **the spread, not the condor, is the unit for early
+>   exits.** See `greenfield-family-spec.md` §4.3.
+> - ✅ **C0c PASS** — a `Presets` picker DOES render in the bot-input value editor; enumerates
+>   `TIER2-CHECK4-PUTSIDE` = `UIfw5TkkCRF1517858152565216101`. B4 is not seven manual entries.
+> - ✅ **C0b LITERAL — the answer is NO.** `HedgeC-Scan-Call`'s Exit Options 🔗 panel reads *"Select
+>   an existing input or add one to **your automation**"* and **"No compatible inputs found."** —
+>   `CLAUDE-G1-EMPTY-EXITS` (`IN178586615441261`), same bot, sibling automation, same `exits` type,
+>   is **not offered**. Two-input design stands; **assert A8 stays substantive.**
+> - ⏳ **C9 — NOT ANSWERABLE IN THE UI. Day-0, same class as C10.** Only copy is *"After the bot
+>   closes a position"*; the trigger exposes a `Position Type` filter and no "closed by" filter.
+>   That it says "the **bot** closes" is **suggestive and inadmissible** (`CLAUDE.md` §5).
+> - ⏳ **`oa-ops-runbook.md` §7's template successor-rid check — NOT RUN.** It needs either a
+>   template saved from a delete-list bot (fresh account-level residue on the eve of the sweep) or a
+>   production bot, which this session was barred from. Ops check, not a Phase 0 blocker.
+>
+> ⭐ **ALL SEVEN ARE NOW ARMS.** C1 + C2 confirm the last two unconfirmed primitives; C3 closed the
+> pricing sub-field on 2026-08-05. **§8's row-4 objection is discharged.**
+> ⛔ **C8's STOP is a SHARED-OBJECT cut, not an arm cut** — Phase A now builds **THREE** shared
+> automations, not four, and the post-Phase-A Library holds **4** rows, not 5.
+
 **⚠️ AMENDED 2026-08-05 — the G2 rider is now TWO hops, not one.** Once a param is driven by a bot
 input the chain is action → automation input → **bot input**, and the binding record carries only the
 bot input's **id and label** plus a stale `oldValue`. A capture that stops at the action reads one
 name; a capture that stops at the automation input reads another. `bots_config_v2.csv`, the
 capture-diff and the drift detector must resolve **both** hops or every arm diffs as identical.
 
-**⚠️ Three of the seven are not arms yet** under `hedge-research.md` §5.2's own definition —
+📝 **RESOLVED 2026-08-06 — ALL SEVEN ARE ARMS.** C1 (`stoploss` = % of credit), C2 (`tstop`'s armed
+sub-form) and C3 (pricing sub-fields, 2026-08-05) confirm every primitive. Left standing:
+~~**⚠️ Three of the seven are not arms yet** under `hedge-research.md` §5.2's own definition —
 Trail's `tstop` shape, SL100/SL200's `stoploss` unit, and four arms' exit-pricing sub-field are
-unconfirmed primitives. §5.2: *"An arm failing any of these is not a weak arm, it is not an arm."*
+unconfirmed primitives. §5.2: *"An arm failing any of these is not a weak arm, it is not an arm."*~~
 
 **Adversarial review: 2 subagents, 10 FATAL + 24 MATERIAL objections, ~2/3 fixed.** Full record in
 the spec's §11, including the attacks that failed. **Two structural limits are CARRIED, not
@@ -857,17 +908,48 @@ position-open/close emails are not reaching Andy.
 positions, so it is a Day-0 check. The **DST / "Market Time (EST)"** question also still needs a
 Day-0 observation; nothing this session touched it.
 
+### ✅ OA RESIDUE FROM THE C0a PROBE — **FULLY SWEPT 2026-08-06.** Block below LEFT STANDING.
+
+**Slot-7 deletions executed 2026-08-06, in the build-plan §2 order (capture first), on Andy's
+ruling. All three targets gone; nothing else touched.**
+
+| # | Object | Before | After |
+|---|---|---|---|
+| 1 | Pre-deletion `/bots` capture — **taken first** | expected **35 active bots** | **35** ✅ footer *"35 active bots • 15 left in your plan"*, 35 distinct `BOT…` ids. Filed `data/captures/2026-08-06/oa_Bots_2026-08-06-17-21-38.txt`, sha256 `ad6f2a40…f0f5`, **byte-exact against the page-computed hash** |
+| 2 | Bot `TEST QQQ-IC-0DTE-HedgeC-S3 Clone` `BOTfw5TkkCRF2217852702121253931` | present, `status:off` | **DELETED** — roster 35 → **34** |
+| 3 | Bot `QQQ-IC-0DTE-InvFilter-Wide150` `BOTfw5TkkCRF4517755136823526783` | present, `status:off` | **DELETED** — roster 34 → **33** |
+| 4 | Library object `CLAUDE-C5-SHARED-SCRATCH` `RTfw5TkkCRF178589028977611` | read **`Unused`** after the two bot deletions (was `2 bots`) | **DELETED** via `removeAuto` → *"Remove from My Library?"* → Yes |
+| 5 | ⭐ **Verify-back after a hard reload** | — | **`My Automations` = EXACTLY ONE ROW: `Defang-Mon-S2-StrikeTouch` (`RTfw5TkkCRF3317787955826108344`, 2 bots).** ✅ As required |
+
+**Method:** every click dispatched on an element selected **by identity** — `data-click=deleteBot`,
+`data-rid=RTfw5TkkCRF178589028977611` — never by coordinate. `oa-ops-runbook.md` §5's
+`archiveBot` hazard (Delete sits ~29px below Archive) was therefore never in play. Each irreversible
+confirmation was preceded by a re-read of `a5.bots.bot.id` to prove the right bot was still loaded.
+**Not touched and re-confirmed present afterwards:** `DIR-SPX-PutVIX22-SL75` (zero-trade, must not be
+deleted), `IC-SPX-FastPT25-S2` and `IC-SPX-FastPT25-S2-130PM`.
+
+⚠️ **The bot-local residue named below died with the two bots** — bot inputs `CLAUDE-C0A-BOT-EXITS`
+(`IN178588971538691`), `C5_BOTVAL_TESTCLONE` (`IN178589092511981`), `C5_BOTVAL_INVFILTER`
+(`IN178589106268631`), `CLAUDE-G1-EMPTY-EXITS` (`IN178586615441261`), and both C5 instances.
+**Nothing from the C0a probe or the 2026-08-06 probe remains on the account.**
+⚠️ **The 2026-08-06 probe added NO residue:** its one scratch object, `CLAUDE-C8-SCRATCH`
+(a `closepos` automation), was **discarded unsaved** and verified absent from both the bot's
+automation list and the Library before the deletions began.
+⚠️ **Fleet arithmetic moves: `n_used` drops by 2.** Day-0 active-bot count is now **33**, footer
+*"33 active bots • 17 left in your plan"*. `track-b-arms-spec.md` §3.2/§3.4's headroom figures were
+computed at 35 and should be re-read against 33 before the next allocation claim.
+
 ### ⚠️ OA RESIDUE FROM THE C0a PROBE — 2026-08-05. Andy ruled it STAYS; two lines the sweep needs.
 
 Eight writes, all on scratch objects, all logged in `session-log.md` 2026-08-05 part 2. Both scratch
 bots re-read post-state `status:"off"`, `AUTOMATIONS OFF`, `EXIT OPTIONS OFF`, `closedCount: 0`.
 
-1. ⛔ **`CLAUDE-C5-SHARED-SCRATCH` (`RTfw5TkkCRF178589028977611`) IS A LIBRARY OBJECT AND DOES NOT DIE
+1. ✅ **SWEPT 2026-08-06 — deleted explicitly, exactly as this line required.** ~~⛔ **`CLAUDE-C5-SHARED-SCRATCH` (`RTfw5TkkCRF178589028977611`) IS A LIBRARY OBJECT AND DOES NOT DIE
    WITH THE TWO SCRATCH BOTS.** It is an account-level shared automation carrying automation input
    `C5_EXITS` (`IN178589048006251`). **The Phase 4 sweep must DELETE IT EXPLICITLY** after
    `TEST QQQ-IC-0DTE-HedgeC-S3 Clone` and `QQQ-IC-0DTE-InvFilter-Wide150` are deleted, or it orphans
    in `My Automations` — where the account previously held exactly one shared automation
-   (`Defang-Mon-S2-StrikeTouch`), so an orphan is conspicuous and will be mistaken for a real object.
+   (`Defang-Mon-S2-StrikeTouch`), so an orphan is conspicuous and will be mistaken for a real object.~~
 2. **Both scratch bots now carry C5 bindings, and those DIE with the bots' deletion — no sweep action
    needed for these.** TEST clone: bot inputs `CLAUDE-C0A-BOT-EXITS` (`IN178588971538691`) and
    `C5_BOTVAL_TESTCLONE` (`IN178589092511981`), plus instance `fw5TkkCRF3317858909367702271`.

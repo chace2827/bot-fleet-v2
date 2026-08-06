@@ -1,0 +1,30 @@
+# Phase 0 — C0b (literal) and C0c
+captured: 2026-08-06, Chrome-direct DOM read
+
+--- C0c : does a Presets picker render inside the BOT INPUT value editor? ==> YES ---
+scope: bot settings -> Bot Inputs panel -> pencil (editInputs) -> bot input
+  CLAUDE-C0A-BOT-EXITS (IN178588971538691) -> its value editor opens the Exit Options modal.
+The modal's header carries a "Presets" control (a.mpickbox). Opening it enumerates:
+    TIER2-CHECK4-PUTSIDE   data-value = UIfw5TkkCRF1517858152565216101
+  -- the `UI...` namespace, i.e. account-scoped, matching the 9-row-4 finding.
+The same modal also carries the checkbox "Save as presets for short option positions",
+  so presets can be CREATED from the input editor as well as loaded.
+CONSEQUENCE: 4.5's typo-reduction survives. Step B4 does NOT become seven manual
+  field-by-field entries. Step A6 is executable from this screen.
+
+--- C0b LITERAL : can ONE Automation Input be referenced from TWO automations? ==> NO ---
+scope: automation editor for `HedgeC-Scan-Call` (aid fw5TkkCRF2217852702121631422) on the
+  same bot -> action "Open QQQ Short Call Spread" -> Exit Options row
+  (ct.param-input.has-link.pin-exits) -> the fa-link button -> Inputs panel.
+Panel copy, verbatim:
+    "Select an existing input or add one to your automation for this value."
+    "No compatible inputs found."
+    [ Add Input > ]
+NOT OFFERED: `CLAUDE-G1-EMPTY-EXITS` (IN178586615441261) -- an `exits`-typed AUTOMATION
+  input that exists on `HedgeC-Scan-Put`, the sibling automation ON THE SAME BOT.
+  Type-compatible, same bot, still not listed.
+CONTRAST with C0a: BOT inputs ARE offered across automations on the same bot (the
+  "Bot Inputs" menu). AUTOMATION inputs are not. The scope boundary matches the id
+  namespace exactly.
+CONSEQUENCE: the two-input design of 4.1 stands (GF_EXITS_PUT + GF_EXITS_CALL), and
+  assert A8 (put bundle == call bundle) stays SUBSTANTIVE rather than trivially true.

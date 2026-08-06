@@ -1,0 +1,34 @@
+# Phase 0 — C7 : is `Bot opened a position with tag <side> today` a real decision node?
+captured: 2026-08-06, Chrome-direct client-model + rendered-picker read
+scopes opened: automation editor (new closepos automation on the scratch bot);
+  full decision-recipe catalogue a5.bots._recipes (127 recipes, 6 groups:
+  Stocks 34, Indicators 17, Positions 23, Bot 29, Opportunities 11, General 13);
+  and the rendered "Select" recipe picker.
+
+RECIPE, verbatim from the client model:
+{ "type": "postagtoday",
+  "group": "Bot",
+  "format": [ "Bot",
+              {"id":"oc","type":"openedclosed","required":true,"text":"opened",
+               "defaultValue":"opened"},
+              "a", "position", "with",
+              {"id":"tag","type":"tags","required":true,"text":"tag","limit":1},
+              "today" ] }
+
+Rendered in the picker as: "Bot opened a position with tag today"
+
+  bot-scoped : YES  -- literal subject "Bot"
+  tag-scoped : YES  -- `tag` field, limit 1
+  day-scoped : YES  -- literal "today"
+  `oc` defaults to "opened"
+
+INDEPENDENT CORROBORATION -- not just available, but already instantiated on this account:
+  automation `HedgeC-Scan-Call` (aid fw5TkkCRF2217852702121631422) contains the live node
+  "Bot opened a position with call side today", whose NO branch leads to
+  "Open QQQ Short Call Spread". That is exactly the greenfield 4.1 tree shape.
+
+ALSO PRESENT (not used): `lastpostag` -- "Bot last [opened|closed] a position with [tag]
+  [cop] [N market days] ago" (cmdays, zero:true, max 90); and `lastpostagnever` --
+  "Bot has never [opened|closed] a position with [tag]".
+
+ANSWER: C7 PASSES. No STOP. No substitution required or made.

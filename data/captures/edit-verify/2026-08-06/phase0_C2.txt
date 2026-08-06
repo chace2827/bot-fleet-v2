@@ -1,0 +1,39 @@
+# Phase 0 — C2 : unit and shape of Exit Options `tstop`
+captured: 2026-08-06, Chrome-direct DOM / value-layer read
+scope opened: same Exit Options modal as C1 (bot-input value editor)
+method: the Trailing Stop control opens a SUB-FORM popover, not a scalar picker.
+  Field names, types and attributes read off the live inputs.
+
+CONTROL LABEL (verbatim): "Trailing Stop"
+The popover is headed "Trailing Stop" and contains FOUR number inputs:
+
+  name="target"    type=number  min=0  step=1  placeholder="50"  value=""
+        rendered:  "Activate at [ ] % of credit"          <-- ARMING THRESHOLD
+  name="trail"     type=number  min=1  step=1  placeholder="15"  value=""
+        rendered:  "Close on [ ] % pullback"
+  -- section: "Disable trailing stop if...  (optional)" --
+  name="minr"      type=number  step=1  value=""
+        rendered:  "Return % is less than [ ] % of credit"
+  name="maxtrail"  type=number  min=1  step=1  value=""
+        rendered:  "Pullback is more than [ ] % from high"
+
+Buttons: Cancel (data-click=close) | Clear (data-click=clear) | Apply (data-click=save)
+
+ANSWER: an ARMING THRESHOLD EXISTS and is native.
+  Unit of the arming threshold: % of CREDIT (same basis as C1).
+  The trail itself is a % PULLBACK from the position's high-water mark.
+  The backtester's "arm @ 40%, trail 15%" maps directly: target=40, trail=15.
+
+BEARING ON oa-platform-reference.md 11 rows 4 and 6:
+  The spec excluded the armed trail by reading it as "a two-stage mid-trade state change"
+  caught by row 4 ("Regime-conditional branching at a breach | NOT NATIVE. No mid-trade
+  branching") and row 6 ("Any condition referencing its own past | NOT NATIVE").
+  Those rows constrain what can be built out of DECISION NODES. They do not constrain what
+  a native exit primitive does internally. `maxtrail` -- "Pullback is more than __ % from
+  high" -- is direct evidence the platform tracks a high-water mark natively.
+  The exclusion of the ARMED TRAIL specifically is therefore falsified; rows 4 and 6
+  themselves are untouched by this observation.
+
+NOT OBSERVED: whether a PLAIN, non-armed trail is expressible (i.e. whether `target` may be
+  left blank). `target` has min=0 and a placeholder of 50; blank-means-always-on was NOT
+  tested. Do not assume it.

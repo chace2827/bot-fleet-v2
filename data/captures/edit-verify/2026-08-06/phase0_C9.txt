@@ -1,0 +1,23 @@
+# Phase 0 — C9 : does the `Position closed` trigger fire on closes by an EVENTS-class
+#                automation and by the account-level ITM action, or only by Exit Options?
+captured: 2026-08-06
+ANSWER: NOT ANSWERABLE IN THE UI. Day-0 behavioural read required -- same class as C10.
+
+SCOPES OPENED (so this is a bounded negative, not an unopened screen):
+  1. Add-Automation -> Schedule picker. All 12 trigger types enumerated with their own
+     descriptions. The relevant entry, verbatim, is the ONLY copy the app offers:
+        "Position closed"  /  "After the bot closes a position"  /  slot counter "0/5"
+     There is no help control on the item (its only child control is the collapse icon).
+  2. The closepos trigger's own settings, once selected: it exposes a "Position Type"
+     filter (default "any") and nothing else. There is NO "closed by" / mechanism filter.
+  3. The full decision-recipe catalogue (127 recipes, 6 groups): no recipe distinguishes
+     the provenance of a close.
+
+SUGGESTIVE AND INADMISSIBLE AS THE ANSWER (CLAUDE.md 5 -- inference is not observation):
+  the copy says "After the BOT closes a position". The account-level ITM action is an
+  ACCOUNT-level mechanism, not the bot, which would read as not firing the trigger.
+  That is an inference from wording. It is recorded, and it is not the answer.
+
+WHAT IT GATES: 4.3's 3:44pm gate (now moot under the 2026-08-06 C8 ruling, which removes
+  GF-SiblingClose entirely) and whether second legs are left open at 15:50 on early-exit
+  arms -- the latter survives the ruling and still needs the Day-0 read.

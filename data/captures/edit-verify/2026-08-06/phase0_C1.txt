@@ -1,0 +1,30 @@
+# Phase 0 — C1 : unit of Exit Options `stoploss`
+captured: 2026-08-06, Chrome-direct DOM / value-layer read
+scope opened: bot settings scope -> Bot Inputs panel -> editInputs -> bot input
+  CLAUDE-C0A-BOT-EXITS value editor -> Exit Options modal
+bot: BOTfw5TkkCRF2217852702121253931 (TEST QQQ-IC-0DTE-HedgeC-S3 Clone, delete-list scratch)
+method: label read off the control's own <label>; option list read off each item's
+  data-value attribute. Never innerText for values (oa-ops-runbook.md 4.0).
+
+CONTROL LABEL (verbatim): "Stop Loss %"
+HIDDEN FIELD           : input[name="stoploss"]   value="" (unset on this scratch bundle)
+SIBLING PRICING FIELD  : input[name="smstoploss"] value={"limitType":"pct","limit":100,
+                         "smart":"normal","text":"100% of bid/ask"}
+
+PICKER ENUMERATION (label = data-value), 42 entries:
+  -5% of credit=0.05    -10% of credit=0.1    -15% of credit=0.15   -20% of credit=0.2
+  -25% of credit=0.25   -30% of credit=0.3    -35% of credit=0.35   -40% of credit=0.4
+  -45% of credit=0.45   -50% of credit=0.5    -55% of credit=0.55   -60% of credit=0.6
+  -65% of credit=0.65   -70% of credit=0.7    -75% of credit=0.75   -80% of credit=0.8
+  -85% of credit=0.85   -90% of credit=0.9    -95% of credit=0.95   -100% of credit=1
+  -110% of credit=1.1   -120% of credit=1.2   -130% of credit=1.3   -140% of credit=1.4
+  -150% of credit=1.5   -160% of credit=1.6   -170% of credit=1.7   -180% of credit=1.8
+  -190% of credit=1.9   -200% of credit=2     -225% of credit=2.25  -250% of credit=2.5
+  -275% of credit=2.75  -300% of credit=3     -325% of credit=3.25  ... -500% of credit=5
+  (5% steps to 100%, 10% steps to 200%, 25% steps beyond; every entry negative)
+
+ANSWER: the unit is % of CREDIT. Not % of risk.
+  SL100 = stoploss: 1   SL200 = stoploss: 2   both exactly selectable, no interpolation.
+
+NOT THIS CONTROL: `dstop` is a separate field labelled "Stop Loss $" -- that is C10's
+  subject and remains open (needs a Day-0 behavioural read against a known contract count).
