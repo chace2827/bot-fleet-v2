@@ -72,8 +72,12 @@ Two design consequences, already built in:
   dead behind an off toggle. A toggle can be flipped by accident; a removed action cannot.
 
 Caveat that still stands: this came from **one rep**, who did not know the documented Excessive Errors
-Failsafe. Verify capabilities in the UI. And **the toggle being ON was never the failure we observed being
-detected** — a toggle screenshot is necessary but not sufficient. Keep the order-level verification.
+Failsafe (and the failsafe is excluded as the June cause — zero June errors on either Fortress bot,
+newest error `Apr 16, 2026 3:55PM`; `oa-platform-reference.md` §4.5, ruled D-4 2026-08-04. The
+mechanism itself is real — tripped March/April, entry scanners. Applied 2026-08-06,
+`decision-card-2026-08-06.md` ruling 1). Verify capabilities in the UI. And **the toggle being ON
+was never the failure we observed being detected** — a toggle screenshot is necessary but not
+sufficient. Keep the order-level verification.
 
 ---
 

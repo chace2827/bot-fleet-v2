@@ -120,6 +120,33 @@ months at 1/day. This is the project's own floor and I am adopting it unchanged.
 ⚠️ The operational VIX definition of B3 exists **only** in the ledger — cite B3 from the audit
 and you lose the test entirely.
 
+> ### 📝 CORRECTION 2026-08-06 — "no regime-change definition exists" is FALSE; it is right here in B3.
+> `greenfield-family-spec.md` §12 row 12, `track-b-arms-spec.md` §11 item 6, and `state.md` all
+> assert some version of *"no regime-change criterion exists anywhere"* / *"undefined in every
+> document"* about the third conjunct of `build-plan.md` §5 / `CLAUDE.md` §4's
+> `n≥100 / 6 months / a regime change` gate. **That claim is false — B3, three lines above this
+> banner, is that definition**, and `T3.3` below (§4.5) already cites it by name:
+> *"span includes ≥ 1 distinct volatility regime change — defined as a VIX move of ≥ 10 points
+> peak-to-trough, or both a sub-15 and an above-25 VIX period."* This file's own mtime predates
+> both specs that called it undefined. **Evidence-backed correction, `CLAUDE.md` §5 — changes no
+> decision:** the two downstream claims are corrected in place, struck not deleted, at
+> `greenfield-family-spec.md` §12 row 12 and `track-b-arms-spec.md` §11 item 6.
+>
+> **What is genuinely still open, and it is narrower than "undefined":** B3 is not wired to any
+> detector in `scripts/` — `state.md` and both specs are right about *that* half — and no
+> pre-registration entry currently cites B3 by name as its regime-change gate.
+>
+> ✅ **RESOLVED — Andy's fresh read, 2026-08-06.** **RATIFIED: B3 above is THE regime-change
+> conjunct's definition** for `build-plan.md` §5 and `CLAUDE.md` §4's gate. No new definition is
+> authored — B3 stands as written. **The deferral trigger survives, narrowed to the detector
+> question:** B3 must be wired to a `scripts/` detector — or a recorded manual-evaluation protocol
+> run at each review date — before the **earlier of** (i) any arm's or variant's first interim
+> read at n=60, or (ii) **2026-11-30**. **Until the detector or protocol exists, B3 is evaluated
+> manually, and each evaluation is logged** (`session-log.md`, dated, citing the VIX read that
+> settled it). This is now the operative gate text; the earlier "DEFER W/ TRIGGER, exactly as
+> drafted" ruling is superseded on its false premise, not overruled on its substance — deferral
+> was always the right posture, just aimed at the wrong open question.
+
 ### C — EXPECTANCY (the sanity check)
 
 | | Criterion |

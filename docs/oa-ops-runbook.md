@@ -310,6 +310,18 @@ then check group counts against the CSV.
 > (shared automation **required**). That is a build decision, gated behind "amend the plan", and it
 > remains open.
 
+> ### 📝 APPENDED 2026-08-06 — Decision 4 RULED 2026-08-04: Architecture E. The conflict above is resolved for the greenfield family. Applied on Andy's explicit "amend the plan" (`decision-card-2026-08-06.md` ruling 1; text per `decision-memo-2026-08-04.md` Decision 4 draft (a)).
+> The ⚠️ warning at the top of this subsection is right and is about UNINTENDED sharing — editing
+> a Library automation changes every bot that uses it by surprise. **It does not forbid DESIGNED
+> sharing.** A tournament's arms are matched precisely because their shared half is one object.
+> **Architecture E:** share the entry automation deliberately (`GF-ScannerA-PutSpread` /
+> `GF-ScannerB-CallSpread`, attached via the Library, not forked); let the differing half be the
+> per-arm exit-bundle Bot Input (D-1 Option A); let the group be the thing that makes the arms
+> *queryable*, not the thing that makes them *shared*. This satisfies `build-plan.md` §2D's
+> "shared automation, shared inputs" and `hedge-research.md` §5.2 rule 1 literally — **the open
+> conflict above is resolved for the greenfield family; this section's fork-via-Copy instruction
+> stands unchanged for every other cohort**, where designed sharing has not been ruled.
+
 ---
 
 ## 4. Edit verification — the procedure that is not optional
@@ -427,7 +439,7 @@ does not error — it silently falls back to a stale Default and keeps trading**
 | **3** | **Collapsed nodes may not be in the DOM** | A branch missing from the capture with no error | **Expand every caret** before clicking OA Grab |
 | **4** | **The export respects the group filter** | A subset export rebuilds the ledger and erases history | **All groups selected**, every time |
 | **5** | **IC = 2 positions** | Limits set to 1 mean one side never opens | Daily/Total limits **× 2 per IC** |
-| **6** | **Market orders fill outside the spread** | The 6/11 fill came in **$5.05/contract beyond the worst mark the position ever traded at** — R −1.63 on a defined-risk spread | **Market pricing is banned on every exit except a hard end-of-day flat close** |
+| **6** | **Market orders fill outside the spread** | The 6/11 fill came in **$5.05/contract beyond the worst mark the position ever traded at** — R −1.63 on a defined-risk spread | ~~Market pricing is banned on every exit except a hard end-of-day flat close~~ **Market pricing is banned on every entry AND every exit except a hard end-of-day flat close** (extended to entries 2026-08-06 — see the footnote below §5) |
 | **7** | **A time gate that was never implemented** | The v1 11:00 gate did not exist; 20+ sessions of entry drift | Confirm the gate is **a real decision node**, then check the first five entry timestamps |
 | **8** | **Name collision on archive** | `Opening Range Breakout 60m` is archived; **`60min-ORB-10W-Paper-v1` stays live** | **Read the full name** before archiving |
 | **9** | **Zero-trade ≠ worthless** | `DIR-SPX-PutVIX22-SL75` has 0 positions because its VIX≥22 gate **correctly never fired** | Delete only bots that are **both** zero-trade **and** absent from the disposition table |
@@ -455,6 +467,14 @@ does not error — it silently falls back to a stale Default and keeps trading**
 > `oa-reconciliation-report.md` R-02 · `data/oa_facts.csv` sha256 `435abe0d…3527b`.
 > Downstream corrections applied the same day: `pilot-clone-card-qqq-fortress.md` STEP 2 (voided),
 > `reactivation-runbook.md` §2 step 2 (rewritten), §3 below (narrowed).
+
+> ### 📝 TRAP 6 EXTENDED 2026-08-06 — the ban now covers entries. Ruled by Andy, decision memo 2026-08-04 (Decision 5); applied on Andy's explicit "amend the plan" (`decision-card-2026-08-06.md` ruling 1).
+> **Original counter, struck above and preserved here:** *"Market pricing is banned on every exit
+> except a hard end-of-day flat close."* The mechanism cited in the trap's middle column is
+> **order-type-specific, not side-specific** — a market order takes no limit on either side, so an
+> entry carries the same unbounded-slippage exposure the trap documents for exits. Full rationale
+> and the accepted-cost caveat (n=1 position, below `CLAUDE.md` §4's T2 gate — a mechanism
+> decision, not a sample decision): `oa-platform-reference.md` §7's dated append.
 
 ---
 

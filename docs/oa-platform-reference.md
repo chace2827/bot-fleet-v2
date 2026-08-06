@@ -472,6 +472,11 @@ to this project until 2026-07-29 — including to the OA support rep consulted a
 > the answer. Fortress kept emitting *entry* orders through 6/26 while emitting no exit orders,
 > which is not a whole-bot shutdown. State it as a hypothesis in pre-registration and check the
 > June error counter before claiming it.
+>
+> 📝 **Done — see the banner immediately below.** The June error counter was checked 2026-08-04
+> (D-4): zero June errors on either Fortress bot. Retired as the June cause; kept as a real,
+> documented mechanism. `pre-registration-ledger.md` PR-05 carries it as a liveness kill
+> criterion only, never as a June-lapse hypothesis (`decision-memo-2026-08-04.md` D-4).
 
 > ### ⛔ §9 CHECK #8 ANSWERED 2026-08-04 — **the hypothesis is DEAD. No June errors, on either bot.**
 > **[FIRST-HAND — bot Log → `Errors` filter (`?status=,error`), 2026-08-04.]** The list is
@@ -972,6 +977,19 @@ selected, the best price is used."*
 
 Guidance: **Fast** for 0DTE exits where fill certainty matters; **Patient** in calm markets.
 
+> ### 📝 APPENDED 2026-08-06 — the ban is extended to ENTRIES. Ruled by Andy, decision memo 2026-08-04; propagated 2026-08-06 on Andy's explicit "amend the plan" (`decision-card-2026-08-06.md` ruling 1).
+> The mechanism above is **order-type-specific, not side-specific**: a market order takes no
+> limit (first-hand — selecting `Market` collapses the Final Price ladder), so an entry carries
+> the same unbounded-slippage exposure. The flat-close carve-out does NOT extend to entries:
+> its logic is that fill certainty beats fill quality when an unclosed position is an uncapped
+> risk, and an unfilled ENTRY is simply no position — a costless outcome.
+> **Amended rule: Market pricing is banned on every entry and every exit in the v2 fleet, with
+> one exception — a hard end-of-day flat close.**
+> ⚠️ **Evidence tier: this is a mechanism decision, not a sample decision.** The impossible-fill
+> evidence is n=1 position (`T00147`, R −1.63; n=2 in the frozen fixture with `T00845`, R −1.10),
+> below `CLAUDE.md` §4's T2 gate. **Accepted cost:** limit entries that do not fill bias the
+> entry distribution toward tight-spread days. **Log non-fills** so that bias is measurable.
+
 ---
 
 ## 8. Building the v2 fleet — what the platform supports
@@ -986,6 +1004,11 @@ Per `build-plan.md` §2B and runbook §3 Step C, each greenfield bot carries:
 2. **A flat-close Scheduled Event backstop** in the Events class — see §8.2.
 3. **A position-closed-trigger automation** to close the sibling spread — §5.4, with all three
    interlocks.
+
+> ### 📝 APPENDED 2026-08-06 — D-1 ruled. The item-1 dependency resolves, with a new shape. Applied on Andy's explicit "amend the plan" (`decision-card-2026-08-06.md` ruling 1; text per `decision-memo-2026-08-04.md` D-1 draft (c)).
+> §9 row 3 answered the second dependency: Exit Options DO accept a Bot Input, but the input's
+> type is the whole bundle. Item 1's "PT%" is therefore not the variable — the exit SET is.
+> Preset naming (§9 row 4) is confirmed and cross-automation scope is closed.
 
 ### 8.2 ⚠️ THE 15:52 BACKSTOP MAY NOT BE BUILDABLE AS SPECIFIED
 
@@ -1043,6 +1066,20 @@ which fired. Give the Event a **distinct SmartPricing setting** from the Exit Op
 Trades list distinguishes them, and have the nightly detector count fires per mechanic. This is
 what `execution_audit.py`'s `BACKSTOP_CAUGHT_IT` rule reads — and it needs `time_exit` and
 `event_backstop` as separate config columns for exactly this reason.
+
+> ### 📝 APPENDED 2026-08-06 — attribution restored by re-pricing the 15:50 exit. Ruled by Andy, decision memo 2026-08-04; propagated 2026-08-06 on Andy's explicit "amend the plan" (`decision-card-2026-08-06.md` ruling 1).
+> As built, the 15:52 Event backstop and the 15:50 Expiration Exit Option were BOTH `Market`,
+> so the attribution guard above was unsatisfied. Resolved by setting the **Expiration exit** to
+> SmartPricing (`speedy`), NOT by re-pricing the backstop — §7's carve-out is for the hard flat
+> close specifically, and the 15:50 exit is a routine time exit with the Exit Options window
+> still open to ~15:59.
+> ⚠️ The two mechanics OVERLAP: an exit-option order stays live two minutes (§6.4), so the
+> 15:50 order is still working when the backstop fires at 15:52. The timestamp gap alone was
+> never sufficient. `execution_audit.py`'s `BACKSTOP_CAUGHT_IT` still requires `time_exit` and
+> `event_backstop` as separate config columns.
+> ⏸ **EXECUTION still DEFERRED to Template V2, per the ruling's own terms** — this append records
+> the ruling and rationale on the gated surface; the pilot clone's actual 15:50 exit is re-priced
+> at Template V2 with an amended pre-registration, before Day-0, not as a quiet edit now.
 
 ### 8.3 Verification standard — every bot, before it may trade
 
@@ -1167,6 +1204,12 @@ confirmed places (§0.2), and a first-hand observation beats a stale doc.
 >
 > **Only the Day-0 order-level check settles it** — first new position, Trades list, PT row
 > present. §8.3.
+>
+> 📝 **UPDATED 2026-08-06 — half of "neither" is now tested.** The Excessive Errors Failsafe was
+> excluded as the 2026-06-12 cause 2026-08-04 (D-4, §4.5's ⛔ ANSWERED banner: zero June errors on
+> either Fortress bot, newest error `Apr 16, 2026 3:55PM`). The mechanism is real and this fleet
+> tripped it in March/April on entry scanners, but not in June. **The toggle-OFF hypothesis
+> remains untested**; it is settled only by the Day-0 order-level check named above.
 
 What the evidence set *does* contain:
 

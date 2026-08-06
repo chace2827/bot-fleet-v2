@@ -167,6 +167,15 @@ An arm may enter a ranking only when **all five** hold:
 2. **Same execution class.** All arms as Exit Options, or all as Monitors. Never mixed.
 3. **Range075 carried as a preset** on every arm, so the tournament measures hedges on the days
    the strategy actually trades.
+   > ⚠️ **FLAGGED 2026-08-06 — "carried as a preset" is a category error; corrected in substance
+   > by Architecture E.** Presets are an Exit Options object (`oa-platform-reference.md` §6.1);
+   > Range075 is `a symbol %-change decision` (§8 below), an entry decision — an entry decision
+   > cannot be an exit preset. Under the Architecture-E ruling (Decision 4, `decision-memo-2026-08-04.md`)
+   > the requirement is stronger, not weaker: Range075 lives in the SHARED entry automation, so it
+   > is identical across arms by construction rather than by repetition. Rule 3 is not withdrawn;
+   > it is marked. `build-plan.md` §2D carries the corresponding frozen-doc amendment
+   > (2026-08-06, ruling 1a). Applied on Andy's explicit "amend the plan"
+   > (`decision-card-2026-08-06.md` ruling 1).
 4. **A pre-registration entry** naming the hypothesis, the kill criterion, the sample target,
    the review date — **and the platform primitive the mechanic will be built from** (§7's
    lesson).
@@ -342,7 +351,11 @@ win rate, which is precisely the trap.
 - **SL-trigger slippage is worse than PT slippage.** Backtests ignoring it overstate tight stops.
 - **Market-order fills outside the spread** — the 6/11 fill came in **$5.05/contract beyond the
   worst price the position was ever marked at**, producing R −1.63 on a defined-risk spread.
-  Market pricing is banned on every v2 exit except a hard end-of-day flat close.
+  Market pricing is banned on every v2 entry and exit except a hard end-of-day flat close.
+  ⚠️ *Extended to entries 2026-08-06 (Decision 5, ruled 2026-08-04) — order-type-specific, not
+  side-specific; a market order takes no limit on either side. Originally scoped to exits only;
+  see `oa-platform-reference.md` §7's dated append for the full rationale and the accepted-cost
+  caveat (n=1 position, below the T2 gate).*
 - **Silent suppression** — the Bid-Ask Guard disables Exit Options without an error (§7.2).
 - **Undocumented substitution at a platform limit** — §7. The newest one, and the hardest to see.
 

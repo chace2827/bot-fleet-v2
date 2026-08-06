@@ -178,6 +178,30 @@ Confirmed against the 2026-07-30 capture. No remainder.
 > **This amendment scopes a count. It authorizes no build.** Every Track B arm still needs its own
 > signed pre-registration entry before it may be switched on.
 
+> ### 🔓 AMENDMENT 2026-08-06 — "amend the plan", Andy's explicit words. Range075 wording corrected.
+> **This section's "Rebuilt hedge tournament arms" bullet previously read, and read until now:**
+> *"Rebuilt hedge tournament arms — shared automation, shared inputs, same execution class,
+> Range075 as a preset. Proof of matching is a capture-diff showing one differing input."*
+>
+> **Corrected to:** *"Rebuilt hedge tournament arms — shared automation, shared inputs, same
+> execution class, Range075 in the shared entry automation. Proof of matching is a capture-diff
+> showing one differing input."*
+>
+> **Why.** Presets are an Exit Options object (`oa-platform-reference.md` §6.1, verbatim: "Save
+> your Exit Option criteria as a Preset to be reused for…"); Range075 is an entry decision
+> (`hedge-research.md` §8: "a gap filter, not an intraday-range filter: implement as a symbol
+> %-change decision, not a high-low range check"). An entry decision cannot be an Exit Option
+> preset, so "Range075 as a preset" named a primitive that cannot express the mechanic — the same
+> defect class as `hedge-research.md` §7's HedgeD lesson. Under **Architecture E** (Decision 4,
+> ruled 2026-08-04), the substance is unchanged and strengthened, not weakened: Range075 lives in
+> the shared entry automation (`GF-ScannerA-PutSpread` / `GF-ScannerB-CallSpread`,
+> `greenfield-family-spec.md` §4.1), identical across all seven arms by construction rather than
+> by repeated preset attachment. **Nothing else in §2D changed; no build authorized by this
+> amendment.**
+> Ruled 2026-08-04 (`decision-memo-2026-08-04.md` Decision 4, draft (c)); applied 2026-08-06 per
+> `decision-card-2026-08-06.md` ruling 1a — reopens only if the UI check (does the preset picker
+> accept a non-Exit-Option criterion — presumed no, not yet directly observed) ever contradicts.
+
 ---
 
 ## 3. Data architecture after the cutover

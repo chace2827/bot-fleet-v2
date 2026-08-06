@@ -497,6 +497,17 @@ percent-risk anchor and measures two changes at once. **The primary arm-vs-Ride 
 unaffected.** C1 is already a blocking Phase-0 check for `GF-SL100`/`GF-SL200`; this arm inherits
 it for its secondary reading only.
 
+> ### 📝 APPENDED 2026-08-06 — double-testing RULED, RETIRE-SCOPED. `research-loop-spec.md` §10a scoped. Applied on Andy's explicit "amend the plan" (`decision-card-2026-08-06.md` ruling 5).
+> §6.3's double-testing finding (`DSTOP_100` shared with Track A's signed §3 set) is resolved by
+> **scoped retirement, R-2 precedent**: this arm's ledger is excluded from `research-loop-spec.md`
+> §10a's computed family for the `DSTOP_100` variant, so the arm's own ledger no longer re-enters
+> Track A's family carrying its own variant. **This is not deduplication of one hypothesis** — the
+> CF-4 paragraph above already establishes `DStop100-close-both` as a distinct mechanic from
+> Track A's per-spread `DSTOP_100` counterfactual; the two are non-equivalent estimators, carried
+> as a limitation, not solved. **No-influence rule:** a Track A advisory read on `DSTOP_100` may
+> not trigger, accelerate, or veto this arm's disposition before its own pre-declared gate date —
+> which in any case cannot arrive before C10/C11 close and `<D100>` is stamped (§5.4).
+
 ---
 
 ## 6. ⭐ ARM-B2 — `GF-QQQ-IC-Exp1545`
@@ -546,6 +557,17 @@ as *"the 9 computable variants × every bot under test"*, and an arm is a bot un
 arm's own ledger re-enters Track A's family carrying the same variant. **`TIME_*` was retired
 from §3 by R-2, so ARM-B2 alone is tested in exactly one place.** Under a 1-slot budget that is
 decisive, and it is §7's answer.
+
+> ### 📝 RESOLVED 2026-08-06 — scoped retirement, the R-2 move applied to SL100/SL200/DSTOP_100. Applied on Andy's explicit "amend the plan" (`decision-card-2026-08-06.md` ruling 5, RETIRE-SCOPED package).
+> `research-loop-spec.md` §10a now excludes `(bot, variant)` pairs where the bot is a
+> pre-registered live-arm running that variant as its own arm — at this signature: `GF-SL100`,
+> `GF-SL200` on `SL100`/`SL200`, and any Track B arm on `DSTOP_100` (this spec's ARM-B1, §5.5).
+> **ARM-B2 is no longer the only arm tested in exactly one place — it is joined by these, by
+> exclusion rather than by never having collided.** ⚠️ **Not solved, only scoped:** the arms and
+> Track A's variants are non-equivalent estimands (CF-4: close-both vs per-spread), so this
+> retirement is not a claim that one engine's result stands in for the other's; no cross-engine
+> multiplicity accounting exists or is created by this ruling. A no-influence rule bars Track A
+> advisory reads from affecting arm dispositions before each arm's own pre-declared gate date.
 
 ### 6.4 ⛔ The `0.005` (15:55) half of R-2 is NOT buildable in this family
 
@@ -1038,7 +1060,7 @@ return to Andy with the tournament. **C1** gates ARM-B1's secondary reading only
 | **3** | ⭐ **`greenfield-family-spec.md` §12 item 10 is STALE** — it is written against the superseded `≥0.10R` margin and concludes *"nothing here can ever graduate"*. **R-3 lowered the margin to +0.015R**, which that family's theoretical range (+0.083R to +0.162R) clears comfortably. The item should be re-scoped: the **effect-size** objection is resolved; the **power** objection is not (n=100 → ±0.026R; ~307 matched condors for ±0.015R; ~560 with Bonferroni) | Not this spec's file to edit. Flagged so the greenfield build does not carry a resolved blocker as if it were live — and so the surviving half is not lost with it. |
 | **4** | **PR-21 / PR-22 ID literals are PROPOSED.** `pre-registration-ledger.md` §8 item 1: PR-01…PR-13 are stamped and final; §6's are ranges until the fresh-build counts are fixed. Greenfield proposes PR-14…PR-20 | These follow greenfield's block and become final when Andy fixes both counts. **If the greenfield count lands below 7, these shift down.** |
 | **5** | **`pre-registration-ledger.md` §2's template has no GATE EVALUATION DATE field**, which §10a item 2 now requires *before* n reaches 100 | Editing that template is a change to a signed document. Both entries above carry the field anyway, marked ⭐, so nothing is lost if the template is amended later. |
-| **6** | ⭐ **"Regime change" is undefined everywhere.** `research-loop-spec.md` §5 and `build-plan.md` §5 are **conjunctive** gates whose third conjunct has no definition and no detector in `scripts/` | **No arm and no variant can graduate until it is written and signed**, regardless of n or elapsed time. Not invented here. Same finding as greenfield §12 item 12 — recorded twice, from two directions, which is itself the argument for closing it. |
+| **6** | ~~⭐ **"Regime change" is undefined everywhere.**~~ 📝 **CORRECTED 2026-08-06 — FALSE. `evidence-standards.md` §4 gate B3 already defines it**: *"a VIX move of ≥ 10 points peak-to-trough, or both a sub-15 and an above-25 VIX period"* — cross-referenced by that file's own T3.3. **What is still genuinely open, and it is narrower:** B3 is not wired to a detector in `scripts/`, and no pre-registration entry cites B3 by name. `research-loop-spec.md` §5 and `build-plan.md` §5 remain **conjunctive** gates. | ~~No arm and no variant can graduate until it is written and signed, regardless of n or elapsed time.~~ **No arm and no variant can graduate until B3 is wired to a detector and cited by name at signing** — the definition exists; the plumbing does not. `decision-card-2026-08-06.md` slot 6 deferred a *definition* on the false premise that none existed; Andy's fresh read is needed on whether to wire B3's detector now or defer that separately. |
 | **7** | ⭐ **The comparative machinery does not exist.** Nothing produces a cross-bot **paired ΔR with a bootstrap CI**; `research_loop.py` is `0.1.0-DRAFT`, advisory-only, carries **three fatal defects** and **must not be wired in**; §10a's stratified sign-flip permutation test is unimplemented; and the liveness criteria need an **exit-reason field the export may not carry** | Every comparative criterion in §9 is currently uncomputable. `pre-registration-ledger.md` §7 item 3 makes it a **signing gate**, so this blocks signing, not just analysis. Largest unbuilt dependency these arms imply. |
 | **8** | **R-1's "trailing-90-day median": one-time calibration or rolling?** (§5.4) | One word from Andy. This spec assumes one-time; rolling makes every re-stamp a new pre-registration under §10a. |
 | **9** | **`bots_config_v2.csv` is BLOCKED, not neglected** — written per-bot as each bot is built. It is what the capture-diff, the drift detector and Track A's `censored` flag all read | Not a task; a consequence of build order. Both arms write their rows when they are built. |

@@ -413,3 +413,36 @@ carries ruling **R-5**.*
    absorbs the inter-variant correlation, so **no Bonferroni term is applied**.
 4. Any nightly monitoring of the gate statistic must use an **always-valid confidence sequence**,
    not a fixed-n CI.
+
+> ### 📝 APPENDED 2026-08-06 — scoped retirement: dual-tested (bot, variant) pairs excluded from this family. Ruled by Andy (`decision-card-2026-08-06.md` ruling 5, RETIRE-SCOPED package). Applied on Andy's explicit "amend the plan" — this section is signed.
+> **Item 1's family is scoped, R-2 precedent.** Excluded from "the 9 computable variants × every
+> bot under test": any (bot, variant) pair where the bot belongs to a pre-registered live-arm
+> family that runs that same variant as its own arm — at this signature: `SL100`, `SL200` and
+> `DSTOP_100` on the seven `greenfield-family-spec.md` ledgers (`GF-SL100`/`GF-SL200`), and on any
+> Track B arm ledger running the identical variant (`track-b-arms-spec.md` ARM-B1, `DSTOP_100`).
+>
+> **Rationale.** A live arm's own ledger re-entering Track A's computed family carries its own
+> variant, degenerating toward the tautological-`CONTROL` defect class (§5a) — Track A would be
+> testing whether the arm differs from itself. **Precedent already in this document:** the
+> `TIME_*` slots were retired from §3 by ruling R-2 when the question moved to a live arm (ARM-B2);
+> this is the identical move applied to the SL/DSTOP rungs. The variants **remain in §3** and
+> continue to compute normally on every non-family ledger. **The set remains 12; the §10 freeze
+> holds without a count change.**
+>
+> **Non-equivalence, not mere duplication — carried, not solved.** `greenfield-family-spec.md`
+> §11 CF-4 establishes that `GF-SL100`/`GF-SL200` are **close-both** mechanics (the shared
+> sibling-close force-closes the untested side), while Track A's `SL100`/`SL200` counterfactuals
+> are computed **per-spread**. These are not replications of the same estimand; full record in
+> `greenfield-family-spec.md` §9 and `track-b-arms-spec.md` §6.3/§5.5.
+>
+> **No-influence rule, carried into `pre-registration-ledger.md` PR-14…PR-20 / PR-21 / PR-22 at
+> signing (Day-0, not yet applied — those entries are unsigned):** a Track A advisory read on a
+> dual-tested variant may not trigger, accelerate, or veto any arm disposition before that arm's
+> own pre-declared gate date. Kill authority for these variants rests solely with the arm's own
+> pre-registered criteria.
+>
+> ⚠️ **Honesty line.** This scoping removes a degenerate self-comparison; it does **not** create
+> cross-engine multiplicity accounting. Within-family multiplicity for the greenfield arms stays
+> with `greenfield-family-spec.md` Phase C step C4's declared Bonferroni-across-6; Track A's stays
+> with this section's max-T. No pooled alpha exists across the two engines. Recorded as a carried
+> limitation, not a solved one.

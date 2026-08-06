@@ -2,7 +2,15 @@
 
 *The live facts. Updated whenever a stated fact changes (CLAUDE.md §9.1). Numbers live in
 `STATUS.md`; the plan in `docs/build-plan.md`; progress in the `bot-fleet-migration` tracker.
-Last updated 2026-08-05 (part 2: the C0a probe — Architecture E CLEARED, C0a both clauses PASS,
+Last updated 2026-08-06 (decision-card-2026-08-06.md — all seven ruling slots decided by Andy;
+gated propagation batch applied (G-1…G-6, U-1…U-4); double-testing RETIRE-SCOPED package applied;
+regime-change finding corrected (B3 already exists — slot 6 needs Andy's fresh read); greenfield
+build + mechanical sweep AUTHORIZED, deferred to a separate OA-touching session. NOTE: a second
+session was editing `state.md`, `session-log.md` and `greenfield-family-spec.md` concurrently
+tonight — every edit here was applied against a freshly re-read device copy immediately before
+writing, so any content not authored by this session is that session's work, not an unexpected
+diff.
+Previously: 2026-08-05 part 2: the C0a probe — Architecture E CLEARED, C0a both clauses PASS,
 C5 PASS, C11/C4/C6 answered, C10 still blocking ARM-B1; earlier the same day: propagation sweep +
 the released gated batch — C12 and S-2 propagated to
 every surface, D-1 propagated, `research-loop-spec.md` corrected ×6, §8.4 step 1 corrected on
@@ -137,11 +145,15 @@ blob) — detail under *WRITES MADE TO THE CLONE* below.
 > before Day-0**, not as a quiet edit. **Decision 7 → RULED AND EXECUTED**: ScannerA name and tag
 > reverted, preset `TIER2-CHECK4-PUTSIDE` kept, **Bot Group stays unset until the Phase 4 sweep**.
 >
-> ⚠️ **NOT YET PROPAGATED — the rulings are recorded, the docs are not yet amended.** D-1, D-4,
-> Decision 4 and Decision 5 all imply edits to `build-plan.md`, `oa-platform-reference.md`,
-> `hedge-research.md`, `oa-ops-runbook.md`, `pre-registration-ledger.md` and
-> `reactivation-runbook.md` that have **not** been made. The memo carries the ready-to-paste text;
-> the two touching frozen or gated surfaces still require an explicit *"amend the plan"*.
+> ✅ **PROPAGATED 2026-08-06 — Andy granted "amend the plan" in full** (`decision-card-2026-08-06.md`
+> ruling 1; YES, no items struck). Applied and device-verified (sha256 + single-match grep per
+> file): `oa-platform-reference.md` (§7 entries-ban append, §8.1 D-1 append, §8.2 Decision-6
+> append, §10 append, §4.5 cross-reference) · `build-plan.md` §2D (Range075 wording, ruling 1a,
+> APPLY NOW) · `hedge-research.md` (§5.2 rule 3 flag, §10 entries-ban clause) ·
+> `oa-ops-runbook.md` (§3 Architecture-E append, §5 trap 6 entries-ban + footnote) ·
+> `reactivation-runbook.md` §1 (Excessive-Errors cross-reference). `pre-registration-ledger.md`
+> needed no edit here — D-1(a) and D-4 carrier 7 were already applied 2026-08-05's gated-batch
+> release. ~~NOT YET PROPAGATED — the rulings are recorded, the docs are not yet amended.~~
 >
 > **Three load-bearing findings remain open** (memo Appendix B has all seven): the broken
 > `build-plan.md` §5.2/§8.1 citation, flagged on the D-1 row above and still present in three
@@ -151,26 +163,122 @@ blob) — detail under *WRITES MADE TO THE CLONE* below.
 > `execution_audit.py` has 13 rules and none is config-based, so §3 cannot be cited as a proof leg
 > until it is built. ⚠️ **G2's REFERENCE result raises the stakes on the second and third:** an
 > arm-matching proof that reads the action alone now returns identical for every arm.
+>
+> 📝 **N-1 (the broken §5.2/§8.1 citation) is STILL UNRULED as of 2026-08-06** — it was one of the
+> memo's four secondary slots left open 2026-08-04 and was not in `decision-card-2026-08-06.md`'s
+> seven slots either. Still present in `state.md` (this D-1 row), `session-log.md`, and
+> `sprint-2026-08-04.md`. Not invented a fix here.
+
+---
+
+## 🗂️ DECISION CARD 2026-08-06 — all seven ruling slots decided by Andy. Six applied, one flagged.
+
+`docs/decision-card-2026-08-06.md`, sha256 `5dda6b823998a54b457222e1387cc47da8fcb66edd0a07a54081fe73dcd1bb6d`
+at delivery. Written the second-to-last day of Max capacity (downgrade 2026-08-07 14:52 ET), to
+batch every open ruling so Andy rules once. Two of seven slots were adversarially reviewed before
+presentation (subagents attacking slots 4 and 5); both original recommendations were **refuted**
+and the card carried the post-review versions. **All rulings received and applied same-session,
+2026-08-06**, except where noted.
+
+**Slot 1 — propagation grant: YES, in full** (no items struck). Applied — see the
+✅ **PROPAGATED 2026-08-06** banner above, replacing the stale NOT-YET-PROPAGATED block. Six gated
+targets (G-1…G-6) + four ungated riders (U-1…U-3 applied above; **U-4, this section's own hash
+refresh, applied in the GREENFIELD FAMILY SPEC block below**). **Slot 1a — Range075 wording:
+APPLY NOW.** Applied to `build-plan.md` §2D as a new dated 🔓 amendment block (2026-08-06),
+original left standing per the frozen-doc convention; reopens only if the preset-picker UI check
+ever contradicts.
+
+**Slot 2 — ledger count scoping: CONFIRMED, no action needed.** Verified in place 2026-08-06
+(already applied 2026-08-05's gated-batch release).
+**Slot 3 — PR-14…17 kill criterion: CONFIRMED, no action needed.** Verified in place 2026-08-06
+(already replaced 2026-08-05, ruling S-5).
+
+**Slot 4 — greenfield build session: AUTHORIZED, package items 1–8, with two amendments from
+Andy:** (i) the OA build itself (Phase 0 probes onward) runs in a **separate session** — this
+session applied doc edits only, touched no OA surface, ran no browser tool; (ii) sequencing per
+slot 7 — C0b look → 2 deletions → C5 Library delete + exactly-one verify-back run **tonight**,
+before Phase A, in that separate session. **Slot 4a — pilot declared CLEAN: Andy, 2026-08-06**, on
+the ritual-complete record and the FINISH capture-diff no-unintended-edits verdict
+(`reactivation-runbook.md` §3 Step A's gate). ⚠️ **QUEUED, not yet executed** — the separate OA
+session that runs Phase 0 onward has not been opened by this session. The four decisions the
+authorization finalizes (arm count = 7 / PR-14…20, the one-family reading of §2D, underlying QQQ,
+ride = time-exit-only) are **ruled** as of tonight but **not yet stamped into
+`greenfield-family-spec.md`'s own build-time literals** — deliberately left for the build session
+per that spec's own "stamp literals at build time" convention (§9 preamble), so nothing here
+duplicates or races that session's writes.
+
+**Slot 5 — double-testing: RETIRE-SCOPED, package parts 1–4.** Applied: `research-loop-spec.md`
+§10a (scoped-retirement paragraph + honesty line, signed spec, amended on Andy's explicit
+instruction) · `greenfield-family-spec.md` §9 (dated note after PR-19) and §12 row 11 already
+carried the finding, cross-referenced · `track-b-arms-spec.md` §5.5 and §6.3 (dated notes). Part 3
+(no-influence rule carried into PR-14…20 / PR-21 / PR-22) is **written into the §10a append now**
+but the ledger entries themselves are **DRAFT, unsigned** — the rule applies at signing, per the
+ruling's own terms; no ledger edit made tonight.
+
+**Slot 6 — regime-change conjunct: RESOLVED 2026-08-06, in two steps.** Andy's first ruling
+(DEFER W/ TRIGGER, exactly as drafted) was **not applied** — mid-execution the card's premise was
+found FALSE. **[FIRST-HAND 2026-08-06, direct `device_bash` read of `evidence-standards.md` §4
+gate B3]**: a regime-change definition already existed — *"a VIX move of ≥ 10 points peak-to-trough,
+or both a sub-15 and an above-25 VIX period"* — cross-referenced by that file's own T3.3. The
+"undefined everywhere" claims the card's forcing facts were built on (`greenfield-family-spec.md`
+§12 row 12, `track-b-arms-spec.md` §11 item 6) were themselves wrong; both corrected in place,
+dated, original struck not deleted, verified by device sha256 + single-match grep (`CLAUDE.md` §5
+evidence-backed-correction path — changes no decision). Flagged for Andy's fresh read rather than
+silently substituting a decision.
+>
+> ✅ **Andy's fresh ruling, 2026-08-06: RATIFY B3 as the regime-change conjunct's definition** for
+> `build-plan.md` §5 / `CLAUDE.md` §4's gate — **no new definition authored.** The deferral trigger
+> survives, narrowed to the detector question: **B3 must be wired to a `scripts/` detector — or a
+> recorded manual-evaluation protocol run at each review date — before the earlier of (i) any
+> arm's/variant's first n=60 interim read, or (ii) 2026-11-30.** Until then, B3 is evaluated
+> manually and every evaluation is logged (`session-log.md`, dated, citing the VIX read that
+> settled it). Applied to `evidence-standards.md` §4 (the operative gate text) 2026-08-06.
+
+**Slot 7 — mechanical sweep: GO, re-ordered.** C0b look + 2 deletions + C5 Library delete/verify-
+back queued for **tonight**, before Phase A, in the separate OA session (slot 4(ii)). Three clones
++ the ~23 manual archives queued for **tomorrow morning**, pilot-clean gate (slot 4a) now
+satisfied. ⚠️ **QUEUED, not yet executed** — no OA surface touched by this session.
+
+**Files changed by this session, all device-hash-verified, none via git:**
+`oa-platform-reference.md` · `build-plan.md` · `hedge-research.md` · `oa-ops-runbook.md` ·
+`reactivation-runbook.md` · `research-loop-spec.md` · `track-b-arms-spec.md` (×2 passes) ·
+`evidence-standards.md` · `greenfield-family-spec.md` · `state.md` (this file) ·
+`session-log.md`. Full per-file before/after hashes in `session-log.md`'s 2026-08-06 entry.
+
+⚠️ **Concurrent-edit note.** A second session was editing `state.md`, `session-log.md` and
+`greenfield-family-spec.md` at the same time as this one tonight. Every edit in this session
+re-read each of those three files immediately before writing and asserted the hash was unchanged
+since that read (compare-and-swap, no `device_commit_files` mtime guard applicable since edits
+went directly through `device_bash`). No collision was detected on any of the edits made here. Any
+content in these three files not described in this section or in `session-log.md`'s 2026-08-06
+entry is the other session's work, not an unexpected diff.
 
 ---
 
 ## ⭐ GREENFIELD FAMILY SPEC — WRITTEN + AMENDED ×4 2026-08-04. Design closed; SIX blocking checks before build.
 
-`docs/greenfield-family-spec.md` — **1,585 lines / 136,274 bytes, sha256
-`99abab8fd35e2d9c5ee5cc34b9c9bee24393e460af422dc6c13c5c705a0eeb1f`**, on-device verified
-**2026-08-05 at close-out**.
+`docs/greenfield-family-spec.md` — **1,628 lines, sha256
+`207517211f05de50f92ebadacc23e8974021f58a25fb8520fe823fd11fef83ee`**, on-device verified
+**2026-08-06** (two more amendments tonight: §9 double-testing RETIRE-SCOPED note after PR-19,
+§12 row 12 regime-change correction — both listed in the hash chain below).
+📝 **CROSS-REFERENCE, 2026-08-06:** this block previously cited `99abab8f…` (1,585), one close-out
+behind — the C0a-probe session amended the file further after that close-out (source unclear from
+this session's reads; treat as the same "hash goes stale" class flagged just below). **This is a
+snapshot at read time, not a fact that stays true** — see the standing warning two lines down.
 📝 **CROSS-REFERENCE CORRECTED 2026-08-05** — this block previously read *"AMENDED ×3"* /
 *"AMENDED THREE TIMES"* and cited **`da3c440e…` (1,585)**, one amendment behind.
 **[FIRST-HAND 2026-08-05, `device_bash sha256` of the device file.]**
 **Content claims about the spec elsewhere on this page were re-verified and stand; only the hash
 moved.** ⚠️ **Treat an embedded hash as a timestamp, not a fact** — cite a file's content claim
 and the date it was read.
-📝 **AMENDED FIVE TIMES after writing** — the first four on 2026-08-04, each because a document it
-had *staged* was amended after staging. Hash chain: as-written `aee1d763…` (1,548) → R-1/R-3
-correction `84ea156a…` (1,558) → 15:44 gate move `d9c686ac…` (1,584) → S-1 slot correction
-`da3c440e…` (1,585) → §12 row 17 closed at close-out `e6dec33c…` (1,585) → **C12 discharge
-propagated into §12 row 17, 2026-08-05, `99abab8f…` (1,585)**. Full record: `session-log.md`
-2026-08-04 *amended three times post-write* + *Amendment 4*, and 2026-08-05 *propagation sweep*.
+📝 **AMENDED SEVEN TIMES after writing** — the first five per the chain already on record: as-written
+`aee1d763…` (1,548) → R-1/R-3 correction `84ea156a…` (1,558) → 15:44 gate move `d9c686ac…` (1,584)
+→ S-1 slot correction `da3c440e…` (1,585) → §12 row 17 closed at close-out `e6dec33c…` (1,585) →
+C12 discharge propagated into §12 row 17, 2026-08-05, `99abab8f…` (1,585) → **§9 double-testing
+RETIRE-SCOPED note added, 2026-08-06, `0797de38…` → intermediate** → **§12 row 12 regime-change
+correction, 2026-08-06, `20751721…` (1,628, current)**. Full record: `session-log.md`
+2026-08-04 *amended three times post-write* + *Amendment 4*, 2026-08-05 *propagation sweep*, and
+2026-08-06 *decision-card rulings applied*.
 ⚠️ **Treat an embedded hash as a timestamp, not a fact** — cite a file's content claim and the
 date it was read.
 **The design document Phase 4's fresh builds are built from.** It **implements** `build-plan.md`

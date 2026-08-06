@@ -4179,3 +4179,113 @@ not-already-present check. **A uniqueness assertion is the wrong guard for an ap
 log** — the right one is positional. Both closeouts since have used it.
 
 **HOLDING for Andy's commit.**
+
+---
+
+## 2026-08-06 — Decision card ruled and applied; one flagged finding, resolved same session
+
+**Context.** Second-to-last day of Max capacity (downgrade 2026-08-07 14:52 ET).
+`docs/decision-card-2026-08-06.md` batched every open ruling slot (7) so Andy could rule once.
+Slots 4 and 5 were adversarially reviewed pre-presentation — two subagents attacking each
+recommendation independently; both original drafts were **refuted**, and the card carried the
+post-review versions with surviving objections recorded in-slot. Andy ruled all seven in one
+message; slot 6 was re-ruled a second time later the same session after a finding surfaced
+mid-execution (below). This entry records both rounds.
+
+**Andy's first-round rulings, verbatim in substance:**
+1. Propagation grant — YES, apply G-1…G-6 + U-1…U-4, nothing struck. 1a. Range075 wording —
+   APPLY NOW.
+2. Ledger count scoping — NO ACTION NEEDED, CONFIRMED.
+3. PR-14…17 kill criterion — NO ACTION NEEDED, CONFIRMED.
+4. Build session — AUTHORIZE, package 1–8, with two amendments: (i) the OA build itself runs in a
+   SEPARATE session, this session applies doc edits only; (ii) C0b look + 2 deletions + C5
+   delete/verify-back run tonight, before Phase A, in that separate session. 4a. Pilot declared
+   CLEAN — Andy, 2026-08-06.
+5. Double-testing — RETIRE-SCOPED, package parts 1–4.
+6. Regime-change conjunct — DEFER W/ TRIGGER, exactly as drafted. *(Superseded — see below.)*
+7. Mechanical sweep — GO, re-ordered per slot 4(ii); clones + manual archives tomorrow morning.
+
+**Applied, this session, doc edits only — no OA surface touched, no browser tool called, no `git`
+run.** Every edit verified by a **direct `device_bash` sha256 of the whole file, plus a
+single-match grep of the inserted text** — never the write tool's response, never a staged
+read-back (`CLAUDE.md` §9.1a). Per-file before → after sha256:
+
+| File | Before | After | What changed |
+|---|---|---|---|
+| `oa-platform-reference.md` | `800ccc6a1ed3ae1d…` | `7ced9f124eb92b00…` | §7 entries-ban append (G-6a) · §8.1 D-1 append (G-1) · §8.2 Decision-6 append (G-2) · §10 append beneath "Neither has been tested" (U-1) · §4.5 cross-reference (U-2) |
+| `build-plan.md` | `289b701a74b29a3f…` | `4af8fe2e49a50805…` | §2D new 🔓 amendment block, Range075 wording corrected (G-3 / ruling 1a), original left standing |
+| `hedge-research.md` | `7d3e751f8993d37e…` | `3f302c5c48298979…` | §5.2 rule 3 FLAGGED banner (G-4) · §10 entries-ban clause (G-6c) |
+| `oa-ops-runbook.md` | `489501882c99fa8e…` | `528e9df3fdaf8022…` | §3 Architecture-E append (G-5) · §5 trap 6 cell struck+replaced, footnote added (G-6b) |
+| `reactivation-runbook.md` | `919349b6bc5f1e46…` | `619ad6e98678d2f9…` | §1 "one rep" caveat, one clause added (U-3) |
+| `research-loop-spec.md` | `3fe3369ada262ac7…` | `0559e7d43b7bf1c8…` | §10a append: scoped-retirement paragraph (R-2 precedent), non-equivalence note, no-influence rule, honesty line (slot 5 part 1) |
+| `track-b-arms-spec.md` (pass 1) | `e2753227556ecb93…` | `0ca6882de64e35f0…` | §5.5 append (ARM-B1 scoped retirement) · §6.3 append (resolution note) |
+| `track-b-arms-spec.md` (pass 2) | `0ca6882de64e35f0…` | `09f53423325eadcb…` | §11 item 6 corrected in place (regime-change already defined — finding, see below) |
+| `evidence-standards.md` (pass 1) | `7d6c4f139a076975…` | `13caf912714cde42…` | §4 gate B footnote — corrects the "no regime-change definition exists" claim (finding) |
+| `evidence-standards.md` (pass 2) | `13caf912714cde42…` | `5f21c134dbc1ed63…` | §4 footnote extended — RATIFIED as the resolution, second-round ruling (below) |
+| `greenfield-family-spec.md` | `0797de386a112272…` | `207517211f05de50…` | §9 dated note after PR-19 (double-testing, slot 5 part 2) · §12 row 12 corrected in place (regime-change) — 2 edits, compare-and-swap verified against a concurrent session, no collision |
+| `state.md` (pass 1) | `158b1492c50e0b10…` | `7a3c54f5dbea320e…` | header line · NOT-YET-PROPAGATED → PROPAGATED banner · greenfield-spec hash chain refresh |
+| `state.md` (pass 2) | `7a3c54f5dbea320e…` | `5af8463b0edcf5a6…` | new §"DECISION CARD 2026-08-06" section — full ruling record |
+| `state.md` (pass 3) | `5af8463b0edcf5a6…` | `b30103050c6a6856…` | slot-6 section updated with the second-round RATIFY ruling |
+
+`state.md` and `greenfield-family-spec.md` edits were each compare-and-swap verified against a
+concurrent session editing the same files — re-read immediately before write, hash asserted
+unchanged, no collision on any pass.
+
+**Slot 6 — the flagged finding and its resolution.** The decision card's slot-6 forcing facts
+(`greenfield-family-spec.md` §12 row 12: *"the third conjunct is undefined in every document"*;
+`track-b-arms-spec.md` §11 item 6: *"No definition of 'regime change' exists anywhere in this
+repository"*) were themselves **false**. `evidence-standards.md` §4 gate B3 — mtime Aug 3,
+predating both specs — already read: *"Span includes ≥ 1 distinct volatility regime change —
+defined as a VIX move of ≥ 10 points peak-to-trough, or both a sub-15 and an above-25 VIX
+period."* T3.3 in the same file cites B3 by name. **Discovered mid-execution**, while staging the
+drafted slot-6 deferral text for `evidence-standards.md` §4 — the draft would have written
+*"undefined by recorded decision"* into the same file that already defines it, three lines away.
+Applying it as literally ruled would have introduced a new false claim into the fleet's evidence
+law. **First action:** did not write the drafted deferral paragraph anywhere; applied an
+evidence-backed correction instead (`CLAUDE.md` §5 — falsified by a quotable sentence, dated
+banner, original struck not deleted, evidence cited, verified, changes no decision) to
+`evidence-standards.md` §4, `greenfield-family-spec.md` §12 row 12, and `track-b-arms-spec.md`
+§11 item 6, and flagged the corrected premise for Andy rather than ruling on his behalf. **Second
+action, after Andy's fresh ruling:** RATIFY B3 as the regime-change conjunct's definition for
+`build-plan.md` §5 / `CLAUDE.md` §4's gate — no new definition authored. The deferral trigger
+survives, narrowed to the detector question: **B3 must be wired to a `scripts/` detector, or a
+recorded manual-evaluation protocol run at each review date, before the earlier of any arm's or
+variant's first n=60 interim read, or 2026-11-30**; until then B3 is evaluated manually, each
+evaluation logged. Applied to `evidence-standards.md` §4 (pass 2) and `state.md`'s slot-6 section
+(pass 3).
+
+**Bridge dropped twice, mid-write, on this exact append.** Both attempts errored on connection
+loss rather than confirming success or failure. Per `CLAUDE.md` §9.1a this session reported the
+outcome as **unknown** both times, not as landed, and took no further action until reconnection.
+On each reconnect, verified directly (`device_bash sha256` + mtime + tail read) before retrying —
+both times the file was unmodified: hash `485768b72c4504d5…`, mtime Aug 5, ending at the prior
+HOLDING anchor. This entry is the successful write, using the file's own documented convention (a
+**tail assertion** — the file must end with the anchor — rather than a uniqueness match, since
+"HOLDING for Andy's commit." repeats; see the *Method note* above this entry). Before writing this
+final time, all thirteen other files from this session were also re-verified unchanged.
+
+**Slot 4/7 — queued, not executed.** Per Andy's amendment (i), no OA surface was touched, no
+browser tool was called, and no bot, automation, or account setting was read or written this
+session. The build (Phase 0 checks onward), the cleanup sweep (C0b look, 2 deletions, the C5
+Library delete + verify-back), and the three remaining clones are all queued for the separate
+session Andy specified. The four decisions slot 4 finalizes (7 arms / PR-14…20, one-family
+reading, QQQ, ride = time-exit-only) are ruled but deliberately not stamped into
+`greenfield-family-spec.md`'s build-time literals tonight, per that spec's own convention that
+literals are stamped at build time — avoids racing the session that will actually do that
+stamping.
+
+**Concurrent session.** A second session was editing `state.md`, `session-log.md` and
+`greenfield-family-spec.md` at the same time as this one. Every edit to those three files in this
+session re-read the device file immediately before writing and asserted the hash matched the
+pre-edit read (compare-and-swap) before committing the write; no collision was detected on any
+write made here. Any content in these three files not itemized above is the other session's work,
+not an unexpected diff.
+
+**Not done, deliberately.** No `git` command was run. The `bot-fleet-migration` tracker artifact
+update and Andy's visual confirmation of it are still pending (close-out step 2, `CLAUDE.md`
+§9.1). `pre-registration-ledger.md` was read for cross-reference only — no edit needed or made,
+since its D-1/D-4 propagation had already landed 2026-08-05 and slot 5's no-influence rule applies
+at signing, not now.
+
+**HOLDING for Andy's commit.** Fourteen files touched this session (list above, three files
+touched twice or three times); none via `git`.
