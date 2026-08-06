@@ -1,0 +1,67 @@
+# CAPTURE — GF-ScannerA-PutSpread (shared Library automation)
+# captured: 2026-08-06, Chrome-direct, Option Alpha /bots/automations
+# METHOD: values read from a5.bots.acedit.routine (client model) AFTER a hard reload.
+#         Never innerText, never a save banner (CLAUDE.md 9.1a).
+# Account state at capture: 33 active bots; banner "Account inactive, no changes will be saved".
+#   -> creation and edits DID persist across hard reload (re-confirmed first-hand this session).
+
+AUTOMATION      GF-ScannerA-PutSpread
+RID             RTfw5TkkCR...  (Library object; full rid in bots_config_v2.csv)
+VERSION         3
+LIBRARY STATE   My Automations row present, "Unused" (not yet attached to any bot)
+WARNINGS        0
+INPUTS          1 usage
+  - id      IN178605447966781
+    type    exits            <- whole-bundle type (C0a shape)
+    label   GF_EXITS_PUT
+    posType shortputspread
+    required false
+    DEFAULT VALUE  (NOT SET - see OPEN ITEM below)
+
+## TREE (matches greenfield-family-spec.md 4.1 node-for-node)
+Loop QQQ                                             [symbolloop, symbols=QQQ]
+ └─ Current market time is after 1:30pm              [timeofday cop=after time=1330]
+     └─ YES → Current market time is before 2:00pm   [timeofday cop=before time=1400]
+         └─ YES → Symbol change % is greater than -0.75 since previous close
+                                                     [stockchangepct cop=gt value=-0.75 prop=close]
+             └─ YES → Symbol change % is less than 0.75 since previous close
+                                                     [stockchangepct cop=lt value=0.75 prop=close]
+                 └─ YES → Bot opened a position with put side today
+                                                     [postagtoday oc=opened tag="put side"]
+                     └─ NO → Open Symbol Short Put Spread
+
+NOTE: the symbol in every Symbol-change node and in the Open action auto-binds to the
+      Symbols-loop output referent {"type":"output","ntype":"symbolloop","output":"symbol"},
+      so the rendered name is "Open Symbol Short Put Spread", not "Open QQQ ...".
+      Same object, cosmetic difference from the spec's prose. Recorded, not corrected.
+
+## OPEN SHORT PUT SPREAD ACTION — value layer
+type        open-shortputspread
+series      {"type":"days","compare":"exact","days":0,"filter":"*","text":"exactly 0 days"}
+shortPut    legpctprice  pct=0.75 cop=lt priceprop=last mode=closest
+            text "0.75% below underlying price"
+longPut     leggap  gap=2 cop=lt shlg=short ltype=put mode=closest
+            text "$2.00 below short put leg"
+amount      {"type":"quantity","quantity":1,"text":"1 contract"}
+              ^ SIZING PRIMITIVE USED = FIXED CONTRACT COUNT (spec 5.4 / check C4 branch 1).
+                Record this in every MECHANISM block. The $-risk fallback is NOT in use.
+price       {"limitType":"pct","limit":100,"smart":"normal","text":"100% of bid/ask"}
+              ^ SmartPricing normal, NOT Market. Decision 5 satisfied on entry.
+exits       {"type":"input","nid":"root","input":"IN178605447966781",
+             "text":"GF_EXITS_PUT","oldValue":""}
+              ^ G2 RIDER CONFIRMED FIRST-HAND: the action stores a REFERENCE, not values.
+                oldValue is "" here because the field was linked before it ever held a value.
+                Any diff reading this action alone will report every arm identical.
+tags        "put side"
+filter      {"minPrice":0.08}          <- "Mid price is between $0.08 - (no max)"
+entry       {}                          <- no Entry Criteria set (bot-state gates unused)
+
+## A7 PAYLOAD-HASH BASELINE  (taken immediately after creation, post-hard-reload)
+sha256(JSON{name,inputs,root})  d35307e54d10c3457b383cdb9106f703f7bee0f5ad3f9c664787b98fda871ec7
+sha256(JSON{full routine})      3f61b2cf4f2b3234399618fde949b106df4bbaf0ed4fe0e6cf0d688111f06910
+  Use the CONFIG hash as the A7 baseline: the full-routine hash also covers `updated`/`version`,
+  which bump on any save and would make A7 fire on no-op saves.
+
+## DEFERRED TO DAY-0
+Layer 2 (behavioural, first NEW position's Trades list) — impossible: account inactive,
+no positions. Queued per greenfield-family-spec.md 10 and CLAUDE.md 5.

@@ -1,0 +1,7 @@
+# bots_config_v2.csv — POST-CUTOVER config record. Built ONLY from capture, never hand-written
+# and never memory-derived (CLAUDE.md §3 rule 2). Created 2026-08-06 by the greenfield Phase-A
+# build session. PARTIAL: Phase A is incomplete — only 1 of 3 shared objects exists.
+# object_kind: shared_automation | bot
+# a7_hash: sha256 of JSON{name,inputs,root} read from the client model AFTER a hard reload.
+object_kind,name,oa_id,version,attached_to,input_id,input_type,input_label,input_default,a7_hash,captured,layer2_status
+shared_automation,GF-ScannerA-PutSpread,RTfw5TkkCRF178605283747821,3,NONE (Unused),IN178605447966781,exits,GF_EXITS_PUT,NOT SET — see FINDING F-4,d35307e54d10c3457b383cdb9106f703f7bee0f5ad3f9c664787b98fda871ec7,data/captures/2026-08-06-gfam/GF-ScannerA-PutSpread.txt,DEFERRED TO DAY-0

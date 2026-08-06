@@ -255,6 +255,50 @@ entry is the other session's work, not an unexpected diff.
 
 ---
 
+> ### 🔨 PHASE A STARTED AND **NOT FINISHED** — 2026-08-06 (late), the first OA BUILD session.
+> **ONE of the three shared Library automations exists. NO BOT EXISTS. Phase A is OPEN.**
+>
+> **Built + Layer-1 verified after a hard reload:** `GF-ScannerA-PutSpread`
+> (`RTfw5TkkCRF178605283747821`, version 3, Library state `Unused`, `Warnings 0`). Tree matches
+> `greenfield-family-spec.md` §4.1 node-for-node. Action `open-shortputspread`:
+> `exactly 0 days` · short put `0.75% below underlying price` · long put `$2.00 below short put
+> leg` · **`amount` = 1 contract — the SIZING PRIMITIVE IN USE IS THE FIXED CONTRACT COUNT**, not
+> the `$250 risk` fallback (stamp this in all seven MECHANISM blocks) · `price`
+> `{"limit":100,"smart":"normal"}` — **not Market**, Decision 5 holds · `tags` `put side` ·
+> `filter {"minPrice":0.08}` · `exits` = a **REFERENCE** to automation input `IN178605447966781`
+> (`GF_EXITS_PUT`, type `exits`) — **the G2 rider reproduced first-hand on a new object.**
+> **A7 baseline** `sha256(JSON{name,inputs,root})` =
+> `d35307e54d10c3457b383cdb9106f703f7bee0f5ad3f9c664787b98fda871ec7`.
+> Capture: `data/captures/2026-08-06-gfam/GF-ScannerA-PutSpread.txt`. First-ever rows written to
+> `data/bots_config_v2.csv`.
+>
+> **NOT built:** `GF-ScannerB-CallSpread` · `GF-Backstop-1552-FlatClose` · presets (A6) ·
+> **`GF-QQQ-IC-Ride` (Phase B never started)**. `GF-SiblingClose` correctly not built (C8 ruling).
+> **Layer 2 is DEFERRED TO DAY-0 for every item** — account inactive, no positions, nothing fired.
+>
+> ⛔ **F-4 — DAY-0 BLOCKER: `SENTINEL-SL1` IS NOT EXPRESSIBLE AND IS UNSET.** §1.3 wants Stop
+> Loss % = 1; **the `stoploss` picker floors at `-5% of credit` (`0.05`)**, 42 entries, no
+> free-text [FIRST-HAND 2026-08-06, live modal enumerated]. `stoploss: 1` is **−100%**, i.e.
+> **exactly the `GF-SL100` arm's value** — a sentinel indistinguishable from a real arm, which
+> §1.3 forbids by name. The input was created with **Default Value = NONE** and the sentinel left
+> unimplemented. **Andy must rule (0.05, or re-spec) before any arm's `AUTOMATIONS` goes ON.**
+>
+> ⛔ **F-3 — THE TRIGGER IS NOT PART OF A SHARED LIBRARY OBJECT.** The Library editor carries the
+> tree only; a bot's Settings groups attached automations under `SCANNERS`/`MONITORS`, so trigger
+> class — and the whole **Repeating / 15:52 / Mon–Fri / holidays-skip** config of §4.2 — is set
+> **per bot at attach time**. **The backstop's 15:52 is therefore a per-arm hand-set surface on
+> all seven bots**, and neither §8.2 step 6 (rid lists) nor §8.3 **A2** enumerates trigger config.
+> **A2 needs a trigger clause or the family has an undetected matching hazard in its only
+> backstop.** Spec text — Andy's, not amended here.
+>
+> ⚠️ **F-1 — the slot-4 gate surface.** `decision-card-2026-08-06.md` is an **unfilled** ruling
+> sheet (lines 240–241 still read the option lists); the rulings live on **this page**. This
+> session proceeded on this page and flags the divergence. See `session-log.md` 2026-08-06 (late).
+>
+> Also read first-hand and unchanged: `itmpaper` = `market` ✅ · `itmlive` = `auto` ✅ ·
+> `maxexits` = `0` · Bot Schedule `09:31`/`5`, `09:31`/`1`. `/bots` = **33 active bots**;
+> `My Automations` was exactly one row before the build, **two** after.
+
 ## ⭐ GREENFIELD FAMILY SPEC — WRITTEN + AMENDED ×4 2026-08-04. Design closed; SIX blocking checks before build.
 
 `docs/greenfield-family-spec.md` — **1,628 lines, sha256

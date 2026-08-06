@@ -4406,3 +4406,156 @@ started.
   grep. **Diffs from that session are expected, not anomalies.**
 
 **HOLDING for Andy's commit.**
+
+---
+
+## 2026-08-06 (late) — GREENFIELD PHASE A, PART 1. First OA build session. ONE of three shared objects built. NOT COMPLETE.
+
+**Mode:** Chrome-direct OA edits under `CLAUDE.md` §5 (amended 2026-08-04). Slot-4 authorization
+read from `state.md` §"Slot 4", not from the card — see FINDING F-1. No git run, in any form.
+
+### ⛔ WHAT WAS AND WAS NOT BUILT — read this line first
+**BUILT AND VERIFIED:** `GF-ScannerA-PutSpread` (1 of 3 shared Library automations), complete
+tree, complete Open-Position action, its `exits` automation input, and its A7 baseline hash.
+**NOT BUILT:** `GF-ScannerB-CallSpread` · `GF-Backstop-1552-FlatClose` · the presets (step A6) ·
+**`GF-QQQ-IC-Ride` — Phase B was not started at all.** The session ran out of runway inside
+Phase A. **Phase A is therefore OPEN**, and no bot exists.
+`GF-SiblingClose` was **not** built and step **A4 was not attempted** — correct per the C8 ruling.
+
+### Layer-1 verification actually performed (ops-runbook §4.0)
+Every value below was read from `a5.bots.acedit.routine` (the client model) **after a hard
+reload**, never from `innerText` and never from a save banner. Tree renders node-for-node as
+`greenfield-family-spec.md` §4.1. `Warnings 0`.
+- `series` = `exactly 0 days` · `shortPut` = `0.75% below underlying price` (legpctprice,
+  pct 0.75, mode closest) · `longPut` = `$2.00 below short put leg` (leggap, gap 2, mode closest)
+- `amount` = `{"type":"quantity","quantity":1}` — **the sizing primitive in use is the FIXED
+  CONTRACT COUNT**, not the `$250 risk` fallback (spec §5.4, C4 branch 1). Must be stamped in all
+  seven MECHANISM blocks.
+- `price` = `{"limitType":"pct","limit":100,"smart":"normal"}` — **not Market**; Decision 5 holds.
+- `tags` = `put side` · `filter` = `{"minPrice":0.08}` (no max)
+- `exits` = `{"type":"input","input":"IN178605447966781","text":"GF_EXITS_PUT","oldValue":""}`
+  — ⭐ **the G2 rider reproduced first-hand on a brand-new object.** The action stores a
+  REFERENCE. A capture that reads the action alone will diff every arm as identical.
+- **A7 baseline (post-reload):** `sha256(JSON{name,inputs,root})` =
+  `d35307e54d10c3457b383cdb9106f703f7bee0f5ad3f9c664787b98fda871ec7`. Recorded in
+  `data/bots_config_v2.csv` (created this session) and the capture file.
+  ⚠️ The **full-routine** hash also covers `version`/`updated`, which bump on every save; the
+  **config** hash is the one A7 should compare, or A7 fires on no-op saves.
+- **Layer 2 is DEFERRED TO DAY-0 for every item above** — the account is inactive and holds no
+  positions, so no Trades list exists. Nothing was test-fired.
+
+### ⭐ Method findings worth carrying (all first-hand, all reproduced)
+1. **The commit chain is THREE saves and they are easy to confuse.** `a.btn.green.save` commits a
+   *criterion*; `form.edit-form button.btn.green` commits the *node*; `a.btn.gray.green.saveclose`
+   (top bar) saves the *automation and closes the editor*. Clicking the wrong one silently
+   produced a decision node reading **"(No criteria)"** — a well-formed node with no test in it,
+   which would have gated nothing and looked fine in a screenshot. Caught only by reading the
+   tree text back. **This is trap 7's shape on a brand-new build.**
+2. **Recipe rows carry no spaces in `textContent`** (`"Currentmarkettimeisbefore10:00am"`) — the
+   spaces are CSS margins between per-word spans, and `innerText` is `""`. Text-matching a recipe
+   fails silently. Select on `item.mni-recipe[data-value="<recipe type>"]` instead.
+3. **`a5.bots._recipes` is readable in bulk** (127 objects, `{type, format[], group}`) and is the
+   fastest way to confirm a node exists before hunting for it in a menu.
+4. Tag widgets confirmed: per-character `input` events open the suggestion menu; the value only
+   lands when the suggestion `item` is clicked. `put side` already existed (105 uses).
+5. The full `pointerdown→mousedown→pointerup→mouseup→click` dispatch worked for every control
+   this session. Element-ref clicks were not used.
+
+### The sweep state was re-verified before any write
+`/bots` footer read **`33 active bots`** (matches tonight's earlier sweep: 35 − 2 deletions) and
+`My Automations` held **exactly one row**, `Defang-Mon-S2-StrikeTouch` (2 bots). ✅
+
+### Account settings read first-hand (spec Phase C step C5, done early and opportunistically)
+`itmpaper` = **`market`** ✅ (spec §7 assumption 1 holds) · `itmlive` = **`auto`** ✅ (correctly
+NOT set; hard Day-0 gate D2) · `maxexits` = `0` (Unlimited) · Bot Schedule `scanstart` `09:31` /
+`scanend` `5` / `exitstart` `09:31` / `exitend` `1`. **Nothing on `/settings` was changed.**
+
+### FINDINGS — all reported, none acted on as a decision
+- **F-1 · The slot-4 gate cannot be satisfied as written.** `docs/decision-card-2026-08-06.md`
+  is an **unfilled ruling sheet** — line 19 `## RULING SHEET — copy, fill, send`, and lines 240–241
+  still read `AUTHORIZE (package 1–8) / PROBE-ONLY / DEFER` and `YES / NOT YET`, i.e. the option
+  lists, never struck through. The card's own appendix says *"Nothing was edited"*. The rulings
+  live in **`docs/state.md`** ("Slot 4 — greenfield build session: AUTHORIZED, package items 1–8,
+  with two amendments"; "Slot 4a — pilot declared CLEAN: Andy, 2026-08-06"). This session
+  proceeded on `state.md` (the live-facts doc, `CLAUDE.md` §3/§10) and records the divergence.
+  **Andy: either back-fill the card or make state.md the named gate surface.**
+- **F-2 · "Bot Schedule per the spec's two-window values" is not a build step.** Bot Schedule is
+  **account-level** (`/settings`), not per-bot, and `greenfield-family-spec.md` specifies no
+  values for it. Nothing to set at bot creation; the four fields are recorded above instead. No
+  account setting was touched.
+- **F-3 · ⛔ THE TRIGGER IS NOT PART OF A SHARED LIBRARY OBJECT.** Verified two ways: the Library
+  editor for the existing, real, 2-bot-shared `Defang-Mon-S2-StrikeTouch` opens straight to
+  `START AUTOMATION` with **no trigger/schedule control**; and a bot's Settings page groups its
+  attached automations under **`SCANNERS` / `MONITORS`** headings. So trigger class — and, for
+  `GF-Backstop-1552-FlatClose`, the whole **Repeating / 15:52 / Mon–Fri / holidays-skip**
+  configuration of spec §4.2 — is set **per bot at attach time**, NOT shared.
+  **Consequence the spec does not cover:** the backstop's 15:52 is a **per-arm hand-set surface**
+  on all seven bots. §8.2's diff step 6 compares `rid` lists and would pass with a mistyped
+  15:52 on one arm; §8.3's **A2** does not enumerate trigger config either. **A2 needs a trigger
+  clause, or the family carries an undetected matching hazard in its only backstop.** Reported,
+  not fixed — this is spec text and it is Andy's.
+- **F-4 · ⛔ `SENTINEL-SL1` AS SPECIFIED IS NOT EXPRESSIBLE. Step A1's Default Value is UNSET.**
+  Spec §1.3 requires the default to be *"an Exit-Options bundle whose only content is Stop Loss
+  % = 1"*, producing positions that *"close within minutes of opening, every day, on the first
+  adverse tick"*. **The `stoploss` picker's floor is `-5% of credit` (`0.05`)** — 42 entries,
+  `-5%` … `-100%`(=`1`) … `-500%`(=`5`), no free-text path. [FIRST-HAND 2026-08-06, picker
+  enumerated from the live Exit Options modal; screenshot filed.] So:
+  - `stoploss: 1` is **−100% of credit** — which is **exactly the `GF-SL100` arm's value**
+    (§4.4 / C1). Using it would make the sentinel behaviourally identical to a legitimate arm,
+    which §1.3 forbids in terms: *"a sentinel that looks like a legitimate arm is not a sentinel"*.
+  - `stoploss: 0.05` (−5%) is the nearest expressible value and does keep the loud same-day
+    signature, but choosing it is a **spec change**, and spec changes are not this session's.
+  **Action taken: the input was created with Default Value = NONE and the sentinel left
+  unimplemented and flagged.** This is safe today (account inactive, `AUTOMATIONS` OFF, nothing
+  can trade) and it is NOT "using the empty bundle as the sentinel", which §1.3 also forbids —
+  it is the sentinel not yet existing. ⛔ **This is a Day-0 blocker: it must be ruled before any
+  arm's `AUTOMATIONS` goes ON.**
+- **F-5 · Two strike-selection sub-fields the spec does not specify.** Both `shortPut` and
+  `longPut` require a match mode (`exactly` / `or closest` / `or higher` / `or lower`). The spec
+  gives none. **The platform default `closest` was accepted and recorded** (it is what the recipe
+  renders before any edit, and it is what the spec's own quoted phrasing reflects). Identical on
+  every arm by construction, so it cannot confound the comparison. Recorded, not decided.
+- **F-6 · `timeofdaybt` exists** — `Current market time is between [low] - [high]`, one node for
+  both bounds. The spec's two separate `timeofday` nodes were built **as written**. Noted only so
+  a later session does not "simplify" a shared object mid-sample and trip A7.
+
+### Files changed this session
+`data/captures/2026-08-06-gfam/GF-ScannerA-PutSpread.txt` (new) ·
+`data/bots_config_v2.csv` (**new — first ever rows**) · `docs/state.md` · `docs/session-log.md`.
+
+**HOLDING for Andy's commit. Phase A is INCOMPLETE — do not treat the family as started.**
+
+---
+
+## 2026-08-06 — Tracker: new Phase-4 group "Exploring test bots"
+
+**Andy's instruction, verbatim in substance:** add to the migration checklist an *"exploring test
+bots"* item — *"create a few bots that fire on every day, and usually trade so we can learn more
+about the mechanics and operations and testing of how OA fully operates."*
+
+**Done**
+- `bot-fleet-migration` tracker artifact: added a new group under **Phase 4**, *"Exploring test
+  bots — learn OA by running it"*, with one `[ANDY] todo` item. No existing item was touched;
+  artifact JS re-parsed clean before upload.
+- The item records the intent (learn OA by OPERATING it daily rather than probing it once), the
+  design (1-lot, deliberately high fill probability, so a no-trade day is itself a signal, and
+  explicitly **not** a research arm — no hypothesis, no ranking, no performance number ever read
+  from them), and the three constraints it collides with:
+  1. **Slot budget** — `build-plan.md` §2D is ≈18–20 plan bots + ≤8 Track B arms, **ceiling 28**
+     of the Pro 50; wave 1 is 22, so these either fit the 6 remaining headroom slots or need an
+     explicit *"amend the plan"*.
+  2. **Pre-registration** — Phase 4 governance is *"No entry, no restart"*. A bot that trades
+     daily needs either its own ledger entry or a **named exemption class for non-inferential ops
+     bots**, ruled by Andy and written into `pre-registration-ledger.md` §3.
+  3. **Ledger contamination** — their fills land in the working ledger after `LEDGER_START` and
+     must be tagged/excluded at `build_ledger.py`, the way `data/archive/` is excluded.
+- Also left open in the item: paper vs live-tiny, and whether they get their own Bot Group so the
+  drift detector can scope them.
+
+**Not done**
+- Nothing built in OA. No count, no names, no spec — this is a checklist entry, not an
+  authorization. The three constraints above are Andy's to rule before any build.
+
+### Files changed this session
+`docs/session-log.md` (this entry) + the `bot-fleet-migration` tracker artifact (needs Andy's
+visual confirmation per `CLAUDE.md` §9.1a).
