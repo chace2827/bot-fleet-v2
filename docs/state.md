@@ -284,6 +284,13 @@ entry is the other session's work, not an unexpected diff.
 > **exactly the `GF-SL100` arm's value** — a sentinel indistinguishable from a real arm, which
 > §1.3 forbids by name. The input was created with **Default Value = NONE** and the sentinel left
 > unimplemented. **Andy must rule (0.05, or re-spec) before any arm's `AUTOMATIONS` goes ON.**
+> ✅ **RULED 2026-08-06 (Andy, final), APPLIED same night — F-4 CLOSED.** SENTINEL-SL1 abandoned,
+> struck (`greenfield-family-spec.md` §1.3a). Default Value stays `NONE` (already true for
+> ScannerA, carried forward for ScannerB). Detection moves to config-level: new assert **A9**
+> (§8.3) — every arm's exit bot input BOUND and NON-EMPTY, checked before any `AUTOMATIONS`
+> toggle at Day-0; old **A4** struck as moot (nothing is ever stamped a sentinel that doesn't
+> exist). Residual cap recorded: an unbound/empty arm still closes via the 15:52 backstop, so
+> the failure mode is bounded, not a silent open-ended ride. No probe needed; build resumes.
 >
 > ⛔ **F-3 — THE TRIGGER IS NOT PART OF A SHARED LIBRARY OBJECT.** The Library editor carries the
 > tree only; a bot's Settings groups attached automations under `SCANNERS`/`MONITORS`, so trigger
@@ -309,6 +316,52 @@ entry is the other session's work, not an unexpected diff.
 > Also read first-hand and unchanged: `itmpaper` = `market` ✅ · `itmlive` = `auto` ✅ ·
 > `maxexits` = `0` · Bot Schedule `09:31`/`5`, `09:31`/`1`. `/bots` = **33 active bots**;
 > `My Automations` was exactly one row before the build, **two** after.
+
+## 📐 COMPARATIVE MACHINERY SPEC — WRITTEN 2026-08-07. The signing gate is SCOPED, not closed.
+
+`docs/comparative-machinery-spec.md` — **914 lines, sha256
+`d26a3960a860a2667f0641748cfb3e4989c0bfd4fad347a171ad0613cf61c3dc`**, on-device verified
+2026-08-07 in a separate `device_bash` call. ⚠️ **Treat the hash as a timestamp, not a fact.**
+Written to close `greenfield-family-spec.md` §12 row 13 / `track-b-arms-spec.md` §11 item 7
+(*"needs scoping as its own task before Day-0"*). **It edits no existing spec and authorizes no
+build.** Implementation is Claude Code's; the spec is hand-off-ready.
+
+⛔ **`pre-registration-ledger.md` §7 item 3 is NOT discharged by it.** Discharged for **Layer 1**
+(everything derivable from `data/trades.csv`); **NOT discharged for Layer 2** (everything needing
+exit attribution). Four findings, each verified first-hand this session:
+
+1. ⭐ **Gate conjunct (c) is UNCOMPUTABLE from any input that exists.** No exit-reason field in the
+   26-column export or the 30-column ledger; `tags` is bot-level, set at open; the ITM label is
+   unobserved (D4). A close-time + MFE/MAE proxy was **rejected** — 15:44 is a dead constant (S-4
+   gated the object C8 removed), it classifies PR-22's own 15:45 mechanic as NOT FIRED, the export
+   timezone is unverified (D3), and MFE/MAE **censor at the trigger**, so the test resolves on
+   slippage sign, which is monotone in `d_i`. **A missing input is specified instead:**
+   `data/exit_rows.csv`, per-position exit attribution read from the Trades list (spec §1.4).
+   ⛔ **New capture surface — Andy's, ruling G-1. Five declared criteria across all seven arms are
+   unfireable without it.**
+2. ⭐ **Gate conjunct (a) is INERT under conjunct (b).** Family's own arithmetic, n=100: SE=0.013416
+   → 95% ±0.0263R (matches §9's ±0.026R) → **Bonferroni K=6 ±0.0354R**. (b) demands ≥+0.035R while
+   (a) demands +0.015R, so **every sample passing (b) passes (a)** — and +0.035R is **2.4× the
+   largest effect this program has ever measured** (SL75, +0.0150R, n=1,254). This is
+   `greenfield-family-spec.md` §12 row 16 with the declared Bonferroni term included; **row 16
+   states ±0.026R and the operative figure is ±0.035R.**
+3. ⭐ **PR-19's degeneracy criterion cannot fire — CF-11 is not actually fixed.** Expected **1.2**
+   within-tolerance hits per 40-day window against a requirement of **20**, ANDed to a near-certain
+   limb; plus ill-posed (overlapping-window scan, no cadence) and uncomputable (stop-row count).
+   And **conjunct (c) is unpassable for PR-19 by construction** — an exact sign test needs
+   `n_fired ≥ 8` at α′=0.05/6, and the arm's hypothesis is that it never fires.
+4. ⭐ **Bonferroni K is under-corrected ~1.8×.** **Nine** declared decisions run against the single
+   `GF-QQQ-IC-Ride` control, not six. And **"S-1 puts Track B outside the greenfield family" is a
+   category error, withdrawn** — S-1 ruled **bot slots**, not error rates.
+
+⚠️ **Carried:** CF-1's own mitigation is itself uncomputable (the per-arm Market-priced / ITM close
+count needs the **pricing field**, which lives only in the Trades list), so **no ΔR in this family
+currently meets its own declared publication precondition.**
+
+**Adversarial record:** two subagents instructed to refute — **both succeeded**, 12 FATAL +
+26 MATERIAL, both answering **NO** to *"is the restated gate computable from the named inputs
+alone?"* Spec §7 records what survived; **spec §8 is a 16-item ruling queue (G-1…G-16) for Andy**,
+plus the already-open D2/D3/D4. **G-1 decides whether §7 item 3 can ever close.**
 
 ## ⭐ GREENFIELD FAMILY SPEC — WRITTEN + AMENDED ×4 2026-08-04. Design closed; SIX blocking checks before build.
 

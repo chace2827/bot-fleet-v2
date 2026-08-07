@@ -4609,3 +4609,117 @@ before/after hashes:
 `docs/pre-registration-ledger.md` · `docs/state.md` · `docs/session-log.md` (this entry).
 
 **HOLDING for Andy's commit.**
+
+
+---
+
+## 2026-08-07 — COMPARATIVE MACHINERY SPEC written (`docs/comparative-machinery-spec.md`, 914 lines)
+
+**Task.** Write the implementation spec for the cross-bot paired-ΔR analysis that
+`pre-registration-ledger.md` §7 item 3 makes a SIGNING gate — `greenfield-family-spec.md` §12
+row 13 and `track-b-arms-spec.md` §11 item 7, both of which say the machinery does not exist and
+needs scoping as its own task before Day-0. Product is a spec Andy hands to Claude Code verbatim.
+**No OA surface touched, no browser tool run, no git run, no existing spec edited.**
+
+**Sources read fresh from the device:** `research-loop-spec.md` §10/§10a (incl. the 2026-08-06
+RETIRE-SCOPED append) · `greenfield-family-spec.md` §9, §8.4, §4.4, §6.2, §11, §12 rows
+10/11/13/16 · `track-b-arms-spec.md` §9, §11 · `oa-export-schema.md` (full) ·
+`pre-registration-ledger.md` §2/§7/§8 and PR-02 · `evidence-standards.md` §4 (B3) · `state.md`
+· `CLAUDE.md` §4 · `scripts/build_ledger.py`, `scripts/daily.sh`, `scripts/research_loop.py` ·
+`data/trades.csv` header, `data/bots_config_v2.csv`, `data/ledger_meta.json`, `data/bots_meta.csv`.
+
+**Adversarial review — two subagents, instructed to refute, prompt: "is the restated gate
+computable from the named inputs alone?" BOTH SUCCEEDED. 12 FATAL + 26 MATERIAL.** Verdict on the
+central question from both, independently: **NO.** Every load-bearing objection was re-verified by
+this session directly on the device before adoption. §7 of the new spec is the record; §8 is the
+16-item ruling queue it produced.
+
+**The four findings that change what Andy is looking at:**
+
+1. ⭐ **Conjunct (c) of the restated gate is UNCOMPUTABLE from any input that exists.** The
+   26-column export and the 30-column ledger carry **no exit-reason field**; `tags` is bot-level
+   and set at open; the ITM-action label is unobserved (D4). A close-time + MFE/MAE proxy was
+   drafted and **rejected outright** — 15:44 is a dead constant (S-4 gated an object C8 removed),
+   it classifies PR-22's own 15:45 mechanic as NOT FIRED, the export timezone is unverified (D3),
+   and MFE/MAE **censor at the trigger**, so a threshold test resolves on the sign of the slippage,
+   which is monotone in `d_i`. **A missing input is specified instead** — `data/exit_rows.csv`,
+   a per-position exit-attribution capture from the Trades list, schema in §1.4. ⛔ New capture
+   surface = **Andy's, G-1.** Five declared criteria across all seven arms are unfireable without it.
+2. ⭐ **Conjunct (a) is INERT under conjunct (b) at the declared n and K.** Using the family's own
+   arithmetic (SD(R)≈0.30, ρ≈0.90, n=100): SE = 0.013416; 95% half-width **±0.0263R** (matches
+   §9's stated ±0.026R); **Bonferroni K=6 → ±0.0354R**. So (b) demands mean(d) ≥ +0.035R while
+   (a) demands +0.015R — **every sample passing (b) passes (a) automatically, and +0.035R is 2.4×
+   the largest effect this program has ever measured** (SL75, +0.0150R, n=1,254). This is §12 row
+   16 with the declared Bonferroni term included; **row 16 states ±0.026R and the operative figure
+   is ±0.035R**. `mde_fam` is now mandatory on every verdict.
+3. ⭐ **PR-19's degeneracy criterion cannot fire, and CF-11 is not actually fixed.** Paired daily
+   SD = 0.30·√0.20 ≈ 0.134R ⇒ P(|d| ≤ 0.005) ≈ 0.030 ⇒ **expected 1.2 hits in 40 days against a
+   requirement of 20**, ANDed to a near-certain limb. Also ill-posed (overlapping-window scan, no
+   cadence, "consecutive" undefined — and a rolling scan collides with §10a item 2's no-nightly-
+   gate rule) and uncomputable (stop-row count). Separately, **conjunct (c) is unpassable for PR-19
+   by construction**: an exact two-sided sign test needs n_fired ≥ 8 at α′=0.05/6, and the arm's
+   hypothesis is that it never fires — CF-11's own defect reintroduced one layer up, in the PASS
+   gate this time.
+4. ⭐ **K is under-corrected ~1.8×, and the obvious 6-vs-5 question is the small end of it.**
+   Enumerating decisions actually taken against the single `GF-QQQ-IC-Ride` control across the
+   named documents gives **nine** (five arm ΔRs + PR-16's worst-condor test + PR-19's degeneracy
+   equivalence + PR-21 K1 + PR-22 K1), not six. Relatedly: **"S-1 puts Track B outside the
+   greenfield family" is a category error and is withdrawn** — S-1 ruled **bot slots**, not error
+   rates, and both Track B arms declare the same control, day-series and entry automations.
+
+**Also carried, each named in §7:** CF-1's own mitigation is itself uncomputable (the per-arm
+Market-priced/ITM close count needs the **pricing field**, which lives only in the Trades list) —
+so **no ΔR in this family currently meets its own declared publication precondition**; the
+`expired` exclusion is a row-level rule on a group-level unit and under C8 mixed-status condors are
+the *designed* shape for every early-exit arm (X-1 rules it group-level, exclude only all-expired,
+flagged G-4); `d` is **not** zero-inflated in a between-bot contrast so the drafted BCa rationale
+was false and is struck; the n≥60 kill is a one-sided fixed-n interim look on the gate's own
+vector (§10a item 4 forbids it — the engine emits an always-valid confidence sequence instead);
+`PAIR_WINDOW_S = 180` can silently delete a day for the **whole family** on fast days; and
+PR-14…PR-20 have **no GATE EVAL DATE field**, so the engine refuses to emit a verdict for them.
+
+**Design decisions recorded:** engine reads the **ledger, not the export** (re-reading the export
+re-implements four correct things and re-opens the §5 bug class); resample unit = **the day**;
+BCa with **B ≥ 200,000** for the family-adjusted endpoint (at α′=0.05/6 the raw endpoint is order
+statistic ~42 of 10,000, or the 4th after the BCa shift); block bootstrap **withdrawn** (gap-deleted,
+arm-dependently-gapped index); `ci_fam_*` in the verdict object and `ci95_*` in a `diagnostics`
+block flagged `NOT_A_GATE`; `risk` gets a **second witness** re-derived from leg strikes;
+`trade_id` is **never persisted** (regenerated per rebuild); nine hard refusal rules.
+**Standalone — NOT wired into `daily.sh`**, and the reason is stated: `research_loop.py` is
+`0.1.0-DRAFT` with three fatal defects and stays unwired, and a second research engine in the
+pipeline beside it invites the two to be run and quoted as a pair.
+
+**Validation fixtures — five, every one anchored on VERBATIM real capture rows** from
+`data/captures/oa_export_positions_2026-07-30.csv` (sha256 `dca69ada…fcadc`), asset status
+identical to `data/execution_audit.csv`: a **test asset, never a reporting input**. Assertions are
+on VALUES: `R_condor == 18/192 == 0.09375` exactly and **≠ mean(leg ror) == 0.047641** (the
+wrong-answer assertion, 50.8% understatement); `R == 756/4900 == 0.154285714285714` and
+`d(2026-03-24) == 0.060535714285714`, both to 1e-9, on a real **quantity=28** row so the
+×100×quantity bug class shows as a factor of 28; `premium == −700` vs `credit == 0.25`;
+`expired == 154 / closed == 1232 / total == 1386`; `n_fired == 7 → INCAPABLE`, not FAIL; and
+`mde_fam == 0.035` asserted as a number so a future K or B change fails a test rather than a review.
+
+**§8 hands Andy 16 gated rulings (G-1…G-16)**, plus two dependencies already open elsewhere: D3
+(export/backstop timezone — no wall-clock predicate is safe until it is answered) and D2/D4
+(`itmlive = market`, and whether the ITM action appears in a Trades list and under what label).
+**G-1 is the one that decides whether §7 item 3 can ever close.**
+
+**⚠️ The signing gate is NOT discharged by this document.** It is discharged for Layer 1 (everything
+derivable from the ledger) and explicitly **not** for Layer 2 (everything needing exit attribution),
+with the missing input named, schema'd and priced. That is the honest state and the spec says so in
+its own opening.
+
+**Verification.** File written via `device_commit_files`, then verified in a **separate**
+`device_bash` call — never the write tool's response (`CLAUDE.md` §9.1a):
+`docs/comparative-machinery-spec.md` = **914 lines**, sha256
+`d26a3960a860a2667f0641748cfb3e4989c0bfd4fad347a171ad0613cf61c3dc`, single-match greps confirmed on
+the §8 heading, the A-5 fixture value and the A-15 `mde_fam` value. This log entry appended after a
+fresh re-read of `session-log.md` with a compare-and-swap on sha256
+`ab8a96ef…984983e` and a tail assertion on `**HOLDING for Andy's commit.**` — a concurrent session
+was editing this file.
+
+### Files changed this session
+`docs/comparative-machinery-spec.md` (**NEW**) · `docs/state.md` (pointer block only) ·
+`docs/session-log.md` (this entry).
+
+**HOLDING for Andy's commit.**
