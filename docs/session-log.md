@@ -5835,3 +5835,84 @@ after that content, not over it (verified: pre-append sha
 `e0bb380cceb23155e525bf8474e1e312eeac1842fbe3da8ada06cadff40b1988` @ 5704 lines → post-append
 `22985e244b705941a9058d36e291de4a489564f51010386a0b5cb3c3241a24e7` @ 5831, delta +127, tail-assert on
 the final line). Nothing above it was modified.**
+
+---
+
+## 2026-08-07 — E-1/E-2/E-3 applied: OPS/Lab third allocation ruled, OPS class added, ledger-exclusion hard precondition recorded. Doc-only, no OA, no git.
+
+**Trigger.** Andy: *"Andy signed E-1/E-2/E-3 on 2026-08-07 (~14:40 ET). Apply."* — three slots of
+`exploratory-bots-design-2026-08-07.md` §3, drafted the prior entry this same day and left
+explicitly unruled (*"Not done / not claimed: No decision ruled and no other file edited"*).
+
+**What was applied — all three "amend the plan," Andy's explicit words, no build performed.**
+
+1. **E-1 — SLOT A, slot budget.** `build-plan.md` §2D gains `🔓 AMENDMENT 2026-08-07`: a third
+   named allocation, `≤2 Lab ops slots`, separate from the ≈18–20 plan-bot count and from Track
+   B's ≤8 — mirroring how **S-1** separated Track B. **Ceiling 28 → 30.** Wave 1 becomes 24 of 50;
+   full spend 30 of 50. Both costs the design doc flagged are carried forward, not resolved: C12's
+   `[FIRST-HAND, UNCORROBORATED]` residual is materially more likely to bite (30 + ~23 archives =
+   53 > 50 under the pessimistic reading), and the whole arithmetic stays provisional on the OA
+   restore landing — `/bots` still reads `0 active bots` at time of writing.
+2. **E-2 — SLOT B, pre-registration.** `pre-registration-ledger.md` gains, exactly per the design
+   doc's drafted text: new **§2a** (the ops-class template — `HYPOTHESIS` as an INSTRUMENT
+   hypothesis never a market one, `MECHANISM`/`SAMPLE TARGET`/`KILL CRITERION` declared `n/a` per
+   PR-20's stated-exemption pattern, and a new **`PHASE LOG`** field, ops-class only) and
+   guardrails **G1–G10** (publication interdict enforced by G2's code-not-intent mechanism = E-3;
+   never an arm/control; no shared Library object; paper only; sizing declared once per phase;
+   account-wide probes separately gated; phases declared before they start; deliberate-failure
+   phases named and restored; retirement the default). A new **§3 roster row** (Group E, ≤2,
+   entries at new placeholder **§6a** — no bot named or entered yet), propagated to the ceiling in
+   §1/§3/§7 (28 → 30, dated banners, originals left standing per convention). **No entry, no
+   restart applies to this class exactly as to every other** — it defines a template, it signs
+   nothing.
+3. **E-3 — SLOT C, ledger contamination.** `exploratory-bots-design-2026-08-07.md` §3.3 gains its
+   RULED banner: the recommended mechanism is adopted, **and** recorded as a **HARD
+   PRECONDITION** — `build_ledger.py` exclusion (the `bots_meta.csv` `ops_class` column,
+   pre-pairing partition, FATAL leak assertion, receipt extension) **+** `a_series` scoping
+   (`_a4b`/`_a6` skip the ops set, reported not silent) **+** Lab group/tag fencing (group `Lab`
+   set at creation per §3.5, tag `ops` as cohort handle) — **all** implemented **and** verified
+   **before any Lab bot's `AUTOMATIONS` toggle goes ON.** No exception, no partial credit.
+   **Nothing was implemented this session** — the implementation is a queued Claude Code task
+   (Pro-tier, fixtures per house style); `execution_audit.py` stays FROZEN, unedited.
+
+Also updated: the design doc's top disclaimer and its `## 3` "nothing below is decided" line, both
+struck-and-corrected in place (original left standing) to point at the per-slot RULED banners
+rather than re-asserting they're undecided. `state.md` gets a new `⭐ E-1 / E-2 / E-3 APPLIED`
+block up top and its `Last updated` line moved to today, citing this entry.
+
+**Method.** Anchored `Edit` against a freshly staged device copy of each file (staged
+2026-08-07, this session); every insertion is additive or a struck-and-corrected line, per
+`CLAUDE.md` §5's doc-edit convention — nothing pre-existing was deleted. Written back via
+`device_commit_files`, then verified by a **direct `device_bash` read** of the file on-device
+(never a stage-back), sha256 + `wc -l` + anchored single-match `grep`, per §9.1a.
+
+**Verification — direct device reads, post-write**
+```
+docs/build-plan.md                              363 lines  sha256 78bdf5e3d26f7097501622239b6e9ac70d5b2e83b531b239332e56e1b915f76d
+docs/pre-registration-ledger.md                1107 lines  sha256 3b37fa3cb91767fc8ae4c36e3eeed9b97d44fc0d0247a4c07ff9e4a65d659ba2
+docs/exploratory-bots-design-2026-08-07.md      782 lines  sha256 9ec56ba972cd03abcc11ae9b4fed463e035ebfb0a172819239809ed93641698a
+docs/state.md                                  1659 lines  sha256 22f61975c81b371807447fe151a0a0e356d3b078347d6e2944896b33fd7d2fd1
+```
+Anchored single-match greps confirmed present, each read fresh from the device: `ceiling 30` /
+`🔓 AMENDMENT 2026-08-07` in `build-plan.md`; `Lab ops bots` / `ceiling.*30` / `ADDED 2026-08-07`
+in `pre-registration-ledger.md` (roster row at its table, §2a header, §6a header, all present
+exactly once where checked); `RULED 2026-08-07` at all three slot headers (×3) plus the top
+disclaimer in `exploratory-bots-design-2026-08-07.md`; `E-1 / E-2 / E-3 APPLIED` in `state.md`.
+
+**Not done / not claimed**
+- ⛔ **No OA action of any kind.** `/bots` still reads `0 active bots`; the account remains
+  untouchable pending the restore.
+- ⛔ **No implementation of E-3's mechanism.** `build_ledger.py`, `a_series.py`,
+  `execution_audit.py` and `bots_meta.csv` are all **unchanged** — the hard precondition is
+  recorded, not built. Queued as a Claude Code task.
+- ⛔ **No Lab bot named, entered, or signed.** §6a is a placeholder pointing at the class
+  definition; the roster row exists, nothing under it does.
+- §3.4 (paper vs live-tiny) and §3.5 (Bot Group) remain design-doc **recommendations**, explicitly
+  **not** part of this signature — flagged as such in the doc's new top banner.
+
+### Files changed this session
+`docs/build-plan.md` · `docs/pre-registration-ledger.md` ·
+`docs/exploratory-bots-design-2026-08-07.md` · `docs/state.md` · `docs/session-log.md` (this
+entry). No CSV, no script, no OA action, **no git in any form**.
+
+**HOLDING for Andy's commit.**

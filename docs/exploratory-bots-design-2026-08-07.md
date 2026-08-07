@@ -5,6 +5,13 @@ taken while writing it — the account is untouchable pending OA's roster restor
 2026-08-07 incident block). Every build step is gated on **two** things: the restore landing, and
 Andy ruling the three slots in §3.*
 
+> ### 🔓 ALL THREE SLOTS RULED 2026-08-07 (~14:40 ET) — Andy, E-1/E-2/E-3
+> §3.1 SLOT A, §3.2 SLOT B, and §3.3 SLOT C are each ruled — see the banner at the top of each
+> subsection. **Still nothing is built.** The build gate is now: E-3's hard precondition (§3.3 —
+> the three exclusion surfaces implemented and verified) **and** the OA restore landing **and**
+> Andy's go. §3.4 (paper vs live-tiny) and §3.5 (Bot Group) remain **recommendations only, not
+> ruled** — they were not part of this signature.
+
 ---
 
 ## 0. What this document is
@@ -343,11 +350,23 @@ per-side asymmetry or anything requiring a condor (§1.4), and do not settle §1
 
 ## 3. The three governance constraints — RULING SLOTS
 
-⛔ **Nothing below is decided. Each slot states the arithmetic or the text, gives a recommendation,
-and stops.** `CLAUDE.md` §5: decisions that change *what gets built* require an explicit
-*"amend the plan"* from Andy.
+~~⛔ **Nothing below is decided. Each slot states the arithmetic or the text, gives a
+recommendation, and stops.** `CLAUDE.md` §5: decisions that change *what gets built* require an
+explicit *"amend the plan"* from Andy.~~
+**🔓 RULED 2026-08-07 — all three slots decided, Andy's explicit "amend the plan."** Each slot
+below still states the arithmetic/text and the recommendation as originally written; the ruling
+banner at the top of each subsection records what Andy adopted. Left standing per this document's
+own §0.2 evidence convention.
 
 ### 3.1 SLOT A — slot budget
+
+> ### 🔓 RULED 2026-08-07 (~14:40 ET) — Andy, signing E-1/E-2/E-3 together
+> **Adopted as recommended: a third named allocation, `≤2 Lab ops slots`, separate from the plan-
+> bot count and from Track B. Ceiling 28 → 30.** Wave 1 becomes 24 of 50; full spend 30 of 50.
+> Applied to `build-plan.md` §2D as `🔓 AMENDMENT 2026-08-07` (E-1) and propagated to
+> `pre-registration-ledger.md` §1/§3/§7. Both costs below are accepted as carried, not resolved:
+> C12's residual is materially more likely to bite, and the whole arithmetic stays provisional on
+> the OA restore landing and Andy verifying the roster count.
 
 **The arithmetic, from the numbers as they stand.**
 
@@ -399,6 +418,14 @@ second.
    exist.
 
 ### 3.2 SLOT B — pre-registration
+
+> ### 🔓 RULED 2026-08-07 (~14:40 ET) — Andy, signing E-1/E-2/E-3 together
+> **Adopted as recommended, exactly as drafted below: the named "E — Lab ops bots" roster row plus
+> the new §2a ops-class template (three `n/a` fields, the new `PHASE LOG` field, guardrails
+> G1–G10).** Applied to `pre-registration-ledger.md` as new §2a and a new §3 roster row
+> (🔓 ADDED 2026-08-07, E-2), plus a placeholder §6a — no bot is named or entered yet. **No entry,
+> no restart applies to this class exactly as to every other**; the class defines the template,
+> it does not pre-sign anything.
 
 **The rule the class must be written against**, `pre-registration-ledger.md` header:
 
@@ -463,6 +490,18 @@ signature — a new §3 roster row plus a new §2a:
 > | **G10** | ⛔ **Retirement is the default.** Each Class-S unknown is struck from the bot's phase list once answered; when the phase list empties, the bot is archived and its slot returns. An ops bot with no open phase is not earning its slot. |
 
 ### 3.3 SLOT C — ledger contamination
+
+> ### 🔓 RULED 2026-08-07 (~14:40 ET) — Andy, signing E-1/E-2/E-3 together
+> **Adopted as recommended mechanism (below), AND recorded as a HARD PRECONDITION:** the three
+> exclusion surfaces — **`build_ledger.py` exclusion** (the `bots_meta.csv` `ops_class` column +
+> partition + FATAL leak assertion + receipt, items 1–5 below), **`a_series` scoping** (`_a4b` and
+> `_a6` skip the ops set, reported not silent, item 6 below), and **Lab group/tag fencing** (group
+> `Lab` set at creation per §3.5, tag `ops` as the cohort handle, enforcing guardrails G3/G4) —
+> must **all** be **implemented and verified** before **any** Lab bot's `AUTOMATIONS` toggle goes
+> ON. No exception, no partial credit — one surface unverified holds the whole class OFF.
+> **Nothing here is implemented by this ruling.** The implementation is a **queued Claude Code
+> task** (Pro-tier, fixtures per house style); this document authorizes the design, not the code.
+> `execution_audit.py` stays **FROZEN** and unedited, per its own pin.
 
 **The problem, precisely.** `build_ledger.py` has **no bot, tag or group filter of any kind**. Its
 only exclusion is the temporal cutover on `open_date`; `data/archive/` is excluded not by code but

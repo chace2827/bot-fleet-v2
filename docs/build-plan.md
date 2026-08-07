@@ -121,7 +121,8 @@ Validated builds with negligible or specially-treated history. No clone, no spec
 - **Optional 1-lot canary** whose PT should fill every single day. If it stops filling, the exit engine died.
 
 **End state: ≈18–20 plan bots plus ≤8 pre-registered Track B arms
-(`research-loop-spec.md` §10, signed), ceiling 28.**
+(`research-loop-spec.md` §10, signed) plus ≤2 Lab ops slots (a third, separate allocation —
+🔓 AMENDMENT 2026-08-07 below), ceiling 30.**
 **Accounting: 35 on the roster = 20 archived + 2 deleted + 4 cloned (originals archived) + 9 untouched.**
 Confirmed against the 2026-07-30 capture. No remainder.
 
@@ -201,6 +202,44 @@ Confirmed against the 2026-07-30 capture. No remainder.
 > Ruled 2026-08-04 (`decision-memo-2026-08-04.md` Decision 4, draft (c)); applied 2026-08-06 per
 > `decision-card-2026-08-06.md` ruling 1a — reopens only if the UI check (does the preset picker
 > accept a non-Exit-Option criterion — presumed no, not yet directly observed) ever contradicts.
+
+> ### 🔓 AMENDMENT 2026-08-07 — "amend the plan", Andy's explicit words (E-1)
+> **This row previously read:** *"End state: ≈18–20 plan bots plus ≤8 pre-registered Track B arms
+> (`research-loop-spec.md` §10, signed), ceiling 28."* **A third, separate allocation is added:
+> `OPS/Lab ≤2 bots`. Ceiling 28 → 30.**
+>
+> **Why.** `exploratory-bots-design-2026-08-07.md` §3.1 SLOT A found that the 2 Lab ops bots Andy
+> asked for (`session-log.md` 2026-08-06, *"create a few bots that fire on every day… so we can
+> learn more about the mechanics and operations and testing of how OA fully operates"*) do not fit
+> under the existing ceiling: *"plan bots (18–20) + Track B (8) = 26–28 ← the ceiling IS this sum…
+> 2 ops bots do not reliably fit under ceiling 28."* The design doc's recommendation — mirror what
+> **S-1** did for Track B, a **third named allocation rather than a raid on the second** — is
+> adopted as stated:
+>
+> > *"`≤2 Lab ops slots`, a separate allocation. Ceiling 28 → 30. Wave 1 becomes 24 of 50; full
+> > spend 30 of 50."*
+>
+> **Operative figures:** ≈18–20 plan bots · ≤8 Track B arms · **≤2 Lab ops slots** · **ceiling 30**.
+> Wave 1 spend is now **24 of 50**; full spend **30 of 50** against the Pro 50-bot cap (active-count
+> reading, `§2D` `🔓 SCOPING AMENDMENT 2026-08-05`, C12 discharged).
+>
+> **⚠️ Cost stated, not buried — carried from `exploratory-bots-design-2026-08-07.md` §3.1:**
+> 1. **It makes C12's residual more likely to bite.** C12 was discharged on a footer read that is
+>    `[FIRST-HAND, UNCORROBORATED]` — observed with **one** archived bot where the sweep archives
+>    **twenty**. Under the pessimistic reading, 30 + ~23 archives = **53 > 50**. The pre-declared
+>    reopen condition — *"if a bot build ever fails at the cap despite archived bots existing, C12
+>    reopens"* — becomes materially likelier. 2 slots is the cost of that.
+> 2. **This arithmetic is provisional on the restore.** `/bots` read **`0 active bots • 50 left in
+>    your plan`** against an expected 41 at time of writing (`state.md` 2026-08-07 incident block).
+>    Every number above describes a fleet that does not presently exist until the restore lands and
+>    Andy verifies the roster count.
+>
+> **This amendment scopes a count. It authorizes no build.** No Lab bot's `AUTOMATIONS` may go ON
+> until **E-3**'s hard precondition clears — `build_ledger.py` exclusion + `a_series` scoping + Lab
+> group/tag fencing, implemented and verified (`exploratory-bots-design-2026-08-07.md` §3.3,
+> queued as a Claude Code task) — **and** the OA restore lands, **and** Andy's go.
+> Ruled by Andy 2026-08-07 (~14:40 ET), signing E-1/E-2/E-3 together. Design doc:
+> `exploratory-bots-design-2026-08-07.md` §3.1 SLOT A.
 
 ---
 

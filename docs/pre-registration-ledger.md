@@ -11,8 +11,9 @@
 >
 > **No entry, no restart.** A bot without a signed entry stays OFF on Day-0, regardless of how
 > ready it looks. This is `build-plan.md` §5 and `CLAUDE.md` §5, and it applies to all ~~≈18–20
-> active bots~~ **≈18–20 plan bots plus up to 8 pre-registered Track B arms — ceiling 28** —
-> **including the nine untouched ones**, and including every Track B arm.
+> active bots~~ ~~**≈18–20 plan bots plus up to 8 pre-registered Track B arms — ceiling 28**~~
+> **≈18–20 plan bots plus up to 8 pre-registered Track B arms plus up to 2 Lab ops bots — ceiling
+> 30** — **including the nine untouched ones**, every Track B arm, and every Lab ops bot.
 >
 > > **📝 SCOPED 2026-08-05 on Andy's explicit release — `build-plan.md` §2D's
 > > `🔓 SCOPING AMENDMENT 2026-08-05` ("amend the plan", Andy's explicit words).** §2D now reads
@@ -24,6 +25,13 @@
 > > reopen condition at `track-b-arms-spec.md` §3.2). **Wave 1 is 22 of 50.**
 > > ⛔ **The amendment scopes a count. It authorizes no build** — and it changes nothing about
 > > *this* document's rule: **no entry, no restart**, for plan bots and Track B arms alike.
+> >
+> > > **🔓 AMENDED 2026-08-07 — `build-plan.md` §2D's `🔓 AMENDMENT 2026-08-07` (E-1).** A third,
+> > > separate allocation — **`≤2 Lab ops bots`, ceiling 28 → 30** — citing
+> > > `exploratory-bots-design-2026-08-07.md` §3.1 SLOT A. Wave 1 becomes **24 of 50**; full spend
+> > > **30 of 50**. Class and entries: §2a/§6a (added same date, E-2). ⛔ Still scopes a count
+> > > only; still no entry, no restart, for Lab ops bots too — and E-3's hard precondition (§2a)
+> > > gates any Lab bot's `AUTOMATIONS` regardless of signing.
 
 ---
 
@@ -90,11 +98,61 @@ SIGNED           <date> ................................  ← blank until Andy s
 
 ---
 
-## 3. The roster — ≈18–20 plan bots, plus ≤8 Track B arms. Ceiling 28.
+## 2a. Ops-class entries
+
+> ### 🔓 ADDED 2026-08-07 — "amend the plan", Andy's explicit words (E-2)
+> Andy signed **E-2** 2026-08-07 (~14:40 ET), together with E-1 and E-3. This section is added
+> **exactly per** `exploratory-bots-design-2026-08-07.md` §3.2 SLOT B's drafted text, proposed for
+> "a named class that follows PR-20's pattern exactly" — write `n/a`, state the exemption in the
+> entry, state its retirement condition, never drop the entry. Nothing existing in this document
+> is changed by this section; it is additive.
+
+An **ops-class** bot is one run to observe the *platform*, never to estimate a *return*. It uses
+the §2 template unchanged, with three fields declared `n/a` and a fourth added:
+
+- **`HYPOTHESIS`** — an **INSTRUMENT** hypothesis, in PR-20's sense: what the bot will let us
+  observe that no other bot can. **Never a market hypothesis.**
+- **`MECHANISM`** — `n/a — not run for edge.` ⚠️ And, unlike PR-20, **P/L is not expected to be
+  flat**: e.g. a `dstop`-instrument bot loses money by design. State that in the entry so it
+  cannot later be mistaken for a losing bot nobody killed.
+- **`SAMPLE TARGET`** — `n/a — the daily observation is the output.`
+- **`KILL CRITERION`** — none on P/L, by design and stated. Killed instead on **instrument
+  failure**: no usable observation for K consecutive sessions where the cause is the bot rather
+  than the platform. Plus a hard `RETIREMENT DATE`.
+- **`PHASE LOG`** **(new field, ops-class only)** — every configuration change, dated, with the
+  phase ID and the unknown it targets. **This field is the class's whole justification for being
+  mutable**, and its absence is the `HedgeD` failure: an undocumented substitution at a platform
+  limit, where *"the config record and the tree agreed with each other and both were wrong about
+  the intent."*
+
+**Guardrails G1–G10 — the conditions on the class.**
+
+| | Guardrail |
+|---|---|
+| **G1** | ⛔ **Publication interdict.** No number from an ops-class bot may enter any Exp(R), any arm or variant comparison, any funding decision, any tiered T1–T5 claim, or any brief section other than the ops/mechanics section. |
+| **G2** | **G1 is enforced in code, not by intent** — the `build_ledger.py` ledger exclusion (`exploratory-bots-design-2026-08-07.md` §3.3; implementation queued, `CLAUDE.md` §5, E-3). A rule with no mechanism is the failure class this project keeps re-learning. |
+| **G3** | ⛔ **Never an arm, never a control.** Ops bots enter no tournament, are matched to nothing, and are deliberately non-matched to each other. `DUPLICATE_ARM` must not scope them, and no A-series assert may read them (§3.3). |
+| **G4** | ⛔ **No shared Library object, ever.** Every ops automation is a per-bot copy. `oa-platform-reference.md` **OA-0682**: an edit *"will flow through anywhere the automation is used."* |
+| **G5** | **Paper only.** Promotion to live requires a separate ruling (`exploratory-bots-design-2026-08-07.md` §3.4). |
+| **G6** | **Sizing declared once per phase**, with the reason in writing — not by preference. |
+| **G7** | ⛔ **Account-wide probes are separately gated.** `maxexits`, the ITM actions, the Bot Schedule and notification settings are account-wide; any phase touching them does not run without its own ruling. |
+| **G8** | **Every phase is declared and dated in `PHASE LOG` BEFORE it starts.** An undeclared configuration change voids that phase's observations. |
+| **G9** | **Deliberate-failure phases** (`EXIT OPTIONS` OFF; induced errors) require a named window, a named expected signature, and a restore step in the same declaration. |
+| **G10** | ⛔ **Retirement is the default.** Each unknown is struck from the bot's phase list once answered; when the phase list empties, the bot is archived and its slot returns. An ops bot with no open phase is not earning its slot. |
+
+⛔ **E-3 hard precondition** (`exploratory-bots-design-2026-08-07.md` §3.3, ruled 2026-08-07): no
+Lab bot's `AUTOMATIONS` may go ON until the `build_ledger.py` exclusion, the `a_series` scoping
+(`_a4b`/`_a6`), and the Lab group/tag fencing are **all implemented and verified**. Implementation
+is a queued Claude Code task; nothing above authorizes it to be built.
+
+---
+
+## 3. The roster — ≈18–20 plan bots, plus ≤8 Track B arms, plus ≤2 Lab ops slots. Ceiling 30.
 
 ~~Per `build-plan.md` §2, under decision freeze: **4 clones + 9 untouched + 5–7 fresh.**~~
 Per `build-plan.md` §2 as amended 2026-08-05: **4 clones + 9 untouched + 5–7 fresh
-= ≈18–20 plan bots**, **plus ≤8 pre-registered Track B arms** as a separate allocation.
+= ≈18–20 plan bots**, **plus ≤8 pre-registered Track B arms** as a separate allocation, **plus ≤2
+Lab ops slots** as a third, separate allocation (🔓 amended 2026-08-07, banner below).
 
 | Group | Count | Entries below |
 |---|--:|---|
@@ -103,7 +161,17 @@ Per `build-plan.md` §2 as amended 2026-08-05: **4 clones + 9 untouched + 5–7 
 | **D — fresh builds** | 5–7 | §6 |
 | **plan-bot subtotal** | **≈18–20** | |
 | **Track B arms** (separate allocation, `research-loop-spec.md` §10) | **≤8** | `track-b-arms-spec.md` §9 — PR-21 / PR-22 proposed, wave-1 spend **2** |
-| **ceiling** | **28** | |
+| **E — Lab ops bots** (non-inferential; separate allocation, `exploratory-bots-design-2026-08-07.md` §3.1) | **≤2** | §6a |
+| **ceiling** | **30** | |
+
+> ### 🔓 AMENDED 2026-08-07 — "amend the plan", Andy's explicit words (E-1, propagated here)
+> **The `ceiling` row previously read `28`; no `E — Lab ops bots` row existed.** `build-plan.md`
+> §2D now carries a `🔓 AMENDMENT 2026-08-07` block adding a third, separate allocation —
+> **`OPS/Lab ≤2 bots`, ceiling 28 → 30** — citing `exploratory-bots-design-2026-08-07.md` §3.1
+> SLOT A. Wave 1 becomes **24 of 50**; full spend **30 of 50**. The Lab-ops entries themselves are
+> §2a/§6a (added same date, E-2). ⛔ **This scopes a count and authorizes no build** — every Lab
+> bot needs its own signed entry here before it may be switched on, **and** E-3's hard
+> precondition (§2a) must clear first.
 
 > ### 📝 SCOPED 2026-08-05 — S-2's count amendment propagated here on Andy's explicit release
 > **This heading and line previously read `≈18–20 active bots` / `4 clones + 9 untouched + 5–7
@@ -946,10 +1014,29 @@ SIGNED           ..............................
 
 ---
 
+## 6a. Group E — Lab ops bots (≤2)
+
+> ### 🔓 ADDED 2026-08-07 — "amend the plan", Andy's explicit words (E-2)
+> Class defined in §2a. **No specific bot is named or entered here yet** —
+> `exploratory-bots-design-2026-08-07.md` §1/§2 catalogs the candidate instruments (e.g. an
+> R2/C10 `dstop`-unit instrument, an R3 `dprofit` instrument) but §8 open items leaves final
+> selection, naming and IDs to build time, same as Group D's fresh builds. Entries land here per
+> the §2 template as amended by §2a, each with a signed `PHASE LOG` (guardrail G8) before its
+> first phase starts. ⛔ **No entry, no restart applies to this group exactly as to every other**
+> — §1's exemption pattern is PR-20's, not a waiver.
+>
+> ⛔ **Gated ahead of any entry becoming signable:** E-3's hard precondition — `build_ledger.py`
+> exclusion + `a_series` scoping + Lab group/tag fencing, implemented and verified
+> (`exploratory-bots-design-2026-08-07.md` §3.3, Claude Code task, not yet queued as implemented)
+> — and the OA restore landing, and Andy's go.
+
+---
+
 ## 7. Signing checklist — Day-0
 
-For each of the ~~≈18–20~~ **≈18–20 plan bots and every Track B arm — up to 28 in total**
-(scoped 2026-08-05; `build-plan.md` §2D's `🔓 SCOPING AMENDMENT 2026-08-05`, §3 above), in this
+For each of the ~~≈18–20~~ **≈18–20 plan bots, every Track B arm, and every Lab ops bot — up to
+30 in total** (scoped 2026-08-05, amended 2026-08-07; `build-plan.md` §2D's
+`🔓 SCOPING AMENDMENT 2026-08-05` and `🔓 AMENDMENT 2026-08-07`, §3 above), in this
 order:
 
 1. **Config hash filled** from the bot's own capture file. Not from memory, not from

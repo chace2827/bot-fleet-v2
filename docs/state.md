@@ -2,7 +2,9 @@
 
 *The live facts. Updated whenever a stated fact changes (CLAUDE.md §9.1). Numbers live in
 `STATUS.md`; the plan in `docs/build-plan.md`; progress in the `bot-fleet-migration` tracker.
-Last updated 2026-08-06 (decision-card-2026-08-06.md — all seven ruling slots decided by Andy;
+Last updated 2026-08-07 (E-1/E-2/E-3 applied — see block below; supersedes the ceiling-28 /
+no-OPS-class facts in every section beneath this one, which are historical as of their own dates).
+Previously: 2026-08-06 (decision-card-2026-08-06.md — all seven ruling slots decided by Andy;
 gated propagation batch applied (G-1…G-6, U-1…U-4); double-testing RETIRE-SCOPED package applied;
 regime-change finding corrected (B3 already exists — slot 6 needs Andy's fresh read); greenfield
 build + mechanical sweep AUTHORIZED, deferred to a separate OA-touching session. NOTE: a second
@@ -10,11 +12,41 @@ session was editing `state.md`, `session-log.md` and `greenfield-family-spec.md`
 tonight — every edit here was applied against a freshly re-read device copy immediately before
 writing, so any content not authored by this session is that session's work, not an unexpected
 diff.
-Previously: 2026-08-05 part 2: the C0a probe — Architecture E CLEARED, C0a both clauses PASS,
+Earlier: 2026-08-05 part 2: the C0a probe — Architecture E CLEARED, C0a both clauses PASS,
 C5 PASS, C11/C4/C6 answered, C10 still blocking ARM-B1; earlier the same day: propagation sweep +
 the released gated batch — C12 and S-2 propagated to
 every surface, D-1 propagated, `research-loop-spec.md` corrected ×6, §8.4 step 1 corrected on
 explicit authorization; earlier the same day: R-edit package applied + edit-policy split).*
+
+## ⭐ E-1 / E-2 / E-3 APPLIED — 2026-08-07 (~14:40 ET signature, applied same session)
+
+Andy signed all three together, per `exploratory-bots-design-2026-08-07.md` §3's ruling slots.
+**Fleet is still 0 active bots, awaiting OA's roster restore** (incident recorded below/in
+`rebuild-contingency-2026-08-07.md`) — nothing here authorizes or performs a build.
+
+- **E-1 (SLOT A, slot budget) — RULED & APPLIED.** Third named allocation, `≤2 Lab ops slots`,
+  separate from plan bots and Track B. **Ceiling 28 → 30.** Wave 1 becomes 24 of 50; full spend
+  30 of 50. `build-plan.md` §2D gains `🔓 AMENDMENT 2026-08-07`. Cost carried, not resolved: C12's
+  residual is materially more likely to bite at 30 + ~23 archives; the whole arithmetic stays
+  provisional on the restore landing and Andy verifying the roster count.
+- **E-2 (SLOT B, pre-registration) — RULED & APPLIED.** `pre-registration-ledger.md` gains new
+  §2a (ops-class template: `HYPOTHESIS`/`MECHANISM`/`SAMPLE TARGET`/`KILL CRITERION` per PR-20's
+  `n/a`-with-stated-exemption pattern, plus a new `PHASE LOG` field) and guardrails G1–G10
+  (publication interdict, never an arm/control, no shared Library object, paper only, etc.), a new
+  §3 roster row (**Group E**, ≤2, entries at new placeholder §6a — no bot named yet), and the
+  ceiling propagated to §1/§3/§7. No entry, no restart applies to this class exactly as to every
+  other.
+- **E-3 (SLOT C, ledger contamination) — RULED, NOT IMPLEMENTED.**
+  `exploratory-bots-design-2026-08-07.md` §3.3 gains its RULED banner recording the HARD
+  PRECONDITION: **`build_ledger.py` exclusion + `a_series` scoping (`_a4b`/`_a6`) + Lab group/tag
+  fencing, all implemented and verified, before any Lab bot's `AUTOMATIONS` goes ON.** No
+  exception, no partial credit. Implementation is a **queued Claude Code task** — nothing was
+  built this session. `execution_audit.py` stays frozen, unedited.
+
+**Changed files this session:** `docs/build-plan.md`, `docs/pre-registration-ledger.md`,
+`docs/exploratory-bots-design-2026-08-07.md`, `docs/state.md` (this block),
+`docs/session-log.md`. Verification: direct `device_bash` sha256 + single-match grep per file,
+recorded in `session-log.md`'s entry for this session. **Uncommitted — Andy runs the commit.**
 
 ## 🔁 PROPAGATION SWEEP — 2026-08-05. Eight files reconciled to the 08-04/05 rulings.
 
