@@ -4776,3 +4776,77 @@ a tail assertion on `**HOLDING for Andy's commit.**` — a concurrent build sess
 `docs/pre-registration-ledger.md` · `docs/session-log.md` (this entry).
 
 **HOLDING for Andy's commit.**
+
+
+---
+
+## 2026-08-06 (late) — G-RULINGS CARD Group B ruled: G-11, G-10, G-9, G-8 applied (G-8 extended)
+
+**Task.** Andy ruled Group B of `docs/g-rulings-card-2026-08-07.md` (the four items gating ARM-B2 /
+PR-22 signing) and instructed direct application this session. Applied exactly: **G-11** IN —
+PR-21/PR-22 are statistically inside the greenfield Bonferroni family; ruling S-1 governs bot-slot
+allocation only, not error rates. **G-10** SWITCH — the family's multiplicity correction is now a
+joint day-bootstrap max-T across arms, replacing Bonferroni-across-6, declared before any data
+exists (`data/ledger_meta.json`: `export_rows 0`). **G-9** MOOT under G-10 — max-T needs no
+hand-set K, so the 6-vs-5-vs-9 question dissolves; recorded in the card sheet only, no other file
+touched for G-9 specifically. **G-8** SEQUENCE+CS — every `"CI entirely below 0 at n≥60"` kill
+line in `pre-registration-ledger.md`'s greenfield-family entries and both Track B K1s
+(`track-b-arms-spec.md` PR-21/PR-22) is amended, dated, original standing: the n≥60 read is now
+emitted as an always-valid confidence sequence, not a fixed-n CI, and the absolute kill cannot
+retire an arm before its own stamped GATE EVAL DATE; family-level and sentinel criteria
+(execution-integrity rules) are unaffected. **Group C remains unruled** — the sheet's C lines are
+untouched, still blank.
+
+**Files edited, each via anchored `device_bash` insertion with a pre-write single-match count
+assertion on the exact anchor text, then a post-write `device_bash` sha256 plus a single-match
+grep of the new text — never the write tool's response (`CLAUDE.md` §9.1a):**
+- `docs/g-rulings-card-2026-08-07.md` — the RULING SHEET's G-11/G-10/G-9/G-8 lines filled with
+  Andy's rulings, each dated 2026-08-06. Group A lines untouched; Group C lines left exactly as
+  drafted. sha256 `592e36c7525c445fd744a0c303142c83c1ffa5f29310bd41b81747ce58862cd5`.
+- `docs/pre-registration-ledger.md` — G-8 SEQUENCE+CS banners added to both greenfield-family
+  KILL CRITERION blocks in §6 (the 4-arm block and the hedge-tournament block), original text left
+  standing. sha256 `10e9b255c3c4ebfe8ff350f5594231f24050a8708d8e03484a9369a72d32be22`.
+- `docs/track-b-arms-spec.md` — G-8 SEQUENCE+CS banners added to PR-21's and PR-22's K1 kill lines;
+  a G-11 IN banner (cross-referencing G-10) added at the end of §6.3. sha256
+  `c1ac77af1c766f86bb083aad731792d33f454d58706d222cbfddccd102faa240`.
+- `docs/greenfield-family-spec.md` — G-10 SWITCH applied at four points: §9's COMPARATIVE CRITERION
+  (Bonferroni struck, max-T substituted, original left standing), the SAMPLE TARGET power note
+  (flagged as superseded, not recomputed — no new power figure invented), PR-19's 2026-08-06
+  appended note's stale cross-reference, and the Phase C step C4 checklist row. **EXTENDED, same
+  session, on Andy's explicit follow-up: G-8 SEQUENCE+CS banners added to all six PR-14…PR-19
+  `KILL CRITERION` blocks in §9** (the per-arm entries), dated, original standing — the n≥60 read
+  is now emitted as an always-valid confidence sequence and the absolute kill cannot fire before
+  each arm's own stamped GATE EVAL DATE; family-level and sentinel criteria unaffected. sha256
+  `a12b34a287e7a0f46ebd6ef943e4b5e766e28e83faa4494bff8119fa35db0041` (was
+  `930a2ace3dbeb7fda819662a8104ec603cdcb3f4726d3d98fc49dd9acba64203` before the extension).
+- `docs/comparative-machinery-spec.md` — dated RULED banners added at §3.2 (G-10, noting it
+  dissolves G-9 and flagging that `BONFERRONI_K`/`ci_fam_*` need restating under max-T —
+  implementation is Claude Code's) and §3.4 (G-11, noting the `k_basis` flag is resolved). sha256
+  `ccab3fce48612ec3f5ba26adc6cadc4eab6003785cce8704283e1adff60a2c43`.
+
+**Scope note — RESOLVED same session.** The flag above was put to Andy directly; his answer:
+*"Yes — G-8 propagates to greenfield-family-spec.md too. Same amendment, dated, original standing,
+on all six PR-14…PR-19 kill lines in §9 ... Same verification discipline."* Applied immediately
+after — see the `greenfield-family-spec.md` bullet above, now marked EXTENDED. Every one of
+G-5/G-13/G-7/G-8 has now touched all six PR-14…PR-19 per-arm `KILL CRITERION` blocks; no known
+propagation gap remains between the card's Group A/B rulings and those entries.
+
+**Not touched this session:** `docs/state.md` (shared with a concurrent build session); the
+engine implementation itself (`BONFERRONI_K`, `ci_fam_*`, `k_basis` — Claude Code's, per
+`CLAUDE.md` §7); OA (no browser tool run); git (no git command run, per instruction).
+
+**Verification.** This log entry appended after a fresh re-read of `session-log.md`'s tail and a
+compare-and-swap on sha256 `a6b8858fef9241bdbdbb4decd7ad3d2eede87d1b4bc083ebcdd4494ff3b82e0c`, plus
+a tail assertion on `**HOLDING for Andy's commit.**` — a concurrent build session shares this file.
+The G-8 extension above was applied with the same discipline: pre-write single-match count
+assertion on each of the six anchors, then a post-write `device_bash` sha256 (confirmed 6/6
+banners present via a single-match-per-arm grep) — never the write tool's response. This entry
+was then edited in place (not re-appended) to record the extension, itself compare-and-swapped on
+this entry's own prior sha256 immediately before the edit.
+
+### Files changed this session
+`docs/g-rulings-card-2026-08-07.md` · `docs/pre-registration-ledger.md` ·
+`docs/track-b-arms-spec.md` · `docs/greenfield-family-spec.md` ·
+`docs/comparative-machinery-spec.md` · `docs/session-log.md` (this entry).
+
+**HOLDING for Andy's commit.**

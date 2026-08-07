@@ -370,6 +370,11 @@ MECHANISM        Short-premium VRP on 0DTE. The arms share every other input, so
                  "quantity":1}`. Applies to all seven greenfield-family arms, PR-14…PR-20
                  (`greenfield-family-spec.md` C4, memory row).
 KILL CRITERION   Per arm: Exp(R) per condor < 0 with CI entirely below 0 at n≥60.
+                 📝 AMENDED 2026-08-06 (G-8, SEQUENCE+CS, ruled by Andy) — the n≥60 read
+                 above is emitted as an always-valid confidence sequence, not a fixed-n CI, and
+                 the absolute kill cannot retire an arm before its own stamped GATE EVAL DATE
+                 (§2 template). FAMILY-LEVEL and sentinel criteria (execution-integrity rules)
+                 are unaffected.
                  FAMILY-LEVEL (REPLACED 2026-08-05 — see the banner below this entry):
                  if a capture-diff ever shows two arms differing in MORE THAN ONE MECHANIC
                  (a trigger field and, if present, its own pricing sub-field), or if any of
@@ -478,6 +483,11 @@ KILL CRITERION   The tournament is VOID (not the bots) if any of hedge-research.
                  conditions fails: shared automation · one differing input proven by
                  capture-diff · same execution class · Range075 on every arm · a proof-of-fire
                  artifact identified in advance. Per arm: Exp(R) < 0, CI below 0, n≥60.
+                 📝 AMENDED 2026-08-06 (G-8, SEQUENCE+CS, ruled by Andy) — the n≥60 read
+                 above is emitted as an always-valid confidence sequence, not a fixed-n CI, and
+                 the absolute kill cannot retire an arm before its own stamped GATE EVAL DATE
+                 (§2 template). The tournament-VOID and sentinel criteria (execution-integrity
+                 rules) are unaffected.
 SAMPLE TARGET    n = 100 positions per arm.
 REVIEW DATE      Day-0 + 6 months.
 MAX LOSS         1 lot per arm.

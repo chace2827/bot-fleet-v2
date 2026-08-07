@@ -1158,7 +1158,9 @@ read before it may take a position.*
   family statistically tractable at all — see the power note below.
 - ⭐ **COMPARATIVE CRITERION** (added — the draft had only an absolute one; see §11-CF2):
   *Arm X beats the Ride control iff the paired per-condor ΔR (arm − control) has a bootstrap 95%
-  CI entirely above 0 after Bonferroni correction across the 6 arm-vs-control tests, on matched
+  CI entirely above 0 after ~~Bonferroni correction across the 6 arm-vs-control tests~~ **the
+  family's joint day-bootstrap max-T correction across arms (SWITCHED 2026-08-06, G-10, ruled by
+  Andy — declared before any data exists: `data/ledger_meta.json` `export_rows 0`)**, on matched
   days, at the declared n.* This is the form `pre-registration-ledger.md` PR-02 already uses
   (*"not better than the 11:00 arm's by ≥0.01 at n≥60 with non-overlapping bootstrap CIs"*).
 - **SAMPLE TARGET** n = 100 **matched days** per arm. ⚠️ **Declared with its power, not without
@@ -1166,7 +1168,9 @@ read before it may take a position.*
   on ΔR of **±0.026R** — against a largest-ever-measured effect in this program of **+0.0150R**
   (`state.md`, SL75, n = 1,254). **n = 100 is underpowered for the effects this program actually
   sees, by roughly 2–3×**, and reaching ±0.015R needs ~307 matched days paired, ~560 with
-  Bonferroni. n = 100 is therefore a **first-read** target, not a decision target; the
+  Bonferroni. ⚠️ **The Bonferroni-based figure above is superseded by G-10's switch to max-T
+  (2026-08-06) and has not been restated under the new correction — flagged, not recomputed.**
+  n = 100 is therefore a **first-read** target, not a decision target; the
   graduation gate is `build-plan.md` §5's, and it is not reachable inside six months.
 - **REVIEW DATE** Day-0 + 6 months, interim read at n = 60 matched days.
 - **MAX LOSS** 1 lot. Per-condor risk ≈ $200 gross per side less credit (≈$185 net) on a $2-wide
@@ -1231,6 +1235,10 @@ MECHANISM        Short-premium VRP on 0DTE QQQ, harvested by time decay with no 
                  §5.4 check C4 — RECORD WHICH ONE WAS USED BEFORE BUILD.
 KILL CRITERION   Exp(R) per condor < 0 with the CI entirely below 0 at n ≥ 60 condors.
                  Plus the family-level, liveness (inverted) and sentinel criteria above.
+                 📝 AMENDED 2026-08-06 (G-8, SEQUENCE+CS, ruled by Andy) — the n≥60 read above is
+                 emitted as an always-valid confidence sequence, not a fixed-n CI; the absolute
+                 kill cannot fire before this arm's own stamped GATE EVAL DATE (below).
+                 Family-level and sentinel criteria (execution-integrity rules) are unaffected.
 SAMPLE TARGET    n = 100 condors.
 REVIEW DATE      Day-0 + 6 months; interim at n = 60.
 GATE EVAL DATE   Day-0 + 6 months (relational; resolves to calendar at Day-0); interim look at
@@ -1259,6 +1267,10 @@ MECHANISM        Converts a probabilistic tail into a booked mid-day gain, tradi
                  close means this is "PT50 on either side closes the CONDOR", not per spread.
 KILL CRITERION   Exp(R) per condor < 0 with CI entirely below 0 at n ≥ 60. Plus family-level,
                  liveness and sentinel.
+                 📝 AMENDED 2026-08-06 (G-8, SEQUENCE+CS, ruled by Andy) — the n≥60 read above is
+                 emitted as an always-valid confidence sequence, not a fixed-n CI; the absolute
+                 kill cannot fire before this arm's own stamped GATE EVAL DATE (below).
+                 Family-level and sentinel criteria (execution-integrity rules) are unaffected.
 GATE EVAL DATE   Day-0 + 6 months (relational; resolves to calendar at Day-0); interim look at
                  n=60.
 VERIFICATION     A 50% profit-taking row in the first new position's Trades list.
@@ -1315,6 +1327,10 @@ MECHANISM        Ratchets a floor under an open profit instead of closing flat.
 KILL CRITERION   Exp(R) per condor < 0 with CI entirely below 0 at n ≥ 60. Plus family-level,
                  liveness and sentinel. Plus: worst-condor-R worse than the Ride control's at
                  n ≥ 60 → the "no new risk" claim is refuted and the arm is retired.
+                 📝 AMENDED 2026-08-06 (G-8, SEQUENCE+CS, ruled by Andy) — the n≥60 read above is
+                 emitted as an always-valid confidence sequence, not a fixed-n CI; the absolute
+                 kill cannot fire before this arm's own stamped GATE EVAL DATE (below).
+                 Family-level and sentinel criteria (execution-integrity rules) are unaffected.
 GATE EVAL DATE   Day-0 + 6 months (relational; resolves to calendar at Day-0); interim look at
                  n=60.
 VERIFICATION     A trailing-stop row in the first new position's Trades list.
@@ -1349,6 +1365,10 @@ MECHANISM        Caps the loss at first breach instead of at expiry.
                  available.
 KILL CRITERION   Exp(R) per condor < 0 with CI entirely below 0 at n ≥ 60. Plus family-level,
                  liveness and sentinel.
+                 📝 AMENDED 2026-08-06 (G-8, SEQUENCE+CS, ruled by Andy) — the n≥60 read above is
+                 emitted as an always-valid confidence sequence, not a fixed-n CI; the absolute
+                 kill cannot fire before this arm's own stamped GATE EVAL DATE (below).
+                 Family-level and sentinel criteria (execution-integrity rules) are unaffected.
 GATE EVAL DATE   Day-0 + 6 months (relational; resolves to calendar at Day-0); interim look at
                  n=60.
 VERIFICATION     A touch row at/after the underlying crosses the short strike.
@@ -1402,6 +1422,10 @@ MECHANISM        Caps the loss at a level calibrated by the largest public 0DTE 
                  RE-DERIVED AND THIS ENTRY IS RE-STAMPED BEFORE BUILD — not adjusted after.~~
 KILL CRITERION   Exp(R) per condor < 0 with CI entirely below 0 at n ≥ 60. Plus family-level,
                  liveness and sentinel.
+                 📝 AMENDED 2026-08-06 (G-8, SEQUENCE+CS, ruled by Andy) — the n≥60 read above is
+                 emitted as an always-valid confidence sequence, not a fixed-n CI; the absolute
+                 kill cannot fire before this arm's own stamped GATE EVAL DATE (below).
+                 Family-level and sentinel criteria (execution-integrity rules) are unaffected.
 GATE EVAL DATE   Day-0 + 6 months (relational; resolves to calendar at Day-0); interim look at
                  n=60.
 VERIFICATION     A stop-loss row in the first new position's Trades list.
@@ -1456,6 +1480,10 @@ KILL CRITERION   Exp(R) per condor < 0 with CI entirely below 0 at n ≥ 60 matc
                  post-hoc, outcome-based, AMBER and silent below 5 identical days). The version
                  above uses a TOLERANCE and a CONFIG-BACKED second condition, both computable
                  from the ledger the daily loop already writes.
+                 📝 AMENDED 2026-08-06 (G-8, SEQUENCE+CS, ruled by Andy) — the n≥60 read above is
+                 emitted as an always-valid confidence sequence, not a fixed-n CI; the absolute
+                 kill cannot fire before this arm's own stamped GATE EVAL DATE (below).
+                 Family-level and sentinel criteria (execution-integrity rules) are unaffected.
 GATE EVAL DATE   Day-0 + 6 months (relational; resolves to calendar at Day-0); interim look at
                  n=60.
 VERIFICATION     A stop-loss row in the first new position's Trades list.
@@ -1484,7 +1512,8 @@ SIGNED           ..............................
 > accelerate, or veto either arm's disposition before that arm's own pre-declared gate date; kill
 > authority stays with each arm's own pre-registered criteria (this entry's KILL CRITERION line).
 > No cross-engine multiplicity accounting exists or is created by this ruling — within-family
-> multiplicity stays with Phase C step C4's Bonferroni-across-6; Track A's stays with §10a's max-T.
+> multiplicity stays with Phase C step C4's ~~Bonferroni-across-6~~ **joint day-bootstrap max-T
+> (SWITCHED 2026-08-06, G-10, ruled by Andy)**; Track A's stays with §10a's max-T.
 
 ```
 ### GF-QQQ-IC-Canary
@@ -1665,7 +1694,7 @@ because it is an instrument, not an arm.*
 | **C1** | Run the pairwise capture-diff of §8.2 across all **21 unordered pairs**, plus the intra-arm put==call test on each of the seven | Every pair PASSes on all four conditions, or the family does not trade |
 | **C2** | Build and run the §8.3 nightly assert (rules **A1–A8**) against `bots_config_v2.csv` | All eight green. ⏳ **Whether this must precede trading is one of the memo's four NOT-RULED slots** — this spec places it before Day-0 |
 | **C3** | ⭐ Record the shared-automation payload hashes as the **A7 baseline** and wire A7 into `daily.sh` | Baseline re-read and re-hashed after a hard reload |
-| **C4** | ⭐ Declare and record the analysis convention: **paired by day, matched days only**, Bonferroni across the 6 arm-vs-control tests, and the §8.4 matched-day definition | Written into all seven pre-registrations before signing, not after |
+| **C4** | ⭐ Declare and record the analysis convention: **paired by day, matched days only**, ~~Bonferroni across the 6 arm-vs-control tests~~ **SWITCHED 2026-08-06 (G-10, ruled by Andy) to a joint day-bootstrap max-T across arms — declared before any data exists (`data/ledger_meta.json`: `export_rows 0`)**, and the §8.4 matched-day definition | Written into all seven pre-registrations before signing, not after |
 | **C5** | Add the account-settings rows to the capture set: `itmlive` · `itmpaper` · `maxexits` · `scanstart`/`scanend`/`exitstart`/`exitend` | Read back from `/settings`; `itmpaper` = `market` confirmed |
 | **C6** | Append seven rows to `data/archive/rename_map.csv`? **No** — these are fresh builds with no original. Append seven rows to `bots_meta.csv` instead, with `pillar = IC`, and reconcile group counts | Group counts == `bots_meta.csv` pillar counts |
 

@@ -589,6 +589,18 @@ decisive, and it is §7's answer.
 > multiplicity accounting exists or is created by this ruling. A no-influence rule bars Track A
 > advisory reads from affecting arm dispositions before each arm's own pre-declared gate date.
 
+> ### 📝 RULED 2026-08-06 — G-11: IN. PR-21/PR-22 are inside the greenfield Bonferroni family.
+> Applied on Andy's explicit ruling (`comparative-machinery-spec.md` §3.4). **One family, one
+> correction** — ruling S-1 (§3.3 above) governs bot-slot allocation only and says nothing about
+> error rates; both arms share `GF-QQQ-IC-Ride` as control, the entry automations, the day-series
+> and 1-lot sizing with the five greenfield arms. This does not change this section's own finding
+> — ARM-B2 is still the only proposed arm that does not double-test a signed Track A variant — it
+> changes how ARM-B2's own K1 read is corrected: as one arm inside a K-arm family, not a family of
+> its own. ⚠️ **Also ruled the same session: G-10 SWITCH** — the family correction is no longer
+> Bonferroni-across-6 but a joint day-bootstrap max-T (`comparative-machinery-spec.md` §3.2,
+> `greenfield-family-spec.md` Phase C step C4). K1's own bootstrap CI construction is downstream
+> of that switch; not restated here.
+
 ### 6.4 ⛔ The `0.005` (15:55) half of R-2 is NOT buildable in this family
 
 R-2 names two values: `0.015` and `0.005`. Only one is expressible here.
@@ -905,6 +917,10 @@ MECHANISM        The arm buys removal of terminal gamma exposure at the price of
 KILL CRITERION   R-based, computable from the daily loop, fires with no human in the loop:
                  (K1) paired per-condor mean ΔR vs GF-QQQ-IC-Ride < 0 with the bootstrap 95% CI
                       entirely below 0 at n >= 60 matched condors -> RED, bot off.
+                      📝 AMENDED 2026-08-06 (G-8, SEQUENCE+CS, ruled by Andy) — this n>=60
+                      read is emitted as an always-valid confidence sequence, not a fixed-n CI,
+                      and the absolute kill cannot retire this arm before its own stamped GATE
+                      EVAL DATE (below). K2-K5 are execution-integrity rules and unaffected.
                  (K2) LIVENESS — zero close rows at ~15:45 priced `speedy` across 10 consecutive
                       matched days -> RED, pending investigation. (Not conditioned on a threshold
                       breach: unlike a stop, a time exit must fire every single day, which makes
@@ -991,6 +1007,10 @@ MECHANISM        hedge-research.md §9 item 6 ("Fixed-$ SL variants alongside th
                  (CF-4).~~ Size primitive per C4 — RECORD WHICH ONE WAS USED BEFORE BUILD.
 KILL CRITERION   (K1) paired per-condor mean ΔR vs GF-QQQ-IC-Ride < 0 with the bootstrap 95% CI
                       entirely below 0 at n >= 60 matched condors -> RED, bot off.
+                      📝 AMENDED 2026-08-06 (G-8, SEQUENCE+CS, ruled by Andy) — this n>=60
+                      read is emitted as an always-valid confidence sequence, not a fixed-n CI,
+                      and the absolute kill cannot retire this arm before its own stamped GATE
+                      EVAL DATE (below). K2-K5 are execution-integrity rules and unaffected.
                  (K2) LIVENESS, conditioned so it cannot fire on a calm regime: zero stop rows
                       across 10 consecutive matched days ON WHICH THE LEDGER SHOWS <D100> WAS
                       BREACHED (from MFE/MAE) -> RED, pending investigation.

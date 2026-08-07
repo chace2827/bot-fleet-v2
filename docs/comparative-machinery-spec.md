@@ -510,6 +510,14 @@ arms would recover most of the 2.638 → ~2.3 gap at no cost. **`greenfield-fami
 step C4's "Bonferroni across the 6" is a declared analysis convention**, so this is a decision for
 the queue, not a fix. ⛔ **G-10.**
 
+> 📝 **RULED 2026-08-06 — G-10: SWITCH.** Andy replaced `greenfield-family-spec.md` Phase C step
+> C4's Bonferroni-across-6 with a joint day-bootstrap max-T across arms, declared **before any
+> data exists** (`data/ledger_meta.json`: `export_rows 0` — that timing is the point). This
+> dissolves **G-9**: under max-T the number of tests enters through the resampling null rather
+> than a hand-set `K`, so 6-vs-5-vs-9 stops being a decision. Implementation (the engine's §2/§3
+> machinery) is Claude Code's, per `CLAUDE.md` §7 — this spec's `BONFERRONI_K` (§3.1) and
+> `ci_fam_*` construction (§2.5) are now superseded and need restating under max-T; not done here.
+
 ### 3.3 The seam — and the retire-scoped ruling, read precisely
 
 The slot-5 retirement (`decision-card-2026-08-06.md` ruling 5, applied to `research-loop-spec.md`
@@ -551,6 +559,12 @@ Both Track B arms declare **`GF-QQQ-IC-Ride` as their control** — same control
 same shared entry automations, same day-series, same 1-lot sizing. By every definition except the
 budget line that is **one family**. The engine emits them with `K` from the same `family_census`
 and flags `k_basis: "DECLARED — statistical family not ruled"`. Andy's.
+
+> 📝 **RULED 2026-08-06 — G-11: IN.** Andy ruled PR-21/PR-22 statistically inside the greenfield
+> family: one family, one correction; ruling S-1 governs bot-slot allocation only, not error
+> rates. `k_basis` no longer reads `"DECLARED — statistical family not ruled"` going forward — the
+> family question above is resolved. Implementation (updating the emitted flag) is Claude Code's,
+> per this project's build-lane split (`CLAUDE.md` §7).
 
 **PR-21's secondary DiD vs GF-SL100 is emitted `descriptive: true`, no verdict — and restricted to
 the overlap.** PR-21 switches on at **Day-0 + 90** (its `<D100>` calibration window), so its

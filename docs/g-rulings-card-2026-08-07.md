@@ -37,10 +37,10 @@ G-7   GATE EVAL DATE, PR-14…PR-20             [ STAMP = Day-0 + 6 months (rela
 
 ── B. GATES ARM-B2 (PR-22) SIGNING ──────────────────────────────────────────
 G-1   see above — head of this group too
-G-11  PR-21/PR-22 in the greenfield family?   [ IN | SEPARATE | DEFER ]  ______
-G-9   BONFERRONI_K                            [ 6 | 5 | 9 | CENSUS | DEFER ]  ______
-G-10  Bonferroni → joint day-bootstrap max-T? [ SWITCH | KEEP | DEFER ]  ______
-G-8   n≥60 absolute kill vs the gate          [ SEQUENCE+CS | KEEP | DEFER ]  ______
+G-11  PR-21/PR-22 in the greenfield family?   [ IN | SEPARATE | DEFER ]  IN — one family, one correction; S-1 governs slots only, not error rates. Ruled Andy 2026-08-06.
+G-9   BONFERRONI_K                            [ 6 | 5 | 9 | CENSUS | DEFER ]  MOOT under G-10 — max-T needs no hand-set K; the 6-vs-5-vs-9 question dissolves. Ruled Andy 2026-08-06.
+G-10  Bonferroni → joint day-bootstrap max-T? [ SWITCH | KEEP | DEFER ]  SWITCH — joint day-bootstrap max-T across arms, declared before any data exists. Ruled Andy 2026-08-06.
+G-8   n≥60 absolute kill vs the gate          [ SEQUENCE+CS | KEEP | DEFER ]  SEQUENCE+CS — n≥60 read emitted as an always-valid confidence sequence; absolute kill cannot retire an arm before its stamped gate-eval date. Ruled Andy 2026-08-06.
 
 ── C. ANALYSIS / PUBLICATION ONLY — every one safe past the downgrade ───────
 G-2   Matched-day predicate                   [ M7 | M6 | DEFER ]  ______
