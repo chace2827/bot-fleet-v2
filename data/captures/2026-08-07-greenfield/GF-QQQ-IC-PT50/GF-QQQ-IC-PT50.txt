@@ -1,0 +1,156 @@
+# CAPTURE — GF-QQQ-IC-PT50 (bot, PR-15, arm 1 of 6)
+# captured: 2026-08-07 (six-arm build session), Chrome-direct, Option Alpha
+# METHOD: every value read from a5.bots.bot (client model) and from the attachment editors'
+#         hidden inputs, AFTER a hard reload of /bots/bot/<id>/settings.
+#         Never innerText, never a save banner (CLAUDE.md 9.1a).
+# Account state at capture: "Account inactive, no changes will be saved" banner PRESENT
+#   -> pre-adjudicated FALSE ALARM (state.md 2026-08-07). Every write below survived a hard reload.
+
+BOT             GF-QQQ-IC-PT50
+BOT_ID          BOTfw5TkkCRF4417860738688735152
+ARM             PT50 (Profit Taking 50%) · PR-15
+BUILT           2026-08-07, Phase B steps B1-B8
+PATTERN SOURCE  GF-QQQ-IC-Ride (BOTfw5TkkCRF4417860701930934951) — identical except the three
+                per-arm variables (exit bundle, tags, Notes block)
+
+## BOT-LEVEL SETTINGS (spec 5 table) — read from a5.bots.bot after hard reload
+account         accountId = "sim"          <- Paper Trading      OK spec: Paper
+seed            2500                                             OK
+posLimitDay     2                                                OK
+posLimit        2                                                OK
+scanrate        1                           <- Automations Every 1m OK
+exitrate        1                           <- Exit Options Every 1m OK
+                # NOTE: exitrate was ABSENT from the model on creation (the UI showed the
+                # "Every 1m" default without a stored value). It was MATERIALIZED by explicitly
+                # selecting "Every 1m" in the Scan Speeds picker, so that assert A2 compares a
+                # stored 1 against the Ride's stored 1 rather than absent-vs-1. Repeat on every
+                # arm. First-hand finding this session.
+nopdt           0                           <- Day Trading Allowed OK
+symbols         [] (none)                   <- QQQ carried in the automation OK
+group           {"id":"BGfw5TkkCRF4417860703275878471","name":"IC"}   OK (set at creation)
+tags            "experiment,gfam,arm pt50,pr 15"                 OK spec 5.1 order exactly
+status          "off"                       <- AUTOMATIONS OFF    OK spec: OFF until Day-0
+disableExits    0                           <- EXIT OPTIONS ON    OK spec: ON
+icon            fas-robot bg-blue           (default, not specified — same as Ride)
+
+## BOT INPUTS — the arm variable (spec 1.1). THE LOAD-BEARING READ.
+# Read from a5.bots.bot.inputs[].defaultValue — the BOT INPUT OBJECT, per the G2 rider (1.2
+# rule 1). NOT the Open Position action (which holds only a reference), NOT oldValue.
+# Cross-checked against the Save-Template panel's serialised input payloads (same values).
+
+  GF_EXITS_PUT   id IN178607449758461   type exits   posType shortputspread
+  GF_EXITS_CALL  id IN178607460887972   type exits   posType shortcallspread
+
+  DECODED FIELD SET — BYTE-IDENTICAL on both (assert A8 PASS, string compare of the full
+  serialised payload including sig, not just a field-by-field walk):
+    profits   0.5       <- ** THE ARM MECHANIC ** [spec 4.4: PT50 profits = 0.5]
+    smprofits "speedy"  <- ** the mechanic's own pricing sub-field ** [spec 4.4: smprofits speedy]
+    dprofit   ""        price    ""        stoploss ""
+    dstop     ""        tstop    ""        touch    ""
+    xevents   ""        epsdays  ""
+    expdays   0.01                        <- 10 minutes before close = 15:50   [spec 4.4 base]
+    smexpdays {"pct":100,"text":"100% of bid/ask","smart":"speedy"}
+                                          <- SmartPricing FAST. spec 4.4 base requires speedy.
+    dtype     "short"
+    text      "Profit: 50%, Expiration: 10 minutes"   <- LABEL only, not config
+    chposLimitDay / PDT checkbox   unchecked (absent from payload) [spec 4.4 item 11] OK
+    chbidask / bidask guard        unchecked (absent from payload) [spec 4.4 item 12] OK
+
+  ARM MECHANIC: **profits 0.5 (+ smprofits speedy)** — exactly one mechanic over the Ride base.
+  Loaded from preset GF-PT50-EXITS (UIfw5TkkCRF731786064885075) via the bot input's Default
+  Value control. "Save as presets" checkbox left UNCHECKED on both writes.
+
+  G-1 HOLD STAMP — recorded per Andy's standing ruling (U-1 NEGATIVE -> G-1 HOLD):
+    every exit-pricing sub-field that is NOT this arm's mechanic is stamped UNIFORM
+    {"limitType":"pct","limit":100,"smart":"normal"} — the platform default, identical on every
+    arm — and no per-arm pricing-mode tagging is used anywhere. The two non-normal values on this
+    arm (smprofits speedy, smexpdays speedy) are SPEC-MANDATED (4.4), not arm signatures.
+    STATUS: stamped-under-G-1-HOLD.
+
+## ATTACHED AUTOMATIONS (spec step B3) — rid list proves ATTACH, not COPY
+# Read from each attachment's Edit Settings panel hidden inputs, after a hard reload.
+
+1. GF-ScannerA-PutSpread
+   rid        RTfw5TkkCRF178605283747821    == Phase A object  OK ATTACHED, NOT COPIED
+   ttype      scanner
+   weekdays   {"type":"weekday","value":[1,2,3,4,5],"text":"Mon-Fri"}
+   hdays      "skip"
+   timerange  ""                            <- Market Time (EST) left blank; the 1:30-2:00
+                                               window is enforced by the tree, not the trigger
+   input link IN178605447966781 (automation input)
+              -> {"type":"input","nid":"bot","input":"IN178607449758461","text":"GF_EXITS_PUT"}
+              ^ THE CHAIN OF 1.1 IS BOUND. oldValue on this record is the pre-link "None"
+                snapshot and is NOT config (1.2 rule 2). Ignored.
+
+2. GF-ScannerB-CallSpread
+   rid        RTfw5TkkCRF178606271659881    == Phase A object  OK ATTACHED, NOT COPIED
+   ttype      scanner
+   weekdays   {"type":"weekday","value":[1,2,3,4,5],"text":"Mon-Fri"}
+   hdays      "skip"
+   timerange  ""
+   input link IN178606782436781
+              -> {"type":"input","nid":"bot","input":"IN178607460887972","text":"GF_EXITS_CALL"}
+              (oldValue "" — this automation input was linked before it ever held a value)
+
+3. GF-Backstop-1552-FlatClose
+   rid        RTfw5TkkCRF178606373201751    == Phase A object  OK ATTACHED, NOT COPIED
+   ttype      repeat
+   freq       2          <- weekly
+   interval   1
+   byweekday  {"type":"weekday","value":[0,1,2,3,4],"text":"Mon-Fri"}
+   ntime      1552       <- spec 4.2's operative field, EXACT
+   startDate  "2026-08-07T20:52:00.000Z"
+   endDate    (key absent) <- repeats indefinitely; the End field was left blank  OK
+   holidays   "skip"     OK spec 4.2
+   bymonthday {"value":"day_7","text":"7th"}  <- vestigial, carried by the Month-mode default;
+                                                 inert under freq=2 (weekly). Recorded, not set.
+   LABEL      "Every week on Mon-Fri, 3:52pm EST"
+
+> DST QUESTION REPRODUCES, THIRD TIME (spec 4.2, Day-0 step D3). startDate serialises
+>   2026-08-07T20:52:00.000Z = 15:52 at UTC-5 (EST); Day-0 falls in EDT (UTC-4), where that
+>   instant is 16:52 ET — after the close. ntime=1552 is the field the scheduler is believed to
+>   use and it is correct. UNRESOLVED. D3 stands and is ordered BEFORE any arm is switched on.
+>   Same signature as the pilot (2026-08-03) and the Ride (2026-08-06).
+
+> DIVERGENCE FROM THE RIDE, RECORDED NOT CORRECTED: the Ride's backstop startDate is
+>   2026-08-06T20:52:00.000Z (its build date); this arm's is 2026-08-07 (its build date).
+>   startDate is a creation stamp, not one of A2's enumerated trigger fields (class / time /
+>   repeat / days), all four of which are EQUAL. Flagged so no later session reads it as drift.
+>   A confirm dialog ("Schedule this automation to start today?") was answered Yes; AUTOMATIONS
+>   is OFF, so nothing can run.
+
+## NOTES (spec step B8) — PR-15 pasted VERBATIM
+source          docs/greenfield-family-spec.md 9, lines 1261-1283 (the fenced PR-15 block)
+length          1722 UTF-16 units
+BYTE-EXACT      TRUE — reconstructed from the stored <pre> (<br> -> \n, one entity-decode pass)
+                and compared character-by-character against the source. firstDiff = -1.
+                Verified AFTER a hard reload, not from the save response.
+method          DOUBLE-ESCAPE from the first write (oa-ops-runbook.md 4.0 item 2), per the
+                Ride session's method note 1. ONE write, no retries — the escape path was
+                correct first time. NOTE: before the reload the rendered panel showed literal
+                "&lt;" (over-escaped-looking); after the reload it is a true "<". OA's sanitizer
+                performs its single entity decode SERVER-SIDE on save. Do not "fix" the pre-reload
+                render — that is the trap in the other direction.
+
+## TEMPLATE (spec step B8)
+template_id     Tfw5TkkCRF4417860751149180062
+VERSION         1              CLONES 1        LAST UPDATE Aug 6
+template tags   "experiment,gfam,arm pt50,pr 15"
+template Notes  BYTE-EXACT TRUE, 1722/1722, firstDiff = -1, verified on the template page
+carries         all three automations (SCANNERS x2, TRIGGERS x1) and both bot inputs
+
+> SAME MINOR DIVERGENCE AS THE RIDE, DELIBERATELY REPRODUCED. spec 5.1 specifies template tags
+>   `experiment,pr nn,gfam` (three, without the arm tag). The Save Template panel PRE-FILLS from
+>   the bot (four tags) and the Ride's removal did not take server-side. Left as prefilled here
+>   so the seven templates are consistent BY CONSTRUCTION, which is what A2 needs. 5.1 calls the
+>   tag a search handle, not the record; the record is the Notes block, which is byte-exact.
+
+## SPEC STEP B5 — the toggle screenshot, substituted (same substitution as the Ride)
+`status = "off"` and `disableExits = 0` are VALUE reads of exactly the two toggles B5 asks to
+photograph, taken after a hard reload. A value read is stronger evidence than a screenshot under
+evidence-standards; spec 1.6's premise that toggle state "does not survive text capture" is false
+on this surface. Recorded as a substitution, not skipped silently.
+
+## DEFERRED TO DAY-0
+Layer 2 (behavioural, first NEW position's Trades list, spec 8.5) — impossible: account inactive,
+no positions. Plus D3 (backstop fire time) and D4 (ITM action label).

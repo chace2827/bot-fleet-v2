@@ -65,3 +65,19 @@ sha256(JSON{full routine})      3f61b2cf4f2b3234399618fde949b106df4bbaf0ed4fe0e6
 ## DEFERRED TO DAY-0
 Layer 2 (behavioural, first NEW position's Trades list) — impossible: account inactive,
 no positions. Queued per greenfield-family-spec.md 10 and CLAUDE.md 5.
+
+## A7-DRIFT-1 — RE-BASELINE RULED BY ANDY AND APPLIED 2026-08-07
+# The A7 BASELINE line above (d35307e5...871ec7, VERSION 3) is LEFT STANDING: it is the record of
+# what was read on 2026-08-06 and a capture is not rewritten. It is SUPERSEDED as the assert's
+# reference value.
+NEW A7 BASELINE (adopted 2026-08-07)
+  version                        9
+  sha256(JSON{name,inputs,root}) 3308ce8b476d2bd090d9519b445748fc4c0d0fdbe71861c83a249729b1a5a30a
+  routine.updated                2026-08-07T01:30:07.970Z
+CAUSE, AS RULED   own-session materialization of the F-4 "Default Value = None" setting on input
+                  IN178605447966781: it now carries an explicit defaultValue object (text "None")
+                  where this capture recorded "(NOT SET)". TREE and full Open-Position action
+                  payload diffed field-by-field on 2026-08-07 and UNCHANGED. Warnings 0.
+STATUS OF A7      WORKED AS DESIGNED. The assert surfaced a config-surface change to a shared
+                  object within one day of it happening. Detection = the mechanism passing.
+STORE OF RECORD   data/bots_config_v2.csv (the A-series reads that file, spec 8.3).

@@ -1,0 +1,77 @@
+# CAPTURE — GF-QQQ-IC-Touch0 (bot, PR-17, arm 3 of 6)
+# captured: 2026-08-07 (six-arm build session), Chrome-direct, Option Alpha
+# METHOD: a5.bots.bot (client model) + attachment editors' hidden inputs, AFTER a hard reload.
+#         Never innerText, never a save banner (CLAUDE.md 9.1a).
+
+BOT             GF-QQQ-IC-Touch0
+BOT_ID          BOTfw5TkkCRF4417860760818962144
+ARM             Touch0 (1-minute-sampled touch at $0 from ITM) · PR-17
+BUILT           2026-08-07, Phase B steps B1-B8
+
+## BOT-LEVEL SETTINGS (spec 5 table)
+account sim (Paper) OK · seed 2500 OK · posLimitDay 2 OK · posLimit 2 OK
+scanrate 1 OK · exitrate 1 OK (materialized explicitly — see PT50 capture note)
+nopdt 0 (Day Trading Allowed) OK · symbols [] OK
+group {"id":"BGfw5TkkCRF4417860703275878471","name":"IC"} OK
+tags "experiment,gfam,arm touch0,pr 17" OK (spec 5.1 order)
+status "off" (AUTOMATIONS OFF) OK · disableExits 0 (EXIT OPTIONS ON) OK
+icon fas-robot bg-blue (default, same as every other arm)
+
+## BOT INPUTS — the arm variable. THE LOAD-BEARING READ.
+  GF_EXITS_PUT   id IN178607636188121   type exits   posType shortputspread
+  GF_EXITS_CALL  id IN178607647487782   type exits   posType shortcallspread
+
+  DECODED FIELD SET — IDENTICAL on both (assert A8 PASS):
+    touch     {"type":"usd","value":0,"text":"$0"}    <- ** THE ARM MECHANIC ** [spec 4.4: touch $0]
+    smtouch   {"limitType":"pct","limit":100,"smart":"normal","text":"100% of bid/ask"}
+                        <- mechanic's pricing sub-field: NORMAL (C3 unresolved; G-1 HOLD stamp)
+    profits "" · dprofit "" · price "" · stoploss "" · dstop "" · tstop "" · xevents "" · epsdays ""
+    expdays   0.01                                    [spec 4.4 base — 15:50 time exit]
+    smexpdays {"pct":100,"text":"100% of bid/ask","smart":"speedy"}   [spec 4.4 base — FAST]
+    dtype     "short"
+    text      "Expiration: 10 minutes, Touch: $0"     <- LABEL only, not config
+    PDT checkbox / bid-ask guard   both unchecked (absent from payload)  OK
+      ^ PR-17 calls the Bid-Ask Guard OFF out explicitly: a touch hedge silently suppressed
+        exactly when the market is fast is the worst-timed failure available (spec 6.3).
+        Confirmed OFF here first-hand.
+
+  ARM MECHANIC: **touch $0 (+ smtouch normal)** — exactly one mechanic over the Ride base.
+  Loaded from preset GF-TOUCH0-EXITS. "Save as presets" left UNCHECKED on both writes.
+  G-1: stamped-under-G-1-HOLD.
+
+  NOTE ON UNITS, carried from PR-17 so no later session mis-reads the value: `touch` is
+  `{"type":"usd","value":0}` — DOLLARS from ITM, not percent. $0 = exits on the first 1-minute
+  evaluation at which the position is ITM. This arm is S1, not S2 (C8 ruling: no sibling-close).
+
+## ATTACHED AUTOMATIONS — rid list proves ATTACH, not COPY
+1. GF-ScannerA-PutSpread   rid RTfw5TkkCRF178605283747821  == Phase A object  OK
+   ttype scanner · weekdays Mon-Fri [1,2,3,4,5] · hdays "skip" · timerange ""
+   input link IN178605447966781 -> {"type":"input","nid":"bot","input":"IN178607636188121",
+              "text":"GF_EXITS_PUT"}
+2. GF-ScannerB-CallSpread  rid RTfw5TkkCRF178606271659881  == Phase A object  OK
+   ttype scanner · weekdays Mon-Fri [1,2,3,4,5] · hdays "skip" · timerange ""
+   input link IN178606782436781 -> {"type":"input","nid":"bot","input":"IN178607647487782",
+              "text":"GF_EXITS_CALL"}
+3. GF-Backstop-1552-FlatClose  rid RTfw5TkkCRF178606373201751  == Phase A object  OK
+   ttype repeat · freq 2 · interval 1 · byweekday [0,1,2,3,4] Mon-Fri · ntime 1552
+   holidays "skip" · endDate blank · startDate "2026-08-07T20:52:00.000Z" (D3 signature)
+   bymonthday {"value":"day_7"} vestigial, inert under freq=2
+   LABEL "Every week on Mon-Fri, 3:52pm EST"
+
+## NOTES (spec step B8) — PR-17 pasted VERBATIM
+source          docs/greenfield-family-spec.md 9, lines 1355-1391 (the fenced PR-17 block)
+length          2917 UTF-16 units
+BYTE-EXACT      TRUE — firstDiff = -1, verified after a hard reload. Double-escape, ONE write.
+
+## TEMPLATE (spec step B8)
+template_id     Tfw5TkkCRF4417860766269007264
+VERSION         1
+template tags   "experiment,gfam,arm touch0,pr 17"  (prefilled, left as-is — see PT50 capture)
+A8 at template-save surface: the two serialised input payloads compared EQUAL string-for-string.
+
+## SPEC STEP B5 — toggle screenshot substituted by value reads (same as Ride/PT50/Trail)
+status="off", disableExits=0, read after a hard reload.
+
+## DEFERRED TO DAY-0
+Layer 2 (first NEW position's Trades list — PR-17 wants a touch row at/after the underlying
+crosses the short strike; its `sibling close` row is VOID under C8). Plus D3 and D4.

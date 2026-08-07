@@ -5,8 +5,84 @@
 # server-verified in-session per Andy, but has no capture file / row yet — open item, not this
 # session's task. Ride and the six arms are explicitly deferred to a fresh session (context-window
 # saturation call, 2026-08-07).
+#
+# UPDATE 2026-08-07 (overnight build session) — ORIGINAL HEADER TEXT ABOVE LEFT STANDING.
+# Phase A shared objects are now 3 of 3 captured: GF-Backstop-1552-FlatClose was read first-hand
+# from the client model on a fresh page load, captured, and its row added below. Its trigger
+# config is NOT on the Library object (F-3 re-confirmed first-hand) and is therefore a per-bot
+# surface — see the capture file.
+#
+# FINDING A7-DRIFT-1 — 2026-08-07, FIRST-HAND, UNRULED. GF-ScannerA-PutSpread's recorded
+#   a7_hash below is STALE. Live read this session: version = 9 (recorded 3), a7_hash =
+#   3308ce8b476d2bd090d9519b445748fc4c0d0fdbe71861c83a249729b1a5a30a (recorded d35307e5...871ec7),
+#   routine.updated = 2026-08-07T01:30:07.970Z — i.e. AFTER the 2026-08-06 22:19 capture, inside
+#   the prior session. The hash METHOD is not in doubt: the same formula run against
+#   GF-ScannerB-CallSpread reproduced its recorded baseline bb4ba866...eb32e exactly, and against
+#   the backstop produced the new baseline below.
+#   OBSERVED DELTA: the input IN178605447966781 (GF_EXITS_PUT) now carries an explicit
+#   defaultValue object with text "None" and every other field empty; at capture it was recorded
+#   as "NOT SET". ScannerB's IN178606782436781 by contrast has NO defaultValue key at all. Both
+#   satisfy F-4 in intent (neither is a bundle) but they are NOT byte-identical to each other.
+#   The TREE and the full Open-Position action payload were diffed field-by-field against the
+#   capture this session and are UNCHANGED (series exactly 0 days, shortPut 0.75% below, longPut
+#   $2.00 below, amount = 1 contract, price limit 100 / smart normal, tags "put side", filter
+#   minPrice 0.08, exits = reference to IN178605447966781). Warnings 0.
+#   The v3->v9 gap (six saves) is consistent with the prior session's preset work (spec §10 step
+#   A6 verifies presets by re-opening them from the picker ON A DIFFERENT AUTOMATION) but that
+#   is an INFERENCE, not an observation, and CLAUDE.md §5 forbids treating it as evidence.
+#   NOT CORRECTED HERE. Re-baselining A7 changes the value an operational assert compares
+#   against, which is ambiguous under the doc-edit rule and is therefore GATED to Andy.
+#   ANDY'S RULING NEEDED: re-baseline ScannerA's A7 to 3308ce8b..., or investigate the six saves.
+#   This does NOT block the Ride/arm builds — creating and configuring a BOT does not write to a
+#   Library automation, and attachment is by rid, which is unchanged.
+#
+# A7-DRIFT-1 — RULED AND APPLIED 2026-08-07 (Andy's ruling; the FINDING block above is LEFT
+#   STANDING as the record of what was observed). RULING: ADOPT the new baseline. The
+#   GF-ScannerA-PutSpread row below now carries version = 9 and a7_hash =
+#   3308ce8b476d2bd090d9519b445748fc4c0d0fdbe71861c83a249729b1a5a30a. Superseded baseline, kept
+#   here for the audit trail: version 3, a7_hash d35307e5...871ec7 (2026-08-06 capture).
+#   CAUSE, AS RULED: the own-session materialization of the F-4 "Default Value = None" setting on
+#   automation input IN178605447966781 -- the input acquired an explicit defaultValue object
+#   (text "None") where the 2026-08-06 capture recorded "NOT SET". The TREE and the full
+#   Open-Position action payload were diffed field-by-field and are UNCHANGED (first-hand,
+#   2026-08-07). A7 DETECTED THE DRIFT AS DESIGNED: a config-surface change to a shared object
+#   surfaced inside one day. That is the assert working, not the assert failing.
+#   NOTE for the nightly implementation: ScannerA now carries an explicit defaultValue object and
+#   ScannerB carries no defaultValue key at all. Both satisfy F-4 in intent; they are NOT
+#   byte-identical to each other, and A7 hashes each object against ITS OWN baseline, never
+#   against a sibling's.
 # object_kind: shared_automation | bot
 # a7_hash: sha256 of JSON{name,inputs,root} read from the client model AFTER a hard reload.
+# A2-EXITRATE-1 — RULED AND FIXED 2026-08-07 (Andy: "TAKE THE CLICK").
+#   FINDING: `exitrate` (Exit Options scan speed) was NOT STORED on GF-QQQ-IC-Ride (absent
+#   from a5.bots.bot; the UI and the hidden input both read "Every 1m" / 1) while all six
+#   arms carried a STORED 1, because this session materialized it on each arm deliberately.
+#   Assert A2 lists scan speeds among the non-bundle fields that must be equal, so A2 FAILED
+#   on that one field. Behaviour was identical on all seven throughout (1 is the default).
+#   FIXED: exitrate is now STORED = 1 on the Ride, verified after a hard reload. A2 re-run
+#   across all seven: 12/12 non-bundle fields EQUAL, 0 fails. A2 = PASS 7/7.
+#   ⚠️ SCHEMA NOTE, stated rather than fudged: Andy's ruling says "correct the ... CSV
+#   field", but THIS FILE HAS NO PER-BOT exitrate COLUMN — the bot rows carry object_kind,
+#   name, oa_id, template, attached_to (rid list + trigger config), input ids/type/label,
+#   the decoded bundle, a7_hash, capture path and layer2_status. Scan speeds live in the
+#   per-bot CAPTURE FILE, which is where the correction was applied (see the Ride capture,
+#   `exitrate` line, and the ASSERTS file's A2 section). No column was invented to hold it;
+#   no existing field was overloaded. If a scan-speed column is wanted in this CSV, that is
+#   a schema change and therefore a decision.
+#   The 2026-08-07 six-arm rows below are UNCHANGED by this ruling — they were already 1.
+#
+# BOT ROWS (added 2026-08-07): a7_hash is N/A — A7 is a SHARED-AUTOMATION assert. For a bot the
+#   matching proof is the pairwise capture-diff (spec §8.2) over the DECODED bot-input field set,
+#   which is carried in input_default below and in full in the capture file. attached_to carries
+#   the rid list (§8.2 step 6) and the per-bot trigger config (§8.3 A2 as amended 2026-08-06).
 object_kind,name,oa_id,version,attached_to,input_id,input_type,input_label,input_default,a7_hash,captured,layer2_status
-shared_automation,GF-ScannerA-PutSpread,RTfw5TkkCRF178605283747821,3,NONE (Unused),IN178605447966781,exits,GF_EXITS_PUT,NOT SET — see FINDING F-4,d35307e54d10c3457b383cdb9106f703f7bee0f5ad3f9c664787b98fda871ec7,data/captures/2026-08-06-gfam/GF-ScannerA-PutSpread.txt,DEFERRED TO DAY-0
+shared_automation,GF-ScannerA-PutSpread,RTfw5TkkCRF178605283747821,9,NONE (Unused),IN178605447966781,exits,GF_EXITS_PUT,"Default Value = None (explicit defaultValue object; materialized 2026-08-07 — F-4 compliant; see A7-DRIFT-1 ruling above)",3308ce8b476d2bd090d9519b445748fc4c0d0fdbe71861c83a249729b1a5a30a,data/captures/2026-08-06-gfam/GF-ScannerA-PutSpread.txt,DEFERRED TO DAY-0
 shared_automation,GF-ScannerB-CallSpread,RTfw5TkkCRF178606271659881,2,NONE (Unused),IN178606782436781,exits,GF_EXITS_CALL,NOT SET — see FINDING F-4,bb4ba866a13e7ecd682f7bda9a19011003e9e3ef73fffd0fb64a80a4cd0eb32e,data/captures/2026-08-06-gfam/GF-ScannerB-CallSpread.txt,DEFERRED TO DAY-0
+shared_automation,GF-Backstop-1552-FlatClose,RTfw5TkkCRF178606373201751,1,NONE (Unused),NONE,NONE,NONE,N/A — automation takes no inputs,116069bddf8b8c9e58bd8f28313c2ad95726fa3f7205df4dfde82de7a3e2e5b5,data/captures/2026-08-06-gfam/GF-Backstop-1552-FlatClose.txt,DEFERRED TO DAY-0
+bot,GF-QQQ-IC-Ride,BOTfw5TkkCRF4417860701930934951,template V1 (Tfw5TkkCRF4417860721733331241),"rid RTfw5TkkCRF178605283747821 scanner Mon-Fri notime | rid RTfw5TkkCRF178606271659881 scanner Mon-Fri notime | rid RTfw5TkkCRF178606373201751 repeat freq2 int1 Mon-Fri ntime1552 holidays-skip no-end",IN178607080900761 + IN178607092377072,exits,GF_EXITS_PUT + GF_EXITS_CALL,"DECODED (both sides EQUAL, A8 PASS): expdays=0.01; smexpdays={pct:100,smart:speedy}; profits/dprofit/price/stoploss/dstop/tstop/touch/xevents/epsdays all empty; dtype=short; PDT unchecked; bid-ask guard unchecked. ARM MECHANIC: none (control)",N/A — see BOT ROWS note,data/captures/2026-08-07-greenfield/GF-QQQ-IC-Ride/GF-QQQ-IC-Ride.txt,DEFERRED TO DAY-0
+bot,GF-QQQ-IC-PT50,BOTfw5TkkCRF4417860738688735152,template V1 (Tfw5TkkCRF4417860751149180062),"rid RTfw5TkkCRF178605283747821 scanner Mon-Fri hdays-skip notime | rid RTfw5TkkCRF178606271659881 scanner Mon-Fri hdays-skip notime | rid RTfw5TkkCRF178606373201751 repeat freq2 int1 Mon-Fri ntime1552 holidays-skip no-end",IN178607449758461 + IN178607460887972,exits,GF_EXITS_PUT + GF_EXITS_CALL,"DECODED (both sides BYTE-IDENTICAL, A8 PASS): profits=0.5; smprofits=speedy; expdays=0.01; smexpdays={pct:100,smart:speedy}; dprofit/price/stoploss/dstop/tstop/touch/xevents/epsdays all empty; dtype=short; PDT unchecked; bid-ask guard unchecked. ARM MECHANIC: profits 0.5 + smprofits speedy (exactly one). G-1: stamped-under-G-1-HOLD",N/A — see BOT ROWS note,data/captures/2026-08-07-greenfield/GF-QQQ-IC-PT50/GF-QQQ-IC-PT50.txt,DEFERRED TO DAY-0
+bot,GF-QQQ-IC-Trail,BOTfw5TkkCRF4417860754672239833,template V1 (Tfw5TkkCRF4417860759179743713),"rid RTfw5TkkCRF178605283747821 scanner Mon-Fri hdays-skip notime | rid RTfw5TkkCRF178606271659881 scanner Mon-Fri hdays-skip notime | rid RTfw5TkkCRF178606373201751 repeat freq2 int1 Mon-Fri ntime1552 holidays-skip no-end",IN178607567686951 + IN17860757187372,exits,GF_EXITS_PUT + GF_EXITS_CALL,"DECODED (both sides EQUAL, A8 PASS): tstop={type:tstop,target:40,trail:15}; smtstop={pct:100,smart:normal}; expdays=0.01; smexpdays={pct:100,smart:speedy}; profits/dprofit/price/stoploss/dstop/touch/xevents/epsdays all empty; dtype=short; PDT unchecked; bid-ask guard unchecked. ARM MECHANIC: ARMED TRAIL tstop 40/15 (exactly one). G-1: stamped-under-G-1-HOLD",N/A — see BOT ROWS note,data/captures/2026-08-07-greenfield/GF-QQQ-IC-Trail/GF-QQQ-IC-Trail.txt,DEFERRED TO DAY-0
+bot,GF-QQQ-IC-Touch0,BOTfw5TkkCRF4417860760818962144,template V1 (Tfw5TkkCRF4417860766269007264),"rid RTfw5TkkCRF178605283747821 scanner Mon-Fri hdays-skip notime | rid RTfw5TkkCRF178606271659881 scanner Mon-Fri hdays-skip notime | rid RTfw5TkkCRF178606373201751 repeat freq2 int1 Mon-Fri ntime1552 holidays-skip no-end",IN178607636188121 + IN178607647487782,exits,GF_EXITS_PUT + GF_EXITS_CALL,"DECODED (both sides EQUAL, A8 PASS): touch={type:usd,value:0}; smtouch={pct:100,smart:normal}; expdays=0.01; smexpdays={pct:100,smart:speedy}; profits/dprofit/price/stoploss/dstop/tstop/xevents/epsdays all empty; dtype=short; PDT unchecked; bid-ask guard unchecked. ARM MECHANIC: touch $0 (exactly one). G-1: stamped-under-G-1-HOLD",N/A — see BOT ROWS note,data/captures/2026-08-07-greenfield/GF-QQQ-IC-Touch0/GF-QQQ-IC-Touch0.txt,DEFERRED TO DAY-0
+bot,GF-QQQ-IC-SL100,BOTfw5TkkCRF4417860767788927225,template V1 (Tfw5TkkCRF4417860773009022425),"rid RTfw5TkkCRF178605283747821 scanner Mon-Fri hdays-skip notime | rid RTfw5TkkCRF178606271659881 scanner Mon-Fri hdays-skip notime | rid RTfw5TkkCRF178606373201751 repeat freq2 int1 Mon-Fri ntime1552 holidays-skip no-end",IN178607699688851 + IN178607709288872,exits,GF_EXITS_PUT + GF_EXITS_CALL,"DECODED (both sides EQUAL, A8 PASS): stoploss=1 (=100% OF CREDIT, C1 confirmed at the write surface); smstoploss={pct:100,smart:normal}; expdays=0.01; smexpdays={pct:100,smart:speedy}; profits/dprofit/price/dstop/tstop/touch/xevents/epsdays all empty; dtype=short; PDT unchecked; bid-ask guard unchecked. ARM MECHANIC: stoploss 1 (exactly one). G-1: stamped-under-G-1-HOLD",N/A — see BOT ROWS note,data/captures/2026-08-07-greenfield/GF-QQQ-IC-SL100/GF-QQQ-IC-SL100.txt,DEFERRED TO DAY-0
+bot,GF-QQQ-IC-Canary,BOTfw5TkkCRF4417860774419022836,template V1 (Tfw5TkkCRF4417860782548949126),"rid RTfw5TkkCRF178605283747821 scanner Mon-Fri hdays-skip notime | rid RTfw5TkkCRF178606271659881 scanner Mon-Fri hdays-skip notime | rid RTfw5TkkCRF178606373201751 repeat freq2 int1 Mon-Fri ntime1552 holidays-skip no-end",IN178607794990451 + IN178607800989862,exits,GF_EXITS_PUT + GF_EXITS_CALL,"DECODED (both sides EQUAL, A8 PASS): profits=0.05; smprofits=speedy; expdays=0.01; smexpdays={pct:100,smart:speedy}; dprofit/price/stoploss/dstop/tstop/touch/xevents/epsdays all empty; dtype=short; PDT unchecked; bid-ask guard unchecked. ARM MECHANIC: profits 0.05 (exactly one; same FIELD as PT50 at a different VALUE). G-1: stamped-under-G-1-HOLD",N/A — see BOT ROWS note,data/captures/2026-08-07-greenfield/GF-QQQ-IC-Canary/GF-QQQ-IC-Canary.txt,DEFERRED TO DAY-0
+bot,GF-QQQ-IC-SL200,BOTfw5TkkCRF4417860785000861357,template V1 (Tfw5TkkCRF4417860791919674137),"rid RTfw5TkkCRF178605283747821 scanner Mon-Fri hdays-skip notime | rid RTfw5TkkCRF178606271659881 scanner Mon-Fri hdays-skip notime | rid RTfw5TkkCRF178606373201751 repeat freq2 int1 Mon-Fri ntime1552 holidays-skip no-end",IN178607891888981 + IN178607897588482,exits,GF_EXITS_PUT + GF_EXITS_CALL,"DECODED (both sides EQUAL, A8 PASS): stoploss=2 (=200% OF CREDIT); smstoploss={pct:100,smart:normal}; expdays=0.01; smexpdays={pct:100,smart:speedy}; profits/dprofit/price/dstop/tstop/touch/xevents/epsdays all empty; dtype=short; PDT unchecked; bid-ask guard unchecked. ARM MECHANIC: stoploss 2 (exactly one; same FIELD as SL100 at a different VALUE). G-1: stamped-under-G-1-HOLD",N/A — see BOT ROWS note,data/captures/2026-08-07-greenfield/GF-QQQ-IC-SL200/GF-QQQ-IC-SL200.txt,DEFERRED TO DAY-0

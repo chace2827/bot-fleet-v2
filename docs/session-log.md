@@ -4973,3 +4973,185 @@ banner, §5 nine-rows correction) · `docs/oa-mirror-reference.md` (§2.6 scopin
 file). No `state.md` edit this session (nothing in it was itself stale).
 
 **HOLDING for Andy's commit.**
+
+## 2026-08-07 (six-arm session) — **THE GREENFIELD FAMILY IS COMPLETE: ALL SEVEN BOTS BUILT.** A7-DRIFT-1 ruling applied. A1–A9 run at n=7. Two findings, both gated.
+
+**Scope.** Fresh session against the overnight close-out. Applied Andy's A7-DRIFT-1 ruling first,
+then built the six research arms per-arm atomic in the ordered sequence, then ran every
+family-level assert now runnable and the §8.2 capture-diff. **AUTOMATIONS was not turned ON
+anywhere. No git command was run in any form. Nothing else on the account was touched.**
+
+### 1. A7-DRIFT-1 — RULED BY ANDY, APPLIED, VERIFIED
+Ruling: **ADOPT the new ScannerA baseline.** Applied to the store of record
+(`data/bots_config_v2.csv`: row now reads version 9 and a7_hash
+`3308ce8b476d2bd090d9519b445748fc4c0d0fdbe71861c83a249729b1a5a30a`, with a dated banner beside
+it; the original FINDING block is left standing) and as an appended dated banner on
+`data/captures/2026-08-06-gfam/GF-ScannerA-PutSpread.txt`, whose original hash line is left
+standing as the record of what was observed on 2026-08-06. `docs/state.md` carries the ruling
+banner beside the finding. **Cause, as ruled:** own-session materialization of the F-4
+`Default Value = None` setting on input `IN178605447966781`; tree and Open-Position payload
+diffed unchanged. **A7 detected it as designed** — that is the mechanism passing, not failing.
+Verified by direct `device_bash` sha256 + single-match grep on all three files (§9.1a).
+⭐ Re-confirmed live at close: ScannerA hashes to `3308ce8b…` and `updated` is still
+2026-08-07T01:30:07.970Z — unchanged by the whole six-arm build.
+
+### 2. THE SIX ARMS — built in the ordered sequence, per-arm atomic, each fully verified before the next
+| Arm | PR | BOT_ID | Mechanic (read back, not assumed) | Template |
+|---|---|---|---|---|
+| PT50   | 15 | `BOTfw5TkkCRF4417860738688735152` | `profits` 0.5 + `smprofits` speedy | `Tfw5TkkCRF4417860751149180062` |
+| Trail  | 16 | `BOTfw5TkkCRF4417860754672239833` | `tstop` **{target:40, trail:15}** + `smtstop` normal | `Tfw5TkkCRF4417860759179743713` |
+| Touch0 | 17 | `BOTfw5TkkCRF4417860760818962144` | `touch` {type:usd, value:0} + `smtouch` normal | `Tfw5TkkCRF4417860766269007264` |
+| SL100  | 18 | `BOTfw5TkkCRF4417860767788927225` | `stoploss` **1** + `smstoploss` normal | `Tfw5TkkCRF4417860773009022425` |
+| Canary | 20 | `BOTfw5TkkCRF4417860774419022836` | `profits` 0.05 + `smprofits` speedy | `Tfw5TkkCRF4417860782548949126` |
+| SL200  | 19 | `BOTfw5TkkCRF4417860785000861357` | `stoploss` **2** + `smstoploss` normal | `Tfw5TkkCRF4417860791919674137` |
+Every arm: §5 settings identical to the Ride, three attachments by `rid` (attach, not copy),
+both bot inputs bound and EQUAL, Notes byte-exact, Template V1, AUTOMATIONS OFF, EXIT OPTIONS ON,
+group `IC`, tags in §5.1 order. Captures under `data/captures/2026-08-07-greenfield/<bot>/`;
+one row per arm appended to `data/bots_config_v2.csv` (now 3 shared automations + 7 bots).
+
+**PR-16's STOP condition did not trigger** — the armed trail's `target`=40 / `trail`=15 entered
+and persisted exactly as specified, read back off the bot input object. No fallback to SL130.
+**C1's unit answer confirmed at the write surface**: `stoploss` stores a FRACTION of credit
+(1 = 100%, 2 = 200%), the same convention as `profits`. PR-18/PR-19's re-stamp condition is not
+triggered. Recorded so no later session reads the stored `1` as "1%".
+
+### 3. ⛔ FINDING **A2-EXITRATE-1** — the one assert that does not pass. GATED, not corrected.
+`exitrate` is **not stored on the Ride** (model field undefined; hidden input reads 1; UI renders
+"Every 1m") and **is stored as 1 on all six arms**, because this session materialized it
+deliberately on each arm so A2 would compare stored-to-stored. A2 lists scan speeds among the
+non-bundle fields that must be equal, so as written **A2 FAILS on this one field**. Behaviour is
+identical on all seven (1 is the default). ⚠️ The Ride's own capture records "exitrate 1" — that
+line is **falsified**; it recorded the UI default, not a stored field. **Remedy, one click, NOT
+performed:** Ride → Scan Speeds → EXIT OPTIONS → "Every 1m". Not done because the Ride is a built
+and verified control and the standing instruction is to stop and report rather than improvise on
+an already-verified object. **Andy's call.**
+
+### 4. ⛔ FINDING **A1-SPEC-1** — A1 as written is unsatisfiable for 13 of its 21 pairs. GATED.
+**Arm-vs-control — what the family actually needs — PASSES 6 of 6:** every arm is the Ride base
+plus exactly one mechanic, and the Ride carries none. But §8.3 rule A1 says *every unordered
+pair* must differ in exactly one mechanic, and in a control+K design two DIFFERENT treatment arms
+differ from each other in exactly TWO by construction. 8 pairs pass (the six arm-vs-Ride, plus
+PT50/Canary and SL100/SL200 which share a field); the other 13 cannot pass and never will on a
+correctly-built family. Same class as the "vacuously unfireable" family-level kill criterion §9
+already corrected once. **Not amended — an assert's definition is a decision.** A suggested
+shape is recorded in the assert file for Andy to rule on; the nightly implementation must not be
+built against A1's current text or it will fire 13 times a night on a correct family.
+
+### 5. Asserts run at n=7, recorded verbatim
+`data/captures/2026-08-07-greenfield/ASSERTS-A1-A9-and-capture-diff.txt`.
+A1 **split verdict** (§4 above) · A2 **1 field fails** (§3) · A3 **PASS 7/7** — each arm's decoded
+set equals its pre-registered set value-by-value · A4 moot · A4b/A6 not runnable pre-Day-0 ·
+A5 **not run**, stated · A7 **PASS 3/3** · A8 **PASS 7/7** · A9 **PASS 7/7 (14 inputs)**.
+§8.2 capture-diff run in full, all seven steps, **both G2 hops resolved explicitly on every arm**;
+`oldValue` ignored throughout per §1.2 rule 2.
+⭐ Independent corroboration of attach-not-copy: all three shared automations now read **"7 bots"**
+in the Library, and all three payload hashes are unchanged.
+
+### 6. Method notes worth carrying
+1. **Double-escape works first time, every time** — all six arms byte-exact on the FIRST write
+   (Ride and pilot each needed retries). ⚠️ New corollary: BEFORE the reload the rendered panel
+   shows a literal `&lt;`, which looks over-escaped. It is not — OA's single entity decode happens
+   SERVER-SIDE on save. Do not "fix" the pre-reload render.
+2. **`exitrate` is not written unless you pick it.** A fresh bot stores `scanrate` but not
+   `exitrate`. Select "Every 1m" explicitly on every new bot or A2 compares absent-to-1.
+3. **The weekday multi-select commits only on a REAL outside click.** Synthetic clicks check the
+   boxes but the hidden input keeps the old value until a genuine mouse event lands outside the
+   menu. Verify `byweekday` reads `[0,1,2,3,4]` before saving — twice this session it still read
+   `[4]` after all five looked checked.
+4. **The native time field needs JS focus + REAL keystrokes**: `el.focus(); el.click()` then send
+   `3 5 2 p`. A synthetic coordinate click alone does not focus it.
+5. **The tag widget's suggestion menu can serve a STALE list** after a timed-out call. Re-read
+   `input[name=tags].value` after every add; if the menu is stale, one real keystroke refreshes it.
+6. **`Runtime.evaluate` timed out at 45s six times**, always on a long chain, always with the page
+   healthy and the work COMMITTED. Re-read state; never re-fire. No double-write resulted.
+7. Each backstop attachment raises a confirm — "Schedule this automation to start today?" —
+   answered Yes on all six. AUTOMATIONS is OFF, so nothing can run.
+
+### 7. Unchanged and still open
+F-1 · F-3 · F-4 · **D3** (the 15:52 DST question — reproduces identically on all six new arms:
+`startDate` serialises `2026-08-07T20:52:00.000Z`; ordered BEFORE any arm is switched on) ·
+D4 · the `IC` / `IC-Focus` group duplication and `oa-ops-runbook.md` §3's stale "current state"
+line · PR-18's withheld "Breakeven" name (Andy's read) · the two post-downgrade ruling slots.
+Per-arm startDate differs from the Ride's by build date (08-07 vs 08-06) — a creation stamp, not
+one of A2's four enumerated trigger fields, all of which are equal. Flagged, not corrected.
+
+### Files changed this session
+`data/bots_config_v2.csv` (A7 re-baseline + banner; six new bot rows) ·
+`data/captures/2026-08-06-gfam/GF-ScannerA-PutSpread.txt` (appended A7 re-baseline banner) ·
+`data/captures/2026-08-07-greenfield/GF-QQQ-IC-{PT50,Trail,Touch0,SL100,Canary,SL200}/*.txt` (6 new) ·
+`data/captures/2026-08-07-greenfield/ASSERTS-A1-A9-and-capture-diff.txt` (new) ·
+`docs/state.md` · `docs/session-log.md` (this entry).
+**OA:** six bots created and configured, six templates saved, twelve bot inputs created,
+eighteen attachments made. **Nothing switched ON. No Library object modified** (all three A7
+hashes and `updated` timestamps unchanged).
+
+**HOLDING for Andy's commit.**
+
+## 2026-08-07 (rulings) — **BOTH FINDINGS RULED BY ANDY AND CLOSED. Every pre-Day-0 assert now passes.**
+
+Andy ruled the two findings the six-arm session gated. Both applied and verified the same session.
+No git command was run in any form. Nothing switched ON. No bot other than the control touched.
+
+### RULING 1 — A2-EXITRATE-1: **TAKE THE CLICK.** Applied. A2 = PASS 7/7.
+`exitrate` is now **STORED = 1** on `GF-QQQ-IC-Ride`, verified after a hard reload
+(`a5.bots.bot.exitrate === 1`).
+⚠️ **A single click does not do it, and this is the part worth carrying:** selecting the
+**already-displayed** value is a **no-op** — one click on "Every 1m" sent no write and the field
+was still absent after a hard reload (verified, not assumed). The field was materialized by a
+**TWO-STEP: Instant (0) → save → Every 1m (1) → save.** The intermediate `exitrate=0` was inert —
+AUTOMATIONS OFF, no positions, nothing signed — and is recorded rather than hidden.
+**Nothing else on the control moved:** seed 2500, limits 2/2, scanrate 1, nopdt 0, group `IC`,
+tags unchanged, `status "off"`, `disableExits 0`, both bot inputs still bound and EQUAL (A8), and
+the mechanic set is still **EMPTY** — it is still the base-only control.
+**A2 re-run fresh across all seven** (one page load each, post-reload): **12 of 12 non-bundle
+fields EQUAL, 0 fails.**
+Corrections applied, each with a dated note, originals left standing:
+`data/captures/2026-08-07-greenfield/GF-QQQ-IC-Ride/GF-QQQ-IC-Ride.txt` — the `exitrate 1` line is
+annotated in place: what the overnight session recorded was the **UI default and the hidden
+input**, not a stored model field.
+⚠️ **One deviation from the ruling's wording, stated rather than fudged:** the ruling says correct
+"the Ride's capture line **and CSV field**". `data/bots_config_v2.csv` **has no per-bot exitrate
+column** — scan speeds are not in its schema. The correction went into the capture file (which is
+where scan speeds live) plus a dated banner in the CSV recording the finding, the fix and this
+schema note. **No column was invented and no existing field was overloaded.** Adding a scan-speed
+column would be a schema change, i.e. a decision — flagged, not taken.
+
+### RULING 2 — A1-SPEC-1: **AMEND.** Applied to `greenfield-family-spec.md` §8.3. A1 = PASS 21/21.
+The original A1 row is **struck and left standing**; the amended row sits immediately below it
+with a dated amendment block. Amended text: **pair type decides the expected count.**
+(a) **arm-vs-CONTROL** → differ in **exactly ONE** mechanic. (b) **arm-vs-arm** → differ in
+**exactly TWO**, and those two must be **precisely each arm's own declared mechanic, with nothing
+else differing** — strictly stronger than "differs". ⭐ Two arms sharing a mechanic FIELD at
+different VALUES (`PT50`/`Canary` on `profits`; `SL100`/`SL200` on `stoploss`) differ in exactly
+ONE and are checked under (a).
+**The forcing fact is recorded in the amendment, as ruled:** run for the first time against a
+complete family, A1 produced **8 PASS / 13 FAIL and all 13 failures were correct builds** — it was
+unsatisfiable for 13 of 21 pairs by construction and **would have fired 13 false alarms every
+night, forever, on a family with nothing wrong with it.** An assert that cannot be satisfied gets
+muted, and a muted A1 is exactly the S1 ≈ HedgeD hole it exists to close.
+**Lesson recorded alongside it:** this is the same defect class §9 already corrected once (the
+kill criterion that counted *inputs* and was vacuously unfireable). That one was caught on paper;
+this one only surfaced when the seventh bot existed. **An assert is not verified until it has run
+against a COMPLETE, CORRECT population and returned zero failures.** A1, A2 and A8 had all been
+"run" at n=1 arm, where A1 and A2 were vacuous.
+**Re-run under the amended rule: 21 of 21 PASS** — 6 arm-vs-control at one mechanic, 2 shared-field
+pairs at one, 13 arm-vs-arm at exactly two, each pair's two being precisely the two arms' own
+declared mechanics; base fields equal in all 21.
+⛔ **The nightly assert builds against the amended text, not the struck one.**
+
+### STATE AFTER BOTH RULINGS
+**Every assert runnable pre-Day-0 passes: A1 21/21 · A2 7/7 · A3 7/7 · A7 3/3 · A8 7/7 · A9 7/7.**
+A4 moot · A4b and A6 not runnable pre-Day-0 · A5 not run, stated.
+AUTOMATIONS OFF on all seven. No pre-registration signed. Nothing can trade. D3 (the 15:52 DST
+question) still gates switching any arm on, and D1–D7 are otherwise unchanged.
+
+### Files changed this session
+`docs/greenfield-family-spec.md` (§8.3 A1 amended; 1866 → 1894 lines) ·
+`data/captures/2026-08-07-greenfield/GF-QQQ-IC-Ride/GF-QQQ-IC-Ride.txt` (exitrate line corrected) ·
+`data/captures/2026-08-07-greenfield/ASSERTS-A1-A9-and-capture-diff.txt` (A1 and A2 re-run
+sections + revised close) · `data/bots_config_v2.csv` (A2-EXITRATE-1 banner + schema note) ·
+`docs/state.md` · `docs/session-log.md` (this entry).
+**OA:** one field materialized on one bot (`GF-QQQ-IC-Ride.exitrate = 1`) via the two-step. Nothing
+else touched, nothing switched ON, no Library object modified.
+
+**HOLDING for Andy's commit.**

@@ -1,0 +1,67 @@
+# CAPTURE — GF-QQQ-IC-SL100 (bot, PR-18, arm 4 of 6)
+# captured: 2026-08-07 (six-arm build session), Chrome-direct, Option Alpha
+# METHOD: a5.bots.bot (client model) + attachment editors' hidden inputs, AFTER a hard reload.
+
+BOT             GF-QQQ-IC-SL100
+BOT_ID          BOTfw5TkkCRF4417860767788927225
+ARM             SL100 (stop loss at 100% of credit) · PR-18
+BUILT           2026-08-07, Phase B steps B1-B8
+
+## BOT-LEVEL SETTINGS (spec 5 table)
+account sim (Paper) OK · seed 2500 OK · posLimitDay 2 OK · posLimit 2 OK
+scanrate 1 OK · exitrate 1 OK (materialized explicitly) · nopdt 0 OK · symbols [] OK
+group IC (BGfw5TkkCRF4417860703275878471) OK
+tags "experiment,gfam,arm sl100,pr 18" OK · status "off" OK · disableExits 0 OK
+icon fas-robot bg-blue (default)
+
+## BOT INPUTS — the arm variable
+  GF_EXITS_PUT   id IN178607699688851   posType shortputspread
+  GF_EXITS_CALL  id IN178607709288872   posType shortcallspread
+
+  DECODED FIELD SET — IDENTICAL on both (A8 PASS):
+    stoploss  1        <- ** THE ARM MECHANIC **
+    smstoploss {"limitType":"pct","limit":100,"smart":"normal","text":"100% of bid/ask"}
+                       <- mechanic's pricing sub-field: NORMAL (G-1 HOLD stamp)
+    profits "" · dprofit "" · price "" · dstop "" · tstop "" · touch "" · xevents "" · epsdays ""
+    expdays   0.01   ·  smexpdays {"pct":100,"smart":"speedy"}     [spec 4.4 base]
+    dtype "short" · text "Stop Loss: 100%, Expiration: 10 minutes" (LABEL only)
+    PDT checkbox / bid-ask guard  both unchecked  OK
+
+> ⭐ C1'S UNIT ANSWER CONFIRMED AT THE WRITE SURFACE, FIRST-HAND. PR-18 stamps "RUNG:
+>   stoploss = 1" on the % OF CREDIT basis. The stored value read back is **1**, and the panel
+>   label renders "Stop Loss: 100%". OA stores this field as a FRACTION of credit (1 = 100%),
+>   the same convention as `profits` (0.5 = 50% on PT50). PR-18's re-stamp condition
+>   (%-of-RISK) is NOT triggered. Recorded so no later session reads the stored `1` as "1%"
+>   and "fixes" it to 100.
+
+  ARM MECHANIC: **stoploss 1 (+ smstoploss normal)** — exactly one mechanic over the Ride base.
+  Loaded from preset GF-SL100-EXITS. "Save as presets" left UNCHECKED on both writes.
+  G-1: stamped-under-G-1-HOLD.
+
+## ATTACHED AUTOMATIONS — rid list proves ATTACH, not COPY
+1. GF-ScannerA-PutSpread   rid RTfw5TkkCRF178605283747821  OK
+   scanner · Mon-Fri [1,2,3,4,5] · hdays skip · timerange ""
+   link IN178605447966781 -> input|bot|IN178607699688851|GF_EXITS_PUT
+2. GF-ScannerB-CallSpread  rid RTfw5TkkCRF178606271659881  OK
+   scanner · Mon-Fri [1,2,3,4,5] · hdays skip · timerange ""
+   link IN178606782436781 -> input|bot|IN178607709288872|GF_EXITS_CALL
+3. GF-Backstop-1552-FlatClose  rid RTfw5TkkCRF178606373201751  OK
+   repeat · freq 2 · interval 1 · byweekday [0,1,2,3,4] · ntime 1552 · holidays skip
+   endDate blank · startDate "2026-08-07T20:52:00.000Z" (D3 signature)
+   LABEL "Every week on Mon-Fri, 3:52pm EST"
+
+## NOTES (spec step B8) — PR-18 pasted VERBATIM
+source   docs/greenfield-family-spec.md 9, lines 1395-1446 (the fenced PR-18 block)
+length   4389 UTF-16 units · BYTE-EXACT TRUE, firstDiff = -1, after a hard reload
+
+## TEMPLATE (spec step B8)
+template_id  Tfw5TkkCRF4417860773009022425 · VERSION 1
+template tags "experiment,gfam,arm sl100,pr 18" (prefilled, left as-is)
+A8 at the template-save surface: the two serialised payloads compared EQUAL string-for-string.
+
+## SPEC STEP B5 — toggle screenshot substituted by value reads (status "off", disableExits 0)
+
+## DEFERRED TO DAY-0
+Layer 2 (a stop-loss row in the first new position's Trades list). Plus D3 and D4.
+Open, ANDY'S: PR-18's HYPOTHESIS still withholds the "Breakeven" name pending his read of how
+the arm should be published now that C8 removed the construction objection (CF-4 discharged).

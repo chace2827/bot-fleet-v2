@@ -1027,7 +1027,35 @@ and claims this makes the S1 ≈ HedgeD failure detectable `instead of four mont
 
 | Rule | Assertion | Catches |
 |---|---|---|
-| **A1** | For every unordered pair of `gfam` arms, the decoded field sets differ in **exactly one mechanic** | Two arms that are one arm (the S1 ≈ HedgeD class) **and** two arms that differ in more than one thing, on day 1 |
+| ~~**A1**~~ | ~~For every unordered pair of `gfam` arms, the decoded field sets differ in **exactly one mechanic**~~ 📝 **AMENDED 2026-08-07 — RULED BY ANDY. ORIGINAL LEFT STANDING, STRUCK. See A1 (amended) immediately below.** | ~~Two arms that are one arm (the S1 ≈ HedgeD class) **and** two arms that differ in more than one thing, on day 1~~ |
+| **A1** 📝 **AMENDED 2026-08-07** | **Pair type decides the expected count, because the family is a control + K design.** (a) **ARM-vs-CONTROL** (each of the six arms against `GF-QQQ-IC-Ride`): the decoded field sets differ in **EXACTLY ONE mechanic** — a trigger field and, if present, its own pricing sub-field. (b) **ARM-vs-ARM** (two different treatment arms): they differ in **EXACTLY TWO mechanics**, and those two must be **precisely each arm's own declared mechanic** — arm A's, absent on B, and arm B's, absent on A — **with nothing else differing**. ⭐ **Two arms that share a mechanic FIELD at different VALUES** (`PT50`/`Canary` on `profits`; `SL100`/`SL200` on `stoploss`) **differ in exactly ONE** and are checked under (a)'s rule. In every case the base fields (`expdays`, `smexpdays`, `chposLimitDay`, `chbidask`) must be EQUAL. | Two arms that are one arm (the S1 ≈ HedgeD class); an arm carrying a mechanic that is not its own; an arm that has lost its own mechanic; **and** any difference outside the arms' declared mechanics — all still caught. **What is no longer caught as a failure is the design itself.** |
+
+> ### 📝 A1 AMENDMENT — 2026-08-07, RULED BY ANDY ON FINDING A1-SPEC-1. The original row is struck above, left standing.
+> **The forcing fact, recorded because it is what made this a bug and not a preference:** the
+> assert was run for the first time against a complete family on 2026-08-07, at n=7 bots and
+> **21 real pairs. It produced 8 PASS and 13 FAIL — and all 13 failures were correct builds.**
+> In a control + K design two DIFFERENT treatment arms differ from each other in exactly TWO
+> mechanics **by construction** (arm A's mechanic is absent on B and B's is absent on A), so the
+> original text was **unsatisfiable for 13 of the 21 pairs and would have fired 13 false alarms
+> every night, forever, on a family with nothing wrong with it.** An assert that cannot be
+> satisfied is not a strict assert; it is an assert that gets muted, and a muted A1 is exactly
+> the S1 ≈ HedgeD hole it was written to close.
+> **This is the same defect class §9 already corrected once** — the family-level kill criterion
+> that counted *inputs* and was "vacuously unfireable" under Option A. Both reviewers caught
+> that one on paper; this one only surfaced when the seventh bot existed. **The lesson recorded
+> for the other asserts: an assert is not verified until it has been run against a COMPLETE,
+> CORRECT population and produced zero failures.** A1, A2 and A8 had all been "run" at n=1 arm,
+> where A1 and A2 were vacuous.
+> **What the amendment does NOT relax:** every failure mode the original was written to catch is
+> still caught — see the Catches column. Arm-vs-arm is not waived, it is given its correct
+> expected value (2) plus the requirement that the two differing mechanics be **exactly the two
+> arms' own declared mechanics and nothing else**, which is strictly stronger than "differs".
+> **Verified against the built family the same day:** under the amended rule all **21 of 21**
+> pairs pass — 6 arm-vs-control at one mechanic, 2 shared-field pairs at one, 13 arm-vs-arm at
+> exactly two, each pair's two being precisely the two arms' own mechanics.
+> ⛔ **THE NIGHTLY ASSERT BUILDS AGAINST THE AMENDED TEXT, NOT THE STRUCK ONE.** Evidence:
+> `data/captures/2026-08-07-greenfield/ASSERTS-A1-A9-and-capture-diff.txt`;
+> `session-log.md` 2026-08-07 (six-arm session) and (rulings).
 | **A2** | Every non-bundle field (rid list, seed, both limits, scan speeds, day trading, entry-action payload) is equal across all `gfam` arms. 📝 **AMENDED 2026-08-06 (Andy, authorized):** add **trigger config** (class / time / repeat / days) to the comparison — trigger lives at the bot, not the shared Library object (F-3, `session-log.md` 2026-08-06 late), so §8.2 step 6's rid-list diff does not cover it and the backstop's 15:52 / Mon–Fri / holidays-skip config (§4.2) was an undetected matching hazard. | Silent divergence in the "shared" half, **including a per-arm trigger-config mismatch** (e.g. the backstop's 15:52 hand-set on all seven bots) |
 | **A3** | Each arm's decoded field set **equals its pre-registered field set**, value-by-value | ⭐ **The all-arms-mistyped-identically hole.** A1 and A2 both pass in that case; A3 is the only rule that fires |
 | ~~**A4**~~ | ~~No arm's stored bundle equals `SENTINEL-SL1`~~ 📝 **MOOT 2026-08-06 (F-4 ruling, §1.3a) — SENTINEL-SL1 is struck, nothing is ever stamped it.** | ~~A *typo* stamping the sentinel as an arm value.~~ Superseded by **A9** below |

@@ -1,0 +1,92 @@
+# CAPTURE — GF-QQQ-IC-Trail (bot, PR-16, arm 2 of 6) — THE ARMED TRAIL
+# captured: 2026-08-07 (six-arm build session), Chrome-direct, Option Alpha
+# METHOD: every value read from a5.bots.bot (client model) and from the attachment editors'
+#         hidden inputs, AFTER a hard reload of /bots/bot/<id>/settings.
+#         Never innerText, never a save banner (CLAUDE.md 9.1a).
+
+BOT             GF-QQQ-IC-Trail
+BOT_ID          BOTfw5TkkCRF4417860754672239833
+ARM             Trail (ARMED trailing stop) · PR-16
+BUILT           2026-08-07, Phase B steps B1-B8
+
+## BOT-LEVEL SETTINGS (spec 5 table) — read from a5.bots.bot after hard reload
+account         accountId = "sim"          <- Paper Trading      OK
+seed            2500                                             OK
+posLimitDay     2                                                OK
+posLimit        2                                                OK
+scanrate        1                           <- Automations Every 1m OK
+exitrate        1                           <- Exit Options Every 1m OK (MATERIALIZED explicitly,
+                                               same as PT50 — see that capture's note)
+nopdt           0                           <- Day Trading Allowed OK
+symbols         [] (none)                                        OK
+group           {"id":"BGfw5TkkCRF4417860703275878471","name":"IC"}   OK
+tags            "experiment,gfam,arm trail,pr 16"                OK spec 5.1 order exactly
+status          "off"                       <- AUTOMATIONS OFF    OK
+disableExits    0                           <- EXIT OPTIONS ON    OK
+icon            fas-robot bg-blue           (default — same as Ride/PT50)
+
+## BOT INPUTS — the arm variable. THE LOAD-BEARING READ.
+  GF_EXITS_PUT   id IN178607567686951   type exits   posType shortputspread
+  GF_EXITS_CALL  id IN17860757187372    type exits   posType shortcallspread
+
+  DECODED FIELD SET — IDENTICAL on both (assert A8 PASS):
+    tstop     {"type":"tstop","target":40,"trail":15,"text":"40% / 15%"}
+                        <- ** THE ARM MECHANIC — THE ARMED TRAIL, EXACTLY AS PR-16 RE-SCOPES IT **
+                           target = 40 ("Activate at 40% of credit")
+                           trail  = 15 ("Close on 15% pullback")
+                           Entered from preset GF-TRAIL-EXITS; the values were READ BACK from the
+                           bot input object, not from the preset name. PR-16's STOP condition
+                           ("if the armed values cannot be entered as specified, STOP and return
+                           to Andy") DID NOT TRIGGER — both entered and persisted exactly.
+    smtstop   {"limitType":"pct","limit":100,"smart":"normal","text":"100% of bid/ask"}
+                        <- the mechanic's own pricing sub-field: NORMAL (C3 was never resolved;
+                           G-1 HOLD stamp — uniform platform default, not an arm signature)
+    profits   ""        dprofit ""        price    ""
+    stoploss  ""        dstop   ""        touch    ""
+    xevents   ""        epsdays ""
+    expdays   0.01                        <- 15:50 time exit  [spec 4.4 base]
+    smexpdays {"pct":100,"text":"100% of bid/ask","smart":"speedy"}   <- FAST [spec 4.4 base]
+    dtype     "short"
+    text      "Expiration: 10 minutes, Trail: 40% / 15%"   <- LABEL only, not config
+    PDT checkbox / bid-ask guard   both unchecked (absent from payload)   OK
+
+  ARM MECHANIC: **tstop 40/15 (+ smtstop normal)** — exactly one mechanic over the Ride base.
+  G-1: stamped-under-G-1-HOLD (every non-mechanic exit-pricing sub-field uniform normal).
+  "Save as presets" left UNCHECKED on both writes.
+
+## ATTACHED AUTOMATIONS (spec step B3) — rid list proves ATTACH, not COPY
+1. GF-ScannerA-PutSpread
+   rid        RTfw5TkkCRF178605283747821    == Phase A object  OK ATTACHED, NOT COPIED
+   ttype scanner · weekdays Mon-Fri [1,2,3,4,5] · hdays "skip" · timerange ""
+   input link IN178605447966781 -> {"type":"input","nid":"bot","input":"IN178607567686951",
+              "text":"GF_EXITS_PUT"}    ^ chain of 1.1 BOUND (oldValue ignored, 1.2 rule 2)
+2. GF-ScannerB-CallSpread
+   rid        RTfw5TkkCRF178606271659881    == Phase A object  OK ATTACHED, NOT COPIED
+   ttype scanner · weekdays Mon-Fri [1,2,3,4,5] · hdays "skip" · timerange ""
+   input link IN178606782436781 -> {"type":"input","nid":"bot","input":"IN17860757187372",
+              "text":"GF_EXITS_CALL","oldValue":""}
+3. GF-Backstop-1552-FlatClose
+   rid        RTfw5TkkCRF178606373201751    == Phase A object  OK ATTACHED, NOT COPIED
+   ttype repeat · freq 2 (weekly) · interval 1 · byweekday [0,1,2,3,4] Mon-Fri
+   ntime 1552 · holidays "skip" · endDate blank (indefinite)
+   startDate  "2026-08-07T20:52:00.000Z"   <- D3 DST signature reproduces (see PT50 capture)
+   bymonthday {"value":"day_7","text":"7th"}  <- vestigial Month-mode default, inert under freq=2
+   LABEL      "Every week on Mon-Fri, 3:52pm EST"
+
+## NOTES (spec step B8) — PR-16 pasted VERBATIM
+source          docs/greenfield-family-spec.md 9, lines 1287-1351 (the fenced PR-16 block)
+length          5412 UTF-16 units
+BYTE-EXACT      TRUE — firstDiff = -1, verified after a hard reload. Double-escape path, ONE write.
+
+## TEMPLATE (spec step B8)
+template_id     Tfw5TkkCRF4417860759179743713
+VERSION         1              CLONES 1        LAST UPDATE Aug 7
+template tags   "experiment,gfam,arm trail,pr 16"   (prefilled, left as-is — see PT50 capture)
+template Notes  BYTE-EXACT TRUE, 5412/5412, firstDiff = -1, verified on the template page
+
+## SPEC STEP B5 — toggle screenshot substituted by value reads (same as Ride/PT50)
+status="off", disableExits=0, read after a hard reload.
+
+## DEFERRED TO DAY-0
+Layer 2 (first NEW position's Trades list — PR-16's VERIFICATION line calls for a trailing-stop
+row). Plus D3 and D4.

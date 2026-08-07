@@ -1,0 +1,180 @@
+# CAPTURE — GF-QQQ-IC-Ride (bot, PR-14, the family control)
+# captured: 2026-08-07 (overnight build session), Chrome-direct, Option Alpha
+# METHOD: every value read from a5.bots.bot (client model) and from the attachment editors'
+#         hidden inputs, AFTER a hard reload of /bots/bot/<id>/settings.
+#         Never innerText, never a save banner (CLAUDE.md 9.1a).
+#         Rendered labels are recorded only where explicitly marked LABEL.
+# Account state at capture: "Account inactive, no changes will be saved" banner PRESENT
+#   -> pre-adjudicated FALSE ALARM. Every write below survived a hard reload. Re-confirmed again.
+
+BOT             GF-QQQ-IC-Ride
+BOT_ID          BOTfw5TkkCRF4417860701930934951
+ARM             control (Ride) · PR-14
+BUILT           2026-08-07, Phase B step B1-B8
+
+## BOT-LEVEL SETTINGS (spec 5 table) — read from a5.bots.bot after hard reload
+account         accountId = "sim"          <- Paper Trading      ✅ spec: Paper
+seed            2500                        <- $2,500             ✅
+posLimitDay     2                                                 ✅
+posLimit        2                                                 ✅
+scanrate        1                           <- Automations Every 1m ✅
+exitrate        1                           <- Exit Options Every 1m ✅
+                # ⛔ THIS LINE WAS WRONG WHEN WRITTEN — CORRECTED 2026-08-07 BY ANDY'S RULING
+                # ON FINDING A2-EXITRATE-1. It is left standing above as the record of what the
+                # 2026-08-07 (overnight) session recorded. What that session actually read was
+                # the UI DEFAULT and the hidden input, NOT a stored model field: `exitrate` was
+                # ABSENT from a5.bots.bot on this bot. The six arms all carried a STORED 1,
+                # so A2 (which lists scan speeds among the fields that must be equal across
+                # arms) failed on this one field.
+                # RULED AND FIXED 2026-08-07: exitrate is now STORED = 1 on this bot.
+                # ⚠️ HOW, recorded because it is not obvious and will be needed again:
+                #    selecting the ALREADY-DISPLAYED value is a NO-OP — one click on "Every 1m"
+                #    sent no write and the field stayed absent across a hard reload (verified).
+                #    The field was materialized by a TWO-STEP: Instant (0) -> save -> Every 1m
+                #    (1) -> save. The intermediate exitrate=0 was inert: AUTOMATIONS OFF, no
+                #    positions, no signed pre-registration. Recorded rather than hidden.
+                # VERIFIED AFTER A HARD RELOAD: a5.bots.bot.exitrate === 1. Nothing else on the
+                #    control moved — seed 2500, limits 2/2, scanrate 1, nopdt 0, group IC,
+                #    tags unchanged, status "off", disableExits 0, both bot inputs still EQUAL
+                #    (A8), mechanic set still EMPTY (this is still the base-only control).
+                # A2 RE-RUN ACROSS ALL SEVEN: 12 of 12 non-bundle fields EQUAL, 0 fails.
+nopdt           0                           <- Day Trading Allowed ✅
+symbols         (none)                      <- QQQ carried in the automation ✅
+group           {"id":"BGfw5TkkCRF4417860703275878471","name":"IC"}
+tags            "experiment,gfam,arm ride,pr 14"                  ✅ spec 5.1 order exactly
+status          "off"                       <- AUTOMATIONS OFF    ✅ spec: OFF until Day-0
+disableExits    0                           <- EXIT OPTIONS ON    ✅ spec: ON
+icon            fas-robot bg-blue           (default, not specified)
+
+## BOT INPUTS — the arm variable (spec 1.1). THE LOAD-BEARING READ.
+# Read from a5.bots.bot.inputs[].defaultValue — the BOT INPUT OBJECT, per the G2 rider (1.2
+# rule 1). NOT the Open Position action (which holds only a reference), NOT oldValue.
+
+  GF_EXITS_PUT   id IN178607080900761   type exits   posType shortputspread
+  GF_EXITS_CALL  id IN178607092377072   type exits   posType shortcallspread
+
+  DECODED FIELD SET — IDENTICAL on both (assert A8 PASS, see below):
+    profits   ""        dprofit ""        price    ""
+    stoploss  ""        dstop   ""        tstop    ""
+    touch     ""        xevents ""        epsdays  ""
+    expdays   0.01                        <- 10 minutes before close = 15:50   [spec 4.4 base]
+    smexpdays {"pct":100,"text":"100% of bid/ask","smart":"speedy"}
+                                          <- SmartPricing FAST. spec 4.4 requires `speedy`.
+    dtype     "short"
+    text      "Expiration: 10 minutes"    <- LABEL only, not config
+    chposLimitDay / PDT checkbox   unchecked  (absent from payload)  [spec 4.4 item 11] ✅
+    chbidask / bidask guard        unchecked  (absent from payload)  [spec 4.4 item 12] ✅
+
+  ARM MECHANIC: **none** — Ride is base-only. This is the control. Correct per spec 4.4.
+
+> ⛔ LABEL-vs-VALUE TRAP, HIT AND RECORDED. The Exit Options panel renders the Expiration
+>   pricing as "100% of bid/ask", which reads like SmartPricing Normal and appears to
+>   contradict spec 4.4's `smexpdays = speedy`. It does not. "100% of bid/ask" is the LIMIT
+>   (`pct":100`); the MODE is the separate `smart` key, and it reads `speedy`. This is
+>   greenfield-family-spec.md 1.2 rule 4 ("any parser keying on the string `fast` silently
+>   misses it — the internal value is `speedy`") reproduced first-hand on the write path.
+>   Recorded so no later session "fixes" a correct field on the strength of a label.
+
+## ATTACHED AUTOMATIONS (spec step B3) — rid list proves ATTACH, not COPY
+# Read from each attachment's Edit Settings panel hidden inputs.
+
+1. GF-ScannerA-PutSpread
+   rid        RTfw5TkkCRF178605283747821    == Phase A object  ✅ ATTACHED, NOT COPIED
+   ttype      scanner
+   weekdays   {"type":"weekday","value":[1,2,3,4,5],"text":"Mon-Fri"}
+   timerange  ""                            <- Market Time (EST) left blank; the 1:30-2:00
+                                               window is enforced by the tree, not the trigger
+   input link IN178605447966781 (automation input)
+              -> {"type":"input","nid":"bot","input":"IN178607080900761","text":"GF_EXITS_PUT"}
+              ^ THE CHAIN OF 1.1 IS BOUND: action -> automation input -> BOT input.
+                oldValue on this record is the pre-link "None" snapshot and is NOT config
+                (1.2 rule 2). Ignored.
+
+2. GF-ScannerB-CallSpread
+   rid        RTfw5TkkCRF178606271659881    == Phase A object  ✅ ATTACHED, NOT COPIED
+   ttype      scanner
+   weekdays   {"type":"weekday","value":[1,2,3,4,5],"text":"Mon-Fri"}
+   timerange  ""
+   input link IN178606782436781
+              -> {"type":"input","nid":"bot","input":"IN178607092377072","text":"GF_EXITS_CALL"}
+
+3. GF-Backstop-1552-FlatClose
+   rid        RTfw5TkkCRF178606373201751    == Phase A object  ✅ ATTACHED, NOT COPIED
+   ttype      repeat
+   freq       2          <- weekly
+   interval   1
+   byweekday  {"type":"weekday","value":[0,1,2,3,4],"text":"Mon-Fri"}
+   ntime      1552       <- ⭐ spec 4.2's operative field, EXACT
+   startDate  2026-08-06        (serialised: "2026-08-06T20:52:00.000Z")
+   endDate    ""                <- repeats indefinitely  ✅
+   holidays   "skip"            ✅ spec 4.2
+   LABEL      "Every week on Mon-Fri, 3:52pm EST"
+
+> ⛔ THE DST QUESTION REPRODUCES EXACTLY (spec 4.2, Day-0 step D3). The saved trigger
+>   serialises `startDate 2026-08-06T20:52:00.000Z` = 15:52 at UTC-5 (EST). Day-0 falls in
+>   EDT (UTC-4), where that instant is **16:52 ET — after the close**. `ntime=1552` is the
+>   field the scheduler is believed to use and it is correct; `startDate`'s time component
+>   may be a stamp only. THIS IS UNRESOLVED AND IS NOT RESOLVED HERE. D3 stands, and it is
+>   ordered BEFORE the arms are switched on: if the literal-EST reading is right the backstop
+>   never fires, on all seven arms at once, and the absence looks exactly like "nothing needed
+>   closing." Same shape as the pilot's `2026-08-03T20:52:00.000Z`.
+
+## F-3 CONFIRMED AGAIN, AT THE ATTACH SURFACE
+The Add Automation panel is literally {Automation, Schedule}: the CLASS and the whole trigger
+config are chosen PER BOT, PER ATTACHMENT. The Library object carries none of it. So the
+backstop's 15:52 / Mon-Fri / holidays-skip is a hand-set surface that must be re-entered
+identically on all seven arms, and assert A2 (as amended 2026-08-06) is what catches a
+divergence. Schedule classes enumerated first-hand: CONTINUOUSLY {Scanner, Monitor} ·
+TRIGGERS {Date, Repeating, Market open, Market close, Position opened, Position closed,
+Webhook} · MANUAL {Button}.
+
+## NOTES (spec step B8) — PR-14 pasted VERBATIM
+source          docs/greenfield-family-spec.md 9, lines 1224-1257 (the fenced PR-14 block)
+length          2339 UTF-16 units / 2338 codepoints / 2372 bytes UTF-8
+BYTE-EXACT      ✅ TRUE — reconstructed from the stored <pre> (<br> -> \n, one entity-decode
+                pass) and compared character-by-character against the source. firstDiff = -1.
+                Verified AFTER a hard reload, not from the save response.
+
+> ⛔ THE PILOT'S NOTES DEFECT REPRODUCED, THEN DEFEATED — first attempt lost 15 characters.
+>   Pasting the block plain, and again with single HTML-escaping, both came back 2324/2339:
+>   OA's sanitizer DECODES ENTITIES AND THEN STRIPS UNKNOWN TAGS, so `<capture>` and `<hash>`
+>   on the CONFIG HASH line were eaten and the line read `CONFIG HASH       @ `. The rendered
+>   panel looked correct. This is the identical failure recorded on the pilot
+>   (oa-ops-runbook.md 4.0 item 2; session-log.md 2026-08-04 finding C).
+>   FIX APPLIED — the runbook's own documented counter: **DOUBLE-ESCAPE** (`&amp;lt;`) so one
+>   sanitizer decode pass leaves `&lt;` intact. Third write verified byte-exact 2339/2339.
+>   The defect was caught ONLY by the byte-exact compare. Eyeballing the panel would have
+>   passed it. Every remaining arm must use the double-escape path from the first write.
+
+## TEMPLATE (spec step B8)
+template_id     Tfw5TkkCRF4417860721733331241
+VERSION         1              CLONES 1        LAST UPDATE Aug 6
+template tags   "experiment,gfam,arm ride,pr 14"
+template Notes  BYTE-EXACT ✅ TRUE, 2339/2339, verified on the template page after navigation
+carries         all three automations (SCANNERS x2, EVENTS x1 with the 3:52pm pattern) and
+                both bot inputs at "Expiration: 10 minutes"
+
+> 📝 DIVERGENCE, MINOR, RECORDED NOT CORRECTED. spec 5.1 specifies template tags
+>   `experiment,pr nn,gfam` — three tags, without the arm tag. The Save Template panel
+>   PRE-FILLS tags from the bot (four tags). `arm ride` was removed in the widget and
+>   `input[name=tags].value` read `experiment,gfam,pr 14` at submit time, but the saved
+>   template reads `experiment,gfam,arm ride,pr 14` — the removal did not take server-side.
+>   Left as-is: 5.1 states the tag is "a *search handle*; the record is the pre-registration
+>   entry pasted verbatim into template Notes", and that record is byte-exact. Consistency
+>   across the seven arms is what A2 needs, and inheriting the bot's tag set is consistent by
+>   construction. Flagged for Andy; not re-edited.
+
+## ⛔ NOT DONE — spec step B5's screenshot
+B5 asks for a screenshot of both toggles filed to
+`data/captures/edit-verify/<date>/<bot>_toggles.png`, on the reasoning (spec 1.6) that toggle
+state "does not survive text capture". **That premise is false on this surface, first-hand:**
+`a5.bots.bot.status = "off"` and `a5.bots.bot.disableExits = 0` are VALUE reads of exactly
+those two toggles, and a value read is stronger evidence than a screenshot under
+evidence-standards. The screenshot was NOT filed. Recorded as a substitution, not skipped
+silently — Andy's to accept or reject.
+
+## DEFERRED TO DAY-0
+Layer 2 (behavioural, first NEW position's Trades list, spec 8.5) — impossible: account
+inactive, no positions. Plus D3 (backstop fire time, above) and D4 (ITM action label), both of
+which gate this arm's INVERTED liveness rule (spec 9: "until D2/D4 is answered the inverted
+rule is ADVISORY, not fireable").

@@ -364,6 +364,150 @@ entry is the other session's work, not an unexpected diff.
 > F-1, F-3, F-4 (SENTINEL-SL1 unexpressible, Day-0 blocker) all **unchanged, still open** — see the
 > 2026-08-06 (late) block above for full text.
 
+> ### ✅ UPDATE — 2026-08-07 (overnight), FRESH SESSION. **PHASE A CLOSED. PHASE B PART 1 DONE:
+> `GF-QQQ-IC-Ride` IS BUILT AND SERVER-VERIFIED.** Both blocks above LEFT STANDING per convention.
+>
+> **Phase A is now COMPLETE — 3 of 3 shared objects captured.** The open item from the block above
+> (`GF-Backstop-1552-FlatClose` present but never field-verified or captured) is **CLEARED**:
+> `RTfw5TkkCRF178606373201751`, version 1, `inputs []`, Warnings 0, unrestricted Positions loop →
+> Close Position (`Market`, 100%, memo `1552 backstop flat close`). **A7 baseline (first recording)**
+> `116069bddf8b8c9e58bd8f28313c2ad95726fa3f7205df4dfde82de7a3e2e5b5`. Capture:
+> `data/captures/2026-08-06-gfam/GF-Backstop-1552-FlatClose.txt`.
+>
+> **`GF-QQQ-IC-Ride` (PR-14) — `BOTfw5TkkCRF4417860701930934951`.** Every §5 bot-level setting, both
+> bot inputs, all three attachments and their per-bot trigger configs, Notes and Template were read
+> back from the client model **after a hard reload** and match spec. Paper · `seed 2500` ·
+> limits 2/2 · scan 1m/1m · Day Trading Allowed · Group **`IC`** · tags
+> `experiment,gfam,arm ride,pr 14` · **`status "off"` (AUTOMATIONS OFF)** · `disableExits 0`
+> (EXIT OPTIONS ON). Bot inputs `IN178607080900761` (GF_EXITS_PUT) and `IN178607092377072`
+> (GF_EXITS_CALL), **both bound, both non-empty, decoded field sets EQUAL (A8 PASS)**:
+> `expdays 0.01` + `smexpdays {pct:100, smart:"speedy"}`, every trigger field empty, PDT and
+> bid-ask guard unchecked. All three `rid`s equal Phase A's objects — **attached, not copied.**
+> Backstop trigger `ttype repeat · freq 2 · interval 1 · byweekday [0,1,2,3,4] · ntime 1552 ·
+> endDate "" · holidays "skip"`. **Notes byte-exact 2339/2339.** Template
+> `Tfw5TkkCRF4417860721733331241` V1, Notes byte-exact 2339/2339. Capture:
+> `data/captures/2026-08-07-greenfield/GF-QQQ-IC-Ride/GF-QQQ-IC-Ride.txt`. Row in
+> `data/bots_config_v2.csv` (now 4 rows: 3 shared automations + 1 bot).
+>
+> ⛔ **NEW FINDING A7-DRIFT-1 — UNRULED, GATED TO ANDY.** `GF-ScannerA-PutSpread` live-reads
+> **version 9** (recorded 3) and A7 `3308ce8b476d2bd090d9519b445748fc4c0d0fdbe71861c83a249729b1a5a30a`
+> (recorded `d35307e5…871ec7`), `updated 2026-08-07T01:30:07.970Z` — after its own capture, inside the
+> prior session. The **hash method is not in doubt**: the same formula reproduced ScannerB's recorded
+> baseline exactly. Observed delta: its automation input now carries an explicit `defaultValue` object
+> `text:"None"` where the capture read "NOT SET" (ScannerB has no `defaultValue` key at all — both
+> F-4-compliant in intent, not byte-identical to each other). **Tree and Open-Position payload diffed
+> field-by-field and UNCHANGED.** The v3→v9 gap is *consistent with* the prior session's preset work
+> but that is an inference, not an observation. **Not corrected** — re-baselining A7 changes an
+> operational assert's reference value, which is ambiguous under the doc-edit rule and therefore gated.
+> **Andy's ruling needed.** Does not block the arms: building a bot does not write to a Library object.
+>
+> ✅ **A7-DRIFT-1 — RULED 2026-08-07 BY ANDY: ADOPT THE NEW BASELINE. Applied same day.** The
+> finding paragraph above is **left standing** per this doc's correction convention; read this
+> banner with it. `GF-ScannerA-PutSpread`'s A7 baseline is now
+> **`3308ce8b476d2bd090d9519b445748fc4c0d0fdbe71861c83a249729b1a5a30a`** at **version 9**.
+> **Cause, as ruled:** the drift is the **own-session materialization of the F-4 `Default Value =
+> None` setting** on automation input `IN178605447966781` — the input acquired an explicit
+> `defaultValue` object (`text:"None"`) where the 2026-08-06 capture recorded "NOT SET". The
+> **tree and the full Open-Position action payload were diffed field-by-field and are UNCHANGED**
+> (dated first-hand observation, 2026-08-07 overnight session). **A7 detected it as designed** —
+> a config-surface change to a shared object surfaced within one day, which is the assert's whole
+> purpose; the detection is a PASS of the mechanism, not a failure of it. Baseline record updated
+> in `data/bots_config_v2.csv` (the A-series' store) and a dated banner appended to
+> `data/captures/2026-08-06-gfam/GF-ScannerA-PutSpread.txt`, whose original recorded hash line is
+> left standing as the record of what was observed on 2026-08-06.
+>
+> ⛔ **BOT GROUP `IC` WAS CREATED — the account had no such group.** Live groups were
+> `Archive · Directional-Focus · IC-Focus · Lab · Monitor · OA-Mirror-Focus`. `IC-Focus` holds exactly
+> **one** bot (`IC-SPX-FastPT25-S2`), so it is a focus/workflow group, not the pillar container —
+> `oa-ops-runbook.md` §3's `Group = Pillar` reorganisation has never been executed. Resolved by
+> executing `greenfield-family-spec.md` §5.2 literally, which overrides §3 for these bots by name.
+> **Flagged:** the account now carries both `IC` and `IC-Focus`, and §3's "Current state (v1,
+> pre-sweep): `SPX-IC` and `OA-Mirror` only" is stale on its face. Not edited — that is a decision.
+>
+> ⛔ **THE PILOT'S NOTES DEFECT REPRODUCED AND DEFEATED.** First two writes of the PR-14 block lost
+> `<capture>` and `<hash>` (2324/2339) — OA's sanitizer decodes entities *then* strips unknown tags,
+> and the rendered panel looked correct both times. Fixed with `oa-ops-runbook.md` §4.0 item 2's own
+> counter: **double-escape (`&amp;lt;`)**. Every remaining arm must use that path from the first write.
+>
+> **STILL NOT BUILT: the six research arms** (PT50 · Trail · Touch0 · SL100 · Canary · **SL200 LAST**).
+> Stopped at a clean per-arm boundary on context budget. The next session's exact per-arm sequence and
+> seven method notes are in `session-log.md`'s 2026-08-07 (overnight) entry, §9.
+>
+> F-1, F-3 (re-confirmed first-hand at the attach surface: the Add Automation panel is literally
+> {Automation, Schedule} — trigger class and config are per-bot) and F-4 all **unchanged, still open**.
+> **D3 (the 15:52 DST question) reproduces exactly** on this bot: the saved trigger serialises
+> `startDate 2026-08-06T20:52:00.000Z` = 15:52 at UTC−5, which in EDT is 16:52 ET. `ntime=1552` is
+> correct; the question is unresolved and D3 stands, ordered BEFORE any arm is switched on.
+
+> ### ✅ UPDATE — 2026-08-07 (six-arm session). **THE GREENFIELD FAMILY IS COMPLETE — ALL SEVEN
+> BOTS BUILT AND SERVER-VERIFIED.** Every block above is LEFT STANDING per convention.
+>
+> **The six arms, built per-arm atomic in the ordered sequence, each fully verified before the
+> next was started:**
+> `-PT50` (PR-15) `BOTfw5TkkCRF4417860738688735152` · `-Trail` (PR-16)
+> `BOTfw5TkkCRF4417860754672239833` · `-Touch0` (PR-17) `BOTfw5TkkCRF4417860760818962144` ·
+> `-SL100` (PR-18) `BOTfw5TkkCRF4417860767788927225` · `-Canary` (PR-20)
+> `BOTfw5TkkCRF4417860774419022836` · `-SL200` (PR-19) `BOTfw5TkkCRF4417860785000861357`, last.
+> All seven: Paper · `seed 2500` · limits 2/2 · scan 1m/1m · Day Trading Allowed · Group `IC` ·
+> **`status "off"` (AUTOMATIONS OFF)** · `disableExits 0` (EXIT OPTIONS ON) · symbols empty ·
+> both bot inputs bound, non-empty and EQUAL · three attachments by `rid` (**attach, not copy** —
+> corroborated independently by the Library, which now reads **"7 bots"** on each shared object) ·
+> Notes byte-exact, firstDiff −1, on the FIRST write for all six · Template V1 each.
+> Captures: `data/captures/2026-08-07-greenfield/<bot>/`. `data/bots_config_v2.csv` = 3 shared
+> automations + 7 bots. Account went 33 → 40 bots.
+>
+> **A7-DRIFT-1 — RULED BY ANDY (ADOPT) AND APPLIED**; see the ruling banner earlier on this page.
+> Re-verified live at close: ScannerA still hashes `3308ce8b…`, `updated` unchanged. Building six
+> bots does not write to a shared Library object — now first-hand, not inferred.
+>
+> **Asserts at n=7, recorded verbatim in
+> `data/captures/2026-08-07-greenfield/ASSERTS-A1-A9-and-capture-diff.txt`:**
+> A3 **PASS 7/7** (each arm's decoded set == its pre-registered set) · A7 **PASS 3/3** ·
+> A8 **PASS 7/7** · A9 **PASS 7/7** · A4 moot · A4b/A6 not runnable pre-Day-0 · A5 not run
+> (stated). §8.2 capture-diff run in full; **both G2 hops resolved explicitly on every arm**;
+> **arm-vs-control diff PASSES 6 of 6 — exactly one differing mechanic per pair.**
+>
+> ⛔ **TWO FINDINGS, BOTH GATED TO ANDY, NEITHER CORRECTED.**
+> **A2-EXITRATE-1** — `exitrate` is not stored on the Ride (model field undefined; UI and hidden
+> input both read Every 1m / 1) but IS stored as `1` on all six arms, which this session
+> materialized deliberately. A2 lists scan speeds among the fields that must be equal, so **A2
+> fails on this one field**; behaviour is identical on all seven. The Ride's capture line
+> "exitrate 1" is falsified — it recorded the UI default. Remedy is one click on the Ride
+> (Scan Speeds → EXIT OPTIONS → Every 1m); **not performed** — the Ride is a verified control.
+> **A1-SPEC-1** — §8.3 rule A1 ("every unordered pair differs in exactly one mechanic") is
+> **unsatisfiable for 13 of its 21 pairs by construction**: two different treatment arms in a
+> control+K design differ from each other in exactly two. 8 pairs pass (six arm-vs-Ride, plus
+> PT50/Canary and SL100/SL200, which share a field). The property the family needs holds. **The
+> nightly implementation must not be built against A1's current text.** Same class as the
+> "vacuously unfireable" defect §9 already corrected once.
+>
+> **PR-16's STOP condition did not trigger** — the armed trail entered as `target`=40 / `trail`=15
+> and persisted. **C1's unit answer confirmed at the write surface**: `stoploss` is a FRACTION of
+> credit (1 = 100%, 2 = 200%), same convention as `profits`; no re-stamp triggered.
+>
+> ### ✅ BOTH FINDINGS RULED BY ANDY AND CLOSED — 2026-08-07 (rulings). Text above left standing.
+> **A2-EXITRATE-1 → TAKE THE CLICK, applied.** `exitrate` is now **STORED = 1** on the Ride,
+> hard-reload verified. ⚠️ A single click is a **no-op** when the picker already displays the
+> value — materialized by a **two-step (Instant 0 → Every 1m 1)**, intermediate state inert
+> (AUTOMATIONS OFF, no positions). Nothing else on the control moved; its mechanic set is still
+> empty. **A2 = PASS 7/7, 12 of 12 non-bundle fields equal, 0 fails.** The Ride's capture line is
+> corrected in place with a dated note. ⚠️ `bots_config_v2.csv` **has no per-bot exitrate column** —
+> the correction lives in the capture plus a dated CSV banner; adding a column would be a schema
+> change and is flagged, not taken.
+> **A1-SPEC-1 → AMEND, applied.** `greenfield-family-spec.md` §8.3's A1 row is **struck and left
+> standing**, replaced by a dated amended row: **arm-vs-control differ in exactly ONE mechanic;
+> arm-vs-arm differ in exactly TWO — precisely each arm's own, nothing else** (shared-field pairs
+> like PT50/Canary and SL100/SL200 differ in ONE). The **13-false-alarms-per-night arithmetic is
+> recorded in the amendment as the forcing fact**, with the lesson that an assert is not verified
+> until it has run against a complete, correct population and returned zero failures.
+> **A1 = PASS 21/21.** ⛔ The nightly assert builds against the amended text.
+> ⭐ **EVERY ASSERT RUNNABLE PRE-DAY-0 NOW PASSES: A1 21/21 · A2 7/7 · A3 7/7 · A7 3/3 · A8 7/7 ·
+> A9 7/7.** A4 moot · A4b/A6 not runnable pre-Day-0 · A5 not run (stated). Spec now 1,894 lines,
+> sha256 `0e84e86278d7416936097372e04536f334362c05921edd50862594f42510fbad` (read 2026-08-07;
+> ⚠️ treat an embedded hash as a timestamp, not a fact).
+> **D3 reproduces on all six** (`startDate 2026-08-07T20:52:00.000Z`) and still stands, ordered
+> before any arm is switched on. F-1, F-3, F-4 unchanged.
+
 ## ⭐ GREENFIELD FAMILY SPEC — WRITTEN + AMENDED ×4 2026-08-04. Design closed; SIX blocking checks before build.
 
 `docs/greenfield-family-spec.md` — **1,628 lines, sha256

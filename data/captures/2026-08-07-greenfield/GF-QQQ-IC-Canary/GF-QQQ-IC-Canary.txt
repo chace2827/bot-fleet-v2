@@ -1,0 +1,65 @@
+# CAPTURE — GF-QQQ-IC-Canary (bot, PR-20, arm 5 of 6) — THE INSTRUMENT, NOT AN EDGE ARM
+# captured: 2026-08-07 (six-arm build session), Chrome-direct, Option Alpha
+# METHOD: a5.bots.bot (client model) + attachment editors' hidden inputs, AFTER a hard reload.
+
+BOT             GF-QQQ-IC-Canary
+BOT_ID          BOTfw5TkkCRF4417860774419022836
+ARM             Canary (5% profit-take — exit-engine liveness detector) · PR-20
+BUILT           2026-08-07, Phase B steps B1-B8
+
+## BOT-LEVEL SETTINGS (spec 5 table)
+account sim (Paper) OK · seed 2500 OK · posLimitDay 2 OK · posLimit 2 OK
+scanrate 1 OK · exitrate 1 OK (materialized) · nopdt 0 OK · symbols [] OK
+group IC OK · tags "experiment,gfam,arm canary,pr 20" OK
+status "off" OK · disableExits 0 OK · icon fas-robot bg-blue (default)
+
+## BOT INPUTS — the arm variable
+  GF_EXITS_PUT   id IN178607794990451   posType shortputspread
+  GF_EXITS_CALL  id IN178607800989862   posType shortcallspread
+
+  DECODED FIELD SET — IDENTICAL on both (A8 PASS):
+    profits   0.05      <- ** THE ARM MECHANIC ** [spec 4.4: Canary profits = 0.05]
+    smprofits "speedy"  <- mechanic's pricing sub-field [spec 4.4 specifies speedy for this arm]
+    dprofit "" · price "" · stoploss "" · dstop "" · tstop "" · touch "" · xevents "" · epsdays ""
+    expdays   0.01   ·  smexpdays {"pct":100,"smart":"speedy"}    [spec 4.4 base]
+    dtype "short" · text "Profit: 5%, Expiration: 10 minutes" (LABEL only)
+    PDT checkbox / bid-ask guard  both unchecked  OK
+
+  ARM MECHANIC: **profits 0.05 (+ smprofits speedy)** — exactly one mechanic over the Ride base.
+  Note this is the SAME FIELD as PT50's mechanic at a different value; the pair (PT50, Canary)
+  differs in exactly one mechanic's VALUE, which is what §8.2's PASS condition requires.
+  Loaded from preset GF-CANARY-EXITS. "Save as presets" left UNCHECKED on both writes.
+  G-1: stamped-under-G-1-HOLD.
+
+> PR-20's own warning carried forward, unresolved and NOT resolved here: the 5% threshold is
+>   SUB-TICK on QQQ ($0.004-$0.0075 vs a $0.01 increment), so the effective trigger is "the first
+>   tick of favourable movement". A no-fill day is AMBIGUOUS between "the exit engine died" and
+>   "the spread widened by a cent"; the instrument's false-negative rate is UNMEASURED. Built in
+>   the first wave anyway, per PR-20's own argument.
+
+## ATTACHED AUTOMATIONS — rid list proves ATTACH, not COPY
+1. GF-ScannerA-PutSpread   rid RTfw5TkkCRF178605283747821  OK
+   scanner · Mon-Fri [1,2,3,4,5] · hdays skip · timerange ""
+   link IN178605447966781 -> input|bot|IN178607794990451|GF_EXITS_PUT
+2. GF-ScannerB-CallSpread  rid RTfw5TkkCRF178606271659881  OK
+   scanner · Mon-Fri [1,2,3,4,5] · hdays skip · timerange ""
+   link IN178606782436781 -> input|bot|IN178607800989862|GF_EXITS_CALL
+3. GF-Backstop-1552-FlatClose  rid RTfw5TkkCRF178606373201751  OK
+   repeat · freq 2 · interval 1 · byweekday [0,1,2,3,4] · ntime 1552 · holidays skip
+   endDate blank · startDate "2026-08-07T20:52:00.000Z" (D3 signature)
+   LABEL "Every week on Mon-Fri, 3:52pm EST"
+
+## NOTES (spec step B8) — PR-20 pasted VERBATIM
+source   docs/greenfield-family-spec.md 9, lines 1533-1570 (the fenced PR-20 block)
+length   3018 UTF-16 units · BYTE-EXACT TRUE, firstDiff = -1, after a hard reload
+
+## TEMPLATE (spec step B8)
+template_id  Tfw5TkkCRF4417860782548949126 · VERSION 1
+template tags "experiment,gfam,arm canary,pr 20" (prefilled, left as-is)
+A8 at the template-save surface: the two serialised payloads compared EQUAL string-for-string.
+
+## SPEC STEP B5 — toggle screenshot substituted by value reads (status "off", disableExits 0)
+
+## DEFERRED TO DAY-0
+Layer 2: PR-20's VERIFICATION is a profit-taking fill on DAY 1, read from the Trades list —
+this arm is the one whose Day-1 read is a GO/NO-GO on the exit engine itself. Plus D3 and D4.

@@ -1,0 +1,61 @@
+# CAPTURE — GF-QQQ-IC-SL200 (bot, PR-19, arm 6 of 6 — BUILT LAST, per the standing order)
+# captured: 2026-08-07 (six-arm build session), Chrome-direct, Option Alpha
+# METHOD: a5.bots.bot (client model) + attachment editors' hidden inputs, AFTER a hard reload.
+
+BOT             GF-QQQ-IC-SL200
+BOT_ID          BOTfw5TkkCRF4417860785000861357
+ARM             SL200 (stop loss at 200% of credit) · PR-19
+BUILT           2026-08-07, Phase B steps B1-B8. LAST OF THE SEVEN.
+
+## BOT-LEVEL SETTINGS (spec 5 table)
+account sim (Paper) OK · seed 2500 OK · posLimitDay 2 OK · posLimit 2 OK
+scanrate 1 OK · exitrate 1 OK (materialized) · nopdt 0 OK · symbols [] OK
+group IC OK · tags "experiment,gfam,arm sl200,pr 19" OK
+status "off" OK · disableExits 0 OK · icon fas-robot bg-blue (default)
+
+## BOT INPUTS — the arm variable
+  GF_EXITS_PUT   id IN178607891888981   posType shortputspread
+  GF_EXITS_CALL  id IN178607897588482   posType shortcallspread
+
+  DECODED FIELD SET — IDENTICAL on both (A8 PASS):
+    stoploss  2        <- ** THE ARM MECHANIC ** = -200% OF CREDIT (C1 basis; PR-19 "RUNG: 2")
+    smstoploss {"limitType":"pct","limit":100,"smart":"normal","text":"100% of bid/ask"}
+                       <- mechanic's pricing sub-field: NORMAL (G-1 HOLD stamp)
+    profits "" · dprofit "" · price "" · dstop "" · tstop "" · touch "" · xevents "" · epsdays ""
+    expdays   0.01   ·  smexpdays {"pct":100,"smart":"speedy"}    [spec 4.4 base]
+    dtype "short" · text "Stop Loss: 200%, Expiration: 10 minutes" (LABEL only)
+    PDT checkbox / bid-ask guard  both unchecked  OK
+
+  ARM MECHANIC: **stoploss 2 (+ smstoploss normal)** — exactly one mechanic over the Ride base.
+  Against SL100 the pair differs in the SAME FIELD at a different VALUE (1 vs 2), which is the
+  one-mechanic difference §8.2 requires. Loaded from preset GF-SL200-EXITS.
+  "Save as presets" left UNCHECKED on both writes. G-1: stamped-under-G-1-HOLD.
+
+## ATTACHED AUTOMATIONS — rid list proves ATTACH, not COPY
+1. GF-ScannerA-PutSpread   rid RTfw5TkkCRF178605283747821  OK
+   scanner · Mon-Fri [1,2,3,4,5] · hdays skip · timerange ""
+   link IN178605447966781 -> input|bot|IN178607891888981|GF_EXITS_PUT
+2. GF-ScannerB-CallSpread  rid RTfw5TkkCRF178606271659881  OK
+   scanner · Mon-Fri [1,2,3,4,5] · hdays skip · timerange ""
+   link IN178606782436781 -> input|bot|IN178607897588482|GF_EXITS_CALL
+3. GF-Backstop-1552-FlatClose  rid RTfw5TkkCRF178606373201751  OK
+   repeat · freq 2 · interval 1 · byweekday [0,1,2,3,4] · ntime 1552 · holidays skip
+   endDate blank · startDate "2026-08-07T20:52:00.000Z" (D3 signature)
+   LABEL "Every week on Mon-Fri, 3:52pm EST"
+
+## NOTES (spec step B8) — PR-19 pasted VERBATIM
+source   docs/greenfield-family-spec.md 9, lines 1450-1504 (the fenced PR-19 block)
+length   4546 UTF-16 units · BYTE-EXACT TRUE, firstDiff = -1, after a hard reload
+
+## TEMPLATE (spec step B8)
+template_id  Tfw5TkkCRF4417860791919674137 · VERSION 1
+template tags "experiment,gfam,arm sl200,pr 19" (prefilled, left as-is)
+A8 at the template-save surface: the two serialised payloads compared EQUAL string-for-string.
+
+## SPEC STEP B5 — toggle screenshot substituted by value reads (status "off", disableExits 0)
+
+## DEFERRED TO DAY-0
+Layer 2 (a stop-loss row in the first new position's Trades list). Plus D3 and D4.
+Carried forward from PR-19, unchanged: liveness AND Gate-CM conjunct (c) are DISAPPLIED on this
+arm by Andy's G-5 ruling; its gate reduces to conjunct (b) alone, and the degeneracy criterion is
+the TOST equivalence test at ±0.015R (G-13).

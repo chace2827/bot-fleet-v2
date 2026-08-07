@@ -1,0 +1,226 @@
+# FAMILY-LEVEL ASSERTS + THE §8.2 CAPTURE-DIFF — run 2026-08-07 at n=7 bots (full family)
+# Every value below was read FIRST-HAND from a5.bots.bot after a hard reload of each bot's
+# settings page (seven separate page loads), and from a5.bots.acedit.routine for the three
+# shared Library objects. Never innerText, never a save banner (CLAUDE.md §9.1a).
+# Verdicts are recorded VERBATIM, including the one that does not pass.
+
+## THE SEVEN
+Ride    BOTfw5TkkCRF4417860701930934951   PR-14   control
+PT50    BOTfw5TkkCRF4417860738688735152   PR-15
+Trail   BOTfw5TkkCRF4417860754672239833   PR-16
+Touch0  BOTfw5TkkCRF4417860760818962144   PR-17
+SL100   BOTfw5TkkCRF4417860767788927225   PR-18
+Canary  BOTfw5TkkCRF4417860774419022836   PR-20
+SL200   BOTfw5TkkCRF4417860785000861357   PR-19   (built last)
+Account totals at read time: 40 bots (was 33 before the family). All seven: status "off",
+disableExits 0, group IC.
+
+====================================================================================
+## A1 — pairwise one-mechanic difference. ⛔ SPLIT VERDICT. READ BOTH LINES.
+====================================================================================
+**A1 AS THE FAMILY ACTUALLY NEEDS IT (arm vs CONTROL): PASS, 6 of 6.**
+Every arm's decoded bundle is the Ride base plus EXACTLY ONE mechanic:
+  Ride    mechanics = {}                (control, base only)
+  PT50    mechanics = {profits}         profits 0.5   + smprofits speedy
+  Trail   mechanics = {tstop}           tstop {target:40, trail:15} + smtstop normal
+  Touch0  mechanics = {touch}           touch {type:usd,value:0}    + smtouch normal
+  SL100   mechanics = {stoploss}        stoploss 1    + smstoploss normal
+  SL200   mechanics = {stoploss}        stoploss 2    + smstoploss normal
+  Canary  mechanics = {profits}         profits 0.05  + smprofits speedy
+Mechanic count per arm = 1 for all six, 0 for the control. No arm carries a stray second
+mechanic. This is the property `build-plan.md` §2D asks for and the one the tournament rests on.
+
+**A1 AS LITERALLY WRITTEN (all 21 unordered pairs): 8 PASS / 13 FAIL — and the 13 are
+STRUCTURAL, NOT DEFECTS. ⛔ FINDING A1-SPEC-1, reported, NOT corrected (a spec change is a
+decision).**
+  PASS (8): the six arm-vs-Ride pairs, plus PT50/Canary (same field `profits`, 0.5 vs 0.05)
+            and SL100/SL200 (same field `stoploss`, 1 vs 2).
+  FAIL (13): every pair of two DIFFERENT treatment arms — PT50/Trail, PT50/Touch0, PT50/SL100,
+            PT50/SL200, Trail/Touch0, Trail/SL100, Trail/SL200, Trail/Canary, Touch0/SL100,
+            Touch0/SL200, Touch0/Canary, SL100/Canary, SL200/Canary.
+  WHY: in a control + K design, two different treatment arms differ from EACH OTHER in exactly
+  TWO mechanics by construction (arm A's mechanic is absent on B and vice versa). A one-mechanic
+  difference between two different treatment arms is UNREACHABLE unless they share a field.
+  §8.3 rule A1 says "for every unordered pair of gfam arms ... differ in exactly one mechanic",
+  which is therefore unsatisfiable as written for 13 of the 21 pairs.
+  This is the same class of defect §9 already corrected once in this spec (the family-level kill
+  criterion that was "vacuously unfireable"): a rule whose stated form cannot hold.
+  ⛔ NOT AMENDED HERE. Changing A1's text changes an operational assert's definition, which is a
+  DECISION and is gated to Andy. Recorded verbatim so the nightly implementation is not built
+  against a rule that will fire 13 times a night on a correctly-built family.
+  SUGGESTED SHAPE FOR ANDY'S RULING (not applied): A1 tests arm-vs-CONTROL for all six, plus a
+  separate rule that every pairwise symmetric difference is confined to the two arms' own
+  declared mechanics and nothing else — which is what was actually verified above.
+
+
+------------------------------------------------------------------------------------
+## ✅ A1 — RE-RUN 2026-08-07 UNDER THE AMENDED RULE. **PASS, 21 of 21.**
+------------------------------------------------------------------------------------
+The split-verdict text above is LEFT STANDING as the record of what was found. It is RESOLVED.
+Andy ruled: AMEND A1 in `greenfield-family-spec.md` §8.3 — arm-vs-control pairs differ in exactly
+ONE mechanic; arm-vs-arm pairs differ in exactly TWO (each arm's own, and nothing else), by
+construction. Original row struck and left standing; the amendment carries the
+13-false-alarms-per-night arithmetic as the forcing fact. THE NIGHTLY ASSERT BUILDS AGAINST THE
+AMENDED TEXT.
+
+Re-run against the built family, same decoded sets, amended rule:
+  expect 1 (arm-vs-CONTROL, 6 pairs)      Ride/PT50 [profits] · Ride/Trail [tstop] ·
+                                          Ride/Touch0 [touch] · Ride/SL100 [stoploss] ·
+                                          Ride/SL200 [stoploss] · Ride/Canary [profits]   6 PASS
+  expect 1 (SHARED FIELD, different value, 2 pairs)
+                                          PT50/Canary [profits] · SL100/SL200 [stoploss]  2 PASS
+  expect 2 (arm-vs-arm, 13 pairs) — and in every one the two differing mechanics are PRECISELY
+  the two arms' own declared mechanics, nothing else:
+     PT50/Trail [profits,tstop] · PT50/Touch0 [profits,touch] · PT50/SL100 [profits,stoploss] ·
+     PT50/SL200 [profits,stoploss] · Trail/Touch0 [tstop,touch] · Trail/SL100 [tstop,stoploss] ·
+     Trail/SL200 [tstop,stoploss] · Trail/Canary [tstop,profits] · Touch0/SL100 [touch,stoploss] ·
+     Touch0/SL200 [touch,stoploss] · Touch0/Canary [touch,profits] ·
+     SL100/Canary [stoploss,profits] · SL200/Canary [stoploss,profits]                    13 PASS
+  Base fields (expdays, smexpdays) EQUAL in all 21 pairs. PDT and bid-ask guard unchecked on all.
+  **TOTAL 21 / 21 PASS. 0 FAILS.**
+
+====================================================================================
+## A2 — non-bundle fields equal across all seven. ⚠️ ONE FIELD FAILS.
+====================================================================================
+EQUAL across all seven (first-hand, post-reload):
+  accountId "sim" · seed 2500 · posLimit 2 · posLimitDay 2 · nopdt 0 · scanrate 1
+  status "off" · disableExits 0 · group "IC" · icon "fas-robot bg-blue" · symbols [] (0)
+  base bundle fields: expdays 0.01 EQUAL · smexpdays {pct:100,smart:"speedy"} EQUAL
+Trigger config (A2 as amended 2026-08-06) — EQUAL on all seven, read per bot from each
+attachment's editor at build time:
+  ScannerA  scanner · weekdays [1,2,3,4,5] Mon-Fri · hdays "skip" · timerange ""
+  ScannerB  scanner · weekdays [1,2,3,4,5] Mon-Fri · hdays "skip" · timerange ""
+  Backstop  repeat · freq 2 · interval 1 · byweekday [0,1,2,3,4] Mon-Fri · ntime 1552 ·
+            holidays "skip" · endDate blank
+rid list — EQUAL on all seven, and independently corroborated at the Library:
+  all three shared automations now display "7 bots" on /bots/automations. ATTACHED, NOT COPIED.
+
+⛔ **FINDING A2-EXITRATE-1 — A2 FAILS ON ONE FIELD. GATED TO ANDY, NOT CORRECTED.**
+  `exitrate` (Exit Options scan speed):  Ride = **UNDEFINED / not stored** ·
+                                          all six arms = **1**
+  Both render "Every 1m" in the UI and both behave as Every 1m — 1 is the platform default, and
+  the Ride's hidden input reads "1" while its stored model field is absent. This session
+  MATERIALIZED the field on each of the six arms deliberately (selecting "Every 1m" explicitly
+  in the Scan Speeds picker) precisely so A2 would compare a stored 1 against a stored 1.
+  ⚠️ The Ride's own capture (2026-08-07 overnight) records "exitrate 1" — that line is
+  FALSIFIED by this read: the value the prior session recorded was the UI default, not a stored
+  field. Its capture is left standing as the record of what was read; this file is the correction.
+  REMEDY, one click, NOT PERFORMED: on the Ride's settings page, Scan Speeds → EXIT OPTIONS →
+  select "Every 1m". That stores exitrate=1 and A2 goes green. It changes no behaviour.
+  WHY NOT DONE: the Ride is a BUILT AND VERIFIED control and this session's standing instruction
+  is to stop and report on surprise rather than improvise on an already-verified object.
+  Andy's call. Nothing can trade meanwhile — AUTOMATIONS is OFF on all seven and no PR is signed.
+
+
+------------------------------------------------------------------------------------
+## ✅ A2 — RE-RUN 2026-08-07 AFTER ANDY'S RULING. **PASS, 7 of 7. 0 FAILS.**
+------------------------------------------------------------------------------------
+The finding text above is LEFT STANDING as the record of what was found. It is RESOLVED.
+Andy ruled "TAKE THE CLICK". `exitrate` was materialized on GF-QQQ-IC-Ride and is now STORED = 1,
+verified after a hard reload (a5.bots.bot.exitrate === 1).
+⚠️ HOW, because a single click does NOT do it: selecting the already-displayed value is a no-op —
+one click on "Every 1m" sent no write and the field stayed absent across a hard reload. The field
+was materialized by a TWO-STEP: Instant (0) -> save -> Every 1m (1) -> save. The intermediate
+exitrate=0 was inert (AUTOMATIONS OFF, no positions, nothing signed) and is recorded, not hidden.
+A2 re-read fresh on all seven bots, one page load each, post-reload:
+  accountId "sim" · seed 2500 · posLimit 2 · posLimitDay 2 · scanrate 1 · **exitrate 1** ·
+  nopdt 0 · status "off" · disableExits 0 · group "IC" · icon "fas-robot bg-blue" · symbols 0
+  -> 12 of 12 non-bundle fields EQUAL across all seven. **0 fails.**
+Nothing else on the control moved: mechanic set still EMPTY (base-only control), A8 still PASS,
+both bot inputs still bound and equal, tags unchanged. Trigger config and rid lists unchanged.
+
+====================================================================================
+## A3 — each arm's decoded field set == its pre-registered field set.  PASS, 7 of 7.
+====================================================================================
+Checked value-by-value against each PR's MECHANISM line, which is pasted verbatim in that bot's
+own Notes (all seven byte-exact, see below):
+  PR-14 Ride   "{Expiration expdays=0.01, smexpdays=speedy} and nothing else"      MATCHES
+  PR-15 PT50   "`profits` = 0.5, `smprofits` = speedy"                              MATCHES
+  PR-16 Trail  "`target` = 40 ... `trail` = 15"  (the ARMED trail, re-scoped 08-06) MATCHES
+  PR-17 Touch0 "`touch` = $0"                                                       MATCHES
+  PR-18 SL100  "RUNG: stoploss = 1"   (% of credit, C1)                             MATCHES
+  PR-19 SL200  "RUNG: stoploss = 2"   (% of credit, C1)                             MATCHES
+  PR-20 Canary "`profits` = 0.05, `smprofits` = speedy"                             MATCHES
+A3 is the load-bearing rule — it is the only one that catches all-arms-mistyped-identically —
+and it is the one that required the PR text to be on the bot, which it now is.
+
+## A4    MOOT (F-4 ruling, struck).
+## A4b   NOT RUNNABLE pre-Day-0 — no ledger rows.
+## A5    NOT RUN this session — the account-settings page was not opened. Last recorded values
+         stand (itmpaper=market, itmlive=auto, maxexits=0). D2 remains the Day-0 gate. Stated,
+         not skipped silently.
+## A6    NOT RUNNABLE pre-Day-0. Note the sizing primitive is a fixed contract count
+         (amount {"type":"quantity","quantity":1}) in the SHARED action, so the $-risk fallback
+         A6 guards is not in use and cannot diverge per arm.
+
+====================================================================================
+## A7 — shared-automation payload hashes vs baseline.  PASS, 3 of 3.
+====================================================================================
+Formula: sha256(JSON{name,inputs,root}) from a5.bots.acedit.routine, post-load.
+  GF-ScannerA-PutSpread     v9  3308ce8b476d2bd090d9519b445748fc4c0d0fdbe71861c83a249729b1a5a30a  MATCH
+        ^ this is the NEW baseline adopted today under Andy's A7-DRIFT-1 ruling. It reproduces
+          exactly, and `updated` is still 2026-08-07T01:30:07.970Z — unchanged by today's work.
+  GF-ScannerB-CallSpread    v2  bb4ba866a13e7ecd682f7bda9a19011003e9e3ef73fffd0fb64a80a4cd0eb32e  MATCH
+  GF-Backstop-1552-FlatClose v1 116069bddf8b8c9e58bd8f28313c2ad95726fa3f7205df4dfde82de7a3e2e5b5  MATCH
+⭐ CONFIRMED FIRST-HAND: building six bots does NOT write to a shared Library object. All three
+   version numbers and `updated` timestamps are unchanged across the whole six-arm build.
+
+## A8 — decoded(GF_EXITS_PUT) == decoded(GF_EXITS_CALL).  PASS, 7 of 7.
+Compared as full serialised payload strings (including `sig`), not field-by-field, on every bot.
+Only `posType` differs (shortputspread / shortcallspread), which is structural scope, not bundle.
+
+## A9 — every bot input BOUND and NON-EMPTY.  PASS, 7 of 7 (14 of 14 inputs).
+Each arm's two bot inputs resolve to a non-empty decoded bundle, and each attachment's automation
+input resolves to {"type":"input","nid":"bot","input":"IN…"} pointing at THIS bot's input.
+
+====================================================================================
+## §8.2 CAPTURE-DIFF — the procedure, run in full
+====================================================================================
+Step 1  Captured every bot page + every attachment editor.                            DONE
+Step 2  Read BOTH bot input OBJECTS' values from the per-bot input surface —
+        NOT the Open Position action, NOT oldValue.                                   DONE
+Step 3  Decoded both payloads to fields.                                              DONE
+Step 4  INTRA-ARM assert decoded(PUT)==decoded(CALL).                        PASS 7/7 (A8)
+Step 5  Read the bot-level settings block.                          DONE — A2 above, 1 finding
+Step 6  Read the attached-automation rid list.                      DONE — identical on all 7,
+        corroborated by the Library's own "7 bots" count on each object
+Step 7  Wrote each row into data/bots_config_v2.csv with the DECODED field set.        DONE
+
+**BOTH G2 HOPS RESOLVED, explicitly, on every arm** (§1.2 rider):
+  hop 1  action → automation input:  the action stores {"type":"input","nid":"root",...}, a
+         REFERENCE. Never read as a value. Identical on all seven by construction (shared object).
+  hop 2  automation input → BOT input: read at the attachment editor as
+         {"type":"input","nid":"bot","input":"IN<this bot's id>","text":"GF_EXITS_*"}, and the
+         BOT INPUT OBJECT's own defaultValue decoded as the arm's bundle.
+  `oldValue` was IGNORED everywhere per §1.2 rule 2 — on ScannerA it still holds the pre-link
+  "None" snapshot on every bot and is not config.
+
+**ARM-CONTROL PAIR DIFF — the deliverable this session was asked for. 6 of 6 PASS:**
+  Ride vs PT50    exactly one differing mechanic: profits  (+ its own pricing sub-field)
+  Ride vs Trail   exactly one differing mechanic: tstop    (+ its own pricing sub-field)
+  Ride vs Touch0  exactly one differing mechanic: touch    (+ its own pricing sub-field)
+  Ride vs SL100   exactly one differing mechanic: stoploss (+ its own pricing sub-field)
+  Ride vs SL200   exactly one differing mechanic: stoploss (+ its own pricing sub-field)
+  Ride vs Canary  exactly one differing mechanic: profits  (+ its own pricing sub-field)
+  In every pair: base fields expdays/smexpdays EQUAL, PDT and bid-ask guard both unchecked on
+  both sides, bot-level settings EQUAL except name / arm tag / PR tag — and except `exitrate`,
+  finding A2-EXITRATE-1 above.
+
+## NOTES BYTE-EXACTNESS — 7 of 7, firstDiff = -1 on every one
+  Ride 2339 · PT50 1722 · Trail 5412 · Touch0 2917 · SL100 4389 · SL200 4546 · Canary 3018
+  (UTF-16 units; each compared character-by-character against the spec §9 fenced block after a
+  hard reload). Every arm used the double-escape path from the FIRST write — zero retries,
+  against the pilot's and the Ride's one-retry-each history.
+
+## STATE AT CLOSE
+AUTOMATIONS OFF on all seven. No PR signed. Nothing can trade. Day-0 steps D1-D7 unchanged.
+
+## ⭐ STATE AT CLOSE — REVISED 2026-08-07 AFTER BOTH RULINGS
+Both findings raised by this file are now RULED AND CLOSED:
+  A2-EXITRATE-1  -> ruled TAKE THE CLICK. exitrate stored = 1 on the Ride. **A2 PASS 7/7, 0 fails.**
+  A1-SPEC-1      -> ruled AMEND. §8.3 A1 amended (original struck, standing). **A1 PASS 21/21.**
+**EVERY ASSERT THAT IS RUNNABLE PRE-DAY-0 NOW PASSES:**
+  A1 21/21 · A2 7/7 · A3 7/7 · A7 3/3 · A8 7/7 · A9 7/7.
+  A4 moot · A4b not runnable pre-Day-0 · A5 not run (stated) · A6 not runnable pre-Day-0.
+AUTOMATIONS OFF on all seven. No PR signed. Nothing can trade. Day-0 steps D1-D7 unchanged; D3
+(the 15:52 DST question) still gates switching any arm on.
