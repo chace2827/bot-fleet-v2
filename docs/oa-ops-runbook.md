@@ -451,6 +451,7 @@ does not error — it silently falls back to a stale Default and keeps trading**
 | **7** | **A time gate that was never implemented** | The v1 11:00 gate did not exist; 20+ sessions of entry drift | Confirm the gate is **a real decision node**, then check the first five entry timestamps |
 | **8** | **Name collision on archive** | `Opening Range Breakout 60m` is archived; **`60min-ORB-10W-Paper-v1` stays live** | **Read the full name** before archiving |
 | **9** | **Zero-trade ≠ worthless** | `DIR-SPX-PutVIX22-SL75` has 0 positions because its VIX≥22 gate **correctly never fired** | Delete only bots that are **both** zero-trade **and** absent from the disposition table |
+| **10** | **`disableExits` resets 1 → 0 on clone** — a config-present/toggle-off exit arms itself silently on every clone | An Exit-Option “off” toggle that was OFF pre-clone reads ON post-clone; any exit config the automation already carries (e.g. a dead profit target) is live again even though nothing was edited | **Check `disableExits` immediately after cloning and restore before any other edit** |
 
 > ### ⛔ TRAP 1 CORRECTED 2026-08-05 — the original wording is preserved here, struck above.
 > **Original:** *"Clones share automations by reference | Edit the clone, you edited the original
@@ -483,6 +484,16 @@ does not error — it silently falls back to a stale Default and keeps trading**
 > entry carries the same unbounded-slippage exposure the trap documents for exits. Full rationale
 > and the accepted-cost caveat (n=1 position, below `CLAUDE.md` §4's T2 gate — a mechanism
 > decision, not a sample decision): `oa-platform-reference.md` §7's dated append.
+
+> ### ⛔ TRAP 10 ADDED 2026-08-07 — finding F-C2, ruled AUTHORIZED same day (Andy, first-hand).
+> **[FIRST-HAND 2026-08-07, read on a fresh clone before any edit; corroborated by the top-bar
+> toggle rendering ON.]** The other traps above leave a clone inert; this one makes a clone
+> **do something**: a config-present/toggle-off exit — e.g. a dead profit target still sitting in
+> `exits.profits` — re-arms itself silently the instant `disableExits` resets 1→0, with no field
+> edited. Caught on the `IC-SPX-FastPT25-S2` → PR-01 clone, composed with finding F-C1
+> (`exits.profits = 0.25` present behind the same toggle) — restored to 1 and verified before it
+> could arm anything. **Invisible to text capture by construction (§1.6)** — check the toggle state
+> directly on every clone, never infer it from a capture diff.
 
 ---
 

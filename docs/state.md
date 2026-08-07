@@ -1492,18 +1492,24 @@ grep. **No `git` run.**
 > `{"pct":100,"smart":"speedy"}` (⚠️ **the tier was unspecified by any doc**; chosen byte-identical
 > to this bot's own StrikeTouch closes). **Layer 2 DEFERRED TO DAY-0, INVERTED form.**
 >
-> ⛔ **F-C1 — GATED, NEEDS ANDY. `PT25` IS LIVE IN BOTH OPEN ACTIONS** of the champion pair —
-> `exits.profits = 0.25`, read first-hand. The controls are **not** Exit-Option-free; they are
-> Exit-Option-bearing behind an off toggle, which is exactly what `build-plan.md` §2B forbids.
-> `reactivation-runbook.md`'s Day-0 branch says **do not edit it out, escalate** — so it was not
-> touched, in either direction, on the original or the clone. **Andy rules: remove it per §2B, or
-> amend §2B.** Until then PR-01's Day-0 INVERTED check fails by construction, and **PR-02 is in the
-> same state** — rule once, apply to both.
+> ⛔ ~~**F-C1 — GATED, NEEDS ANDY.**~~ ✅ **F-C1 — RULED 2026-08-07 (Andy, first-hand): REMOVE.**
+> `PT25` WAS LIVE IN BOTH OPEN ACTIONS of the champion pair — `exits.profits = 0.25`, read
+> first-hand. The controls are **not** Exit-Option-free as found; they are Exit-Option-bearing
+> behind an off toggle, which is exactly what `build-plan.md` §2B forbids.
+> `reactivation-runbook.md`'s Day-0 branch said **do not edit it out, escalate** — so it was not
+> touched, in either direction, on the original or the clone, at the time of this finding.
+> **Ruling: remove `exits.profits` from both Open actions per §2B as written** — the controls are
+> genuinely intended to be Exit-Option-free; §2B is not amended. **Originals untouched by this
+> ruling; applies to the clones only** — the PR-01 clone at reactivation, and PR-02 at build (rule
+> once, apply to both). **Not yet applied to either bot** — both are unreachable while the account
+> is disabled (see the lockout block at the end of this file).
 >
-> ⛔ **F-C2 — A FOURTH CLONE TRAP, IN NO DOC: `disableExits` RESETS 1 → 0 ON CLONE** (EXIT OPTIONS
-> turns ON). Unlike the three known traps it makes a clone *do something*, and composed with F-C1
-> it would have armed PT25 on the ride benchmark. Restored and verified here.
-> **Recommend `oa-ops-runbook.md` §5 Trap 10 + a clone-checklist line — GATED** (checklist = decision).
+> ✅ **F-C2 — RULED 2026-08-07 (Andy, first-hand): AUTHORIZED AS TRAP 10.** A FOURTH CLONE TRAP, AT
+> THE TIME IN NO DOC: `disableExits` RESETS 1 → 0 ON CLONE (EXIT OPTIONS turns ON). Unlike the
+> three known traps it makes a clone *do something*, and composed with F-C1 it would have armed
+> PT25 on the ride benchmark. Restored and verified here. **Ruling: added to `oa-ops-runbook.md`
+> §5 as Trap 10**, dated, first-hand 2026-08-07 — the clone-checklist line is the same edit. See
+> that file for the full record and the counter.
 >
 > ⛔ **SESSION STOPPED ON A TOOL FAILURE, NOT A SPEC FAILURE.** The bot `…` menu (`showBotMenu`)
 > stopped responding after ~40 good clicks — three attempts, no error. `archiveBot` class.
@@ -1522,3 +1528,21 @@ grep. **No `git` run.**
 >
 > **The ~23 archives (20 Group-A + 3 clone originals) remain QUEUED FOR ANDY'S HAND** — not
 > attempted this session. Renames work; `archiveBot` remains 3-for-3 failed from this side.
+
+---
+
+> ### ⛔ OA ACCOUNT FULLY DISABLED — 2026-08-07, ~04:24 ET. LOGIN ITSELF NOW BLOCKED.
+> **[FIRST-HAND, Andy's screenshot, 04:24 ET 2026-08-07]**: the OA login page now reads
+> **“Account disabled, please purchase a plan.”** This is a step beyond the account-inactive
+> banner adjudicated above (line ~337) — that banner allowed login and editing with writes
+> server-verified; this blocks login entirely. **Supersedes-in-part, does not overturn: the
+> banner finding held exactly as recorded through ~04:00 ET 08-07** — every write this session
+> made was server-verified via hard reload up to that point. The morning clone session's
+> `showBotMenu` going dead after ~40 clicks (CLONE SWEEP block above) was **most likely
+> enforcement onset, not UI saturation** — stated, not confirmed; no independent corroboration.
+> **ALL OA work halts. Reactivation = Day-0.** No login, no ad hoc purchase — purchasing the plan
+> IS Day-0 and runs only under `reactivation-runbook.md`'s sequence (see that file's §0 for the
+> now-logged-out starting condition this creates). **Andy has emailed OA support requesting
+> billing access.**
+> **Reopen condition: a plan is purchased and login succeeds** — until then this block stands and
+> supersedes any reading of the account as merely inactive-but-reachable.

@@ -22,6 +22,15 @@ Most of the build work happens **before** you pay. Edits made while the account 
 (verified empirically 7/29→7/30). Do as much of §3 as OA allows before Day-0, and log every inactive-era
 edit.
 
+> ### ⛔ ADDED 2026-08-07 — THE ACCOUNT IS FULLY DISABLED. DAY-0 NOW BEGINS FROM A LOGGED-OUT STATE.
+> **[FIRST-HAND, Andy's screenshot, 04:24 ET 2026-08-07]**: OA login itself is blocked (“Account
+> disabled, please purchase a plan”), a step beyond the inactive-but-reachable account this
+> section was written against. **Step 0 now includes, before anything else in §4: log in, verify
+> the 41-bot roster, and re-run the A-series against fresh captures** (per
+> `day0-session-pack-2026-08-07.md` §S0). See `state.md`'s dated lockout block (end of file,
+> 2026-08-07) for the full first-hand record. The Step 0a/Step 1 ordering question this creates is
+> already recorded there as gate A2 in the pack — unchanged by this note.
+
 ---
 
 ## 1. The lapse mechanism — EXISTENCE ESTABLISHED, CAUSE STILL UNVERIFIED (OA support / Zack, 2026-07-30)

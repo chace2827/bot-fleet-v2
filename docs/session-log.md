@@ -5195,7 +5195,7 @@ independent confirmation that cloning COPIES (corrected Trap 1), after `sharing=
 objects and the Library listing (which holds only `Defang-Mon-S2-StrikeTouch` (2 bots) + the three
 GF objects (7 bots each) — **no `Scalp-*` object**).
 
-### ⛔ FINDING F-C1 — PT25 IS LIVE ON THE "EXIT-OPTION-FREE" CONTROLS. GATED, NOT ACTED ON.
+### ⛔ FINDING F-C1 — PT25 IS LIVE ON THE "EXIT-OPTION-FREE" CONTROLS. ~~GATED, NOT ACTED ON.~~ ✅ RULED 2026-08-07 — REMOVE.
 **[FIRST-HAND 2026-08-07, `node.input.exits` read on both Open Position actions of the original]**:
 `exits.profits = 0.25`, `smprofits "normal"`, text `"Profits: 25%"` — on **both** the put and call
 side. The bot is Exit-Option-**bearing** at the action layer; what made it look free is
@@ -5207,19 +5207,26 @@ CONTAMINATED… ⛔ **Do NOT edit the bot to remove it** — `CLAUDE.md` §5 sta
 to Andy: YES (a spec question under decision freeze)."* (ii) this session's own instruction: *only
 the two safety fixes… do not "fix" them further.* (iii) against those, §2B's cell mandating removal.
 Two frozen decisions conflict ⇒ **`CLAUDE.md` §5: when it is ambiguous, it is gated.**
-Cost of deferring: none that compounds — AUTOMATIONS OFF, EXIT OPTIONS OFF, account inactive,
-PR-01 unsigned. **Andy rules: remove `exits.profits` from both Open actions (§2B as written), or
-leave it and amend §2B.** ⚠️ Until ruled, PR-01's Day-0 INVERTED check **fails by construction**.
+Cost of deferring: none that compounded — AUTOMATIONS OFF, EXIT OPTIONS OFF, account inactive,
+PR-01 unsigned.
 
-### ⛔ FINDING F-C2 — A FOURTH CLONE TRAP, IN NO DOC. `disableExits` RESETS 1 → 0 ON CLONE.
+✅ **RULED 2026-08-07 (Andy, first-hand): REMOVE.** `exits.profits` comes out of both Open Position
+actions per §2B as written — the controls are genuinely intended to be Exit-Option-free; §2B is
+not amended. **Originals untouched by this ruling; applies to the clones only** — the PR-01 clone
+at reactivation, and PR-02 at build (rule once, apply to both). **Not yet applied to either bot**
+— both are unreachable behind the 2026-08-07 account lockout (this log, below; `state.md`'s dated
+block).
+
+### ⛔ FINDING F-C2 — A FOURTH CLONE TRAP, IN NO DOC. `disableExits` RESETS 1 → 0 ON CLONE. ✅ RULED 2026-08-07 — AUTHORIZED AS TRAP 10.
 **[FIRST-HAND 2026-08-07, read on the fresh clone before any edit; corroborated by the top-bar
 toggle rendering ON.]** The three documented traps (allocation → 1000, group → None, tags dropped)
 all make a cloned bot **do nothing**. This one makes it **do something**: composed with F-C1 it
 would have armed a 25% profit target on the bot whose entire pre-registered role is the **ride
 benchmark with no profit target** — tripping PR-01's own `REMOVED_EXIT_FIRED` kill criterion on
 day 1. Invisible to text capture by construction (§1.6). Restored to 1 and verified.
-**Recommend adding to `oa-ops-runbook.md` §5 as Trap 10 and to the clone checklist — GATED**
-(a checklist edit is a decision).
+✅ **RULED 2026-08-07 (Andy, first-hand): AUTHORIZED.** Added to `oa-ops-runbook.md` §5 as
+Trap 10, dated, first-hand 2026-08-07 — the clone-checklist line is the same edit; see that file
+for the full record and the counter.
 *Also confirmed: all three known traps reproduced. Trap 1 (allocation) is now **pre-emptable** —
 the Clone Settings drawer exposes Name + Account + Allocation before creation, which also retires
 the pilot card's temporary-name step whenever the original is renamed first.*
@@ -5408,5 +5415,45 @@ instead of browsing the archive.
 ### Files changed this session
 `docs/baseline-forensic-2026-08-07.md` (NEW) · `docs/session-log.md` (this entry).
 **Nothing else. No CSV, no config, no OA, no git.**
+
+**HOLDING for Andy's commit.**
+
+---
+
+## 2026-08-07 — Doc-only session: lockout recorded, F-C1/F-C2 rulings applied. No OA, no git.
+
+**Three items recorded from Andy's first-hand ruling this session, all doc-only — no OA surface
+touched (account remains locked out), no git command in any form.**
+
+1. **THE LOCKOUT.** Andy's screenshot, 04:24 ET 2026-08-07: OA login now reads “Account disabled,
+   please purchase a plan” — login itself is blocked, superseding-in-part the account-inactive-
+   banner finding (`state.md` ~line 337), which held exactly as recorded through ~04:00 ET 08-07.
+   Recorded as a new dated block appended to the end of `state.md`, and as a note in
+   `reactivation-runbook.md` §0 (Day-0 now begins from a LOGGED-OUT state; Step 0 gains login +
+   41-bot roster verify + A-series re-run, per `day0-session-pack-2026-08-07.md` §S0). Andy has
+   emailed OA support requesting billing access.
+2. **F-C1 RULED — REMOVE.** `exits.profits` (`PT25`) comes out of both Open Position actions per
+   `build-plan.md` §2B as written; §2B not amended. Originals untouched; applies to the PR-01 clone
+   at reactivation and to PR-02 at build. `state.md` ~line 1495 and this log's F-C1 finding above
+   (~line 5198) converted from GATED to RULED, originals struck-through and left standing, not
+   deleted. Not yet applied to either bot — both unreachable behind the lockout.
+3. **F-C2 RULED — AUTHORIZED AS TRAP 10.** `disableExits` resets 1→0 on clone — a config-present/
+   toggle-off exit arms itself silently on every clone; check and restore immediately after
+   cloning. Added to `oa-ops-runbook.md` §5 as Trap 10 (table row + dated explanatory block, same
+   pattern as Trap 1's 2026-08-05 correction). `state.md` ~line 1503 and this log's F-C2 finding
+   above (~line 5214) converted from GATED to RULED likewise.
+
+### Method
+Anchored, single-match text replacement per edit (Python `str.count() == 1` asserted before every
+write, script aborts on any non-1 count). Verified after by direct `device_bash sha256` on each
+changed file (paths and both hashes below) plus single-match greps confirming the new anchor text
+landed and the old GATED phrasing no longer appears live (only struck-through, preserved).
+
+### Files changed this session
+`docs/state.md` (F-C1 GATED→RULED, F-C2 GATED→RULED, lockout block appended) ·
+`docs/session-log.md` (F-C1/F-C2 headings and closing paragraphs GATED→RULED, this entry) ·
+`docs/reactivation-runbook.md` (§0 preamble note) · `docs/oa-ops-runbook.md` (§5 Trap 10 row +
+dated explanatory block). **No CSV, no OA action (impossible — account disabled), no git in any
+form.**
 
 **HOLDING for Andy's commit.**
