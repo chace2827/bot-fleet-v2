@@ -57,8 +57,9 @@ and the live-facts page do not diverge:
 - **C8** — build without sibling-close; the spread, not the condor, is the unit for early exits
   (`greenfield-family-spec.md` §4.3).
 - **PR-16** — re-scoped to the armed trail, target=40 / trail=15.
-- **F-4** — probe-first: `SENTINEL-SL1` left unimplemented, Default Value = NONE, flagged as an
-  open Day-0 blocker — not yet decided, must be ruled before any arm's `AUTOMATIONS` goes ON.
+- **F-4** — probe-first, then ✅ **RULED 2026-08-06 (Andy, final), same night as this card:**
+  `SENTINEL-SL1` struck as inexpressible; Default Value stays NONE; detection moved to a new
+  config-level assert (`greenfield-family-spec.md` §1.3a, §8.3 A9). Closed.
 
 ---
 

@@ -1,0 +1,65 @@
+# CAPTURE — GF-Backstop-1552-FlatClose (shared Library automation)
+# captured: 2026-08-07 (overnight), Chrome-direct, Option Alpha /bots/automations
+# METHOD: values read from a5.bots.acedit.routine (client model) on a FRESH page load
+#         (tab navigated to app.optionalpha.com this session; model refetched from server).
+#         Never innerText, never a save banner (CLAUDE.md 9.1a).
+# Account state at capture: banner "Account inactive, no changes will be saved" PRESENT.
+#   -> pre-adjudicated FALSE ALARM (state.md 2026-08-07 block). Object was built in the prior
+#      session and read back intact here on an independent page load = persistence re-confirmed.
+# This capture DISCHARGES the open item recorded in state.md's 2026-08-07 block and in
+# bots_config_v2.csv's header ("built and server-verified in-session per Andy, but has no
+# capture file / row yet").
+
+AUTOMATION      GF-Backstop-1552-FlatClose
+RID             RTfw5TkkCRF178606373201751
+VERSION         1
+LIBRARY STATE   My Automations row present, "Unused" (not yet attached to any bot)
+WARNINGS        0        (read from the editor's Warnings counter, screenshot-confirmed)
+OPPORTUNITIES   0
+INPUTS          [] — none. This automation takes no inputs.
+
+## TREE (matches greenfield-family-spec.md 4.2)
+Repeat for each position                             [posrepeater]
+   input: symbol="" · ptype="*" (any) · tags=""      <- UNRESTRICTED loop, per 4.2
+ └─ Close Position                                   [closepos]
+
+## CLOSE POSITION ACTION — value layer
+type        closepos
+position    {"id":"position","nid":"posrepeater854585","text":"Position","type":"output",
+             "ntype":"posrepeater","ptype":"position","output":"position"}
+              ^ binds to the posrepeater's own output referent
+price       {"text":"Market","smart":"market"}
+              ^ MARKET — inside spec 7's carve-out (hard EOD flat close, fill certainty beats
+                fill quality). Decision 6 keeps it. Do NOT "fix" this to SmartPricing.
+closeqty    {"text":"100% of position","type":"pct","value":100}
+memo        "1552 backstop flat close"
+tags        ""
+opts        {}
+
+## A7 PAYLOAD-HASH BASELINE  (first recording for this object)
+sha256(JSON{name,inputs,root})  116069bddf8b8c9e58bd8f28313c2ad95726fa3f7205df4dfde82de7a3e2e5b5
+sha256(JSON{full routine})      d79776e7f96698722c4d5bfd9f3cb3d9cdbfd456d120033cf9cfa635e6727139
+  Use the CONFIG hash as the A7 baseline (same convention as ScannerA/ScannerB): the
+  full-routine hash also covers `updated`/`version`, which bump on any save.
+  METHOD VALIDATED THIS SESSION: the identical formula, run against GF-ScannerB-CallSpread,
+  reproduced its recorded baseline bb4ba866...eb32e byte-for-byte. The formula is
+  JSON.stringify({name,inputs,root}) over the client model, SHA-256, lowercase hex.
+
+## ⛔ WHAT THIS CAPTURE CANNOT CONTAIN — F-3, re-confirmed FIRST-HAND 2026-08-07
+greenfield-family-spec.md 10 step A5 asks this object to be verified by reading
+`ntime=1552`, `holidays=skip`, the repeat pattern and the Mon-Fri day set.
+**NONE OF THOSE FIELDS EXIST ON THIS OBJECT.** The Library routine carries `{id, uid,
+folderId, group, name, inputs, root, formulas, version, counter, sharing, created, updated,
+folderName}` and nothing else — no trigger, no schedule, no class. Read first-hand from the
+client model this session, on a fresh load.
+=> The 15:52 / Repeating / Mon-Fri / holidays-skip configuration is a PER-BOT surface, set at
+   attach time, on all seven arms independently. This is exactly finding F-3 (state.md,
+   2026-08-06 late) reproduced on the backstop itself.
+=> A5's verification line is therefore NOT dischargeable at the Library level and is not
+   claimed here. It is discharged per bot, at attach, and is covered by assert A2 as amended
+   2026-08-06 (trigger config added to the cross-arm comparison).
+
+## DEFERRED TO DAY-0
+Layer 2 (behavioural, first NEW position's Trades list) — impossible: account inactive,
+no positions. Also spec 10 step D3: observe the actual fire time before the arms are switched
+on (the DST / Market Time (EST) question, 4.2 — 15:52 EST would be 16:52 EDT, after the close).

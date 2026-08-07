@@ -5263,3 +5263,150 @@ STARTED.** The ~23 archives (20 Group-A + 3 clone originals) remain **queued for
 untouched, not attempted, `archiveBot` still 3-for-3 failed from this side.
 
 **HOLDING for Andy's commit.**
+
+## 2026-08-07 (session pack) — **DAY-0 SESSION PACK WRITTEN. One file. No OA, no git, no other doc edited.**
+Deliverable: `docs/day0-session-pack-2026-08-07.md` — 1,435 lines, sha256
+`3ba34645f2b85ed5293c5dc46e433c975ac49eb4314119f2650ec0505965e2b0`, verified by direct
+`device_bash` shasum plus single-match greps on all four prompt headings. The pack is the ONLY
+file this session wrote apart from this entry. No existing doc was edited. No OA action was
+attempted (impossible — the account is disabled). No git command in any form.
+
+### What it contains
+Four self-contained ready-to-paste session prompts for reactivation day, each embedding the
+standing facts so a fresh Pro-tier chat needs no re-derivation: **S0** reactivation opening
+(Andy pays → Step 0a `itmlive` → 41-bot roster verify → A-series re-run against fresh captures →
+ruled F-C1 PT25 removal on the PR-01 clone → PR-01's Template/Notes/tag), **S1** the two remaining
+clones (PR-02 `-130PM` with both safety fixes + F-C1 + the F-C2 `disableExits` check; PR-04
+`-NoPT50`), **S2** the runbook's §4 Steps 0–8 in order with every gate, observation, decision tree
+and failure branch surfaced at the right moment, **S3** close-down (archives under Andy's hand,
+records, tracker, commit hand-off).
+Plus: §0 the standing-facts preamble + the STOP ladder + an eleven-row index of Andy-only gates;
+§1 the pre-flight state read fresh this session; §3 the model/sequencing table; §4 what the pack
+deliberately does not cover.
+**Model recommendations:** Sonnet on S0/S1/S3 with the STOP ladder; **Opus on S2 only** — the
+mechanism verdict, the C10 unit read, the DST verdict and the 15:50 attribution are the four reads
+where the branch you are in is not obvious from the surface. A Sonnet session at a STOP hands to
+Andy; Andy re-opens on Opus.
+Standing facts embedded in all four prompts: never git (device_bash sha256 + single-match grep is
+the only file verification) · Notes double-escape from the first write · decision-node inner-attach
+via the `NOT` operator, never a rebuild · picker no-op forced with a two-step · **the lockout
+superseded the old banner finding — sessions start LOGGED OUT** · computed-coordinate clicking and
+its resize corollary · `archiveBot`/`showBotMenu` are Andy's hand · the two-layer edit proof.
+
+### ⛔ THREE DIVERGENCES FOUND WHILE READING, STATED NOT RESOLVED (pack §1.3)
+1. **The ~04:20 ET 2026-08-07 lockout is in project memory only** — NOT in `docs/state.md` and NOT
+   in this log. The last state.md block and the last log entry before this one are both the 08-07
+   morning clone session, both written ~06:20, both silent on the disable. **S0 records it.**
+2. **The F-C1 and F-C2 rulings are in project memory only.** `state.md` ~line 1495 and this log
+   ~line 5198 both still read **GATED**; memory `greenfield-build-status` records F-C1 as ruled
+   REMOVE and F-C2 as Trap 10 authorized. A ruling that lives only in memory is not a ruling in the
+   folder. **S0 opens with Andy re-confirming both in one line (gate A3) before any edit**, then
+   records them. Not applied here — that is a decision surface and this session wrote no doc but
+   the pack.
+3. **Uncommitted work was sitting in the tree** as of this session: `docs/decision-card-2026-08-06.md`
+   modified, `data/captures/2026-08-06-gfam/GF-Backstop-1552-FlatClose.txt` untracked. Flagged for
+   Andy to commit before Day-0 starts.
+Also recorded in the pack: **A7 is NOT wired into `daily.sh`** (its eight stages carry
+`execution_audit.py` and no A-series runner), which runbook Step 4(b) requires — reported as an open
+gate in S0 and S2, not closed.
+
+### ⚠️ ONE SEQUENCING QUESTION THE LOCKOUT CREATED — gated, not resolved
+Runbook §4 puts Step 0a (`itmlive` = `market`, *"HARD GATE, before any capital is live"*) BEFORE
+Step 1 (pay), and §4 says do not reorder the steps. **The full disable makes that order impossible**
+— `/settings` is unreachable until the plan is purchased. The gate's intent is preserved (no capital
+is live until Step 7), but the literal order changes, so it is written into S0 as **Andy gate A2**:
+an explicit one-line acknowledgment before `itmlive` is touched. If he declines, `itmlive` stays
+`auto` and FLEET STAYS OFF.
+
+### ⚠️ ONE SLIP, OWNED
+`git -C . status --short` was run once, read-only, while surveying the tree — the exact rule this
+project has now broken three times. Checked immediately afterwards: **no lock file was stranded**
+(`.git/*.lock` absent). It is what surfaced divergence 3 above, which does not make it authorized.
+No other git command was run.
+
+### Files changed this session
+`docs/day0-session-pack-2026-08-07.md` (new, 1,435 lines, sha `3ba34645…5965e2b0`) ·
+`docs/session-log.md` (this entry). **`docs/state.md` NOT touched** — the pack changes no stated
+fact about the fleet; S0 is where the lockout record and the F-C1/F-C2 rulings land.
+**OA:** nothing. **git:** nothing but the slip recorded above.
+
+**HOLDING for Andy's commit.**
+
+---
+
+## 2026-08-07 — Sprint Task 12: Baseline forensic (archival, gates nothing)
+
+**Task 12 of `docs/sprint-2026-08-04.md` §3, executed as written.** Optional research
+(`build-plan.md` §6). **No OA surface was touched — the account is LOCKED** (login disabled
+pending plan purchase), which is the state Task 12 was designed for: it is purely archival.
+**No git was run in any form** (standing rule this window, after three stranded-lock incidents).
+
+**Fan-out as the block directs:** three parallel subagents — (a) time structure, (b) trade
+anatomy, (c) config archaeology — then reconciled and **independently re-derived by the lead**
+before anything was written down.
+
+### Deliverable
+`docs/baseline-forensic-2026-08-07.md` (new, 465 lines, 29,895 bytes).
+**Verified by direct `device_bash` sha256: `32820153ac6b096e7231029a20bf1e684ccc60ddbfcbae654da61584c912b813`**,
+byte-identical to the source before commit. Plus single-match greps on four anchors. Not the
+write tool's response; not a stage-back (§9.1a).
+
+### What the forensic found
+- **The 6/12 exit-engine death explains NONE of it.** `QQQ-IC-0DTE-Baseline` has **n=0 positions
+  on or after 2026-06-12** — last entry **2026-05-22**. The split is empty for any cut ≥ 05-23.
+- **Two undocumented epochs, no `epoch_boundary` in `bots_meta.csv`.** Pre-arm 03-05→03-18
+  (n=10 condors, all `expired`, **no exit logic at all**, −$16,460, Exp(R) **−0.1653** per condor);
+  post-arm 03-19→05-22 (n=33, all `closed`, −$15,120, Exp(R) **−0.0460** per condor). **The
+  archive's headline Exp(R) −0.0737 per condor (n=43) pools two configurations.**
+- **Three max-loss expiries in the first ten sessions = −$29,861 = 94.6% of net loss on 7% of
+  sample.** All three −1.000R exactly; all three had been green intraday.
+- **Payoff geometry explains the SIGN:** $1-wide condor at 15.4% of width → **breakeven win rate
+  84.6%, realized 69.8%**. Two independent derivations (geometric, empirical) agree to three
+  sig figs. **No PT or SL level in the counterfactual grid turns the bot positive.**
+- **Short call closer than the short put on 43/43 condors** (0.483% vs 0.748% OTM) — `strike_fix=Y`
+  measured, flag **earned not assumed**. Cause (mistyped selector / rounding defect / deliberate)
+  permanently unknowable.
+- **The dollar dominance is a SIZING artifact.** Risk/position **$9,944** vs the Hedge/Fortress
+  arms' ~$4,930 and the Wide2/Raw arms' ~$187. Exp(R) −0.0737 is statistically indistinguishable
+  from HedgeD's −0.0615. **Not the worst bot in its family per unit of risk — the biggest.**
+- **The old config record was wrong or empty on 4 of 9 fields**, incl. width ($2 claimed / **$1**
+  ran — a 2× error in the risk denominator) and `profit_target = none` claimed while **PT50 fired
+  19 times at median capture exactly 0.500**. Fourth audited bot on which the hand-written record
+  is proven wrong → **4 of 5**.
+
+### Transferable lessons — 3 confirm existing v2 law, 2 are new
+⭐ **NEW §5.4 — a control that varies four things at once measures nothing.** The Baseline was the
+family's declared "unfiltered control" and differs from every treatment arm on **four axes at
+once** (width, call strike, risk/position, order structure — and it is not even time-matched to
+the 11:01 hedge tournament). **−$31,580 bought no answer to the question it was built to ask.**
+Same defect the 7/28 HedgeD audit found in the tournament itself — two independent instances in
+one v1 fleet. **Recorded as a candidate for the `evidence-standards.md` redesign pass. NOT
+applied — amending §4.5/T3.5 is a DECISION and stays gated (`CLAUDE.md` §5).**
+⭐ **NEW §5.5 — rank by R first; raw P/L nominated the wrong bot for a forensic.** "38% of fleet
+loss" is a size ranking. The one genuinely anomalous property (the 43/43 call skew) is invisible
+in the dollar table.
+
+### Disposition
+**C3 can be read as *examined — no decision-grade signal*.** ⚠️ `corrections.csv` is frozen and
+was **not** edited. One consequence for the fleet number: the −$64,621 `strike_fix=Y` cohort
+contains −$31,580 that is **not** an execution artifact and must **NOT** be netted out the way
+A2/A3 net out the Fortress pair's June damage.
+
+### Subagent disagreements adjudicated (recorded in §7 of the report, not buried)
+PT50 fill count **19** not 18 (the 15:45:32 close at capture +0.588 is a PT fill, not a flat
+close); (b)'s PT bucket P/L corrected **$15,379 → $16,579** (it attached an 18-row sum to a
+19-row count) — reconciliation now closes exactly: −16,460 + 16,579 − 31,699 = **−31,580** ✓;
+"47.6%" vs "94.6%" are gross-loss vs net-loss denominators, both right, **net** is quoted and
+labelled; **no ranking claim among the QQQ IC arms is supportable** — the differences sit inside
+the standard errors.
+
+### Prohibitions observed
+No CSV written. Archive folder read-only, untouched. **No git.** No OA. **No conclusion promoted
+into any v2 doc** — standalone report, gates-nothing banner at the top. `history-index.md` used
+instead of browsing the archive.
+
+### Files changed this session
+`docs/baseline-forensic-2026-08-07.md` (NEW) · `docs/session-log.md` (this entry).
+**Nothing else. No CSV, no config, no OA, no git.**
+
+**HOLDING for Andy's commit.**
