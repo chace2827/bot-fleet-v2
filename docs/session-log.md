@@ -4562,345 +4562,203 @@ visual confirmation per `CLAUDE.md` §9.1a).
 
 ---
 
-## 2026-08-06 (late) — Housekeeping: three mechanical doc tasks from Phase A findings (F-1, F-3, sizing stamp)
+## 2026-08-07 — Phase A continued: 7 presets, ScannerB complete, banner re-adjudicated, U-1 NEGATIVE
 
-**Mode:** doc edits only, all via direct `device_bash` read-modify-write with a fresh re-read,
-a single-match assert, and a post-write `sha256` + single-match grep, per `CLAUDE.md` §5/§9.1a.
-No git run, in any form. No OA surface touched.
+Same continued session as 2026-08-06 (late), carried past midnight. Picks up from "Phase A STARTED
+AND NOT FINISHED" in `state.md`.
 
-**F-1 — `decision-card-2026-08-06.md`'s RULING SHEET filled.** The top RULING SHEET block
-(`## RULING SHEET — copy, fill, send`) was a blank template; filled from `state.md`'s recorded
-rulings, dated 2026-08-06: 1 YES / 1a APPLY NOW / 2 CONFIRM / 3 CONFIRM / 4 AUTHORIZE (package
-1–8, amended: separate build session + deletions-before-Phase-A sequencing) / 4a YES CLEAN /
-5 RETIRE-SCOPED / 6 DEFER W/ TRIGGER as drafted, superseded same session — B3 RATIFIED as the
-regime-change definition with a detector-trigger deadline / 7 GO, re-ordered. Added a dated line
-noting the same-night rulings made outside this card's seven slots: C8 (build without
-sibling-close), PR-16 (re-scoped to the armed trail), F-4 (probe-first — left unimplemented,
-Default Value NONE, still an open Day-0 blocker, not decided). **Scope note:** only the top sheet
-was filled — the inline `RULING SLOT 4` / `RULING SLOT 4a` lines inside §4's adversarial record
-(still ~lines 240–241) were left as option lists; out of this pass's scope. `state.md`'s F-1
-finding updated to record the partial resolution.
+**Instruction, verbatim in substance (start of this stretch):** finish ScannerB's tree first — the
+time<2pm decision, the two Symbol-change-% decisions, the C7 `postagtoday` re-entry gate, the
+terminal Open Short Call Spread action (mirroring ScannerA: SmartPricing not Market, 1 contract,
+exits linked to a new `GF_EXITS_CALL` input) — using the inner attach-point method throughout, then
+top-level Save → hard reload → server-verify → A7 baseline → capture + CSV row. ScannerB complete
+and baselined before anything attaches it. Then build Ride in one pass. Report U-1 first.
 
-**F-3 — `greenfield-family-spec.md` §8.3 A2 amended, Andy-authorized.** Added trigger config
-(class/time/repeat/days) to the A2 assertion's field list, dated, original standing — trigger
-lives at the bot (SCANNERS/MONITORS), not the shared Library object, so neither §8.2 step 6's
-rid-list diff nor the un-amended A2 covered the backstop's 15:52/Mon–Fri/holidays-skip config,
-an undetected matching hazard on all seven arms. `state.md`'s F-3 finding updated: closed.
+**Done**
+- **Seven exit-option presets** built and F-4-compliant (Default Value forced back to `None` on
+  each, verified server-side after a hard reload, each confirmed present in the account Presets
+  picker): `GF-RIDE-EXITS`, `GF-PT50-EXITS`, `GF-TRAIL-EXITS`, `GF-TOUCH0-EXITS`, `GF-SL100-EXITS`,
+  `GF-CANARY-EXITS`, `GF-SL200-EXITS`. Full field values in `state.md`'s 2026-08-07 update block.
+- **U-1 answered and reported before continuing, per instruction.** Trades-list rows have no
+  per-row pricing-mode label and no memo field; the Automation Log detail view's Close Position
+  card likewise has neither. **NEGATIVE.**
+- **`GF-ScannerB-CallSpread` finished and Layer-1 verified.** Built the remaining four nodes (time
+  <2pm, both Range075 symbol-change gates, the `postagtoday` re-entry gate on tag `call side`) via
+  the inner attach-point method (Add Step panel showing `Loops` greyed out, checked before every
+  insert), then the terminal `Open Symbol Short Call Spread` action: `exactly 0 days` · short call
+  `0.75% above underlying price` · long call `$2.00 above short call leg` · 1 contract · SmartPricing
+  Normal 100% (confirmed via the modal itself, title `SmartPricing`, not just the collapsed field
+  label) · `Mid price between $0.08 – (no max)` · tag `call side` · Exit Options linked to a newly
+  created input `GF_EXITS_CALL` (`IN178606782436781`, Default Value = `None`). Top-level Save, then
+  a genuine hard reload (full navigate, cold Automation Library list, fresh click-in — not a
+  stage-back) and a field-by-field re-read of `a5.bots.acedit.routine` confirmed every value
+  persisted exactly. A7 baseline `bb4ba866a13e7ecd682f7bda9a19011003e9e3ef73fffd0fb64a80a4cd0eb32e`.
+  Capture: `data/captures/2026-08-06-gfam/GF-ScannerB-CallSpread.txt`. Row appended to
+  `data/bots_config_v2.csv`.
+- **Confirmed automation inputs are per-automation, not shared**: `GF_EXITS_PUT` (ScannerA) could
+  not be, and was not, reused on ScannerB — a fresh `GF_EXITS_CALL` input was required and created.
+- **Tag-widget quirk reproduced and worked around**: the `postagtoday` tag field and the terminal
+  action's `Tags` field both required typing the tag text and then *selecting it from the
+  autocomplete dropdown* (an async, debounced list) to commit it — clicking away without selecting
+  silently discarded the typed text, and once, concatenated onto stale un-cleared text
+  (`call sidecall side`) rather than replacing it. Fixed each time by fully clearing the field
+  (click, `End`, repeated `Backspace`) and re-typing before selecting the dropdown match. Relevant
+  to the Ride bot's tags step next session — do not bulk `form_input` + Enter on these fields.
 
-**Sizing stamp — `pre-registration-ledger.md`'s three Group D templates re-stamped.** The
-PR-14…17 four-arm block, the PR-18-onward hedge/SL block, and the canary block (together
-covering all seven greenfield-family arms, PR-14…PR-20) each got a dated note: the sizing
-primitive in use is the FIXED CONTRACT COUNT = 1, not the `Up to $250 risk` fallback (spec
-§5.4/C4), observed first-hand on `GF-ScannerA-PutSpread` in tonight's Phase A build. Matches
-`greenfield-family-spec.md`'s own C4 instruction to record this in all seven MECHANISM blocks
-before signing. `state.md`'s Phase A close-out block updated to mark the stamp done.
+**Found — the account-inactive banner, re-flagged then re-adjudicated**
+- Mid-verification, found "Account inactive, no changes will be saved until you select a plan."
+  present in the page DOM on the automations screens — hidden behind the full-screen editor overlay
+  so it hadn't shown in any screenshot this session. Read literally, it says top-level Save is a
+  no-op. Per the standing "stop on ambiguity/surprise" discipline and "do not touch billing", work
+  was paused and the finding reported before ScannerB's action node was even Saved.
+- **Andy's ruling**: no billing action — the account activates by design at Day-0 (mid-Aug); the
+  banner is the same one this session had already adjudicated (ScannerB's first node, the
+  Backstop, and all seven presets were built and hard-reload-verified under it earlier tonight); a
+  hard reload cannot serve client-side-only state, so that verification is decisive. Instructed:
+  finish the node → top-level Save → hard reload → server-verify the full tree; if it genuinely
+  does not persist, stop then — that would be new information.
+- **Test run, result PASSED** (see ScannerB entry above — the full tree persisted exactly).
+- **One transient false alarm, logged for the record, not as data loss**: immediately after
+  finishing the tree, a *second* browser tab (opened read-only to cross-check ScannerA's field
+  layout) rendered the Automation Library as **zero automations** on a cold load, reproduced twice.
+  This was reported to Andy as a possible severe finding. Andy's own screenshot, same account, same
+  moment (10:12PM), showed all four automations present and correct. Re-navigating the same
+  second tab immediately after showed the correct four-automation state — the empty render was a
+  client-side glitch on that one tab load, not a server-side or account-wide event. No further
+  cause found; not reproduced again this session.
+- **Conclusion carried into `state.md`**: banner is cosmetic for this account under Andy's Day-0
+  design, not a save-blocker — treat it as closed, but the §9.1a hard-reload discipline stays
+  standing regardless (a save confirmation is still never verification on its own).
 
-**Verification.** Every edit: fresh read immediately before writing, `str.count()` == 1 assert
-on the anchor text, write, then an independent `device_bash` `shasum -a 256` + single-match
-`grep -c` in a separate call (not the write script's own printed confirmation). All four files'
-before/after hashes:
-- `decision-card-2026-08-06.md`: `5dda6b82…dcfbdd` → `ab7ab955…ba68dbc`
-- `greenfield-family-spec.md`: `e1c53a4e…ff78e52` → `9b04ac3a…f065768`
-- `pre-registration-ledger.md`: `e16bd23c…8ebe26eed` → `c4c39867…f26e485d0`
-- `state.md`: `382d3d0f…080ba14004a` → `d3caa5bc…88ce13c1e` (two edits, both independently verified)
-
-### Files changed this session
-`docs/decision-card-2026-08-06.md` · `docs/greenfield-family-spec.md` ·
-`docs/pre-registration-ledger.md` · `docs/state.md` · `docs/session-log.md` (this entry).
-
-**HOLDING for Andy's commit.**
-
-
----
-
-## 2026-08-07 — COMPARATIVE MACHINERY SPEC written (`docs/comparative-machinery-spec.md`, 914 lines)
-
-**Task.** Write the implementation spec for the cross-bot paired-ΔR analysis that
-`pre-registration-ledger.md` §7 item 3 makes a SIGNING gate — `greenfield-family-spec.md` §12
-row 13 and `track-b-arms-spec.md` §11 item 7, both of which say the machinery does not exist and
-needs scoping as its own task before Day-0. Product is a spec Andy hands to Claude Code verbatim.
-**No OA surface touched, no browser tool run, no git run, no existing spec edited.**
-
-**Sources read fresh from the device:** `research-loop-spec.md` §10/§10a (incl. the 2026-08-06
-RETIRE-SCOPED append) · `greenfield-family-spec.md` §9, §8.4, §4.4, §6.2, §11, §12 rows
-10/11/13/16 · `track-b-arms-spec.md` §9, §11 · `oa-export-schema.md` (full) ·
-`pre-registration-ledger.md` §2/§7/§8 and PR-02 · `evidence-standards.md` §4 (B3) · `state.md`
-· `CLAUDE.md` §4 · `scripts/build_ledger.py`, `scripts/daily.sh`, `scripts/research_loop.py` ·
-`data/trades.csv` header, `data/bots_config_v2.csv`, `data/ledger_meta.json`, `data/bots_meta.csv`.
-
-**Adversarial review — two subagents, instructed to refute, prompt: "is the restated gate
-computable from the named inputs alone?" BOTH SUCCEEDED. 12 FATAL + 26 MATERIAL.** Verdict on the
-central question from both, independently: **NO.** Every load-bearing objection was re-verified by
-this session directly on the device before adoption. §7 of the new spec is the record; §8 is the
-16-item ruling queue it produced.
-
-**The four findings that change what Andy is looking at:**
-
-1. ⭐ **Conjunct (c) of the restated gate is UNCOMPUTABLE from any input that exists.** The
-   26-column export and the 30-column ledger carry **no exit-reason field**; `tags` is bot-level
-   and set at open; the ITM-action label is unobserved (D4). A close-time + MFE/MAE proxy was
-   drafted and **rejected outright** — 15:44 is a dead constant (S-4 gated an object C8 removed),
-   it classifies PR-22's own 15:45 mechanic as NOT FIRED, the export timezone is unverified (D3),
-   and MFE/MAE **censor at the trigger**, so a threshold test resolves on the sign of the slippage,
-   which is monotone in `d_i`. **A missing input is specified instead** — `data/exit_rows.csv`,
-   a per-position exit-attribution capture from the Trades list, schema in §1.4. ⛔ New capture
-   surface = **Andy's, G-1.** Five declared criteria across all seven arms are unfireable without it.
-2. ⭐ **Conjunct (a) is INERT under conjunct (b) at the declared n and K.** Using the family's own
-   arithmetic (SD(R)≈0.30, ρ≈0.90, n=100): SE = 0.013416; 95% half-width **±0.0263R** (matches
-   §9's stated ±0.026R); **Bonferroni K=6 → ±0.0354R**. So (b) demands mean(d) ≥ +0.035R while
-   (a) demands +0.015R — **every sample passing (b) passes (a) automatically, and +0.035R is 2.4×
-   the largest effect this program has ever measured** (SL75, +0.0150R, n=1,254). This is §12 row
-   16 with the declared Bonferroni term included; **row 16 states ±0.026R and the operative figure
-   is ±0.035R**. `mde_fam` is now mandatory on every verdict.
-3. ⭐ **PR-19's degeneracy criterion cannot fire, and CF-11 is not actually fixed.** Paired daily
-   SD = 0.30·√0.20 ≈ 0.134R ⇒ P(|d| ≤ 0.005) ≈ 0.030 ⇒ **expected 1.2 hits in 40 days against a
-   requirement of 20**, ANDed to a near-certain limb. Also ill-posed (overlapping-window scan, no
-   cadence, "consecutive" undefined — and a rolling scan collides with §10a item 2's no-nightly-
-   gate rule) and uncomputable (stop-row count). Separately, **conjunct (c) is unpassable for PR-19
-   by construction**: an exact two-sided sign test needs n_fired ≥ 8 at α′=0.05/6, and the arm's
-   hypothesis is that it never fires — CF-11's own defect reintroduced one layer up, in the PASS
-   gate this time.
-4. ⭐ **K is under-corrected ~1.8×, and the obvious 6-vs-5 question is the small end of it.**
-   Enumerating decisions actually taken against the single `GF-QQQ-IC-Ride` control across the
-   named documents gives **nine** (five arm ΔRs + PR-16's worst-condor test + PR-19's degeneracy
-   equivalence + PR-21 K1 + PR-22 K1), not six. Relatedly: **"S-1 puts Track B outside the
-   greenfield family" is a category error and is withdrawn** — S-1 ruled **bot slots**, not error
-   rates, and both Track B arms declare the same control, day-series and entry automations.
-
-**Also carried, each named in §7:** CF-1's own mitigation is itself uncomputable (the per-arm
-Market-priced/ITM close count needs the **pricing field**, which lives only in the Trades list) —
-so **no ΔR in this family currently meets its own declared publication precondition**; the
-`expired` exclusion is a row-level rule on a group-level unit and under C8 mixed-status condors are
-the *designed* shape for every early-exit arm (X-1 rules it group-level, exclude only all-expired,
-flagged G-4); `d` is **not** zero-inflated in a between-bot contrast so the drafted BCa rationale
-was false and is struck; the n≥60 kill is a one-sided fixed-n interim look on the gate's own
-vector (§10a item 4 forbids it — the engine emits an always-valid confidence sequence instead);
-`PAIR_WINDOW_S = 180` can silently delete a day for the **whole family** on fast days; and
-PR-14…PR-20 have **no GATE EVAL DATE field**, so the engine refuses to emit a verdict for them.
-
-**Design decisions recorded:** engine reads the **ledger, not the export** (re-reading the export
-re-implements four correct things and re-opens the §5 bug class); resample unit = **the day**;
-BCa with **B ≥ 200,000** for the family-adjusted endpoint (at α′=0.05/6 the raw endpoint is order
-statistic ~42 of 10,000, or the 4th after the BCa shift); block bootstrap **withdrawn** (gap-deleted,
-arm-dependently-gapped index); `ci_fam_*` in the verdict object and `ci95_*` in a `diagnostics`
-block flagged `NOT_A_GATE`; `risk` gets a **second witness** re-derived from leg strikes;
-`trade_id` is **never persisted** (regenerated per rebuild); nine hard refusal rules.
-**Standalone — NOT wired into `daily.sh`**, and the reason is stated: `research_loop.py` is
-`0.1.0-DRAFT` with three fatal defects and stays unwired, and a second research engine in the
-pipeline beside it invites the two to be run and quoted as a pair.
-
-**Validation fixtures — five, every one anchored on VERBATIM real capture rows** from
-`data/captures/oa_export_positions_2026-07-30.csv` (sha256 `dca69ada…fcadc`), asset status
-identical to `data/execution_audit.csv`: a **test asset, never a reporting input**. Assertions are
-on VALUES: `R_condor == 18/192 == 0.09375` exactly and **≠ mean(leg ror) == 0.047641** (the
-wrong-answer assertion, 50.8% understatement); `R == 756/4900 == 0.154285714285714` and
-`d(2026-03-24) == 0.060535714285714`, both to 1e-9, on a real **quantity=28** row so the
-×100×quantity bug class shows as a factor of 28; `premium == −700` vs `credit == 0.25`;
-`expired == 154 / closed == 1232 / total == 1386`; `n_fired == 7 → INCAPABLE`, not FAIL; and
-`mde_fam == 0.035` asserted as a number so a future K or B change fails a test rather than a review.
-
-**§8 hands Andy 16 gated rulings (G-1…G-16)**, plus two dependencies already open elsewhere: D3
-(export/backstop timezone — no wall-clock predicate is safe until it is answered) and D2/D4
-(`itmlive = market`, and whether the ITM action appears in a Trades list and under what label).
-**G-1 is the one that decides whether §7 item 3 can ever close.**
-
-**⚠️ The signing gate is NOT discharged by this document.** It is discharged for Layer 1 (everything
-derivable from the ledger) and explicitly **not** for Layer 2 (everything needing exit attribution),
-with the missing input named, schema'd and priced. That is the honest state and the spec says so in
-its own opening.
-
-**Verification.** File written via `device_commit_files`, then verified in a **separate**
-`device_bash` call — never the write tool's response (`CLAUDE.md` §9.1a):
-`docs/comparative-machinery-spec.md` = **914 lines**, sha256
-`d26a3960a860a2667f0641748cfb3e4989c0bfd4fad347a171ad0613cf61c3dc`, single-match greps confirmed on
-the §8 heading, the A-5 fixture value and the A-15 `mde_fam` value. This log entry appended after a
-fresh re-read of `session-log.md` with a compare-and-swap on sha256
-`ab8a96ef…984983e` and a tail assertion on `**HOLDING for Andy's commit.**` — a concurrent session
-was editing this file.
+**Not done**
+- `GF-Backstop-1552-FlatClose` — confirmed present in the Library list (`Unused` row) but not
+  independently field-verified or captured this pass. No capture file, no `bots_config_v2.csv` row
+  yet. Next session's task before Phase A can be called complete.
+- `GF-QQQ-IC-Ride` and the six research arms — **deliberately not started.** Andy's instruction: a
+  banner re-flag after an in-session adjudication reads as a context-window-saturation signal: stop
+  here, close out cleanly, continue Ride and the six arms in a fresh session against this
+  close-out.
+- Recorded for the Ride/arm session per Andy's conditional ruling: **U-1 NEGATIVE → G-1 reverts to
+  HOLD.** The six arms will be stamped uniform `{"smart":"normal"}` under G-1-HOLD, not per-arm
+  pricing-mode tagging. The `exit_rows.csv` schema question re-presents post-downgrade with the
+  degraded `(exit_ts, fill_price)` capture cost — open, not resolved here.
+- Layer 2 (behavioural, first new position's Trades list) remains DEFERRED TO DAY-0 for every item
+  built this session, same as before — account has no live positions to observe.
 
 ### Files changed this session
-`docs/comparative-machinery-spec.md` (**NEW**) · `docs/state.md` (pointer block only) ·
+`data/captures/2026-08-06-gfam/GF-ScannerB-CallSpread.txt` (new) · `data/bots_config_v2.csv`
+(+1 row) · `docs/state.md` (2026-08-07 update block appended, prior block left standing) ·
 `docs/session-log.md` (this entry).
 
-**HOLDING for Andy's commit.**
-
+**HOLDING for Andy's commit. Phase A is STILL INCOMPLETE — Backstop's capture/CSV row is
+outstanding and Ride has not been started. Do not treat the family as started.**
 
 ---
 
-## 2026-08-06 (late) — G-RULINGS CARD Group A ruled: G-1, G-5, G-13, G-7 applied
+## 2026-08-07 — SPRINT TASK 10: the seven mirror pre-registrations stamped (PR-07…PR-13)
 
-**Task.** Andy ruled Group A of `docs/g-rulings-card-2026-08-07.md` (the four items that change
-what tomorrow's build stamps, out of the 16-item G-1…G-16 queue) and instructed direct application
-this session. Applied exactly: **G-1** AUTHORIZE, conditional on U-1 positive (Trades list renders
-per-row pricing mode + memo); reverts to HOLD if U-1 negative — recorded in the ruling sheet only,
-**no `exit_rows.csv` or capture machinery built** (implementation, later). **G-5** DISAPPLY conjunct
-(c) on PR-19, the deliberate parallel to CF-11; with conjunct (a) already inert (G-6), the arm's
-gate reduces to conjunct (b) alone — chosen, not arrived at. **G-13** REPLACE-EQUIV — PR-19's
-degeneracy criterion replaced by a TOST equivalence test on mean paired ΔR vs the Ride control,
-band ±0.015R (the program's R-3 minimum-effect margin, signed by Andy 2026-08-06), evaluated once
-at the stamped gate-eval date; the old ±0.005R / 20-of-40 rule struck as unfireable (CM-9's
-arithmetic: ≈1.2 expected hits vs 20 required). **G-7** STAMP `GATE EVAL DATE` = Day-0 + 6 months
-(relational; resolves to calendar at Day-0), interim look at n=60, into all seven PR-14…PR-20
-entries and into the `pre-registration-ledger.md` §2 template. **Groups B and C are unruled** — the
-sheet's B/C lines are untouched, still blank.
+**Task.** `sprint-2026-08-04.md` Task 10 — draft pre-registration entries for the leave-in-place
+nine so Day-0 is signing, not authoring — run with Andy's 2026-08-06/07 amendments applied
+(D-4 ruled; `GATE EVAL DATE` stamped per G-7; G-8 SEQUENCE+CS on any n≥60 kill line; B3 as the
+ratified regime-change conjunct).
 
-**Files edited, each via anchored `device_bash` insertion with a pre-write single-match
-`grep`/count assertion on the exact anchor text, then a post-write `device_bash` sha256 plus a
-single-match grep of the new text — never the write tool's response (`CLAUDE.md` §9.1a):**
-- `docs/g-rulings-card-2026-08-07.md` — the RULING SHEET's G-1/G-5/G-13/G-7 lines filled with
-  Andy's rulings, each dated 2026-08-06. Group B and Group C lines left exactly as drafted.
-  sha256 `435d2ca4fe7d50c5443d90b443448d27909af70eef25f6dc27fc4c7cb3e848e3`.
-- `docs/greenfield-family-spec.md` — PR-19's entry: added the G-5 conjunct-(c) disapplication
-  banner (parallel to the existing liveness-disapplication banner already in the entry) and the
-  G-13 correction banner, which strikes the old degeneracy rule (`~~...~~`, original left standing
-  per the doc's own convention) and replaces it with the TOST equivalence test. Added a
-  `GATE EVAL DATE` field, stamped Day-0 + 6 months (interim look at n=60), to all seven PR-14…PR-20
-  entries — verified 7 occurrences post-write. sha256
-  `0292fc21c9039b45b94a8164e0dc12fd49031ffc9d6ef7f7fb0fad3af9c0e154`.
-- `docs/pre-registration-ledger.md` — added `GATE EVAL DATE` to the §2 template, between
-  `REVIEW DATE` and `MAX LOSS`, citing `research-loop-spec.md` §10a item 2 and
-  `track-b-arms-spec.md` §11 item 5 (open since 2026-08-04). sha256
-  `851c7416c794d044931d4caa80c6ecfd64f7286f31b64c0a63f01c5c65963404`.
+**What the nine actually needed, which is not what the task prompt assumed.** Two of the nine
+were already stamped as individual entries — **PR-05** `DIR-SPX-PutVIX22-SL75` and **PR-06**
+`DIR-SPX-CallVIXdrop`. The other seven existed only as **one shared frame** with `<per bot>`
+placeholders in `HYPOTHESIS`, `MECHANISM` and `MAX LOSS`, under a heading that already promised
+*"one frame, seven separate entries — one ID per bot."* So the work was **resolving that frame
+into seven entries**, not authoring nine. `pre-registration-ledger.md` §5 now carries PR-07…PR-13
+as full DRAFT blocks; the frame is **left standing as the shared skeleton** and governs wherever
+an entry is silent (the doc's own §0.2-style convention).
 
-**Not touched this session:** `docs/state.md` (shared with a concurrent build session — out of
-scope for this edit, per instruction); `data/exit_rows.csv` or any exit-attribution capture
-machinery (G-1 authorizes it but building it is a separate, later task); OA (no browser tool run);
-git (no git command run, per instruction).
+**PR-05 was NOT edited, and that is the ruling, not an omission.** `decision-memo-2026-08-04.md`
+§D-4 row 7 rules its `failsafe-tripped` clause **KEEP UNCHANGED** — it is a *liveness kill
+criterion*, not a June-lapse hypothesis — and the memo explicitly warns that Task 5's premise is
+wrong and that *"there is no propagation work to do in the ledger. Do not let a downstream
+session invent an edit to satisfy the instruction."* Confirmed by grep: the ledger carries
+exactly one mention of the failsafe and it is that one. PR-05 also already reflects that 0
+positions in 22 days is its gate working (`"The open question is not the edge — it is whether
+the bot is ALIVE"` plus the ⛔ do-not-delete banner), so the amendment's requirement was already
+satisfied on the file.
 
-**Verification.** This log entry appended after a fresh re-read of `session-log.md`'s tail and a
-compare-and-swap on sha256 `fdb40ce781a43ce4ff23ec2ee408696e418e74c96ff12a99f155849a1c598a54`, plus
-a tail assertion on `**HOLDING for Andy's commit.**` — a concurrent build session shares this file.
+**Amendments, applied as instructed.**
+- **G-7 `GATE EVAL DATE`** stamped on all seven, in the PR-14…PR-20 wording: *Day-0 + 6 months
+  (relational; resolves to calendar at Day-0); interim look at n=60.* ⚠️ **And the arithmetic
+  stamped beside it**, because for this class the interim look is mostly unreachable: at each
+  bot's own observed cadence over ~180 days, only `3DTE` (≈101) and `Nigiri` (≈82) reach n=60;
+  `60min-ORB` ≈45, `Trendy` ≈35, `Friday 14 DTE` ≈20, `Tasty` ≈19, `QQQ long call` ≈18. Each
+  entry says ✅ REACHABLE or ⚠️ NOT REACHABLE with its own number, so a signer is not stamping a
+  look that cannot happen.
+- **G-8 SEQUENCE+CS** — **no entry below draws an n≥60 absolute kill**, so there is no fixed-n CI
+  to convert. Stated once in the expansion banner rather than seven times, with the standing
+  condition that G-8 binds if a mirror ever acquires one. Nothing was invented to give the rule
+  something to attach to.
+- **B3** cited **by name** as the n≥100 edge limb's regime-change conjunct in all seven
+  `SAMPLE TARGET` lines. `evidence-standards.md` §4's 2026-08-06 banner records *"no
+  pre-registration entry currently cites B3 by name"* as the open half of that gap — **these are
+  the first seven that do.** The manual-evaluation-and-log requirement is carried with it.
+
+**Content sources — every figure carries its file.** Per-bot record from `data/mirror_baseline.csv`
+via `mirror-funding-memo-2026-08-05.md` §2 (n, mean R, median R, sd, worst R, maxDD, win%);
+DRAFT verdicts from memo §6; cadence and months-to-n=100 from memo §7; mechanism, allocation and
+loss shape from `oa-mirror-reference.md` §5.2; funding bar from §2.6. **No number was stated that
+was not read this session.**
+
+**Judgment calls worth a reader's eye:**
+- **PR-09 `QQQ long call` carries a PRIOR CONDITION, not just a caveat** — no funding verdict in
+  either direction until the ride-or-close on the 4 open positions is *executed*, per memo §3 and
+  Day-0 audit **F-34** (Step 2 requires the decision *logged*, never *executed*, and Step 3 then
+  arms this bot). Its `VERIFICATION` line makes the ordering load-bearing.
+- **PR-12 carries a name-collision guard.** `60min-ORB-10W-Paper-v1` stays live;
+  `Opening Range Breakout 60m` is a different, OFF, being-archived bot with a draft KILL against
+  it. Arming the wrong one is a one-way door and the names are one careless read apart.
+- **PR-13 forbids a cadence-based kill by name.** The v1 *"kill if no trades by day 21"* flag was
+  struck because 45-DTE entries do not expire for ~6 weeks; the entry says so, so it cannot be
+  reintroduced under another name — the same logic PR-05 carries for a gate that correctly never
+  fires.
+- **PR-10 forbids "fixing" the OFF stop switch.** Enabling it costs $1,792 of P/L to save ≈$290
+  of drawdown on the author's own 96-trade disclosure. It is a source design choice; changing it
+  makes the bot no longer a mirror.
+- **Three of the seven have an UNOBSERVED loss tail** (`Nigiri` 0 losers in 38, `Friday 14 DTE`
+  0 in 7, `Tasty` 0 in 4). Each entry says `maxDD 0.0000R` is an absence of evidence, not a risk
+  statement.
+
+**Three open items filed in §8 (7, 8, 9) and NOT applied — each is a decision or touches text
+outside this task's scope:**
+7. **PR-05/PR-06 predate the `GATE EVAL DATE` field** and do not carry it. Under §7 item 2 an
+   entry with an unresolved field is unsigned, so it must close before Day-0 — but stamping a
+   written entry is an edit to that entry, which Task 10 forbade. Andy's call: stamp both, or
+   rule the field inapplicable to non-comparative bots.
+8. **The §2.6 funding bar is stated in P/L and win rate; §2 rule 1 forbids both in a kill
+   criterion** (`"never dollars, never win rate"`), and `CLAUDE.md` §4 says compare by R. Seven
+   entries now carry that bar verbatim, so the tension is load-bearing. It may be correct — a
+   *funding* bar is not an *edge* bar — but that is a ruling, not a reading.
+9. **`data/mirror_baseline.csv` EXISTS and holds TEN rows** — `[FIRST-HAND 2026-08-07, direct
+   `device_bash` read]`, header + 10 mirror rows, 174 positions, written 2026-08-04, sha
+   `cdceb0a8d444e570…` per memo §9. §5's frame note calls it *"nine rows"* and `CLAUDE.md` §3
+   lists it as *"not yet written"*. Neither is inside a PR entry and neither changes a decision
+   (funding scope is still the 7 live mirrors), so both are flagged, not edited.
+
+**Files edited, verified by direct `device_bash` sha256 + single-match greps — never a write
+tool's response, never a stage-back (`CLAUDE.md` §9.1a):**
+- `docs/pre-registration-ledger.md` — §5 expansion banner + seven DRAFT entries inserted at the
+  §5/§6 boundary by anchored Python insertion with a **pre-write uniqueness assert** on
+  `## 6. Group D — the 5–7 fresh builds` (count==1) and on the frame's closing note (count==1);
+  §8 items 7–9 appended behind a single-match anchor on item 6. **Post-write verification: all 7
+  entry headers grep to exactly 1 match each, all 7 `ID` lines grep to exactly 1 each, all 3 new
+  §8 items grep to exactly 1 each, 36 code fences (even).** 572 → 909 lines. sha256
+  `5df009eada9b1665a75da9f159c23ca4177204854b498d8f8c342c1b7274c727`.
+
+**Not touched, deliberately:** PR-01…PR-06 and every §6 entry (unchanged, byte for byte);
+`docs/state.md` (shared with a concurrent build session); `CLAUDE.md`; `data/` (read-only this
+session); OA (no browser tool run); **git — no git command in any form, per Andy's instruction.**
+
+**Verification of this entry.** Appended after a fresh re-read of `session-log.md`'s tail and a
+compare-and-swap on sha256 `173731b995c13b2e46d0935dbf8b0480575a9e5d1d57914671f4ba1d27a0ff41`,
+plus a tail assertion on `Do not treat the family as started.` — a concurrent session is writing
+to this file.
 
 ### Files changed this session
-`docs/g-rulings-card-2026-08-07.md` · `docs/greenfield-family-spec.md` ·
 `docs/pre-registration-ledger.md` · `docs/session-log.md` (this entry).
-
-**HOLDING for Andy's commit.**
-
-
----
-
-## 2026-08-06 (late) — G-RULINGS CARD Group B ruled: G-11, G-10, G-9, G-8 applied (G-8 extended)
-
-**Task.** Andy ruled Group B of `docs/g-rulings-card-2026-08-07.md` (the four items gating ARM-B2 /
-PR-22 signing) and instructed direct application this session. Applied exactly: **G-11** IN —
-PR-21/PR-22 are statistically inside the greenfield Bonferroni family; ruling S-1 governs bot-slot
-allocation only, not error rates. **G-10** SWITCH — the family's multiplicity correction is now a
-joint day-bootstrap max-T across arms, replacing Bonferroni-across-6, declared before any data
-exists (`data/ledger_meta.json`: `export_rows 0`). **G-9** MOOT under G-10 — max-T needs no
-hand-set K, so the 6-vs-5-vs-9 question dissolves; recorded in the card sheet only, no other file
-touched for G-9 specifically. **G-8** SEQUENCE+CS — every `"CI entirely below 0 at n≥60"` kill
-line in `pre-registration-ledger.md`'s greenfield-family entries and both Track B K1s
-(`track-b-arms-spec.md` PR-21/PR-22) is amended, dated, original standing: the n≥60 read is now
-emitted as an always-valid confidence sequence, not a fixed-n CI, and the absolute kill cannot
-retire an arm before its own stamped GATE EVAL DATE; family-level and sentinel criteria
-(execution-integrity rules) are unaffected. **Group C remains unruled** — the sheet's C lines are
-untouched, still blank.
-
-**Files edited, each via anchored `device_bash` insertion with a pre-write single-match count
-assertion on the exact anchor text, then a post-write `device_bash` sha256 plus a single-match
-grep of the new text — never the write tool's response (`CLAUDE.md` §9.1a):**
-- `docs/g-rulings-card-2026-08-07.md` — the RULING SHEET's G-11/G-10/G-9/G-8 lines filled with
-  Andy's rulings, each dated 2026-08-06. Group A lines untouched; Group C lines left exactly as
-  drafted. sha256 `592e36c7525c445fd744a0c303142c83c1ffa5f29310bd41b81747ce58862cd5`.
-- `docs/pre-registration-ledger.md` — G-8 SEQUENCE+CS banners added to both greenfield-family
-  KILL CRITERION blocks in §6 (the 4-arm block and the hedge-tournament block), original text left
-  standing. sha256 `10e9b255c3c4ebfe8ff350f5594231f24050a8708d8e03484a9369a72d32be22`.
-- `docs/track-b-arms-spec.md` — G-8 SEQUENCE+CS banners added to PR-21's and PR-22's K1 kill lines;
-  a G-11 IN banner (cross-referencing G-10) added at the end of §6.3. sha256
-  `c1ac77af1c766f86bb083aad731792d33f454d58706d222cbfddccd102faa240`.
-- `docs/greenfield-family-spec.md` — G-10 SWITCH applied at four points: §9's COMPARATIVE CRITERION
-  (Bonferroni struck, max-T substituted, original left standing), the SAMPLE TARGET power note
-  (flagged as superseded, not recomputed — no new power figure invented), PR-19's 2026-08-06
-  appended note's stale cross-reference, and the Phase C step C4 checklist row. **EXTENDED, same
-  session, on Andy's explicit follow-up: G-8 SEQUENCE+CS banners added to all six PR-14…PR-19
-  `KILL CRITERION` blocks in §9** (the per-arm entries), dated, original standing — the n≥60 read
-  is now emitted as an always-valid confidence sequence and the absolute kill cannot fire before
-  each arm's own stamped GATE EVAL DATE; family-level and sentinel criteria unaffected. sha256
-  `a12b34a287e7a0f46ebd6ef943e4b5e766e28e83faa4494bff8119fa35db0041` (was
-  `930a2ace3dbeb7fda819662a8104ec603cdcb3f4726d3d98fc49dd9acba64203` before the extension).
-- `docs/comparative-machinery-spec.md` — dated RULED banners added at §3.2 (G-10, noting it
-  dissolves G-9 and flagging that `BONFERRONI_K`/`ci_fam_*` need restating under max-T —
-  implementation is Claude Code's) and §3.4 (G-11, noting the `k_basis` flag is resolved). sha256
-  `ccab3fce48612ec3f5ba26adc6cadc4eab6003785cce8704283e1adff60a2c43`.
-
-**Scope note — RESOLVED same session.** The flag above was put to Andy directly; his answer:
-*"Yes — G-8 propagates to greenfield-family-spec.md too. Same amendment, dated, original standing,
-on all six PR-14…PR-19 kill lines in §9 ... Same verification discipline."* Applied immediately
-after — see the `greenfield-family-spec.md` bullet above, now marked EXTENDED. Every one of
-G-5/G-13/G-7/G-8 has now touched all six PR-14…PR-19 per-arm `KILL CRITERION` blocks; no known
-propagation gap remains between the card's Group A/B rulings and those entries.
-
-**Not touched this session:** `docs/state.md` (shared with a concurrent build session); the
-engine implementation itself (`BONFERRONI_K`, `ci_fam_*`, `k_basis` — Claude Code's, per
-`CLAUDE.md` §7); OA (no browser tool run); git (no git command run, per instruction).
-
-**Verification.** This log entry appended after a fresh re-read of `session-log.md`'s tail and a
-compare-and-swap on sha256 `a6b8858fef9241bdbdbb4decd7ad3d2eede87d1b4bc083ebcdd4494ff3b82e0c`, plus
-a tail assertion on `**HOLDING for Andy's commit.**` — a concurrent build session shares this file.
-The G-8 extension above was applied with the same discipline: pre-write single-match count
-assertion on each of the six anchors, then a post-write `device_bash` sha256 (confirmed 6/6
-banners present via a single-match-per-arm grep) — never the write tool's response. This entry
-was then edited in place (not re-appended) to record the extension, itself compare-and-swapped on
-this entry's own prior sha256 immediately before the edit.
-
-### Files changed this session
-`docs/g-rulings-card-2026-08-07.md` · `docs/pre-registration-ledger.md` ·
-`docs/track-b-arms-spec.md` · `docs/greenfield-family-spec.md` ·
-`docs/comparative-machinery-spec.md` · `docs/session-log.md` (this entry).
-
-**HOLDING for Andy's commit.**
-
-
----
-
-## 2026-08-06 (late) — G-RULINGS CARD Group C ruled: G-2, G-3, G-4, G-6, G-12, G-14, G-15, G-16 applied
-
-**Task.** Andy ruled all eight Group C items of `docs/g-rulings-card-2026-08-07.md` (analysis /
-publication only, every one safe past the 08-07 downgrade — none blocks tomorrow's build) via
-multiple-choice, and instructed direct application. Andy took the card's recommendation on all
-eight. Applied exactly: **G-2** M6 — the gate reads the six comparative arms, not all seven;
-the Canary's fill/RED no longer halts the five real comparisons; `|M7|` still printed. **G-3**
-CONFIRM — "exactly one condor per arm per day" ratified as written, no text change. **G-4**
-CONFIRM X-1 — exclude only all-expired groups, no text change. **G-6** STANDS — the +0.015R bar
-unchanged, `fire_rate` published beside it always (already inert under conjunct (b), per G-10's
-own reasoning). **G-12** RESPEC — PR-16's worst-condor-R test (a coin flip, P≈0.5, worded as a
-refutation) is struck as a retirement criterion; the concrete tail-quantile/CI replacement is
-**not specified here** — Andy ruled the decision to respec, not the statistical method, and
-inventing one would be fabrication, not application. **G-14** DEFER-TO-DAY-0 — no ruling needed
-now; ARM-B1 isn't an arm until C10/C11 close regardless. **G-15** PER-SIDE — the breach/liveness
-indicator resolves on whichever side actually breached, consistent with the C8 spread-is-the-
-exit-unit ruling; still gated on G-1 for a fireable input. **G-16** confirm 20 — the emission
-floor is signed, not assumed. **Every group on the card (A, B, C) is now ruled.**
-
-**Files edited, each via anchored `device_bash` insertion with a pre-write single-match count
-assertion on the exact anchor text, then a post-write `device_bash` sha256 plus a single-match
-grep of the new text — never the write tool's response (`CLAUDE.md` §9.1a):**
-- `docs/g-rulings-card-2026-08-07.md` — the RULING SHEET's Group C lines (G-2/G-3/G-4/G-6/G-12/
-  G-14/G-15/G-16) filled with Andy's rulings, each dated 2026-08-06. Groups A and B untouched.
-  sha256 `1126b1d955df39dfc9cec3bfd064632c9890122668e3afb20b1b24beba46481f`.
-- `docs/comparative-machinery-spec.md` — **17 edits**: a dated `RULED` resolution appended to each
-  of the eight ⛔-tagged findings (§1.5 for G-2 ×2 including the "gate reads M7" sentence itself,
-  §1.6 for G-3/G-4, §2.4 for G-6, §4 for G-12/G-14/G-15, §6.3 for G-16), plus the matching row in
-  the §8 ruling-queue summary table updated for all eight — original text left standing throughout,
-  nothing struck except the superseded "gate reads M7" clause. sha256
-  `deb4fcc94b7c46d6c442cdcd1226604a23e4998b8586a886eb8b83363d714ce7`.
-- `docs/greenfield-family-spec.md` — **2 edits**: §8.4's "matched day" definition gets a dated
-  cross-reference to the M6 ruling (G-2), original definition left standing; PR-16's
-  `KILL CRITERION` block gets the G-12 correction — the worst-condor-R clause struck
-  (`~~...~~`, original left standing) and marked pending respec, dated. sha256
-  `d2832290d7ad3a317cb78d43b166caa5e0d0d618cff4195ea9b241e14e775df8` (previously
-  `a12b34a287e7a0f46ebd6ef943e4b5e766e28e83faa4494bff8119fa35db0041`, after the G-8 extension).
-
-**Not touched this session:** `docs/state.md` (shared with a concurrent build session); OA (no
-browser tool run); git (no git command run — commit is Andy's, per standing instruction).
-
-**Verification.** This log entry appended after a fresh re-read of `session-log.md`'s tail and a
-compare-and-swap on sha256 `91cce0ab95726ff3204d5fa18dcd599b645ca2fcde6192ac3f7a0890d77f221f`,
-plus a tail assertion on `**HOLDING for Andy's commit.**`.
-
-### Files changed this session
-`docs/g-rulings-card-2026-08-07.md` · `docs/comparative-machinery-spec.md` ·
-`docs/greenfield-family-spec.md` · `docs/session-log.md` (this entry).
 
 **HOLDING for Andy's commit.**

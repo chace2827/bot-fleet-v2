@@ -263,9 +263,7 @@ entry is the other session's work, not an unexpected diff.
 > `greenfield-family-spec.md` §4.1 node-for-node. Action `open-shortputspread`:
 > `exactly 0 days` · short put `0.75% below underlying price` · long put `$2.00 below short put
 > leg` · **`amount` = 1 contract — the SIZING PRIMITIVE IN USE IS THE FIXED CONTRACT COUNT**, not
-> the `$250 risk` fallback (stamp this in all seven MECHANISM blocks ✅ **done 2026-08-06**,
-> late-night Sonnet housekeeping session — `pre-registration-ledger.md`'s three Group D
-> templates covering PR-14…PR-20, dated note each, device-hash-verified) · `price`
+> the `$250 risk` fallback (stamp this in all seven MECHANISM blocks) · `price`
 > `{"limit":100,"smart":"normal"}` — **not Market**, Decision 5 holds · `tags` `put side` ·
 > `filter {"minPrice":0.08}` · `exits` = a **REFERENCE** to automation input `IN178605447966781`
 > (`GF_EXITS_PUT`, type `exits`) — **the G2 rider reproduced first-hand on a new object.**
@@ -284,13 +282,6 @@ entry is the other session's work, not an unexpected diff.
 > **exactly the `GF-SL100` arm's value** — a sentinel indistinguishable from a real arm, which
 > §1.3 forbids by name. The input was created with **Default Value = NONE** and the sentinel left
 > unimplemented. **Andy must rule (0.05, or re-spec) before any arm's `AUTOMATIONS` goes ON.**
-> ✅ **RULED 2026-08-06 (Andy, final), APPLIED same night — F-4 CLOSED.** SENTINEL-SL1 abandoned,
-> struck (`greenfield-family-spec.md` §1.3a). Default Value stays `NONE` (already true for
-> ScannerA, carried forward for ScannerB). Detection moves to config-level: new assert **A9**
-> (§8.3) — every arm's exit bot input BOUND and NON-EMPTY, checked before any `AUTOMATIONS`
-> toggle at Day-0; old **A4** struck as moot (nothing is ever stamped a sentinel that doesn't
-> exist). Residual cap recorded: an unbound/empty arm still closes via the 15:52 backstop, so
-> the failure mode is bounded, not a silent open-ended ride. No probe needed; build resumes.
 >
 > ⛔ **F-3 — THE TRIGGER IS NOT PART OF A SHARED LIBRARY OBJECT.** The Library editor carries the
 > tree only; a bot's Settings groups attached automations under `SCANNERS`/`MONITORS`, so trigger
@@ -299,69 +290,79 @@ entry is the other session's work, not an unexpected diff.
 > all seven bots**, and neither §8.2 step 6 (rid lists) nor §8.3 **A2** enumerates trigger config.
 > **A2 needs a trigger clause or the family has an undetected matching hazard in its only
 > backstop.** Spec text — Andy's, not amended here.
-> ✅ **APPLIED 2026-08-06 (late-night Sonnet housekeeping session, Andy authorized):** A2 amended
-> in `greenfield-family-spec.md` §8.3 to add trigger config (class/time/repeat/days) to the
-> comparison, dated, original standing. Device-hash-verified, single-match grep. F-3 closed.
 >
 > ⚠️ **F-1 — the slot-4 gate surface.** `decision-card-2026-08-06.md` is an **unfilled** ruling
 > sheet (lines 240–241 still read the option lists); the rulings live on **this page**. This
 > session proceeded on this page and flags the divergence. See `session-log.md` 2026-08-06 (late).
-> ✅ **PARTIALLY APPLIED 2026-08-06 (late-night Sonnet housekeeping session):** the card's top
-> RULING SHEET (lines ~21–32) is now filled from this page's recorded rulings, dated, plus a
-> line noting the same-night rulings (C8, PR-16, F-4) made outside the card's seven slots. The
-> inline `RULING SLOT 4` / `RULING SLOT 4a` lines inside §4's adversarial record (still ~lines
-> 240–241) were **not** touched — out of this pass's scope; the top sheet is the named gate
-> surface and now agrees with this page.
 >
 > Also read first-hand and unchanged: `itmpaper` = `market` ✅ · `itmlive` = `auto` ✅ ·
 > `maxexits` = `0` · Bot Schedule `09:31`/`5`, `09:31`/`1`. `/bots` = **33 active bots**;
 > `My Automations` was exactly one row before the build, **two** after.
 
-## 📐 COMPARATIVE MACHINERY SPEC — WRITTEN 2026-08-07. The signing gate is SCOPED, not closed.
-
-`docs/comparative-machinery-spec.md` — **914 lines, sha256
-`d26a3960a860a2667f0641748cfb3e4989c0bfd4fad347a171ad0613cf61c3dc`**, on-device verified
-2026-08-07 in a separate `device_bash` call. ⚠️ **Treat the hash as a timestamp, not a fact.**
-Written to close `greenfield-family-spec.md` §12 row 13 / `track-b-arms-spec.md` §11 item 7
-(*"needs scoping as its own task before Day-0"*). **It edits no existing spec and authorizes no
-build.** Implementation is Claude Code's; the spec is hand-off-ready.
-
-⛔ **`pre-registration-ledger.md` §7 item 3 is NOT discharged by it.** Discharged for **Layer 1**
-(everything derivable from `data/trades.csv`); **NOT discharged for Layer 2** (everything needing
-exit attribution). Four findings, each verified first-hand this session:
-
-1. ⭐ **Gate conjunct (c) is UNCOMPUTABLE from any input that exists.** No exit-reason field in the
-   26-column export or the 30-column ledger; `tags` is bot-level, set at open; the ITM label is
-   unobserved (D4). A close-time + MFE/MAE proxy was **rejected** — 15:44 is a dead constant (S-4
-   gated the object C8 removed), it classifies PR-22's own 15:45 mechanic as NOT FIRED, the export
-   timezone is unverified (D3), and MFE/MAE **censor at the trigger**, so the test resolves on
-   slippage sign, which is monotone in `d_i`. **A missing input is specified instead:**
-   `data/exit_rows.csv`, per-position exit attribution read from the Trades list (spec §1.4).
-   ⛔ **New capture surface — Andy's, ruling G-1. Five declared criteria across all seven arms are
-   unfireable without it.**
-2. ⭐ **Gate conjunct (a) is INERT under conjunct (b).** Family's own arithmetic, n=100: SE=0.013416
-   → 95% ±0.0263R (matches §9's ±0.026R) → **Bonferroni K=6 ±0.0354R**. (b) demands ≥+0.035R while
-   (a) demands +0.015R, so **every sample passing (b) passes (a)** — and +0.035R is **2.4× the
-   largest effect this program has ever measured** (SL75, +0.0150R, n=1,254). This is
-   `greenfield-family-spec.md` §12 row 16 with the declared Bonferroni term included; **row 16
-   states ±0.026R and the operative figure is ±0.035R.**
-3. ⭐ **PR-19's degeneracy criterion cannot fire — CF-11 is not actually fixed.** Expected **1.2**
-   within-tolerance hits per 40-day window against a requirement of **20**, ANDed to a near-certain
-   limb; plus ill-posed (overlapping-window scan, no cadence) and uncomputable (stop-row count).
-   And **conjunct (c) is unpassable for PR-19 by construction** — an exact sign test needs
-   `n_fired ≥ 8` at α′=0.05/6, and the arm's hypothesis is that it never fires.
-4. ⭐ **Bonferroni K is under-corrected ~1.8×.** **Nine** declared decisions run against the single
-   `GF-QQQ-IC-Ride` control, not six. And **"S-1 puts Track B outside the greenfield family" is a
-   category error, withdrawn** — S-1 ruled **bot slots**, not error rates.
-
-⚠️ **Carried:** CF-1's own mitigation is itself uncomputable (the per-arm Market-priced / ITM close
-count needs the **pricing field**, which lives only in the Trades list), so **no ΔR in this family
-currently meets its own declared publication precondition.**
-
-**Adversarial record:** two subagents instructed to refute — **both succeeded**, 12 FATAL +
-26 MATERIAL, both answering **NO** to *"is the restated gate computable from the named inputs
-alone?"* Spec §7 records what survived; **spec §8 is a 16-item ruling queue (G-1…G-16) for Andy**,
-plus the already-open D2/D3/D4. **G-1 decides whether §7 item 3 can ever close.**
+> ### ✅ UPDATE — 2026-08-07 (same session, continued late). Seven presets done, ScannerB built +
+> **Layer-1 verified**, Backstop confirmed present. **Phase A is STILL OPEN — Ride not started.**
+> Block above LEFT STANDING per the doc's own correction convention; read this banner with it.
+>
+> **Presets (A6) — all seven built, F-4-compliant (Default Value forced back to `None` on every
+> one), each independently confirmed in the account Presets picker after a hard reload:**
+> `GF-RIDE-EXITS` · `GF-PT50-EXITS` · `GF-TRAIL-EXITS` (Trailing Stop 40%/15% + Expiration
+> 10min/Fast) · `GF-TOUCH0-EXITS` (Touch $0 default-Normal + Expiration 10min/Fast) ·
+> `GF-SL100-EXITS` (Stop Loss % −100% credit default-Normal + Expiration 10min/Fast) ·
+> `GF-CANARY-EXITS` (Profit Taking % 5% credit/Fast + Expiration 10min/Fast) · `GF-SL200-EXITS`
+> (Stop Loss % −200% credit default-Normal + Expiration 10min/Fast).
+>
+> **`GF-ScannerB-CallSpread` now COMPLETE + Layer-1 verified after a hard reload**
+> (`RTfw5TkkCRF178606271659881`, version 2, Library state `Unused`, `Warnings 0`). Tree mirrors
+> ScannerA node-for-node through the Range075 gate, then diverges only where the spec calls for it:
+> `Bot opened a position with call side today` (`postagtoday`) → NO → `Open Symbol Short Call
+> Spread`. Action `open-shortcallspread`: `exactly 0 days` · short call `0.75% above underlying
+> price` · long call `$2.00 above short call leg` · `amount` = 1 contract (same sizing primitive as
+> ScannerA) · `price {"pct":100,"smart":"normal"}` — **not Market**, confirmed via the SmartPricing
+> modal itself, not just the collapsed label · `tags` `call side` · `filter {"minPrice":0.08}` ·
+> `exits` = a REFERENCE to a **newly created** automation input `IN178606782436781`
+> (`GF_EXITS_CALL`, type `exits`, **Default Value = None, F-4 compliant**) — confirms automation
+> inputs are per-automation, `GF_EXITS_PUT` was correctly NOT reused. **A7 baseline**
+> `sha256(JSON{name,inputs,root})` = `bb4ba866a13e7ecd682f7bda9a19011003e9e3ef73fffd0fb64a80a4cd0eb32e`.
+> Capture: `data/captures/2026-08-06-gfam/GF-ScannerB-CallSpread.txt`. Row appended to
+> `data/bots_config_v2.csv` (now 2 rows).
+>
+> **`GF-Backstop-1552-FlatClose` confirmed present** in the Library list this session (`Unused`
+> row) — built earlier in this same continued session; **not independently field-verified or
+> captured in this pass** (no capture file, no CSV row yet — open item, next session's task before
+> Phase A can be called done).
+>
+> **Still NOT built:** **`GF-QQQ-IC-Ride` (Phase B never started)** and the six research arms.
+> `GF-SiblingClose` correctly not built (C8 ruling, unchanged).
+>
+> ⛔ **ACCOUNT-INACTIVE BANNER — RE-FLAGGED AND RE-ADJUDICATED, this session.** The
+> "Account inactive, no changes will be saved until you select a plan" banner was re-raised as a
+> possible save-blocker mid-session (found hidden in the DOM behind the full-screen editor overlay,
+> not visible in screenshots). Andy ruled it pre-adjudicated (activates by design at Day-0; the
+> session's own presets/ScannerA/Backstop work already passed hard-reload verification under it)
+> and directed the decisive test: node Save → finish tree → top-level Save → hard reload →
+> server-verify. **Result: PASSED.** The full ScannerB tree, every action field, and the new
+> `GF_EXITS_CALL` input all persisted exactly as built. One transient false alarm during
+> re-verification is logged for the record, not as a data-loss event: a second browser tab
+> rendered the Automation Library as empty on its first cold load; re-navigating the same tab
+> immediately after showed all four automations correctly, and Andy's own 10:12PM screenshot
+> independently corroborated the correct state throughout. **Banner question closed for this
+> account — treat it as cosmetic, not a save-blocker, going forward**, but keep doing the
+> hard-reload check anyway (§9.1a — a save confirmation is still never verification).
+>
+> ⛔ **U-1 RESOLVED — NEGATIVE.** Trades-list rows carry no per-row pricing-mode label and no memo
+> field (only description/qty/timestamp, a bid→fill price pair, an Automation Log link, "filled at
+> $X"); the linked Automation Log detail view's Close Position action card likewise has none.
+> **Consequence, per Andy's conditional ruling: G-1 reverts to HOLD.** The six research arms will
+> be stamped uniform `{"smart":"normal"}` under G-1-HOLD, not per-arm pricing-mode tagging. The
+> `exit_rows.csv` schema question re-presents post-downgrade with the degraded `(exit_ts,
+> fill_price)` capture cost — **open item for the Ride/six-arm session, not resolved here.**
+>
+> ⛔ **RIDE DELIBERATELY NOT STARTED THIS SESSION.** Andy's instruction: after this banner
+> re-flag/re-adjudication, treat it as a context-window-saturation signal and continue
+> `GF-QQQ-IC-Ride` and the six research arms in a **fresh session**, against this close-out.
+>
+> F-1, F-3, F-4 (SENTINEL-SL1 unexpressible, Day-0 blocker) all **unchanged, still open** — see the
+> 2026-08-06 (late) block above for full text.
 
 ## ⭐ GREENFIELD FAMILY SPEC — WRITTEN + AMENDED ×4 2026-08-04. Design closed; SIX blocking checks before build.
 

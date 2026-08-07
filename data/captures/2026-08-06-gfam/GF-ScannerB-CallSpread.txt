@@ -1,0 +1,100 @@
+# CAPTURE — GF-ScannerB-CallSpread (shared Library automation)
+# captured: 2026-08-07 (session continuation of the 2026-08-06 Phase-A build), Chrome-direct,
+#           Option Alpha /bots/automations
+# METHOD: values read from a5.bots.acedit.routine (client model) AFTER a hard reload.
+#         Never innerText, never a save banner (CLAUDE.md 9.1a).
+# Account state at capture: banner "Account inactive, no changes will be saved until you select
+#   a plan" was present and re-flagged mid-session as a possible blocker; re-adjudicated per Andy's
+#   explicit instruction (in-chat, this session) and empirically re-confirmed: node-level tree edits,
+#   top-level Save, and this capture's hard-reload readback all persisted correctly. One transient
+#   false alarm during re-verification (a second browser tab briefly rendered the whole Automation
+#   Library as empty on first load; re-navigating the same tab immediately after showed all 4
+#   automations correctly — logged as a client-side render glitch, not a data-loss event; Andy's own
+#   screenshot at 10:12PM independently corroborated the correct 4-automation state throughout).
+
+AUTOMATION      GF-ScannerB-CallSpread
+RID             RTfw5TkkCRF178606271659881  (version 2; uid/folderId fw5TkkCRF is the stable id —
+                the RT-prefixed id token changes on every save, see G2-rider note below)
+VERSION         2
+LIBRARY STATE   My Automations row present, "Unused" (not yet attached to any bot)
+WARNINGS        0
+INPUTS          1 usage
+  - id      IN178606782436781
+    type    exits            <- whole-bundle type (C0a shape)
+    label   GF_EXITS_CALL
+    posType shortcallspread
+    required false
+    DEFAULT VALUE  None (F-4 compliant, confirmed in client model post-hard-reload)
+
+## TREE (matches greenfield-family-spec.md 4.1 node-for-node, mirrored to the call side)
+Loop QQQ                                             [symbolloop, symbols=QQQ]
+ └─ Current market time is after 1:30pm              [timeofday cop=after time=1330]
+     └─ YES → Current market time is before 2:00pm   [timeofday cop=before time=1400]
+         └─ YES → Symbol change % is greater than -0.75 since previous close
+                                                     [stockchangepct cop=gt value=-0.75 prop=close]
+             └─ YES → Symbol change % is less than 0.75 since previous close
+                                                     [stockchangepct cop=lt value=0.75 prop=close]
+                 └─ YES → Bot opened a position with call side today
+                                                     [postagtoday oc=opened tag="call side"]
+                     └─ NO → Open Symbol Short Call Spread
+
+NOTE: the Range075 gate (>-0.75 / <0.75) is structurally identical to ScannerA's — not mirrored in
+      sign, per spec: both scanners share the same symmetric filter band. Only the terminal action's
+      strike-selection sign, tag, and exits input differ between the two scanners.
+NOTE: the symbol in every Symbol-change node and in the Open action auto-binds to the
+      Symbols-loop output referent {"type":"output","ntype":"symbolloop","output":"symbol"},
+      so the rendered name is "Open Symbol Short Call Spread", not "Open QQQ ...". Same object,
+      cosmetic difference from the spec's prose. Recorded, not corrected.
+
+## OPEN SHORT CALL SPREAD ACTION — value layer
+type        open-shortcallspread
+series      {"type":"days","compare":"exact","days":0,"filter":"*","text":"exactly 0 days"}
+shortCall   legpctprice  pct=0.75 cop=gt priceprop=last mode=closest
+            text "0.75% above underlying price"
+longCall    leggap  gap=2 cop=gt shlg=short ltype=call mode=closest
+            text "$2.00 above short call leg"
+amount      {"type":"quantity","quantity":1,"text":"1 contract"}
+              ^ SIZING PRIMITIVE USED = FIXED CONTRACT COUNT (spec 5.4 / check C4 branch 1),
+                matching ScannerA. The $-risk fallback is NOT in use.
+price       {"pct":100,"smart":"normal","text":"100% of bid/ask"}
+              ^ SmartPricing normal, NOT Market. Confirmed via the SmartPricing modal itself
+                (title "SmartPricing", mode "Normal - up to 4 prices, 10 seconds each",
+                Final Price = 100% of bid/ask spread checked) before Save, not just the label.
+exits       {"type":"input","nid":"root","input":"IN178606782436781",
+             "text":"GF_EXITS_CALL","oldValue":""}
+              ^ G2 RIDER CONFIRMED FIRST-HAND (again, call side): the action stores a REFERENCE,
+                not values. oldValue is "" here because the field was linked before it ever held
+                a value. Any diff reading this action alone will report every arm identical.
+tags        "call side"
+filter      {"minPrice":0.08}          <- "Mid price is between $0.08 - (no max)"
+entry       {}                          <- no Entry Criteria set (bot-state gates unused)
+
+## A7 PAYLOAD-HASH BASELINE  (taken immediately after the top-level Save, post-hard-reload)
+sha256(JSON{name,inputs,root})  bb4ba866a13e7ecd682f7bda9a19011003e9e3ef73fffd0fb64a80a4cd0eb32e
+sha256(JSON{full routine})      dd2c2741ac01fda7ec1a9fef40ac31700e000ffeb5e05aa22c93059b09e4ade8
+  Use the CONFIG hash as the A7 baseline: the full-routine hash also covers `updated`/`version`,
+  which bump on any save and would make A7 fire on no-op saves.
+
+## DEFERRED TO DAY-0
+Layer 2 (behavioural, first NEW position's Trades list) — impossible: account inactive (functionally,
+for trading — activates by design at Day-0 per Andy), no positions. Queued per
+greenfield-family-spec.md 10 and CLAUDE.md 5.
+
+## U-1 (this session, reported before continuing per Andy's instruction)
+Trades-list rows carry no per-row pricing-mode label and no memo field — only description/qty/
+timestamp, a bid→fill price pair, an "Automation Log" link, and "filled at $X". The linked
+Automation Log detail view's Close Position action card likewise has no pricing-mode/memo field.
+RESULT: U-1 NEGATIVE. Per Andy's conditional ruling this reverts G-1 to HOLD — the six arms will be
+stamped uniform {"smart":"normal"} under G-1-HOLD (not per-arm pricing-mode tagging). The
+exit_rows.csv schema question re-presents post-downgrade with the degraded (exit_ts, fill_price)
+capture cost — open item for the Ride/six-arm session, not resolved here.
+
+## ACCOUNT-INACTIVE BANNER — RE-ADJUDICATED THIS SESSION
+Re-flagged mid-session as a possible save-blocker (see CLAUDE.md 9.1a — tool success is not
+verification). Test performed: node Save -> finish tree -> top-level Save -> hard reload (full
+navigate, not a stage-back) -> re-open from a cold Automation Library list -> re-read
+a5.bots.acedit.routine. RESULT: the full 5-node tree, the terminal action's every field, and the
+newly-created GF_EXITS_CALL input all persisted exactly as built. Banner question closed for this
+account, this session, consistent with Andy's account (activates by design at Day-0) and with the
+same test already having passed earlier tonight for ScannerB's first node, the Backstop automation,
+and all seven exit-option presets.
