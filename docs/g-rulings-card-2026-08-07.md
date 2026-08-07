@@ -29,11 +29,11 @@ RULING SHEET  ·  G-1…G-16  ·  2026-08-07
 Source: docs/comparative-machinery-spec.md §8, sha256 d26a3960…cf61c3dc
 
 ── A. CHANGES WHAT GETS BUILT / STAMPED TOMORROW MORNING — rule these first ──
-G-1   exit_rows.csv capture surface           [ AUTHORIZE | DECLINE | DEFER ]  ______
-G-5   PR-19 (SL200): gate conjunct (c)        [ DISAPPLY | ACCEPT-NO-GATE | DROP-ARM ]  ______
-G-13  PR-19 (SL200): degeneracy criterion     [ RESPEC | REPLACE-EQUIV | ACCEPT-AS-IS ]  ______
-G-7   GATE EVAL DATE, PR-14…PR-20             [ STAMP = ____________ | DEFER ]  ______
-        └ and add the field to pre-registration-ledger.md §2 template? [ YES | NO ]  ______
+G-1   exit_rows.csv capture surface           [ AUTHORIZE | DECLINE | DEFER ]  AUTHORIZE, conditional on U-1 positive (Trades list renders per-row pricing mode + memo); reverts to HOLD if U-1 negative. Ruled Andy 2026-08-06.
+G-5   PR-19 (SL200): gate conjunct (c)        [ DISAPPLY | ACCEPT-NO-GATE | DROP-ARM ]  DISAPPLY — the deliberate parallel to CF-11; with (a) inert (G-6), PR-19's gate reduces to conjunct (b) alone — chosen, not arrived at. Ruled Andy 2026-08-06.
+G-13  PR-19 (SL200): degeneracy criterion     [ RESPEC | REPLACE-EQUIV | ACCEPT-AS-IS ]  REPLACE-EQUIV — TOST equivalence test on mean paired ΔR vs Ride, band ±0.015R (Andy-signed 2026-08-06 as the R-3 minimum-effect margin), evaluated once at the stamped gate-eval date; strikes the 40-day-window rule as unfireable (≈1.2 expected hits vs 20 required). Ruled Andy 2026-08-06.
+G-7   GATE EVAL DATE, PR-14…PR-20             [ STAMP = Day-0 + 6 months (relational; resolves to calendar at Day-0); interim look at n=60 | DEFER ]  STAMP. Ruled Andy 2026-08-06.
+        └ and add the field to pre-registration-ledger.md §2 template? [ YES | NO ]  YES. Ruled Andy 2026-08-06.
 
 ── B. GATES ARM-B2 (PR-22) SIGNING ──────────────────────────────────────────
 G-1   see above — head of this group too

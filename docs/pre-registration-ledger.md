@@ -66,6 +66,11 @@ KILL CRITERION   R-based. Must be falsifiable from data the daily loop already p
 SAMPLE TARGET    n, in positions. The audit's admissibility bar is n≥100 at T1/T2 over
                  ≥6 months incl. a regime change (evidence-standards §4, gate B).
 REVIEW DATE      Day-0 + N. Relative, because Day-0 is not yet fixed.
+GATE EVAL DATE   📝 FIELD ADDED 2026-08-06 (G-7, STAMP, ruled by Andy). The single date (or
+                 n) at which the comparative gate evaluates, once — required before n reaches
+                 100 (research-loop-spec.md §10a item 2). Relative to Day-0, resolves to a
+                 calendar date at Day-0. Distinct from REVIEW DATE. Previously absent from this
+                 template (track-b-arms-spec.md §11 item 5, open since 2026-08-04).
 MAX LOSS         Per-position $ risk cap, and the daily aggregate this bot may contribute.
 SIZING TIER      1 lot (experiment) | ≈$5K risk/position (CANDIDATE+). Set once, never ad hoc.
 CONFIG HASH      <capture file> @ <hash>            ← filled at signing, from the capture

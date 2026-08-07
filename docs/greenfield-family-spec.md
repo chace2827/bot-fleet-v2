@@ -120,6 +120,12 @@ nothing.
 
 ### 1.3 The sentinel — and ⛔ the half of §5.2 it CANNOT discharge
 
+> 📝 **RULED 2026-08-06 (Andy, final) — SENTINEL-SL1 IS ABANDONED, STRUCK.** Phase A found it
+> literally inexpressible (picker-floor evidence below), not just weak. Detection moves to
+> config-level instead of the runtime signature this section designs. **See §1.3a, appended at
+> the end of this section, for the ruled replacement.** Everything below is history — the design
+> that was tried and why it failed — left standing, not corrected in place.
+
 §5.2's failure mode: *"The Default Values are not used UNLESS the Automation/Bot Input link is
 broken"*, and **a broken link does not error.** It silently reverts to the stale Default and
 keeps trading.
@@ -163,6 +169,39 @@ silent, plausible-looking fallback §5.2 exists to prevent.
 > break and the next day's brief, it is a property of the platform's silent-fallback design and
 > not of this spec, and it is why the §9 SENTINEL criterion is written as a *ledger* criterion
 > rather than a config one.
+
+> ### §1.3a — AMENDED 2026-08-06 (Andy, final ruling). Default Value = NONE; detection is config-level.
+>
+> **(a) SENTINEL-SL1 is struck — it is not expressible.** [FIRST-HAND 2026-08-06, live Exit Options
+> `stoploss` modal, Phase A build session]: the picker floors at **`-5% of credit` (`0.05`)**, 42
+> entries, no free-text path — `-5%` … `-100%`(`=1`) … `-500%`(`=5`). `stoploss: 1`, the value
+> `SENTINEL-SL1` calls for, is **exactly `GF-SL100`'s own value** — behaviourally identical to a
+> real arm, which this section's own text forbids by name (*"a sentinel that looks like a
+> legitimate arm is not a sentinel"*). The nearest expressible value, `0.05`, is a **spec change**
+> to what a sentinel means, not a build detail, and is not adopted here. No runtime sentinel is
+> built. Every `GF_EXITS_*` Automation Input's **Default Value = `NONE`.**
+>
+> **(b) New assert — §8.3 A9, BOUND + NON-EMPTY, replaces A4's job.** A4 (*"no arm's stored bundle
+> equals `SENTINEL-SL1`"*) is now vacuous — nothing is ever stamped `SENTINEL-SL1` because it does
+> not exist — and is struck as moot, not deleted (§8.3). **A9: every arm's `GF_EXITS_PUT` /
+> `GF_EXITS_CALL` bot input is BOUND (an input object is attached, `oldValue`/link state aside) and
+> NON-EMPTY (`decoded(value) != {}`), checked before any arm's `AUTOMATIONS` toggle goes ON at
+> Day-0.** This is unambiguous because **no arm legitimately runs empty exits** — `Ride` (PR-14) is
+> time-exit-only via its own dedicated close row, not via an empty exits bundle — so BOUND
+> non-empty is a clean necessary condition for every one of the seven arms, checkable from
+> `bots_config_v2.csv` with no behavioural read required.
+>
+> **(c) Residual cap, recorded rather than hidden.** An arm whose exit link is unbound or empty is
+> **not left riding unmanaged**: `GF-Backstop-1552-FlatClose` (§4.2, attached to every bot at Day-0)
+> flat-closes it at 15:52 regardless. The failure mode a broken/empty exit link produces is *"rides
+> to the 15:52 backstop instead of its own exit policy that day"* — bounded, loud in the ledger
+> (an anomalous 15:52 close on a day with no early exit), and not a silent open-ended hold. This is
+> weaker than same-day detection but it is not the unbounded risk an un-backstopped design would
+> carry, and A9 catches the config-level version before Day-0 rather than after a live miss.
+>
+> Applied 2026-08-06 by Andy's explicit final ruling on F-4 (superseding the earlier probe-first
+> answer — Default Value left at NONE, sentinel unimplemented, flagged for a ruling — which is now
+> resolved by this amendment). `state.md` and `session-log.md` updated to match.
 
 ### 1.4 Where G1's empty-bundle result is and is not used
 
@@ -626,7 +665,7 @@ seven bundles without retyping them, reducing typo surface at the moment of stam
 
 **Naming convention, decided here because Decision 7 deferred it to this spec:**
 `GF-<ARM>-EXITS` — `GF-RIDE-EXITS`, `GF-PT50-EXITS`, `GF-TRAIL-EXITS`, `GF-TOUCH0-EXITS`,
-`GF-SL100-EXITS`, `GF-SL200-EXITS`, `GF-CANARY-EXITS`, plus `GF-SENTINEL-SL1`.
+`GF-SL100-EXITS`, `GF-SL200-EXITS`, `GF-CANARY-EXITS`. ~~plus `GF-SENTINEL-SL1`~~ 📝 **STRUCK 2026-08-06 — not built, F-4 ruling (§1.3a).**
 The residual test preset `TIER2-CHECK4-PUTSIDE` is **KEPT** (ruled 2026-08-04) and is now an
 obvious non-member of this namespace, which is what Decision 7 item 1 wanted.
 ⚠️ **Whether a preset can be renamed at all was never observed.** Do not plan on renaming
@@ -991,12 +1030,13 @@ and claims this makes the S1 ≈ HedgeD failure detectable `instead of four mont
 | **A1** | For every unordered pair of `gfam` arms, the decoded field sets differ in **exactly one mechanic** | Two arms that are one arm (the S1 ≈ HedgeD class) **and** two arms that differ in more than one thing, on day 1 |
 | **A2** | Every non-bundle field (rid list, seed, both limits, scan speeds, day trading, entry-action payload) is equal across all `gfam` arms. 📝 **AMENDED 2026-08-06 (Andy, authorized):** add **trigger config** (class / time / repeat / days) to the comparison — trigger lives at the bot, not the shared Library object (F-3, `session-log.md` 2026-08-06 late), so §8.2 step 6's rid-list diff does not cover it and the backstop's 15:52 / Mon–Fri / holidays-skip config (§4.2) was an undetected matching hazard. | Silent divergence in the "shared" half, **including a per-arm trigger-config mismatch** (e.g. the backstop's 15:52 hand-set on all seven bots) |
 | **A3** | Each arm's decoded field set **equals its pre-registered field set**, value-by-value | ⭐ **The all-arms-mistyped-identically hole.** A1 and A2 both pass in that case; A3 is the only rule that fires |
-| **A4** | No arm's stored bundle equals `SENTINEL-SL1` | A *typo* stamping the sentinel as an arm value. ⛔ **NOT a broken link** — see §1.3's residual hole; the link detector is behavioural (A4b) |
+| ~~**A4**~~ | ~~No arm's stored bundle equals `SENTINEL-SL1`~~ 📝 **MOOT 2026-08-06 (F-4 ruling, §1.3a) — SENTINEL-SL1 is struck, nothing is ever stamped it.** | ~~A *typo* stamping the sentinel as an arm value.~~ Superseded by **A9** below |
 | **A4b** | ⭐ No arm shows a ledger day of stop-outs within minutes of open with no `stoploss` in its config | The **broken input link** — the runtime fell back to the Default while the stored config still reads correct |
 | **A5** | `itmpaper`, `itmlive`, `maxexits` match their recorded values | Account-wide regressions |
 | **A6** | ⭐ Every arm opened **exactly 1 contract per leg** today | The $-risk sizing fallback silently sizing 2 lots on a high-credit day (§5.4) — and doing it on *some* arms only |
 | **A7** | ⭐ The **payload hash of each shared automation** matches its recorded baseline | **Architecture E's own blind spot** — see below |
 | **A8** | ⭐ For each arm, `decoded(GF_EXITS_PUT) == decoded(GF_EXITS_CALL)` | Per-side exit asymmetry inside one arm (§4.1), which A1 and A3 cannot see |
+| **A9** | 📝 **NEW 2026-08-06 (F-4 ruling, §1.3a).** Every arm's `GF_EXITS_PUT` / `GF_EXITS_CALL` bot input is BOUND and NON-EMPTY (`decoded(value) != {}`). Verified before any arm's `AUTOMATIONS` toggle goes ON at Day-0 — not a nightly-only check | The broken/unset-link failure mode config-level, replacing A4/sentinel detection. No arm legitimately runs empty exits (`Ride` is time-exit-only via its own close row) |
 
 **A3 is the load-bearing one** and it is the direct answer to the surviving adversarial objection
 in the memo's Appendix A item 6 — *"nothing catches a day-1 hand-set error under ANY
@@ -1193,6 +1233,8 @@ KILL CRITERION   Exp(R) per condor < 0 with the CI entirely below 0 at n ≥ 60 
                  Plus the family-level, liveness (inverted) and sentinel criteria above.
 SAMPLE TARGET    n = 100 condors.
 REVIEW DATE      Day-0 + 6 months; interim at n = 60.
+GATE EVAL DATE   Day-0 + 6 months (relational; resolves to calendar at Day-0); interim look at
+                 n=60.
 MAX LOSS         ≈$185 net risk per condor; 1 condor/day.
 SIZING TIER      1 lot — IDENTICAL across arms.
 CONFIG HASH      <capture> @ <hash>
@@ -1217,6 +1259,8 @@ MECHANISM        Converts a probabilistic tail into a booked mid-day gain, tradi
                  close means this is "PT50 on either side closes the CONDOR", not per spread.
 KILL CRITERION   Exp(R) per condor < 0 with CI entirely below 0 at n ≥ 60. Plus family-level,
                  liveness and sentinel.
+GATE EVAL DATE   Day-0 + 6 months (relational; resolves to calendar at Day-0); interim look at
+                 n=60.
 VERIFICATION     A 50% profit-taking row in the first new position's Trades list.
 SIGNED           ..............................
 ```
@@ -1271,6 +1315,8 @@ MECHANISM        Ratchets a floor under an open profit instead of closing flat.
 KILL CRITERION   Exp(R) per condor < 0 with CI entirely below 0 at n ≥ 60. Plus family-level,
                  liveness and sentinel. Plus: worst-condor-R worse than the Ride control's at
                  n ≥ 60 → the "no new risk" claim is refuted and the arm is retired.
+GATE EVAL DATE   Day-0 + 6 months (relational; resolves to calendar at Day-0); interim look at
+                 n=60.
 VERIFICATION     A trailing-stop row in the first new position's Trades list.
 SIGNED           ..............................
 ```
@@ -1303,6 +1349,8 @@ MECHANISM        Caps the loss at first breach instead of at expiry.
                  available.
 KILL CRITERION   Exp(R) per condor < 0 with CI entirely below 0 at n ≥ 60. Plus family-level,
                  liveness and sentinel.
+GATE EVAL DATE   Day-0 + 6 months (relational; resolves to calendar at Day-0); interim look at
+                 n=60.
 VERIFICATION     A touch row at/after the underlying crosses the short strike.
                  📝 CORRECTED 2026-08-06: ~~plus a `sibling close` row on the second leg at
                  `:00`/`:00`~~ — VOID, that row will not exist (C8 ruling).
@@ -1354,6 +1402,8 @@ MECHANISM        Caps the loss at a level calibrated by the largest public 0DTE 
                  RE-DERIVED AND THIS ENTRY IS RE-STAMPED BEFORE BUILD — not adjusted after.~~
 KILL CRITERION   Exp(R) per condor < 0 with CI entirely below 0 at n ≥ 60. Plus family-level,
                  liveness and sentinel.
+GATE EVAL DATE   Day-0 + 6 months (relational; resolves to calendar at Day-0); interim look at
+                 n=60.
 VERIFICATION     A stop-loss row in the first new position's Trades list.
 SIGNED           ..............................
 ```
@@ -1381,10 +1431,24 @@ KILL CRITERION   Exp(R) per condor < 0 with CI entirely below 0 at n ≥ 60 matc
                  draft's version would have switched the arm off precisely when it was
                  CONFIRMING itself. Replaced by the degeneracy criterion below, which measures
                  the same thing in the right direction.
-                 ⭐ DEGENERACY CRITERION, REWRITTEN TO BE FIREABLE: if this arm's per-condor R
+                 📝 ADDED 2026-08-06 (G-5, DISAPPLY, ruled by Andy) — GATE-CM CONJUNCT (c) IS
+                 ALSO DISAPPLIED ON THIS ARM, the deliberate parallel to the liveness
+                 disapplication above: conjunct (c) is an exact sign test on the fired
+                 subpopulation, unpassable by construction when the arm's hypothesis is that it
+                 rarely fires (`comparative-machinery-spec.md` §8, CM-8). With conjunct (a)
+                 already inert at this family's K and n (G-6), this arm's gate reduces to
+                 conjunct (b) alone — a single bootstrap CI. Chosen, not arrived at.
+                 📝 CORRECTED 2026-08-06 (G-13, REPLACE-EQUIV, ruled by Andy) — the degeneracy
+                 criterion below is STRUCK AS UNFIREABLE: at the family's declared paired daily
+                 SD ≈ 0.134R, P(|d| ≤ 0.005) ≈ 0.030, so the expected count in a 40-day window
+                 is ≈ 1.2 against a requirement of 20 (`comparative-machinery-spec.md` §8, CM-9).
+                 REPLACED BY a TOST equivalence test on mean paired ΔR vs the Ride control,
+                 equivalence band ±0.015R (the program's R-3 minimum-effect margin, signed by
+                 Andy 2026-08-06 as the band), evaluated ONCE, at this entry's GATE EVAL DATE.
+                 ⭐ DEGENERACY CRITERION, REWRITTEN TO BE FIREABLE: ~~if this arm's per-condor R
                  is within ±0.005R of the Ride control's on ≥ 20 of any 40 consecutive MATCHED
                  days, AND its stop-loss row count over that window is 0, the arm carries no
-                 information and is retired.
+                 information and is retired.~~
                  ⛔ The draft's version — "identical P/L, structure and entry minute" — was
                  unfireable three times over: identical P/L is impossible given H1's independent
                  fills; identical entry minute is impossible given §4.2's parallel work queue;
@@ -1392,6 +1456,8 @@ KILL CRITERION   Exp(R) per condor < 0 with CI entirely below 0 at n ≥ 60 matc
                  post-hoc, outcome-based, AMBER and silent below 5 identical days). The version
                  above uses a TOLERANCE and a CONFIG-BACKED second condition, both computable
                  from the ledger the daily loop already writes.
+GATE EVAL DATE   Day-0 + 6 months (relational; resolves to calendar at Day-0); interim look at
+                 n=60.
 VERIFICATION     A stop-loss row in the first new position's Trades list.
 SIGNED           ..............................
 ```
@@ -1455,6 +1521,8 @@ KILL CRITERION   NONE ON P/L. Exempt by design, stated here so it cannot later b
                  prevent. It also carries the family-level and sentinel criteria.
 SAMPLE TARGET    n/a — daily fill / no-fill is the output.
 REVIEW DATE      Day-0 + 3 months: is it still earning its slot?
+GATE EVAL DATE   Day-0 + 6 months (relational; resolves to calendar at Day-0); interim look at
+                 n=60.
 VERIFICATION     A profit-taking fill on DAY 1, read from the Trades list.
 SIGNED           ..............................
 ```
@@ -1559,7 +1627,7 @@ session log. **Nothing is answered from memory or from this document.**
 
 | Step | Do | Layer 1 verification |
 |---|---|---|
-| **A1** | Create Automation Input `GF_EXITS_PUT` on `GF-ScannerA-PutSpread` (and `GF_EXITS_CALL` on ScannerB at A3); set each **Default Value = `SENTINEL-SL1`** (§1.3, subject to C6) | Fresh capture; read each input object's default back and decode it. Screenshot the 🔗 state on the Exit Options row |
+| **A1** | Create Automation Input `GF_EXITS_PUT` on `GF-ScannerA-PutSpread` (and `GF_EXITS_CALL` on ScannerB at A3); set each **Default Value = `NONE`** 📝 **AMENDED 2026-08-06 — was `SENTINEL-SL1`, struck by the F-4 ruling (§1.3a); done for ScannerA in the first Phase A pass, carry forward for ScannerB** | Fresh capture; read each input object's default back and decode it (expect unset/None, not a bundle). Screenshot the 🔗 state on the Exit Options row |
 | **A2** | Build `GF-ScannerA-PutSpread` per §4.1, every field. **Entry pricing SmartPricing `normal`, NOT Market** | Fresh capture with **every caret expanded** (trap 3). Diff every field against §4.1's table, reading `input.value` / `data-value`, **never `innerText`** |
 | **A3** | Build `GF-ScannerB-CallSpread` — mirror image, own `GF_EXITS_CALL` input (or the shared one if C0b said yes) | As A2, plus record whether the two actions reference the same or different input ids — this sets whether A8 is substantive or trivial |
 | ~~**A4**~~ | ⛔ **STRUCK 2026-08-06 — DO NOT BUILD. C8 ruling (§4.3): the family is built without sibling-close.** Original step left standing: ~~Build `GF-SiblingClose` per §4.3 — **Positions loop, 3:44pm gate (amended 2026-08-04, NOT 3:50pm), side-tag comparison, opened-today, `patient` pricing, memo** — **and test it on a dead bot first** | Fresh capture; confirm **each gate is an actual decision node**, not assumed (trap 7). Then fire it on the dead bot and read the resulting Trades list: exactly one close, no re-trigger. **This is now load-bearing, because the platform-level limit defence does not apply to closes** (§4.3)~~ |

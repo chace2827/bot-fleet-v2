@@ -4723,3 +4723,56 @@ was editing this file.
 `docs/session-log.md` (this entry).
 
 **HOLDING for Andy's commit.**
+
+
+---
+
+## 2026-08-06 (late) — G-RULINGS CARD Group A ruled: G-1, G-5, G-13, G-7 applied
+
+**Task.** Andy ruled Group A of `docs/g-rulings-card-2026-08-07.md` (the four items that change
+what tomorrow's build stamps, out of the 16-item G-1…G-16 queue) and instructed direct application
+this session. Applied exactly: **G-1** AUTHORIZE, conditional on U-1 positive (Trades list renders
+per-row pricing mode + memo); reverts to HOLD if U-1 negative — recorded in the ruling sheet only,
+**no `exit_rows.csv` or capture machinery built** (implementation, later). **G-5** DISAPPLY conjunct
+(c) on PR-19, the deliberate parallel to CF-11; with conjunct (a) already inert (G-6), the arm's
+gate reduces to conjunct (b) alone — chosen, not arrived at. **G-13** REPLACE-EQUIV — PR-19's
+degeneracy criterion replaced by a TOST equivalence test on mean paired ΔR vs the Ride control,
+band ±0.015R (the program's R-3 minimum-effect margin, signed by Andy 2026-08-06), evaluated once
+at the stamped gate-eval date; the old ±0.005R / 20-of-40 rule struck as unfireable (CM-9's
+arithmetic: ≈1.2 expected hits vs 20 required). **G-7** STAMP `GATE EVAL DATE` = Day-0 + 6 months
+(relational; resolves to calendar at Day-0), interim look at n=60, into all seven PR-14…PR-20
+entries and into the `pre-registration-ledger.md` §2 template. **Groups B and C are unruled** — the
+sheet's B/C lines are untouched, still blank.
+
+**Files edited, each via anchored `device_bash` insertion with a pre-write single-match
+`grep`/count assertion on the exact anchor text, then a post-write `device_bash` sha256 plus a
+single-match grep of the new text — never the write tool's response (`CLAUDE.md` §9.1a):**
+- `docs/g-rulings-card-2026-08-07.md` — the RULING SHEET's G-1/G-5/G-13/G-7 lines filled with
+  Andy's rulings, each dated 2026-08-06. Group B and Group C lines left exactly as drafted.
+  sha256 `435d2ca4fe7d50c5443d90b443448d27909af70eef25f6dc27fc4c7cb3e848e3`.
+- `docs/greenfield-family-spec.md` — PR-19's entry: added the G-5 conjunct-(c) disapplication
+  banner (parallel to the existing liveness-disapplication banner already in the entry) and the
+  G-13 correction banner, which strikes the old degeneracy rule (`~~...~~`, original left standing
+  per the doc's own convention) and replaces it with the TOST equivalence test. Added a
+  `GATE EVAL DATE` field, stamped Day-0 + 6 months (interim look at n=60), to all seven PR-14…PR-20
+  entries — verified 7 occurrences post-write. sha256
+  `0292fc21c9039b45b94a8164e0dc12fd49031ffc9d6ef7f7fb0fad3af9c0e154`.
+- `docs/pre-registration-ledger.md` — added `GATE EVAL DATE` to the §2 template, between
+  `REVIEW DATE` and `MAX LOSS`, citing `research-loop-spec.md` §10a item 2 and
+  `track-b-arms-spec.md` §11 item 5 (open since 2026-08-04). sha256
+  `851c7416c794d044931d4caa80c6ecfd64f7286f31b64c0a63f01c5c65963404`.
+
+**Not touched this session:** `docs/state.md` (shared with a concurrent build session — out of
+scope for this edit, per instruction); `data/exit_rows.csv` or any exit-attribution capture
+machinery (G-1 authorizes it but building it is a separate, later task); OA (no browser tool run);
+git (no git command run, per instruction).
+
+**Verification.** This log entry appended after a fresh re-read of `session-log.md`'s tail and a
+compare-and-swap on sha256 `fdb40ce781a43ce4ff23ec2ee408696e418e74c96ff12a99f155849a1c598a54`, plus
+a tail assertion on `**HOLDING for Andy's commit.**` — a concurrent build session shares this file.
+
+### Files changed this session
+`docs/g-rulings-card-2026-08-07.md` · `docs/greenfield-family-spec.md` ·
+`docs/pre-registration-ledger.md` · `docs/session-log.md` (this entry).
+
+**HOLDING for Andy's commit.**
