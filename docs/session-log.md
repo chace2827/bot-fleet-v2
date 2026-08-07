@@ -5505,3 +5505,63 @@ also updated with a summary block at the end, per `CLAUDE.md` §9.1.
 **No CSV, no OA action, no git in any form.**
 
 **HOLDING for Andy's commit.**
+
+
+---
+
+## 2026-08-07 — OA reactivated, roster lost (0/41). Incident recorded, rebuild contingency written. No OA, no git.
+
+**Facts, first-hand (Andy's screenshots, ~12:06–12:10 ET).** Plan purchased, login works. `/bots`
+with all filters cleared: **"0 active bots • 50 left in your plan"** — expected 41 per
+`day0-session-pack-2026-08-07.md` §1.1. SURVIVED: Automation Library (4/4 objects, "Unused"), all
+9 Bot Templates (7 `GF-QQQ-IC-*` + `QQQ-IC-0DTE-Fortress` + `TEST HedgeA-S1`), Bot Archive (the 1
+expected bot, `Fortress-ARCHIVED-2026-08-03`). LOST: every active bot. Support told Andy in
+writing, the day before, that "all of your account data is still intact." Andy emailed OA
+requesting a pre-disable snapshot restore and left the account untouched.
+
+**Update ~12:30 ET.** OA support (Zack) replied: restore promised, bots "operational again by
+Monday." Restore is the expected path; the contingency below is insurance, not a plan in motion —
+stated as such in its own header.
+
+**Applied**
+1. Dated incident block appended to `docs/state.md` (tail-assert: read the file's exact tail
+   before writing, appended after it, verified sha256 + single-match greps after). It supersedes-
+   in-part `day0-session-pack-2026-08-07.md` §1.1's "expect 41 bots" assumption and branches S0
+   Step 3 (VERIFY THE ROSTER): restore-confirmed → run original S0 unchanged; restore not landed
+   → read `docs/rebuild-contingency-2026-08-07.md` first, which carries its own DO-NOT-START gate.
+2. While in `docs/state.md`, corrected three stale `research_loop.py` version references (lines
+   ~76, 749, 1572–3 pre-edit) that still read `0.1.0-DRAFT` / 23/23 checks. First-hand this
+   session: `python3 scripts/research_loop.py --validate` → **62/62 checks pass, engine
+   `0.2.0-DRAFT`, sha `302bef72778a1a35`, `FROZEN_ON = None`, DO-NOT-WIRE guard still passes**
+   (absent from `scripts/daily.sh`). Each correction is a dated banner, original struck not
+   deleted, evidence cited inline (CLAUDE.md §5) — still unwired, still unfrozen, still not a
+   reporting input; no claim beyond what was read is asserted.
+3. Wrote `docs/rebuild-contingency-2026-08-07.md` — the plan IF OA cannot restore. Inventory table
+   for the 8 built bots (7 greenfield arms PR-14…PR-20 + PR-01 clone) from `data/bots_config_v2.csv`
+   + their capture files: template exists/none, rebuild source, per-bot unrecoverable items.
+   Rebuild sequence: clone-from-own-template → re-link the 3 shared automations by `rid` → re-create
+   the two `GF_EXITS_PUT`/`GF_EXITS_CALL` bot inputs per arm (Default Value `NONE`, each arm's own
+   exits preset) → verify against the bot's own capture file field-by-field → re-run the A-series
+   asserts. Flagged what needs rebuilding WITHOUT a template: PR-02 and PR-04 (never-started clone
+   originals) and PR-01 (built, but `template NOT SAVED` per `bots_config_v2.csv` — a pre-existing
+   `showBotMenu` defect, not new data loss). Flagged what is permanently unrecoverable if OA cannot
+   restore: the nine leave-in-place bots' live trade history predating `mirror_baseline.csv`'s
+   2026-08-04 freeze, and — because Step 2c's no-touch toggle read can only ever happen once, on
+   the original still-lapsed bots — the D-4 mechanism-verdict test (Step 6a) and the 5-position
+   ride-or-close decision are foreclosed on a rebuild, not merely delayed. Explicit DO-NOT-START
+   gate: the rebuild executes only on Andy's word, after OA's answer.
+
+**Method.** Anchored, single-match text replacement per edit (Python `str.count() == 1` asserted
+against a fresh device read immediately before writing; no stage-back used). `state.md`'s incident
+block used a tail-assert: the file's exact last lines were read and matched before appending.
+Verified after by direct `device_bash sha256sum` on the changed file plus single-match greps
+confirming each new string landed exactly once. No OA surface touched (per this session's explicit
+instruction) — no login, no click, no capture. No git command in any form.
+
+### Files changed this session
+`docs/state.md` (dated incident block appended; three `research_loop.py` version references
+corrected) · `docs/rebuild-contingency-2026-08-07.md` (new file) · `docs/session-log.md` (this
+entry).
+**No CSV, no OA action, no git in any form.**
+
+**HOLDING for Andy's commit.**

@@ -73,9 +73,14 @@ condition. **A discharge propagated without its residual is worse than no propag
 >   tree, and it sat in the build instructions. Struck in place, replaced by the Library check.
 >   **Nothing else in §8 touched.**
 >
-> ⚠️ **The spec corrections do NOT touch the engine.** `research_loop.py` is still `0.1.0-DRAFT`
+> ⚠️ ~~**The spec corrections do NOT touch the engine.** `research_loop.py` is still `0.1.0-DRAFT`
 > with **three fatal defects** (units × 100 × quantity · the tautological `CONTROL` · censoring),
-> still **not wired into `daily.sh`**, and must not be. The `censored` flag depends on
+> still **not wired into `daily.sh`**, and must not be.~~
+> **[CORRECTED 2026-08-07, dated first-hand observation — `python3 scripts/research_loop.py
+> --validate` run this session]** `research_loop.py` is now `0.2.0-DRAFT` per
+> `research-loop-fix-spec-2026-08-07.md` — 62/62 checks pass (engine sha `302bef72778a1a35`),
+> `FROZEN_ON = None`, and the DO-NOT-WIRE guard still passes (absent from `scripts/daily.sh`).
+> Still unwired, still unfrozen, still never a reporting input. The `censored` flag depends on
 > `bots_config_v2.csv`, so **Track A's honesty remains gated on Phase-2 config capture.**
 
 ⛔ ~~**DELIBERATELY NOT APPLIED — gated, and each needs Andy.**~~ **APPLIED 2026-08-05 — the list
@@ -746,9 +751,17 @@ nodes in the shared entry automation, the substitute primitive named explicitly.
 ## Research loop — ALL 7 RULINGS SIGNED 2026-08-04, spec amended, ⛔ STILL DO NOT WIRE IN
 
 `docs/research-loop-spec.md` is signed **and amended 2026-08-04** by Andy's seven rulings.
-`scripts/research_loop.py` is **`0.1.0-DRAFT`, NOT frozen**, 23/23 validation checks, writes
+~~`scripts/research_loop.py` is **`0.1.0-DRAFT`, NOT frozen**, 23/23 validation checks, writes
 `data/counterfactuals.csv` and nothing else, silent below n=30. **It is not wired into `daily.sh`
-and must not be — the rulings fixed the SPEC, not the ENGINE.** Three fatal code defects stand.
+and must not be — the rulings fixed the SPEC, not the ENGINE.** Three fatal code defects stand.~~
+**[CORRECTED 2026-08-07, dated first-hand observation this session]** `scripts/research_loop.py`
+is now **`0.2.0-DRAFT`, NOT frozen** (`FROZEN_ON = None`) — the fix-spec rewrite
+(`research-loop-fix-spec-2026-08-07.md`), 62/62 `--validate` checks pass (engine sha
+`302bef72778a1a35`), writes `data/counterfactuals.csv` and nothing else, silent below n=30. **It
+is still not wired into `daily.sh` and must not be — the rulings fixed the SPEC, and the fix-spec
+rewrote the ENGINE.** The script's own header states the rewrite targets the three fatal defects
+(D-6 units, D-7 CONTROL tautology, D-8 censoring) plus D-9…D-17 — that is the file's claim about
+itself, read first-hand this session, not independently re-derived here.
 
 **Review: `docs/research-loop-review-2026-08-04.md`** (three adversarial reviewers; 27 quotes
 byte-exact single-match; every figure recomputed from the n=1,386 capture). Five §5a defects ruled,
@@ -1569,8 +1582,10 @@ precondition meetable.
 **`M_bot_$` calibration — RULED (fix-spec OPEN-1/OPEN-2).** ONE-TIME, not rolling; median over
 POSITIONS, computed at the stamp date over the trailing 90 days as of that date; SKIPPED (never a
 zero, never a proxy) before 90 days of history exist. Answers `research-loop-spec.md` §5a item
-1's open one-word question. The engine itself is unchanged — still `research_loop.py`
-`0.1.0-DRAFT`, still NOT wired into `daily.sh`.
+1's open one-word question. ~~The engine itself is unchanged — still `research_loop.py`
+`0.1.0-DRAFT`, still NOT wired into `daily.sh`.~~ **[CORRECTED 2026-08-07]** The engine itself is
+unchanged by this ruling — `research_loop.py` is `0.2.0-DRAFT` (see the correction above), still
+NOT wired into `daily.sh`.
 
 **PT family — RULED (fix-spec OPEN-3).** REPORTED WITH MANDATORY SPLIT: every PT line prints its
 decidable/undecidable position counts and `single_sided` share. Descriptive only — no graduation
@@ -1581,3 +1596,32 @@ read is taken from a Track A PT line. The live test of the PT mechanic is the gr
 Full text: `post-u1-package-2026-08-07.md`, `pre-registration-ledger.md` (PR-16 entry),
 `day0-session-pack-2026-08-07.md` (S2 close-out item 4), `research-loop-fix-spec-2026-08-07.md`
 §10, `research-loop-spec.md` §5a item 1.
+
+---
+
+> ### ⛔ OA REACTIVATED BUT ROSTER LOST — 2026-08-07, ~12:06–12:30 ET. 0 OF 41 EXPECTED ACTIVE BOTS SURVIVED THE RESTART. RESTORE PROMISED, CONTINGENCY WRITTEN AS INSURANCE.
+> **[FIRST-HAND, Andy's screenshots, ~12:06–12:10 ET 2026-08-07]**: plan purchased, login works.
+> `/bots` with ALL filters cleared reads **"0 active bots • 50 left in your plan"** — was **41
+> active** per `day0-session-pack-2026-08-07.md` §1.1's expected-roster arithmetic (35 − 2 + 7 + 1
+> = 41, 9 left of the Pro 50). **SURVIVED:** the Automation Library (all 4 objects, each reading
+> "Unused"), all 9 Bot Templates (the 7 `GF-QQQ-IC-*` + `QQQ-IC-0DTE-Fortress` + `TEST HedgeA-S1`),
+> and the Bot Archive (exactly the 1 expected bot, `Fortress-ARCHIVED-2026-08-03`). **LOST:** every
+> active bot — the entire built-and-leave-in-place roster is gone from `/bots`.
+> Support told Andy in writing, the day before, "all of your account data is still intact." Andy
+> emailed OA requesting restoration from a pre-disable snapshot and left the account untouched
+> pending a reply.
+> **UPDATE ~12:30 ET 2026-08-07** — OA support (Zack) replied: *"We will restore the bots
+> promptly. Please be assured they will be operational again by Monday."* **Restore is the
+> expected path here, not the contingency.** `docs/rebuild-contingency-2026-08-07.md` is
+> insurance, written in case the restore does not land — it is not a plan in motion.
+> **Supersedes-in-part `day0-session-pack-2026-08-07.md` §1.1's "expected roster: 41 active
+> bots"** — that arithmetic is right for a restored account and wrong for a rebuilt one. **S0 Step
+> 3 (VERIFY THE ROSTER) now BRANCHES on this block, read it first:**
+> - **Restore confirmed** (roster reads 41, names match §1.1's list) → run **original S0** exactly
+>   as written, no change.
+> - **Restore has not landed by the time a session next opens `/bots`** → do NOT run S0 Step 3
+>   cold. Read `docs/rebuild-contingency-2026-08-07.md` first — it is the rebuild plan and it
+>   carries its own DO-NOT-START gate: the rebuild executes only on Andy's explicit word, after
+>   OA's answer.
+> **Reopen condition: OA confirms the restore, in writing, with a roster count Andy can verify
+> against §1.1** — until then this block stands.
