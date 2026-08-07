@@ -1657,3 +1657,86 @@ Full text: `post-u1-package-2026-08-07.md`, `pre-registration-ledger.md` (PR-16 
 >   OA's answer.
 > **Reopen condition: OA confirms the restore, in writing, with a roster count Andy can verify
 > against §1.1** — until then this block stands.
+
+---
+
+> ### ✅ GATE A0 RESOLVED — 2026-08-07 (S0a session), BRANCH 1: CLEAN RESTORE, CONFIRMED WITH EVIDENCE.
+> Above block's reopen condition is MET. `/bots` (all filters cleared) read **41 active bots • 9
+> left**, two consecutive identical captures (~5:24pm/~5:26pm ET). **A-01c mandatory ID/rid check:
+> all 7 greenfield bot IDs + the PR-01 clone ID + the archived original's ID + all 3 shared-
+> automation `rid`s read IDENTICAL to their recorded values in `bots_config_v2.csv`** — the objects
+> were preserved, not re-created. Every name in Step 3's A-05-corrected list is present; the pilot's
+> `-ARCHIVED-2026-08-03` original is correctly absent from `/bots`. Full detail, per-bot evidence,
+> and the Step 1–4b record: `session-log.md`, 2026-08-07 "S0a — DAY-0 REACTIVATION OPENING" entry.
+>
+> **`itmlive` = market**, set this session, hard-reload verified (Layer 1). `itmpaper` = market
+> unchanged. `maxexits` = Unlimited(0), Bot Schedule 09:31/5 · 09:31/1 — both unchanged.
+>
+> **LEDGER_START RULED BY ANDY: starts at the first day a bot's `AUTOMATIONS` actually goes ON, not
+> at the 2026-08-07 ~12:06 ET payment timestamp.** Not yet set — carried to S0b/S1.
+>
+> ⛔ **NEW FINDING, RULED, FIXED: EXIT OPTIONS was OFF (`disableExits=1`) on all 7 greenfield bots
+> post-restore** — pre-lockout baseline was ON (`disableExits=0`) for all seven, part of the build
+> convention. Escalated to Andy before any edit. **Andy's ruling: expected OA restore-default
+> behavior, not a config loss — flip back to ON.** Applied and Layer-1 verified (hard reload +
+> re-read) on all 7: Ride, PT50, Trail, Touch0, SL100, SL200, Canary — all now `disableExits: 0`,
+> confirmed post-reload. `AUTOMATIONS` untouched (still off) on all seven throughout. The PR-01
+> clone's `disableExits: 1` was spot-checked and left alone — it matches its own correct pre-F-C1
+> state. Layer 2 (Trades list) DEFERRED TO DAY-0 — no position exists yet on any of the seven.
+>
+> A-series (`scripts/a_series.py --validate` then `--json`): **FAMILY GREEN** — A1 21/21 · A2 7/7 ·
+> A3 7/7 · A7 3/3 (3/4 overall — `Defang-Mon-S2-StrikeTouch` still ⬜ NOT EVALUABLE, A-13 unchanged)
+> · A8 7/7 · A9 7/7 · A4 MOOT · A4b/A6 NOT-RUNNABLE · A5 NOT-RUN. ⚠️ Ran against the STORED
+> pre-lockout capture files (script default), not a fresh bookmarklet/Export Data pull — Step 3's
+> formal capture (gate A12, Andy's hand) was **not run this session**, no capture file from today's
+> restore exists on disk. The live-model spot checks above are today's actual verification.
+>
+> ⛔ **STEP 4b NOT COMPLETE — TOGGLE-LEVEL SWEEP ONLY.** Read (never opened) the `/bots` list
+> AUTOS/EXITS columns for all 13 non-greenfield named bots (clone, archived original, pilot,
+> `-130PM`, `-NoPT50`) and all nine leave-in-place bots — no anomaly beyond the finding above. **The
+> full field-by-field capture-diff A-07 requires was NOT performed** on these 13 bots. None of
+> their config-capture hashes are ESTABLISHED; none can be signed at Step 2b on this session's
+> evidence. Primary open item for S0b / a follow-up session.
+>
+> **ATTESTATION (A-18): none of the nine leave-in-place bots was opened, edited, or toggle-touched
+> this session** — every read of the nine was from the `/bots` list view only.
+>
+> F-C1/F-C2 verified already RULED in this file (A-03 discharge) — not re-asked, not re-banner'd,
+> **not applied this session** (F-C1's removal on the PR-01 clone is Step 5, S0b's job).
+>
+> **Session scope was S0a only** (`day0-session-pack-2026-08-07.md` §0.0 A-23): gate A0 → Steps
+> 1–4b → gate A4 → close-out. Steps 5–8 move to a fresh S0b chat. **7 OA writes made** (`itmlive` +
+> 7× `disableExits`), all Layer-1 verified. Full record: `session-log.md`, same date.
+
+> ### ⛔ CORRECTION — 2026-08-07 (Andy, same session): HOW THE S0a EXIT OPTIONS FINDING IS BOOKED.
+> **Andy's instruction, applied directly per `CLAUDE.md` §5 — this corrects how the block above
+> characterizes the finding, not the actions taken. Original block LEFT STANDING above; read this
+> banner with it. No decision changed.**
+>
+> 1. **RE-BOOKED AS GATE A0 BRANCH 3, SUB-STATE (d) — "config rolled back to an older snapshot" —
+>    DETECTED, ESCALATED, AND OVERRIDDEN BY ANDY**, who authorized fixing forward. Not an incidental
+>    repair inside a Branch 1 pass. **Both facts stand together; neither erases the other:** Branch 1
+>    is correct on its own terms — footer 41·9 on two consecutive captures, every named bot present,
+>    all 8 bot IDs + all 3 shared-automation `rid`s identical to recorded values. AND sub-state (d)
+>    fired on the 7 greenfield bots' `disableExits` field, was escalated per protocol before any
+>    edit was made, and Andy overrode the default STOP disposition and authorized a forward fix.
+> 2. **"OA restore-default" is an INFERENCE, explicitly UNVERIFIED — struck as a stated fact.** The
+>    observation: `disableExits` read as EXIT OPTIONS OFF on 7 of 7 greenfield bots, against the
+>    recorded baseline `disableExits 0` / EXIT OPTIONS ON (this file, the Phase-A build block:
+>    "`status "off"` (AUTOMATIONS OFF) · `disableExits 0` (EXIT OPTIONS ON)"). **Why it was off is
+>    NOT established.** Whether OA's restore mechanism resets this field is a live, open question
+>    about restore fidelity generally — it does not close on this one observation.
+> 3. ⛔ **TURNING EXIT OPTIONS ON *IS* DAY-0 STEP 3** (D3 / audit F-2: "Step 3 arms EXIT OPTIONS
+>    only; `AUTOMATIONS` goes ON in Step 7, per bot, only for bots that passed"). **S0a has
+>    therefore performed Step 3 on all seven greenfield bots, ahead of Step 4's gate, C9, and the
+>    mechanism verdict.** ⛔ **S2 VERIFIES STEP 3, DOES NOT RE-DO IT** — S2 must read this correction
+>    before touching any of the seven's Exit Options toggle again.
+> 4. **The seven flips + `itmlive` are LAYER 1 VERIFIED ONLY** (hard reload + value re-read). **Layer
+>    2 — the first new position's Trades list — is NOT YET POSSIBLE** (no position exists yet;
+>    `AUTOMATIONS` is off on all seven). Per `CLAUDE.md` §5 / §9.1a, **these stay OPEN at the top of
+>    every brief until Layer 2 closes them** — not silently treated as fully proven.
+> 5. ⛔ **`data/bots_config_v2.csv` NOW LAGS OA** by seven `disableExits` values and one `itmlive`
+>    value, and **stays lagging until a post-edit bookmarklet/Export Data capture is taken.** This
+>    is the SAME open item as the missing 13-bot byte diff (Step 4b) — that diff runs against
+>    capture files, so the missing capture blocks it too. **S0b takes the capture FIRST, before
+>    anything else.**

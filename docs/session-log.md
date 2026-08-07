@@ -5916,3 +5916,212 @@ disclaimer in `exploratory-bots-design-2026-08-07.md`; `E-1 / E-2 / E-3 APPLIED`
 entry). No CSV, no script, no OA action, **no git in any form**.
 
 **HOLDING for Andy's commit.**
+
+---
+
+## 2026-08-07 (S0a — DAY-0 REACTIVATION OPENING, gate A0 through gate A4)
+
+**Session scope, per `day0-session-pack-2026-08-07.md` §0.0 A-23:** S0a only = gate A0 → Steps
+1–4b → gate A4 → close-out → hand-off. Steps 5–8 (F-C1 application to the PR-01 clone, the PR-01
+record artifacts, the Day-0-missing-items writeup, pre-flight for `daily.sh`) are explicitly
+**S0b, a fresh chat.** Ran Chrome-direct per `CLAUDE.md` §7/§5's OA-automation authority; every
+edit self-checked (Layer 1: hard reload + re-read) per §5/§9.1a. No git in any form.
+
+### ⛔ GATE A0 — BRANCH 1, CLEAN RESTORE. CONFIRMED, WITH EVIDENCE.
+Andy had reported the roster restored; per this session's own instruction that report was treated
+as unverified until checked first-hand. `/bots` with **all filters cleared** read **"41 active
+bots • 9 left in your plan"** on TWO consecutive captures (~5:24pm and ~5:26pm ET; only the live
+mirrors' mark-to-market figures moved between them — Beta Weight 145.33→145.29 etc. — the roster
+names and count were byte-identical both times, satisfying A-08's two-consecutive-match rule).
+
+**Every name in Step 3's A-05-corrected list is present**, confirmed by direct DOM read
+(`document.querySelectorAll('a[href^="/bots/bot/"]')`, not a bookmarklet scrape): the 7 greenfield
+arms, `IC-SPX-FastPT25-S2` (clone, holding the production name) + its
+`-ARCHIVED-2026-08-07` original, `QQQ-IC-0DTE-Fortress` (pilot clone, its own
+`-ARCHIVED-2026-08-03` original correctly **absent** from `/bots` — A-05's false-flag avoided),
+the two un-started clone originals `IC-SPX-FastPT25-S2-130PM` and `QQQ-IC-0DTE-Fortress-NoPT50`
+(both carrying real trade history, untouched), and all nine leave-in-place bots.
+
+**A-01c mandatory ID/rid comparison — ALL MATCH, no re-creation:**
+- All 7 greenfield bot IDs + the PR-01 clone's bot ID read identical to `bots_config_v2.csv`'s
+  recorded values (`BOTfw5TkkCRF4417860701930934951` … `…785000861357`, clone
+  `…821948715488`).
+- `IC-SPX-FastPT25-S2-ARCHIVED-2026-08-07`'s ID (`BOTfw5TkkCRF1217757048550308561`) matches
+  `state.md`'s recorded value exactly.
+- All 3 shared-automation `rid`s (Automation Library, read via `document.body.innerHTML` regex,
+  not clicked) match `bots_config_v2.csv` exactly: ScannerA `RTfw5TkkCRF178605283747821` ·
+  ScannerB `RTfw5TkkCRF178606271659881` · Backstop `RTfw5TkkCRF178606373201751`. Library bot-counts
+  read **7 / 7 / 7 / 2** (ScannerA/B, Backstop, Defang-Mon-S2-StrikeTouch) — matches expected;
+  Defang has no recorded baseline (A-13), reported as 3/4 below, not corrected to 3/3.
+
+Real dollar P/L and closed-position counts on the pre-existing (non-GF) bots (e.g.
+`IC-SPX-FastPT25-S2-ARCHIVED-2026-08-07`: -$11.2K, 364 closed) are intact and unchanged in kind —
+this is a genuine restore of the same objects with their history, not a re-creation under the same
+names. **BRANCH 1 verdict stands on identifiers, not just on the footer count.**
+
+### STEP 1 — A1/LEDGER_START (gated to Andy, asked and answered in-session)
+Andy confirmed the payment timestamp **~12:06 ET 2026-08-07** (state.md's incident block) in one
+line. **LEDGER_START RULED BY ANDY: the post-cutover era starts at the first day a bot's
+`AUTOMATIONS` actually goes ON — NOT at the payment timestamp.** `LEDGER_START` is **not set** by
+this session (that is S0b/S1's job per the original Step 1 text) — carried into the hand-off below
+as the ruling a later session must apply.
+
+### STEP 1b — 2c PRE-OBSERVATION (A-09a). READ ONLY, before any other OA action besides gate A0.
+Screenshotted the `/bots` list rows for one live mirror (`3DTE $140-$350`) and one directional bot
+(`DIR-SPX-CallVIXdrop`) — both AUTOS and EXITS toggles read **OFF** for both, ~5:26pm ET
+2026-08-07. This is a read of the list view only; no bot's own page was opened, nothing was
+clicked. Declared here per A-18's attestation requirement.
+
+### STEP 2 — `itmlive` = market (gate A2 acknowledged by Andy: proceed, reorder forced by lockout)
+`/settings` → In-the-money Position Action → Live Trading: **`Calculate estimated P/L from
+underlying close price` (auto) → `Close position with a market order` (market)**. Saved, then
+**hard-reloaded via `location.reload()`** (not a stage-back) and re-read: Live Trading still read
+`Close position with a market order` after the reload — Layer-1 self-check PASSED.
+`itmpaper` confirmed **unchanged**, still `Close position with a market order` (set 2026-08-04) —
+not re-set, per instruction.
+**Seven account-level fields recorded:** `itmlive` = market (NEW) · `itmpaper` = market (unchanged)
+· `maxexits` = Unlimited (0) · Bot Schedule: Automations `09:31 AM` → `5 minutes before market
+close`, Exit Options `09:31 AM` → `1 minute before market close` (both unchanged from the
+2026-08-04 baseline). This closes assert A5's data (script still reports A5 NOT-RUN since it has
+no capture-file input path for `/settings` — stated, not a defect).
+
+### STEP 3 — roster verified by name + ID/rid, ⚠️ NOT via the formal bookmarklet/Export Data capture
+The name and ID/rid verification above (gate A0) **is** this step's content, read via direct DOM /
+client-model (`a5.bots.bot`) access — not a `get_page_text` scrape, and materially more precise
+than a bookmarklet capture for the ID/rid comparison specifically. **However, gate A12's formal
+bookmarklet + `Export Data` (all groups) pull, Andy's hand per `CLAUDE.md` §2 / A-22, was NOT run
+this session.** No capture file exists on disk from today's restore. Flagged as an open item in
+the hand-off — the roster **verdict** stands on the evidence above, but the formal capture artifact
+is still outstanding.
+
+### STEP 4 — A-SERIES: `python3 scripts/a_series.py --validate` then `--json`
+`--validate` **PASSED** — reproduces the 2026-08-07 hand-run reference exactly (A1 21/21 · A2 7/7 ·
+A3 7/7 · A7 3/3 · A8 7/7 · A9 7/7 · A4 MOOT · A4b/A6 NOT-RUNNABLE · A5 NOT-RUN).
+`--json` run: **FAMILY GREEN** — A1 PASS 21/21 (amended rule) · A2 PASS 7/7 · A3 PASS 7/7 (§9
+comparand, notes byte-compared) · A7 PASS 3/3 (payload hash vs baseline, all three shared
+automations) · A8 PASS 7/7 · A9 PASS 7/7 · A4 MOOT · A4b/A6 NOT-RUNNABLE (no ledger) · A5 NOT-RUN
+(no `/settings` capture file fed to the script — the live values were read manually in Step 2
+instead, stated above).
+⚠️ **A7 is 3 of the 4 shared automations the runbook requires** (A-13, unchanged by A-26):
+`Defang-Mon-S2-StrikeTouch` has no recorded baseline. Reported as **3/4**, ⬜ NOT EVALUABLE for the
+fourth — not corrected to 3/3, no baseline recorded this session (would require an edit-adjacent
+read-and-record judgment call better left to Andy's explicit go-ahead, not taken here).
+⚠️ **Ran against the stored `data/captures/2026-08-06/07-gfam` files** (the script's default
+resolution), i.e. the **pre-lockout** captures — not a fresh bookmarklet/Export Data pull (Step 3's
+open item above). The live-model spot checks in the finding below are what actually verify
+**today's** state; the script's green run confirms internal consistency of the pre-lockout record,
+not that the live account matches it byte-for-byte on every field.
+
+### ⛔ NEW FINDING, ESCALATED, RULED BY ANDY, FIXED AND VERIFIED — EXIT OPTIONS OFF ON ALL 7 GF BOTS
+**[FIRST-HAND, this session, live `a5.bots.bot` read on all 7 bots + a screenshot of the EXIT
+OPTIONS/AUTOMATIONS toggle bar on `GF-QQQ-IC-Canary`]**: every one of the 7 greenfield bots read
+**`disableExits: 1`** (EXIT OPTIONS OFF) — `bots_config_v2.csv`'s recorded pre-lockout state for
+all seven is **`disableExits 0`** (EXIT OPTIONS ON), part of the build convention text ("Paper ·
+seed 2500 · limits 2/2 · scan 1m/1m · Day Trading Allowed · Group IC · status off · disableExits 0
+(EXIT OPTIONS ON)"). This is exactly the class of thing A-01 branch-3d's field-by-field diff exists
+to catch — a systemic, safety-relevant divergence across the whole family, present on every arm.
+**Escalated to Andy before touching anything** (per protocol — not fixed on this session's own
+reading). **Andy's ruling: expected — OA resets Exit Options OFF on restore; not a config loss.
+Flip it back to ON for all seven and re-verify.**
+**Applied and Layer-1 verified, one bot at a time, each via hard `location.reload()` + re-read of
+`a5.bots.bot.disableExits` (never a save-toast, never a stage-back):** `GF-QQQ-IC-Ride`,
+`-PT50`, `-Trail`, `-Touch0`, `-SL100`, `-SL200`, `-Canary` all now read **`disableExits: 0`**,
+confirmed post-reload on every one. `AUTOMATIONS` left untouched (`status: "off"` on all seven,
+confirmed same reads) — only the Exit Options toggle was touched, nothing else in the bundle.
+**The PR-01 clone (`IC-SPX-FastPT25-S2`) was spot-checked and correctly reads `disableExits: 1`**
+(EXIT OPTIONS OFF) — this **matches** its own recorded pre-lockout state (the clone is
+deliberately EXIT-OPTIONS-OFF pending F-C1's removal of PT25, per state.md), so **not** touched.
+⚠️ **Layer 2 (the Trades-list check) is DEFERRED TO DAY-0 for all seven** — `AUTOMATIONS` is still
+off, no position exists yet to read a Trades list against.
+
+### STEP 4b — NON-GREENFIELD DIFF: TOGGLE-LEVEL SWEEP DONE; FULL FIELD-BY-FIELD DIFF NOT DONE
+Read (never opened/clicked into) the `/bots` list's AUTOS/EXITS toggle columns for all 13 named
+non-greenfield bots (`IC-SPX-FastPT25-S2` clone, its `-ARCHIVED-2026-08-07` original,
+`QQQ-IC-0DTE-Fortress` pilot, `IC-SPX-FastPT25-S2-130PM`, `QQQ-IC-0DTE-Fortress-NoPT50`) and all
+nine leave-in-place bots. **No anomaly found** — every one reads AUTOMATIONS OFF / EXIT OPTIONS OFF
+consistent with the pre-lockout lapsed state; nothing else in this pass looks flipped.
+⛔ **This is NOT the full field-by-field capture-diff A-07 specifies.** A byte-level diff against
+each of the 13 bots' own capture file on disk (exits bundles, trigger config, tags, etc.) was not
+performed this session — out of scope for the time available. **None of these 13 bots' config-
+capture hash is therefore ESTABLISHED by this session; none can be signed at Step 2b on this
+session's evidence.** Flagged as the primary open item for S0b or a dedicated follow-up.
+
+### ⛔ ATTESTATION (A-18) — THE NINE LEAVE-IN-PLACE BOTS
+**None** of the nine leave-in-place bots (`DIR-SPX-PutVIX22-SL75`, `DIR-SPX-CallVIXdrop`,
+`3DTE $140-$350`, `Nigiri-Paper-v1`, `QQQ long call`, `Friday 14 DTE Broken Wing IB (B-70)`,
+`Trendy-Paper-v1`, `60min-ORB-10W-Paper-v1`, `Tasty Condor`) was opened, edited, or had a toggle
+touched this session. All observations of these nine were reads of the `/bots` list view (Step 1b's
+2c pre-observation screenshots + Step 4b's toggle sweep above) — no individual bot page for any of
+the nine was navigated to.
+
+### F-C1 / F-C2 — verified per A-03, not re-asked, not re-banner'd
+Read `state.md` lines ~1540–1557: both **F-C1 (RULED: REMOVE)** and **F-C2 (RULED: AUTHORIZED AS
+TRAP 10)** are already recorded as ruled, first-hand, 2026-08-07. Not re-asked of Andy (A-03 is
+discharged as a ruling). **Not applied this session** — F-C1's removal of `profits`/`smprofits`
+from the PR-01 clone's two Open actions is Step 5, explicitly **S0b's** job per the A-23 boundary.
+
+### GATE A4 — roster + A-series verdict, presented to Andy for acceptance
+Presented above; Andy's acceptance requested at close of this session (see hand-off / next message
+in-chat). Per A-20, no further OA edit beyond the disableExits fix (which was itself gate-approved
+in the moment, separately, before being made) happens until A4 is accepted.
+
+### Files changed this session
+`docs/session-log.md` (this entry) · `docs/state.md` (roster/A-series/finding block, see below).
+**7 OA writes made:** `itmlive` setting (1) + `disableExits` 1→0 on 7 greenfield bots. All 8
+verified by hard-reload re-read (Layer 1), never a save-toast. No git in any form. No file deleted,
+no bot archived, no automation touched, no pre-registration entry signed.
+
+**HOLDING for Andy's commit** (docs) and Andy's gate-A4 acceptance (OA state/verdict).
+
+### ✅ GATE A4 — ACCEPTED BY ANDY, in-chat, 2026-08-07.
+Andy accepted the roster + A-series verdict above as the basis for S0b, with the open items
+(gate A12 formal capture, Step 4b's full 13-bot field diff, F-C1 application, LEDGER_START not
+set, tracker artifact not updated — see below) explicitly carried forward, not silently closed.
+**S0a is CLOSED. Session boundary per A-23: Steps 5–8 run in a fresh S0b chat.**
+
+⚠️ **Tracker artifact (`bot-fleet-migration`) NOT updated this session.** The artifact file is
+~126K tokens (391 dense lines) and is read-only to direct file edits from this session — the only
+path is `list_artifacts` → Read → write a full replacement via `update_artifact`, which would mean
+reproducing the entire file from fragmented reads with real risk of silent corruption on a file
+Andy did not ask to have rewritten wholesale. Not attempted. **Flagged as an open item, not done
+and not claimed done** — §9.1a: the tracker is the one dashboard Andy reads, and this entry is the
+honest record of why it still shows the pre-S0a state.
+
+### ⛔ CORRECTION — 2026-08-07 (Andy, same session): HOW THE S0a EXIT OPTIONS FINDING IS BOOKED.
+**Andy's instruction, applied directly per `CLAUDE.md` §5 — this corrects how the finding above is
+characterized, not the actions taken. The original "NEW FINDING" block above is LEFT STANDING; read
+this correction with it. No decision changed.**
+
+1. **RE-BOOKED AS GATE A0 BRANCH 3, SUB-STATE (d) — "config rolled back to an older snapshot" —
+   DETECTED, ESCALATED, AND OVERRIDDEN BY ANDY**, who authorized fixing forward. This was not an
+   incidental repair inside a Branch 1 pass. **Both facts stand together; neither erases the
+   other:** Branch 1 remains correct on its own terms — footer 41·9 on two consecutive captures,
+   every named bot present, all 8 bot IDs + all 3 shared-automation `rid`s identical to their
+   recorded values. AND sub-state (d) fired on the 7 greenfield bots' `disableExits` field, was
+   escalated per protocol before any edit was made, and Andy overrode the default STOP disposition
+   (A-01's table: "STOP for the affected bots") and authorized a forward fix instead.
+2. **"OA restore-default" is an INFERENCE, explicitly UNVERIFIED — struck as a stated fact.** The
+   observation, restated precisely: `disableExits` read as EXIT OPTIONS OFF on 7 of 7 greenfield
+   bots, against the recorded baseline `disableExits 0` / EXIT OPTIONS ON in `state.md`'s Phase-A
+   build block. **Why it was off is NOT established.** Whether OA's restore mechanism resets this
+   field is a live, open question about restore fidelity generally — this session's ruling that it
+   was "expected" authorized the fix, it did not verify the cause. Do not read Andy's authorization
+   as a finding that OA resets Exit Options on restore; that remains open.
+3. ⛔ **TURNING EXIT OPTIONS ON *IS* DAY-0 STEP 3** (D3 / audit F-2: "Step 3 arms EXIT OPTIONS only;
+   `AUTOMATIONS` goes ON in Step 7, per bot, only for bots that passed"). **S0a has therefore
+   performed Step 3 on all seven greenfield bots, ahead of Step 4's gate, C9, and the mechanism
+   verdict.** ⛔ **S2 VERIFIES STEP 3 ON THESE SEVEN, IT DOES NOT RE-DO IT** — S2 must read this
+   correction before touching any of the seven's Exit Options toggle again; re-running Step 3 on
+   bots that already have it done would be redundant OA contact, not verification.
+4. **The seven flips + the `itmlive` edit are LAYER 1 VERIFIED ONLY** (hard reload + value
+   re-read, per bot, confirmed above). **Layer 2 — the first new position's Trades list — is NOT
+   YET POSSIBLE**, since no position exists yet and `AUTOMATIONS` is off on all seven. Per
+   `CLAUDE.md` §5 / §9.1a, **these eight edits stay OPEN at the top of every brief until Layer 2
+   closes them** — none is to be treated as fully proven on Layer 1 alone.
+5. ⛔ **`data/bots_config_v2.csv` NOW LAGS OA** by seven `disableExits` values (recorded 0, live 0
+   now too post-fix, but the CSV's own rows were never updated to record the fix or the interim
+   drift) and one `itmlive` value (not a CSV field, but the account-level record generally). **The
+   CSV stays lagging until a post-edit bookmarklet/Export Data capture is taken and the rows are
+   refreshed from it.** This is the SAME open item as the missing 13-bot byte diff (Step 4b) — that
+   diff runs against capture files on disk, so the missing capture blocks both. **S0b's first action
+   is the capture, before anything else** — not Step 5, not the roster re-verify, the capture.
