@@ -1095,6 +1095,12 @@ edge, bot A evaluates at 13:31:05 with Δ = 0.74% and opens while bot B evaluate
 > convention). Unmatched days are logged, counted per arm, and **excluded from the primary
 > comparison** — never silently absorbed. The matched-day count, not the per-arm position count,
 > is the sample size that matters, and §11-CF9's arithmetic is stated against it.
+>
+> 📝 **RULED 2026-08-06 (G-2, M6, by Andy)** — `comparative-machinery-spec.md` §1.5: the
+> engine's gate reads **`M6`** (the six comparative arms PR-14…PR-19), not `M7` as defined above.
+> The Canary PR-20's fill no longer gates the five real comparisons. `M7` (all seven, as defined
+> here) is still computed and printed for visibility. This definition of "matched" is otherwise
+> unchanged.
 
 **H3 — live-only, recorded now.** Seven identical condors entered at the same second create
 fill-queue interaction if this family ever leaves paper. Matching degrades the moment it goes
@@ -1325,8 +1331,16 @@ MECHANISM        Ratchets a floor under an open profit instead of closing flat.
                  ★★★★), re-stamp THIS pre-registration first, then build. That is the HedgeD
                  rule; −$15,376 is what ignoring it cost.
 KILL CRITERION   Exp(R) per condor < 0 with CI entirely below 0 at n ≥ 60. Plus family-level,
-                 liveness and sentinel. Plus: worst-condor-R worse than the Ride control's at
-                 n ≥ 60 → the "no new risk" claim is refuted and the arm is retired.
+                 liveness and sentinel.
+                 📝 CORRECTED 2026-08-06 (G-12, RESPEC, ruled by Andy) — the worst-condor-R
+                 retirement criterion below is STRUCK, PENDING RESPEC: it compared two sample
+                 minima with no CI, no tolerance and no correction (P≈0.5 under the null,
+                 `comparative-machinery-spec.md` §8, CM-19) and retired the arm on what was
+                 arithmetically a coin flip worded as a refutation. REPLACEMENT (a tail quantile
+                 with a CI) is not yet specified — Andy ruled RESPEC, not the concrete method; that
+                 is a follow-up decision, not fabricated here. Until specified, this criterion does
+                 not fire. Plus: ~~worst-condor-R worse than the Ride control's at
+                 n ≥ 60 → the "no new risk" claim is refuted and the arm is retired.~~
                  📝 AMENDED 2026-08-06 (G-8, SEQUENCE+CS, ruled by Andy) — the n≥60 read above is
                  emitted as an always-valid confidence sequence, not a fixed-n CI; the absolute
                  kill cannot fire before this arm's own stamped GATE EVAL DATE (below).

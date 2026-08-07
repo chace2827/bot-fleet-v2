@@ -43,14 +43,14 @@ G-10  Bonferroni → joint day-bootstrap max-T? [ SWITCH | KEEP | DEFER ]  SWITC
 G-8   n≥60 absolute kill vs the gate          [ SEQUENCE+CS | KEEP | DEFER ]  SEQUENCE+CS — n≥60 read emitted as an always-valid confidence sequence; absolute kill cannot retire an arm before its stamped gate-eval date. Ruled Andy 2026-08-06.
 
 ── C. ANALYSIS / PUBLICATION ONLY — every one safe past the downgrade ───────
-G-2   Matched-day predicate                   [ M7 | M6 | DEFER ]  ______
-G-3   "exactly one condor per arm per day"    [ CONFIRM | REJECT | DEFER ]  ______
-G-4   X-1 group reading of R-7                [ CONFIRM | ROW-WISE | ANY-EXPIRED | DEFER ]  ______
-G-6   +0.015R on a fire-rate-diluted mean     [ STANDS | RESCALE | DEFER ]  ______
-G-12  PR-16 worst-condor test                 [ RESPEC | ADVISORY-ONLY | ACCEPT | DEFER ]  ______
-G-14  <D100> calendar / unit / C10            [ DEFER-TO-DAY-0 | OTHER ]  ______
-G-15  put-breached / call-not-breached        [ PER-SIDE | EITHER | BOTH | DEFER ]  ______
-G-16  n_matched_days ≥ 20 emission floor      [ 20 | ______ | DEFER ]  ______
+G-2   Matched-day predicate                   [ M7 | M6 | DEFER ]  M6 — gate reads the six comparative arms; |M7| still printed alongside. Ruled Andy 2026-08-06.
+G-3   "exactly one condor per arm per day"    [ CONFIRM | REJECT | DEFER ]  CONFIRM. Ruled Andy 2026-08-06.
+G-4   X-1 group reading of R-7                [ CONFIRM | ROW-WISE | ANY-EXPIRED | DEFER ]  CONFIRM (exclude only all-expired groups). Ruled Andy 2026-08-06.
+G-6   +0.015R on a fire-rate-diluted mean     [ STANDS | RESCALE | DEFER ]  STANDS — fire_rate published beside it always; currently inert under (b). Ruled Andy 2026-08-06.
+G-12  PR-16 worst-condor test                 [ RESPEC | ADVISORY-ONLY | ACCEPT | DEFER ]  RESPEC — old wording struck; exact tail-quantile/CI method is a follow-up decision, not fabricated here. Ruled Andy 2026-08-06.
+G-14  <D100> calendar / unit / C10            [ DEFER-TO-DAY-0 | OTHER ]  DEFER-TO-DAY-0. Ruled Andy 2026-08-06.
+G-15  put-breached / call-not-breached        [ PER-SIDE | EITHER | BOTH | DEFER ]  PER-SIDE — still gated on G-1 (exit_rows.csv) for a fireable input. Ruled Andy 2026-08-06.
+G-16  n_matched_days ≥ 20 emission floor      [ 20 | ______ | DEFER ]  Confirm 20. Ruled Andy 2026-08-06.
 
 Signed .......................................  Date ..................
 ```

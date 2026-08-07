@@ -179,8 +179,10 @@ its control by construction, and keying on close would sort the same day into tw
 | `MB(x)` | days on which arm `x` ∈ {PR-21, PR-22} **and** PR-14 each have exactly one included condor | PR-21 / PR-22 K1 |
 
 The engine computes `M7`, `M6` and every `MB`, and **prints `|M7|`, `|M6|` and their difference
-every run**. The gate reads `M7`, because that is the declared convention and changing it is a
-decision.
+every run**. ~~The gate reads `M7`, because that is the declared convention and changing it is a
+decision.~~ **RULED 2026-08-06 (G-2, M6, by Andy) — the gate now reads `M6`** (the six comparative
+arms, PR-14…PR-19), excluding the Canary PR-20 from the matched-day predicate that halts the real
+comparisons; `|M7|` continues to be printed alongside for visibility.
 
 > ⛔ **GATED FINDING — G-2.** PR-20 is *"an INSTRUMENT hypothesis … its P/L is expected to be ~flat
 > and **is not evidence about anything**"* with *"KILL CRITERION: NONE ON P/L"*
@@ -189,6 +191,10 @@ decision.
 > point `M7` stops accruing and **all five real comparisons halt.** The declared convention installs
 > the one bot with no scientific role as a single point of failure over the family. `|M7|` vs `|M6|`
 > is printed every run so the cost of the declared choice is visible while it stands.
+>
+> 📝 **RULED 2026-08-06 — G-2: M6.** Andy ruled the gate reads `M6`. The five real comparisons
+> (and PR-19's own criteria) no longer halt on the Canary's fill or its 2-day RED. `|M7|` stays
+> printed for visibility.
 
 **"Exactly one condor"** — a day on which an arm shows two included condors is **dropped from the
 matched set and logged as an anomaly**, never averaged. The shared entry automation carries a
@@ -197,6 +203,9 @@ position-tag re-entry gate (check C7, PASS), so two is a finding.
 > ⛔ **GATED — G-3.** "Exactly one" is a **tightening** of §8.4's *"opened a condor on it."* It is
 > what makes the day-level mean and the condor-level mean the same number (§2.4 rationale 1), so it
 > is load-bearing, not cosmetic. It is a third departure from R-3 and §12 row 16 names only two.
+>
+> 📝 **RULED 2026-08-06 — G-3: CONFIRM.** Andy confirmed the tightening as written; no text
+> change needed.
 
 ### 1.6 Exclusions — each applied in this order, each counted, each printed
 
@@ -228,6 +237,9 @@ position-tag re-entry gate (check C7, PASS), so two is a finding.
 > flagged because it is an interpretation of a signed ruling, not a quotation of one. The engine
 > prints `n_all_expired`, `n_mixed_status` and `n_all_closed` **per arm** every run regardless, so
 > the incidence asymmetry is visible whichever way it is ruled.
+>
+> 📝 **RULED 2026-08-06 — G-4: CONFIRM X-1.** Andy confirmed the group-level, all-expired-only
+> reading; no text change needed.
 
 ### 1.7 Two instrumentation outputs the review forced
 
@@ -400,6 +412,10 @@ GATE-CM(arm X vs control C, family F, at the stamped gate-eval date):
    **The bar is materially harsher on the hedge arms than on the profit-target arms, and nothing in
    R-3's text sets the fire rate that decides it.** The engine therefore emits `fire_rate` beside
    (a), always. ⛔ **G-6.**
+   📝 **RULED 2026-08-06 — G-6: STANDS.** Andy ruled the bar stands unchanged, `fire_rate`
+   published beside it always — consistent with §2.5's finding that (a) is currently inert under
+   (b) and does no work at this K and n. Revisit if G-10's max-T switch narrows the CI enough for
+   (a) to start binding.
 5. **Multiplicity — R-3's (b) points at §10a's max-T; the family declares Bonferroni-across-6.**
    Kept separate, §3.
 6. **Sign test — retained in substance**, with FIRED sourced from I-5 rather than inferred (§1.4,
@@ -617,6 +633,13 @@ needs I-5** (§1.4) · ⬛ not this engine's surface.
 > with the explicit annotation `no_inference: "sample minimum, uncorrected"`. ⛔ **G-12** — Andy's
 > to re-specify (a tail quantile with a CI would be the natural repair) or to accept as a
 > deliberately blunt tripwire.
+>
+> 📝 **RULED 2026-08-06 — G-12: RESPEC.** Andy ruled RESPEC — the raw sample-minimum
+> comparison is retired as a retirement criterion. ⚠️ **Not fully specified: the tail quantile and
+> the CI method are a follow-up decision, not invented here.** Until specified, the engine keeps
+> emitting `worst_r_*` with `no_inference: "sample minimum, uncorrected"` and takes no retirement
+> verdict from it. `greenfield-family-spec.md` §9's PR-16 entry is amended to match (struck,
+> pending respec).
 
 > ### ⚠️ PR-19's degeneracy criterion is not computable, not well-posed, and cannot fire. Three separate defects.
 > **(1) Not computable** — the second limb needs a stop-row count (I-5).
@@ -654,6 +677,10 @@ needs I-5** (§1.4) · ⬛ not this engine's surface.
 > silently tests a different rung than the one pre-registered, and nothing detects it.
 > The engine emits `d100_candidate` with `basis: "days-with-rows, NOT trading days"` and
 > `unit: "UNRESOLVED — C10"`, and **refuses to stamp**. ⛔ **G-14.**
+>
+> 📝 **RULED 2026-08-06 — G-14: DEFER-TO-DAY-0.** Andy deferred; no ruling needed now. ARM-B1
+> is not an arm until C10/C11 close regardless, and the refusal-to-stamp behaviour above is correct
+> under every option.
 
 > ### ⚠️ Basis and unit mixing inside one liveness test — label every emission.
 > `mfe_pct` / `mae_pct` are on the **credit** basis (`oa-export-schema.md` §4: *"the same basis as
@@ -665,6 +692,11 @@ needs I-5** (§1.4) · ⬛ not this engine's surface.
 > `d_i`, with **no rule for the case where the put side breached and the call side did not**.
 > Undefined in the folder; the engine emits `breach_put`, `breach_call` and `breach_either`
 > separately and takes no verdict from them. ⛔ **G-15.**
+>
+> 📝 **RULED 2026-08-06 — G-15: PER-SIDE.** Andy ruled the liveness/breach indicator resolves
+> on whichever side actually breached — `breach_put` for a put-side breach, `breach_call` for a
+> call-side breach — consistent with the C8 ruling that the spread, not the condor, is the exit
+> unit. Still gated on **G-1**: this test has no fireable input until `exit_rows.csv` exists.
 
 ### 4.1 Output artifacts
 
@@ -796,6 +828,9 @@ single suppressed-output line, so the stage is exercised without publishing nois
 R-4's start condition in form; ⛔ **the value 20 is a proposal and needs a signature (G-16)**, since
 R-4's own threshold was ruled rather than assumed.
 
+📝 **RULED 2026-08-06 — G-16: confirm 20.** Andy confirmed 20 as signed, not assumed; no text
+change needed.
+
 Verdicts are emitted only at a stamped gate-eval date (§2.6). At `n=0` the engine prints
 `EMPTY — n=0 matched days` and exits 0 — an absent number is never rendered as a zero.
 
@@ -892,21 +927,21 @@ with the machinery. **GATED** — needs Andy; listed in §8.
 | G | Ruling needed | Consequence if unruled |
 |---|---|---|
 | **G-1** | **Authorise `data/exit_rows.csv`** — a per-position exit-attribution capture from the Trades list (§1.4 schema). A new capture surface, one step per trading day | Five declared criteria across all seven arms stay unfireable. `pre-registration-ledger.md` §2 rule 2: *"A criterion needing evidence nobody collects is not a criterion."* §7 item 3 stays open |
-| **G-2** | Matched-day predicate: **`M7` (declared, all seven) or `M6` (six comparative arms)** | `M7` stands. The Canary's 2-day RED can halt all five comparisons |
-| **G-3** | Confirm **"exactly one condor per arm per day"** as the matched-day tightening | The day-mean / condor-mean identity in §2.4 rationale 2 rests on an unratified reading |
-| **G-4** | Confirm **X-1's group-level reading of R-7** (exclude only all-expired groups) | The exclusion is an interpretation of a signed ruling. Both alternatives bias `d_i`, in opposite directions, at arm-dependent rates |
+| **G-2** | Matched-day predicate: **`M7` (declared, all seven) or `M6` (six comparative arms)** | **RULED 2026-08-06 — M6.** Gate reads `M6`; `|M7|` printed alongside. The Canary's RED no longer halts the five real comparisons |
+| **G-3** | Confirm **"exactly one condor per arm per day"** as the matched-day tightening | **RULED 2026-08-06 — CONFIRM.** The day-mean / condor-mean identity in §2.4 rationale 2 is ratified |
+| **G-4** | Confirm **X-1's group-level reading of R-7** (exclude only all-expired groups) | **RULED 2026-08-06 — CONFIRM X-1.** The group-level, all-expired-only reading is ratified |
 | **G-5** | **Disapply conjunct (c) on PR-19**, or accept that PR-19 has a kill criterion and no reachable gate | PR-19 can never pass GATE-CM |
-| **G-6** | Whether **+0.015R** stands as a bar on a **fire-rate-diluted** mean, given it is ~12× harsher on a 5 %-firing arm than a 60 %-firing one, and was derived from a **PT** move | The bar means something different on each arm and nothing says so |
+| **G-6** | Whether **+0.015R** stands as a bar on a **fire-rate-diluted** mean, given it is ~12× harsher on a 5 %-firing arm than a 60 %-firing one, and was derived from a **PT** move | **RULED 2026-08-06 — STANDS.** `fire_rate` published beside it always; currently inert under (b) |
 | **G-7** | **Stamp a `GATE EVAL DATE` for PR-14…PR-20** (and add the field to `pre-registration-ledger.md` §2's template — `track-b-arms-spec.md` §11 item 5) | No verdict is emitted for those arms. §10a item 2 is unsatisfiable and the no-influence rule has no anchor |
 | **G-8** | Bring the **absolute n≥60 kill criteria** under the family correction and sequence them against the gate | CF-2's finding is live: the kill fires on the winners, 40 days before the gate is reachable |
 | **G-9** | `BONFERRONI_K`: **6 (declared) / 5 (tests that run) / ≥9 (decisions against the shared control)** | K=6 ships. Over-corrected by ~2.4 % on z, under-corrected ~1.8× against the real family |
 | **G-10** | Whether to replace **Bonferroni-across-6 with a joint day-bootstrap max-T** (`greenfield-family-spec.md` Phase C step C4 is a declared analysis convention) | The engine with no power to spare keeps the conservative correction; Track A keeps the efficient one |
 | **G-11** | Whether **PR-21/PR-22 are statistically in the greenfield family** (S-1 ruled slots, not error rates) | `k_basis: "DECLARED — statistical family not ruled"` ships on both |
-| **G-12** | Re-specify or accept **PR-16's worst-condor test** (P ≈ 0.5 under the null) | The Trail arm can be retired on a coin flip, worded as a refuted claim |
+| **G-12** | Re-specify or accept **PR-16's worst-condor test** (P ≈ 0.5 under the null) | **RULED 2026-08-06 — RESPEC.** Exact tail-quantile/CI method is a follow-up decision; not yet fireable |
 | **G-13** | Re-specify **PR-19's degeneracy criterion** — it is uncomputable, ill-posed and unfireable (expected 1.2 of 40 vs a requirement of 20) | `degeneracy_fireable: false` ships. CF-11 is not actually fixed |
-| **G-14** | **`<D100>`**: the calendar basis, the per-condor vs per-side unit, and C10 | The engine refuses to stamp `<D100>`; ARM-B1 is not an arm |
-| **G-15** | The **put-breached / call-not-breached** case for a per-spread threshold classifying a per-condor `d_i` | Three breach flags emitted, no verdict taken from them |
-| **G-16** | The **`n_matched_days ≥ 20`** emission floor (R-4's analogue, proposed not ruled) | 20 ships as an assumption where R-4's own threshold was ruled |
+| **G-14** | **`<D100>`**: the calendar basis, the per-condor vs per-side unit, and C10 | **RULED 2026-08-06 — DEFER-TO-DAY-0.** Engine refuses to stamp `<D100>`; ARM-B1 is not an arm |
+| **G-15** | The **put-breached / call-not-breached** case for a per-spread threshold classifying a per-condor `d_i` | **RULED 2026-08-06 — PER-SIDE.** Still gated on G-1 (`exit_rows.csv`) for a fireable input |
+| **G-16** | The **`n_matched_days ≥ 20`** emission floor (R-4's analogue, proposed not ruled) | **RULED 2026-08-06 — confirm 20.** Signed, not assumed |
 
 **Two dependencies outside this list, already open and already Andy's or Day-0's:** **D3** (the
 export/backstop timezone — no wall-clock predicate is safe until it is answered) and **D2/D4**

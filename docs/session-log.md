@@ -4850,3 +4850,57 @@ this entry's own prior sha256 immediately before the edit.
 `docs/comparative-machinery-spec.md` · `docs/session-log.md` (this entry).
 
 **HOLDING for Andy's commit.**
+
+
+---
+
+## 2026-08-06 (late) — G-RULINGS CARD Group C ruled: G-2, G-3, G-4, G-6, G-12, G-14, G-15, G-16 applied
+
+**Task.** Andy ruled all eight Group C items of `docs/g-rulings-card-2026-08-07.md` (analysis /
+publication only, every one safe past the 08-07 downgrade — none blocks tomorrow's build) via
+multiple-choice, and instructed direct application. Andy took the card's recommendation on all
+eight. Applied exactly: **G-2** M6 — the gate reads the six comparative arms, not all seven;
+the Canary's fill/RED no longer halts the five real comparisons; `|M7|` still printed. **G-3**
+CONFIRM — "exactly one condor per arm per day" ratified as written, no text change. **G-4**
+CONFIRM X-1 — exclude only all-expired groups, no text change. **G-6** STANDS — the +0.015R bar
+unchanged, `fire_rate` published beside it always (already inert under conjunct (b), per G-10's
+own reasoning). **G-12** RESPEC — PR-16's worst-condor-R test (a coin flip, P≈0.5, worded as a
+refutation) is struck as a retirement criterion; the concrete tail-quantile/CI replacement is
+**not specified here** — Andy ruled the decision to respec, not the statistical method, and
+inventing one would be fabrication, not application. **G-14** DEFER-TO-DAY-0 — no ruling needed
+now; ARM-B1 isn't an arm until C10/C11 close regardless. **G-15** PER-SIDE — the breach/liveness
+indicator resolves on whichever side actually breached, consistent with the C8 spread-is-the-
+exit-unit ruling; still gated on G-1 for a fireable input. **G-16** confirm 20 — the emission
+floor is signed, not assumed. **Every group on the card (A, B, C) is now ruled.**
+
+**Files edited, each via anchored `device_bash` insertion with a pre-write single-match count
+assertion on the exact anchor text, then a post-write `device_bash` sha256 plus a single-match
+grep of the new text — never the write tool's response (`CLAUDE.md` §9.1a):**
+- `docs/g-rulings-card-2026-08-07.md` — the RULING SHEET's Group C lines (G-2/G-3/G-4/G-6/G-12/
+  G-14/G-15/G-16) filled with Andy's rulings, each dated 2026-08-06. Groups A and B untouched.
+  sha256 `1126b1d955df39dfc9cec3bfd064632c9890122668e3afb20b1b24beba46481f`.
+- `docs/comparative-machinery-spec.md` — **17 edits**: a dated `RULED` resolution appended to each
+  of the eight ⛔-tagged findings (§1.5 for G-2 ×2 including the "gate reads M7" sentence itself,
+  §1.6 for G-3/G-4, §2.4 for G-6, §4 for G-12/G-14/G-15, §6.3 for G-16), plus the matching row in
+  the §8 ruling-queue summary table updated for all eight — original text left standing throughout,
+  nothing struck except the superseded "gate reads M7" clause. sha256
+  `deb4fcc94b7c46d6c442cdcd1226604a23e4998b8586a886eb8b83363d714ce7`.
+- `docs/greenfield-family-spec.md` — **2 edits**: §8.4's "matched day" definition gets a dated
+  cross-reference to the M6 ruling (G-2), original definition left standing; PR-16's
+  `KILL CRITERION` block gets the G-12 correction — the worst-condor-R clause struck
+  (`~~...~~`, original left standing) and marked pending respec, dated. sha256
+  `d2832290d7ad3a317cb78d43b166caa5e0d0d618cff4195ea9b241e14e775df8` (previously
+  `a12b34a287e7a0f46ebd6ef943e4b5e766e28e83faa4494bff8119fa35db0041`, after the G-8 extension).
+
+**Not touched this session:** `docs/state.md` (shared with a concurrent build session); OA (no
+browser tool run); git (no git command run — commit is Andy's, per standing instruction).
+
+**Verification.** This log entry appended after a fresh re-read of `session-log.md`'s tail and a
+compare-and-swap on sha256 `91cce0ab95726ff3204d5fa18dcd599b645ca2fcde6192ac3f7a0890d77f221f`,
+plus a tail assertion on `**HOLDING for Andy's commit.**`.
+
+### Files changed this session
+`docs/g-rulings-card-2026-08-07.md` · `docs/comparative-machinery-spec.md` ·
+`docs/greenfield-family-spec.md` · `docs/session-log.md` (this entry).
+
+**HOLDING for Andy's commit.**
