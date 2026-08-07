@@ -5155,3 +5155,111 @@ sections + revised close) · `data/bots_config_v2.csv` (A2-EXITRATE-1 banner + s
 else touched, nothing switched ON, no Library object modified.
 
 **HOLDING for Andy's commit.**
+
+## 2026-08-07 (morning) — **CLONE 1 OF 3 COMPLETE AND VERIFIED. CLONES 2 AND 3 NOT STARTED.**
+**`IC-SPX-FastPT25-S2` (PR-01) is cloned to spec. Two findings gated to Andy. Session stopped
+early on a tool failure, per the ladder — not on a spec failure.** No git command was run in any
+form. Nothing switched ON. No bot other than PR-01's original and its clone was touched.
+
+### What was done, in order
+Fresh reads first (`state.md` 08-07 blocks, `session-log.md` tail, `build-plan.md` §2B,
+`pilot-clone-card-qqq-fortress.md`, `oa-ops-runbook.md` §1/§4, `decision-card-2026-08-06.md`
+slot 7, memory `phase_a_build_status`). `/bots` read **40 active bots • 10 left in your plan** —
+matches `state.md`. Then, per-clone atomic:
+Step 0 baseline capture of the original → rename original → clone (production name + $50,000
+allocation set **in the Clone Settings drawer, before creation**) → restore the dropped fields →
+two safety fixes → hard-reload server verification of all four automations → capture + rows.
+Captures: `data/captures/2026-08-07-clones/{00-original,06-clone-final}/IC-SPX-FastPT25-S2.txt`.
+
+### The two ruled fixes — both applied, both Layer-1 verified after a hard reload
+1. **Re-entry gate**, both scanners. `countpostag{cop:eq,tags:"…side",count:0,status:"open"}`
+   → **`postagtoday{"oc":"opened","not":true,"tag":"put|call side"}`**, action left on YES.
+   ⚠️ **Deliberate form divergence from the greenfield scanners, recorded not smuggled:** GF uses
+   plain `postagtoday` with the action on **NO**. OA's editor has **no move-node control**, so the
+   NO form would have required deleting and rebuilding the Open Position action in full —
+   including its `exits` bundle, i.e. forcing this session to take a position on the gated F-C1.
+   `NOT` is a first-class operator on OA's criterion toolbar (`Create Group | NOT | 🗑`), observed
+   first-hand; `oc` offers only `opened`/`closed`, so there is no negated recipe variant.
+   Logically identical; action node left byte-untouched.
+2. **Cleanup pricing** `{"text":"Market","smart":"market"}` → **`{"pct":100,"smart":"speedy"}`**.
+   The tier was **not specified by any doc** — 2B says only "Market → SmartPricing". Chosen as
+   **byte-identical to what this same bot's StrikeTouch closes already use**; least-invention, no
+   new value introduced. One field if Andy wants Normal/Patient. Nothing else in Cleanup touched.
+
+### No-unintended-edits proof — by hash, not by eye
+`Scalp-Mon-S2-StrikeTouch` on the CLONE hashes **identically to the ORIGINAL's Step-0 baseline**
+(`01af4963aafb5856…`). The ORIGINAL's `Scalp-Scan-Put`, re-read after every clone edit, still
+hashes `91da84fd2b7aafbb…`, 5027 bytes, version 2 — **byte-identical to Step 0. The original was
+not touched.** All four clone automations carry **different rids** from the original's — a third
+independent confirmation that cloning COPIES (corrected Trap 1), after `sharing=0` on all eight
+objects and the Library listing (which holds only `Defang-Mon-S2-StrikeTouch` (2 bots) + the three
+GF objects (7 bots each) — **no `Scalp-*` object**).
+
+### ⛔ FINDING F-C1 — PT25 IS LIVE ON THE "EXIT-OPTION-FREE" CONTROLS. GATED, NOT ACTED ON.
+**[FIRST-HAND 2026-08-07, `node.input.exits` read on both Open Position actions of the original]**:
+`exits.profits = 0.25`, `smprofits "normal"`, text `"Profits: 25%"` — on **both** the put and call
+side. The bot is Exit-Option-**bearing** at the action layer; what made it look free is
+`disableExits = 1`. That is verbatim the state `build-plan.md` §2B forbids: *"PT25 removed from
+the Open Position action explicitly — not left dead behind an off toggle."*
+**Three sources, two decisive, say do not remove it in this session:**
+(i) `reactivation-runbook.md`'s Day-0 inverted-check branch, verbatim: *"the ride+S2 control is
+CONTAMINATED… ⛔ **Do NOT edit the bot to remove it** — `CLAUDE.md` §5 standing exception… escalate
+to Andy: YES (a spec question under decision freeze)."* (ii) this session's own instruction: *only
+the two safety fixes… do not "fix" them further.* (iii) against those, §2B's cell mandating removal.
+Two frozen decisions conflict ⇒ **`CLAUDE.md` §5: when it is ambiguous, it is gated.**
+Cost of deferring: none that compounds — AUTOMATIONS OFF, EXIT OPTIONS OFF, account inactive,
+PR-01 unsigned. **Andy rules: remove `exits.profits` from both Open actions (§2B as written), or
+leave it and amend §2B.** ⚠️ Until ruled, PR-01's Day-0 INVERTED check **fails by construction**.
+
+### ⛔ FINDING F-C2 — A FOURTH CLONE TRAP, IN NO DOC. `disableExits` RESETS 1 → 0 ON CLONE.
+**[FIRST-HAND 2026-08-07, read on the fresh clone before any edit; corroborated by the top-bar
+toggle rendering ON.]** The three documented traps (allocation → 1000, group → None, tags dropped)
+all make a cloned bot **do nothing**. This one makes it **do something**: composed with F-C1 it
+would have armed a 25% profit target on the bot whose entire pre-registered role is the **ride
+benchmark with no profit target** — tripping PR-01's own `REMOVED_EXIT_FIRED` kill criterion on
+day 1. Invisible to text capture by construction (§1.6). Restored to 1 and verified.
+**Recommend adding to `oa-ops-runbook.md` §5 as Trap 10 and to the clone checklist — GATED**
+(a checklist edit is a decision).
+*Also confirmed: all three known traps reproduced. Trap 1 (allocation) is now **pre-emptable** —
+the Clone Settings drawer exposes Name + Account + Allocation before creation, which also retires
+the pilot card's temporary-name step whenever the original is renamed first.*
+
+### ⛔ WHY THE SESSION STOPPED HERE — a tool failure, recorded as a finding
+**The bot `…` menu (`showBotMenu`) stopped opening**, after ~40 consecutive successful coordinate
+clicks in the same session. Three attempts, no menu, no error, page healthy. Same class as the
+2026-08-04 `archiveBot` failure. `oa-ops-runbook.md` §4.0: *"If an action resists all three, stop —
+do not fall back to coordinates."* **Stopped.** Consequence: **Template V1 + PR-01 Notes + the
+`pr 01` tag were NOT done** on the clone. Nothing depends on them — the bot is fully specced and
+Day-0 does not read the template.
+
+### ⭐ METHOD NOTE THAT RESOLVES §4.0's REFS-VS-COORDINATES DILEMMA — carry this forward
+Element-**ref** clicks no-op on this app (known). Raw coordinates eyeballed off a screenshot are
+unsafe because `read_page`'s viewport and the screenshot disagree — and **this session watched that
+ratio CHANGE mid-run** (2560×1314→1548×795, then 3456×1314→1568×596) after a window resize, which
+silently invalidated every coordinate in flight.
+**The fix is neither: compute the target from the DOM and convert.**
+`scale = screenshotWidth / window.innerWidth`; click at `rect.centre × scale`. Verified live —
+re-derived the scale (0.4537) after the resize and the very next click landed correctly.
+Every click after that point in this session used it. It needs no JS event dispatch (which the
+Cowork harness classifier blocks on this app) and no guessing.
+⚠️ **Corollary: never carry a coordinate across a window resize. Re-derive the scale.**
+
+### Also read first-hand and unchanged
+`oa-platform-reference.md` §7's SmartPricing table confirmed a **second** time from the live modal
+(Normal 4×10s · Fast 3×5s · Patient 5×20s · Off 1 limit · Market). The `IC`/`IC-Focus` group
+duplication is still present in the Bot Group picker (`Archive · Directional-Focus · IC · IC-Focus
+· Lab · Monitor · OA-Mirror-Focus`). Account-inactive banner behaved as pre-adjudicated: every one
+of this session's writes survived a hard reload.
+
+### Files changed this session
+`data/captures/2026-08-07-clones/00-original/IC-SPX-FastPT25-S2.txt` (new) ·
+`data/captures/2026-08-07-clones/06-clone-final/IC-SPX-FastPT25-S2.txt` (new) ·
+`data/archive/rename_map.csv` (+1 row) · `data/bots_config_v2.csv` (+1 bot row + schema banner) ·
+`docs/state.md` · `docs/session-log.md` (this entry).
+**OA:** one bot renamed, one bot created by clone, three restores, two spec fixes on two
+automations, one pricing fix on one automation. **Nothing switched ON. No Library object touched**
+(all four Library objects and their bot-counts unchanged). **Clones 2 (PR-02) and 3 (PR-04) NOT
+STARTED.** The ~23 archives (20 Group-A + 3 clone originals) remain **queued for ANDY'S HAND** —
+untouched, not attempted, `archiveBot` still 3-for-3 failed from this side.
+
+**HOLDING for Andy's commit.**

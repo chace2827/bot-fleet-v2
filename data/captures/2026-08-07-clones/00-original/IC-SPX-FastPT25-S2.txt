@@ -1,0 +1,188 @@
+# CAPTURE — IC-SPX-FastPT25-S2  (STEP 0 BASELINE OF THE ORIGINAL, pre-rename, pre-clone)
+# captured: 2026-08-07 ~01:50 ET, Chrome-direct, Option Alpha
+# session: the three-clone session (PR-01 / PR-02 / PR-04), build-plan.md 2B
+# METHOD: every value read from the client model — a5.bots.bot for bot-level fields,
+#         a5.bots.acedit.routine for each automation's {name, inputs, root}.
+#         Never innerText. Never a save banner (CLAUDE.md 9.1a).
+#         Rendered labels recorded only where marked LABEL.
+# Account state: "Account inactive, no changes will be saved" banner PRESENT
+#         -> pre-adjudicated FALSE ALARM (state.md 2026-08-07, definitive test PASSED).
+# Roster at capture: LABEL "40 active bots - 10 left in your plan" (matches state.md).
+
+BOT             IC-SPX-FastPT25-S2
+BOT_ID          BOTfw5TkkCRF1217757048550308561
+ROLE            PR-01 - IC - control (ride + S2 benchmark).  build-plan.md 2B row 1.
+CREATED         2026-04-09T03:20:55.032Z
+
+## BOT-LEVEL SETTINGS  (read from a5.bots.bot)
+account         accountId = "sim"   / {"id":"sim","type":"sim","name":"Paper Trading"}
+seed            50000                      <- LABEL "ALLOCATION $50,000"
+posLimitDay     10                         <- LABEL "DAILY POSITIONS 10 per day"
+posLimit        10                         <- LABEL "POSITION LIMIT 10 at once"
+warnsDay        10
+nopdt           0                          <- LABEL "DAY TRADING Allowed"
+scanrate        1                          <- LABEL "AUTOMATIONS Every 1m"
+exitrate        ABSENT from a5.bots.bot    <- UI shows "Every 1m"; hidden input reads 1.
+                # This is the A2-EXITRATE-1 shape exactly (ruled 2026-08-07): the DISPLAYED
+                # value is the UI default, NOT a stored model field. Recorded, not "fixed" -
+                # no ruling covers exitrate on the control clones.
+status          "off"                      <- AUTOMATIONS OFF
+disableExits    1                          <- EXIT OPTIONS **OFF**
+group           {"id":"BGfw5TkkCRF3517811337258939101","name":"IC-Focus"}
+tags            "live candidate,focus ic"
+symbols         (none)  LABEL "No symbols yet"  <- SPX is carried inside the automations
+icon            fas-robot bg-blue
+Bot Inputs      NONE (empty)
+Notes           EMPTY  (LABEL "Add Notes")
+Activity Alerts open position / close position / automation warning / automation error - all checked
+
+## LIFETIME RECORD AT CAPTURE (v1 era - archive context only, NOT a reporting input)
+closedCount 364 | closedPnl -11155 | wins 208 | losses 141 | winRate 0.59598854
+profitFactor 0.7317542383070819 | streak 3 | seed 50000 | value 38845 | roi -0.2231
+# CLAUDE.md 3.1: pre-cutover. Cited as lineage, never as the state of the fleet.
+
+## AUTOMATION LIST — 4, exactly as rendered, in order
+SCANNERS   1. Scalp-Scan-Put
+           2. Scalp-Scan-Call
+MONITORS   3. Scalp-Mon-S2-StrikeTouch
+           4. Scalp-Mon-S2-Cleanup
+
+## LIBRARY MEMBERSHIP — THE TRAP-1 CHECK (oa-ops-runbook.md 5 Trap 1 as corrected 2026-08-05)
+ALL FOUR read  sharing = 0  -> NONE is in the Automation Library.
+=> Clone-owned by default; edit the clone's copies DIRECTLY. No Copy-to-fork needed.
+   (Pilot card Step 2 is VOID; this is the confirmation that replaces it.)
+
+================================================================================
+## 1. Scalp-Scan-Put        rid RTfw5TkkCRF177570499904870000051   version 2   sharing 0
+##    payload bytes 5027    sha256(JSON{name,inputs,root}) =
+##    91da84fd 2b7aafbb 906b137f 250562f0 e9669cff 7d62640d 2f72ff81 ecd946f8
+symbolloop | Loop SPX :: {"symbols":"SPX"}
+  decision | Symbol change % is greater than -0.75 since previous close
+             [stockchangepct cop=gt value=-0.75 prop=close]
+    [yes] decision | Symbol change % is less than 0.75 since previous close
+             [stockchangepct cop=lt value=0.75 prop=close]
+      [yes] decision | FOMC Meeting today   [marketevent event=fomc days=0]
+        [yes] placeholder
+        [no]  decision | Current market time is after 11:00am [timeofday cop=after time=1100]
+          [yes] decision | Bot has exactly 0 positions with put side and open status
+                   [countpostag cop=eq tags="put side" count=0 status=open]     <== FIX 1 TARGET
+            [yes] open-shortputspread | Open SPX Short Put Spread
+            [no]  placeholder
+          [no] placeholder
+      [no] placeholder
+    [no] placeholder
+
+### OPEN SHORT PUT SPREAD ACTION — value layer (verbatim from node.input)
+type        open-shortputspread
+symbol      SPX
+series      {"days":0,"text":"exactly 0 days","type":"days","filter":"*","compare":"exact"}
+shortPut    {"cop":"lt","pct":0.75,"mode":"closest","type":"legpctprice","priceprop":"last",
+             "optionType":"put","text":"0.75% below underlying price"}
+longPut     {"cop":"lt","gap":5,"mode":"closest","shlg":"short","type":"leggap","ltype":"put",
+             "optionType":"put","text":"$5.00 below short put leg"}
+amount      {"draw":5000,"text":"Up to $5,000 risk","type":"draw"}   <- RISK-BASED sizing
+price       {"pct":75,"text":"75% of bid/ask","smart":"speedy"}      <- ENTRY pricing, SmartPricing Fast
+filter      {"minPrice":0.08}
+tags        "put side"
+exits       {"profits":0.25,"smprofits":"normal","text":"Profits: 25%",
+             "dstop":"","dtype":"short","price":"","touch":"","tstop":"","dprofit":"",
+             "epsdays":"","expdays":"","stoploss":""}
+            ############################################################################
+            ## >> FINDING F-C1 <<  PT25 IS LIVE IN THIS ACTION. READ THE BANNER BELOW. ##
+            ############################################################################
+
+================================================================================
+## 2. Scalp-Scan-Call       rid RTfw5TkkCRF1217757057095244611    version 3   sharing 0
+##    payload bytes 5048    sha256(JSON{name,inputs,root}) =
+##    8c146e14 38caa7dc 2cfa9934 2c390013 d7ea3ef8 13b22c05 b27e81fe 4242f328
+# Structurally identical to Scalp-Scan-Put through the 11:00am gate. Diverges only at:
+      [yes] decision | Bot has exactly 0 positions with call side and open status
+               [countpostag cop=eq tags="call side" count=0 status=open]        <== FIX 1 TARGET
+        [yes] open-shortcallspread | Open SPX Short Call Spread
+
+### OPEN SHORT CALL SPREAD ACTION — value layer
+type        open-shortcallspread
+symbol      SPX
+series      {"days":0,"text":"exactly 0 days","type":"days","filter":"*","compare":"exact"}
+shortCall   {"cop":"gt","pct":0.75,"mode":"closest","type":"legpctprice","priceprop":"last",
+             "optionType":"call","text":"0.75% above underlying price"}
+longCall    {"cop":"gt","gap":5,"mode":"closest","shlg":"short","type":"leggap","ltype":"call",
+             "optionType":"call","text":"$5.00 above short call leg"}
+amount      {"draw":5000,"text":"Up to $5,000 risk","type":"draw"}
+price       {"pct":75,"text":"75% of bid/ask","smart":"speedy"}
+filter      {"minPrice":0.08}
+tags        "call side"
+exits       {"profits":0.25,"smprofits":"normal","text":"Profits: 25%", ...rest empty}
+            ## >> FINDING F-C1 — PT25 LIVE ON THIS SIDE TOO. <<
+
+================================================================================
+## 3. Scalp-Mon-S2-StrikeTouch   rid RTfw5TkkCRF177570596776652   version 4   sharing 0
+##    payload bytes 4584    sha256(JSON{name,inputs,root}) =
+##    01af4963 aafb5856 6789662a afa68d94 d846d042 869590ec cbede9fb 6d57ca85
+posrepeater | Repeat for each position :: {"symbol":"SPX","ptype":"*","tags":""}
+  decision | Position has any of these tags: put side   [postag cop=any tags="put side"]
+    [yes] decision | Position underlying price is below short put strike price
+             [postouch cop=lt shlg=short otype=put]
+      [yes] closepos | Close Position :: price {"pct":100,"text":"100% of bid/ask","smart":"speedy"} memo ""
+      [no]  placeholder
+    [no] decision | Position underlying price is above short call strike price
+             [postouch cop=gt shlg=short otype=call]
+      [yes] closepos | Close Position :: price {"pct":100,"text":"100% of bid/ask","smart":"speedy"} memo ""
+      [no]  placeholder
+# THIS IS S2. Both closes ALREADY on SmartPricing Fast (speedy) - NOT Market. No fix due here.
+# NOTE: it is this monitor's close that leaves a lone surviving leg, which Cleanup then flattens.
+
+================================================================================
+## 4. Scalp-Mon-S2-Cleanup      rid RTfw5TkkCRF177570685755260000023   version 1   sharing 0
+posrepeater | Repeat for each position :: {"symbol":"","ptype":"*","tags":""}
+  conditional | Position has been open 2 minutes or more
+    [yes] decision | Bot has exactly 1 position with any type and open status
+             [countpos cop=eq count=1 status=open posType=*]
+      [yes] closepos | Close Position :: price {"text":"Market","smart":"market"} memo ""   <== FIX 2 TARGET
+      [no]  placeholder
+    [no] placeholder
+# Opportunities 0 / Warnings 0.
+# build-plan.md 2B: "Do NOT touch Cleanup itself - S2 depends on it." Only the PRICE changes.
+# Provenance of the fix: evidence-standards.md 7 - the frozen detector fixture's T00147
+# (R -1.63) has diagnosed mechanism "Cleanup priced at Market", independently corroborated by
+# FILL_WORSE_THAN_MAE (filled 4.81 credits beyond the worst mark; next-worst of 1,232 closed
+# rows is 0.91). This is the single most expensive known config defect in the v1 record.
+
+================================================================================
+## >> FINDING F-C1 — ESCALATED TO ANDY, NOT ACTED ON. <<
+##
+## CLAIM AS GIVEN TO THIS SESSION (and in decision-card-2026-08-06.md line 446):
+##   "PR-01/PR-02 ... they are the deliberately Exit-Option-free ride+S2 controls".
+## CLAIM AS FOUND, FIRST-HAND, 2026-08-07:  **FALSE OF THE ORIGINAL.**
+##   Both Open Position actions carry a live  exits.profits = 0.25  (smprofits "normal",
+##   text "Profits: 25%"). The bot is Exit-Option-BEARING at the action layer. What makes it
+##   look Exit-Option-free is  disableExits = 1  - i.e. the PT is alive in config and dead
+##   only behind the bot-level EXIT OPTIONS toggle.
+##   That is verbatim the state build-plan.md 2B says must NOT be left standing:
+##   "PT25 removed from the Open Position action explicitly - not left dead behind an off toggle."
+##
+## WHY THIS SESSION DID NOT REMOVE IT — three sources, two of them decisive:
+##   1. reactivation-runbook.md, Day-0 inverted-check branch, VERBATIM:
+##        "IF either control clone's Trades list shows a PT row or an exit-trigger row -> the
+##         ride+S2 control is CONTAMINATED; the arm's comparison is void, not delayed.
+##         [X] Do NOT edit the bot to remove it - CLAUDE.md 5 standing exception: 'Do not fix
+##         them, do not re-arm them.' ... escalate to Andy: YES (a spec question under decision
+##         freeze)."
+##      The project's own written disposition for a PT found on these two controls is
+##      DO-NOT-EDIT + ESCALATE. It is written for the Day-0 behavioural read; this is the same
+##      question one layer earlier, at config time.
+##   2. This session's instruction: "apply ONLY the two safety fixes ... do NOT 'fix' them
+##      further". Removing PT25 is a third edit to an exit surface.
+##   3. Against those: build-plan.md 2B's cell, which mandates the removal.
+##      2B is frozen and it is a DECISION; so is the runbook branch. They conflict.
+##      CLAUDE.md 5: "When it is ambiguous, it is gated."  ==> GATED.
+##
+## COST OF THE DEFERRAL: none that can compound. AUTOMATIONS OFF, EXIT OPTIONS OFF, account
+## inactive, PR-01 unsigned. The bot cannot trade. The fix is one field on two action nodes,
+## and it is cheaper AFTER a ruling than a wrong edit is to undo.
+##
+## WHAT ANDY RULES:  remove exits.profits from both Open actions on the PR-01 and PR-02 clones
+## (2B as written), or leave them and amend 2B. Either way it is one edit per side per bot.
+## Until ruled, the clones carry PT25 forward EXACTLY as the originals held it - no drift
+## introduced by this session in either direction.
+================================================================================

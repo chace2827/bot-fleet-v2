@@ -1,0 +1,187 @@
+# CAPTURE — IC-SPX-FastPT25-S2  (THE CLONE, post-spec, PR-01)
+# captured: 2026-08-07 ~02:20 ET, Chrome-direct, Option Alpha
+# METHOD: every value below read from a5.bots.bot / a5.bots.acedit.routine AFTER A HARD RELOAD
+#         of the bot settings page. Never innerText. Never a save banner (CLAUDE.md 9.1a).
+# LAYER 1 (immediate self-check): PASS on every field below - each re-observed from OA's own
+#         refetched server model after the save, not from the tool call that made the edit.
+# LAYER 2 (behavioural, Trades list): **DEFERRED TO DAY-0.** Account inactive, AUTOMATIONS OFF,
+#         zero positions, nothing can fire. Queued, tracked, repeated at the top of every brief
+#         until closed (CLAUDE.md 5 / oa-ops-runbook.md 4.1).
+
+BOT             IC-SPX-FastPT25-S2                 <- took the production name at CLONE time
+BOT_ID          BOTfw5TkkCRF4417860821948715488
+CREATED         2026-08-07T05:56:34.871Z
+CLONED FROM     IC-SPX-FastPT25-S2-ARCHIVED-2026-08-07 (BOTfw5TkkCRF1217757048550308561)
+PRE-REG         PR-01 - IC - control - STATUS DRAFT, UNSIGNED
+SPEC SOURCE     build-plan.md 2B row 1
+
+## BOT-LEVEL — clone vs original, field by field (all post-hard-reload)
+                        ORIGINAL                CLONE                   VERDICT
+name                    ...-ARCHIVED-2026-08-07  IC-SPX-FastPT25-S2      as designed
+accountId               sim                      sim                     EQUAL
+seed (ALLOCATION)       50000                    50000                   EQUAL  (trap pre-empted)
+posLimitDay             10                       10                      EQUAL
+posLimit                10                       10                      EQUAL
+warnsDay                10                       10                      EQUAL
+scanrate                1                        1                       EQUAL
+status (AUTOMATIONS)    off                      off                     EQUAL  - OFF
+disableExits (EXITS)    1                        1                       EQUAL  - OFF  (RESTORED, see F-C2)
+group                   IC-Focus                 IC-Focus                EQUAL  (RESTORED)
+tags                    "live candidate,focus ic" "live candidate,focus ic"  EQUAL (RESTORED)
+symbols                 (none)                   (none)                  EQUAL
+Bot Inputs              none                     none                    EQUAL
+Notes                   empty                    empty                   EQUAL
+Activity Alerts         all 4 checked            all 4 checked           EQUAL
+closedCount             364                      0                       as designed - clone starts n=0
+nopdt                   0                        ABSENT                  EQUIVALENT: both render
+                        LABEL "DAY TRADING Allowed". Absent = platform default = allowed. Recorded,
+                        not "corrected" - writing a field the original also renders as Allowed would
+                        be a change, not a restoration.
+exitrate                ABSENT                   ABSENT                  EQUAL (both UI-default 1)
+                        # Same shape as finding A2-EXITRATE-1 (ruled 2026-08-07 for the greenfield
+                        # family). NOT applied here: that ruling is scoped to the seven GF arms,
+                        # where A2 requires cross-arm equality. No assert compares these controls,
+                        # and materializing it would be an unruled third edit. Flagged, not taken.
+
+## THE THREE CLONE TRAPS - all three reproduced exactly as documented (state.md)
+  1. ALLOCATION resets to 1000  -> PRE-EMPTED. The Clone Settings drawer exposes Name + Account +
+     Allocation BEFORE creation; 50000 was entered there, so the reset never happened.
+     ** METHOD NOTE: the drawer also frees you from the pilot card's temporary-name step -
+        because the original is renamed FIRST, the clone can be given the production name at birth. **
+  2. Bot Group drops to None    -> REPRODUCED. Restored to IC-Focus, verified post-reload.
+  3. Tags drop                  -> REPRODUCED. Restored to "live candidate,focus ic", verified.
+
+## >> FINDING F-C2 - A FOURTH CLONE TRAP, NOT IN ANY DOC <<
+   **`disableExits` DOES NOT SURVIVE THE CLONE. It resets 1 -> 0, i.e. EXIT OPTIONS turns ON.**
+   [FIRST-HAND 2026-08-07, a5.bots.bot.disableExits read on the fresh clone before any edit;
+    corroborated by the top-bar toggle rendering ON/blue in the same page state.]
+   Why this one is not cosmetic, and why it is the most expensive of the four:
+     - The three documented traps make a bot DO NOTHING (no allocation, no group, no tags).
+       This one makes a bot DO SOMETHING it was not doing.
+     - On THIS bot it composes with F-C1 into a live contamination path: the original's PT25 was
+       inert because EXIT OPTIONS was OFF; on the clone the same PT25 sat behind an ON toggle.
+       An unnoticed clone would have armed a 25% profit target on the bot whose entire pre-registered
+       role (PR-01) is to be the **ride benchmark with NO profit target**, and PR-01's own kill
+       criterion (REMOVED_EXIT_FIRED) would have fired on day 1 of Day-0.
+     - It is invisible to every text capture: 1.6 says toggle state does not survive text capture,
+       which is exactly why it was missed for four clones' worth of documentation.
+   RESTORED to 1 on this clone and verified after a hard reload.
+   ** ADD TO oa-ops-runbook.md 5 AS TRAP 10 AND TO THE CLONE CHECKLIST. Gated - a doc edit that
+      changes the checklist is a decision. Recommended, not applied. **
+
+## AUTOMATIONS - 4, same names, same order, and PROVABLY SEPARATE OBJECTS
+   Every clone automation carries a DIFFERENT rid from its original. Third independent confirmation
+   that cloning COPIES (Trap 1 as corrected 2026-08-05), after sharing=0 and the Library listing.
+                              ORIGINAL rid                        CLONE rid
+   Scalp-Scan-Put             RTfw5TkkCRF177570499904870000051    RTfw5TkkCRF4417860821948941343
+   Scalp-Scan-Call            RTfw5TkkCRF1217757057095244611      RTfw5TkkCRF4417860821948941031
+   Scalp-Mon-S2-StrikeTouch   RTfw5TkkCRF177570596776652          RTfw5TkkCRF4417860821948941404
+   Scalp-Mon-S2-Cleanup       RTfw5TkkCRF177570685755260000023    RTfw5TkkCRF4417860821948941435
+   All four read sharing = 0 on BOTH bots -> none is a Library object, so no Copy-to-fork was
+   needed and none was done. Library listing read independently the same session: it holds exactly
+   Defang-Mon-S2-StrikeTouch (2 bots) + the three GF objects (7 bots each). No Scalp-* object.
+
+================================================================================
+## FIX 1 of 2 - THE RE-ENTRY GATE.  Applied to BOTH scanners. VERIFIED.
+   SPEC (build-plan.md 2B): "scanner re-entry gate -> `opened this side today`"
+
+   BEFORE (both scanners, inherited):
+     decision "Bot has exactly 0 positions with put|call side and open status"
+       criteria: countpostag {cop:eq, tags:"put side"|"call side", count:0, status:"open"}
+       YES -> Open Spread
+     # Defect: counts OPEN positions. After S2/StrikeTouch closes the spread intraday the count
+     # returns to 0 and the scanner re-opens the same side the same day - unbounded re-entry.
+
+   AFTER (verified post-hard-reload, read from the criterion object):
+     Scalp-Scan-Put   decision "NOT Bot opened a position with put side today"
+                      postagtoday {"oc":"opened","not":true,"tag":"put side","type":"postagtoday"}
+                      YES -> Open SPX Short Put Spread
+     Scalp-Scan-Call  decision "NOT Bot opened a position with call side today"
+                      postagtoday {"oc":"opened","not":true,"tag":"call side","type":"postagtoday"}
+                      YES -> Open SPX Short Call Spread
+
+   ⚠️ FORM NOTE - READ THIS BEFORE COMPARING TO THE GREENFIELD SCANNERS.
+   The greenfield ScannerA/B express the same gate as PLAIN `postagtoday` with the action on the
+   **NO** branch. This build uses `postagtoday` + the **`not:true`** flag with the action left on
+   the **YES** branch. The two are logically identical (open iff this side was not opened today).
+   WHY THE NOT FORM WAS CHOSEN, recorded because it is a deliberate divergence:
+     - OA's decision editor edits a node's CRITERIA in place; it has **no move-node control**
+       (the node menu is Settings / Precede with / Copy Action / Edit Caption / Edit Notes / Delete).
+       Putting the action on NO would have required DELETING the Open Position action and
+       REBUILDING it under the NO branch - all of series, both legs, amount, price, filter, tags
+       AND the exits bundle.
+     - That rebuild would have forced this session to re-author the `exits` field, i.e. to take a
+       position on F-C1 (PT25) - the exact question that is gated. The NOT form keeps the action
+       node byte-untouched and leaves F-C1 cleanly separable.
+     - `not` is a first-class operator on OA's criterion toolbar (Create Group | NOT | delete),
+       observed first-hand, not a workaround.
+   [FIRST-HAND 2026-08-07: the `oc` token on this recipe offers exactly two values, `opened` and
+    `closed`. There is no negated recipe variant, so `not` is the only in-place expression.]
+
+   Everything else in both scanners is UNCHANGED: Loop SPX, the two Range075 symbol-change gates
+   (-0.75 / +0.75), FOMC-today, the 11:00am time gate, and both Open actions in full.
+
+   Scalp-Scan-Put   version 2 -> 3   bytes 5027 -> 4949
+     sha256 91da84fd 2b7aafbb 906b137f 250562f0 e9669cff 7d62640d 2f72ff81 ecd946f8   (original, unchanged)
+     sha256 7be1cc04 bbf24ae2 42d518cd fb6c5456 8750722c 7c49b15b ed12f4a8 83dc6a54   (clone, after fix)
+   Scalp-Scan-Call  version 3 -> 4
+     sha256 8c146e14 38caa7dc 2cfa9934 2c390013 d7ea3ef8 13b22c05 b27e81fe 4242f328   (original, unchanged)
+     sha256 e0ee1f3f 9ac7626d a7bc68a5 50f59393 d6cafb3b 8514ebae 32ce905b 9630be2e   (clone, after fix)
+
+================================================================================
+## FIX 2 of 2 - CLEANUP PRICING.  VERIFIED.
+   SPEC (build-plan.md 2B): "Cleanup pricing Market -> SmartPricing"
+   PROVENANCE: evidence-standards.md 7 - frozen detector fixture row T00147 (R -1.63), diagnosed
+   mechanism "Cleanup priced at Market", independently corroborated by FILL_WORSE_THAN_MAE
+   (filled 4.81 credits beyond the worst mark; next-worst of 1,232 closed rows is 0.91).
+
+   BEFORE  closepos price {"text":"Market","smart":"market"}
+   AFTER   closepos price {"pct":100,"text":"100% of bid/ask","smart":"speedy"}
+   Verified post-hard-reload from node.input.price on the refetched model.
+
+   ⚠️ THE TIER WITHIN SmartPricing WAS NOT SPECIFIED BY ANY DOC. Recorded as a choice, not a find:
+   2B says only "Market -> SmartPricing". The live modal offers exactly five, enumerated first-hand
+   and matching oa-platform-reference.md 7 (now confirmed a second time):
+       Normal - up to 4 prices, 10 seconds each
+       Fast   - up to 3 prices, 5 seconds each      <== CHOSEN
+       Patient- up to 5 prices, 20 seconds each
+       Off    - 1 limit price
+       Market - send a market order
+   **Fast (`speedy`) @ 100% of bid/ask was chosen because it is BYTE-IDENTICAL to what this same
+   bot's OTHER close action already uses** - Scalp-Mon-S2-StrikeTouch's two Close Position nodes
+   have always been {"pct":100,...,"smart":"speedy"}. This is the least-invention option: it
+   introduces no value that was not already live on this bot, and it keeps the bot's two closing
+   mechanisms on one pricing policy. Fast is also the quickest non-Market tier, which is what a
+   flatten-the-survivor cleanup wants. **If Andy wants Normal or Patient instead it is one field.**
+
+   NOTHING ELSE IN CLEANUP WAS TOUCHED (2B: "Do NOT touch Cleanup itself - S2 depends on it").
+   Tree after: posrepeater -> "Position has been open 2 minutes or more" -> countpos{eq,1,open,*}
+               -> YES -> Close Position.  Identical to before but for the price field.
+   version 1 -> 2   sha256 f3673f29 91541420 c7124f3a 6d2e2a29 96002f6c 61dc61ac 8389ea34 8db2ccd7
+
+================================================================================
+## THE NO-UNINTENDED-EDITS PROOF  (the FINISH gate of the pilot card, run by hash not by eye)
+ 1. Scalp-Mon-S2-StrikeTouch on the CLONE hashes to
+    01af4963 aafb5856 6789662a afa68d94 d846d042 869590ec cbede9fb 6d57ca85
+    - BYTE-IDENTICAL to the ORIGINAL's Step-0 baseline. The one automation that was supposed to
+      change in no way, provably did not.
+ 2. The ORIGINAL's Scalp-Scan-Put re-read AFTER all clone edits still hashes to
+    91da84fd 2b7aafbb 906b137f 250562f0 e9669cff 7d62640d 2f72ff81 ecd946f8, bytes 5027, version 2
+    - byte-identical to Step 0. **The original was not touched by any clone edit.**
+      This is the pilot card's Step-0-vs-Step-2 check, now a confirmation rather than a trap counter.
+ 3. Original bot-level re-read after all edits: name ...-ARCHIVED-2026-08-07, disableExits 1,
+    status off, group IC-Focus, tags "live candidate,focus ic", 4 automations. Unchanged.
+
+## STILL OPEN ON THIS BOT
+ - **F-C1 (PT25 still live in both Open actions)** - gated, escalated. See the 00-original capture.
+ - **Template V1 + PR-01 Notes + `pr 01` tag: NOT DONE.** The bot `...` menu (`showBotMenu`)
+   stopped responding to clicks after ~40 successful ones - three attempts, no menu, no error.
+   Same class as the 2026-08-04 `archiveBot` failure. Per oa-ops-runbook.md 4.0 ("if an action
+   resists all three, stop - do not fall back to coordinates") the session STOPPED rather than
+   forcing it. Nothing depends on the template: it is a record artifact, the bot is fully specced,
+   and Day-0 does not read it.
+ - Layer 2 behavioural verification - DEFERRED TO DAY-0, INVERTED form
+   (oa-ops-runbook.md 4.3): the first new position's Trades list must show **NO PT row and NO
+   exit-trigger row**, and the S2 monitor must be observed firing.
+   ⚠️ **While F-C1 is unruled this check WILL fail by construction** - PT25 is still in the action.
+   Rule F-C1 before Day-0 or the inverted check is meaningless.

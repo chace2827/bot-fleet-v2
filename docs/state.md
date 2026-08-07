@@ -1469,3 +1469,56 @@ grep. **No `git` run.**
   ARCHIVE's remote, not v2's. Do not confuse them.)*
   Confirm `.gitignore` covers `.env` before the first push.
 - **HOLD in force on the builder chat.**
+
+---
+
+> ### 🔨 CLONE SWEEP STARTED 2026-08-07 (morning) — **1 OF 3 DONE. CLONES 2 AND 3 NOT STARTED.**
+> Blocks above LEFT STANDING per the doc's own correction convention; read this banner with them.
+> Full entry: `session-log.md` 2026-08-07 (morning).
+>
+> **`IC-SPX-FastPT25-S2` (PR-01) IS CLONED TO SPEC AND SERVER-VERIFIED.**
+> Clone `BOTfw5TkkCRF4417860821948715488` holds the production name, n=0, AUTOMATIONS OFF,
+> EXIT OPTIONS OFF, group `IC-Focus`, tags `live candidate,focus ic`, allocation $50,000,
+> limits 10/10. Original renamed **`IC-SPX-FastPT25-S2-ARCHIVED-2026-08-07`**
+> (`BOTfw5TkkCRF1217757048550308561`) and **verified byte-identical to its Step-0 baseline after
+> every clone edit** — the original was not touched. `/bots` was **40 active bots • 10 left**
+> before the clone; it is **41** after. Rows written to `data/archive/rename_map.csv` and
+> `data/bots_config_v2.csv`. Captures in `data/captures/2026-08-07-clones/`.
+>
+> **Both ruled fixes applied and Layer-1 verified after a hard reload:** re-entry gate →
+> `postagtoday{oc:opened, not:true, tag:"put|call side"}` on both scanners (⚠️ **NOT form** — the
+> action stays on YES because OA has no move-node control; logically identical to the greenfield
+> NO form, see the log for why the alternative was rejected) · Cleanup pricing Market →
+> `{"pct":100,"smart":"speedy"}` (⚠️ **the tier was unspecified by any doc**; chosen byte-identical
+> to this bot's own StrikeTouch closes). **Layer 2 DEFERRED TO DAY-0, INVERTED form.**
+>
+> ⛔ **F-C1 — GATED, NEEDS ANDY. `PT25` IS LIVE IN BOTH OPEN ACTIONS** of the champion pair —
+> `exits.profits = 0.25`, read first-hand. The controls are **not** Exit-Option-free; they are
+> Exit-Option-bearing behind an off toggle, which is exactly what `build-plan.md` §2B forbids.
+> `reactivation-runbook.md`'s Day-0 branch says **do not edit it out, escalate** — so it was not
+> touched, in either direction, on the original or the clone. **Andy rules: remove it per §2B, or
+> amend §2B.** Until then PR-01's Day-0 INVERTED check fails by construction, and **PR-02 is in the
+> same state** — rule once, apply to both.
+>
+> ⛔ **F-C2 — A FOURTH CLONE TRAP, IN NO DOC: `disableExits` RESETS 1 → 0 ON CLONE** (EXIT OPTIONS
+> turns ON). Unlike the three known traps it makes a clone *do something*, and composed with F-C1
+> it would have armed PT25 on the ride benchmark. Restored and verified here.
+> **Recommend `oa-ops-runbook.md` §5 Trap 10 + a clone-checklist line — GATED** (checklist = decision).
+>
+> ⛔ **SESSION STOPPED ON A TOOL FAILURE, NOT A SPEC FAILURE.** The bot `…` menu (`showBotMenu`)
+> stopped responding after ~40 good clicks — three attempts, no error. `archiveBot` class.
+> Per `oa-ops-runbook.md` §4.0 the session stopped rather than forcing it.
+> **Consequently NOT DONE: Template V1 + PR-01 Notes + `pr 01` tag on the clone** (record artifacts;
+> nothing depends on them), **and clones 2 (PR-02 `-130PM`) and 3 (PR-04 `-NoPT50`) were never
+> started.** Both originals are **untouched and un-renamed** — the next session starts them clean.
+>
+> ⭐ **Carry forward — the click method that finally works, and why coordinates went bad mid-run.**
+> Refs no-op on this app; eyeballed screenshot coordinates are unsafe because the screenshot and
+> the viewport disagree — and **the ratio CHANGED mid-session** after a window resize (2560×1314 /
+> 1548×795 → 3456×1314 / 1568×596), silently invalidating in-flight coordinates. **Compute the
+> target from the DOM instead:** `scale = screenshotWidth / innerWidth`, click at
+> `rect.centre × scale`. Re-derived live and the next click landed. **Never carry a coordinate
+> across a resize.**
+>
+> **The ~23 archives (20 Group-A + 3 clone originals) remain QUEUED FOR ANDY'S HAND** — not
+> attempted this session. Renames work; `archiveBot` remains 3-for-3 failed from this side.
