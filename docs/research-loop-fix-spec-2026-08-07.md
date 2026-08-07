@@ -1090,6 +1090,27 @@ plan"** from Andy. **Where an item is unruled, the affected variant is emitted `
 | **OPEN-6** | The **regime-change conjunct** is undefined in every document | `research-loop-spec.md` §5's own applied note: *"The gate cannot fire until it is written and signed"* | the §5 gate is unreachable; the generator may still run |
 | **OPEN-7** | G-10's **per-member direction vector** for Track A's max-T region (§8 Constraint B), which must be declared **before any data exists** — still true today | A direction vector chosen after Day-0 is a post-hoc analysis change | §10a item 3's test is not implementable |
 
+### 📝 RULED 2026-08-07 (Andy) — OPEN-1, OPEN-2, OPEN-3 signed; OPEN-4 through OPEN-7 remain gated
+
+**OPEN-1 + OPEN-2 — `M_bot_$` calibration, RULED.** ONE-TIME calibration (not rolling — answers
+`research-loop-spec.md` §5a item 1's "one word from Andy," recorded there with its own dated
+banner). Median over **POSITIONS**, not legs. Computed **at the stamp date**, over the **trailing
+90 days as of that date** (not a whole-ledger, look-ahead median). **SKIPPED, never a fabricated
+value, for any bot with fewer than 90 days of history** at the stamp date — the engine emits
+`SKIPPED`, not a proxy computed from a shorter window. `DSTOP_100`/`DSTOP_150` may emit `PASS`/
+`FAIL` once `M_bot_$` is implemented to this spec **and** the engine's three fatal defects (§9
+above) are fixed — `research_loop.py` is still `0.1.0-DRAFT` and still not wired into `daily.sh`.
+
+**OPEN-3 — PT family, RULED.** REPORTED, WITH A MANDATORY SPLIT: every PT line prints the
+**decidable / undecidable position counts** and the **`single_sided` share**, on every line, no
+exceptions. The report is **descriptive only** — no graduation read, no kill/pass verdict, is
+taken from a Track A PT line while this ruling stands. The **live test of the PT mechanic is the
+greenfield PT50 arm** (`greenfield-family-spec.md` §9, PR-15), which is exempt from the
+47.8%-undecidable / +0.01696R selection-effect problem OPEN-3 measured, because it is judged on
+its own matched-day family under G-10, not against the v1-style PT bucket.
+
+**OPEN-4 through OPEN-7 are UNCHANGED — still GATED, still unruled.** Nothing above touches them.
+
 ---
 
 ## 11. Verification record

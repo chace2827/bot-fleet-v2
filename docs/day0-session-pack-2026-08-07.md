@@ -1228,6 +1228,19 @@ sizing 2 lots, and doing it on SOME arms only). Run both. Report the result.
 4. ⛔ THE FIVE DEFERRED OBSERVATIONS, EACH REPORTED BY NAME WITH ITS ANSWER OR AS OPEN:
    no-touch (2c) · DST (5a) · the 15:50 attribution (6) · mechanism verdict (6a) · C10 `dstop` (6b).
    Plus Tier-2 §9 #5. ANY ONE LEFT UNREAD IS REPORTED AS OPEN, NEVER AS PASSED.
+   📝 ADDED 2026-08-07 (G-1′ DECLINED, Andy) — two of the above are also RULING-REOPENERS
+   for G-1′ (`post-u1-package-2026-08-07.md` §4.1, §4.6): if either resolves favorably it
+   reopens the DECLINE on materially better terms and must be flagged back to Andy, not just
+   logged.
+     - DST (5a), export timezone — the SAME read as D3 above; no separate step. RULING-REOPENER:
+       if the 15:52 backstop's own `close_date` confirms the export clock on day 1, that same
+       reading also supports per-arm time-based exit attribution (§4.3).
+     - THE AUTOMATION LOG LINK'S TARGET, for an Exit-Option close (~5 min, NOT a numbered step —
+       run it opportunistically during Step 6 while a Trades-list row is open). Read one exit
+       row's Automation Log link and record whether its target names the closing object (the
+       Exit-Options bundle) or the automation that fired it. UNOBSERVED as of this ruling
+       (§4.1: "It is not assumed anywhere below"). RULING-REOPENER: if it names the closing
+       object, most of the `pricing_mode`/attribution loss in §4.1 reopens.
 5. A per-bot ON/OFF table: every bot, its Step 6 verdict, its signature status, and — for every bot
    that is OFF — the named reason and what would close it.
 ```

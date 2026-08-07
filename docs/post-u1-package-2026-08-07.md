@@ -31,29 +31,28 @@ recorded in §1.6, whose model reproduces `comparative-machinery-spec.md` §2.5'
 G-12b  PR-16 T1 — FAST-MOVE TAIL PAIRED NON-HARM TEST          (drafted in §1)
        Replaces the struck worst-condor-R clause. Three signed constants:
 
-       S1  delta  = 0.10 R per condor, on the tail set T   [ 0.10 | other: ........ ]
+       S1  delta  = 0.10 R per condor, on the tail set T   [ 0.10 ]  ✅ SIGNED
            A NEW MARGIN. No inherited authority from R-3's +0.015R (§1.4).
-       S2  p      = 0.20  (tail fraction; m = ceil(p*n))   [ 0.20 | other: ........ ]
+       S2  p      = 0.20  (tail fraction; m = ceil(p*n))   [ 0.20 ]  ✅ SIGNED
        S3  floor  = n_matched_days >= 100, plus ONE re-arm at Day-0 + 9 months
-                                                           [ as stated | other: .... ]
+                                                           [ as stated ]  ✅ SIGNED
 
-       Family membership   [ INSIDE the family correction (recommended) |
-                             uncorrected one-sided 5% ]
-       Acknowledge the standing publication cap of §3        [ acknowledged ]
+       Family membership   [ INSIDE the family correction ]  ✅ SIGNED (recommended option taken)
+       Acknowledge the standing publication cap of §3        [ acknowledged ]  ✅
 
-       Ruled ..................................  Date ..........
+       Ruled  SIGNED AS DRAFTED                Date  2026-08-07
 
 
 G-1'   exit_rows.csv, re-presented under the degraded schema   (§4)
-       [ AUTHORIZE-DEGRADED | DECLINE | DEFER ]
+       [ DECLINE ]  ✅ RULED
 
        Recommendation: DECLINE, plus two ~5-minute Day-0 checks —
        D3 (export timezone) and the Automation Log link's target (§4.1).
 
        Acknowledge that no option available here makes CF-1's publication
-       precondition meetable (§3)                            [ acknowledged ]
+       precondition meetable (§3)                            [ acknowledged ]  ✅
 
-       Ruled ..................................  Date ..........
+       Ruled  DECLINE                          Date  2026-08-07
 ```
 
 **Not a ruling slot, but read before ruling either:** §2 records two **family-level implementation

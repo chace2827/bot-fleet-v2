@@ -5457,3 +5457,51 @@ dated explanatory block). **No CSV, no OA action (impossible — account disable
 form.**
 
 **HOLDING for Andy's commit.**
+
+---
+
+## 2026-08-07 — Four ruling slots closed: G-12b, G-1′, `M_bot_$` calibration, PT family reporting. Doc-only, no OA, no git.
+
+**All four ruled by Andy this session, applied as dated, anchored, single-match edits. No OA
+surface touched, no git command in any form.**
+
+1. **G-12b RULED — SIGNED AS DRAFTED.** PR-16 T1 fast-move-tail paired non-harm test: δ=0.10R
+   (new margin, no inherited authority from R-3), p=0.20, floor n_matched_days≥100 plus one re-arm
+   at Day-0+9mo, family membership INSIDE the family correction, publication cap acknowledged.
+   Ruling slot filled in `post-u1-package-2026-08-07.md`. §1.7's exact ledger text pasted into
+   `pre-registration-ledger.md`'s PR-14…PR-17 entry, scoped explicitly to PR-16 (the other three
+   arms are unaffected), dated, noting it replaces the struck worst-condor-R clause recorded in
+   `greenfield-family-spec.md` §9's PR-16 entry — that struck text is left standing there, not
+   touched by this session.
+2. **G-1′ RULED — DECLINED.** `exit_rows.csv` degraded-schema capture not authorized; the
+   recommendation was taken as ruled. Two ~5-minute Day-0 checks added as dated ruling-reopener
+   line-items in `day0-session-pack-2026-08-07.md`'s S2 close-out (item 4, the five deferred
+   observations list): D3 export timezone (same read as Step 5a's DST check) and the Automation
+   Log link's target for an Exit-Option close (unobserved, new). CF-1 publication-cap
+   acknowledgment recorded as part of the ruling in both the slot and the log.
+3. **`M_bot_$` calibration RULED (fix-spec OPEN-1/OPEN-2).** ONE-TIME (not rolling); median over
+   POSITIONS; computed at the stamp date over the trailing 90 days as of that date; SKIPPED before
+   90 days of history. Marked ruled in `research-loop-fix-spec-2026-08-07.md` §10 (new
+   subsection after the OPEN-item table). `research-loop-spec.md` §5a item 1's "one word from
+   Andy" answered inline, dated, between items 1 and 2.
+4. **PT family RULED (fix-spec OPEN-3).** REPORTED WITH MANDATORY SPLIT — every PT line prints
+   decidable/undecidable counts and the `single_sided` share; descriptive only, no graduation read
+   from Track A PT lines; the live test is the greenfield PT50 arm (PR-15). Marked ruled in
+   `research-loop-fix-spec-2026-08-07.md` §10.
+
+### Method
+Anchored, single-match text replacement per edit (Python `str.count() == 1` asserted before every
+write against a fresh device read; no stage-back used). Verified after by direct `device_bash
+sha256` on each changed file plus single-match greps confirming new text landed. `docs/state.md`
+also updated with a summary block at the end, per `CLAUDE.md` §9.1.
+
+### Files changed this session
+`docs/post-u1-package-2026-08-07.md` (both ruling slots filled) ·
+`docs/pre-registration-ledger.md` (PR-16-scoped tail retirement criterion added) ·
+`docs/day0-session-pack-2026-08-07.md` (S2 close-out item 4: two ruling-reopener line-items) ·
+`docs/research-loop-fix-spec-2026-08-07.md` (§10: OPEN-1/OPEN-2/OPEN-3 ruling subsection added) ·
+`docs/research-loop-spec.md` (§5a item 1: one-word ruling recorded) ·
+`docs/state.md` (dated summary block appended) · `docs/session-log.md` (this entry).
+**No CSV, no OA action, no git in any form.**
+
+**HOLDING for Andy's commit.**

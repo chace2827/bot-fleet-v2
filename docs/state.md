@@ -1546,3 +1546,38 @@ grep. **No `git` run.**
 > billing access.**
 > **Reopen condition: a plan is purchased and login succeeds** — until then this block stands and
 > supersedes any reading of the account as merely inactive-but-reachable.
+
+---
+
+### 📝 RULED 2026-08-07 (Andy) — four open items closed; Day-0 signing set narrows by one
+
+**G-12b — SIGNED AS DRAFTED.** PR-16's (`GF-QQQ-IC-Trail`) tail retirement criterion is signed:
+δ=0.10R, p=0.20, floor n_matched_days≥100 + one re-arm at Day-0+9mo, INSIDE the family
+correction, publication cap acknowledged. Slot filled in `post-u1-package-2026-08-07.md`'s RULING
+SLOTS block; exact ledger text pasted into `pre-registration-ledger.md`'s PR-14…PR-17 entry,
+scoped to PR-16 only, replacing the struck worst-condor-R clause recorded in
+`greenfield-family-spec.md` §9's PR-16 entry (left standing there, untouched). Whatever fires
+still carries `CF1_PUBLICATION_PRECONDITION: UNMET` while G-1 is on HOLD.
+
+**G-1′ — DECLINED.** `exit_rows.csv` under the degraded schema is not authorized; Layer 2 stays
+`BLOCKED`, refusal R-9 stands. Two ~5-minute Day-0 checks kept as ruling-reopeners — D3 (export
+timezone, Step 5a) and the Automation Log link's target for an Exit-Option close (unobserved) —
+recorded as dated line-items in `day0-session-pack-2026-08-07.md`'s S2 close-out (item 4). The
+CF-1 publication-cap acknowledgment is part of this ruling: no option here makes CF-1's
+precondition meetable.
+
+**`M_bot_$` calibration — RULED (fix-spec OPEN-1/OPEN-2).** ONE-TIME, not rolling; median over
+POSITIONS, computed at the stamp date over the trailing 90 days as of that date; SKIPPED (never a
+zero, never a proxy) before 90 days of history exist. Answers `research-loop-spec.md` §5a item
+1's open one-word question. The engine itself is unchanged — still `research_loop.py`
+`0.1.0-DRAFT`, still NOT wired into `daily.sh`.
+
+**PT family — RULED (fix-spec OPEN-3).** REPORTED WITH MANDATORY SPLIT: every PT line prints its
+decidable/undecidable position counts and `single_sided` share. Descriptive only — no graduation
+read is taken from a Track A PT line. The live test of the PT mechanic is the greenfield PT50 arm
+(PR-15), judged on its own matched-day family under G-10, not against this bucket.
+
+**OPEN-4 through OPEN-7 of the fix-spec, and PR-18's "Breakeven" naming, remain open and gated.**
+Full text: `post-u1-package-2026-08-07.md`, `pre-registration-ledger.md` (PR-16 entry),
+`day0-session-pack-2026-08-07.md` (S2 close-out item 4), `research-loop-fix-spec-2026-08-07.md`
+§10, `research-loop-spec.md` §5a item 1.

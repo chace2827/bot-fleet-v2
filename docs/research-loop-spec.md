@@ -252,6 +252,11 @@ item; none is applied to the signed text above except where the code had to choo
    `0.1.0-DRAFT` and unfixed. ⚠️ **Open, one word from Andy** (`track-b-arms-spec.md` §11-8):
    is *"trailing-90-day median"* a **one-time** calibration or **rolling**? Rolling makes every
    re-stamp a new pre-registration under §10a.
+   📝 RULED 2026-08-07 (Andy) — ONE-TIME. Not rolling. `M_bot_$` is calibrated once per bot, at
+   that bot's stamp date, as the median over the trailing 90 days as of that date; it is `SKIPPED`
+   (never fabricated, never a shorter-window proxy) before 90 days of history exist. Full ruling,
+   including the POSITIONS-vs-legs and as-of-when detail: `research-loop-fix-spec-2026-08-07.md`
+   §10 (OPEN-1/OPEN-2).
 2. **The count was wrong.** §3's prose lists 11 experimental variants while stating 12. The twelfth
    is now `CONTROL`, which earns its slot as the engine's self-test: it must reproduce the realised
    P/L, and a mismatch means the engine is wrong rather than the strategy underperforming.

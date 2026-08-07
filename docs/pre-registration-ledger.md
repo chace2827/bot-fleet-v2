@@ -726,6 +726,78 @@ KILL CRITERION   Per arm: Exp(R) per condor < 0 with CI entirely below 0 at n≥
                  greenfield-family-spec.md §8.3's A1, A2, A3, A7 or A8 fires, the family's
                  ranking is VOID and all arms are re-based — the comparison, not the bots,
                  is what dies.
+
+                 📝 ADDED 2026-08-07 (G-12b, SIGNED AS DRAFTED, Andy) — PR-16-SPECIFIC TAIL
+                 RETIREMENT CRITERION. Applies to PR-16 (`GF-QQQ-IC-Trail`) only — PR-14, PR-15
+                 and PR-17 are unaffected and keep only the arm-level criterion above. Replaces
+                 the struck worst-condor-R clause recorded in `greenfield-family-spec.md` §9's
+                 PR-16 entry; that struck text is left standing there per this project's standing
+                 convention (`CLAUDE.md` §5) and is not repeated here. Exact ledger text, pasted
+                 verbatim from `post-u1-package-2026-08-07.md` §1.7:
+
+                 TAIL RETIREMENT CRITERION — PR-16 T1, FAST-MOVE TAIL PAIRED NON-HARM
+                 TEST. Replaces the struck worst-condor-R clause per ruling G-12
+                 (RESPEC, Andy, 2026-08-06); method signed 2026-08-07 under ruling G-12b.
+
+                 STATISTIC.  Over the G-2 matched-day set M6 (PR-14..PR-19), with
+                 d_i = R_X(i) - R_C(i) per condor (X = this arm, C = GF-QQQ-IC-Ride,
+                 R = sum(pnl)/max(risk), risk = larger side, [DERIVED, UNCORROBORATED]):
+                   move_i = |underlying_close - underlying_open| / underlying_open
+                   T      = the m days in M6 with the LARGEST move_i,
+                            m = ceil(p*n), n = n_matched_days
+                   dTail  = mean of d_i over i in T
+                 T is selected on move_i -- a day-level variable IDENTICAL for every arm --
+                 and NEVER on any arm's own outcome. X and C are therefore exchangeable
+                 under the null and E[dTail] = 0 BY SYMMETRY. This is the arm's own
+                 declared mechanism domain: "bites in the fast-move tail"
+                 (hedge-research.md 14.1, quoted in this entry's HYPOTHESIS).
+                 DECLARED LIMITATION, CHOSEN NOT DISCOVERED: move_basis is OPEN-TO-CLOSE,
+                 NOT the intraday extreme, so it under-ranks reversal days. The ledger
+                 carries endpoints only and this is not fixable by exit_rows.csv. It costs
+                 power; it does not cost the null centering.
+
+                 SIGNED CONSTANTS.   p     = 0.20        (tail fraction)
+                                     delta = 0.10 R      (non-harm margin, per condor, on T)
+                                     floor = n_matched_days >= 100   (so m >= 20)
+                 delta IS A NEW MARGIN. It is NOT re-scaled or transported from R-3's
+                 +0.015R; that argument was refuted in adversarial review and withdrawn.
+                 It carries no inherited authority and stands only on this signature.
+
+                 DECISION.  RETIRE this arm iff ci_fam_hi(dTail) < -delta, where ci_fam_hi
+                 is the family-corrected upper bound from the joint day-bootstrap
+                 simultaneous region under ruling G-10, with THIS MEMBER'S DIRECTION
+                 DECLARED UPPER BEFORE ANY DATA EXISTS. B >= 200,000; seed declared and
+                 recorded. T is recomputed inside every bootstrap replicate.
+                 If n_matched_days < 100 the verdict is INCAPABLE -- never RETIRE, never
+                 FAIL, and never read as a retirement.
+
+                 SEQUENCING.  Computed EXACTLY ONCE, at this arm's stamped GATE EVAL DATE
+                 (G-7). No confidence sequence is emitted for dTail; pre-gate it is
+                 descriptive and flagged NOT_A_GATE, and retirement cannot fire before the
+                 gate-eval date (G-8). RE-ARM, DECLARED IN ADVANCE: if n_matched_days < 100
+                 at that date, the test re-arms ONCE at Day-0 + 9 months. If n < 100 again,
+                 INCAPABLE is TERMINAL and this arm carries no tail retirement rule.
+
+                 PUBLICATION.  A RETIRE verdict may not be published without mde_tail
+                 (computed from sd_dtail_boot, never from se_dtail), sd_d_tail,
+                 n_matched_days, m, c, seed, B, family_census, pnl_may_be_modelled,
+                 n_all_expired_X/C, n_days_dropped_all_expired and move_basis.
+                 Refusal R-6 stands: no verdict while pnl_may_be_modelled == true
+                 (itmlive != market).
+                 CF-1's precondition -- "no tail-based ranking is published without" the D7
+                 per-arm Market-priced / ITM-action counts -- is UNMET while G-1 is on HOLD.
+                 The verdict therefore carries CF1_PUBLICATION_PRECONDITION: UNMET.
+
+                 CARRIED LIMITS, declared: (1) dTail is a COMPONENT of mean d, not an
+                 orthogonal statistic (mean d = p*dTail + (1-p)*d_offT). (2) X-1 excludes
+                 all-expired groups, which is the ITM-expiry tail; counts are published.
+                 (3) An arm-specific loss mode occurring on a CALM day lies outside T and
+                 this criterion cannot see it -- T1 answers "does the trail harm the tail in
+                 the regime it claims to operate in", not "does the trail add loss anywhere".
+
+                 Family membership: INSIDE the family correction (ruled 2026-08-07). Publication
+                 cap acknowledged (package §3 — no option meets CF-1's precondition while G-1 is
+                 on HOLD).
 SAMPLE TARGET    n = 100 positions per arm, on matched days.
 REVIEW DATE      Day-0 + 6 months, interim at n=60.
 MAX LOSS         1 lot per arm until one clears its interim read; then ≈$5K risk/position.
