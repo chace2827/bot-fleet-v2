@@ -5702,3 +5702,136 @@ already carries the facts these amendments are built on.** No CSV, no OA action,
 > (was `ce41518901b12493…`), 2430 lines (was 2333), fenced blocks still even at 10, single-match
 > greps on the three new anchors. **Files changed by this addendum: `docs/day0-session-pack-2026-08-07.md`
 > and `docs/session-log.md` — the same two as the entry above. No new file. No OA action. No git.**
+
+---
+
+## 2026-08-07 — Exploratory ops bots: design written, most of the first draft killed under review
+
+**Instruction, verbatim in substance:** design the "exploring test bots" item Andy added to the
+tracker 2026-08-06 — a few bots that fire and usually trade every day, to learn OA's mechanics by
+OPERATING it rather than probing it once. Doc-only; OA untouchable pending restore; four parts
+(unknowns catalog · bot designs · the three governance constraints as ruling slots · honest limits);
+one adversarial subagent against part 2; nothing built until Andy rules.
+
+**Done**
+- Wrote `docs/exploratory-bots-design-2026-08-07.md` (new file, 743 lines).
+- Read fresh: `state.md` · `day0-session-pack-2026-08-07.md` (**re-read at 2333 lines** — §0.0's 25
+  amendments were added earlier today; every line reference in this folder taken against the
+  1448-line version is stale) · `oa-platform-reference.md` §3/§4/§5/§6/§7/§8/§9/§11/§13/§14 ·
+  `oa-ops-runbook.md` §3/§7 · `reactivation-runbook.md` §3/§4 · `build-plan.md` §2D ·
+  `pre-registration-ledger.md` §2/§3/§6/§7 · `greenfield-family-spec.md` §4/§5/§10 ·
+  `post-u1-package-2026-08-07.md` §4 · `research-loop-fix-spec-2026-08-07.md` · `daily-loop-spec.md`
+  §5 · `strategy-taxonomy.md` · `build_ledger.py` · `a_series.py` · `execution_audit.py` ·
+  `report.py` · `data/oa_facts.csv` · `CLAUDE.md` §4/§5/§9.
+
+**The review changed the answer, and that is the headline.** The first draft was three bots justified
+as "a bot that enters and exits every session exercises the whole chain." One adversarial subagent
+returned **19 fatal or material objections**; I spot-checked its citations directly and every one I
+checked held. **Nine claims were withdrawn outright, ten narrowed, and one bot deleted.** The failure
+pattern was uniform: the bots produced *activity* where the claim needed an *observation*.
+- **Killed by paper-fill semantics** [OA-0930 / OA-1138 / OA-0932]: SmartPricing ladder steps, the
+  2-minute order-lifetime signature, closing-order partial fills, and any validation of
+  `IMPOSSIBLE_FILL` / `FILL_WORSE_THAN_MAE` — a ladder step is visible only on a *failure* to fill,
+  which the paper engine does not model.
+- **Killed as already answered:** the automation-log retention window (§9 #7, 2026-08-04) and the
+  ITM-action *label* (U-1, NEGATIVE and ruled permanent).
+- **Killed as already queued one-shot:** the Automation-Log-link target, D3/DST, D4.
+- **Killed as a duplicate:** a daily 5%-PT bot is **PR-20 byte for byte**.
+- **Killed by unscoped asserts:** `a_series.py` `_a6` (L488) flags any `quantity not in (1.0,1)`
+  fleet-wide, and `_a4b` (L467) flags fast same-day closes on any bot absent from the seven-arm dict.
+  A 3-lot ops bot turns **A6 FAIL** on its first fill; a fast-PT ops bot turns **A4b FAIL** every day
+  it trades. The ledger exclusion is therefore a **hard precondition**, not hygiene.
+
+**What survived, and the design conclusion**
+> Daily trading is the **precondition**, not the instrument. The instrument is a bot that trades daily
+> **and may be freely mutated** — the mutation schedule is what converts activity into observations.
+
+Every plan bot and Track B arm is frozen by matching, and **A-12** forbids editing a signed arm to
+close an observation: *"run C10 on an instrument OUTSIDE the tournament, or leave C10 OPEN… Standing
+up a separate canary is a plan question."* The fleet has no such instrument. **That gap is the whole
+justification**, and it is a question A-12 already routed to Andy.
+
+**Two bots, not three**, both paper, QQQ 0DTE short put verticals, group `Lab`, per-bot automation
+copies only:
+1. `TESTOPS-LAB-OPS` — 1 lot, `profits 0.25`, seven declared phases (P0–P6) covering §9 #5 re-apply
+   over ~20 re-applies rather than one, C9's Events-class and ITM limbs, the `Load more` stall, a
+   labelled dead-engine signature, and all seven Class-S one-shots that are blocked only for want of
+   a bot somebody may break.
+2. `TESTOPS-LAB-DSTOP` — ⭐ **3 contracts**, far-OTM, `dstop −60`. The one quantitative result in the
+   document: enumerating the four candidate bases for a dollar threshold (`per position D` · `per leg
+   2D` · `per contract-per-leg nD` · `per total contract 2nD`), **n=1 collapses B1=B3 and B2=B4, n=2
+   collapses B2=B3, and n=3 is the minimum that separates all four** on a 2-leg vertical. This extends
+   A-12(b), which names the 1-contract collapse but derives no count at which the read discriminates.
+   Also: paper is the *better* instrument here, not a compromise — exits evaluate mid [OA-0872] and
+   paper fills at/near mid [OA-0930], so the fill sits at the band that fired it.
+
+**The three rulings, with the arithmetic**
+- ⛔ **SLOT A — the "6 headroom slots" are not free.** They are Track B's unspent allocation (8
+  authorized, wave-1 spend 2), and ruling **S-1** exists to stop that allocation being consumed by
+  something else. Against the ceiling: `18–20 + 8 = 26–28` **is** ceiling 28, so `+2 ops = 28–30`
+  breaches it at the top of the range and merely equals it at the bottom. **2 ops bots do not reliably
+  fit; an "amend the plan" is required.** Recommended: a **third named allocation**, `≤2 Lab ops slots`,
+  ceiling 28 → 30 — with the cost stated, that it makes **C12's uncorroborated residual likelier to
+  bite** (30 + ~23 archives = 53 > 50 under the pessimistic reading).
+- **SLOT B — not an exemption, as posed.** The ledger's only existing exemption is *inside* PR-20's
+  entry, and its convention is "write `n/a`, state the exemption, state its retirement condition —
+  never drop the entry." Proposed: a named **ops-class** using the §2 template unchanged with three
+  fields `n/a`, a new `PHASE LOG` field (the class's whole justification for being mutable, and the
+  defence against the HedgeD undocumented-substitution failure), and guardrails **G1–G10** including a
+  publication interdict enforced in code, no shared Library object ever [OA-0682], and separate gating
+  for the account-wide probes.
+- **SLOT C — three surfaces, and it ships first.** Mirror `LEDGER_START`'s own pattern (constant +
+  sentinel → partition to a visible sidecar with counts → post-transform FATAL leak assertion →
+  receipt contract string) on a second axis sourced from a **new `bots_meta.csv` `ops_class` column** —
+  not the export's lossy `tags`, not the bot name, per `build_ledger.py`'s own no-name-heuristics rule.
+  Partition **after** `rows = post` and **before** condor pairing, because `trade_id` comes from a
+  global counter. ⛔ **It must ship before the first ops bot trades** or the FILTERED-EXPORT GUARD trips
+  and the ledger needs surgery. `execution_audit.py` stays **frozen** and reads `ops_rows.csv` only as
+  an explicit fixture — which is also how the labelled dead-engine example gets used without
+  contaminating the nightly run. And group-based *export* exclusion is the **wrong** mechanism: it
+  produces exactly the subset that guard exists to catch.
+- Plus **paper** (recommended, with the §4.6 cost named) and **group `Lab`** — the pillar container
+  already exists and is *"Empty — to populate"*; a new `TESTOPS` group would violate `Group = Pillar`.
+
+**Two new questions this design surfaced, routed to Andy rather than answered:** whether the
+account-wide probes (`maxexits`, the failsafe error taxonomy) are authorized at all; and the O26
+residual — phase P3 rides to expiration and can therefore die by the very Excessive Errors Failsafe it
+is meant to characterise. Accept, or drop P3.
+
+**Not done / not claimed**
+- ⛔ **No OA action of any kind.** No bot, no name reserved, no template, no capture. The account is
+  untouchable pending the restore, and `/bots` still reads `0 active bots`.
+- ⛔ **No decision ruled and no other file edited.** `pre-registration-ledger.md`, `build-plan.md`,
+  `oa-ops-runbook.md`, `build_ledger.py` and `a_series.py` are **unchanged** — the amendment text and
+  the exclusion spec are *proposals inside the new file*, per `CLAUDE.md` §5 (decisions stay gated).
+- **`state.md` NOT changed** — no stated fact of the fleet changed; this is a design proposal, and
+  every unknown it catalogues is already recorded there.
+- Not covered, stated in the file's §4: assignment (paper has no broker; bots are blind to it
+  [OA-0245/0246/0145]), the June lapse cause, per-side fire-rate asymmetry, anything needing a condor,
+  live exit timing (§4.6), and the account-wide settings.
+
+**Verification**
+`docs/exploratory-bots-design-2026-08-07.md` — direct `device_bash` sha256
+`37dbde640ccc5e6e15e9cff2afa32afed15fc1570bbaf9bb6875dcc4a361dcb3`, **743 lines**, new file (confirmed
+absent before the write). Single-match greps confirmed on `Daily trading is the precondition, not the
+instrument`, `n = 3` is the minimum count that separates all four candidate bases, and the `G4` row
+verified to sit inside its blockquote. Fenced blocks even (4). Read back from the device, never from a
+stage-back (§9.1a).
+⚠️ **The tree moved under this session:** `scripts/a_series.py` carried mtime `2026-08-07 17:22`, after
+this session opened, and was absent from a `scripts/` listing taken at ~17:08. Its L467/L488 line
+references in the new file are against the 17:22 version and must be re-read before the SLOT C change
+is made. `scripts/comparative_machinery.py` (16:53) also postdates the last log entry.
+
+### Files changed this session
+`docs/exploratory-bots-design-2026-08-07.md` (**new**) · `docs/session-log.md` (this entry). No other
+doc, no CSV, no script, no OA action, **no git in any form**.
+
+**HOLDING for Andy's commit.** ⚠️ Still uncommitted from earlier sessions:
+`docs/decision-card-2026-08-06.md` (modified), `data/captures/2026-08-06-gfam/GF-Backstop-1552-FlatClose.txt`
+(untracked), and whatever produced the `scripts/a_series.py` / `scripts/comparative_machinery.py` mtimes above.
+⚠️ **Also: `docs/session-log.md` itself went 5567 → 5704 lines between this session opening (~17:06) and
+this entry being appended at 5704, so a concurrent writer touched the log too. This entry is appended
+after that content, not over it (verified: pre-append sha
+`e0bb380cceb23155e525bf8474e1e312eeac1842fbe3da8ada06cadff40b1988` @ 5704 lines → post-append
+`22985e244b705941a9058d36e291de4a489564f51010386a0b5cb3c3241a24e7` @ 5831, delta +127, tail-assert on
+the final line). Nothing above it was modified.**
