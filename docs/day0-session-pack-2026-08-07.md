@@ -15,6 +15,607 @@ attempted (impossible — the account is disabled). No git command in any form.
 
 ---
 
+# §0.0 · ⛔ AMENDMENTS — ADDED 2026-08-07 (evening), AFTER AN ADVERSARIAL REVIEW. READ BEFORE §0.
+
+> **How to read this section.** The body of this pack below is **left standing exactly as written**
+> — nothing in §0–§4 was deleted or rewritten. Every correction lives here, dated, with the
+> evidence that forced it. **Where an amendment and the original body text conflict, the amendment
+> wins.** Each amendment names the location it governs. Short pointers were also inserted inside
+> the four prompt blocks, because a prompt pasted into a fresh chat never sees this section unless
+> it is read — **every prompt's READ FIRST list now names `§0.0` explicitly.**
+>
+> Two things happened between the pack being written and this review: (1) the account was paid and
+> came back **empty**; (2) four items the pack records as open were ruled and recorded in the
+> folder. Neither was known to the authoring session. **This section is the delta.**
+>
+> ⚠️ **These are corrections and gates. Not one of them rules a decision.** Where the review found
+> a decision that needed making, the amendment routes it to Andy rather than resolving it.
+> **Andy may reject any amendment at commit review** (`CLAUDE.md` §5).
+>
+> **26 amendments, A-01…A-26.** ⭐ **A-26 is filed OUT OF NUMERIC ORDER — it sits immediately after
+> A-15 because it supersedes A-15's hand-derivation fallback.** It is the one amendment that adds a
+> tool rather than a gate: **the A-series now executes via `python3 scripts/a_series.py`.**
+
+---
+
+## ⛔ A-01 — THE ROSTER WAS LOST. GATE A0 COMES BEFORE EVERYTHING, INCLUDING S0 STEP 1.
+**Governs: §1.1, §1.2, S0 Step 3, and the opening line of S1, S2 and S3.**
+
+**[Evidence: dated first-hand block, `docs/state.md` (read directly 2026-08-07), "⛔ OA REACTIVATED
+BUT ROSTER LOST — 2026-08-07, ~12:06–12:30 ET": `/bots` with all filters cleared read **"0 active
+bots • 50 left in your plan"**. SURVIVED: the Automation Library (all 4 objects, each reading
+"Unused"), all 9 Bot Templates, and the Bot Archive (1 bot). LOST: every active bot. OA support
+(Zack), ~12:30 ET, in writing: *"We will restore the bots promptly… operational again by
+Monday."*]**
+
+**§1.1's "Expected roster at reactivation: 41 active bots" is superseded-in-part.** It is the right
+arithmetic for a **restored** account and the wrong one for a rebuilt or partially restored one.
+
+### GATE A0 — run this before S0 Step 1, and before starting S1, S2 or S3.
+1. Read `docs/state.md`'s incident block (tail of file) **and** `docs/rebuild-contingency-2026-08-07.md`.
+2. Open `/bots` with **all filters cleared** and read the footer.
+3. Take **one** of the three branches below. ⛔ **There are three, not two.** `state.md`'s branch is
+   binary; the third is the state this review found it does not cover.
+
+**BRANCH 1 — CLEAN RESTORE.** Footer reads **41 active · 9 left**, AND every name in S0 Step 3's
+list (as corrected by A-05) is present as written, AND every bot ID and automation `rid` matches
+its recorded value (A-01c below). → Run the pack as written, with every amendment in this section
+applied.
+
+**BRANCH 2 — NO RESTORE.** Footer reads 0, or nothing recognisable came back. → ⛔ **DO NOT run S0
+Step 3 cold. DO NOT run S1, S2 or S3 at all** — they operate on bots that do not exist, and
+`rebuild-contingency-2026-08-07.md` §2 records that PR-02's and PR-04's originals were themselves
+lost with no template, so there is nothing left to clone from. Read the contingency doc, honour its
+§4 DO-NOT-START gate, and hand to Andy. **No OA write of any kind.**
+
+**BRANCH 3 — ⛔ PARTIAL, ALTERED, OR STILL-MOVING RESTORE. THIS IS THE BRANCH THE FOLDER DID NOT
+HAVE, AND IT IS THE MOST LIKELY ONE.** Anything that is not Branch 1 and not Branch 2 is Branch 3.
+**Default disposition: STOP. NO OA WRITE. FLEET STAYS OFF. ESCALATE TO ANDY: YES.** Record which
+sub-state you are in, by name, with first-hand evidence:
+
+| Sub-state | How you detect it | What you do |
+|---|---|---|
+| **a. Count ≠ 41** (short **or** long) | `/bots` footer | STOP. A long count may be the two 08-06 deletes or an archived original coming back — that is a finding, not a tidy-up. ⛔ **DELETE NOTHING. ARCHIVE NOTHING.** |
+| **b. Roster still moving** | two captures disagree | ⛔ **A second capture that agrees is NOT a capture defect resolved — it is a restore still landing.** See A-08. |
+| **c. Names match but IDs / `rid`s changed** | read `a5.bots.bot`'s id per bot against `data/bots_config_v2.csv`; read each shared automation's `rid` against `RTfw5TkkCRF178605283747821` (ScannerA) · `RTfw5TkkCRF178606271659881` (ScannerB) · `RTfw5TkkCRF178606373201751` (Backstop) | STOP. The objects were **re-created, not preserved**. Every capture file, CSV row, doc citation and signed config hash is keyed to a dead identifier. ⛔ **The A-series cannot see this — every assert in it is relational and passes on a faithful re-creation.** Not repairable by a session. |
+| **d. Config rolled back to an older snapshot** | S0 Step 4b (A-07) — field-by-field diff against each bot's own capture file | STOP for the affected bots. Watch specifically for: `disableExits` back to 0, PT25 back in the champion clone's Open actions, the re-entry gate absent, Cleanup back on Market, `itmpaper` back to `auto`, exits bundles unlinked. ⛔ **A bot that "already looks correct" after a rollback past its own creation is not a pass** — without the diff you cannot tell a restored-correct bot from a never-edited one. |
+| **e. Automations restored but detached or re-created** | `My Automations` bot-counts ≠ 7/7/7/2, or a `rid` changed | STOP. Re-attaching a re-created object creates a new object, not the shared one. ⛔ Do not re-attach to make the count look right. |
+| **f. Archive / rename state lost → name collisions** | two bots under one production name, or an `-ARCHIVED-` name back on `/bots` | STOP. ⛔ **Do not rename and do not archive to resolve it** — renames commit and are not reversible from this side. |
+| **g. Positions did not come back, or came back different** | the five open mirror positions (S2 Step 2) | See A-10. The ride-or-close decision is **mooted, not preserved** — a forced outcome recorded as a decision is a record that lies. |
+| **h. Restore lands MID-SESSION** | anything appears that was not there at gate A0 | ⛔ STOP at the current per-bot boundary, write the close-out, and **re-run gate A0 in a fresh chat.** Do not absorb a changing account into a session already in flight. |
+
+⛔ **Branch 3 is never resolved by a session's own judgment, and never by re-capturing until the
+numbers agree.** The contingency doc's §4 DO-NOT-START gate governs everything downstream of it.
+
+---
+
+## ⛔ A-02 — GATE A1 IS ALREADY SATISFIED. DO NOT ASK ANDY TO PURCHASE AGAIN.
+**Governs: §0.3 gate A1, S0 Step 1, S2 Step 1.**
+
+**[Evidence: `docs/state.md` incident block, dated ~12:06–12:10 ET 2026-08-07, first-hand from
+Andy's screenshots: "plan purchased, login works."]**
+
+S0 Step 1 as written (*"Wait for gate A1… Do not attempt to log in or pay"*) would have a Sonnet
+ask Andy to buy a plan he already owns. **Replace it with: read the payment timestamp from
+`state.md`'s incident block and have Andy confirm it in one line.**
+
+⛔ **AND `LEDGER_START` IS NOW A GATED QUESTION, NOT A COPY.** The runbook says *"This date is
+`LEDGER_START`"* on the assumption that payment and Day-0 are the same day. They are not: payment
+was 2026-08-07 and the roster does not exist until the restore lands. **A `LEDGER_START` of
+2026-08-07 claims an era in which the account held zero bots.** S2 Step 1 must **ask Andy** whether
+the era starts at the payment timestamp or at the first day a bot is actually switched ON, record
+the answer verbatim, and only then set it. ⛔ Do not choose. The rest of Step 1 — set it, run
+`build_ledger.py`, require row count 0 / EMPTY LEDGER n=0 — is unchanged and still binding.
+
+---
+
+## ⛔ A-03 — §1.3(a) AND §1.3(b) ARE FALSIFIED. GATE A3 BECOMES *VERIFY*, NOT *RE-ASK*.
+**Governs: §1.3(a), §1.3(b), §0.3 gate A3, S0's gate A3 block, S0 Step 7(a) and 7(b).**
+
+**[Evidence: direct read of the files, 2026-08-07. `docs/state.md` carries — verbatim —
+"⛔ **OA ACCOUNT FULLY DISABLED — 2026-08-07, ~04:24 ET. LOGIN ITSELF NOW BLOCKED.**" with the
+first-hand screenshot record; and "⛔ ~~**F-C1 — GATED, NEEDS ANDY.**~~ ✅ **F-C1 — RULED
+2026-08-07 (Andy, first-hand): REMOVE.**" and "✅ **F-C2 — RULED 2026-08-07 (Andy, first-hand):
+AUTHORIZED AS TRAP 10.**". `docs/session-log.md` carries the same banner: "### ⛔ FINDING F-C1 …
+~~GATED, NOT ACTED ON.~~ ✅ RULED 2026-08-07 — REMOVE."]**
+
+§1.3 says all three divergences are missing from the folder. **Two of the three are in the folder
+and were already in it when the pack was written.** Only §1.3(c) (uncommitted work) survives as
+stated.
+
+- **Gate A3 is DISCHARGED as a ruling.** Do **not** ask Andy to re-confirm F-C1 or F-C2. Read the
+  two `state.md` blocks and confirm they say REMOVE and AUTHORIZED AS TRAP 10. ⛔ **A ruling
+  recorded first-hand in the folder is never retracted by a session's failure to get it re-said** —
+  A3's decline branch as written would do exactly that.
+- ⚠️ **What is still outstanding is the APPLICATION, not the ruling.** `state.md` says of F-C1:
+  *"Not yet applied to either bot"*. **S0 Step 5 and S1 step 6 stand unchanged** — they are the
+  application.
+- **S0 Step 7(a) and 7(b) become VERIFY-AND-REPORT.** Read the blocks, confirm they are there,
+  report "already recorded". ⛔ **Do not write a second dated banner for either** — a duplicate
+  ruling banner in the project's single source of facts is worse than a missing one.
+- What S0 must still record is what gate A0 found: the restore state, first-hand.
+
+---
+
+## ⛔ A-04 — GATE A8 IS **ONE** OPEN ITEM, NOT THREE.
+**Governs: §0.3 gate A8, S2 Step 2b's "THREE OPEN SIGNATURE ITEMS".**
+
+**[Evidence: `docs/state.md`, dated block "📝 RULED 2026-08-07 (Andy) — four open items closed":
+"**G-12b — SIGNED AS DRAFTED.** … δ=0.10R, p=0.20, floor n_matched_days≥100 + one re-arm at
+Day-0+9mo, INSIDE the family correction, publication cap acknowledged… exact ledger text pasted
+into `pre-registration-ledger.md`" and "**G-1′ — DECLINED.**" The same block: "PR-18's 'Breakeven'
+naming, remain open and gated."]**
+
+- **(i) G-12b — SIGNED. ⛔ DO NOT RE-PRESENT `[ 0.10 | other ]` TO ANDY.** Any answer that is not a
+  verbatim repeat silently forks a signed pre-registration. **Verify the pasted text is in the
+  ledger's PR-14…PR-17 entry, scoped to PR-16, and move on.**
+- **(iii) G-1′ — DECLINED.** Do not re-open it. Its two ruling-reopeners are already carried
+  correctly at S2 close-out item 4 — that part of the pack is right and the Step 2b text is stale.
+- **(ii) PR-18's "Breakeven" naming — STILL OPEN AND STILL ANDY'S.** Ask; do not choose. This is
+  the whole of gate A8.
+
+---
+
+## ⛔ A-05 — S0 STEP 3'S NAME LIST CONTAINS AN ARCHIVED BOT. AS WRITTEN IT FIRES A FALSE FLEET-STOP.
+**Governs: S0 Step 3's "Confirm by name" list.**
+
+**[Evidence: `reactivation-runbook.md` §3 Step A, first-hand 2026-08-04: *"the original is
+`QQQ-IC-0DTE-Fortress-ARCHIVED-2026-08-03` and archived."* `docs/state.md` incident block: the Bot
+Archive holds *"exactly the 1 expected bot, `Fortress-ARCHIVED-2026-08-03`"*. And §1.1's own
+arithmetic — the pilot clone replaced its original one-for-one inside the 35.]**
+
+`QQQ-IC-0DTE-Fortress-ARCHIVED-2026-08-03` **is not one of the 41 and must NOT appear on `/bots`.**
+Step 3's branch (*"IF A BOT IS MISSING… same STOP"*) is unconditional, so a session that cannot
+find it halts the entire fleet over a bot that is exactly where it belongs.
+
+**Corrected clause:** confirm `QQQ-IC-0DTE-Fortress` (the pilot clone, holding the production name)
+on `/bots`. ⚠️ **Its original `-ARCHIVED-2026-08-03` lives in the Bot Archive. If it IS on `/bots`,
+THAT is the finding** — A-01 branch 3f.
+⚠️ Contrast, and the pack is right about this one: `IC-SPX-FastPT25-S2-ARCHIVED-2026-08-07` **was
+renamed, not archived**, so it *is* expected on `/bots` and it *does* count toward 41.
+
+---
+
+## ⛔ A-06 — A STOP DOES NOT PROPAGATE ACROSS THE SESSION BOUNDARY. IT MUST.
+**Governs: the opening line of S1, S2 and S3.**
+
+S1 opens *"S0 has run"*, S2 *"S0 and S1 have run"*, S3 *"Day-0's sequence has run"* — none branches
+on what the previous close-out actually **says**. The STOP ladder's *"fleet stays OFF → stop the
+sequence"* is unenforceable across four separate chats with no shared memory, and S1 is explicitly
+cleared to run **unattended**.
+
+**Insert as the first instruction of S1, S2 and S3, before any work:**
+> ⛔ **PRECONDITION — READ THE PREVIOUS SESSION'S CLOSE-OUT FIRST, IN THE FOLDER, NOT FROM MEMORY.
+> IF it records a `FLEET STAYS OFF` verdict, OR gate A0 landed on branch 2 or branch 3, OR no
+> close-out exists, OR its hand-off block is absent or incomplete → DO NOT START. Record
+> `BLOCKED ON <session> — <verbatim branch>` and hand to Andy. A hand-off you had to reconstruct is
+> a hand-off that did not happen.**
+
+---
+
+## ⛔ A-07 — NEW S0 STEP 4b: THE THIRTEEN NON-GREENFIELD BOTS GET NO POST-RESTORE CONFIG CHECK.
+**Governs: S0, between Step 4 and Step 5. Runs on gate-A0 branch 1 only.**
+
+Every post-restore config check in the pack is scoped to the seven greenfield arms (A1/A2/A3/A8/A9
+are all n=7). The PR-01 clone, the pilot, the two un-started clone originals and **the nine** go
+from "lost" to "signed at Step 2b and switched on at Step 7" without their configuration ever being
+re-read. S0 Step 5's F-C1 verification is a **post-edit self-check**, not a pre-edit baseline: a
+session that finds `profits` already absent because the restore rolled the bot back past its own
+creation reads that as success.
+
+> **STEP 4b — RE-CAPTURE AND DIFF EVERY NON-GREENFIELD BOT.** For `IC-SPX-FastPT25-S2` (the clone),
+> `IC-SPX-FastPT25-S2-ARCHIVED-2026-08-07`, `QQQ-IC-0DTE-Fortress`, `IC-SPX-FastPT25-S2-130PM`,
+> `QQQ-IC-0DTE-Fortress-NoPT50`, and each of the nine: fresh capture after a hard reload, resolve
+> the input chain two hops where one exists, and diff **field-by-field against that bot's own
+> capture file on disk**. ⛔ **ANY DIFF → that bot's config-capture hash is NOT ESTABLISHED, its
+> entry CANNOT be signed at Step 2b, the bot STAYS OFF, the fleet proceeds, ESCALATE: YES.**
+> ⛔ **A capture file written before the roster was lost is a record of a bot that no longer
+> demonstrably exists.** Do not sign against one without this diff.
+
+---
+
+## ⛔ A-08 — "RECAPTURE ONCE" MUST NOT CONVERT A LANDING RESTORE INTO A PASS.
+**Governs: S0 Step 3's `IF THE COUNT DISAGREES -> recapture ONCE` branch.**
+
+That branch was inherited from `reactivation-runbook.md` §3 Step B, which was written for a
+bookmarklet that mis-scrapes — not for a roster being repopulated by OA support. As written, first
+capture 37 → second capture 41 reads as *"the first capture was bad, proceed"*, and the A-series
+then baselines a roster that is still acquiring objects.
+
+> ⛔ **IF THE FIRST AND SECOND CAPTURES DISAGREE, THAT IS A-01 BRANCH 3b — A MOVING ROSTER — UNTIL
+> PROVEN OTHERWISE. Record both counts with their timestamps, wait 30 minutes, capture a THIRD
+> time, and require TWO CONSECUTIVE IDENTICAL captures before proceeding. IF THE THIRD DIFFERS FROM
+> THE SECOND → STOP. FLEET STAYS OFF. ESCALATE: YES.** Carry both timestamps and the
+> two-consecutive-match confirmation into the close-out.
+
+---
+
+## ⛔ A-09 — STEP 2c IS SPENT BY THE TRANSITION, NOT BY THE SESSION THAT REACHES IT.
+**Governs: S0 (new read, before Step 2) and S2 Step 2c.**
+
+Step 2c is the one irreversible observation in the plan, and the pack schedules it **two sessions
+after** the inactive→active transition it measures. Worse: that transition **already happened** at
+~12:06 ET 2026-08-07, and the roster was wiped and is being restored across it.
+
+**(a) S0 takes the reading, as a READ, before anything else.** Insert before S0 Step 2:
+> ⭐ **BEFORE ANY OTHER OA ACTION: screenshot BOTH dashboard toggles on ONE live mirror and ONE
+> directional bot. READING AND SCREENSHOTTING IS NOT TOUCHING** — you flip nothing, you open no
+> editor, you change no value. Record the filenames and the timestamp in the close-out under
+> `2c PRE-OBSERVATION`. ⛔ **This does NOT replace S2 Step 2c and licenses no other contact with
+> the nine** — it preserves information that Step 2c would otherwise find already spent.
+
+**(b) S2 Step 2c gains a confounding branch:**
+> ⛔ **IF THE ROSTER WAS RESTORED BY OA RATHER THAN SURVIVING INTACT, THIS OBSERVATION IS CONFOUNDED
+> BY THE RESTORE.** A restored bot's toggle state is whatever the snapshot or OA's restore default
+> carries; it cannot separate billing-state from hand-set. Record `NO-TOUCH OBSERVATION CONFOUNDED —
+> RESTORE`, treat it as ⬜ NOT EVALUABLE, and say so **inside the Step 6a verdict** — a CONFIRMED
+> verdict resting on it is weaker than it looks, and `rebuild-contingency-2026-08-07.md` §2 already
+> records the rebuild case as **foreclosed, not delayed**.
+
+---
+
+## ⛔ A-10 — GATE A6: RE-READ THE FIVE POSITIONS FIRST-HAND, AND BRANCH FOR "GONE OR CHANGED".
+**Governs: S2 Step 2.**
+
+Step 2 quotes *"~$13K risk, ~−$10.8K unrealized"* from the **2026-07-30** capture and puts it in
+front of Andy at the one gate the pack itself labels a capital decision. It also has no branch for
+the positions not surviving the wipe — and its completion condition (*"EXECUTED FOR ALL FIVE"*) is
+then unsatisfiable, deadlocking the sequence at `DO NOT PROCEED TO STEP 3`.
+
+> ⛔ **FIRST, BEFORE EITHER BRANCH: re-read all five positions first-hand — quantity, open date,
+> current mark, unrealized P/L — and open EACH POSITION'S OWN EXIT OPTIONS SCREEN AND SCREENSHOT
+> IT.** That per-position screen is the third toggle surface, it has never been observed on a
+> lapse-surviving position (Step 3's own rider says so), and **a CLOSE destroys it permanently.**
+> Reading and screenshotting a position is not toggle intervention.
+> **BRANCH: all five present → proceed as written, using the FRESH numbers. Do not present a stale
+> number to Andy at a capital gate.**
+> ⛔ **FEWER THAN FIVE, OR ANY POSITION MATERIALLY CHANGED → the outcome was FORCED BY THE INCIDENT,
+> NOT CHOSEN BY ANDY.** Record `RIDE-OR-CLOSE MOOTED BY THE 2026-08-07 ROSTER LOSS` in the ledger
+> entry and in `state.md`, naming which survived and which did not, get Andy's explicit
+> acknowledgment of that record, and only then proceed to Step 2b. **A forced outcome recorded as a
+> decision is a record that lies** (`rebuild-contingency-2026-08-07.md` §2).
+
+---
+
+## ⛔ A-11 — THE FIRST-POSITION EXCEPTION HAS NO MECHANISM. DO NOT INVENT ONE.
+**Governs: S2 Step 6. ⚠️ RUNBOOK-LEVEL in origin — `reactivation-runbook.md` §4 Step 6 has the
+same hole and is not this session's to edit.**
+
+*"The bot is allowed EXACTLY ONE position at 1 LOT"* names no control. The only way to make a
+position exist is `AUTOMATIONS` → ON, which Step 3 forbids and Step 7 gates — and nothing caps the
+bot at one (the greenfield arms carry `limits 2/2`, the PR-01 clone `10/10`). A session that
+improvises here reproduces the v1 failure the pack quotes at −$9,618, with Step 7 gating nothing.
+
+> ⛔ **DO NOT IMPROVISE THE MECHANISM AND DO NOT BATCH IT.** Attempt the button test-fire first and
+> record verbatim whether the control exists. If it does not: **STOP and put the mechanism to Andy
+> as a gated question** — changing a signed bot's position limit is a config change on a signed
+> entry, and turning `AUTOMATIONS` ON early is the act Step 3 forbids. Whatever he authorizes:
+> **ONE BOT AT A TIME, never a batch; screenshot every transition; read the Trades list the moment
+> the position opens.** ⛔ **IF ANDY IS NOT AVAILABLE TO RULE IT → that bot's Step 6 is ⬜ NOT
+> EVALUABLE and IT STAYS OFF.** Never spend a live position to route around an unanswered question.
+> ⚠️ **AND "TEST-FIRE UNAVAILABLE" IS NOT DECIDABLE FROM ONE SCREEN.** Step 3's own rule applies
+> here: **a surface you did not open is not an absent control.** If no doc names where the
+> test-fire lives, that is ⬜ NOT EVALUABLE — not "unavailable".
+
+---
+
+## ⛔ A-12 — STEP 6b: DO NOT EDIT A SIGNED ARM, AND THE READ IS AMBIGUOUS AS SPECIFIED.
+**Governs: S2 Step 6b's SET UP and its first two branches.**
+
+**Two independent defects.**
+
+**(a) PR-20 is a SIGNED tournament arm.** Its whole mechanic is `profits 0.05` + `smprofits speedy`
+(§1.1). Adding `dstop` to it after Step 2b has signed its config: falsifies **A1** (it now differs
+from the control in two mechanics), falsifies **A3** — *"the load-bearing one"* — and voids the
+config hash its signature cites. A later A-series run then reports a red that the pack's own Step 4
+branch escalates as `FLEET STAYS OFF for the family`, over an edit this pack ordered. And
+`profits 0.05` will usually close the position before any `dstop` can fire.
+> ⛔ **DO NOT EDIT A SIGNED ARM TO CLOSE AN OBSERVATION, AND DAY-0 IS NOT A BUILD DAY. Put it to
+> Andy: run C10 on an instrument OUTSIDE the tournament, or leave C10 OPEN.** If no such instrument
+> exists on the day, **C10 STAYS OPEN** — say so by name in `state.md` and at close-out; ARM-B1
+> stays blocked, which is where it already is. Standing up a separate canary is a plan question.
+
+**(b) "CONTRACT COUNT" IS UNDEFINED AND THE TWO BRANCHES CAN COLLAPSE.** The step says record
+*"CONTRACT COUNT PER LEG"* and then branches on `−$100 × (CONTRACT COUNT)`. **At 1 contract per
+leg, per-leg count = 1, so `−$100` and `−$100 × 1` are the same number** — the two primary branches
+become indistinguishable and `FIRED AT NEITHER FIGURE` is unreachable.
+> ⛔ **IF C10 IS RUN AT ALL: the discriminating quantity is TOTAL CONTRACTS ON THE POSITION (a
+> 1-lot iron condor = 4), not contracts per leg. Record BOTH numbers — per leg and total — before
+> the position opens, and state which one each branch is read against. IF THE TWO CANDIDATE FIGURES
+> ARE EQUAL FOR THE INSTRUMENT YOU ACTUALLY HAVE → the read cannot discriminate: report
+> `C10-UNRESOLVED`, do NOT report C10 CLOSED, and do not fit a basis to one data point.**
+
+---
+
+## ⛔ A-13 — A7 COVERS **3** SHARED AUTOMATIONS. THE RUNBOOK REQUIRES **4**.
+**Governs: S0 Step 4's A7, S2 Step 0 and Step 4(b).**
+
+**[Evidence: `reactivation-runbook.md` §4 Step 4, verbatim: *"the payload hash of each of the four
+shared automations, written to `bots_config_v2.csv`'s shared-object rows"*. Against §1.1: the
+Library holds four objects — the three GF objects **plus `Defang-Mon-S2-StrikeTouch` (2 bots)** —
+and the pack supplies baselines for three.]**
+
+`Defang-Mon-S2-StrikeTouch` is shared by 2 bots, so an edit to it propagates to both with no
+template bump — exactly the blast radius A7 exists to detect, and the pack calls A7 *"THE ONLY
+DETECTOR"*. It is also the object the two control clones' S2 monitor depends on.
+> ⛔ **Report A7 as `3/4`, with `Defang-Mon-S2-StrikeTouch` named as ⬜ NOT EVALUABLE — no recorded
+> baseline. DO NOT REPORT 3/3 AS COMPLETE and do not tick the runbook's Step 4(b) box on it.**
+> Recording the fourth baseline is a read-and-record, not an edit, and is allowed: read it after a
+> hard reload, hash it, write the row to `bots_config_v2.csv`, and say plainly that it is a
+> **first** baseline, not a re-verification.
+
+---
+
+## ⛔ A-14 — "NO COORDINATE FALLBACK" DOES NOT BAN THE ONLY CLICK METHOD THAT WORKS.
+**Governs: §0.2 and the inline STOP ladder in all four prompts.**
+
+§0.2 says *"Do NOT fall back to raw coordinates"* — correct. The inline copies dropped the word
+**raw**: S0 *"do not fall back to coordinates"*, S1 and S3 *"no coordinate fallback"*. Standing
+fact 6 makes DOM-computed coordinates **the documented method**, not a fallback. A literal session
+hits its first silent ref no-op, reads the ladder, and concludes it has no method left.
+> **Read every ladder as: do not fall back to RAW / EYEBALLED coordinates. DOM-COMPUTED coordinates
+> (`scale = screenshotWidth / window.innerWidth`, click at `rect.centre × scale`, re-derived after
+> any resize) ARE the documented method — use them freely. The ONE documented alternative for a
+> failed click is: fresh screenshot → re-derive the scale → re-click once. ⛔ The raw-coordinate ban
+> is absolute on the bot `…` menu (fact 8) and there it means exactly what it says.**
+
+---
+
+## ⛔ A-15 — S0 IS TOLD TO RUN THE A-SERIES AND TO WRITE NOTES WITHOUT THE SOURCE TEXT FOR EITHER.
+**Governs: S0's READ FIRST list, S0 Step 4, S0 Step 6; S1's READ FIRST list and step 8.**
+
+S0 must *"Build against the AMENDED text, not the struck one"* for A1, and compare each arm's
+decoded set to *"its pre-registered set"* for A3 — but `docs/greenfield-family-spec.md` **is not on
+S0's read list** (it appears only on S2's). Separately, S0 Step 6b and S1 step 8 require the PR-01
+and PR-02 **Notes / pre-registration note text**, and `docs/pre-registration-ledger.md` is on
+neither list. A session that composes a Notes block and then "verifies byte-exact against the
+source" is verifying its own invention.
+> **ADD to S0's and S1's READ FIRST lists:**
+> `docs/greenfield-family-spec.md` — **§8.3** (the A-series; A1's AMENDED text is authoritative and
+> the struck version is marked in place — do not run A1 from this pack's one-line summary) and
+> **§9** (the seven DRAFT entries — each arm's pre-registered set is **A3's comparand**).
+> `docs/pre-registration-ledger.md` **§4** — the PR-01 / PR-02 entries. **This is the source text
+> for the Notes block and for the template's attached note; there is no other.**
+> ⛔ **IF YOU CANNOT LOCATE THE EXACT NOTE TEXT → STOP. DO NOT COMPOSE ONE.** These are record
+> artifacts and nothing in the Day-0 sequence reads them: record NOT DONE and carry forward, per
+> Step 6's own branch.
+> ⚠️ **AND THE HASH PROCEDURE IS IN NO PROMPT.** ⭐ **SUPERSEDED 2026-08-07 (evening) by A-26 —
+> THE A-SERIES NOW HAS A RUNNER: `python3 scripts/a_series.py`. RUN IT; DO NOT HAND-DERIVE THE
+> ASSERTS OR THE HASHES.** The fallback below stands only if the script is absent or will not run:
+> use exactly the procedure recorded in
+> `data/captures/2026-08-07-greenfield/ASSERTS-A1-A9-and-capture-diff.txt`, which produced the
+> baselines you are comparing to. **IF THAT FILE DOES NOT STATE THE SERIALIZATION → A7 IS ⬜ NOT
+> EVALUABLE. Do not invent a hash input, and never compare a recorded baseline to itself.**
+
+---
+
+## ⭐ A-26 — THE A-SERIES EXECUTES VIA `scripts/a_series.py`. SESSIONS RUN IT; THEY DO NOT HAND-DERIVE IT.
+**Governs: A-13, A-15, S0 Step 4, S2 Step 0 and Step 4(b). Added 2026-08-07 (evening), at Andy's
+instruction.**
+
+**[Evidence: Andy, first-hand 2026-08-07 — built and verified: reproduces the hand-run reference
+exactly, name-keyed so it survives an id-rekeying restore, RED paths negative-tested. Corroborated
+by a direct read of the file the same evening: `scripts/a_series.py`, 33,345 bytes, module
+docstring — *"`--validate` asserts this tool reproduces it EXACTLY: A1 21/21 · A2 7/7 · A3 7/7 ·
+A7 3/3 · A8 7/7 · A9 7/7; A4 MOOT; A4b/A6 NOT-RUNNABLE pre-Day-0; A5 NOT-RUN"* and *"NEVER
+HARDCODE OA OBJECT IDS… family membership keys on the STABLE bot NAME (GF-QQQ-IC-<Arm>), never on
+an id."*]**
+
+**HOW TO RUN IT.** `python3 scripts/a_series.py` — defaults resolve `data/captures/`,
+`data/bots_config_v2.csv` and `docs/greenfield-family-spec.md` on their own; override with
+`--captures` / `--config` / `--spec` if the session is pointed elsewhere. Useful flags:
+`--validate` (assert it still reproduces the 2026-08-07 hand-run reference — **run this FIRST on
+Day-0, before trusting any verdict it gives**), `--json` (machine-readable output for the
+close-out), `--emit-wiring` (prints the `daily.sh` snippet as a COMMENT; it does not edit
+`daily.sh`).
+
+**WHAT IT DISCHARGES.** The serialization/hash question in A-15 · A3's comparand (the §9
+pre-registration mechanics are encoded in the tool, so A3 is config-independent and catches
+all-arms-mistyped-identically) · the G2 rider two hops deep (it reads the **bot input object's**
+decoded value and ignores both the action reference and `oldValue`) · the arithmetic of A1's
+amended 21-pair rule. ⛔ **A hand-derived assert is now the fallback, not the method — a session
+that hand-runs the A-series when the script is available is inventing a second procedure.**
+
+⛔ **WHAT IT DOES *NOT* DISCHARGE — read this before reporting anything green:**
+1. ⛔ **A-01c STILL APPLIES, AND THE SCRIPT'S OWN DESIGN IS WHY.** It is **name-keyed by
+   construction** and never reads an OA id — which is exactly what makes it survive a rekeying
+   restore, and exactly why **it cannot detect one**. A restore that re-creates every object under
+   the same names produces a **fully green A-series** over dead identifiers. **The bot ID and
+   `rid` comparison at gate A0 / Step 3 is a separate, manual, still-mandatory check.**
+2. ⛔ **A-13 IS UNCHANGED: the script's `SHARED_AUTOMATIONS` list carries the same THREE objects.**
+   `Defang-Mon-S2-StrikeTouch` is not in it. A green `A7 3/3` from the tool is still **3 of the 4**
+   the runbook requires — report it as **3/4** with the fourth named ⬜ NOT EVALUABLE.
+3. ⛔ **THE `daily.sh` WIRING GATE IS STILL OPEN.** The file's own header, read first-hand:
+   *"⛔ STANDALONE. NOT wired into `scripts/daily.sh`… wiring is a Day-0-adjacent decision
+   (`reactivation-runbook.md` §4 Step 4(b)) and this tool does not edit daily.sh."* A runner
+   existing is not a nightly detector existing. **S0 and S2 still report Step 4(b) as an OPEN
+   gate**, and it stays Andy's call whether the family trades today without a nightly A7 (A-24).
+4. **A5 is still fed by hand** from the `/settings` read (S0 Step 2), and **A4b and A6 remain
+   not-runnable until positions exist** (Day-1, S2 Step 8). The tool reports them as such; do not
+   read `NOT-RUNNABLE` as a pass.
+5. ⚠️ **Its `VERSION` string still reads `0.1.0-DRAFT`** (direct read, same evening). Stated as an
+   observation, not an objection — Andy's verification is the authority on its fitness. **If
+   `--validate` fails on Day-0, that is a defect in the tool, not in the record: STOP, report it,
+   fall back to the A-15 hand procedure, and do not silently re-baseline.**
+6. ⛔ **Its `PRE_REGISTRATION` table is a spec surface.** Changing an arm's entry there is an
+   *"amend the plan"* edit, not a fix. ⛔ **A session never edits this script to make an assert
+   pass.** `scripts/` is Claude Code's lane (`CLAUDE.md` §7); Day-0 sessions **run** it.
+
+---
+
+## ⛔ A-16 — TWO PLACES WHERE THE RUNBOOK AND THIS PACK GIVE OPPOSITE INSTRUCTIONS.
+**Governs: S1's "Run runbook §2's nine steps in order". ⚠️ Both are RUNBOOK-LEVEL findings —
+flagged, not fixed. `reactivation-runbook.md` is not this session's to edit.**
+
+**(a) ORDER.** Runbook §2 is *"1. Clone the original bot … 8. Rename the original"*. S1's list is
+`0. baseline capture … 1. RENAME THE ORIGINAL FIRST … 2. CLONE`. A literal session obeying the
+sentence *"Run runbook §2's nine steps in order"* clones first, and the Clone Settings drawer then
+cannot take the production name because the original still holds it.
+> **THE PACK'S ORDER SUPERSEDES §2's NUMBERING AND IT IS THE ONLY ORDER YOU FOLLOW.** Read §2 for
+> its **branches and trap text**, not its sequence. Two deliberate changes, both learned on PR-01:
+> a Step-0 baseline capture is ADDED before anything; the RENAME moves before the clone. **Where
+> they disagree on ORDER, the pack wins. Where they disagree on a BRANCH, stop and gate it.**
+
+**(b) PT25.** `reactivation-runbook.md` §2 step 7 still carries, verbatim: *"⛔ **IF PT25 is still
+present on a control clone's Open Position action** → **do not remove it yourself.** … **Bot stays
+OFF · escalate to Andy: YES.**"* — the pre-ruling text. It was never amended for F-C1.
+> **THAT TEXT IS SUPERSEDED** by F-C1 RULED: REMOVE (Andy, first-hand, 2026-08-07, recorded in
+> `docs/state.md` and `docs/session-log.md`). **Do not treat the conflict as ambiguity and do not
+> stop on it.** ⛔ **Report the un-amended runbook line at close-out as a doc-correction item for
+> Andy** — the runbook is a decision surface and amending it is his.
+
+---
+
+## ⛔ A-17 — F-C2 IS APPLIED UNCONDITIONALLY IN S1 WHILE F-C1 CARRIES A GATE; AND THE CONTROL CLONES HAVE NO DISPOSITION IF F-C1 IS NOT APPLIED.
+**Governs: S1 clone step 4 (Trap 10), S1 step 6, S2 Step 6's inverted branch, S2 Step 7.**
+
+- **Trap 10 gets the same precondition as F-C1** — same ruling class, same date. Under A-03 both
+  read RULED in the folder, so both proceed; but if a session finds either **not** recorded, ⛔ **do
+  not restore `disableExits` on your own reading. Leave it, record it, ESCALATE: YES — a clone with
+  EXIT OPTIONS ON and PT25 present is a live hazard, not a tidy-up.**
+- **The bigger hole:** if F-C1 is not applied, S2 Step 6 calls the failed inverted check *"a known
+  state, not a finding"* — which disclaims the generic `BOT STAYS OFF` branch and supplies no
+  replacement, while Step 7 describes those same bots as *"deliberately Exit-Option-free"*, which
+  they would not be.
+  > ⛔ **IF F-C1 WAS NOT APPLIED, BOTH CONTROL CLONES STAY OFF. "Fails by construction" is not a
+  > pass and it is not an exemption — the arm has no valid control until the removal lands.**
+
+---
+
+## ⛔ A-18 — S0 AND S1 MUST ATTEST ABOUT THE NINE. STEP 2c'S PRECONDITION IS OTHERWISE UNDECIDABLE.
+**Governs: S0 and S1 close-out blocks; S2 Step 2c.**
+
+Step 2c says *"confirm from their close-outs that they did"* — and neither close-out template has a
+field for it, leaving S2 to choose between inferring compliance from silence (forbidden: inference
+from absence is never evidence) and treating its own precondition as unverified.
+> **ADD to S0's and S1's close-out hand-off:** ⛔ **ATTESTATION — state explicitly whether any of
+> the nine leave-in-place bots was opened, edited, or had a toggle touched this session, BY NAME.
+> "None" must be written; silence is not an attestation.** (The A-09 pre-observation screenshots
+> are a read, and are declared here as such.)
+> **ADD to S2 Step 2c:** ⛔ **IF EITHER CLOSE-OUT LACKS THE ATTESTATION → record
+> `2c PRECONDITION UNVERIFIED`, run the observation anyway, and label the result NOT EVALUABLE in
+> the Step 6a verdict.**
+
+---
+
+## ⛔ A-19 — S2 NEVER READS `state.md`, AND WRITES TO IT AT CLOSE-OUT.
+**Governs: S2's READ FIRST list — and every prompt's.**
+
+The one Opus session — the one that settles §1, rules the mechanism verdict, and appends that
+verdict to `state.md` — does not have `state.md` on its read list. `CLAUDE.md` §6: *"`docs/state.md`
+— the live facts. **Read first.**"* Without it S2 never sees the incident block and its branch, the
+lockout block, the F-C1/F-C2 rulings, or the four-rulings block that closes two of the three items
+its own gate A8 presents as open.
+> **INSERT FIRST in S2's read list:** `docs/state.md` — **IN FULL**, and specifically the dated tail
+> blocks: the 04:24 ET lockout, the F-C1/F-C2 rulings, the "four open items closed" ruling block,
+> and the `OA REACTIVATED BUT ROSTER LOST` incident block with its branch. ⛔ **You do not write to
+> a file you have not read.**
+> **AND ADD `docs/rebuild-contingency-2026-08-07.md` TO ALL FOUR READ LISTS** — gate A0 needs it.
+
+---
+
+## ⛔ A-20 — GATE A4 SITS BETWEEN STEP 4 AND STEP 5, NOT AT THE CLOSE-OUT.
+**Governs: §0.3 gate A4, S0's header line, S0's gate A4 block.**
+
+S0's header says *"Everything after gate A4 is unattended-safe"*, but A4 is written as *"before you
+write the close-out"* — which puts Step 5's destructive, spec-level `exits.profits` removal on a
+live bot **before** Andy has accepted the roster the edit is being made against. In a
+restored-account scenario that acceptance is the entire point.
+> **A4 LANDS AT THE END OF STEP 4 (after Step 4b, A-07). No OA edit is made until it does. IF ANDY
+> IS UNAVAILABLE, S0 STOPS AFTER STEP 4b with its roster and A-series report, and Steps 5–8 move to
+> a follow-up session.** The header reads: *everything after gate A4 — which is reached at the end
+> of Step 4b — is unattended-safe.*
+
+---
+
+## ⛔ A-21 — ESCALATION GOES TO ANDY, NOT TO A MODEL; AND "DIVERGES" NEEDS A DEFINITION.
+**Governs: S0's header line, S0 Step 4's branches.**
+
+S0's header (*"Escalate to Opus only if §1's roster or the A-series diverges"*), Step 4's generic
+branch (*"ESCALATE TO ANDY: YES"*) and Step 4's A7 carve-out (*"report what you find, and GATE
+it"*) give three destinations for one event.
+> ⛔ **EVERY ESCALATION IN THIS SESSION GOES TO ANDY. You never request a model and never reason
+> past a gate; Andy decides whether to re-open a thread on Opus (§0.2 step 6).**
+> **"DIVERGES" MEANS, EXACTLY:** the `/bots` active count ≠ 41; **or** any name in Step 3's
+> corrected list is absent, altered, or unexpectedly present; **or** any shared automation's
+> bot-count ≠ its expected value; **or** any bot ID or `rid` ≠ its recorded value (A-01c); **or**
+> any assert other than A7 fails. **A7 drift ALONE is not a divergence** — diff the tree and the
+> payload field-by-field, report, and GATE it, per Step 4's own carve-out.
+
+---
+
+## ⛔ A-22 — THE BOOKMARKLET CAPTURE AND `Export Data` ARE ANDY'S HAND. NEW GATE A12.
+**Governs: §0.3, S0 Step 3, S2 Step 5, S3.**
+
+`CLAUDE.md` §2 assigns capture to Andy (*"Andy captures (bookmarklet on `/bots` + OA Export Data,
+all groups)"*), no prompt says where the bookmarklet lives or what it emits, and standing fact 6
+says JS dispatch is harness-blocked on this app. A session left to resolve that substitutes a page
+scrape — which the same prompts rule inferior evidence, and which cannot satisfy the two-hop input
+chain.
+> **GATE A12 — ANDY RUNS THE BOOKMARKLET CAPTURE AND THE `Export Data` PULL** (⛔ **ALL GROUPS
+> SELECTED**) and says where the file landed. Procedure: `oa-ops-runbook.md` §1.
+> ⛔ **A `get_page_text` scrape is NOT a capture and must never be recorded as one.** If no capture
+> file arrives, the roster check is ⬜ NOT EVALUABLE and the fleet stays OFF.
+> ⚠️ Reading `a5.bots.bot` per bot is a different thing and remains yours — it is the hydrated
+> client model, and it is what Step 4's asserts run against.
+
+---
+
+## ⛔ A-23 — S0 IS TOO LARGE FOR ONE CHAT, ON THE MODEL LEAST ABLE TO ABSORB IT.
+**Governs: S0 as a whole; §3's model table.**
+
+S0 as written is `/settings` + a 41-bot roster read + ~22 by-name confirmations + a 7-bot A-series
+whose two-hop input-chain resolution alone is ~50 navigations + (now) Step 4b + a live two-action
+edit + template / Notes / tag + four folder writes + close-out. **[Evidence: `docs/state.md`,
+first-hand 2026-08-07 — *"The bot `…` menu (`showBotMenu`) stopped responding after ~40 good
+clicks"*.]** The pack's own §0.1 item 12 warns that long OA chats saturate and start dropping
+reads — and saturation here presents as **reads that return stale content while reporting
+success**, which on S0 means a green `A2 7/7` on a bot whose page never loaded.
+> ⛔ **S0 IS TWO CHATS. S0a = gate A0, Steps 1–4b, gate A4, close-out and hand-off. S0b = Steps 5–8
+> in a FRESH chat against that close-out.** ⛔ **IF YOU HAVE PASSED ~40 CLICKS AND A READ LOOKS
+> WRONG, STOP AT THE CURRENT PER-BOT BOUNDARY AND HAND OFF** — do not push to finish the arm.
+
+---
+
+## ⛔ A-24 — S2 STEP 0's "DO NOT PAY" CLAUSE IS SPENT, AND THE STEP AS WRITTEN DEADLOCKS.
+**Governs: S2 Step 0.**
+
+Step 0 says *"IF ANY ⛔ HARD BLOCKER BOX IS UNTICKED -> DO NOT PAY, DO NOT RE-ARM"* and then, in
+the same block, lists three ⛔ boxes as known-unticked: **Template V2 on the pilot**, **C9**, and
+**A7 wired into `daily.sh`**. Read literally, the session must halt before Step 0a — and one of the
+two required actions refers to a payment gate A1 completed on 2026-08-07.
+> ⚠️ **THE "DO NOT PAY" HALF IS SPENT — payment already happened. It is not an instruction.**
+> ⛔ **THE THREE KNOWN-UNTICKED BOXES ARE ANDY'S RULING AT STEP 0, ONE AT A TIME, ASKED EXPLICITLY —
+> not a silent proceed and not an automatic halt:** Template V2 is finished here **or the pilot
+> stays OFF**; C9 is run **as a read** before switch-on **or the family stays OFF**; A7-unwired is
+> reported and **Andy rules whether the family trades today with no nightly detector** (wiring it
+> is Claude Code's lane). ⛔ **ANY OTHER unticked ⛔ box is an unqualified STOP.** ⛔ **Do not
+> resolve any of them yourself.**
+
+---
+
+## ⛔ A-25 — PROJECT MEMORY IS CORROBORATION, NOT A PRECONDITION.
+**Governs: all four READ FIRST lists.**
+
+Every prompt lists project-memory keys under an absolute *"READ FIRST"*, and the STOP ladder makes
+an unrun read `NOT EVALUABLE, never a pass` — so a fresh chat without project-memory access has an
+unsatisfiable precondition on line one.
+> ⚠️ **THE project-memory ENTRIES ARE CORROBORATION. Every fact they carry is restated inline in
+> the prompt or is now recorded in `docs/state.md` (A-03). IF PROJECT MEMORY IS UNAVAILABLE: note
+> it once and PROCEED on the folder plus the prompt.** ⛔ **IF A *FILE* ON THE LIST CANNOT BE READ,
+> that is different — name it and STOP.**
+
+---
+
+*Amendments A-01…A-25 written 2026-08-07 (evening) under `CLAUDE.md` §5's
+evidence-backed-correction rule: each one either corrects a claim falsified by a dated first-hand
+read of the folder, or adds a gate/branch where the review found none. **A-26 added the same
+evening at Andy's instruction** (the `a_series.py` runner). **No decision was ruled here** — A-02,
+A-11, A-12, A-24 and gate A8's surviving item are routed to Andy. **Andy may reject any of them at
+commit review.***
+
+---
+
 # §0 · THE STANDING PREAMBLE
 
 Every prompt below already embeds this block. It is repeated here once so it can be maintained in
@@ -120,11 +721,27 @@ Applies to every action in every session. It is what makes a Sonnet session safe
    reasons its way past a gate.
 ```
 
+> ⛔ **AMENDED 2026-08-07 (A-14) — "no coordinate fallback" does NOT ban the only click method that
+> works.** Step 3 above says *raw* coordinates, and it means it. The inline copies of this ladder in
+> S0, S1 and S3 dropped the word. **DOM-COMPUTED coordinates (`scale = screenshotWidth /
+> window.innerWidth`, click at `rect.centre × scale`, re-derived after any resize) ARE the
+> documented method (standing fact 6), not a fallback — use them freely.** The ONE documented
+> alternative for a failed click is: fresh screenshot → re-derive the scale → re-click once.
+> ⛔ **The RAW/eyeballed-coordinate ban is absolute on the bot `…` menu** (fact 8).
+>
+> ⛔ **AMENDED 2026-08-07 (A-21) — every escalation goes to ANDY, not to a model.** A session never
+> requests Opus; it stops and hands to Andy, and Andy decides whether to re-open on Opus.
+
 ## 0.3 Andy's steps — the gates that are HIS hands, in order
+
+> ⛔ **AMENDED 2026-08-07 — two gates added and two corrected. A0 and A12 are new; A1 is spent; A3,
+> A4 and A8 changed. See §0.0.**
 
 | # | Gate | Session | Why it cannot be Claude's |
 |---|---|---|---|
-| A1 | **Log in and purchase the plan** | S0 | Payment. Also the only way in — the account is disabled. |
+| **A0** | ⛔ **RULE THE RESTORE STATE** — 0 of 41 bots survived reactivation (A-01). Andy confirms which of the three branches the account is in. | **before S0 Step 1, and before S1/S2/S3** | The roster is the premise of the whole pack; branch 3 (partial/altered/moving) is never a session's call. |
+| A1 | ~~**Log in and purchase the plan**~~ ✅ **SPENT — DONE 2026-08-07 ~12:06 ET.** Andy confirms the timestamp in one line; **`LEDGER_START` becomes a separate gated question** (A-02). | S0 | Payment. Also the only way in — the account is disabled. |
+| **A12** | **Run the bookmarklet capture and the `Export Data` pull, ALL GROUPS SELECTED** (A-22) | S0, S2, S3 | `CLAUDE.md` §2 assigns capture to Andy; JS dispatch is harness-blocked on this app, and a page scrape is not a capture. |
 | A2 | **Acknowledge the pay-before-`itmlive` order** (S0 §2) | S0 | Runbook §4 says do not reorder; the lockout forced it. One line. |
 | A3 | **Rule / re-confirm F-C1 and F-C2** if not already recorded in the folder | S0 | The rulings exist only in project memory (see §1.3). |
 | A4 | **Declare the roster and A-series verdict accepted** | S0 | Same class as "Andy declares the pilot clean" (runbook §3 Step A). |
@@ -143,6 +760,12 @@ Applies to every action in every session. It is what makes a Sonnet session safe
 Read fresh from the folder this session. Every prompt below repeats the parts it needs.
 
 ## 1.1 The fleet, as built
+
+> ⛔ **SUPERSEDED-IN-PART 2026-08-07 ~12:06 ET — READ §0.0 A-01 BEFORE USING ANY NUMBER BELOW.**
+> `/bots` read **"0 active bots • 50 left in your plan"** after the plan was purchased. Templates,
+> the Automation Library and the Bot Archive survived; every active bot did not. Restore was
+> promised by OA for Monday. **The arithmetic below is correct for a RESTORED account and wrong for
+> a rebuilt or partially restored one.** Gate A0 decides which world you are in.
 
 **Expected roster at reactivation: 41 active bots · 9 slots left of the Pro 50.**
 Arithmetic: 35 (2026-07-30 capture) − 2 deleted (sweep, 08-06 night) = 33; + 7 greenfield = 40;
@@ -227,6 +850,15 @@ verdict** · Step 6b **C10 `dstop` unit** (blocks ARM-B1) · Tier-2 **§9 #5**.
 
 ## 1.3 ⛔ THREE DIVERGENCES THIS SESSION FOUND — read before S0
 
+> ⛔ **CORRECTED 2026-08-07 (evening) — A-03. TWO OF THE THREE ARE FALSIFIED. Original text left
+> standing below.** `docs/state.md` carries the 04:24 ET lockout block, and both
+> **"F-C1 — RULED 2026-08-07 (Andy, first-hand): REMOVE"** and **"F-C2 — RULED 2026-08-07 (Andy,
+> first-hand): AUTHORIZED AS TRAP 10"**; `docs/session-log.md` carries the same F-C1 banner. They
+> were already in the folder when this pack was written. **(a) and (b) are wrong as stated. Only
+> (c) survives.** Gate A3 becomes VERIFY, not re-ask; S0 Step 7(a)/(b) become verify-and-report and
+> must NOT write a second dated banner. ⚠️ **What IS still outstanding is the APPLICATION of F-C1 —
+> `state.md`: *"Not yet applied to either bot"* — so S0 Step 5 and S1 step 6 stand unchanged.**
+
 **(a) The lockout is NOT in `docs/state.md` or `docs/session-log.md`.** It exists only in project
 memory (`greenfield-build-status`). The last `state.md` block is the 08-07 morning clone sweep and
 the last `session-log.md` entry is the same session — both written ~06:20, both silent on the
@@ -265,9 +897,25 @@ account is being reactivated. This is the OPENING session. Its job is to establi
 came out of the lockout exactly as it went in, then finish the two record artifacts the lockout
 interrupted. It does NOT run the Day-0 sequence — that is a later session.
 
+⛔ AMENDED 2026-08-07 (evening). READ `docs/day0-session-pack-2026-08-07.md` §0.0 — THE AMENDMENTS —
+BEFORE ANYTHING ELSE IN THIS PROMPT. Where §0.0 and the text below conflict, §0.0 WINS. The ones
+that change this session: A-01 (gate A0 — THE ROSTER WAS LOST; three branches, not two) · A-02
+(the plan is ALREADY PAID — do not ask) · A-03 (F-C1/F-C2 are RULED IN THE FOLDER — verify, do not
+re-ask) · A-05 (one name in Step 3's list is archived and will fire a false STOP) · A-07 (new Step
+4b) · A-09 (take the 2c toggle screenshots FIRST) · A-13 · A-15 · A-20 · A-21 · A-22 · A-23.
+
 READ FIRST, FRESH, IN THIS ORDER (never from memory of a prior session):
-  docs/day0-session-pack-2026-08-07.md  §0, §1  (this pack — your standing facts and pre-flight)
-  docs/state.md                          the 2026-08-07 blocks and the clone-sweep banner at the tail
+  docs/day0-session-pack-2026-08-07.md  ⛔ §0.0 FIRST, then §0, §1  (standing facts and pre-flight)
+  docs/state.md                          ⛔ IN FULL. The dated tail blocks are load-bearing: the
+                                         04:24 ET lockout · the F-C1/F-C2 RULINGS · the "four open
+                                         items closed" block · ⛔ the `OA REACTIVATED BUT ROSTER
+                                         LOST` incident block and its branch (gate A0)
+  docs/rebuild-contingency-2026-08-07.md ⛔ gate A0 branch 2/3 routes here; it has its own
+                                         DO-NOT-START gate (§4)
+  docs/greenfield-family-spec.md         §8.3 (the A-series — A1's AMENDED text is authoritative)
+                                         and §9 (each arm's pre-registered set — A3's comparand)
+  docs/pre-registration-ledger.md        §4 — the PR-01 entry. ⛔ The Notes-block SOURCE TEXT for
+                                         Step 6. There is no other; do not compose one.
   docs/session-log.md                    the last two entries
   docs/reactivation-runbook.md           §2 (the per-clone checklist), §3 Step B, §4 Steps 0, 0a, 1
   docs/oa-ops-runbook.md                 §1 (capture ritual), §4 (edit verification), §5 (traps)
@@ -340,9 +988,29 @@ A4. ANDY DECLARES THE ROSTER + A-SERIES VERDICT ACCEPTED, before you write the c
 
 === YOUR WORK, IN ORDER ===
 
-STEP 1 — Wait for gate A1. Record the payment timestamp verbatim. Do not set LEDGER_START (that is
-the next session's Step 1); just carry the timestamp into the close-out under a heading a later
-session cannot miss.
+⛔ STEP 0 — GATE A0 (AMENDMENT A-01). BEFORE STEP 1. Read state.md's incident block and
+rebuild-contingency; open /bots with ALL FILTERS CLEARED and read the footer. BRANCH 1 clean
+restore (41 · 9 left · names match · IDs and rids match) -> continue. BRANCH 2 nothing came back ->
+STOP, no OA write, hand to Andy. ⛔ BRANCH 3 — ANYTHING ELSE, including a count that is short OR
+long, names right but IDs/rids changed, configs rolled back, automations detached, an -ARCHIVED-
+name back on /bots, or a roster that moves between two captures -> STOP. NO OA WRITE. FLEET STAYS
+OFF. ESCALATE: YES. Record the sub-state by name per A-01's table. You do not resolve branch 3.
+
+STEP 1 — ⛔ AMENDED (A-02): THE PLAN IS ALREADY PURCHASED — state.md's incident block, first-hand
+~12:06 ET 2026-08-07, "plan purchased, login works". DO NOT ASK ANDY TO PURCHASE ANYTHING. Read the
+payment timestamp from that block and have him confirm it in one line. ⛔ AND LEDGER_START IS NOW A
+GATED QUESTION, NOT A COPY — payment and Day-0 are different days, so ask Andy whether the era
+starts at payment or at the first day a bot is ON, and carry his verbatim answer forward. Do not
+set LEDGER_START (that is the next session's Step 1); carry it into the close-out under a heading a
+later session cannot miss.
+[Original Step 1 text, left standing: "Wait for gate A1. Record the payment timestamp verbatim."]
+
+STEP 1b — ⭐ AMENDMENT A-09(a). BEFORE ANY OTHER OA ACTION: screenshot BOTH dashboard toggles on ONE
+live mirror and ONE directional bot. READING AND SCREENSHOTTING IS NOT TOUCHING — you flip nothing,
+open no editor, change no value. Record the filenames + timestamp in the close-out under
+`2c PRE-OBSERVATION`. Step 2c's information is spent by the TRANSITION, not by the session that
+reaches it, and the transition already happened. ⛔ This does NOT replace S2 Step 2c and licenses
+no other contact with the nine.
 
 STEP 2 — Gate A2, then runbook §4 Step 0a: /settings -> set `itmlive` = `market` -> HARD RELOAD ->
 re-read `input.value` -> screenshot before and after. A save banner is not verification.
@@ -356,7 +1024,28 @@ re-read `input.value` -> screenshot before and after. A save banner is not verif
   ⛔ `maxexits` is the dangerous one — a non-zero value reproduces the June failure shape fleet-wide
   with nothing per-bot to show for it. This closes assert A5. Record the values verbatim.
 
-STEP 3 — VERIFY THE ROSTER. Bookmarklet capture of /bots FIRST — write the expected count down
+STEP 3 — VERIFY THE ROSTER.
+⛔ AMENDED (A-22): THE BOOKMARKLET CAPTURE AND `Export Data` (ALL GROUPS SELECTED) ARE ANDY'S HAND —
+gate A12, CLAUDE.md §2. Ask him to run them and say where the file landed; procedure
+oa-ops-runbook.md §1. A get_page_text scrape is NOT a capture and is never recorded as one; if no
+capture file arrives the roster check is ⬜ NOT EVALUABLE and the fleet stays OFF. Reading
+`a5.bots.bot` per bot is a different thing and remains yours.
+⛔ AMENDED (A-05): `QQQ-IC-0DTE-Fortress-ARCHIVED-2026-08-03` was ARCHIVED 2026-08-04 and is in the
+Bot Archive. It is NOT one of the 41 and MUST NOT appear on /bots — as written, the list below
+fires a false FLEET-STOP on it. Confirm `QQQ-IC-0DTE-Fortress` (the pilot clone) only; if the
+-ARCHIVED- name IS on /bots, THAT is the finding (A-01 branch 3f). Contrast:
+`IC-SPX-FastPT25-S2-ARCHIVED-2026-08-07` was RENAMED, not archived — it IS expected and DOES count.
+⛔ AMENDED (A-08): if the first and second captures DISAGREE, that is a MOVING ROSTER until proven
+otherwise, not a capture defect resolved. Record both counts with timestamps, wait 30 minutes,
+capture a THIRD time, and require TWO CONSECUTIVE IDENTICAL captures. Third differs -> STOP.
+⛔ AMENDED (A-01c): ALSO READ THE IDENTIFIERS, NOT JUST THE NAMES — each built bot's id from
+`a5.bots.bot` against data/bots_config_v2.csv, and each shared automation's `rid` against
+RTfw5TkkCRF178605283747821 / RTfw5TkkCRF178606271659881 / RTfw5TkkCRF178606373201751. Any mismatch
+-> the objects were RE-CREATED, not preserved; every capture file, CSV row and signed hash is keyed
+to a dead identifier, and the A-series CANNOT SEE THIS because every assert in it is relational.
+STOP. FLEET STAYS OFF. ESCALATE: YES.
+[Original Step 3 text follows, left standing.]
+Bookmarklet capture of /bots FIRST — write the expected count down
 before you capture. EXPECTED: 41 active bots, 9 left of the Pro 50.
   Arithmetic: 35 (2026-07-30) − 2 deleted = 33; + 7 greenfield = 40; + 1 PR-01 clone = 41. The
   PR-01 original was RENAMED, not archived, so it still counts.
@@ -376,7 +1065,41 @@ before you capture. EXPECTED: 41 active bots, 9 left of the Pro 50.
      was supposed to block access, not delete anything; a deletion is a different event entirely
      and it is Andy's call, not yours.
 
-STEP 4 — RE-RUN THE A-SERIES AGAINST FRESH CAPTURES. Not against the 08-07 file — that file is the
+STEP 4 — RE-RUN THE A-SERIES AGAINST FRESH CAPTURES.
+⭐ AMENDED (A-26) — RUN THE SCRIPT, DO NOT HAND-DERIVE THE ASSERTS:
+  `python3 scripts/a_series.py --validate`   FIRST — it asserts the tool still reproduces the
+  2026-08-07 hand-run reference exactly (A1 21/21 · A2 7/7 · A3 7/7 · A7 3/3 · A8 7/7 · A9 7/7;
+  A4 MOOT; A4b/A6 NOT-RUNNABLE; A5 NOT-RUN). Then `python3 scripts/a_series.py --json` for the
+  close-out. Defaults resolve data/captures/, data/bots_config_v2.csv and
+  docs/greenfield-family-spec.md on their own. It encodes the §9 pre-registration mechanics, the
+  hash procedure and the G2 two-hop read (bot INPUT OBJECT, never the action, never oldValue).
+  ⛔ IF `--validate` FAILS -> that is a defect in the TOOL, not in the record. STOP, report it, and
+  fall back to the hand procedure below. DO NOT silently re-baseline and DO NOT EDIT THE SCRIPT to
+  make an assert pass — scripts/ is Claude Code's lane and its PRE_REGISTRATION table is a spec
+  surface (amending it is an "amend the plan" edit).
+  ⛔ THE SCRIPT IS NAME-KEYED BY CONSTRUCTION AND READS NO OA ID — which is why it survives a
+  rekeying restore and why IT CANNOT DETECT ONE. A restore that re-creates every object under the
+  same names gives you a FULLY GREEN A-SERIES OVER DEAD IDENTIFIERS. A-01c's manual bot-ID and rid
+  comparison is a SEPARATE, STILL-MANDATORY check. A green run does not close it.
+⛔ AMENDED (A-15) — FALLBACK ONLY, if the script is absent or will not run: A1's AMENDED text and
+A3's comparand are NOT in this prompt — they are in greenfield-family-spec.md §8.3 and §9. Read
+them; do not run A1 from the one-line summary below. The HASH PROCEDURE is in no prompt either: use
+exactly the procedure recorded in
+data/captures/2026-08-07-greenfield/ASSERTS-A1-A9-and-capture-diff.txt, which produced the baselines
+you are comparing to. If that file does not state the serialization -> A7 IS ⬜ NOT EVALUABLE. Do
+not invent a hash input and NEVER compare a recorded baseline to itself.
+⛔ AMENDED (A-13): A7 IS 3 OF THE FOUR SHARED AUTOMATIONS THE RUNBOOK REQUIRES — AND THE SCRIPT
+DOES NOT CHANGE THIS: its SHARED_AUTOMATIONS list carries the same three, so a green `A7 3/3` from
+the tool is still 3 of 4.
+`Defang-Mon-S2-StrikeTouch` (2 bots) has NO recorded baseline. Report A7 as 3/4 with it named ⬜ NOT
+EVALUABLE — do NOT report 3/3 as complete. Recording its FIRST baseline (read after hard reload,
+hash, write the row) is a read-and-record and is allowed; say plainly it is a first baseline.
+⛔ AMENDED (A-21): EVERY ESCALATION GOES TO ANDY, NOT TO A MODEL. "DIVERGES" MEANS EXACTLY: active
+count ≠ 41; or any name in Step 3's CORRECTED list absent, altered or unexpectedly present; or any
+shared automation's bot-count ≠ expected; or any bot ID / rid ≠ recorded; or any assert other than
+A7 fails. A7 drift ALONE is not a divergence — diff, report, GATE.
+[Original Step 4 text follows, left standing.]
+Not against the 08-07 file — that file is the
 reference you compare TO. One page load per bot, after a hard reload, read from `a5.bots.bot` (and
 `a5.bots.acedit.routine` for the three Library objects). Never innerText, never a save banner.
   RUN: A1 (21/21 under the AMENDED rule — arm-vs-control differ in exactly ONE mechanic;
@@ -410,7 +1133,31 @@ reference you compare TO. One page load per bot, after a hard reload, read from 
      Andy's, on evidence. If A7 drifts again: diff the tree and payload field-by-field, report what
      you find, and GATE it. Do not re-baseline on your own.
 
+⛔ STEP 4b — ADDED 2026-08-07 (AMENDMENT A-07). RE-CAPTURE AND DIFF EVERY NON-GREENFIELD BOT.
+The A-series is n=7 and covers the greenfield family only. Thirteen bots would otherwise go from
+"lost" to "signed and switched ON" with their config never re-read. For `IC-SPX-FastPT25-S2` (the
+clone), `IC-SPX-FastPT25-S2-ARCHIVED-2026-08-07`, `QQQ-IC-0DTE-Fortress`,
+`IC-SPX-FastPT25-S2-130PM`, `QQQ-IC-0DTE-Fortress-NoPT50` and EACH OF THE NINE: fresh capture after
+a hard reload, resolve the input chain two hops where one exists, diff FIELD-BY-FIELD against that
+bot's own capture file on disk. ⛔ ANY DIFF -> that bot's config-capture hash is NOT ESTABLISHED,
+its entry CANNOT BE SIGNED at Step 2b, BOT STAYS OFF, fleet proceeds, ESCALATE: YES.
+⛔ A capture file written before the roster was lost is a record of a bot that no longer
+demonstrably exists. Do not sign against one without this diff.
+⚠️ This is a READ on the nine — it is not toggle intervention and does not spend Step 2c. Declare
+it in the close-out attestation (A-18).
+
+⛔ GATE A4 LANDS HERE (AMENDMENT A-20), NOT AT THE CLOSE-OUT. Andy declares the roster + A-series
+verdict ACCEPTED before any OA EDIT is made. IF ANDY IS UNAVAILABLE, STOP AFTER STEP 4b with the
+roster and A-series report; Steps 5–8 move to a follow-up session. ⚠️ A-23: S0 is two chats — this
+is the boundary. S0a = gate A0 → Step 4b → A4 → close-out. S0b = Steps 5–8, fresh chat.
+
 STEP 5 — APPLY THE RULED F-C1 REMOVAL TO THE PR-01 CLONE (only after gate A3).
+⛔ AMENDED (A-03): GATE A3 IS DISCHARGED AS A RULING — F-C1 (REMOVE) and F-C2 (Trap 10 authorized)
+ARE RECORDED IN docs/state.md AND docs/session-log.md, dated 2026-08-07, first-hand. VERIFY THEM BY
+READING; DO NOT ASK ANDY TO RE-CONFIRM, and ⛔ never let a failure to get a ruling re-said retract a
+ruling already in the folder. What is outstanding is the APPLICATION, which is this step.
+⚠️ A-01 branch 3d applies first: if the restore rolled this bot back, `profits` may be absent for
+the WRONG reason. Step 4b's diff is what tells you which; a post-edit self-check cannot.
   TARGET: `IC-SPX-FastPT25-S2`, the CLONE `BOTfw5TkkCRF4417860821948715488`. NOT the archived
   original — that is a lineage record and stays byte-identical to its Step-0 baseline.
   DO: remove `exits.profits` (0.25) from BOTH Open Position actions — put side and call side.
@@ -441,7 +1188,16 @@ STEP 6 — FINISH PR-01's RECORD ARTIFACTS (interrupted when `showBotMenu` went 
      nothing in the Day-0 sequence reads them. Record them as NOT DONE and carry them forward.
      Do not let this block anything.
 
-STEP 7 — RECORD WHAT THE FOLDER IS MISSING. Three items, found 2026-08-07:
+STEP 7 — RECORD WHAT THE FOLDER IS MISSING.
+⛔ AMENDED (A-03): (a) AND (b) BELOW ARE FALSIFIED — BOTH ARE ALREADY IN THE FOLDER. state.md
+carries the 04:24 ET lockout block, and both "F-C1 — RULED 2026-08-07 … REMOVE" and "F-C2 — RULED
+2026-08-07 … AUTHORIZED AS TRAP 10"; session-log.md carries the same F-C1 banner. (a) and (b)
+become VERIFY-AND-REPORT: read the blocks, confirm they are there, report "already recorded".
+⛔ DO NOT WRITE A SECOND DATED BANNER FOR EITHER — a duplicate ruling banner in the project's single
+source of facts is worse than a missing one. (c) stands as written.
+⛔ WHAT S0 MUST ACTUALLY RECORD INSTEAD: gate A0's finding — the restore state, first-hand, with the
+footer read verbatim, the capture timestamps, and the branch taken.
+[Original Step 7 text follows, left standing.] Three items, found 2026-08-07:
   (a) The ~04:20 ET 2026-08-07 lockout ("Account disabled, please purchase a plan") is in project
       memory only — NOT in docs/state.md and NOT in docs/session-log.md. Write it into both, as a
       dated first-hand record, noting that it SUPERSEDED the "inactive banner is cosmetic" finding.
@@ -501,6 +1257,20 @@ STEP 8 — PRE-FLIGHT FOR THE NEXT SESSIONS. Read and REPORT, do not fix:
    - F-C1 / F-C2: ruled or still gated, and what was applied
    - PR-01: what landed, what did not
    - everything still OPEN, by name — an unrun check is NOT EVALUABLE, never a pass
+   ⛔ ADDED 2026-08-07 (evening):
+   - GATE A0's VERDICT: the /bots footer verbatim, both/all capture counts with timestamps, the
+     two-consecutive-match confirmation, and WHICH BRANCH (1 / 2 / 3+sub-state) you took
+   - the ID and rid comparison result (A-01c), per bot and per shared automation
+   - STEP 4b's per-bot diff result for all thirteen non-greenfield bots — and, for each, whether
+     its config-capture hash is ESTABLISHED or NOT ESTABLISHED
+   - A7 reported as 3/4, with Defang-Mon-S2-StrikeTouch named ⬜ NOT EVALUABLE or newly baselined
+   - the `2c PRE-OBSERVATION` screenshot filenames + timestamp (A-09a)
+   - ⛔ ATTESTATION (A-18): state explicitly whether ANY of the nine leave-in-place bots was
+     opened, edited, or had a toggle touched this session, BY NAME. "None" must be WRITTEN.
+     Silence is not an attestation. Declare the A-09a screenshots and the Step 4b captures here as
+     READS.
+   - ⛔ A FLEET STAYS OFF verdict, if one fired, stated in those words at the top of the hand-off —
+     S1 is instructed to refuse to start on it (A-06)
 ```
 
 ---
@@ -517,8 +1287,28 @@ You are working in bot-fleet-v2 (~/bot-fleet-v2 via the device bridge). Day-0 is
 has run (read its close-out first). Your job: build the last two clones — PR-02 and PR-04 — per the
 ruled pattern, and NOTHING else.
 
+⛔ PRECONDITION, ADDED 2026-08-07 (AMENDMENT A-06). READ S0's CLOSE-OUT IN THE FOLDER FIRST, NOT
+FROM MEMORY. IF it records a `FLEET STAYS OFF` verdict, OR gate A0 landed on branch 2 or branch 3,
+OR no close-out exists, OR its hand-off block is absent or incomplete -> ⛔ DO NOT START. Record
+`BLOCKED ON S0 — <verbatim branch>` and hand to Andy. A hand-off you had to reconstruct is a
+hand-off that did not happen. ⛔ AND IF GATE A0 LANDED ON BRANCH 2 (no restore), PR-02's AND PR-04's
+ORIGINALS DO NOT EXIST — rebuild-contingency-2026-08-07.md §2: there is nothing left to clone from,
+template or otherwise. This session is unexecutable; say so and stop.
+
+⛔ READ `docs/day0-session-pack-2026-08-07.md` §0.0 — THE AMENDMENTS — BEFORE ANYTHING ELSE. Where
+§0.0 and the text below conflict, §0.0 WINS. The ones that change this session: A-06 (above) ·
+A-14 (the coordinate ban) · A-15 (the Notes source text) · A-16 (the pack's step ORDER supersedes
+runbook §2's, and runbook §2 step 7's "do not remove PT25" is superseded) · A-17 (Trap 10's
+precondition; and the control clones stay OFF if F-C1 was not applied) · A-18 (the attestation) ·
+A-22 (captures are Andy's hand) · A-25 (project memory is corroboration, not a precondition).
+
 READ FIRST, FRESH:
-  docs/day0-session-pack-2026-08-07.md   §0, §1, and S0's hand-off block
+  docs/day0-session-pack-2026-08-07.md   ⛔ §0.0 FIRST, then §0, §1, and S0's hand-off block
+  docs/state.md                          ⛔ the dated tail blocks — F-C1/F-C2 RULED, and the
+                                         `OA REACTIVATED BUT ROSTER LOST` incident block
+  docs/rebuild-contingency-2026-08-07.md ⛔ read before assuming an original exists to clone
+  docs/pre-registration-ledger.md        §4 — the PR-02 and PR-04 entries. ⛔ The SOURCE TEXT for
+                                         step 8's Notes / template note. Do not compose one.
   docs/session-log.md                     S0's entry, in full
   docs/reactivation-runbook.md            §2 — the nine-step per-clone checklist, IN FULL
   docs/build-plan.md                      §2B — the two clone specs. FROZEN. Nothing beyond spec.
@@ -582,7 +1372,14 @@ SPEC (build-plan.md §2B, frozen): identical to PR-01 with a 1:30 PM entry. Ride
 A/B partner. Same two safety fixes, same Exit-Option-free spec. NO NEW EXIT ARCHITECTURE — it is a
 control. ⛔ DO NOT TOUCH `Cleanup` ITSELF — S2 depends on it.
 
-Run runbook §2's nine steps in order. The clone-specific points that cost real time on PR-01:
+⛔ AMENDED 2026-08-07 (A-16a): THE ORDER BELOW SUPERSEDES runbook §2's NUMBERING AND IT IS THE ONLY
+ORDER YOU FOLLOW. §2 is read for its BRANCHES and its trap text, not its sequence — §2 clones at
+step 1 and renames at step 8; this list captures a Step-0 baseline first and RENAMES BEFORE THE
+CLONE, because the Clone Settings drawer sets the production name at creation and the original must
+have released it. Where they disagree on ORDER, this list wins. Where they disagree on a BRANCH,
+stop and gate it.
+[Original sentence, left standing:] Run runbook §2's nine steps in order.
+The clone-specific points that cost real time on PR-01:
 
 0. STEP-0 BASELINE CAPTURE OF THE ORIGINAL FIRST, and hash all four of its automations. That
    baseline is what proves later that the original was never touched.
@@ -606,6 +1403,11 @@ Run runbook §2's nine steps in order. The clone-specific points that cost real 
      that looks fine on the dashboard. Pre-empt it in the Clone Settings drawer; read it back.
    - Bot Group drops to `None`. PR-01's clone is `IC-Focus` — match it.
    - Tags drop to empty. PR-01's clone carries `live candidate,focus ic`.
+   - ⛔ AMENDED 2026-08-07 (A-17): TRAP 10 CARRIES THE SAME PRECONDITION AS F-C1 — same ruling
+     class, same date. Verify F-C2 reads RULED / AUTHORIZED in state.md (it does, first-hand
+     2026-08-07). IF A SESSION EVER FINDS IT NOT RECORDED -> do NOT restore `disableExits` on your
+     own reading: leave it, record it, ESCALATE: YES. A clone with EXIT OPTIONS ON and PT25 still
+     present is a live hazard, not a tidy-up.
    - ⛔ TRAP 10 (F-C2, found 2026-08-07, authorized by Andy): `disableExits` RESETS 1 -> 0 ON
      CLONE. EXIT OPTIONS turns ON. Unlike the other three this makes the clone DO SOMETHING —
      composed with F-C1 it would arm PT25 on a ride benchmark and trip its own REMOVED_EXIT_FIRED
@@ -630,7 +1432,20 @@ Run runbook §2's nine steps in order. The clone-specific points that cost real 
       ⚠️ §2B says only "Market -> SmartPricing" and does not name a tier. PR-01 chose `speedy`
       (= Fast) as byte-identical to this same bot's own StrikeTouch closes — least-invention.
       USE `speedy`. Do not re-open the choice. ⛔ Nothing else in Cleanup is touched.
-6. ⛔ F-C1 — APPLY THE RULED PT25 REMOVAL, on the CLONE only. Remove `exits.profits` (0.25) and
+6. ⛔ AMENDED 2026-08-07 (A-16b): runbook §2 step 7 STILL CARRIES THE PRE-RULING BRANCH — "IF PT25
+   is still present on a control clone's Open Position action -> do not remove it yourself … Bot
+   stays OFF · escalate to Andy: YES". IT WAS NEVER AMENDED FOR F-C1 AND IT IS SUPERSEDED by
+   F-C1 RULED: REMOVE (Andy, first-hand, 2026-08-07, recorded in state.md and session-log.md).
+   DO NOT TREAT THE CONFLICT AS AMBIGUITY AND DO NOT STOP ON IT. ⛔ Report the un-amended runbook
+   line at close-out as a doc-correction item for Andy — the runbook is his to amend.
+   ⛔ AMENDED (A-03): the PRECONDITION below reads "S0's gate A3 landed". A3 is DISCHARGED AS A
+   RULING — F-C1 is recorded RULED: REMOVE in the folder. Verify by reading state.md; do not treat
+   a missing re-confirmation as a retraction.
+   ⛔ AMENDED (A-17): IF F-C1 SOMEHOW READS NOT-APPLIED AT THE END OF THIS SESSION, BOTH CONTROL
+   CLONES STAY OFF. "Fails by construction" is NOT a pass and NOT an exemption — the arm has no
+   valid control until the removal lands.
+   [Original step 6 follows, left standing.]
+   ⛔ F-C1 — APPLY THE RULED PT25 REMOVAL, on the CLONE only. Remove `exits.profits` (0.25) and
    `smprofits` from BOTH Open Position actions, put side and call side. build-plan.md §2B: "PT25
    removed from the Open Position action explicitly — not left dead behind an off toggle."
    ⛔ PRECONDITION: S0's gate A3 landed and F-C1 reads RULED: REMOVE in S0's close-out. IF IT IS
@@ -692,6 +1507,12 @@ DIFFERENCES FROM PR-02, and they matter:
    ⛔ State plainly which of the four clones now have a signable config-capture hash. A bot whose
    hash is NOT ESTABLISHED cannot be signed at Step 2b, and a bot that is not signed stays OFF for
    the whole of Day-0.
+   ⛔ ADDED 2026-08-07 (evening):
+   - ⛔ ATTESTATION (A-18): state explicitly whether ANY of the nine leave-in-place bots was
+     opened, edited, or had a toggle touched this session, BY NAME. "None" must be WRITTEN.
+     Silence is not an attestation — S2 Step 2c's precondition is decided from this line.
+   - the un-amended runbook §2 step 7 PT25 line (A-16b), listed as a doc-correction item for Andy
+   - a `FLEET STAYS OFF` verdict, if one fired, in those words at the top of the hand-off (A-06)
 ```
 
 ---
@@ -710,12 +1531,32 @@ You are working in bot-fleet-v2 (~/bot-fleet-v2 via the device bridge). This is 
 SEQUENCE. S0 and S1 have run. Your job is to execute docs/reactivation-runbook.md §4, Steps 0
 through 8, in order, and NOTHING ELSE.
 
+⛔ PRECONDITION, ADDED 2026-08-07 (AMENDMENT A-06). READ S0's AND S1's CLOSE-OUTS IN THE FOLDER
+FIRST. IF either records a `FLEET STAYS OFF` verdict, OR gate A0 landed on branch 2 or branch 3, OR
+a close-out is missing or its hand-off block incomplete -> ⛔ DO NOT START. Record
+`BLOCKED ON <session> — <verbatim branch>` and hand to Andy.
+
+⛔ READ `docs/day0-session-pack-2026-08-07.md` §0.0 — THE AMENDMENTS — BEFORE ANYTHING ELSE. Where
+§0.0 and the text below conflict, §0.0 WINS. The ones that change this session: A-01 (gate A0) ·
+A-02 (LEDGER_START is a GATED question at Step 1, not a copy) · A-04 (gate A8 is ONE item, not
+three — G-12b is SIGNED and G-1′ is DECLINED) · A-09b (Step 2c is confounded by a restore) · A-10
+(re-read the five positions; branch for gone-or-changed) · A-11 (the first-position exception has
+no mechanism — do not invent one) · A-12 (do NOT put `dstop` on PR-20; and "contract count" is
+undefined) · A-13 (A7 is 3/4) · A-17 · A-18 · A-19 · A-24 (Step 0's "do not pay" is spent).
+
 ⛔ YOU DO NOT RE-PLAN THIS. The runbook is 801 lines and it governs. Every check below carries an
 explicit branch and there is no step that requires you to invent a remedy. Where a branch says
 escalate, escalate and stop that thread. build-plan.md is under decision freeze and DAY-0 IS NOT A
 BUILD DAY.
 
 READ FIRST, FRESH, IN FULL:
+  docs/state.md                           ⛔ IN FULL, AND FIRST (A-19 — it was missing from this
+                                          list and you WRITE TO IT at close-out). The dated tail
+                                          blocks: the 04:24 ET lockout · the F-C1/F-C2 rulings ·
+                                          the "four open items closed" block (G-12b SIGNED, G-1′
+                                          DECLINED) · the `OA REACTIVATED BUT ROSTER LOST`
+                                          incident block and its branch.
+  docs/rebuild-contingency-2026-08-07.md  ⛔ gate A0 routes here on branch 2/3; §4 DO-NOT-START.
   docs/reactivation-runbook.md            THE WHOLE FILE. §4 is not self-contained — the Pre-Day-0
                                           checklist at the foot is a set of PRECONDITIONS for it,
                                           and Step 4 does not re-assert them.
@@ -779,6 +1620,16 @@ Ask for each explicitly and WAIT. Do not proceed past a gate on your own reading
 ────────────────────────────────────────────────────────────────
 STEP 0 — CLOSE THE PRE-DAY-0 CHECKLIST. NOTHING IN §4 STARTS UNTIL IT IS CLOSED.
 ────────────────────────────────────────────────────────────────
+⛔ AMENDED 2026-08-07 (A-24): AS WRITTEN THIS STEP DEADLOCKS. It says "IF ANY ⛔ HARD BLOCKER BOX IS
+UNTICKED -> DO NOT PAY, DO NOT RE-ARM" and then lists THREE ⛔ boxes as known-unticked (Template V2
+on the pilot · C9 · A7 wired into daily.sh). AND THE "DO NOT PAY" HALF IS SPENT — payment happened
+2026-08-07 (gate A1, A-02). IT IS NOT AN INSTRUCTION.
+⛔ THE THREE KNOWN-UNTICKED BOXES ARE ANDY'S RULING HERE, ONE AT A TIME, ASKED EXPLICITLY — not a
+silent proceed and not an automatic halt: Template V2 is finished here OR THE PILOT STAYS OFF; C9
+is run AS A READ before switch-on OR THE FAMILY STAYS OFF; A7-unwired is reported and ANDY RULES
+whether the family trades today with no nightly detector (wiring it is Claude Code's lane).
+⛔ ANY OTHER unticked ⛔ box is an unqualified STOP. ⛔ Do not resolve any of them yourself.
+[Original Step 0 text follows, left standing.]
 The checklist is at the foot of the runbook. Confirm EACH BOX BY READING THE ARTIFACT ITSELF, never
 from a memory of a prior session and never from another document's claim about it.
 ⛔ IF ANY ⛔ HARD BLOCKER BOX IS UNTICKED -> DO NOT PAY, DO NOT RE-ARM. ESCALATE TO ANDY: YES.
@@ -814,6 +1665,9 @@ Known state entering this session — VERIFY each, do not assume:
      DAY-0 PRE-SWITCH-ON READ and is still open. `C10` is open and blocks ARM-B1 — observed at
      Step 6b, not before. ⛔ C7 and C8 carry their own STOP; C8's verbatim: "Do NOT substitute
      position age — that is the literal substitution that cost −$15,376."
+  ⭐ A-26: run `python3 scripts/a_series.py --validate` before you read any A-series verdict this
+     session, and `--json` for the close-out. ⛔ It is STANDALONE and does NOT wire itself into
+     daily.sh — the gate below is unchanged.
   ❓ ⛔ A7 BASELINES + A7 WIRED INTO `daily.sh`. The baselines ARE recorded in bots_config_v2.csv;
      A7 IS NOT WIRED INTO daily.sh (its eight stages carry execution_audit.py and no A-series
      runner). Under Architecture E the three automations are shared across seven bots, so one edit
@@ -833,6 +1687,13 @@ positions on expiration day. Do not let the two be conflated later.
 ────────────────────────────────────────────────────────────────
 STEP 1 — LEDGER_START
 ────────────────────────────────────────────────────────────────
+⛔ AMENDED 2026-08-07 (A-02): `LEDGER_START` IS A GATED QUESTION, NOT A COPY. Payment was
+2026-08-07 and the roster did not exist that day — a LEDGER_START of the payment date claims an era
+in which the account held zero bots. ASK ANDY whether the era starts at the payment timestamp or at
+the first day a bot is actually switched ON, record his answer VERBATIM, and only then set it.
+⛔ DO NOT CHOOSE. Everything else in this step — set it, run build_ledger.py, require row count 0
+and EMPTY LEDGER n=0 — is unchanged and still binding.
+[Original Step 1 text follows, left standing.]
 S0 recorded the exact payment timestamp. THAT DATE IS `LEDGER_START`. Set it in
 `scripts/build_ledger.py` before anything else, so no pre-cutover row can enter the working ledger.
 ⛔ VERIFY IT, DO NOT ASSUME IT. Run `build_ledger.py` once and confirm the row count is 0 and the
@@ -847,6 +1708,21 @@ MIRROR BASELINE layer, never the working ledger.
 ────────────────────────────────────────────────────────────────
 STEP 2 — RIDE OR CLOSE, on the 5 open mirror positions. ⛔ ANDY'S GATE A6.
 ────────────────────────────────────────────────────────────────
+⛔ AMENDED 2026-08-07 (A-10). BEFORE EITHER BRANCH, TWO THINGS THE STEP AS WRITTEN DOES NOT DO:
+(1) RE-READ ALL FIVE POSITIONS FIRST-HAND — quantity, open date, current mark, unrealized P/L. The
+numbers below are from the 2026-07-30 capture and are NOT current; do not put a stale number in
+front of Andy at a capital gate.
+(2) OPEN EACH POSITION'S OWN EXIT OPTIONS SCREEN AND SCREENSHOT IT. That per-position screen is the
+THIRD toggle surface, it has never been observed on a lapse-surviving position (Step 3's own rider
+says so), and A CLOSE DESTROYS IT PERMANENTLY. Reading and screenshotting a position is not toggle
+intervention.
+⛔ BRANCH — FEWER THAN FIVE SURVIVED THE 2026-08-07 ROSTER LOSS, OR ANY POSITION MATERIALLY CHANGED
+-> the outcome was FORCED BY THE INCIDENT, NOT CHOSEN BY ANDY, and the step's completion condition
+("EXECUTED FOR ALL FIVE") is otherwise unsatisfiable and deadlocks the sequence. Record
+`RIDE-OR-CLOSE MOOTED BY THE 2026-08-07 ROSTER LOSS` in the ledger entry AND in state.md, naming
+which survived and which did not, get Andy's explicit acknowledgment of that record, and only then
+proceed to Step 2b. A forced outcome recorded as a decision is a record that lies.
+[Original Step 2 text follows, left standing.]
 `QQQ long call` ×4 (~$13K risk, ~−$10.8K unrealized) and `Tasty Condor` ×1 (~+$328), open at the
 2026-07-30 capture and still open. An unmanaged legacy position is exactly the quiet exposure that
 survives a clean-slate rebuild and then surprises someone.
@@ -894,6 +1770,19 @@ THE SIGNING SET — 20 plan bots plus the ride-or-close entry:
   ⛔ NOT IN THE SIGNING SET: PR-21 / PR-22 (Track B) are DRAFT and unsigned, and ARM-B1 is not an
   arm until C10/C11 close. They are not switched on today. Do not sign them to be tidy.
 
+⛔ AMENDED 2026-08-07 (A-04): GATE A8 IS **ONE** OPEN ITEM, NOT THREE. state.md's dated block
+"📝 RULED 2026-08-07 (Andy) — four open items closed" records: **G-12b — SIGNED AS DRAFTED**
+(δ=0.10R, p=0.20, floor n_matched_days≥100 + one re-arm at Day-0+9mo, INSIDE the family correction,
+publication cap acknowledged; exact ledger text already pasted into pre-registration-ledger.md's
+PR-14…PR-17 entry, scoped to PR-16) and **G-1′ — DECLINED**.
+⛔ ITEM (i) IS SIGNED — DO NOT RE-PRESENT `[ 0.10 | other ]` TO ANDY. Any answer that is not a
+verbatim repeat silently forks a signed pre-registration. VERIFY the pasted text is in the ledger
+and move on.
+⛔ ITEM (iii) IS DECLINED — do not re-open it. Its two ruling-reopeners are already carried
+correctly at this session's close-out item 4.
+✅ ITEM (ii), PR-18's "Breakeven" naming, IS STILL OPEN AND STILL ANDY'S — it is the WHOLE of gate
+A8. Ask; do not choose.
+[Original text follows, left standing.]
 ⛔ THREE OPEN SIGNATURE ITEMS — ANDY'S GATE A8. Under §7 item 2 an entry with an unresolved field
 is UNSIGNED, so each of these blocks a signature until it is ruled:
 
@@ -932,6 +1821,20 @@ is UNSIGNED, so each of these blocks a signature until it is ruled:
 ────────────────────────────────────────────────────────────────
 STEP 2c — ⭐ THE NO-TOUCH OBSERVATION. BEFORE ANY TOGGLE IS MOVED.
 ────────────────────────────────────────────────────────────────
+⛔ AMENDED 2026-08-07 (A-09b): IF THE ROSTER WAS RESTORED BY OA RATHER THAN SURVIVING INTACT, THIS
+OBSERVATION IS CONFOUNDED BY THE RESTORE. A restored bot's toggle state is whatever the snapshot or
+OA's restore default carries; it cannot separate billing-state from hand-set. Record
+`NO-TOUCH OBSERVATION CONFOUNDED — RESTORE`, treat it as ⬜ NOT EVALUABLE, and say so INSIDE the
+Step 6a verdict — a CONFIRMED verdict resting on it is weaker than it looks
+(rebuild-contingency-2026-08-07.md §2 records the rebuild case as FORECLOSED, not delayed).
+⚠️ S0 was amended (A-09a) to take READ-ONLY toggle screenshots on one live mirror and one
+directional bot before anything else, because this information is spent by the TRANSITION, not by
+the session that reaches it. Read those screenshots from S0's close-out and report both readings.
+⛔ AMENDED (A-18): the precondition below — "confirm from their close-outs that they did" — is
+decided from S0's and S1's ATTESTATION line. IF EITHER CLOSE-OUT LACKS IT -> record
+`2c PRECONDITION UNVERIFIED`, run the observation anyway, and label the result NOT EVALUABLE in the
+Step 6a verdict. ⛔ Never infer compliance from silence.
+[Original Step 2c text follows, left standing.]
 ⛔ THIS IS FREE AND THE INFORMATION IS NOT RECOVERABLE AFTERWARDS. Day-0 is itself an
 inactive→active transition. If exits resume at reactivation with NO toggle intervention, BILLING
 STATE IS IMPLICATED as the June cause. Flip a toggle first and re-arm is confounded with
@@ -999,6 +1902,14 @@ PLUS the two gates the four artifacts do not satisfy:
       pre-switch-on read. ⛔ IF ANY IS STILL UNANSWERED, THE FAMILY DOES NOT TRADE TODAY — those
       bots stay OFF and the checks are run AS READS, NEVER WRITES, before switch-on. DO NOT
       IMPROVISE A SPEC ON THE FLY. Fleet proceeds. Escalate: YES.
+  ⭐ AMENDED (A-26): THE A-SERIES HAS A RUNNER — `python3 scripts/a_series.py` (`--validate` first,
+      then `--json`). RUN IT; do not hand-derive the asserts or the hashes. ⛔ IT DOES NOT CLOSE
+      THIS GATE: its own header reads "STANDALONE. NOT wired into scripts/daily.sh… this tool does
+      not edit daily.sh" (`--emit-wiring` prints the snippet as a COMMENT). A RUNNER EXISTING IS
+      NOT A NIGHTLY DETECTOR EXISTING — (b) below stays OPEN and stays Andy's call.
+      ⛔ AND IT IS NAME-KEYED AND READS NO OA ID, so a green run CANNOT detect a rekeying restore —
+      A-01c's manual ID/rid comparison is separate and still mandatory. A7 from the tool is 3/4
+      (A-13): `Defang-Mon-S2-StrikeTouch` is not in its SHARED_AUTOMATIONS list.
   (b) A7 payload-hash baselines RECORDED and A7 WIRED INTO `daily.sh`. Baselines: recorded. Wiring:
       NOT DONE (see Step 0). ⛔ No detector before Day-0 = no detector for the whole sample.
       Report the state; the wiring is Claude Code's lane. Andy rules whether the family trades
@@ -1066,6 +1977,22 @@ it resolves now.
 ────────────────────────────────────────────────────────────────
 STEP 6 — ORDER-LEVEL VERIFICATION, PER BOT, BEFORE IT MAY TRADE
 ────────────────────────────────────────────────────────────────
+⛔ AMENDED 2026-08-07 (A-11): THE FIRST-POSITION EXCEPTION HAS NO MECHANISM ANYWHERE IN THIS PACK
+OR IN THE RUNBOOK. "Allowed exactly ONE position at 1 LOT" names no control: the only way to make a
+position exist is AUTOMATIONS -> ON, which Step 3 forbids and Step 7 gates, and nothing caps the
+bot at one (greenfield arms carry limits 2/2, the PR-01 clone 10/10).
+⛔ DO NOT IMPROVISE IT AND DO NOT BATCH IT. Attempt the button test-fire first and record VERBATIM
+whether the control exists. If it does not: STOP and put the mechanism to Andy as a GATED question
+— changing a signed bot's position limit is a config change on a signed entry, and turning
+AUTOMATIONS ON early is the exact act Step 3 forbids (the v1 −$9,618 failure, with Step 7 gating
+nothing). Whatever he authorizes: ONE BOT AT A TIME, never a batch; screenshot every transition;
+read the Trades list the moment the position opens.
+⛔ IF ANDY IS NOT AVAILABLE TO RULE IT -> that bot's Step 6 is ⬜ NOT EVALUABLE and IT STAYS OFF.
+Never spend a live position to route around an unanswered question.
+⚠️ AND "TEST-FIRE UNAVAILABLE" IS NOT DECIDABLE FROM ONE SCREEN — Step 3's own rule applies here:
+A SURFACE YOU DID NOT OPEN IS NOT AN ABSENT CONTROL. If no doc names where the test-fire lives,
+that is ⬜ NOT EVALUABLE, not "unavailable".
+[Original Step 6 text follows, left standing.]
 Two acceptable proofs, in order of preference: BUTTON TEST-FIRE then read the resulting TRADES LIST;
 or allow the bot ONE position — the first-position exception — and read it the moment it opens.
 ⚠️ THE FIRST-POSITION EXCEPTION, stated plainly because Steps 6 and 7 are otherwise circular: the
@@ -1162,6 +2089,24 @@ AN OBSERVATION, NOT A BUILD. Nothing is re-stamped on Day-0 either way — Andy 
 only unit marker is a bare `$`, `step=1`, and there is NO per-contract / per-position / per-leg
 qualifier anywhere on it. It needs a LIVE POSITION WHOSE CONTRACT COUNT YOU WROTE DOWN BEFORE IT
 OPENED. THAT MOMENT EXISTS EXACTLY ONCE. DO NOT LET IT PASS UNRECORDED.
+⛔ AMENDED 2026-08-07 (A-12) — TWO DEFECTS IN THE SET-UP BELOW.
+(a) PR-20 IS A SIGNED TOURNAMENT ARM. Its whole mechanic is `profits 0.05` + `smprofits speedy`.
+Adding `dstop` to it after Step 2b signs its config falsifies A1 (two mechanics vs the control),
+falsifies A3 — "the load-bearing one" — and voids the config hash its signature cites; a later
+A-series run then reports a red that Step 4's branch escalates as FLEET STAYS OFF for the family,
+over an edit this pack ordered. And `profits 0.05` will usually close the position before any
+`dstop` can fire. ⛔ DO NOT EDIT A SIGNED ARM TO CLOSE AN OBSERVATION, AND DAY-0 IS NOT A BUILD
+DAY. PUT IT TO ANDY: run C10 on an instrument OUTSIDE the tournament, or leave C10 OPEN. If no such
+instrument exists today, C10 STAYS OPEN — say so by name in state.md and at close-out; ARM-B1 stays
+blocked, which is where it already is.
+(b) "CONTRACT COUNT" IS UNDEFINED AND THE FIRST TWO BRANCHES CAN COLLAPSE. The step says record
+CONTRACT COUNT PER LEG and then branches on −$100 × (CONTRACT COUNT): at 1 contract per leg those
+are the same number and `FIRED AT NEITHER FIGURE` becomes unreachable. ⛔ IF C10 IS RUN AT ALL, the
+discriminating quantity is TOTAL CONTRACTS ON THE POSITION (a 1-lot iron condor = 4), not per leg.
+Record BOTH numbers before the position opens and state which one each branch is read against.
+IF THE TWO CANDIDATE FIGURES ARE EQUAL FOR THE INSTRUMENT YOU ACTUALLY HAVE -> the read cannot
+discriminate: report C10-UNRESOLVED, do NOT report C10 CLOSED, and do not fit a basis to one point.
+[Original SET UP follows, left standing.]
 SET UP: the 1-lot canary (PR-20) IS THE C10 INSTRUMENT — run it, and run it at EXACTLY 1 CONTRACT.
 On the canary ONLY, set `dstop` to a round, unmistakable value (e.g. −100) and RECORD, BEFORE THE
 POSITION OPENS: bot name, `dstop` as typed, and CONTRACT COUNT PER LEG.
@@ -1257,6 +2202,19 @@ is resolved by handing every archive click to Andy.
 You are working in bot-fleet-v2 (~/bot-fleet-v2 via the device bridge). Day-0's sequence has run
 (S0, S1, S2). This is the CLOSE-DOWN session. Its job is to leave the folder in a state Andy can
 commit in one command, get the ~23 archives done under Andy's hand, and hand Day-1 forward.
+
+⛔ PRECONDITION, ADDED 2026-08-07 (AMENDMENT A-06). READ S0's, S1's AND S2's CLOSE-OUTS IN THE
+FOLDER FIRST. IF any records a `FLEET STAYS OFF` verdict, OR gate A0 landed on branch 2 or branch
+3, OR a close-out is missing -> ⛔ DO NOT RUN TASK 1 (the archive sweep). Archiving against an
+unexplained roster is irreversible from this side. Do Tasks 2–5 (the records, the tracker, the
+commit hand-off, the Day-1 note) so the tree is committable, name the block, and hand to Andy.
+⛔ READ `docs/day0-session-pack-2026-08-07.md` §0.0 — THE AMENDMENTS — BEFORE ANYTHING ELSE. Where
+§0.0 and the text below conflict, §0.0 WINS. Relevant here: A-01 (gate A0; ⛔ branch 3f — a name
+collision or an -ARCHIVED- name back on /bots is a FINDING, never resolved by archiving) · A-06 ·
+A-14 (DOM-computed clicks are the documented method; the RAW-coordinate ban is absolute on the
+`…` menu) · A-22 (the capture is Andy's hand) · A-25.
+⛔ ADD TO THE READ LIST: `docs/state.md` (the dated tail blocks, incl. the incident block) and
+`docs/rebuild-contingency-2026-08-07.md`.
 
 ⛔ THIS SESSION MAKES NO SPEC DECISION AND NO OA CONFIG EDIT. If you find something that wants
 changing, record it and gate it.
@@ -1399,7 +2357,7 @@ Same §9.1 sequence: session-log + state.md (sha-verified) -> tracker + Andy's v
 
 | Session | Model | Andy attended | Runbook coverage | Ends when |
 |---|---|---|---|---|
-| **S0** Reactivation opening | **Sonnet** | Yes — A1, A2, A3, A4, A9 | Step 0a; Step 1's timestamp; §3 Step B roster; the A-series | Roster + A-series accepted, F-C1 applied, PR-01 finished |
+| **S0** Reactivation opening ⛔ **AMENDED — SPLIT IN TWO (A-23): S0a = gate A0 → Steps 1–4b → gate A4 → close-out; S0b = Steps 5–8, fresh chat** | **Sonnet** | Yes — **A0**, ~~A1~~ (spent), A2, ~~A3~~ (now verify-only), A4, A9, **A12** | gate A0; Step 0a; Step 1's timestamp; §3 Step B roster; the A-series; **new Step 4b** | Roster + A-series accepted, F-C1 applied, PR-01 finished |
 | **S1** Clones | **Sonnet** | No, unless a branch fires | §2's nine steps ×2 (PR-02, PR-04) | Both clones built and verified, or stopped with a named branch |
 | **S2** The sequence | **Opus** | **Yes, throughout** — A6, A7, A8 | §4 Steps 0 → 8, in order | Step 7 done per bot, Step 8 queued for Day-1 |
 | **S3** Close-down | **Sonnet** | Yes — A5, A10, A11 | §3 Step B's archives; §4 Step 8's hand-off | Tree committable in one command, Day-1 handed forward |
@@ -1425,6 +2383,11 @@ Named so nothing is assumed handled:
 - **`daily.sh` at n=0** — Andy's terminal (gate A9). `tape.py` needs network; `device_bash` has none.
 - **Wiring A7 into `daily.sh`** — Claude Code's lane (`CLAUDE.md` §7). Runbook Step 4(b) requires
   it; it is not done, and S0/S2 report it as an open gate rather than closing it.
+  ⭐ **UPDATED 2026-08-07 (evening), A-26: the A-series RUNNER now exists —
+  `python3 scripts/a_series.py`, and Day-0 sessions run it instead of hand-deriving the asserts.
+  ⛔ IT IS STILL STANDALONE AND STILL NOT WIRED INTO `daily.sh`** (its own header says so;
+  `--emit-wiring` prints the snippet as a comment and edits nothing). **A runner existing is not a
+  nightly detector existing — this row stays open.**
 - **The comparative machinery implementation** and `research_loop.py`'s D-1…D-17 fixes — Claude
   Code, post-downgrade, with the two G-10 constraints from `post-u1-package-2026-08-07.md` §2
   (the max-T restatement must not silently undo G-10; the family region needs a per-member
@@ -1439,6 +2402,25 @@ Named so nothing is assumed handled:
 - **Mirror funding.** Zero of ten mirrors clears the bar and none can before late Oct 2026. The
   Day-0 action is re-arm, watch-only, size nothing. It is not a Day-0 decision and this pack does
   not open it.
+
+---
+
+# §5 · ⛔ RUNBOOK-LEVEL FINDINGS — FLAGGED, NOT FIXED (added 2026-08-07 evening)
+
+`docs/reactivation-runbook.md` is a decision surface and amending it needs Andy's explicit *"amend
+the plan"*. The adversarial review found four defects that live **in the runbook**, not here. Each
+is carried with a pack-side guard (named), and each needs Andy's ruling to close properly.
+
+| # | Runbook location | Defect | Pack-side guard |
+|---|---|---|---|
+| **R-1** | §2 step 7 | Still carries the pre-ruling branch *"IF PT25 is still present on a control clone's Open Position action → do not remove it yourself … escalate"*. Never amended for **F-C1 RULED: REMOVE** (2026-08-07). A session told to read §2 "IN FULL" hits a direct countermand mid-clone. | A-16b |
+| **R-2** | §2's numbering | §2 clones at step 1 and renames at step 8; the learned order (baseline → rename → clone) is the opposite, and the pack asserts it "re-orders nothing". Also: §2 step 3 documents **three** clone traps; Trap 10 (F-C2) makes four. | A-16a, A-17 |
+| **R-3** | §4 Step 6 | The **first-position exception** names no mechanism. The only way to open a position is `AUTOMATIONS` → ON, which Step 3 forbids and Step 7 gates, and nothing caps the bot at one. | A-11 |
+| **R-4** | §4 Step 6b | *"run it at exactly 1 contract"* with branches on `−$100` vs `−$100 × (contract count)` — at 1 contract **per leg** those are the same number, so the read cannot discriminate as specified. And the runbook's instrument is §3 Step C's *optional* canary; treating a signed tournament arm as that instrument breaks A1/A3. | A-12 |
+
+⚠️ **Also runbook-level and unresolved by either document:** the Pre-Day-0 checklist says *"do not
+pay while any ⛔ box is unticked"*, and payment has already happened with at least three ⛔ boxes
+open (A-24). That ordering question is Andy's, not a session's.
 
 ---
 

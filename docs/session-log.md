@@ -5565,3 +5565,140 @@ entry).
 **No CSV, no OA action, no git in any form.**
 
 **HOLDING for Andy's commit.**
+
+---
+
+## 2026-08-07 (evening) — ADVERSARIAL REVIEW OF THE DAY-0 SESSION PACK. 25 DATED AMENDMENTS APPLIED TO THE PACK. NOTHING ELSE EDITED.
+
+**Scope, stated first: this session edited exactly ONE file — `docs/day0-session-pack-2026-08-07.md`.**
+No OA action (the roster is lost and the account is under a restore hold). No git command in any
+form. `docs/reactivation-runbook.md` was read in full and **not touched** — it is a decision surface
+and its four defects are flagged, not fixed (pack §5).
+
+**Method.** Read the pack in full (1449 lines), `reactivation-runbook.md` in full, `state.md`'s
+incident block, and `rebuild-contingency-2026-08-07.md`. Two subagents run in parallel, both
+prompted to REFUTE: (a) sequencing/gates — unset preconditions, the partial-restore hole, missing
+failure branches; (b) executability on a weak model — ambiguity, undecidable STOP conditions,
+broken citations, saturation. 34 objections raised, each self-refuted against the file text before
+reporting; the survivors were then re-verified first-hand here against the folder before any edit.
+
+### What the review found that mattered
+
+1. **The pack is pre-incident and does not know it.** `/bots` read `0 active bots • 50 left` at
+   ~12:06 ET; §1.1 still says "expected roster: 41". `state.md`'s branch is **binary** (restore
+   confirmed / restore not landed) and the most likely world — a **partial, altered or still-moving
+   restore** — falls between them. Amendment **A-01** adds **gate A0** with a third branch and an
+   eight-row sub-state table: short OR long count · moving roster · names right but **bot IDs /
+   automation `rid`s re-created** (⛔ the A-series is entirely relational and CANNOT see this) ·
+   config rolled back past its own creation · automations detached · archive/rename state lost →
+   name collisions · the 5 positions gone or changed · **restore landing mid-session**. Default on
+   branch 3: STOP, no OA write, fleet stays OFF, escalate.
+2. **`§1.3` is falsified by the folder.** The lockout, F-C1 (RULED: REMOVE) and F-C2 (RULED: Trap
+   10) are all recorded in `state.md`, and F-C1 in `session-log.md` too — they were already there
+   when the pack was written. Gate A3 as written asks Andy to re-confirm a landed first-hand ruling
+   and, on a non-answer, **retracts it**. **A-03** makes A3 verify-only and stops S0 Step 7 writing
+   a duplicate ruling banner. ⚠️ The *application* of F-C1 is still outstanding — S0 Step 5 and S1
+   step 6 stand unchanged.
+3. **Gate A8 re-opens two signed rulings.** G-12b is **SIGNED AS DRAFTED** and G-1′ is **DECLINED**
+   (`state.md`, 2026-08-07) — and the pack's own S2 close-out already says so, forty lines later.
+   Re-presenting `[ 0.10 | other ]` to Andy forks a signed pre-registration on any non-verbatim
+   answer. **A-04**: gate A8 is ONE item — PR-18's "Breakeven" naming.
+4. **S0 Step 3 would fire a false FLEET-STOP.** Its confirm-by-name list includes
+   `QQQ-IC-0DTE-Fortress-ARCHIVED-2026-08-03`, which was archived 2026-08-04 and is in the Bot
+   Archive, not on `/bots`; the branch (`IF A BOT IS MISSING → same STOP`) is unconditional.
+   **A-05**.
+5. **No STOP propagates across the session boundary.** S1 opens "S0 has run" and is cleared to run
+   **unattended**; nothing keys it to S0's verdict. A `FLEET STAYS OFF` in S0 halts one chat.
+   **A-06** adds a refuse-to-start precondition to S1, S2 and S3.
+6. **Thirteen bots get no post-restore config check.** The A-series is n=7. The clone, the pilot,
+   the two un-started originals and **the nine** would go from "lost" to signed-and-ON with their
+   config never re-read; S0 Step 5's F-C1 check is a post-edit self-check that reads a rollback as
+   success. **A-07** adds Step 4b.
+7. **Step 2c is spent by the transition, not by the session that reaches it** — and the transition
+   already happened, across a wipe. **A-09** moves a READ-ONLY toggle screenshot to the top of S0
+   and adds a `CONFOUNDED — RESTORE` branch to Step 2c.
+8. **Two things Day-0 would decide by improvising:** the first-position exception names no
+   mechanism (**A-11** — gate it, never batch it, never spend a live position to route around an
+   unanswered question), and Step 6b would put `dstop` on **PR-20, a signed tournament arm**,
+   falsifying A1 and A3 and voiding its signed hash — while at 1 contract per leg `−$100` and
+   `−$100 × 1` are the same number, so the read cannot discriminate anyway (**A-12**).
+9. Plus: A7 baselines **3 of the 4** shared automations the runbook requires (**A-13**); "no
+   coordinate fallback" reads as banning DOM-computed clicks, the only method that works
+   (**A-14**); S0 runs the A-series without `greenfield-family-spec.md` §8.3/§9 or the hash
+   procedure, and writes Notes without `pre-registration-ledger.md` §4 (**A-15**); S2 never reads
+   `state.md` and writes to it (**A-19**); gate A4 sits after the edit it authorizes (**A-20**);
+   the capture is Andy's hand per `CLAUDE.md` §2 and had no gate (**A-22**, new gate A12); S0 is
+   ~4× the click count at which `showBotMenu` died on 08-07 (**A-23** — split at Step 4b); S2 Step
+   0's "do not pay" clause is spent and the step as written deadlocks (**A-24**).
+
+### What was written
+`docs/day0-session-pack-2026-08-07.md` — new **§0.0** (25 amendments A-01…A-25, each with its
+evidence and the location it governs), new **§5** (four RUNBOOK-LEVEL findings, flagged not fixed),
+and short dated pointers inserted **inside all four prompt blocks** — necessary because a prompt
+pasted into a fresh chat never sees §0.0 unless its READ FIRST list names it, which it now does.
+⛔ **Every original line is left standing.** Nothing was deleted or rewritten; where an amendment
+and the body conflict, §0.0 wins and says so.
+⛔ **No decision was ruled.** A-02 (`LEDGER_START` when payment and Day-0 are different days),
+A-11 (the first-position mechanism), A-12 (the C10 instrument), A-24 (the three known-unticked ⛔
+boxes) and gate A8's surviving item are all **routed to Andy**, not resolved.
+
+### Verification
+`docs/day0-session-pack-2026-08-07.md` — direct `device_bash` sha256
+`ce41518901b12493baff789732ebdeaa4742d13e881618f8ab3b0370b9374ed6`, 2333 lines (was 1448, sha
+`e8d8b8789332fbc47d43579ee9b1b99fe9b8593636fc302a1550d2aee64ff8f6`). Single-match greps confirmed
+on `A-01 — THE ROSTER WAS LOST`, `BRANCH 3 — PARTIAL, ALTERED, OR STILL-MOVING RESTORE`,
+`STEP 4b — ADDED 2026-08-07`, `RUNBOOK-LEVEL FINDINGS — FLAGGED, NOT FIXED`. Fenced blocks even
+(10 = 4 prompts + the §0.2 ladder). Every other file's mtime unchanged.
+
+### Files changed this session
+`docs/day0-session-pack-2026-08-07.md` (§0.0 + §5 + inline pointers) · `docs/session-log.md` (this
+entry). **`docs/state.md` NOT changed — no stated fact of the fleet changed; the incident block
+already carries the facts these amendments are built on.** No CSV, no OA action, no git in any form.
+
+**HOLDING for Andy's commit.** ⚠️ Still uncommitted from earlier: `docs/decision-card-2026-08-06.md`
+(modified) and `data/captures/2026-08-06-gfam/GF-Backstop-1552-FlatClose.txt` (untracked).
+
+> ### ⭐ ADDENDUM — same session, 2026-08-07 (evening), at Andy's instruction: AMENDMENT A-26.
+> **[Evidence: Andy, first-hand 2026-08-07 — `scripts/a_series.py` built and verified: reproduces
+> the hand-run reference exactly, name-keyed so it survives an id-rekeying restore, RED paths
+> negative-tested. Corroborated by a direct read of the file the same evening — 33,345 bytes;
+> docstring: *"`--validate` asserts this tool reproduces it EXACTLY: A1 21/21 · A2 7/7 · A3 7/7 ·
+> A7 3/3 · A8 7/7 · A9 7/7; A4 MOOT; A4b/A6 NOT-RUNNABLE pre-Day-0; A5 NOT-RUN"* and *"NEVER
+> HARDCODE OA OBJECT IDS… family membership keys on the STABLE bot NAME… never on an id."*]**
+>
+> **A-26 — THE A-SERIES EXECUTES VIA `python3 scripts/a_series.py`. S0 and S2 RUN IT rather than
+> hand-deriving the asserts or the hashes.** `--validate` first (it must still reproduce the
+> 2026-08-07 hand-run reference before any verdict it gives is trusted), then `--json` for the
+> close-out; `--emit-wiring` prints the `daily.sh` snippet as a COMMENT and edits nothing.
+> **It discharges** A-15's serialization/hash question, A3's comparand (the §9 mechanics are
+> encoded in the tool, so A3 stays config-independent and catches all-arms-mistyped-identically),
+> the G2 rider two hops deep, and A1's 21-pair arithmetic. **A hand-derived assert is now the
+> FALLBACK, not the method.**
+>
+> ⛔ **Six things it explicitly does NOT discharge, all recorded in A-26 so nothing is read as
+> closed that is not:** (1) **A-01c stands, and the tool's own design is why** — it is name-keyed
+> and reads no OA id, which is exactly what lets it survive a rekeying restore and exactly why it
+> **cannot detect one**; a restore that re-creates every object under the same names yields a
+> fully green A-series over dead identifiers, so the manual bot-ID / `rid` comparison at gate A0
+> and Step 3 remains mandatory. (2) **A-13 is unchanged** — its `SHARED_AUTOMATIONS` list carries
+> the same three objects, so a green `A7 3/3` from the tool is still **3 of the 4** the runbook
+> requires; `Defang-Mon-S2-StrikeTouch` is still ⬜ NOT EVALUABLE. (3) **The Step-4(b) wiring gate
+> is still open** — the file's own header: *"⛔ STANDALONE. NOT wired into `scripts/daily.sh`…
+> this tool does not edit daily.sh."* A runner existing is not a nightly detector existing.
+> (4) A5 is still fed by hand from the `/settings` read; A4b and A6 stay not-runnable until
+> positions exist. (5) Its `VERSION` still reads `0.1.0-DRAFT` — stated as an observation, not an
+> objection; Andy's verification is the authority. If `--validate` fails on Day-0 that is a defect
+> in the TOOL, not the record: stop, report, fall back, never silently re-baseline. (6) Its
+> `PRE_REGISTRATION` table is a **spec surface** — editing it is an "amend the plan" edit, and
+> ⛔ a session never edits this script to make an assert pass. `scripts/` is Claude Code's lane.
+>
+> **Applied at five sites plus its own block**, so no session can reach the old hand-derivation
+> instruction without the pointer: §0.0 A-15 (superseded-in-place, original standing) · the new
+> §0.0 A-26 (filed after A-15, deliberately out of numeric order, and said so in the §0.0 intro) ·
+> S0 Step 4's inline A-15/A-13 block · S2 Step 0 · S2 Step 4(b) · §4's "what this pack does not
+> cover" wiring row. **Pack is now 26 amendments, A-01…A-26.**
+>
+> **Verification:** direct `device_bash` sha256 `465c3f55ba3ec2f0bba8f08ecac8ebd8e343fee1c2583ca1e`
+> (was `ce41518901b12493…`), 2430 lines (was 2333), fenced blocks still even at 10, single-match
+> greps on the three new anchors. **Files changed by this addendum: `docs/day0-session-pack-2026-08-07.md`
+> and `docs/session-log.md` — the same two as the entry above. No new file. No OA action. No git.**
