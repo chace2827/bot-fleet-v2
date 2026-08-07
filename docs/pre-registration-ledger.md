@@ -262,6 +262,10 @@ KILL CRITERION   Exp(R) per position < −0.10 with CI below 0 at n≥50. SEPARA
                  failsafe-tripped → RED, and the bot is switched off pending investigation.
 SAMPLE TARGET    n = 50 positions (the gate is selective — 0 fired in 22 days).
 REVIEW DATE      Day-0 + 6 months. Liveness reviewed WEEKLY from day 1.
+GATE EVAL DATE   📝 STAMPED 2026-08-07 (item 7 above; Andy's ruling: stamp both). Day-0 + 6
+                 months (relational; resolves to calendar at Day-0) — matches REVIEW DATE. This
+                 is a standalone R kill (Exp(R) < −0.10, CI below 0, n≥50), not a comparative
+                 gate under research-loop-spec.md §10a — no interim look at n=60 applies.
 MAX LOSS         1 lot, ≈$500/position (the debit).
 SIZING TIER      1 lot — experiment.
 CONFIG HASH      <capture> @ <hash>
@@ -286,6 +290,10 @@ MECHANISM        Directional convexity in low-vol melt-ups; defined risk (the de
 KILL CRITERION   Exp(R) per position < −0.10 with CI below 0 at n≥50. Plus the same liveness kill.
 SAMPLE TARGET    n = 50 positions.
 REVIEW DATE      Day-0 + 6 months.
+GATE EVAL DATE   📝 STAMPED 2026-08-07 (item 7 above; Andy's ruling: stamp both). Day-0 + 6
+                 months (relational; resolves to calendar at Day-0) — matches REVIEW DATE. This
+                 is a standalone R kill (Exp(R) < −0.10, CI below 0, n≥50), not a comparative
+                 gate under research-loop-spec.md §10a — no interim look at n=60 applies.
 MAX LOSS         1 lot, ≈$700/position.
 SIZING TIER      1 lot. ⚠️ Allocation is set to $50k vs the put pair's $10k — harmless for a
                  1-ct bot, but ALIGN IT before signing if cross-bot comparability is wanted.
@@ -332,7 +340,7 @@ VERIFICATION     Both toggles ON and screenshotted. These are 7 of the 9 bots in
 SIGNED           ..............................
 ```
 > ⚠️ **Funding is judged on the PRE-LAPSE lifetime record, from `data/mirror_baseline.csv`** —
-> a one-time frozen snapshot, nine rows, written once, **built from the capture export and NOT
+> a one-time frozen snapshot, nine rows **[CORRECTED 2026-08-07 — actually TEN rows; item 9 below; `device_bash` read, sha `cdceb0a8d444e570…`]**, written once, **built from the capture export and NOT
 > from the archived `trades.csv`** (the ledger is missing 6 mirror positions worth +$632). This
 > is the ONLY place pre-cutover numbers enter a decision. `build-plan.md` §3.
 >
@@ -918,6 +926,8 @@ checks is worse than none.
    with an unresolved field is unsigned, so this must be closed before Day-0 — but adding the
    field to a written entry is an edit to that entry, and the Task-10 scope forbade one. **Andy's
    call: stamp both, or rule the field inapplicable to non-comparative bots.**
+   ✅ **RULED 2026-08-07 (Andy): stamp both.** Applied — PR-05 and PR-06 in §5 now carry
+   `GATE EVAL DATE`, stamped as a standalone R kill, not a comparative gate.
 8. **The funding bar is stated in P/L and win rate; §2's rule 1 forbids both in a kill
    criterion.** `oa-mirror-reference.md` §2.6's conjuncts 2 and 3 are *"positive P/L overall —
    instance-profitable"* and *"win rate within ~10% of the source's claim"*, and §2 rule 1 above
@@ -926,6 +936,9 @@ checks is worse than none.
    correct — a **funding** bar is not an **edge** bar, and the two rules may be about different
    questions — but that is a ruling, not a reading. ⚠️ `CLAUDE.md` §4's *"compare by R, never
    raw P/L"* points the same way.
+   ✅ **RESOLVED 2026-08-07 (Andy's ruling).** Scoping note added to
+   `oa-mirror-reference.md` §2.6 — the funding bar governs a **funding** decision, not a
+   **kill/edge** criterion; §2 rule 1 and `CLAUDE.md` §4 bind the latter only. No conflict.
 9. **`data/mirror_baseline.csv` exists and holds TEN rows, not nine.** `[FIRST-HAND 2026-08-07,
    direct `device_bash` read of the file]`: header plus 10 mirror rows, 174 positions, written
    2026-08-04, sha cited as `cdceb0a8d444e570…` by `mirror-funding-memo-2026-08-05.md` §9. Two

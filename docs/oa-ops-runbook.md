@@ -278,6 +278,14 @@ Groups must reconcile to `bots_meta.csv`'s `pillar` column, exactly.
 rename `SPX-IC` → `IC`, create `Directional` and `Lab`, move every bot per its `pillar` cell,
 then check group counts against the CSV.
 
+> 📝 **STALE 2026-08-07** — `[FIRST-HAND 2026-08-07, Chrome session, Bot Group dropdown
+> DOM read while building `GF-QQQ-IC-Ride`]`: the v1 state above no longer describes the
+> account. Actual groups are **`Archive · Directional-Focus · IC-Focus · Lab · Monitor ·
+> OA-Mirror-Focus`** plus a newly-created **`IC`** group (`greenfield-family-spec.md` §5.2,
+> executed literally — `IC-Focus` holds only the champion and is a workflow group, not the
+> Pillar container this §3 convention describes). The account now has both `IC` and
+> `IC-Focus`. **Not amended** — flagged per Andy's 2026-08-07 ruling; both groups stay.
+
 > ⚠️ **The v2 roster changes all of these counts.** `build-plan.md` §2 archives ~20 bots, deletes
 > 2, clones 4 and builds 5–7. **Do the group reorganisation as part of the Phase 4 sweep, not
 > before it** — otherwise you sort bots you are about to archive. The reconciliation check

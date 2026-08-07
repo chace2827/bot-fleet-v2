@@ -4762,3 +4762,214 @@ to this file.
 `docs/pre-registration-ledger.md` · `docs/session-log.md` (this entry).
 
 **HOLDING for Andy's commit.**
+
+---
+
+## 2026-08-07 (overnight) — GREENFIELD PHASE B PART 1: **GF-QQQ-IC-Ride BUILT AND VERIFIED.** Phase A closed. Six arms NOT started.
+
+**Scope.** Fresh session per the 2026-08-07 close-out's own instruction. Cleared the Phase-A debt
+item, built the family control end to end, stopped at the per-arm boundary on context budget.
+**AUTOMATIONS was not turned ON anywhere. No git command was run in any form.**
+
+### 1. Phase A debt CLEARED — `GF-Backstop-1552-FlatClose` field-verified and captured
+Read first-hand from `a5.bots.acedit.routine` on a fresh page load. `RTfw5TkkCRF178606373201751`,
+version 1, `inputs []`, Library state `Unused`, **Warnings 0 / Opportunities 0** (screenshot-
+confirmed). Tree = unrestricted Positions loop (`symbol ""`, `ptype "*"`, `tags ""`) → Close
+Position, `price {"text":"Market","smart":"market"}`, `closeqty` 100% pct, memo
+`1552 backstop flat close`. Matches `greenfield-family-spec.md` §4.2 exactly.
+**A7 baseline (first recording):** `sha256(JSON{name,inputs,root})` =
+`116069bddf8b8c9e58bd8f28313c2ad95726fa3f7205df4dfde82de7a3e2e5b5`.
+Capture: `data/captures/2026-08-06-gfam/GF-Backstop-1552-FlatClose.txt`. CSV row added.
+**Phase A is now 3 of 3 shared objects captured.**
+
+> **Hash method VALIDATED, not assumed.** The same formula run against `GF-ScannerB-CallSpread`
+> reproduced its recorded baseline `bb4ba866…eb32e` byte-for-byte. That is what makes the next
+> finding a finding rather than a formula artifact.
+
+### 2. ⛔ FINDING **A7-DRIFT-1** — ScannerA's recorded A7 baseline is STALE. UNRULED, gated to Andy.
+`GF-ScannerA-PutSpread` live-reads **version 9** (recorded 3) and A7
+`3308ce8b476d2bd090d9519b445748fc4c0d0fdbe71861c83a249729b1a5a30a` (recorded `d35307e5…871ec7`),
+`routine.updated = 2026-08-07T01:30:07.970Z` — **after** the 2026-08-06 22:19 capture, inside the
+prior session. **Observed delta:** its automation input `IN178605447966781` now carries an explicit
+`defaultValue` object with `text:"None"` and every field empty; at capture it read "NOT SET".
+ScannerB's input by contrast has **no `defaultValue` key at all** — both satisfy F-4 in intent,
+neither is byte-identical to the other. **The tree and the full Open-Position action payload were
+diffed field-by-field against the capture and are UNCHANGED** (series `exactly 0 days`, shortPut
+0.75% below, longPut $2.00 below, `amount` 1 contract, `price {limit:100, smart:normal}`, tags
+`put side`, `filter {minPrice:0.08}`, exits reference). Warnings 0.
+The v3→v9 gap is *consistent with* the prior session's preset work (§10 step A6 verifies presets by
+re-opening them from the picker **on a different automation**) — but that is an **inference, not an
+observation**, and CLAUDE.md §5 forbids treating it as evidence. **NOT corrected.** Re-baselining
+A7 changes the value an operational assert compares against; that is ambiguous under the doc-edit
+rule and therefore **gated**. Recorded as a dated banner in `data/bots_config_v2.csv`.
+**Andy's ruling needed:** re-baseline to `3308ce8b…`, or investigate the six saves.
+It does **not** block the arms — building a bot does not write to a Library automation, and
+attachment is by `rid`, which is unchanged.
+
+### 3. ⛔ BOT GROUP — the documented scheme and the live account disagree. Resolved by executing the frozen spec.
+The account's Bot Group list is `Archive · Directional-Focus · IC-Focus · Lab · Monitor ·
+OA-Mirror-Focus`. **There was no group named `IC`.** `IC-Focus` was checked and contains exactly
+**one** bot — `IC-SPX-FastPT25-S2`, the legacy champion — so it is a *focus/workflow* group, not the
+pillar container; `oa-ops-runbook.md` §3's `Group = Pillar` reorganisation has never been executed
+(§3 itself defers it to the Phase-4 sweep). `greenfield-family-spec.md` §5.2 anticipates exactly
+this and overrides §3 **for these bots by name** ("these are new bots that survive the sweep;
+setting `IC` at birth also sidesteps memo finding N-5"). **Executed the spec literally: created the
+group `IC`** (`BGfw5TkkCRF4417860703275878471`) at bot creation. Not an amendment — §5.2 already
+says `IC`. **Flagged:** the account now carries both `IC` and `IC-Focus`, and `oa-ops-runbook.md`
+§3's "Current state (v1, pre-sweep): `SPX-IC` and `OA-Mirror` only" is stale on its face. Not edited.
+
+### 4. `GF-QQQ-IC-Ride` (PR-14) — BUILT, steps B1–B8, every field server-verified after a hard reload
+`BOTfw5TkkCRF4417860701930934951`. Capture:
+`data/captures/2026-08-07-greenfield/GF-QQQ-IC-Ride/GF-QQQ-IC-Ride.txt`. CSV row added.
+
+| Surface | Read back (value layer, post-hard-reload) | Result |
+|---|---|---|
+| Account | `accountId = "sim"` | Paper ✅ |
+| Allocation | `seed = 2500` | ✅ |
+| Limits | `posLimitDay = 2`, `posLimit = 2` | ✅ |
+| Scan speeds | `scanrate = 1`, `exitrate = 1` | Every 1m / Every 1m ✅ |
+| Day trading | `nopdt = 0` | Allowed ✅ |
+| Symbols | none | ✅ (QQQ is in the automation) |
+| Bot Group | `{"id":"BGfw5TkkCRF4417860703275878471","name":"IC"}` | ✅ set AT CREATION |
+| Tags | `input[name=tags].value = "experiment,gfam,arm ride,pr 14"` | ✅ §5.1 order exactly |
+| AUTOMATIONS | `status = "off"` | ✅ OFF |
+| EXIT OPTIONS | `disableExits = 0` | ✅ ON |
+| Bot inputs | `IN178607080900761` GF_EXITS_PUT · `IN178607092377072` GF_EXITS_CALL | both BOUND, non-empty |
+| Bundle (both) | `expdays 0.01` · `smexpdays {pct:100, smart:"speedy"}` · all triggers empty · PDT unchecked · bid-ask guard unchecked | ✅ §4.4 base, arm mechanic = none |
+| rid list | ScannerA `RTfw5TkkCRF178605283747821` · ScannerB `RTfw5TkkCRF178606271659881` · Backstop `RTfw5TkkCRF178606373201751` | ✅ ATTACHED, not copied |
+| Backstop trigger | `ttype repeat` · `freq 2` · `interval 1` · `byweekday [0,1,2,3,4]` · **`ntime 1552`** · `endDate ""` · `holidays "skip"` | ✅ §4.2 exactly |
+| Scanner triggers | both `ttype scanner`, `weekdays Mon-Fri`, `timerange ""` | ✅ |
+| Notes | PR-14 block, **byte-exact 2339/2339, firstDiff −1** | ✅ |
+| Template | `Tfw5TkkCRF4417860721733331241` V1, Notes **byte-exact 2339/2339** | ✅ |
+
+**The input chain of §1.1 is bound and was read, not assumed:** each attachment's automation-input
+record resolves to `{"type":"input","nid":"bot","input":"IN1786070…","text":"GF_EXITS_*"}`. The
+`oldValue` field on ScannerA's record still holds the pre-link `None` snapshot and was ignored per
+§1.2 rule 2.
+
+### 5. ⛔ THE PILOT'S NOTES DEFECT REPRODUCED — and defeated by the runbook's own counter
+First write of the PR-14 block came back **2324/2339**: OA's sanitizer **decodes entities, then
+strips unknown tags**, so `<capture>` and `<hash>` were eaten and the CONFIG HASH line read
+`CONFIG HASH       @ `. Single HTML-escaping failed identically. **The rendered panel looked
+correct both times.** Fixed with `oa-ops-runbook.md` §4.0 item 2's documented counter —
+**double-escape (`&amp;lt;`)** so one decode pass leaves `&lt;` intact. Third write verified
+byte-exact. **Caught only by the character-by-character compare**, exactly as §B8 warns. Every
+remaining arm must use the double-escape path from the first write; do not re-derive this.
+
+### 6. Label-vs-value trap, hit and recorded
+The Ride preset renders Expiration pricing as **"100% of bid/ask"**, which reads like SmartPricing
+Normal and appears to contradict §4.4's `smexpdays = speedy`. It does not: "100% of bid/ask" is the
+LIMIT (`pct:100`); the MODE is `smart`, and it reads **`speedy`**. §1.2 rule 4 reproduced on the
+write path. No spec conflict, no ruling needed — recorded so no later session "fixes" a correct field.
+
+### 7. A-series asserts — what is runnable at n=1 arm, run and recorded verbatim
+| Assert | Status |
+|---|---|
+| **A1** pairwise one-mechanic difference | **NOT RUNNABLE — vacuous at n=1 arm.** 0 of 21 pairs exist |
+| **A2** non-bundle fields equal across arms (incl. trigger config, as amended) | **NOT RUNNABLE — vacuous at n=1 arm.** Ride's values are recorded as the reference set |
+| **A3** decoded set == pre-registered set | **PASS.** Ride's decoded bundle is base-only (`expdays 0.01`, `smexpdays speedy`, no mechanic); PR-14's MECHANISM names exactly `{Expiration expdays=0.01, smexpdays=speedy} and nothing else` |
+| **A4** | MOOT (F-4 ruling, struck) |
+| **A4b** ledger stop-out signature | **NOT RUNNABLE pre-Day-0** — no ledger rows |
+| **A5** `itmpaper`/`itmlive`/`maxexits` | **NOT RUN this session** — account-settings page not opened. Last recorded values stand (`itmpaper=market`, `itmlive=auto`, `maxexits=0`); D2 remains the Day-0 gate |
+| **A6** exactly 1 contract/leg today | **NOT RUNNABLE pre-Day-0.** Note the sizing primitive IS the fixed contract count (`amount {"type":"quantity","quantity":1}`), so the $-risk fallback that A6 guards is not in use |
+| **A7** shared-automation payload hashes vs baseline | **1 FAIL, 2 PASS.** ScannerB `bb4ba866…` MATCH · Backstop `116069bd…` baseline first-recorded · **ScannerA MISMATCH → FINDING A7-DRIFT-1 (§2 above), gated** |
+| **A8** decoded(PUT) == decoded(CALL) | **PASS** on Ride — field sets identical, only `posType` differs (structural scope, not bundle) |
+| **A9** bot inputs BOUND and NON-EMPTY | **PASS** on Ride — both bound to the automation inputs, both `decoded(value) != {}` |
+
+### 8. Deliberately NOT done, each with its reason
+- **The six arms.** Context budget. Stopped at a clean per-arm boundary per the standing instruction.
+- **B5's toggle screenshot.** `status="off"` and `disableExits=0` are **value** reads of exactly those
+  two toggles, which is stronger evidence than a screenshot; §1.6's premise that toggle state "does not
+  survive text capture" is false on this surface. Substitution recorded, not skipped silently.
+- **Template tag `arm ride`.** §5.1 specifies template tags `experiment,pr nn,gfam`. The Save Template
+  panel pre-fills from the bot; the removal read correctly in `input[name=tags].value` at submit but the
+  saved template reads `experiment,gfam,arm ride,pr 14`. Left as-is — §5.1 calls the tag a search handle,
+  not the record, and inheritance is consistent across arms by construction. Flagged, not re-edited.
+- **`IC-Focus` / runbook §3 staleness.** Observed, recorded, not edited — group-scheme changes are decisions.
+
+### 9. Method notes for the next session — do not relearn these
+1. **Notes: double-escape from the first write.** Build `<pre>` + `<br>` and escape `& < >` as
+   `&amp;amp; &amp;lt; &amp;gt;`, set `contenteditable.innerHTML`, dispatch `input`, Save, **hard reload**,
+   then reconstruct (`<br>`→`\n`, one entity decode) and compare character-by-character.
+2. **Bot Input Default Value IS the arm's bundle.** F-4's `Default Value = NONE` binds the **Automation**
+   Input (already set on ScannerA/B), not the bot input — §1.3a(a) says so in those words, and A9 requires
+   the bot input non-empty. The bot input's "Default Value" control opens the Exit Options modal with a
+   **Presets** button; load `GF-<ARM>-EXITS` there.
+3. **`GF_EXITS_CALL` must be a NEW bot input**, not a re-link of `GF_EXITS_PUT`. The picker offers the
+   existing one (so a single bot input *can* span both automations — a C0b-adjacent observation), but the
+   two automation inputs are `posType`-scoped (`shortputspread` / `shortcallspread`) and §4.1 specifies two.
+4. **Native `<input type=time>`** (`min 09:31`, `max 15:55`): bulk `type` does **not** land. Click the hour
+   segment, then send single keys `3` `5` `2` `p`. Verify `.value === "15:52"` before saving.
+5. **Weekday multi-select stays open** — click Monday/Tuesday/Wednesday/Friday individually (Thursday is
+   pre-checked), then click outside. Confirm `byweekday.value === [0,1,2,3,4]`.
+6. **`ref`-based clicks no-op** on this app (reconfirmed); use coordinates. Tag-chip rows reflow after each
+   add, so re-screenshot before clicking near them — a stray click **adds** a suggested tag (`focus ic` was
+   added and removed this way).
+7. Attachment order that worked: Add Automation → pick object → Schedule class → (Scanner: leave Market Time
+   blank) → 🔗 → Add Bot Input → Presets → arm preset → Save modal → Save bot input → Save attachment.
+
+### Sequence for each remaining arm (identical to the Ride except three things)
+Order is **PT50 → Trail → Touch0 → SL100 → Canary → SL200 LAST**, per-arm atomic.
+Differences per arm: (a) the exit bot input loads its own `GF-<ARM>-EXITS` preset — **both** PUT and CALL,
+and they must stay equal (A8); Trail = the **ARMED** shape, `target=40 / trail=15`, per the PR-16 re-scope;
+(b) tags `experiment, gfam, arm <name>, pr NN`; (c) its own PR block in Notes, double-escaped.
+Exit-pricing sub-fields stamp **uniform `{"smart":"normal"}` under G-1-HOLD** and are to be recorded as
+`stamped-under-G-1-HOLD` per arm. Full verification + capture + CSV row **before** starting the next.
+
+### Files changed this session
+`data/captures/2026-08-06-gfam/GF-Backstop-1552-FlatClose.txt` (new) ·
+`data/captures/2026-08-07-greenfield/GF-QQQ-IC-Ride/GF-QQQ-IC-Ride.txt` (new) ·
+`data/bots_config_v2.csv` (backstop row + Ride row + A7-DRIFT-1 banner) ·
+`docs/state.md` (Phase A/B status) · `docs/session-log.md` (this entry).
+**OA:** one group created (`IC`), one bot created and configured, one template saved. Nothing switched ON.
+
+**HOLDING for Andy's commit.**
+
+## 2026-08-07 — Housekeeping: five doc corrections (Andy's ruling) + T8/T9 tracker catch-up
+
+**Model switched to claude-sonnet-5 mid-session.** Andy's ruling on the two items flagged at close
+of the prior session: **A7-DRIFT-1** re-baseline is RULED (re-baseline) but assigned to the ARMS
+BUILD session, not this one — no baseline touched here. **`IC`/`IC-Focus`** — both groups stay;
+correcting the stale runbook §3 line is this session's item 3.
+
+Executed exactly Andy's 5-item housekeeping list, then a full tracker refresh. All edits anchored,
+single-match verified, `device_bash` sha256 before/after. No git, no OA, no browser.
+
+1. **`pre-registration-ledger.md` — PR-05/PR-06 `GATE EVAL DATE` stamped** (open item 7; Andy's
+   ruling: stamp both). Both now carry the field, dated 2026-08-07, marked a standalone R kill
+   (Exp(R) < −0.10, n≥50) — not a comparative gate under `research-loop-spec.md` §10a, so no
+   interim look at n=60 applies. Item 7's open-items entry closed with a resolution banner.
+2. **`oa-mirror-reference.md` §2.6 — scoping note added** (resolves open item 8). States plainly
+   that the funding bar is a **funding** question, not a **kill/edge** question — `pre-
+   registration-ledger.md` §2 rule 1 and `CLAUDE.md` §4 govern the latter and are not in tension
+   with §2.6. Item 8 closed with a pointer banner.
+3. **`oa-ops-runbook.md` §3 — stale "current state" line corrected.** The v1 "`SPX-IC` and
+   `OA-Mirror` only" description no longer matches the account. Dated banner cites the 2026-08-07
+   Chrome-session DOM read (building `GF-QQQ-IC-Ride`): actual groups are `Archive ·
+   Directional-Focus · IC-Focus · Lab · Monitor · OA-Mirror-Focus`, plus the newly-created `IC`
+   (`greenfield-family-spec.md` §5.2, executed literally). **Not amended** — both `IC` and
+   `IC-Focus` stay, per Andy's ruling this session. This is the item flagged "not edited — group-
+   scheme changes are decisions" in the 2026-08-07 (overnight) entry above; Andy's ruling
+   distinguishes *correcting the description* (this edit) from *changing which groups exist* (a
+   decision, still not made).
+4. **`mirror_baseline.csv` stale refs corrected** (resolves open item 9). `pre-registration-
+   ledger.md` §5's *"nine rows"* and `CLAUDE.md` §3's *"not yet written"* both bracket-corrected
+   in place, original text left standing — the file holds TEN rows, written 2026-08-04, 174
+   positions / 10 mirrors, per the same first-hand read item 9 already cited.
+5. **Tracker rows T8/T9 caught up.** Both `Day-0 runbook adversarial audit` and `Mirror funding
+   memo` were completed 2026-08-05 (`docs/day0-audit-2026-08-05.md`, `docs/mirror-funding-
+   memo-2026-08-05.md`) but the tracker still read `todo` — the 2026-08-04 session's banner-only
+   tracker update never reached these two rows (the same gap `sprint-2026-08-04.md`'s own header
+   already flagged for 3 other items). Fixed to `done` with full summaries.
+6. **Full tracker refresh**, pushed via `update_artifact`. New `hk0807` phase group logs items
+   1–5 above. Removed the stale `Blocked on` entry for the pilot-clone ritual (`state.md`: RITUAL
+   COMPLETE 2026-08-04, nothing outstanding). **Closes on Andy's visual confirmation, per
+   `CLAUDE.md` §9.1a — not yet confirmed.**
+
+**Files changed:** `docs/pre-registration-ledger.md` (5 edits: PR-05, PR-06, item 7 banner, item 8
+banner, §5 nine-rows correction) · `docs/oa-mirror-reference.md` (§2.6 scoping note) ·
+`docs/oa-ops-runbook.md` (§3 stale banner) · `CLAUDE.md` (§3 mirror_baseline correction) ·
+`docs/session-log.md` (this entry). Tracker artifact `bot-fleet-migration` updated (not a repo
+file). No `state.md` edit this session (nothing in it was itself stale).
+
+**HOLDING for Andy's commit.**

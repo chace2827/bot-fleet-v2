@@ -22,7 +22,9 @@ Contract: `docs/daily-loop-spec.md`.
    absent number is not a zero. The v1 ledger — `trades.csv`, `corrections.csv`, `bots_config.csv`,
    `compliance.csv` — is **frozen in `data/archive/` and is never a reporting input**. Read
    `data/archive/README-v1-ledger.md` for the one-page summary; cite it as history, never as the state
-   of the fleet. The single exception is `data/mirror_baseline.csv` (not yet written): a one-time frozen
+   of the fleet. The single exception is `data/mirror_baseline.csv` (not yet written **[CORRECTED 2026-08-07 — WRITTEN 2026-08-04; 174
+   positions, 10 mirrors, zero excluded; `pre-registration-ledger.md` item 9; sha
+   `cdceb0a8d444e570…`]**): a one-time frozen
    pre-lapse snapshot for the 7 live mirrors, read **only** by funding decisions.
 2. **Config**: capture files → `data/bots_config_v2.csv` (not yet written — Phase 2). **Never
    hand-written, never memory-derived.** `data/archive/bots_config.csv` is the OLD hand-written record —

@@ -96,6 +96,15 @@ Shortlist is cloned to OA paper at chosen allocations, labeled, tracked. Data re
 > are funded **in place** (they don't graduate out to another pillar). The headline gate is the
 > taxonomy bar; the older items below are kept only as **supporting checks**, not separate gates.
 
+> 📝 **SCOPING NOTE — added 2026-08-07** (resolves `pre-registration-ledger.md` open item 8;
+> Andy's ruling). This funding bar is stated in **P/L and win rate** by design — it answers a
+> **funding** question (does an already-running, watch-only mirror deserve capital?), not an
+> **edge** question. `pre-registration-ledger.md` §2 rule 1 (*"The kill criterion is in R.
+> Never dollars, never win rate"*) and `CLAUDE.md` §4 (*"Compare by R, never raw P/L"*) govern
+> **kill** and **edge-comparison** criteria — a different question this bar does not answer and
+> is not read as answering. The two rules do not conflict; they bind different decisions.
+> Nothing in this section is read as a kill criterion in dollars or win rate.
+
 **The funding bar (all must hold):**
 1. **≥20 completed trades** in paper.
 2. **Positive P/L** overall — instance-profitable, not just trade-level (the 3DTE/ORB trap: 91%
