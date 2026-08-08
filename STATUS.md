@@ -1,4 +1,4 @@
-# Bot Fleet — STATUS  ·  generated 2026-07-31
+# Bot Fleet — STATUS  ·  generated 2026-08-08
 
 > **Numeric source of truth.** Auto-generated from `data/trades.csv` by `scripts/report.py`. Do not edit by hand. All figures are PAPER. Task backlog: `docs/backlog.md` (also in `dashboard.html`).
 
@@ -21,6 +21,37 @@
 
 | Bot | Pillar | Hold | Pos | med Qty | med Risk$ | max Risk$ | Realism |
 |---|---|---|--:|--:|--:|--:|:--|
+## Hedge tournament (live-data counterfactual)
+> **The productized loss autopsy.** Every real, settled (status=expired) leg replayed through the v1 hedge library — Ride/no-stop, PT+X%/SL-X% return-threshold rules, and an S2 strike-touch cut (tape-gated, 5-min grain). **Optimistic bound, not a live estimate** — every non-Ride arm assumes a fill exactly at the threshold; real fills slip. Compare rules by **R** (pnl÷risk), never $. Basis: PT/SL % are of the credit collected (`|premium|`), per `mfe_pct`/`mae_pct` already carrying that unit (verified against the ledger — see `scripts/hedge_tournament.py` docstring). **Defang: deferred v1** (0 legs marked, not modeled — needs an intraday premium-decay path not yet in the ledger).
+
+| Rule | N | Exp(R) | Tot R | WR | maxDD-R | worst-R |
+|---|--:|--:|--:|--:|--:|--:|
+| ride | 0 | — | — | — | — | — (no legs) |
+| pt25 | 0 | — | — | — | — | — (no legs) |
+| pt50 | 0 | — | — | — | — | — (no legs) |
+| pt100 | 0 | — | — | — | — | — (no legs) |
+| sl50 | 0 | — | — | — | — | — (no legs) |
+| sl75 | 0 | — | — | — | — | — (no legs) |
+| sl100 | 0 | — | — | — | — | — (no legs) |
+| sl130 | 0 | — | — | — | — | — (no legs) |
+| s2 | 0 | — | — | — | — | — (no legs — S2 needs a tape file for that day/underlying) |
+
+#### Per-bot cut  (Ride vs SL75 — the mid-spectrum published rung)
+| Bot | N | Ride Exp(R) | SL75 Exp(R) | Δ |
+|---|--:|--:|--:|--:|
+
+#### Regime cut  (Ride vs SL75, by tape-derived regime label)
+| Regime | N | Ride Exp(R) | SL75 Exp(R) |
+|---|--:|--:|--:|
+
+> N is small and concentrated in the last few tape-covered trading days (tape.py is new); the S2 arm and the regime cut will thicken as more days accrue. Read this as an early ranking to cross-check the LEAN/OA backtest tournament, not a standalone verdict.
+
+## Trade-window heat map — when do shorts actually get touched (hour x regime)
+> **The 11am-vs-1:30 question, generalized.** Every ledger position's worst-adverse-excursion (MAE) timestamp, bucketed by hour-of-day x tape-derived regime (Drift/Trend/Chop/n-a). `touch %` = short-strike touch rate, scored only on positions with same-day tape coverage (a small, recent subset — most history predates `tape.py`); `MAE` = mean adverse excursion as % of credit, computed on ALL positions in the bucket regardless of tape coverage. Cells are `n=… · touch …% · MAE …%`; blank touch% = no tape-covered position fell in that cell. **Small-n cells are directional, not conclusive** — read the n before the rate.
+
+| Hour |  |
+|---|
+
 ## Lessons index — tagged, searchable  (data/lessons.csv)
 > Every graded bot-day's "day's lesson" (from the brief JSON's Verdict row; session-log fallback only for dates the brief never covered), tagged from a fixed vocabulary (`entry-timing · hedge · filter · regime · sizing · other`) by simple keyword rules (see `scripts/lessons.py` docstring) — not an ML classifier. Grouped by tag, most recent first.
 

@@ -1,0 +1,18 @@
+{
+  "date": "2026-08-08",
+  "generated": "2026-08-08T11:17:46",
+  "tape": {
+    "date": "2026-08-08",
+    "generated": "2026-08-08T11:17:46",
+    "any_reconstructed": false,
+    "underlyings": {},
+    "divergence": null
+  },
+  "cards": [],
+  "hedge_clinic": [],
+  "grades": {
+    "green": 0,
+    "amber": 0,
+    "red": 0
+  }
+}

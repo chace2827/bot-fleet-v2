@@ -6524,3 +6524,94 @@ stale in substance.
 
 **Files changed:** `docs/reactivation-runbook.md` · `docs/day0-session-pack-2026-08-07.md` ·
 `data/brief/2026-08-08_tape.json` · `docs/state.md` · `docs/session-log.md`. sha256-verified. No git.
+
+### 📋 DECISION CARD 2026-08-08 WRITTEN — the remaining Day-0 ruling batch, prepared not decided. No OA, no Chrome, no git.
+
+**Deliverable:** `docs/decision-card-2026-08-08.md` (747 lines, sha256
+`2ee1416bf6a87365f9af28b7f502291089656d520f7f505ea07dae082c16012c`), in the shape of
+`decision-card-2026-08-06.md`: preamble → copy-paste **Ruling Sheet** → one section per slot
+(question · verbatim citations · evidence · options with costs · **RECOMMENDATION**) →
+**Verification appendix** (sha256 set + 29-row `grep -cF` assert table + open evidence gaps).
+
+**Six slots, all Andy's, none ruled here:** (1) **A-02** `LEDGER_START` semantics — payment date vs
+first `AUTOMATIONS`-ON day · (2) **A-11** the first-position control · (3) **A-12** the C10 `dstop`
+instrument — `TESTOPS-LAB-DSTOP` vs the pilot vs leave-open · (4) **A-24** S2 Step-0's three
+known-unticked boxes **plus gate A9**, which A-24 predates · (5) **gate A8** = PR-18's naming, the
+one surviving signature item (**A-04**) · (6) **A-27(c)** Step-4b, with the per-bot capture worklist
+and the exact pages attached.
+
+**Three findings the card surfaced and did NOT fix — all gated, all listed as consequential
+amendments for Andy at commit review:**
+- **CA-3 — A-27(c)'s count is off by one.** It says *"12 of the 14 … NO per-bot capture file on
+  disk"* and then names **eleven**. Re-inventoried `data/captures/` directly: **11** bots have no
+  per-bot capture file; **12** cannot have a hash ESTABLISHED (those 11 **plus the pilot**, which
+  has a baseline and diverges from it). The step4b file's §4 table is internally correct; its §0
+  headline is the loose one, and A-27(c) inherited §0's wording.
+- **CA-2 — `state.md`'s CF-4 bullet is stale.** It still reads *"do not publish it under the
+  anchor's name"*; `greenfield-family-spec.md` discharged CF-4 on 2026-08-06. ⛔ Not applied: the
+  falsified sentence **is** the decision in slot 5, so under `CLAUDE.md` §5 it is ambiguous and
+  therefore gated, not an evidence-backed correction.
+- **CA-1 — `build-plan.md` §3 + `build_ledger.py`.** §3 defines `LEDGER_START` as *"the Day-0
+  reactivation date"*, a phrase that now names two different days; the script constant reads
+  `"UNSET"`. Needs an amend whichever way slot 1 goes.
+
+**Two analytic points the source amendments do not state, added in-slot:**
+- **Slot 6, option 3 forecloses Step 6a permanently.** The mechanism verdict runs *"on the nine
+  leave-in-place bots ONLY"* — nine bots off forever = §1's lapse mechanism can never be settled.
+- **Slot 6's Step-2c cost is lower than A-27(c) implies.** A-09b already rules the no-touch
+  observation `CONFOUNDED — RESTORE` / ⬜ NOT EVALUABLE on gate-A0 branch 1, so a pure-read capture
+  pass forfeits an observation that is already forfeit. Sub-choice 6a settles it explicitly anyway,
+  because the S0b instruction (*"DO NOT touch any of the nine … in any way"*) is narrower than
+  A-07's pure-read allowance.
+
+**Also recorded:** slot 4 adds **gate A9** as a ⛔ box A-24 does not enumerate — A-24's own
+*"ANY OTHER unticked ⛔ box is an unqualified STOP"* applies, and per §9.1a the box closes on Andy's
+own clean end-to-end n=0 run and on nothing else, not on a session's report of a fix.
+
+**Method:** every quote asserted byte-exact on the device by `device_bash grep -cF` with the count
+stated inline; 15 files sha256'd at read time; no staged-copy quote; no OA fact from memory —
+unreadable facts written **UNVERIFIED** in place (the button test-fire; the nine's automation trees,
+`posLimit`s, tags and groups). No browser tool loaded, no OA surface touched, no git command run
+including `status`.
+
+⚠️ **S1 was running at the time of this read** — one step-0 baseline on disk
+(`data/captures/2026-08-08-clones/PR-02-step0-baseline-IC-SPX-FastPT25-S2-130PM.txt`), **no S1
+close-out entry in this log**. Slots 2 and 6 both reference bots S1 may have changed; the card says
+so in place.
+
+**Files changed:** `docs/decision-card-2026-08-08.md` (new) · `docs/state.md` · `docs/session-log.md`.
+Verified by direct `device_bash` sha256 + single-match grep. No git. **Uncommitted — Andy runs the commit.**
+
+### ✅ GATE A9 CLOSED — 2026-08-08 (orchestrator session, Fable). Two loader fixes, full 8/8 clean run on Andy's machine. No OA, no git from this side.
+
+**`execution_audit.py` 1.0.0 → 1.1.0 — the queued SPLIT (i), loader only.** Comment-skip ·
+`bot` (v1 contract) / `name`+`object_kind` (v2 capture) dual key · schema-unrecognized branch:
+every Tier-C rule whose columns are absent reports **SKIPPED BY NAME**, never silence, never a
+crash. `has_cfg` semantics preserved (= a Tier-C rule actually ran), so V7 stands. **Validation
+matrix 21/21 UNCHANGED in both config states** — baseline taken pre-fix with the config absent
+(the only state the frozen matrix could ever run in), diffed identical post-fix. Negative-tested:
+garbage schema → 5 SKIPPED + header quoted; v1-contract synthetic → FULL, rules run. Detector
+rules untouched; fixture untouched; `bots_config_v2.csv` untouched. sha256
+`fdc43d0dcb7275560069048e62d897f528d9620b5a6be87de7a410fae1851e2d`. Split (ii) — the Tier-C
+contract reconciliation — REMAINS OPEN, separate, per the queue.
+
+**`daily_brief.py` — the SAME defect class one stage downstream, found when Andy's first 8-stage
+run died at 4/8** (stage 3's crash had been hiding it). Same fix shape; and because the capture
+schema carries NONE of the brief's graded mechanic columns (`filter`/`entry_time`/
+`profit_target`/`reentry`), it stays **CONFIG-BLIND loudly** with the schema reason printed —
+grading against a record that declares no mechanics would be scoring fidelity to nothing. sha256
+`19d5ed6c6bba587ba3598f82ccb8388b96cf6cfa45fb7a09bd9cb6c846e3868e`. Both files verified on
+device by direct sha256 (cloud copy == device copy, byte-exact), never a stage-back.
+
+**The whole 8-stage pipeline was then run END-TO-END in the cloud workspace against the real
+export before shipping** — stages 1–8 all complete, so stage-N fixes stop being discovered one
+Andy-run at a time. **Andy then reproduced 8/8 clean first-hand (`LEDGER_START=2099-01-01`,
+sentinel pending A-02): 1386 → 0 · n=0 · v1.1.0 REDUCED with the five Tier-C rules SKIPPED by
+name · CONFIG-BLIND with reason · lessons truncate-guard held (33 v1 rows protected; disposition
+= a Day-0 call, flagged, not taken) · STATUS.md + dashboard regenerated at n=0.** Per §9.1a the
+gate closes on Andy's own run on file — this is that run. **Day-0 §4 is unblocked.**
+
+⚠️ `state.md`'s A9 block not yet updated — deferred to this orchestrator session's final
+close-out (batched with the S1 audit results) to avoid a third concurrent writer on `state.md`
+while Worker 1 (PR-02, OA) and Worker B (E-3 implementation) are live. This log entry is the
+record of the closure until then.

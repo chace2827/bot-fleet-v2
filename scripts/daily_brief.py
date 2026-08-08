@@ -362,10 +362,37 @@ def build(day):
     # The v1 data/archive/bots_config.csv is the discredited hand-written record
     # (wrong on 3 of 4 audited bots) and must NEVER be read for a config fact.
     # Absent v2 config => grade nothing rather than grade against a false record.
-    cfg_rows = load("bots_config_v2.csv", required=False)
-    cfgs = {r["bot"]: r for r in cfg_rows}
+    # AMENDED 2026-08-08 — same defect class as execution_audit.py's gate-A9
+    # split (i), fixed the same day (session-log 2026-08-08): the file as built
+    # is a CAPTURE INVENTORY — a '#' comment preamble, heterogeneous object rows
+    # keyed by `object_kind`, identity in `name`, and NONE of the mechanic
+    # columns this brief grades against (filter / entry_time / profit_target /
+    # reentry). csv.DictReader ate the preamble as a header and r["bot"] crashed.
+    # Now: skip '#' lines; key on 'bot' if that column exists (the v1 contract),
+    # else 'name' filtered to object_kind == 'bot'; and if the schema carries
+    # NONE of the graded mechanic columns, stay CONFIG-BLIND loudly — grading
+    # against a record that does not declare mechanics is scoring fidelity to
+    # nothing. Never silence, never a crash.
+    cfgs, cfg_blind_reason = {}, "NO data/bots_config_v2.csv"
+    _cfg_path = os.path.join(D, "bots_config_v2.csv")
+    if os.path.exists(_cfg_path):
+        with open(_cfg_path, newline="") as _fh:
+            _rdr = csv.DictReader(ln for ln in _fh if not ln.lstrip().startswith("#"))
+            _hdr = [f.strip() for f in (_rdr.fieldnames or [])]
+            _rows = list(_rdr)
+        _MECH = {"filter", "entry_time", "profit_target", "reentry"}
+        if "bot" in _hdr:
+            cfgs = {r["bot"]: r for r in _rows if (r.get("bot") or "").strip()}
+        elif "name" in _hdr and (_MECH & set(_hdr)):
+            if "object_kind" in _hdr:
+                _rows = [r for r in _rows if (r.get("object_kind") or "").strip() == "bot"]
+            cfgs = {r["name"]: r for r in _rows if (r.get("name") or "").strip()}
+        else:
+            cfg_blind_reason = (f"bots_config_v2.csv present but its schema carries "
+                                f"none of the graded mechanic columns {sorted(_MECH)} "
+                                f"(header starts: {_hdr[:4]})")
     if not cfgs:
-        print("daily_brief.py: NO data/bots_config_v2.csv — running CONFIG-BLIND. "
+        print(f"daily_brief.py: {cfg_blind_reason} — running CONFIG-BLIND. "
               "Instruction-mirror compliance is NOT graded (it would be scoring "
               "fidelity to a record that does not exist). This is not a pass.")
     metas = {r["bot"]: r for r in load("bots_meta.csv")}

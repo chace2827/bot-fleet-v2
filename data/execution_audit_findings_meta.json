@@ -1,7 +1,7 @@
 {
-  "detector_version": "1.0.0",
+  "detector_version": "1.1.0",
   "frozen_on": "2026-07-30",
-  "detector_sha256_16": "67a537977c5d0896",
+  "detector_sha256_16": "fdc43d0dcb727556",
   "mode": "REDUCED",
   "window_start": "",
   "window_end": "",

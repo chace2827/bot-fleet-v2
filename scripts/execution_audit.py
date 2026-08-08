@@ -60,7 +60,15 @@ import argparse, csv, hashlib, json, os, sys, collections
 # FROZEN 2026-07-30. The independent audit runs against THIS version only.
 # Bump the version and re-run --validate before any behaviour change ships; the
 # self-hash below makes an unversioned edit detectable rather than arguable.
-VERSION = "1.0.0"
+# 1.1.0 2026-08-08 — GATE-A9 SPLIT (i), LOADER ONLY (queued task, session-log
+# 2026-08-08): load_config() skips '#' comment lines, keys on 'bot' (v1
+# contract) or 'name' (v2 capture file), respects object_kind, and gains a
+# schema-unrecognized branch alongside the file-absent branch — every Tier-C
+# rule whose columns are missing reports SKIPPED BY NAME, loudly; never
+# silence, never a crash. DETECTOR RULES UNTOUCHED. Acceptance: the frozen
+# 35-row fixture + the validation matrix pass UNCHANGED (V1..V19, 21/21).
+# Split (ii) — the Tier-C contract reconciliation — remains open and separate.
+VERSION = "1.1.0"
 FROZEN_ON = "2026-07-30"
 # ---------------------------------------------------------------------------
 
@@ -630,10 +638,50 @@ def load_config(path):
 
     Every mechanic cell is THREE-STATE: a value / the literal 'none' (removed by
     design) / blank (missing data). See `cell()`. Absent file -> Tier C SKIPPED,
-    loudly."""
+    loudly.
+
+    AMENDED 2026-08-08 (gate A9, split (i)). The file as built in Phase 4 is a
+    CAPTURE INVENTORY, not the proposed contract above: a 77-line '#' preamble,
+    heterogeneous object rows keyed by `object_kind` (bot / shared_automation),
+    identity in `name`, and NONE of the Tier-C mechanic columns. The two were
+    never reconciled (split (ii), still open). This loader now: skips '#'
+    comment lines; keys on 'bot' if that column exists (the v1 contract, which
+    the synthetic validation configs still use), else on 'name' filtered to
+    object_kind == 'bot'; and NEVER crashes on an unrecognized schema — it
+    returns what is loadable plus the column set, and run() reports every
+    Tier-C rule whose columns are absent as SKIPPED BY NAME. 'Structural rules
+    run · Tier C SKIPPED until bots_config_v2.csv carries the mechanic columns'
+    is an ACCEPTABLE INTERIM STATE (reactivation-runbook.md §3 Step E), and the
+    design working as intended — a blind spot on the page, never silence.
+
+    Returns None (file absent) or {"bots": {key: row}, "columns": set,
+    "header": [fieldnames]}. Rules still receive the plain bots dict."""
     if not os.path.exists(path):
         return None
-    return {r["bot"]: r for r in csv.DictReader(open(path))}
+    with open(path, newline="") as fh:
+        rdr = csv.DictReader(ln for ln in fh if not ln.lstrip().startswith("#"))
+        header = [f.strip() for f in (rdr.fieldnames or [])]
+        rows = list(rdr)
+    if "bot" in header:                     # the v1 declared contract
+        bots = {r["bot"]: r for r in rows if (r.get("bot") or "").strip()}
+    elif "name" in header:                  # the v2 capture file
+        if "object_kind" in header:
+            rows = [r for r in rows if (r.get("object_kind") or "").strip() == "bot"]
+        bots = {r["name"]: r for r in rows if (r.get("name") or "").strip()}
+    else:                                   # schema-unrecognized: degrade, loudly
+        bots = {}
+    return {"bots": bots, "columns": set(header), "header": header}
+
+
+# Which declared-config columns each Tier-C rule reads. A rule with a missing
+# column is SKIPPED BY NAME — never silently passed, never a crash.
+TIERC_RULE_COLUMNS = (
+    ("PT_DECLARED_NOT_TAKEN", ("pt_pct",)),
+    ("PT_NEVER_FIRES",        ("pt_pct",)),
+    ("TIME_EXIT_MISSED",      ("time_exit",)),
+    ("REMOVED_EXIT_FIRED",    ("pt_pct",)),
+    ("BACKSTOP_CAUGHT_IT",    ("time_exit", "event_backstop")),
+)
 
 
 def run(ledger_path, config_path, meta_path, since=None, until=None):
@@ -679,6 +727,7 @@ def run(ledger_path, config_path, meta_path, since=None, until=None):
     rule_S8_silent_bot(rows, meta, add_bot)
 
     # Tier C — only with a declared config
+    tierc_ran = False
     if cfg is None:
         for rule in ("PT_DECLARED_NOT_TAKEN", "PT_NEVER_FIRES", "TIME_EXIT_MISSED",
                      "REMOVED_EXIT_FIRED", "BACKSTOP_CAUGHT_IT"):
@@ -690,15 +739,40 @@ def run(ledger_path, config_path, meta_path, since=None, until=None):
                     verify_by="Phase 4: build data/bots_config_v2.csv from the "
                               "bookmarklet capture")
     else:
-        rule_C1_pt_not_taken(rows, cfg, add, add_bot)
-        rule_C2_pt_never_fires(rows, cfg, add_bot)
-        rule_C3_time_exit_missed(rows, cfg, add, add_bot)
-        rule_C4_removed_exit_fired(rows, cfg, add_bot)
-        rule_C5_backstop_caught_it(rows, cfg, add)
+        bots, cols, header = cfg["bots"], cfg["columns"], cfg["header"]
+        keyed = ("bot" in cols) or ("name" in cols)
+        runners = {
+            "PT_DECLARED_NOT_TAKEN": lambda: rule_C1_pt_not_taken(rows, bots, add, add_bot),
+            "PT_NEVER_FIRES":        lambda: rule_C2_pt_never_fires(rows, bots, add_bot),
+            "TIME_EXIT_MISSED":      lambda: rule_C3_time_exit_missed(rows, bots, add, add_bot),
+            "REMOVED_EXIT_FIRED":    lambda: rule_C4_removed_exit_fired(rows, bots, add_bot),
+            "BACKSTOP_CAUGHT_IT":    lambda: rule_C5_backstop_caught_it(rows, bots, add),
+        }
+        for rule, need in TIERC_RULE_COLUMNS:
+            missing = [c for c in need if c not in cols]
+            if not keyed or missing:
+                observed = (f"config file present but carries no 'bot'/'name' key column "
+                            f"(header read: {header[:6]}{'…' if len(header) > 6 else ''})"
+                            if not keyed else
+                            f"config file present but column(s) {missing} absent from its schema")
+                add_bot("(fleet)", rule, "SKIPPED", "MECHANICS", "C",
+                        observed=observed,
+                        threshold="declared-contract column(s): " + ", ".join(need),
+                        detail="SKIPPED BY NAME (gate A9 split (i)): the declared config's "
+                               "schema does not carry what this rule reads. NOT a pass, NOT "
+                               "a crash — structural rules still run; this rule resumes when "
+                               "bots_config_v2.csv carries the mechanic columns (split (ii)). "
+                               "The runbook's own checklist calls this interim state "
+                               "acceptable: the blind spot is on the page, never silent.",
+                        verify_by="data/bots_config_v2.csv header vs load_config()'s "
+                                  "declared contract")
+                continue
+            runners[rule]()
+            tierc_ran = True
 
     findings.sort(key=lambda f: ({"RED": 0, "AMBER": 1, "INFO": 2, "SKIPPED": 3}[f["severity"]],
                                  f["rule"], f["date"], f["bot"], f["trade_id"]))
-    return rows, findings, (cfg is not None), (w0, w1)
+    return rows, findings, tierc_ran, (w0, w1)
 
 
 def report(rows, findings, has_cfg, window, out_path, write=True):
@@ -707,7 +781,7 @@ def report(rows, findings, has_cfg, window, out_path, write=True):
     print("=" * 74)
     print(f"EXECUTION AUDIT v{VERSION} (frozen {FROZEN_ON}, sha {self_hash()})")
     print(f"{len(rows)} position rows, window {w0 or 'n/a'} .. {w1 or 'n/a'}")
-    print(f"mode: {'FULL' if has_cfg else 'REDUCED (no declared config — Tier C SKIPPED)'}")
+    print(f"mode: {'FULL' if has_cfg else 'REDUCED (Tier C SKIPPED — config absent or its schema lacks the mechanic columns; the SKIPPED rows name the reason)'}")
     print("=" * 74)
     if not rows:
         print("\nNO POSITIONS IN WINDOW. Nothing to audit — this is not a pass.")

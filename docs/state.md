@@ -2039,3 +2039,45 @@ Full text: `post-u1-package-2026-08-07.md`, `pre-registration-ledger.md` (PR-16 
 > **Files changed by this pass:** `docs/reactivation-runbook.md` (checklist box) ·
 > `docs/day0-session-pack-2026-08-07.md` (2 `data/brief/` surfaces) ·
 > `data/brief/2026-08-08_tape.json` (label) · `docs/state.md` (this block) · `docs/session-log.md`.
+
+> ### 📋 THE REMAINING DAY-0 RULING BATCH IS PREPARED — `docs/decision-card-2026-08-08.md`, 2026-08-08. NOTHING RULED.
+> Six slots, all Andy's, in `decision-card-2026-08-06.md`'s shape: **A-02** (`LEDGER_START`
+> semantics) · **A-11** (the first-position control) · **A-12** (the C10 `dstop` instrument) ·
+> **A-24** (S2 Step-0's residue) · **gate A8** (PR-18's naming — the one surviving signature item,
+> **A-04**) · **A-27(c)** (Step-4b, with the per-bot capture worklist and exact pages attached).
+> Each slot carries the question, verbatim citations, the evidence, 2–4 options with costs, and a
+> **RECOMMENDATION** explicitly marked as not a ruling. sha256
+> `2ee1416bf6a87365f9af28b7f502291089656d520f7f505ea07dae082c16012c`.
+>
+> **⛔ THREE GATED CORRECTIONS FOUND, NONE APPLIED** — listed in the card as consequential
+> amendments for commit review:
+> 1. **A-27(c)'s count is off by one.** It says *"12 of the 14 … NO per-bot capture file on disk"*
+>    and names **eleven**. First-hand re-inventory of `data/captures/`, 2026-08-08: **11** bots have
+>    no per-bot capture file; **12** cannot have a hash ESTABLISHED — the 11 **plus the pilot**,
+>    which has a baseline and diverges from it (S0b-1). The step4b file's §4 disposition table is
+>    internally correct (2 + 1 + 11 = 14); its §0 headline is the loose one and A-27(c) inherited it.
+> 2. ⛔ **THIS PAGE'S OWN CF-4 BULLET IS STALE.** It still reads *"do not publish it under the
+>    anchor's name"*; `greenfield-family-spec.md` **discharged CF-4 on 2026-08-06** (C8 removed
+>    sibling-close, so the untested side decays and the arm can reach Breakeven). **Not corrected
+>    here** — that sentence *is* the decision in the card's slot 5, so under `CLAUDE.md` §5 it is
+>    ambiguous and therefore gated. ⚠️ **CF-1 is NOT discharged** and still bounds publication.
+> 3. **`build-plan.md` §3 + `scripts/build_ledger.py`.** §3's *"`LEDGER_START` = the Day-0
+>    reactivation date"* now names two different days, and the script constant reads `"UNSET"`.
+>    An amend is required whichever way slot 1 is ruled.
+>
+> **⛔ GATE A9 IS AN UNTICKED ⛔ BOX THAT A-24 DOES NOT ENUMERATE.** A-24's own catch-all applies —
+> *"ANY OTHER unticked ⛔ box is an unqualified STOP"*. Per §9.1a it closes on **Andy's own clean
+> end-to-end `daily.sh` n=0 run, on file**, and on nothing else. It is currently the binding blocker
+> on §4 regardless of how the card's other slots go.
+>
+> ⚠️ **Two gaps the card names as UNVERIFIED, not as absent:** the **button test-fire** (no document
+> in this folder names where it lives — A-11: ⬜ NOT EVALUABLE, never "unavailable"), and the **nine
+> leave-in-place bots' automation trees, `posLimit`s, tags and groups** (no bot page has ever been
+> opened on any of them).
+>
+> ⚠️ **S1 was running when this card was written** — one step-0 baseline on disk, no close-out in
+> `session-log.md`. Slots 2 and 6 reference bots S1 may have changed.
+>
+> **Files changed by this pass:** `docs/decision-card-2026-08-08.md` (new) · `docs/state.md` (this
+> block) · `docs/session-log.md`. Device-hash-verified. No OA, no Chrome, no git.
+> **Uncommitted — Andy runs the commit.**

@@ -1,0 +1,63 @@
+# STEP-0 BASELINE CAPTURE — IC-SPX-FastPT25-S2-130PM (PR-02 original)
+# Captured 2026-08-08, S1 session, BEFORE any edit (rename/clone) is made.
+# Method: sha256(JSON.stringify({name, inputs, root})) over a5.bots.acedit.routine, read from the
+# hydrated client model after opening each automation fresh — same formula documented in
+# bots_config_v2.csv's header and used for PR-01's F-C1 no-unintended-edits proof (S0b-RESUME).
+
+BOT
+  name: IC-SPX-FastPT25-S2-130PM
+  id: BOTfw5TkkCRF3717814485128334371
+  status: off (AUTOMATIONS OFF)
+  disableExits: 1 (EXIT OPTIONS OFF)
+  bot group: Monitor
+  tags: (none)
+  allocation: $30,000 (live net liq read $30,105)
+  posLimit: 10 at once / 10 per day
+  account: Paper Trading
+  closedCount: 70 (win rate 56.1%, closed P/L $105)
+
+AUTOMATIONS (all sharing=0 — none are Library-shared objects; confirmed against the Library's
+4 known shared objects, none of which is named Scalp-*)
+
+  Scalp-Scan-Put
+    rid: RTfw5TkkCRF3717814485128620923
+    version: 4
+    sharing: 0
+    updated: 2026-06-17T03:48:53.024Z
+    a7_hash: daf616d29a11a67f2498947f8c6b0e1eac9df37c7b59624ca23409f3e922f736
+    entry gate (OLD pre-fix text, confirmed present): "Bot has exactly 0 positions with put side
+      and open status"
+    entry time gate: "Current market time is after 1:30pm" (confirms 130PM spec)
+
+  Scalp-Scan-Call
+    rid: RTfw5TkkCRF3717814485128620331
+    version: 5
+    sharing: 0
+    updated: 2026-06-17T03:48:28.755Z
+    a7_hash: c471da15c8b16a77499fb06c5c97d9ca8af50ce706d52bc85621e91db97498bf
+    entry gate (OLD pre-fix text, confirmed present): "Bot has exactly 0 positions with call side
+      and open status"
+    entry time gate: "Current market time is after 1:30pm"
+
+  Scalp-Mon-S2-StrikeTouch
+    rid: RTfw5TkkCRF3717814485128620994
+    version: 4
+    sharing: 0
+    updated: 2026-06-14T14:40:13.687Z
+    a7_hash: 01af4963aafb58566789662aafa68d94d846d042869590eccbede9fb6d57ca85
+    NOTE: byte-identical hash to PR-01's own Scalp-Mon-S2-StrikeTouch (recorded 01af4963... in
+      bots_config_v2.csv) despite a DIFFERENT rid and sharing=0 on both — two independently-owned
+      copies with identical content, not a Library-shared object. Not a finding; recorded so a
+      future session does not mistake matching hashes for a shared reference.
+
+  Scalp-Mon-S2-Cleanup
+    rid: RTfw5TkkCRF3717814485128621045
+    version: 1
+    sharing: 0
+    updated: 2026-04-09T03:57:15.410Z
+    a7_hash: 0c10e8066c060662d63c9c0d388aab45cabb11b1ee471f243b60d04fa870f91e
+    NOTE: version 1 — the Market-pricing safety fix (Step 5b) has NOT been applied here yet, as
+      expected; this is the pre-fix baseline. PR-01's Cleanup was already at v2 (post-fix) when its
+      baseline was recorded.
+
+This baseline is what proves later (Step 7) that the ORIGINAL was never touched by the clone build.
