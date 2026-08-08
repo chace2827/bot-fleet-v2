@@ -6,11 +6,14 @@
     "export_rows": 1386,
     "post_cutover": 0,
     "straddler": 0,
-    "pre_cutover": 1386
+    "pre_cutover": 1386,
+    "ops_rows": 0
   },
   "n_trades_condors": 0,
   "n_bots": 0,
   "total_pnl": 0,
+  "ops_bots": [],
+  "ops_rows": 0,
   "note": "",
-  "contract": "working ledger is POST-CUTOVER ONLY; the filter is on open_date"
+  "contract": "working ledger is POST-CUTOVER ONLY; the filter is on open_date. AND LAB-OPS-EXCLUDED; the filter is bots_meta.csv ops_class == 'lab-ops' (E-3 \u00a73.3). Two independent axes: time and class."
 }

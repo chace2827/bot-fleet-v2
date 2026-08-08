@@ -2,7 +2,8 @@
 
 *The live facts. Updated whenever a stated fact changes (CLAUDE.md §9.1). Numbers live in
 `STATUS.md`; the plan in `docs/build-plan.md`; progress in the `bot-fleet-migration` tracker.
-Last updated 2026-08-07 (E-1/E-2/E-3 applied — see block below; supersedes the ceiling-28 /
+Last updated 2026-08-08 (E-3 §3.3 hard precondition IMPLEMENTED & VERIFIED — see the
+top block; three items gated. Previously 2026-08-07: E-1/E-2/E-3 applied — see block below; supersedes the ceiling-28 /
 no-OPS-class facts in every section beneath this one, which are historical as of their own dates).
 Previously: 2026-08-06 (decision-card-2026-08-06.md — all seven ruling slots decided by Andy;
 gated propagation batch applied (G-1…G-6, U-1…U-4); double-testing RETIRE-SCOPED package applied;
@@ -17,6 +18,55 @@ C5 PASS, C11/C4/C6 answered, C10 still blocking ARM-B1; earlier the same day: pr
 the released gated batch — C12 and S-2 propagated to
 every surface, D-1 propagated, `research-loop-spec.md` corrected ×6, §8.4 step 1 corrected on
 explicit authorization; earlier the same day: R-edit package applied + edit-policy split).*
+
+## ⭐ E-3 §3.3 HARD PRECONDITION — IMPLEMENTED & VERIFIED 2026-08-08
+
+All **three exclusion surfaces** are built, tested and device-verified. This **discharges the
+implementation half** of E-3's hard precondition; it is **not a build authorization**. The gate on
+any Lab bot's `AUTOMATIONS` toggle is still: E-3 implemented **AND** the OA roster restore landing
+**AND** Andy's go. §3.4 (paper vs live-tiny) and §3.5 (Bot Group) remain recommendations, not
+rulings. Fleet is still **0 active bots**.
+
+1. **`build_ledger.py` ops-class exclusion.** `data/bots_meta.csv` gains an **`ops_class`** column
+   (empty | `lab-ops`) — the sole classifier, never a tag and never a bot name; the script **FATALs
+   if the column is absent**. Rows from declared ops bots are partitioned out immediately after the
+   cutover partition and **before** condor pairing, into a new **`data/ops_rows.csv`** carrying an
+   `OPS_NOTE` constant. A CLASS-axis **FATAL leak assertion** mirrors the pre-cutover one. The
+   receipt's `contract` string names the second axis and gains `ops_bots` / `ops_rows`; `counts`
+   gains `ops_rows`. The FILTERED-EXPORT GUARD subtracts the ops set. An explicit printed
+   `LAB OPS-CLASS` block, shown even at zero rows.
+2. **`a_series.py` scoping.** `_a4b` and `_a6` take the ops set and skip those bots with the skip
+   **REPORTED**, not silent (guardrail **G3**). New `--bots-meta` flag. `--validate` is untouched
+   and its output is byte-identical to the pre-edit run.
+3. **Lab group/tag fencing.** Four FATAL refusals: unknown `ops_class` value · `lab-ops` with
+   `pillar != Lab` · `pillar == Lab` undeclared · an export row **tagged `ops`** whose bot is
+   undeclared. Group reconciles to `pillar` exactly (`oa-ops-runbook.md` §3, §3.5). The tag is a
+   **tripwire only**, never a classifier.
+
+**Verification (direct `device_bash`, §9.1a):** `execution_audit.py --validate` **21/21** and its
+sha **unchanged** (`fdc43d0dcb727556…`, v1.1.0 / gate-A9 — untouched, as pinned) · `a_series.py
+--validate` reproduces the reference exactly and byte-identically · `build_ledger.py` on
+`data/raw/2026-08-07.csv` still **n=0, 1386 discarded**, with `trades.csv` / `bots.csv` /
+`straddlers.csv` **byte-identical** before and after · two new self-test matrices, **19/19** and
+**13/13**, including the negative tests that a synthetic Lab-tagged row is excluded and reported.
+`data/bots_config_v2.csv` untouched. The `LEDGER_START` constant is untouched (still `"UNSET"`) —
+the comparison runs used the env form, per slot **A-02** being Andy's decision, not this session's.
+
+⛔ **THREE ITEMS GATED — see `session-log.md` 2026-08-08 for the full text.**
+(1) The "`ledger_meta.json` byte-for-byte unchanged" acceptance line **cannot coexist** with §3.3
+items 2 and 4, which require new receipt fields; implemented per the ruling, diff is 4 additions and
+0 changed prior values — Andy to confirm the reading. (2) **`trade_id` is blank in `ops_rows.csv`**
+(the partition precedes pairing, as ruled), which leaves §3.3 **item 8** — pointing the frozen
+`execution_audit.py` at it as a fixture — **not usable** until a trade_id namespace is ruled.
+(3) ⛔ **NEW DEFECT, NOT FIXED: `a_series.py::_a4b` cannot fire on any input** — its `fast` test
+compares a `timedelta` to an `int`, the `TypeError` is swallowed by a bare `except`, so the
+broken-input-link detector is **structurally blind**. Recorded as self-test **O4**. Fix is
+`.total_seconds() <= 300`; changing a detector's predicate is a separate ruling.
+
+**Changed files:** `scripts/build_ledger.py` · `scripts/a_series.py` · `data/bots_meta.csv` ·
+`data/ops_rows.csv` (new) · `data/ledger_meta.json` (regenerated) ·
+`docs/exploratory-bots-design-2026-08-07.md` (§3.3 implemented banner) · `docs/state.md` ·
+`docs/session-log.md`. **Uncommitted — Andy runs the commit.**
 
 ## ⭐ E-1 / E-2 / E-3 APPLIED — 2026-08-07 (~14:40 ET signature, applied same session)
 
@@ -36,7 +86,7 @@ Andy signed all three together, per `exploratory-bots-design-2026-08-07.md` §3'
   §3 roster row (**Group E**, ≤2, entries at new placeholder §6a — no bot named yet), and the
   ceiling propagated to §1/§3/§7. No entry, no restart applies to this class exactly as to every
   other.
-- **E-3 (SLOT C, ledger contamination) — RULED, NOT IMPLEMENTED.**
+- **E-3 (SLOT C, ledger contamination) — RULED, ~~NOT IMPLEMENTED~~ → ⭐ IMPLEMENTED & VERIFIED 2026-08-08 (see the block directly below).**
   `exploratory-bots-design-2026-08-07.md` §3.3 gains its RULED banner recording the HARD
   PRECONDITION: **`build_ledger.py` exclusion + `a_series` scoping (`_a4b`/`_a6`) + Lab group/tag
   fencing, all implemented and verified, before any Lab bot's `AUTOMATIONS` goes ON.** No
@@ -2081,3 +2131,70 @@ Full text: `post-u1-package-2026-08-07.md`, `pre-registration-ledger.md` (PR-16 
 > **Files changed by this pass:** `docs/decision-card-2026-08-08.md` (new) · `docs/state.md` (this
 > block) · `docs/session-log.md`. Device-hash-verified. No OA, no Chrome, no git.
 > **Uncommitted — Andy runs the commit.**
+
+> ### ✅ PR-02 BUILT AND LAYER-1 VERIFIED — 2026-08-08 (S1-RESUME, PR-02 only). **ONE ITEM GATED (allocation). PR-04 NOT STARTED.**
+> Successor to the PR-02-CLONE session Andy stopped mid-build. That session filed **no log, no
+> state block, no rename_map row, no capture** — only the step-0 baseline. Everything below was
+> **verified first-hand, not inherited**. No git. Nothing switched ON, nothing archived, nothing signed.
+>
+> **GATE A0 — plausible, NOT branch 3.** `/bots` = **42 active · 8 left** = the 41 of the
+> 2026-08-07 clean restore **+ this clone** (`created 2026-08-08T14:02:41.630Z`). No duplicate
+> production names. Two `-ARCHIVED-` names on `/bots` is **not** branch 3f — renames commit,
+> OA-archiving is Andy's hand, PR-01's original sits the same way.
+>
+> **`IC-SPX-FastPT25-S2-130PM`** (clone `BOTfw5TkkCRF3017861977616287731`) — production name held;
+> original renamed `-ARCHIVED-2026-08-08` (**same id** `BOT…3717814485128334371`, renamed not
+> re-created). AUTOMATIONS **OFF**, EXIT OPTIONS **OFF** (`disableExits 1`, screenshotted),
+> group IC-Focus, tags `live candidate,focus ic,pr 02`, Paper Trading, 10/10.
+> **Symbols panel empty — and that is CORRECT: the ORIGINAL is empty too** (symbol is
+> automation-resident, `symbolloop` "Loop SPX" + action `symbol "SPX"`), exactly as recorded for
+> PR-01. **The pack's "it is NOT empty" line is wrong for this family — PR02-R2, Andy's to amend.**
+>
+> **Applied this session, both Layer-1 verified after a hard reload:**
+> **F-C1 (ruled REMOVE, clones only) — BOTH SIDES.** Put v5→6 `41f2505a…`, call v6→7 `144b45e6…`;
+> both Open actions now `exits.profits ""`, `text "None"`, **no `smprofits` key**, `0.25` absent.
+> Removed **in place** — the action was NOT rebuilt, so the `exits` bundle and the step-5a
+> re-entry gate survived (re-verified field-by-field).
+> **5b Cleanup pricing** v1→2, Market → `{"pct":100,"smart":"speedy"}`. ⭐ Result hashes
+> `f3673f29…` — **byte-identical to PR-01's post-5b Cleanup**: independent proof the edit landed
+> the same way, not a re-invention. Nothing else in Cleanup touched (§2B; S2 depends on it).
+>
+> **⭐ ORIGINAL UNTOUCHED, PROVEN BY HASH AFTER EVERY EDIT** — all four still byte-identical to the
+> step-0 baseline (`daf616d2…` · `c471da15…` · `01af4963…` · `0c10e806…`), all `updated` still
+> 2026-04/06, original's Cleanup still `Market`, original's scanners still `profits 0.25`.
+> **F-C1 and 5b did not leak.** All four clone rids differ from the original's.
+>
+> ⛔ **PR02-R1 — ALLOCATION IS GATED AND IT BLOCKS SIGNING.** Clone **$50,000**; original
+> **$30,000**. Not the flat-1000 trap. **PR-01's precedent says equal-to-origin → $30,000**;
+> **`pre-registration-ledger.md` §4 PR-02 says "IDENTICAL allocation to the 11:00 arm.
+> Non-negotiable" and the 11:00 arm is $50,000 → $50,000.** Two frozen docs disagree; §5 says
+> gated. **Left exactly as found — NOT changed in either direction.**
+> ⛔ **PR-02 MUST NOT BE SIGNED AT S2 STEP 2b UNTIL ANDY RULES THIS.** Sizing is a signed-config
+> field. Cost of deferring: none compounding (bot OFF, unsigned, no positions).
+>
+> ⛔ **STILL OPEN ON PR-02, GATED NOT FAILED:** **Template V1 + the pre-registration Notes**
+> (`showBotMenu` → Save as Template is **Andy's hand**; `tid` is `null`; NOT ATTEMPTED) and the
+> **bot-page Notes block** (**S0b-2 is OPEN, ruling = DO NOT RETRY** — that editor does not decode
+> double-escaped entities). Both are **record artifacts; nothing in the Day-0 sequence reads them.**
+> ⛔ **LAYER 2 IS UNRUN AND INVERTED** (oa-ops-runbook §4.3): first new position's Trades list must
+> show **no PT row and no exit-trigger row**, AND the S2 monitor must be seen firing. **Monitor
+> silence is a liveness RED, not "ride behaviour intact."** Stays at the top of every brief.
+>
+> **📝 Carried doc-corrections for Andy:** PR02-R2 (pack's Symbols line) · PR02-R3 (the un-amended
+> `reactivation-runbook.md` §2 step 7 PT25 line, per A-16b) · PR02-R4 (the `oa-driving` skill could
+> not resolve for the first half of the session; it later loaded and **matched the method already
+> in use**, adding "remove exits in place, never rebuild an action", which was then followed).
+> **⚠️ Tool hazard worth keeping: STALE EDITOR DOM.** With two automation editors opened in one
+> page life, node queries returned the *previous* automation's cards (Cleanup showed **two**
+> `closepos` cards when the model had one). **Hard-reload between automations before acting.**
+> Also: the automation-level `Save` is the real commit (the drawer Save is not), and the
+> **"Leave site?" guard is a reliable dirty-state oracle**.
+>
+> ⛔ **ATTESTATION (A-18): NONE of the nine leave-in-place bots was opened, edited or
+> toggle-touched.** Only PR-02's clone and PR-02's own archived original were opened.
+> **Step 2c is still unspent.**
+>
+> **Files changed:** `data/captures/2026-08-08-clones/` (3 new: final capture, toggle screenshot,
+> superseded mid-session verify) · `data/archive/rename_map.csv` · `data/bots_config_v2.csv` ·
+> `docs/session-log.md` · `docs/state.md` (this block). All device-hash-verified. No git.
+> **Uncommitted — Andy runs the commit. PR-04 remains NOT STARTED.**

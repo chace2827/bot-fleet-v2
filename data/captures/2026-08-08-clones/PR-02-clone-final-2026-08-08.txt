@@ -1,0 +1,123 @@
+# PR-02 CLONE FINAL CAPTURE — IC-SPX-FastPT25-S2-130PM
+# Written 2026-08-08 by the S1-RESUME session (successor to the interrupted PR-02-CLONE session).
+# Method: a5.bots.bot + a5.bots.acedit.routine read after a HARD RELOAD, each automation opened
+# fresh. Hash = sha256(JSON.stringify({name,inputs,root})) — same formula as the step-0 baseline.
+# ⛔ ONE ITEM IS GATED (allocation, PR02-R1). Everything else is BUILT AND LAYER-1 VERIFIED.
+
+GATE A0 (re-checked at session open) — PLAUSIBLE, NOT BRANCH 3
+  /bots footer "42 active bots - 8 left in your plan" = the 41 of the 2026-08-07 clean restore
+  + 1 (this clone, created 2026-08-08T14:02:41.630Z). Read via a.title (44 raw links = 42 bots
+  + the 2 POS-count links). No duplicate production names. Champion + full -130PM lineage visible.
+  ⚠️ Two -ARCHIVED- names sit on /bots. NOT A-01 branch 3f: renames commit, OA-archiving is
+  Andy's hand, and PR-01's original is in the identical state (rename_map: "RENAMED not yet
+  OA-archived"). Known and recorded, not a collision.
+
+────────────────────────────────────────────────────────────────
+ORIGINAL — IC-SPX-FastPT25-S2-130PM-ARCHIVED-2026-08-08   (step 1 rename: DONE, committed)
+────────────────────────────────────────────────────────────────
+  id BOTfw5TkkCRF3717814485128334371 — SAME id as the step-0 baseline (renamed, not re-created)
+  status off · disableExits 1 · group Monitor · tags (none) · allocation $30,000 (net liq $30,105)
+
+  ⭐ STEP-7 NO-UNINTENDED-EDITS PROOF — ALL FOUR RE-HASHED **AFTER EVERY CLONE EDIT**. ALL FOUR
+     BYTE-IDENTICAL TO THE STEP-0 BASELINE. THE ORIGINAL WAS NEVER TOUCHED.
+  | automation               | rid                            | v | baseline == live         |
+  |--------------------------|--------------------------------|---|--------------------------|
+  | Scalp-Scan-Put           | RTfw5TkkCRF3717814485128620923 | 4 | daf616d2... MATCH (4921) |
+  | Scalp-Scan-Call          | RTfw5TkkCRF3717814485128620331 | 5 | c471da15... MATCH (4938) |
+  | Scalp-Mon-S2-StrikeTouch | RTfw5TkkCRF3717814485128620994 | 4 | 01af4963... MATCH (4584) |
+  | Scalp-Mon-S2-Cleanup     | RTfw5TkkCRF3717814485128621045 | 1 | 0c10e806... MATCH (2582) |
+  Original's Cleanup still reads price {"text":"Market","smart":"market"} and its scanners still
+  carry exits.profits 0.25 — F-C1 and 5b did NOT leak onto the original. Correct: both are
+  clone-only. `updated` timestamps all still 2026-04/06 — nothing was rewritten.
+
+────────────────────────────────────────────────────────────────
+CLONE — IC-SPX-FastPT25-S2-130PM   (production name held)
+────────────────────────────────────────────────────────────────
+  id BOTfw5TkkCRF3017861977616287731 · created 2026-08-08T14:02:41.630Z · tid null (NO TEMPLATE)
+
+  BOT-LEVEL (all read from the stored model after a hard reload)
+  status off (AUTOMATIONS OFF) ........................... PASS  [pr02-clone-toggles-2026-08-08.png]
+  disableExits 1 (EXIT OPTIONS OFF) — Trap 10 / F-C2 ..... PASS  [same screenshot]
+  bot group IC-Focus ..................................... PASS (trap 2)
+  tags "live candidate,focus ic,pr 02" ................... PASS (trap 3 + step-8 tag; `pr 02` is
+                                                           the correct normalisation of PR-02)
+  posLimit 10 at once / 10 per day ....................... PASS (matches original)
+  account Paper Trading .................................. PASS (matches original)
+  Symbols panel "No symbols yet" ......................... PASS — MATCHES THE ORIGINAL EXACTLY.
+      ⚠️ DOC DIVERGENCE, NOT A DEFECT. Session-pack S1 step 4 says the panel "is NOT empty".
+      For this family it is empty ON THE ORIGINAL TOO; the symbol is automation-resident
+      (scanner root `symbolloop` "Loop SPX"; Open action `symbol: "SPX"`). Identical to the
+      finding already recorded for PR-01 2026-08-07 ("Symbols empty is CORRECT here... Trap 2
+      does not bite"). Pack correction for Andy.
+  allocation $50,000 ..................................... ⛔ GATED — PR02-R1. NOT the flat-1000
+      trap. Original is $30,000; PR-01's precedent is EQUAL-TO-ORIGIN; the PR-02 ledger entry
+      says IDENTICAL-TO-THE-11:00-ARM ($50,000). Two frozen docs disagree. NOT resolved, NOT
+      changed. Left exactly as the interrupted session set it.
+
+  AUTOMATIONS — all sharing=0; ALL FOUR rids DIFFER from the original's (cloning COPIES)
+  | automation               | rid                            | v | a7_hash (full below)| state    |
+  |--------------------------|--------------------------------|---|---------------------|----------|
+  | Scalp-Scan-Put           | RTfw5TkkCRF3017861977616606732 | 6 | 41f2505a...         | 5a+F-C1  |
+  | Scalp-Scan-Call          | RTfw5TkkCRF3017861977616606341 | 7 | 144b45e6...         | 5a+F-C1  |
+  | Scalp-Mon-S2-StrikeTouch | RTfw5TkkCRF3017861977616606813 | 4 | 01af4963...         | UNTOUCHED|
+  | Scalp-Mon-S2-Cleanup     | RTfw5TkkCRF3017861977616606854 | 2 | f3673f29...         | 5b       |
+  put      41f2505a0f5119f3ed7b4d712f881afa68d104a43f13bbb15600989124238d87 (4796 B, upd 2026-08-08T15:07:22.784Z)
+  call     144b45e69c40289714752715a3986d1c1b6e7ab8190797f67081c120e7ccad3d (4813 B, upd 2026-08-08T15:10:42.006Z)
+  touch    01af4963aafb58566789662aafa68d94d846d042869590eccbede9fb6d57ca85 (4584 B, upd 2026-06-14T14:40:13.687Z)
+  cleanup  f3673f2991541420c7124f3a6d2e2a2996002f6c61dc61ac8389ea348db2ccd7 (2610 B, upd 2026-08-08T15:14:59.794Z)
+
+  ⭐ CORROBORATION WORTH KEEPING: the clone's post-5b Cleanup hashes **f3673f29...**, which is
+  BYTE-IDENTICAL to PR-01's own post-5b Cleanup recorded in bots_config_v2.csv (v2, f3673f29...).
+  Two independently-edited copies converging on the same bytes is independent proof that 5b landed
+  exactly as PR-01's did, and that `speedy`/100% was the same choice, not a re-invention.
+  Likewise StrikeTouch 01af4963... is byte-identical across original, PR-01 and PR-02 — three
+  independently-owned sharing=0 copies with identical content. Not a Library-shared object.
+
+  ✅ STEP 5a — RE-ENTRY GATE (was already applied by the interrupted session; verified here)
+     countpostag count = 0 on both scanners. Gate reads postagtoday{oc:"opened", not:true,
+     tag:"put side"|"call side"} and THE OPEN ACTION SITS ON THE **Yes** BRANCH on both.
+     Chain (identical both sides):
+       symbolloop "Loop SPX" > decision stockchangepct(gt -0.75) > Yes > decision stockchangepct
+       (lt 0.75) > Yes > decision FOMC-today > No > decision timeofday "after 1:30pm"
+       > Yes > decision postagtoday|NOT:opened:<side> > Yes > open-short<side>spread
+     Entry-time gate "after 1:30pm" present on both — the 130PM spec is intact on the clone.
+
+  ✅ STEP 5b — CLEANUP PRICING: APPLIED THIS SESSION. v1 -> v2.
+     {"text":"Market","smart":"market"} -> {"pct":100,"text":"100% of bid/ask","smart":"speedy"}
+     (UI: SmartPricing -> "Fast - up to 3 prices, 5 seconds each", Final Price 100% of bid/ask
+     checked). Byte-identical to this bot's own StrikeTouch closes {pct:100, smart:"speedy"},
+     which is the least-invention rule PR-01 used. Quantity untouched (100% of position); nothing
+     else in Cleanup touched — §2B's hard requirement, S2 depends on it.
+
+  ✅ STEP 6 — F-C1 (RULED 2026-08-07 REMOVE, clones only): APPLIED BOTH SIDES THIS SESSION.
+     Put v5->6, call v6->7. Both Open Position actions now read
+        exits.profits = ""   ·   exits.text = "None"   ·   NO `smprofits` KEY AT ALL
+     `0.25` occurs ZERO times in either routine. Removed IN PLACE via the action's Exit Options
+     panel (clearValue on Profit Taking %) — the action was NOT rebuilt, so the `exits` bundle and
+     the step-5a re-entry-gate work both survive. Everything else in the put action verified
+     intact afterwards: price {pct:75,smart:"speedy"} · tags "put side" · symbol "SPX" ·
+     expiration "exactly 0 days" · long put "$5.00 below short put leg" · short put "-.10 delta" ·
+     position size "Up to $5,000 risk". Call side identical with tag "call side".
+     ⚠️ exits.sig still lists field NAMES — that is the bundle's signature template, not a value.
+
+  ✅ STEP 9 — TOGGLES: both OFF, screenshotted AFTER all edits and a hard reload.
+     data/captures/2026-08-08-clones/pr02-clone-toggles-2026-08-08.png
+     For this bot EXIT OPTIONS stays OFF BY DESIGN and PT25 is removed from the ACTION — the
+     removal is what was verified, not the toggle.
+     ⛔ LAYER 2 IS DEFERRED TO DAY-0 AND IT IS INVERTED (oa-ops-runbook §4.3): the first new
+     position's Trades list must show NO PT row and NO exit-trigger row, AND the S2 monitor must
+     be observed firing. Monitor silence is NOT "ride behaviour intact" — zero log rows is a
+     liveness RED. UNRUN = NOT EVALUABLE, never a pass.
+
+  ⛔ STEP 8 REMAINDER — NOT DONE, GATED (not failed):
+     - Template V1 + the PR-02 pre-registration note: requires `showBotMenu` -> "Save as
+       Template". showBotMenu/archiveBot are ANDY'S HAND (3-for-3 unresponsive historically;
+       `Delete` sits ~29px below `Archive`, so no coordinate fallback). NOT ATTEMPTED.
+     - Bot-page Notes block: S0b-2 is OPEN and its ruling is DO NOT RETRY — the bot-page Notes
+       editor does NOT decode double-escaped entities (the opposite of the TEMPLATE Notes editor),
+       so the byte-exact clause cannot pass as written. Left unwritten deliberately.
+
+PR-02 STATUS: BUILT TO SPEC AND LAYER-1 VERIFIED, WITH ONE GATED ITEM (allocation) AND TWO
+GATED RECORD ARTIFACTS (Template V1, Notes). AUTOMATIONS OFF. Layer 2 unrun.
+⛔ A SIGNABLE CONFIG-CAPTURE HASH NOW EXISTS (the four hashes above) BUT PR-02 MUST NOT BE SIGNED
+   UNTIL PR02-R1 (allocation) IS RULED — sizing is a signed-config field.

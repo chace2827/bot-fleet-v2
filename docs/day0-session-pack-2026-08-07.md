@@ -664,6 +664,18 @@ bots** have never been captured per bot. **This is a structural gap in the repos
 a longer session closes.** Current dispositions: PR-01 clone **ESTABLISHED** · its archived
 original **ESTABLISHED** · the pilot **NOT ESTABLISHED** (a) · **the other twelve ⬜ NOT
 EVALUABLE — never a pass.**
+> ⛔ **CORRECTED 2026-08-08 (CA-3, decision-card-2026-08-08.md; applied by the orchestrator
+> session at Andy's authorization; original left standing above).** The count in the sentence
+> above is wrong, verified by a fresh first-hand listing of `data/captures/` 2026-08-08: **ELEVEN
+> bots have no per-bot capture file at all** — `IC-SPX-FastPT25-S2-130PM`,
+> `QQQ-IC-0DTE-Fortress-NoPT50`, and the nine leave-in-place bots (2 + 9 = 11, as the sentence's
+> own list names). The pilot (`QQQ-IC-0DTE-Fortress`) is the twelfth NOT-ESTABLISHED bot but for a
+> DIFFERENT reason: its capture EXISTS and DIVERGES (S0b-1, sub-state (d), gated) — its path is
+> Andy's S0b-1 ruling, never a re-capture-and-move-on. Corrected dispositions: PR-01 clone
+> **ESTABLISHED** · archived original **ESTABLISHED** · pilot **NOT ESTABLISHED (capture present,
+> diverges)** · **the other ELEVEN ⬜ NOT EVALUABLE** (so "the other twelve" above is the same
+> arithmetic slip). Net: **capture worklist = 11 bots; NOT-ESTABLISHED total = 12 of 14.** The
+> A-07 precondition and the three options above are UNCHANGED by this correction.
 
 **THE THREE OPTIONS, STATED, NONE CHOSEN — ANDY PICKS:**
 1. **CAPTURE-NOW-AS-BASELINE.** Take a fresh per-bot capture of the twelve and treat it as the
@@ -1663,7 +1675,7 @@ a close-out is missing or its hand-off block incomplete -> ⛔ DO NOT START. Rec
 ⛔⛔ SECOND PRECONDITION, ADDED 2026-08-07 AT ANDY'S RULING (AMENDMENT A-27c). **STEP 4b IS A NAMED
 BLOCKER ON THIS SESSION'S OPENING AND IT IS UNRULED.** For 12 of the 14 bots in A-07's scope there
 is NO per-bot capture file on disk, so an ESTABLISHED config-capture hash — which A-07 makes a
-precondition for signing at STEP 2b — is unobtainable for them from the repository as it stands.
+precondition for signing at STEP 2b — is unobtainable for them from the repository as it stands. [CORRECTED 2026-08-08, CA-3: ELEVEN with no capture file; the pilot is the 12th NOT-ESTABLISHED via its DIVERGENT capture (S0b-1) — see the CA-3 banner in §0.0 A-27(c); worklist = 11, not-established = 12 of 14]
 Three options are written out in A-27c and ANDY HAS CHOSEN NONE. ⛔ IF ANDY HAS NOT RULED IT BY
 THE TIME YOU OPEN, DO NOT START: record `BLOCKED ON STEP 4b — A-27c UNRULED` and hand to him.
 ⛔ AND READ A-27a's CARRY-FORWARD BEFORE STEP 7: **the seven greenfield bots' EXIT OPTIONS state

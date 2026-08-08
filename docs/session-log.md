@@ -6615,3 +6615,255 @@ gate closes on Andy's own run on file — this is that run. **Day-0 §4 is unblo
 close-out (batched with the S1 audit results) to avoid a third concurrent writer on `state.md`
 while Worker 1 (PR-02, OA) and Worker B (E-3 implementation) are live. This log entry is the
 record of the closure until then.
+
+### ✅ CA-3 APPLIED — 2026-08-08 (orchestrator session, at Andy's explicit "Agreed"). One correction, two surfaces, no decision changed.
+
+`day0-session-pack-2026-08-07.md` A-27(c): "12 of the 14 … NO per-bot capture file" is falsified
+by first-hand `data/captures/` inventory (decision-card-2026-08-08.md CA-3) — **ELEVEN have no
+capture; the pilot is the 12th NOT-ESTABLISHED via its DIVERGENT capture (S0b-1), a different
+remediation path.** Applied as a dated CA-3 banner under the §0.0 A-27(c) paragraph (original
+standing, including its "other twelve" arithmetic slip, corrected to ELEVEN in the banner) plus a
+bracketed pointer at the S2 prompt's SECOND PRECONDITION surface. The A-07 precondition and the
+three unruled options are UNCHANGED. Worklist = 11 · not-established = 12 of 14.
+File sha256 after edit: 24b81ce2df6c0e93b7654f656c4fe77cb59e7454ad8fca554949a39e59b73fa5.
+CA-1 folds into slot 1 (A-02) · CA-2 folds into slot 5 — both stay gated by design.
+
+### 2026-08-08 (S1-RESUME — PR-02 ONLY) — **PR-02 BUILT AND LAYER-1 VERIFIED, ONE ITEM GATED.** PR-04 NOT STARTED.
+
+**What this session was.** The PR-02-CLONE session was stopped by Andy mid-build at an unknown
+step. It filed **no session-log entry, no state.md block, no rename_map row and no capture** — its
+only trace in the folder was the step-0 baseline. This session's job was to establish what had
+actually landed, **verify rather than inherit it**, finish only what verifiably remained, on PR-02
+only. Nothing the interrupted session did was taken on trust. No git in any form.
+
+**GATE A0 re-check — PLAUSIBLE, NOT BRANCH 3.** `/bots` footer read **"42 active bots • 8 left"**.
+42 = the 41 of the 2026-08-07 clean restore **+ 1**, and the +1 is fully accounted for by this
+clone (`created 2026-08-08T14:02:41.630Z`). Read via `a.title` (44 raw `/bots/bot/` links = 42 bots
++ the 2 POS-count links — the 2026-08-07 false alarm, avoided). **No duplicate production names.**
+⚠️ Two `-ARCHIVED-` names sit on `/bots`; that is **not** A-01 branch 3f — renames commit,
+OA-archiving is Andy's hand, and PR-01's original is in the identical recorded state.
+
+**VERIFY-DON'T-REDO — what the interrupted session had actually done.** Read-only first, from the
+stored model after hard reloads, never from a banner or a tool success message:
+| step | found | evidence |
+|---|---|---|
+| 1 rename original | **DONE** | id `BOT…3717814485128334371` (baseline's id) now carries `…-130PM-ARCHIVED-2026-08-08` — renamed, not re-created |
+| 2 clone | **DONE** | `BOT…3017861977616287731` holds the production name |
+| 4 traps: group / tags / disableExits / AUTOMATIONS | **DONE** | IC-Focus · "live candidate,focus ic" · `disableExits 1` · `status off` |
+| 4 symbols | **PASS** | clone "No symbols yet" == **original** "No symbols yet" |
+| 4 allocation | ⛔ **GATED** | $50,000 vs the original's $30,000 — see PR02-R1 |
+| 5a re-entry gate | **DONE both scanners** | `countpostag` 0; `postagtoday{oc:"opened",not:true,tag:…}`, action on **Yes** |
+| 5b Cleanup pricing | **NOT DONE** | Cleanup v1, hash == original's, price still `{"text":"Market","smart":"market"}` |
+| 6 F-C1 | **NOT DONE either side** | both Open actions `exits.profits 0.25`, `smprofits "normal"` |
+| 8 / 10 | **NOT DONE** | `tid null`, Notes "Add Notes", no `pr 02` tag, no CSV rows |
+| f rids | **PASS** | all four clone rids differ from the original's |
+| g original untouched | **PASS** | all four re-hashed == step-0 baseline |
+
+**WHAT THIS SESSION THEN APPLIED — 5b, 6, and the step-8 tag. All Layer-1 verified after a HARD
+RELOAD, from `a5.bots.acedit.routine`, never the panel.**
+1. **F-C1 (RULED 2026-08-07 REMOVE, clones only) — APPLIED BOTH SIDES.** Put v5→6
+   (`41f2505a…`, upd 15:07:22.784Z), call v6→7 (`144b45e6…`, upd 15:10:42.006Z). Both Open actions
+   now read `exits.profits = ""`, `text "None"`, **no `smprofits` key**; `0.25` occurs **zero**
+   times in either routine. Removed **IN PLACE** via the action's Exit Options panel
+   (`clearValue` on Profit Taking %) — **the action was NOT rebuilt**, so the `exits` bundle and
+   the step-5a re-entry-gate work both survived, verified field-by-field afterwards
+   (`price {pct:75,smart:"speedy"}` · `tags "put side"/"call side"` · `symbol "SPX"` ·
+   `exactly 0 days` · `-.10 delta` · `Up to $5,000 risk`).
+2. **5b Cleanup pricing — APPLIED.** v1→2, `{"text":"Market","smart":"market"}` →
+   `{"pct":100,"text":"100% of bid/ask","smart":"speedy"}` (SmartPricing → **Fast**). Quantity and
+   everything else untouched — §2B's hard requirement, S2 depends on it.
+   ⭐ **The result hashes `f3673f2991541420c7124f3a6d2e2a2996002f6c61dc61ac8389ea348db2ccd7` —
+   BYTE-IDENTICAL to PR-01's own post-5b Cleanup.** Two independently-edited copies converging on
+   the same bytes is independent proof the edit landed exactly as PR-01's did and that `speedy`
+   /100% was the same least-invention choice, not a re-invention.
+3. **Step-8 `pr 02` tag — ADDED.** Stored as `pr 02` (correct normalisation); tags now read
+   `"live candidate,focus ic,pr 02"` after a fresh load.
+
+**⭐ STEP-7 NO-UNINTENDED-EDITS PROOF — RE-RUN AFTER EVERY EDIT. ALL FOUR OF THE ORIGINAL'S
+AUTOMATIONS STILL HASH BYTE-IDENTICALLY TO THE STEP-0 BASELINE** — `daf616d2…` (v4, 4921B) ·
+`c471da15…` (v5, 4938B) · `01af4963…` (v4, 4584B) · `0c10e806…` (v1, 2582B), every `updated`
+still 2026-04/06. The original's Cleanup still reads `Market` and its scanners still carry
+`profits 0.25`: **F-C1 and 5b did not leak. The original was never touched.**
+
+**⛔ FINDING PR02-R1 — ALLOCATION. GATED, NOT RESOLVED, NOT CHANGED. NEEDS ANDY.**
+The clone was created at **$50,000**; the original is **$30,000** (net liq $30,105), first-hand.
+This is **not** the flat-1000 trap — that was pre-empted. Two frozen documents disagree:
+(i) **PR-01's precedent is equal-to-origin** — its capture records `seed 50000 / 50000 EQUAL
+(trap pre-empted)` against a $50,000 original, and S1 step 4's own trap text is "match the
+original". On that reading PR-02's clone should be **$30,000**.
+(ii) **`pre-registration-ledger.md` §4 PR-02** says *"IDENTICAL allocation to the 11:00 arm.
+Non-negotiable: unequal sizing makes the A/B unreadable"* — and the 11:00 arm (`IC-SPX-FastPT25-S2`)
+reads **$50,000**. On that reading the current value is already right.
+⚠️ It matters both ways: the -130PM original ran its 70 closed positions at $30K, so $50K changes
+the bot's own history-to-live continuity, while $30K breaks the A/B's declared equal sizing.
+**`CLAUDE.md` §5 / standing fact 10: when it is ambiguous, it is gated.** Left exactly as found.
+Cost of deferring: none compounding — AUTOMATIONS OFF, unsigned, no positions.
+⛔ **PR-02 MUST NOT BE SIGNED AT S2 STEP 2b UNTIL THIS IS RULED** — sizing is a signed-config field.
+
+**📝 PR02-R2 — PACK CORRECTION (doc, not a defect).** S1 step 4 says the Symbols panel "is NOT
+empty — look at it again; this is the single most common silent clone failure". **For this family
+it is empty ON THE ORIGINAL TOO** — the symbol is automation-resident (`symbolloop` "Loop SPX";
+action `symbol "SPX"`). Clone and original match character-for-character. This is the same finding
+already recorded for PR-01 on 2026-08-07; the pack line was never corrected. **Andy's to amend.**
+
+**📝 PR02-R3 — the un-amended `reactivation-runbook.md` §2 step 7 PT25 line**, carried forward per
+A-16b: it still says *"do not remove it yourself… escalate"*, which F-C1's ruling superseded. Not
+treated as ambiguity (A-16b forbids that) and not edited — **doc-correction item for Andy.**
+
+**📝 PR02-R4 — `oa-driving` skill could not be loaded in this session** (saved after the session
+started; `Skill` returned "Unknown skill" twice, absent from container and project `.claude/`).
+It later became resolvable mid-session and was loaded and followed. Its content **matched the
+method already in use** and added one rule that was then applied: *remove exits in place; never
+rebuild an action.* No method was changed retroactively; no edit was made under the old method
+that the skill would have forbidden.
+
+**⚠️ TOOL NOTES worth carrying.** (a) The automation **Save** (`a.saveclose`) resisted both the
+documented 5-event dispatch and a computed-coordinate click; it committed on the third attempt
+when the sequence was dispatched at `document.elementFromPoint(centre)` with
+`pointerover/enter + focus` included. Within the ladder, recorded. (b) **Stale editor DOM is a
+live hazard**: with two automation editors opened in one page life, a `card[data-nid^="open-"]`
+query returned the *previous* automation's action card, and Cleanup showed **two** `closepos`
+cards when the stored model had one. **Hard-reload between automations before acting** — a
+mis-targeted edit here would have been silent. (c) Two `Runtime.evaluate` 45s timeouts occurred;
+both were re-read, never re-fired, and neither had written anything.
+(d) The **"Leave site?" navigation guard is a reliable dirty-state oracle** — it is what proved
+the drawer-level Save had not persisted and that the automation-level Save is the real commit.
+
+**⛔ NOT DONE, GATED, NOT FAILED — the two record artifacts.**
+- **Template V1 + the PR-02 pre-registration note**: needs `showBotMenu` → "Save as Template".
+  `showBotMenu`/`archiveBot` are **ANDY'S HAND** (3-for-3 unresponsive historically; `Delete` sits
+  ~29px below `Archive`, so no coordinate fallback). **NOT ATTEMPTED.** `tid` is `null`.
+- **Bot-page Notes block**: **S0b-2 is OPEN and its ruling is DO NOT RETRY** — the bot-page Notes
+  editor does not decode double-escaped entities (the opposite of the TEMPLATE editor), so the
+  byte-exact clause cannot pass as written. Left unwritten deliberately.
+
+**⛔ ATTESTATION (A-18): NONE of the nine leave-in-place bots was opened, edited, or had a toggle
+touched this session. No bot page was navigated to for any of the nine.** The only bots opened
+were PR-02's clone and PR-02's own archived original. **Step 2c remains unspent.**
+**Nothing was switched ON. Nothing was archived. Nothing was signed. PR-04 was not started.**
+
+**Files changed:** `data/captures/2026-08-08-clones/PR-02-clone-final-2026-08-08.txt` (new) ·
+`data/captures/2026-08-08-clones/pr02-clone-toggles-2026-08-08.png` (new) ·
+`data/captures/2026-08-08-clones/PR-02-verify-2026-08-08-RESUME.txt` (new, then banner-superseded)
+· `data/archive/rename_map.csv` · `data/bots_config_v2.csv` · `docs/state.md` ·
+`docs/session-log.md` (this entry). All sha256-verified on device. **No git. Uncommitted — Andy
+runs the commit.** Tracker artifact NOT updated (unchanged and still open, as at S0a/S0b).
+
+---
+
+## 2026-08-08 — E-3 §3.3 HARD PRECONDITION IMPLEMENTED (all three exclusion surfaces). No OA, no Chrome, no git.
+
+**Task:** implement `exploratory-bots-design-2026-08-07.md` §3.3's RULED banner exactly — the three
+exclusion surfaces that gate every Lab bot's `AUTOMATIONS` toggle. Ruled 2026-08-07; queued as a
+Claude Code task; nothing was built until now. `execution_audit.py` untouched (sha unchanged
+`fdc43d0dcb727556…`, still v1.1.0 / gate-A9). `bots_config_v2.csv` untouched. No commit — Andy's.
+
+### Surface 1 — `build_ledger.py` ops-class exclusion (§3.3 items 1–5, 7)
+
+- **Item 1.** `data/bots_meta.csv` gains an **`ops_class`** column (13th, appended; empty | `lab-ops`).
+  All 33 rows verified field-for-field identical to the prior file; every `ops_class` empty (no Lab
+  bot exists — fleet is 0 bots). The column is **load-bearing, not optional**: `load_meta()` now
+  FATALs if it is absent, because a silently-missing column would put every ops row in the ledger.
+- **Item 2.** Partition immediately after `rows = post`, **before** the condor pairing block (pairing
+  assigns `trade_id` from a global counter). Excluded rows -> **`data/ops_rows.csv`**, carrying the
+  new `OPS_NOTE` constant mirroring `STRADDLER_NOTE`. `counts` gains `ops_rows`.
+  ⚠️ **Schema choice, recorded:** `OPSCOLS = TCOLS + ["note"]` — the FULL ledger schema, not the
+  straddler shape, so item 8's plan (point the frozen `execution_audit.py` at this file as an
+  explicitly-invoked fixture, the mechanism it already uses for `data/archive/trades.csv`) is
+  reachable. `trade_id` is **blank by construction** — see GATE 2 below.
+- **Item 3.** `assert_no_ops_leak()` — the CLASS-axis FATAL, mirroring the pre-cutover one. One ops
+  row reaching the working-ledger writer kills the run; nothing written. This is guardrail **G2**
+  ("G1 is enforced in code, not by intent") made real.
+- **Item 4.** `write_receipt()`'s `contract` string now names the second axis; receipt gains
+  `ops_bots` and `ops_rows`. No downstream script asserts on the literal `contract` string today
+  (grepped `scripts/` — `report.py`, `lessons.py`, `comparative_machinery.py` all read
+  `ledger_start` / `source_export` / `counts.export_rows` only), so no stale-assert breakage.
+- **Item 5.** FILTERED-EXPORT GUARD now subtracts the ops set from `prior_bots` — an ops bot is
+  absent from the working ledger **by design**, so its absence must never read as a filtered export.
+- **Item 7.** An explicit `LAB OPS-CLASS -> data/ops_rows.csv` printed block, mirroring the
+  straddler / unclassified / dropped blocks. Printed whenever the class is **declared**, including
+  at zero rows, so a declared ops bot cannot vanish silently.
+
+### Surface 2 — `a_series.py` scoping of `_a4b` / `_a6` (§3.3 item 6)
+
+`load_ops_set()` + `_ops_scope()`; both ledger-reading asserts take the ops set and skip those bots
+with the skip **reported** (`⏸ OPS-CLASS SCOPED OUT (E-3 §3.3): N of M ledger row(s) skipped…`),
+never silent. New `--bots-meta` flag. Guardrail **G3** ("no A-series assert may read them") is now
+mechanical. **`--validate` is untouched** — it calls `a4_a5_a6(None, …)`, so the ops path is never
+entered; its output was diffed byte-for-byte against the pre-edit run and is identical.
+
+### Surface 3 — Lab group/tag fencing (via `data/bots_meta.csv`)
+
+Four refusals, all FATAL-with-nothing-written, in `ops_set_from_meta()` / `fence_export_tags()`:
+unknown `ops_class` value · `ops_class=lab-ops` with `pillar != Lab` · `pillar == Lab` with no
+declaration · **an export row tagged `ops` whose bot is undeclared**. §3.5 puts every ops bot in
+group `Lab` with tag `ops`; `oa-ops-runbook.md` §3 requires groups to reconcile to the `pillar`
+column exactly. ⛔ The tag is **never a classifier** here — item 1 forbids that — it is only a
+tripwire catching a Lab bot that reached OA without reaching `bots_meta.csv`. Verified the current
+export has **0 rows** carrying an `ops` tag token, so the tripwire cannot fire on today's data.
+
+### Test evidence (all run on the device, direct `device_bash`)
+
+| Check | Result |
+|---|---|
+| `execution_audit.py --validate` (gate-A9 v1.1.0 regression baseline) | **21/21**, exit 0, sha **unchanged** |
+| `a_series.py --validate` | **REPRODUCED THE REFERENCE EXACTLY**, and byte-identical to the pre-edit run |
+| `build_ledger.py` on `data/raw/2026-08-07.csv` (`LEDGER_START=2099-01-01`, **env form** — constant still `"UNSET"`) | n=0, 1386 discarded, exit 0 |
+| `trades.csv` · `bots.csv` · `straddlers.csv` before/after | **byte-identical** (`cmp`) |
+| `ledger_meta.json` before/after | identical on **every pre-existing key and value**; differs by exactly the four ruled additions |
+| `build_ledger.py --selftest` (new) | **19/19** |
+| `a_series.py --selftest` (new) | **13/13** |
+
+Negative tests prove the ruled behaviour, not just the happy path: **N2** zero ops rows in the
+working ledger · **N3/N4** they land in `ops_rows.csv` in full ledger schema carrying `OPS_NOTE` ·
+**N6** the block is printed naming the bot · **N7** a declared-but-absent ops bot still prints ·
+**N8/N8b** an undeclared `ops`-tagged row refuses and writes nothing · **N9–N12** all four fences ·
+**N13** the leak assertion fires and **N13b** does not false-positive · **N14** the export guard
+stays quiet about an ops bot · **N15** with nothing declared, behaviour is byte-for-byte the old
+behaviour. **O2/O3** unscoped A6 fails on a qty-3 ops row and scoped A6 passes and reports ·
+**O7/O7b** scoping drops only ops rows — a real family violation still FAILs (not blinded).
+
+⛔ **Self-tests are `--selftest`, deliberately separate from `a_series.py --validate`.** `--validate`
+reproduces the hand-run 2026-08-07 reference and its output must not move; new asserts about new
+behaviour get their own flag.
+
+### ⛔ Three items GATED to Andy — nothing decided here
+
+1. **The acceptance criterion "`ledger_meta.json` unchanged byte-for-byte" cannot coexist with
+   §3.3 items 2 and 4**, which *require* `counts.ops_rows`, `ops_bots`, `ops_rows` and an extended
+   `contract` string in that same file. Implemented per the ruling; the byte-for-byte test was run
+   against the invariant that actually holds — the three ledger CSVs identical, and every
+   pre-existing receipt key identical in value. Exact diff is 4 additions, 0 modifications to prior
+   values. **Andy to confirm the reading.**
+2. **`trade_id` is blank in `ops_rows.csv`.** The partition is ruled to happen before pairing, so
+   ops rows never get a `trade_id`. But item 8 wants the frozen `execution_audit.py` pointed at this
+   file as a fixture, and that script keys on `trade_id` (validation check **V5**). Whether ops rows
+   need their own `trade_id` namespace (e.g. an `X…` prefix, so the main counter stays untouched)
+   is **not ruled**. Not invented here. **Item 8 is not usable until this is decided.**
+3. ⛔ **NEW DEFECT FOUND, NOT FIXED — `a_series.py::_a4b` cannot fire on any input.** Its `fast`
+   test is `(_ts(close) - _ts(open)) <= 300` — a **timedelta compared to an int**, which raises
+   `TypeError` straight into the bare `except Exception: fast = False`. Every row therefore reads
+   "not fast" and the broken-input-link stop-out detector is **structurally blind**. Found while
+   building the E-3 scoping tests (a fixture of two 2-minute same-day closes produced PASS).
+   Recorded as self-test **O4** so it cannot be lost. **Not fixed** — E-3 rules the *scoping* of
+   A4b, not its *predicate*, and changing detector behaviour is a separate ruling. One-line fix is
+   `.total_seconds() <= 300`. **This is the second "a detector that answers 'no findings' while
+   structurally blind" instance in this folder.**
+
+### Files changed (uncommitted — Andy runs the commit)
+
+```
+b90499fe649d2a37…  scripts/build_ledger.py     (was fe6896dada117481…)
+ecc8cec9f36e1f32…  scripts/a_series.py         (was 1e9197e9e05c1b13…)
+3c6ef6f8bd3b6c55…  data/bots_meta.csv          (was 5507c8b091c73ca1…)  + ops_class column
+51de21b8f07b4ba9…  data/ops_rows.csv           (NEW, header-only, n=0)
+2f89a57059b11163…  data/ledger_meta.json       (was 83761b3b3f8016b5…)  regenerated
+   unchanged        data/trades.csv · data/bots.csv · data/straddlers.csv
+   unchanged        scripts/execution_audit.py  (fdc43d0dcb727556…)
+   unchanged        data/bots_config_v2.csv
+docs/state.md · docs/session-log.md · docs/exploratory-bots-design-2026-08-07.md §3.3 banner
+```
+
+**E-3's hard precondition is now implemented and verified. It is NOT a build authorization** — the
+gate is still E-3 implemented **and** the OA restore landing **and** Andy's go, and §3.4/§3.5 remain
+recommendations, not rulings.

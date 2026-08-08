@@ -1,3 +1,9 @@
+# ⛔⛔ SUPERSEDED 2026-08-08 BY PR-02-clone-final-2026-08-08.txt — DO NOT CITE THIS FILE FOR
+#     CURRENT STATE. It was written MID-SESSION, before steps 5b and 6 were applied, and its
+#     "NOT DONE" lines for Cleanup pricing and F-C1 are now FALSE. Kept only as the read-only
+#     evidence snapshot of what the INTERRUPTED session had left behind. The GATE A0 read, the
+#     step-7 original-untouched proof and the Symbols finding in it are still accurate.
+
 # PR-02 VERIFY CAPTURE — IC-SPX-FastPT25-S2-130PM
 # Written 2026-08-08 by the S1-RESUME session (the interrupted PR-02-CLONE session's successor).
 # ⛔ THIS IS A VERIFICATION CAPTURE OF A **PARTIAL** CLONE. IT IS NOT A STEP-8 FINAL CAPTURE AND

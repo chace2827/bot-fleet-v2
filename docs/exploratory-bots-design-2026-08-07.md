@@ -503,6 +503,27 @@ signature — a new §3 roster row plus a new §2a:
 > task** (Pro-tier, fixtures per house style); this document authorizes the design, not the code.
 > `execution_audit.py` stays **FROZEN** and unedited, per its own pin.
 
+> ### ✅ IMPLEMENTED & VERIFIED 2026-08-08 — all three surfaces. Still NOT a build authorization.
+> The queued task ran. **(1)** `build_ledger.py`: `data/bots_meta.csv` `ops_class` column (the sole
+> classifier; the script FATALs if it is missing) → partition before condor pairing → new
+> `data/ops_rows.csv` with an `OPS_NOTE` constant → CLASS-axis FATAL leak assertion → receipt
+> `contract` extended plus `ops_bots`/`ops_rows`/`counts.ops_rows` → FILTERED-EXPORT GUARD subtracts
+> the ops set → an explicit printed `LAB OPS-CLASS` block, shown even at zero rows.
+> **(2)** `a_series.py`: `_a4b`/`_a6` scoped, skip **reported** not silent, new `--bots-meta`;
+> `--validate` untouched and byte-identical. **(3)** the group/tag fence: four FATAL refusals, with
+> the `ops` tag used as a **tripwire only, never a classifier** (item 1 forbids that).
+> **Verified:** `execution_audit.py --validate` 21/21 with its sha **unchanged** (still FROZEN,
+> v1.1.0 / gate-A9) · `a_series.py --validate` reproduces the reference exactly · `build_ledger.py`
+> on `data/raw/2026-08-07.csv` still n=0 / 1386 discarded, the three ledger CSVs **byte-identical**
+> before and after · new self-tests 19/19 and 13/13, including the negative tests that a synthetic
+> Lab-tagged row is **excluded and reported, never silent**.
+> ⛔ **THREE ITEMS GATED to Andy — `state.md` top block and `session-log.md` 2026-08-08:** the
+> "receipt unchanged byte-for-byte" acceptance line vs items 2/4 which require new receipt fields ·
+> **`trade_id` is blank in `ops_rows.csv`**, so **item 8 below is not usable** until a trade_id
+> namespace is ruled · and a **new, unfixed defect in `_a4b`** (a `timedelta` compared to an `int`,
+> swallowed by a bare `except` — the detector cannot fire on any input).
+> **The build gate is unchanged:** this surface + the OA restore + Andy's go.
+
 **The problem, precisely.** `build_ledger.py` has **no bot, tag or group filter of any kind**. Its
 only exclusion is the temporal cutover on `open_date`; `data/archive/` is excluded not by code but
 by never being addressed — the enumerator is a **non-recursive** `glob.glob(os.path.join(RAW,
