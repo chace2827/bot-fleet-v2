@@ -1,0 +1,93 @@
+# PR-04 CLONE FINAL — `QQQ-IC-0DTE-Fortress-NoPT50`
+https://app.optionalpha.com/bots/bot/BOTfw5TkkCRF3017862038322323202/settings
+captured: 2026-08-08 (S1 CLONE 2 / PR-04, after every edit, each read AFTER A HARD RELOAD)
+method: Claude-in-Chrome. `a5.bots.bot` for bot state; `a5.bots.acedit.routine` for automation
+        payloads (opened fresh, one per page life — the 2026-08-08 stale-editor-DOM trap);
+        toggles from the header title attribute + screenshot. Never innerText, never a toast,
+        never a tool success message.
+baseline it is diffed against: PR-04-step0-baseline-QQQ-IC-0DTE-Fortress-NoPT50.txt
+screenshots: PR-04-original-step0-toggles-2026-08-08.jpg (original, step 0)
+             PR-04-clone-final-toggles-2026-08-08.jpg  (clone, final)
+
+--- IDENTITY ---
+clone bot_id     BOTfw5TkkCRF3017862038322323202   created 2026-08-08T15:43:52.233Z
+original bot_id  BOTfw5TkkCRF2617743681996538301   -> renamed
+                 `QQQ-IC-0DTE-Fortress-NoPT50-ARCHIVED-2026-08-08` (SAME id: renamed, not
+                 re-created). NOT OA-archived — that click is Andy's hand.
+
+--- HEADER / SAFEGUARDS — every value read back after a hard reload ---
+                     CLONE            ORIGINAL (step 0)   verdict
+ACCOUNT              Paper Trading    Paper Trading       MATCH
+BOT GROUP            Monitor          Monitor             RESTORED (clone trap: reset to None)
+AUTOMATIONS          OFF (status off) OFF                 MATCH — stays OFF by instruction
+EXIT OPTIONS         OFF (disableExits 1) OFF (1)         RESTORED (TRAP 10: clone reset 1->0)
+TAGS                 experiment,pr 04 experiment          RESTORED + step-8 `pr 04` added
+ALLOCATION           $100,000 (seed)  $100,000            MATCH — flat-1000 trap PRE-EMPTED in
+                                                          the Clone Settings drawer
+DAILY POSITIONS      2 per day        2 per day           MATCH (even; IC = 2)
+POSITION LIMIT       2 at once        2 at once           MATCH (even)
+SCAN SPEEDS          1m / 1m          1m / 1m             MATCH
+SYMBOLS              "No symbols yet" "No symbols yet"    MATCH — correct for this family
+BOT INPUTS           none             none                MATCH
+NOTES                empty            empty               MATCH (S0b-2: not retried)
+
+--- AUTOMATIONS ON THE CLONE — 3 (2 inherited + 1 built to spec) ---
+SCANNERS
+  FortNoPT-Scan-Put   rid RTfw5TkkCRF3017862038322605095  v9  sharing 0
+      hash 2eab2d95541b44536c452fcb4b7acd005ae45dd712ce07675d4d66d95db211e2  4682 B
+  FortNoPT-Scan-Call  rid RTfw5TkkCRF3017862038322605296  v9  sharing 0
+      hash 7dd2df800d47d4c4f4ba97cfd5fc83d588fcc4c20d9fd12ef9928b4e607bc6be  4649 B
+  ⭐ Both hashes are BYTE-IDENTICAL to the original's step-0 hashes, and both rids DIFFER from
+     the original's. That is the correct result: cloning copies the payload, and NOTHING was
+     edited on either scanner this session. The spec needed no scanner edit.
+TRIGGERS
+  FortNoPT-Backstop-1552-FlatClose  rid RTfw5TkkCRF178620440961331  v1  sharing 0
+      created/updated 2026-08-08T15:58:58.836Z
+      hash 6794b56b672e7e625ee731ac949ddeffddf5e325522b38a8f73d6d0cb34f7e04  1447 B
+      rendered on the bot page: "Every week on Mon-Fri, 3:52pm EST"
+
+--- SPEC CHECK (build-plan.md §2B: 15:50 time exit + 15:52 flat-close backstop, NO PT50) ---
+1. NO PT50 — CONFIRMED, NOT APPLIED. `exits.profits` is `""` and there is no `smprofits` key on
+   BOTH Open Position actions, on the CLONE and on the ORIGINAL. `0.5` does not occur in either
+   routine. Nothing was removed, because nothing was there. ⛔ F-C1 was NOT invoked and NOT
+   applied by analogy — the S1 CLONE-2 instruction is explicit that a `profits` node here would
+   be a NEW finding. There is none.
+2. 15:50 TIME EXIT — PRESENT, INHERITED, UNTOUCHED. `exits.expdays 0.01`, text
+   "Expiration: 10 minutes", `smexpdays {"text":"Market","smart":"market"}` on both sides.
+3. 15:52 BACKSTOP — BUILT. Decision Point B of the pilot card is answered again in the
+   affirmative: the Repeating trigger's Market Time (EST) picker offers **Custom**, and the
+   custom dialog states its own bound — "Select a time from 9:31AM to 3:55PM EST" — so 15:52 is
+   inside the reachable range. NO time was substituted.
+   Tree (identical in shape to the pilot's Fortress-Backstop-1552-FlatClose):
+     START -> "Repeat for each position" (posrepeater488380; symbol "", ptype any, tags "")
+           -> "Close Position" (closepos719939)
+                price    {"text":"Market","smart":"market"}   <- the permitted end-of-day
+                                                                 flat-close carve-out
+                closeqty {"type":"pct","value":100,"text":"100% of position"}
+                memo     "1552 backstop flat close"
+                tags     ""   opts {}
+   Trigger config, read verbatim from the stored `repeat` input after a hard reload:
+     {"type":"repeat","value":{"startDate":"2026-08-10T20:52:00.000Z","freq":2,"interval":1,
+      "ntime":1552,"bymonthday":{"value":"day_10","text":"10th"},
+      "byweekday":{"type":"weekday","value":[0,1,2,3,4],"text":"Mon-Fri"},"holidays":"skip"},
+      "text":"Every week on Mon-Fri, 3:52pm EST"}
+   Same shape as the greenfield backstop row in bots_config_v2.csv
+   ("repeat freq2 int1 Mon-Fri ntime1552 holidays-skip no-end"). End date left blank = no-end.
+
+--- ⛔ ORIGINAL UNTOUCHED — PROVEN BY HASH AFTER EVERY EDIT, NOT BY EYE ---
+Re-read on a fresh page load after the rename, the clone, the three trap fixes and the backstop
+build. Both automations still hash EXACTLY to the step-0 baseline:
+  FortNoPT-Scan-Put   2eab2d95…211e2  4682 B  v9  updated 2026-03-24T16:04:07.637Z   == step 0
+  FortNoPT-Scan-Call  7dd2df80…c6be   4649 B  v9  updated 2026-03-24T16:04:25.259Z   == step 0
+Original still has exactly TWO automations — the backstop did NOT leak onto it. Original still
+reads seed 100000 · group Monitor · tags "experiment" · disableExits 1 · status off. The only
+changed field on the original is its NAME, which is the intended step-1 edit.
+
+--- NOT DONE, BY INSTRUCTION OR BY GATE ---
+- Template V1 + the PR-04 pre-registration note: `showBotMenu` -> "Save as Template" is ANDY'S
+  HAND. NOT ATTEMPTED. `tid` is null.
+- Bot-page Notes block: S0b-2 is OPEN, ruling = DO NOT RETRY. Left unwritten deliberately.
+- OA archive of the renamed original: Andy's hand (A5).
+- Layer 2 (Trades list): DEFERRED TO DAY-0. For this bot the check is: a time-exit row present,
+  NO PT row, and BACKSTOP_CAUGHT_IT must be NEGATIVE — the 15:52 backstop must not be the thing
+  closing positions.
