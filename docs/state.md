@@ -2,7 +2,9 @@
 
 *The live facts. Updated whenever a stated fact changes (CLAUDE.md §9.1). Numbers live in
 `STATUS.md`; the plan in `docs/build-plan.md`; progress in the `bot-fleet-migration` tracker.
-Last updated 2026-08-08 (S1 CLONE 2 — PR-04 BUILT, 15:52 backstop BUILDABLE and BUILT, finding
+Last updated 2026-08-08 NIGHT (⭐ THE TEN-SLOT RULING SITTING — all ten slots RULED and APPLIED;
+both S2 preconditions CLEARED; LEDGER_START = 2026-08-10; gate A8 CLOSED: see the NEW top block).
+Earlier 2026-08-08 (S1 CLONE 2 — PR-04 BUILT, 15:52 backstop BUILDABLE and BUILT, finding
 PR04-R3 gated: see the BOTTOM block. Earlier same evening: orchestrator batch — gate A9 CLOSED, PR-02 BUILT+RULED,
 O4 fixed, CA-3 applied, bookmarklet fixed: see the NEW top block. Earlier same day: E-3 §3.3
 hard precondition IMPLEMENTED & VERIFIED — see the
@@ -21,6 +23,96 @@ C5 PASS, C11/C4/C6 answered, C10 still blocking ARM-B1; earlier the same day: pr
 the released gated batch — C12 and S-2 propagated to
 every surface, D-1 propagated, `research-loop-spec.md` corrected ×6, §8.4 step 1 corrected on
 explicit authorization; earlier the same day: R-edit package applied + edit-policy split).*
+
+## ⭐⭐ 2026-08-08 NIGHT — THE TEN-SLOT RULING SITTING. ALL TEN RULED BY ANDY, ALL APPLIED SAME SESSION.
+
+*Card + addendum: `docs/decision-card-2026-08-08.md`, now carrying a `✅ RULINGS` section with every
+ruling recorded verbatim. Andy attended and ruled live. No OA surface touched, no browser tool
+loaded, no git command run including `status`. Every edited file verified by direct `device_bash`
+sha256 + single-match grep (`CLAUDE.md` §9.1a) — never a stage-back read.*
+
+- ⭐ **`LEDGER_START` = `2026-08-10`** (slot 1 · A-02). Monday's open — the first market session on
+  or after switch-on; **not** the 2026-08-07 payment timestamp and not a non-trading day on which a
+  toggle is flipped. **The date is FIXED** and does not move if switch-on slips (a bot that is OFF
+  opens nothing). ⛔ **Supersedes the 2026-08-07 S0a/S0b ruling** *"the day you switch the first bot
+  on IS `LEDGER_START`"*, which yields 08-08/09 under a weekend switch-on; both blocks banner'd.
+  **CA-1 amend-the-plan applied** to `build-plan.md` §1 + §3. ⛔ The `build_ledger.py` line-108
+  constant is set **AT DAY-0**, per that script's own line-151 instruction — **not done here.**
+- ⭐ **The first-position control EXISTS now** (slot 2 · A-11). Test-fire first, recorded verbatim;
+  if absent, **`posLimitDay` = 1 is AUTHORIZED**, one bot at a time, screenshotted, **reverted**,
+  and ⛔ **the revert is HASH-PROVEN** — if the hash does not return to its pre-change value, that
+  IS a signature fork and the entry stops. **2a = NO**, it does not fork a Step-2b signature.
+  Accept-the-stored-limit **DECLINED**; ⬜ NOT EVALUABLE + stays OFF is the per-bot fallback.
+- ⛔ **C10 STAYS OPEN** (slot 3 · A-12) — **named here by name, as A-12 requires.** No instrument
+  runs it on Day-0. PR-20 not edited; the pilot declined (NOT-ESTABLISHED hash, and 1 lot cannot
+  discriminate). **ARM-B1 stays blocked. PR-21 stays unstamped.** Queued path: `TESTOPS-LAB-DSTOP`,
+  gated on E-3 verified + a signed `PHASE LOG` (G8) + a Lab ops slot (E-1) — a build-window call.
+- **A-24's Step-0 residue, all four ruled** (slot 4): (i) **the pilot stays OFF**, Template V2 goes
+  to a build window with its amended PR-03 · (ii) **C9 runs as a READ at Step 0**, read only ·
+  (iii) **the family TRADES** with a hand-run `a_series.py --validate` + `--json` at **every**
+  close-out, and ⛔ the 4th shared object (`Defang-Mon-S2-StrikeTouch`) **named as an open gap** —
+  A7 reports **3/4 VERIFIED + 1 FIRST BASELINE, never 4/4** · (iv) **gate A9 CONFIRMED and already
+  satisfied** (closed 2026-08-08 on Andy's own 8/8 n=0 run). **Step 0 no longer stops on any of them.**
+- ⭐ **GATE A8 IS CLOSED IN FULL** (slot 5): (i) G-12b SIGNED · (ii) **PR-18's name RULED — OPTION C,
+  THE SPLIT** · (iii) G-1′ DECLINED. **"Breakeven" is the LEDGER / INTERNAL label; the MECHANICAL
+  name (`SL100` / "stop at 100% of credit") is used in anything PUBLISHED or EXTERNALLY COMPARED,
+  with the CF-1 caveat attached at that surface.** ⛔ **CF-1 is NOT discharged** and bounds what the
+  family may conclude against Sandvand's rung. OA bot name `GF-QQQ-IC-SL100` unchanged; PR-19
+  follows by construction. **5a / CA-2 ruled YES** — the CF-4 bullet below is amended in place.
+  PR-18's `NAMING` field is filled, so gate A8 no longer holds the entry UNSIGNED.
+- ⭐⭐ **BOTH S2 PRECONDITIONS ARE CLEARED — S2 CAN OPEN** (slot 6 · A-27c): **OPTION 2** — an
+  ESTABLISHED config hash is required **only where a pre-restore baseline exists**; the rest are
+  carried ⬜ NOT EVALUABLE **in the `CONFIG HASH` field itself**, not as blockers. Options 1 and 3
+  declined on the record. **6a = PURE READ** — opening any of the nine does **not** spend Step 2c
+  (A-09b already ruled that observation NOT EVALUABLE — restore confound); read only, no write of
+  any kind. **6b = ACCEPT AND RECORD** — the 20 Group-A bots are in no post-restore config check
+  anywhere; not brought into scope, not archived, still covered by the ~23 queued archives.
+- ⭐ **CAPTURE WORKLIST CORRECTED 11 → 9.** On the card's own §B condition: **S1 has closed**, and a
+  direct listing of `data/captures/2026-08-08-clones/` shows both un-started clone originals now
+  hold post-restore step-0 baselines **and** are renamed `-ARCHIVED-2026-08-08`, so they will never
+  trade and cannot take a first-trading-day capture. **Andy's hand-capture list is the NINE
+  leave-in-place bots.** NOT-ESTABLISHED total is still **12 of 14** — the worklist changed, the
+  disposition arithmetic did not.
+- **Doc corrections applied** (slots 7 + 8, five items, dated banners, originals standing): the
+  *"Symbols panel is NOT empty"* assertion is **BRANCHED** not deleted (automation-resident-symbol
+  bots correctly read *"No symbols yet"* on both sides; Bot-Symbols-loop bots must be non-empty —
+  that is the real trap) · runbook §2 step 7's pre-F-C1 *"do not remove PT25"* branch **struck**,
+  F-C1 RULED: REMOVE · *"hash all four automations"* read as **all of them, whatever the count**
+  (`-NoPT50` has TWO; 2 of 2 is complete) · ⭐ **the Automation Library is at `/bots/automations`**,
+  proven from the `/bots` Library button's own `data-ui` menu JSON (`/automations` 404s and was
+  never its path) · runbook §4 Step 1 and §4 Step 6 amended to the slot-1 and slot-2 rulings.
+- **ops `trade_id`: DEFERRED with the scheme pre-registered** (slot 9). Stays blank; when the first
+  Lab bot is built, rows carry **`OPS-<bot>-<date>-<n>`** — collision-proof by prefix, upstream of
+  pairing. Reopen at that build. E-3 §3.3 **item 8 stays NOT USABLE** — carried, not defective.
+- **DA-3: the ≥15-condor go-live bar is RETIRED IN PRINT** (slot 10). `report.py:141` and
+  `STATUS.md` line 17 drop the line; **G2's ≥20 is the only go-live bar** and ⛔ must **not** be
+  rendered as a single-count replacement. The `report.py` edit is a **queued Claude Code task**;
+  `STATUS.md` is generated output and clears on the next `daily.sh`. ⚠️ If the edit misses Monday's
+  first run, the retired line prints once — cosmetic, nothing reads it, named rather than hidden.
+
+### S2-PRECONDITION TABLE — as of the sitting's close
+| Precondition | Status |
+|---|---|
+| Gate A9 — Andy's clean end-to-end n=0 run on file | ✅ CLOSED 2026-08-08 |
+| Slot 1 · A-02 `LEDGER_START` | ✅ RULED — 2026-08-10, fixed |
+| Slot 6 · A-27c / Step-4b capture disposition | ✅ RULED — option 2; **precondition DISCHARGED** |
+| Slots 2 · 3 · 4 · 5 (A-11 · A-12 · A-24 · gate A8) | ✅ ALL RULED AND APPLIED |
+| PR-02 / PR-04 clones | ✅ built + verified; PR02-R1 $50k |
+| Fleet sweep + master audit report | ✅ AUDIT CLEAN, 43·7, FAMILY GREEN |
+| **CAN S2 OPEN?** | ⭐ **YES** — no unruled precondition remains. Outstanding are Andy's hands: Template V1 for PR-02 + PR-04 (`showBotMenu`), the nine captures, OA-archiving the three `-ARCHIVED-` originals. None of these is a precondition on S2 **opening**. |
+
+⚠️ **ORDERING FLAG, raised at the sitting and standing.** Andy stated the intent to switch
+`AUTOMATIONS` ON 2026-08-08 or 2026-08-09 to record from Monday's open. ⛔ **Switching on before S2
+runs bypasses Step 6 and Step 7 entirely** — the slot-2 control never applies, and the champion
+clone would open at its stored `10/10`. **Switch-on belongs at S2 Step 7.** Running S2 on Sunday and
+switching on at its Step 7 still hits Monday's open with both gates intact.
+
+**Files changed by the sitting:** `docs/decision-card-2026-08-08.md` · `docs/build-plan.md` ·
+`docs/state.md` (this block + three in-place amendments) · `docs/day0-session-pack-2026-08-07.md` ·
+`docs/reactivation-runbook.md` · `docs/pre-registration-ledger.md` ·
+`docs/greenfield-family-spec.md` · `docs/oa-ops-runbook.md` ·
+`docs/exploratory-bots-design-2026-08-07.md` · `docs/evidence-standards.md` · `docs/session-log.md`.
+⛔ **No file under `scripts/` and no `data/` file was touched. Uncommitted — Andy runs the commit.**
 
 ## ⭐ 2026-08-08 EVENING — THE DAY'S SETTLED FACTS (orchestrator session batch)
 
@@ -86,7 +178,7 @@ the comparison runs used the env form, per slot **A-02** being Andy's decision, 
 ⛔ **THREE ITEMS GATED — see `session-log.md` 2026-08-08 for the full text.**
 (1) The "`ledger_meta.json` byte-for-byte unchanged" acceptance line **cannot coexist** with §3.3
 items 2 and 4, which require new receipt fields; implemented per the ruling, diff is 4 additions and
-0 changed prior values — Andy to confirm the reading. (2) **`trade_id` is blank in `ops_rows.csv`**
+0 changed prior values — Andy to confirm the reading. (2) ✅ **RULED 2026-08-08 (sitting slot 9): DEFER, WITH THE SCHEME PRE-REGISTERED — `trade_id` stays blank; when the first Lab bot is built its rows carry `OPS-<bot>-<date>-<n>`, collision-proof by prefix and upstream of pairing so it can never enter the working ledger. No id invented, nothing backfilled. Reopen at the first Lab bot's build; §3.3 item 8 stays NOT USABLE until then — carried, not defective.** Original text: **`trade_id` is blank in `ops_rows.csv`**
 (the partition precedes pairing, as ruled), which leaves §3.3 **item 8** — pointing the frozen
 `execution_audit.py` at it as a fixture — **not usable** until a trade_id namespace is ruled.
 (3) ⛔ **NEW DEFECT, NOT FIXED: `a_series.py::_a4b` cannot fire on any input** — its `fast` test
@@ -776,6 +868,17 @@ fixed:**
   *Breakeven* because the untested side decays to zero; close-both forfeits that, so the arm
   cannot reach breakeven by construction. Renamed in substance to "SL100-close-both"; **do not
   publish it under the anchor's name.**
+  **[✅ AMENDED 2026-08-08 — sub-choice 5a / CA-2, ruled YES by Andy at the 2026-08-08 sitting.
+  The text above is PRE-DISCHARGE and stands as the original. ⭐ CF-4 was DISCHARGED 2026-08-06 by
+  the C8 ruling** (`greenfield-family-spec.md`: sibling-close is NOT built, the untested side IS
+  left to decay, *"THIS ARM CAN NOW REACH BREAKEVEN"*) — so "cannot reach breakeven by
+  construction" is no longer the state of the arm. **GATE A8 RULED 2026-08-08 — OPTION C, THE
+  SPLIT:** *"Breakeven"* is the **ledger / internal label**; the **mechanical name (`SL100`, "stop
+  at 100% of credit") is used in anything published or compared externally**, with the CF-1 caveat
+  attached at that surface. So the "do not publish under the anchor's name" instruction above
+  **survives for publication** and is **superseded for the ledger**. ⛔ **CF-1 is NOT discharged** —
+  the exit-pricing / ITM-exposure confound is unrelated to sibling-close and still bounds what the
+  family can conclude. OA bot name `GF-QQQ-IC-SL100` unchanged.]**
 
 **Six findings for Andy, none acted on:**
 
@@ -1755,6 +1858,10 @@ Full text: `post-u1-package-2026-08-07.md`, `pre-registration-ledger.md` (PR-16 
 >
 > **LEDGER_START RULED BY ANDY: starts at the first day a bot's `AUTOMATIONS` actually goes ON, not
 > at the 2026-08-07 ~12:06 ET payment timestamp.** Not yet set — carried to S0b/S1.
+> **[SUPERSEDED 2026-08-08 — Andy's ruling at the 2026-08-08 sitting (slot 1 · A-02): `LEDGER_START`
+> = `2026-08-10`, Monday's open. Switch-on is 08-08 or 08-09, both non-trading days, so "the first
+> day AUTOMATIONS goes ON" and "the first tradeable session" are not the same date and this line's
+> reading yields 08-08/09. The text above stands as ruled on 2026-08-07; 2026-08-10 governs.]**
 >
 > ⛔ **NEW FINDING, RULED, FIXED: EXIT OPTIONS was OFF (`disableExits=1`) on all 7 greenfield bots
 > post-restore** — pre-lockout baseline was ON (`disableExits=0`) for all seven, part of the build
@@ -1888,6 +1995,14 @@ Full text: `post-u1-package-2026-08-07.md`, `pre-registration-ledger.md` (PR-16 
 > CORRECT and STAYS.** Not set, not provisionally set, no date invented.
 > ⛔ **S2 Step 7's session: the day you switch the first bot on IS `LEDGER_START`** — set the
 > constant in `build_ledger.py` then, and not before.
+> **[SUPERSEDED 2026-08-08 — the date now exists and Andy has named it. RULING (2026-08-08 sitting,
+> slot 1 · A-02): `LEDGER_START` = `2026-08-10`.** Switch-on is expected 2026-08-08 or 2026-08-09,
+> both non-trading days, so *"the day you switch the first bot on"* is NOT the first tradeable
+> session — Monday 2026-08-10's open is. The date is **FIXED** and does not move if switch-on
+> slips: a bot that is OFF opens nothing, so the floor admits no row it should not. The
+> `2099-01-01` sentinel stays until Day-0; the constant at `build_ledger.py` line 108 is set to
+> `2026-08-10` **at Day-0**, per that script's own line-151 instruction. The text above stands as
+> ruled on 2026-08-07.]**
 >
 > **STEP 8 — read and reported, nothing fixed.** `data/brief/` EMPTY ✓ · `ledger_meta.json`
 > `2099-01-01` ✓ · `STATUS.md` EMPTY LEDGER n=0 ✓ · `data/raw/` **NOT empty** — it holds
@@ -2316,7 +2431,14 @@ Full text: `post-u1-package-2026-08-07.md`, `pre-registration-ledger.md` (PR-16 
 > **TWO** (`FortNoPT-Scan-Put`, `FortNoPT-Scan-Call`). The hash proof is 2 of 2 — complete, not
 > partial. Pack line for Andy to amend.
 > 📝 **PR04-R2 — the Automation Library PAGE was NOT opened; ⬜ NOT EVALUABLE, recorded as such.**
-> `/automations` 404s and the ladder's third attempt was reached. What stands in its place is
+> ~~`/automations` 404s~~ **[✅ CORRECTED 2026-08-08, FS-3, sitting slot 8 — struck text left
+> standing. `/automations` DOES 404, but that was never the Library's path. THE AUTOMATION LIBRARY
+> IS AT `/bots/automations`.** Evidence, first-hand 2026-08-08 read-only sweep: the `/bots`
+> "Library" button carries no `href`; its `data-ui` menu definition reads verbatim
+> `[{"text":"Templates","href":"/bots/templates"},{"text":"Automations","href":"/bots/automations"}]`.
+> The Library was subsequently enumerated at that path — 1 folder, 4 objects, bot-counts 7/7/7/2.
+> **PR04-R2's own reasoning is unaffected** (`sharing = 0` **is** the not-in-Library fact); only
+> the "unreachable" cause is corrected.]** and the ladder's third attempt was reached. What stands in its place is
 > first-hand and sufficient for the purpose: `sharing = 0` on all five automations read (three on
 > the clone, two on the original). Sharing is opt-in via the Library, so `sharing 0` **is** the
 > not-in-Library fact. No existing automation was edited anyway — the spec delta was a new object.

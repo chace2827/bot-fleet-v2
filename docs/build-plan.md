@@ -15,7 +15,7 @@ It supersedes every earlier version of this file and `approach-reset-2026-07-29.
 
 Two clean slates at once, on the same date.
 
-**The data slate.** `build_ledger.py` takes a `LEDGER_START` constant set to the Day-0 reactivation date.
+**The data slate.** `build_ledger.py` takes a `LEDGER_START` constant set to the Day-0 reactivation date. **[AMENDED 2026-08-08 — `LEDGER_START` = `2026-08-10`; see §3's amendment banner.]**
 The working ledger, `STATUS.md`, the daily brief and every drift report read **post-cutover data only**.
 The v1 ledger is frozen in `data/archive/` and is never a reporting input.
 
@@ -246,6 +246,18 @@ Confirmed against the 2026-07-30 capture. No remainder.
 ## 3. Data architecture after the cutover
 
 **`LEDGER_START` = the Day-0 reactivation date.** Everything downstream reads post-cutover only.
+
+> 🔓 **AMENDMENT 2026-08-08 — explicit "amend the plan" given by Andy at the 2026-08-08 ruling
+> sitting (slot 1 · A-02 · CA-1).** The sentence above stands as the original; this banner governs.
+> Once payment (2026-08-07) and Day-0 separated, *"the Day-0 reactivation date"* named two
+> different days. **RULED: `LEDGER_START` = `2026-08-10`** — Monday's open, the first market
+> session on or after switch-on; never the payment timestamp, and never a non-trading day on which
+> a toggle was flipped. **The date is FIXED:** it does not move if switch-on slips, because a bot
+> that is OFF opens nothing, so a floor of 2026-08-10 admits no row it should not.
+> `scripts/build_ledger.py`'s constant is set to this value **at Day-0**, per that script's own
+> line-151 instruction — not before. Evidence for the two-days problem: `data/ledger_meta.json`
+> (`ledger_start 2099-01-01` sentinel, `post_cutover 0`) and the 2026-08-07 payment timestamp
+> recorded first-hand in `docs/state.md`'s incident block.
 
 ### The straddle rule — a position's era is its OPEN date
 **`LEDGER_START` filters on `open_date`, never `close_date`.** A position belongs to the era in which the

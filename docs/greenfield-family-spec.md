@@ -1449,6 +1449,15 @@ HYPOTHESIS       A stop at Sandvand's ~100%-of-credit level, APPLIED CLOSE-BOTH,
                  arm is "SL100-close-both", not "Breakeven". Do not publish it under the anchor's
                  name.~~ ⚠️ The name is still withheld pending Andy's read of how it should be
                  published now that the construction objection is gone.
+                 ✅ RULED BY ANDY 2026-08-08 (decision-card-2026-08-08 slot 5, gate A8) —
+                 OPTION C, THE SPLIT. "Breakeven" is the LEDGER / INTERNAL label for this arm.
+                 The MECHANICAL name — SL100, "stop at 100% of credit" — is used in ANYTHING
+                 PUBLISHED OR COMPARED EXTERNALLY, and the CF-1 caveat is attached at that
+                 surface. ⛔ CF-1 IS NOT DISCHARGED: the exit-pricing / ITM-exposure confound is
+                 unrelated to sibling-close and bounds what this family can conclude against
+                 Sandvand's rung. The OA bot name GF-QQQ-IC-SL100 is unchanged. The struck
+                 sentence above stands as the original; for PUBLICATION its instruction is
+                 preserved by this ruling, and for the LEDGER it is superseded.
 MECHANISM        Caps the loss at a level calibrated by the largest public 0DTE IC dataset.
                  📝 CORRECTED 2026-08-06: ~~wrapped in a close-both exit~~ — NOT close-both; the
                  stop closes the tested SPREAD only (C8 ruling, §4.3).

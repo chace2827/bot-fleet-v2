@@ -292,6 +292,19 @@ the named blocker. `●` pass · `○` fail · `·` pending.
 "18/15" — a count that silently dropped 11 positions; the true post-fix epoch is 29 positions,
 −$5,455, **Exp(R) −0.0383**. G2's ≥20 supersedes it. Do not reinstate a 15-condor bar.
 
+> ### ✅ RETIRED **IN PRINT** TOO — RULED BY ANDY 2026-08-08 (decision-card-2026-08-08 slot 10,
+> finding DA-3). **The retirement above governs the reporting surfaces, not just the doctrine.**
+> Verified first-hand 2026-08-08: `scripts/report.py:141` still emits
+> `- Go-live gate (≥15 clean post-fix condor trades): **{post_trades} / 15**` and `STATUS.md`
+> line 17 carries the rendered form — **so a bar this document retired prints on the dashboard
+> every trading day from 2026-08-10 on.** ⛔ **RULED: the line is DROPPED from both surfaces.**
+> **G2's ≥20 is the only go-live bar.** ⛔ **Do not replace it with a "≥20" line** — G2 is not a
+> single-count gate and rendering it as one reproduces the defect this paragraph names. The
+> `report.py` edit is a **queued Claude Code task** (`CLAUDE.md` §7); `STATUS.md` is regenerated
+> output and clears on the next `daily.sh` run once the emitter is fixed.
+> **ACCEPTANCE:** `grep -c "Go-live gate" scripts/report.py` = **0**, and the next generated
+> `STATUS.md` contains no `Go-live gate` line.
+
 ---
 
 ## 6. The R methodology

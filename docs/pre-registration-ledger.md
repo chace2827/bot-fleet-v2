@@ -337,6 +337,12 @@ GATE EVAL DATE   📝 STAMPED 2026-08-07 (item 7 above; Andy's ruling: stamp bot
 MAX LOSS         1 lot, ≈$500/position (the debit).
 SIZING TIER      1 lot — experiment.
 CONFIG HASH      <capture> @ <hash>
+                 ⛔ A-27c RULING 2026-08-08 (decision-card-2026-08-08 slot 6, OPTION 2):
+                 ⬜ NOT EVALUABLE — no pre-restore baseline exists for this bot, so A-07's
+                 ESTABLISHED-hash precondition does NOT apply and does NOT block this signature.
+                 A capture is taken ON THE FIRST DAY THIS BOT TRADES; forward drift detection
+                 starts from that capture. ⛔ It establishes nothing about the pre-restore past.
+                 Opening this bot for that capture is a PURE READ (6a) and does not spend Step 2c.
 VERIFICATION     ⚠️ CANNOT be verified from position data. A correctly-gated bot and a dead bot
                  are indistinguishable. **The bot LOG is the only proof**: a scanner run with no
                  entry = healthy. Both toggles ON and screenshotted.
@@ -366,6 +372,12 @@ MAX LOSS         1 lot, ≈$700/position.
 SIZING TIER      1 lot. ⚠️ Allocation is set to $50k vs the put pair's $10k — harmless for a
                  1-ct bot, but ALIGN IT before signing if cross-bot comparability is wanted.
 CONFIG HASH      <capture> @ <hash>
+                 ⛔ A-27c RULING 2026-08-08 (decision-card-2026-08-08 slot 6, OPTION 2):
+                 ⬜ NOT EVALUABLE — no pre-restore baseline exists for this bot, so A-07's
+                 ESTABLISHED-hash precondition does NOT apply and does NOT block this signature.
+                 A capture is taken ON THE FIRST DAY THIS BOT TRADES; forward drift detection
+                 starts from that capture. ⛔ It establishes nothing about the pre-restore past.
+                 Opening this bot for that capture is a PURE READ (6a) and does not spend Step 2c.
 VERIFICATION     Trades list shows an SL row and NO PT row. Confirm AUTOMATIONS is ON — it was
                  OFF at creation.
 SIGNED           ..............................
@@ -487,6 +499,12 @@ MAX LOSS         Paper allocation **$5K**, deliberately small — one bad positi
 SIZING TIER      Unchanged from current. Do not resize a watch-only bot.
 CONFIG HASH      PENDING DAY-0 CAPTURE — the per-bot config capture does not exist yet. Do not
                  fill from `bots_meta.csv`, from the 2026-07-30 export, or from memory.
+                 ⛔ A-27c RULING 2026-08-08 (decision-card-2026-08-08 slot 6, OPTION 2):
+                 ⬜ NOT EVALUABLE — no pre-restore baseline exists for this bot, so A-07's
+                 ESTABLISHED-hash precondition does NOT apply and does NOT block this signature.
+                 A capture is taken ON THE FIRST DAY THIS BOT TRADES; forward drift detection
+                 starts from that capture. ⛔ It establishes nothing about the pre-restore past.
+                 Opening this bot for that capture is a PURE READ (6a) and does not spend Step 2c.
 VERIFICATION     Both toggles ON and screenshotted (1 of the 7 mirrors in the Day-0 re-arm
                  sweep), plus the FIRST post-cutover position's **Trades list** read. The Exit
                  Options panel is never evidence (`oa-platform-reference.md` §0.3).
@@ -528,6 +546,12 @@ MAX LOSS         Paper allocation **$10K**; bounded **$500 max loss per trade** 
                  the named kill shape is a gap-down.
 SIZING TIER      Unchanged from current. Do not resize a watch-only bot.
 CONFIG HASH      PENDING DAY-0 CAPTURE — does not exist yet; do not invent one.
+                 ⛔ A-27c RULING 2026-08-08 (decision-card-2026-08-08 slot 6, OPTION 2):
+                 ⬜ NOT EVALUABLE — no pre-restore baseline exists for this bot, so A-07's
+                 ESTABLISHED-hash precondition does NOT apply and does NOT block this signature.
+                 A capture is taken ON THE FIRST DAY THIS BOT TRADES; forward drift detection
+                 starts from that capture. ⛔ It establishes nothing about the pre-restore past.
+                 Opening this bot for that capture is a PURE READ (6a) and does not spend Step 2c.
 VERIFICATION     Both toggles ON and screenshotted (Day-0 re-arm sweep), plus the first
                  post-cutover position's Trades list.
 SIGNED           ..............................
@@ -577,6 +601,12 @@ MAX LOSS         Paper allocation **$30K** (10%-NL × 10 positions default). ≈
                  modelled figure**.
 SIZING TIER      Unchanged from current. Do not resize a watch-only bot.
 CONFIG HASH      PENDING DAY-0 CAPTURE — does not exist yet; do not invent one.
+                 ⛔ A-27c RULING 2026-08-08 (decision-card-2026-08-08 slot 6, OPTION 2):
+                 ⬜ NOT EVALUABLE — no pre-restore baseline exists for this bot, so A-07's
+                 ESTABLISHED-hash precondition does NOT apply and does NOT block this signature.
+                 A capture is taken ON THE FIRST DAY THIS BOT TRADES; forward drift detection
+                 starts from that capture. ⛔ It establishes nothing about the pre-restore past.
+                 Opening this bot for that capture is a PURE READ (6a) and does not spend Step 2c.
 VERIFICATION     ⛔ **Ordering is load-bearing: the ride-or-close call must be decided, LOGGED
                  and EXECUTED before this bot is armed.** Day-0 audit **F-34** flags that Step 2
                  requires the decision logged but never executed, while Step 3 then arms this
@@ -623,6 +653,12 @@ MAX LOSS         Paper allocation **$10K**; structural max ≈**$2,000/contract*
                  shock). Weekend gap risk is unavoidable by construction.
 SIZING TIER      Unchanged from current. Do not resize a watch-only bot.
 CONFIG HASH      PENDING DAY-0 CAPTURE — does not exist yet; do not invent one.
+                 ⛔ A-27c RULING 2026-08-08 (decision-card-2026-08-08 slot 6, OPTION 2):
+                 ⬜ NOT EVALUABLE — no pre-restore baseline exists for this bot, so A-07's
+                 ESTABLISHED-hash precondition does NOT apply and does NOT block this signature.
+                 A capture is taken ON THE FIRST DAY THIS BOT TRADES; forward drift detection
+                 starts from that capture. ⛔ It establishes nothing about the pre-restore past.
+                 Opening this bot for that capture is a PURE READ (6a) and does not spend Step 2c.
 VERIFICATION     Both toggles ON and screenshotted, **plus an explicit read that the stop switch
                  is still OFF** — its state is the mirror's fidelity to the source. Then the
                  first post-cutover position's Trades list, confirming the 60/40 structure.
@@ -663,6 +699,12 @@ MAX LOSS         Paper allocation **$10–15K**; unhedged max ≈**$1,000/contra
                  unhedged bound. Not live-ready below a $5K account.
 SIZING TIER      Unchanged from current. Do not resize a watch-only bot.
 CONFIG HASH      PENDING DAY-0 CAPTURE — does not exist yet; do not invent one.
+                 ⛔ A-27c RULING 2026-08-08 (decision-card-2026-08-08 slot 6, OPTION 2):
+                 ⬜ NOT EVALUABLE — no pre-restore baseline exists for this bot, so A-07's
+                 ESTABLISHED-hash precondition does NOT apply and does NOT block this signature.
+                 A capture is taken ON THE FIRST DAY THIS BOT TRADES; forward drift detection
+                 starts from that capture. ⛔ It establishes nothing about the pre-restore past.
+                 Opening this bot for that capture is a PURE READ (6a) and does not spend Step 2c.
 VERIFICATION     Both toggles ON and screenshotted, plus the first post-cutover position's
                  Trades list. If a breach fires, the hedge leg must appear as its own row in the
                  Trades list — an intended hedge that never executed is the HedgeD lesson
@@ -704,6 +746,12 @@ MAX LOSS         Paper allocation **$10K**; 10-wide SPX 0DTE credit spread with 
                  realised in the baseline −1.0000R, so the stop is not a guarantee.
 SIZING TIER      Unchanged from current. Do not resize a watch-only bot.
 CONFIG HASH      PENDING DAY-0 CAPTURE — does not exist yet; do not invent one.
+                 ⛔ A-27c RULING 2026-08-08 (decision-card-2026-08-08 slot 6, OPTION 2):
+                 ⬜ NOT EVALUABLE — no pre-restore baseline exists for this bot, so A-07's
+                 ESTABLISHED-hash precondition does NOT apply and does NOT block this signature.
+                 A capture is taken ON THE FIRST DAY THIS BOT TRADES; forward drift detection
+                 starts from that capture. ⛔ It establishes nothing about the pre-restore past.
+                 Opening this bot for that capture is a PURE READ (6a) and does not spend Step 2c.
 VERIFICATION     ⚠️ **NAME-COLLISION GUARD — read the bot name character by character before
                  arming.** `60min-ORB-10W-Paper-v1` **stays live**; `Opening Range Breakout 60m`
                  is a DIFFERENT bot, is OFF, and is **being archived** (`build-plan.md` §2A;
@@ -747,6 +795,12 @@ MAX LOSS         Paper allocation **$10K**; **$500 max loss per position at $5 w
                  the 21-DTE exit caps the damage. ⛔ Plus the 1 open position (≈+$328) above.
 SIZING TIER      Unchanged from current. Do not resize a watch-only bot.
 CONFIG HASH      PENDING DAY-0 CAPTURE — does not exist yet; do not invent one.
+                 ⛔ A-27c RULING 2026-08-08 (decision-card-2026-08-08 slot 6, OPTION 2):
+                 ⬜ NOT EVALUABLE — no pre-restore baseline exists for this bot, so A-07's
+                 ESTABLISHED-hash precondition does NOT apply and does NOT block this signature.
+                 A capture is taken ON THE FIRST DAY THIS BOT TRADES; forward drift detection
+                 starts from that capture. ⛔ It establishes nothing about the pre-restore past.
+                 Opening this bot for that capture is a PURE READ (6a) and does not spend Step 2c.
 VERIFICATION     Both toggles ON and screenshotted, plus the first post-cutover position's
                  Trades list showing the 50%-credit OR 21-DTE exit — this bot has **no
                  monitors**, so the Exit Options preset is the entire exit engine and its
@@ -978,6 +1032,15 @@ REVIEW DATE      Day-0 + 6 months.
 MAX LOSS         1 lot per arm.
 SIZING TIER      1 lot — IDENTICAL across arms.
 CONFIG HASH      <capture> @ <hash> per arm
+NAMING           ✅ GATE A8 RULED BY ANDY 2026-08-08 (decision-card-2026-08-08 slot 5) — PR-18,
+                 OPTION C / THE SPLIT. LEDGER / INTERNAL LABEL: "Breakeven" (CF-4 discharged
+                 2026-08-06 by the C8 ruling; the untested side is left to decay, so the arm can
+                 reach the shape its anchor describes). PUBLISHED OR EXTERNALLY COMPARED: the
+                 MECHANICAL name only — `SL100` / "stop at 100% of credit" — with the CF-1 caveat
+                 attached at that surface. ⛔ CF-1 IS NOT DISCHARGED and bounds what this family
+                 may conclude against Sandvand's rung. OA bot name `GF-QQQ-IC-SL100` unchanged.
+                 THIS FIELD IS NOW RESOLVED — it no longer holds the entry UNSIGNED under §7
+                 item 2. PR-19 (`SL200`) follows the same convention by construction.
 VERIFICATION     Capture-diff, one differing input. No ranking published until it passes.
 SIGNED           ..............................
 ```

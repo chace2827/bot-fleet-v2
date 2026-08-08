@@ -129,6 +129,18 @@ trap was falsified 2026-08-03 and step 2 is now a Library check, not a fork ritu
    > ⛔ **Then read the Symbols panel back, character by character, against the original's list.**
    > *"Verify, don't assume"* — and *"It is **not empty**. Look at it again. This is the single most
    > common silent clone failure in this fleet."*
+   > ### ✅ AMENDED 2026-08-08 — sitting slot 8, carrying slot 7 (PR02-R2). Original left standing.
+   > **THE BLANKET "IT IS NOT EMPTY" IS FALSE FOR AUTOMATION-RESIDENT-SYMBOL FAMILIES.** Dated
+   > first-hand observation 2026-08-08: on **both** PR-02 sides — clone `IC-SPX-FastPT25-S2-130PM`
+   > and its original — the Symbols panel read *"No symbols yet"*, the symbol being resident as
+   > `Loop SPX` + action `symbol: SPX`. Same recorded first-hand for PR-01.
+   > ⛔ **THE CHECK IS NOT SKIPPED — IT IS BRANCHED.** Determine the bot's kind first:
+   > **Bot-Symbols-loop bot** → the panel MUST be non-empty and MUST match character-for-character;
+   > the STOP branch below applies in full — **this is the real trap.**
+   > **Automation-resident-symbol bot** → *"No symbols yet"* is the CORRECT and EXPECTED state on
+   > **both** sides. Verify the original reads the same and that the automation's Loop and action
+   > carry the symbol. ⛔ **Do NOT "restore" symbols into such a bot's panel** — that is an
+   > unrequested config change.
    > **IF the panel is empty or does not match after re-adding** → re-add once via the form control,
    > then re-read `.value` (typed input lands intermittently). **IF it is still wrong** → **stop
    > this clone; the bot stays OFF. The other clones proceed. Escalate to Andy: YES.** Do not
@@ -154,9 +166,19 @@ trap was falsified 2026-08-03 and step 2 is now a Library check, not a fork ritu
    > ⛔ **IF either toggle reads OFF on the post-save screenshot** → drive it ON and re-screenshot.
    > **IF it reverts** → **bot stays OFF · other clones proceed · escalate to Andy: YES.**
    > A save confirmation is never this check.
-   > ⛔ **IF PT25 is still present on a control clone's Open Position action** → **do not remove it
+   > ⛔ ~~**IF PT25 is still present on a control clone's Open Position action** → **do not remove it
    > yourself.** The removal is spec, and the spec is frozen (`build-plan.md` §4). **Bot stays OFF ·
-   > escalate to Andy: YES.**
+   > escalate to Andy: YES.**~~
+   > ### ✅ AMENDED 2026-08-08 — "amend the plan" given by Andy at the 2026-08-08 ruling sitting
+   > (slot 8, item PR02-R3 / A-16b). Struck text left standing above.
+   > **F-C1 IS RULED: REMOVE** (Andy, first-hand, 2026-08-07; recorded in `state.md` and
+   > `session-log.md`). The branch above was written before that ruling and was never amended, so
+   > the runbook and the Day-0 pack said opposite things — the A-16 class of conflict that cost an
+   > adversarial-review pass to find. **CORRECT INSTRUCTION: if PT25 is still present on a control
+   > clone's Open Position action, REMOVE IT** — remove ONLY `profits`/`smprofits`, in place. ⛔ Do
+   > **not** rebuild the action to do it; that destroys the exits bundle and the re-entry-gate work.
+   > If it cannot be cleared in place, **STOP** — bot stays OFF, escalate. ⛔ **Do not treat the
+   > (now-removed) conflict as ambiguity and do not stop on it.**
    > ⚠️ **A toggle screenshot is necessary and not sufficient** (§1). §4 Step 6's Trades-list check
    > is still required before this bot may trade.
 8. **Rename the original** with an `-ARCHIVED-<date>` suffix, **then archive it.** Renaming first frees the
@@ -211,7 +233,12 @@ A mistake made once is a lesson; the same mistake made across nine bots is a reb
 > The pilot is **clean** when all six hold **and Andy has said so**:
 > 1. Every ✅ CONFIRM block in `pilot-clone-card-qqq-fortress.md` is ticked — none from memory.
 > 2. The original's automation list is unchanged from its Step 0 capture.
-> 3. The clone's Symbols panel is non-empty and matches Step 0 character-for-character.
+> 3. ~~The clone's Symbols panel is non-empty and matches Step 0 character-for-character.~~
+>    ✅ **AMENDED 2026-08-08 (sitting slot 8, carrying slot 7 / PR02-R2):** the clone's Symbols
+>    panel **matches the original's, whatever that is.** For a Bot-Symbols-loop bot that means
+>    non-empty and character-for-character. For an **automation-resident-symbol** bot, *"No symbols
+>    yet"* on **both** sides is the correct and expected state (first-hand, both PR-02 sides,
+>    2026-08-08) and the bot is clean on this criterion.
 > 4. Daily and Total position limits are even numbers (an IC = 2 positions).
 > 5. Both capture sets and both toggle screenshots are on file under `data/captures/`.
 > 6. Both open questions are answered in writing: Preset control yes/no; 15:52 reachable yes/no.
@@ -379,8 +406,18 @@ Escalate to Andy: YES.**
 ITM* positions on expiration day.
 
 ### Step 1 — Pay / reactivate
-Note the exact timestamp. **This date is `LEDGER_START`.** Set it in `build_ledger.py` before anything
+Note the exact timestamp. ~~**This date is `LEDGER_START`.**~~ Set it in `build_ledger.py` before anything
 else, so no pre-cutover row can enter the working ledger.
+
+> ### ✅ AMENDED 2026-08-08 — "amend the plan" given by Andy at the 2026-08-08 ruling sitting
+> (slot 1 · A-02 · CA-1). Struck phrase left standing above.
+> **THE PAYMENT TIMESTAMP IS NOT `LEDGER_START`.** Payment landed 2026-08-07 ~12:06 ET; the roster
+> did not exist until the restore, and `AUTOMATIONS` was 0 of 43 on 2026-08-08. **RULED:
+> `LEDGER_START` = `2026-08-10`** — Monday's open, the first market session on or after switch-on.
+> Never the payment date, and never a non-trading day on which a toggle was flipped. **The date is
+> FIXED:** it does not move if switch-on slips, because a bot that is OFF opens nothing. Still set
+> it in `build_ledger.py` (line 108) **before anything else** and still run the n=0 verification
+> below — that requirement is unchanged.
 
 > ⛔ **VERIFY IT, do not assume it. Added 2026-08-05 (D6/F-33).** After setting it, run
 > `build_ledger.py` once and confirm the row count is **0** and the status reads **EMPTY LEDGER,
@@ -611,6 +648,25 @@ Two acceptable proofs, in order of preference:
 > one** position at **1 lot**, read the moment it opens. `greenfield-family-spec.md` D6 makes the
 > same concession — *"Signed ≠ verified."* The test-fire prohibition elsewhere is scoped to the
 > **inactive-account build window**, not to Day-0.
+>
+> ### ✅ AMENDED 2026-08-08 — "amend the plan" given by Andy at the 2026-08-08 ruling sitting
+> (slot 8, carrying slot 2 · A-11). **THE EXCEPTION ABOVE NAMED NO CONTROL. IT NOW HAS ONE.**
+> *"Exactly one position at 1 lot"* was a promise with no mechanism behind it: nothing caps the bot
+> at one (the greenfield arms carry `2/2`, the PR-01 clone `10/10`), which is the shape of the v1
+> −$9,618 failure. **RULED 2026-08-08:**
+> 1. **Attempt the button test-fire FIRST**, one bot, and record **verbatim** whether it exists.
+>    ⛔ A surface you did not open is not an absent control.
+> 2. **If it does not exist: `posLimitDay` = 1 is AUTHORIZED** (and `posLimit` = 1 where separately
+>    settable). ⛔ **ONE BOT AT A TIME, NEVER A BATCH.** Screenshot before and after; read the
+>    Trades list the moment the position opens; **revert immediately after the read.**
+> 3. **The revert is PROVEN, not asserted** — re-capture and re-hash; the hash must return to its
+>    pre-change value. **If it does not, that IS a signature fork** and the entry stops.
+> 4. This does **not** fork the Step-2b signature: it is a declared, dated, reverted verification
+>    action altering no mechanic, no exit bundle and no matched field. Log the change, the read and
+>    the revert in that bot's pre-registration entry.
+> 5. ⛔ **Switching on at the stored limit and reading whatever opens is DECLINED.** Where step 2
+>    cannot be executed, that bot's Step 6 is ⬜ NOT EVALUABLE and **it stays OFF**.
+> ⚠️ This only does work if `AUTOMATIONS` goes ON **at Step 7 and not before**.
 
 **The Exit Options panel is NOT evidence.** Exit Options are copied per-position at open; the panel shows
 intent, the Trades list shows what was attached.

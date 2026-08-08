@@ -523,6 +523,23 @@ signature — a new §3 roster row plus a new §2a:
 > namespace is ruled · and a **new, unfixed defect in `_a4b`** (a `timedelta` compared to an `int`,
 > swallowed by a bare `except` — the detector cannot fire on any input).
 > **The build gate is unchanged:** this surface + the OA restore + Andy's go.
+>
+> ### ✅ GATED ITEM (2) RULED BY ANDY 2026-08-08 (decision-card-2026-08-08 slot 9): **DEFER, WITH
+> THE SCHEME PRE-REGISTERED.** `trade_id` **stays blank** in `data/ops_rows.csv` today — nothing
+> consumes the column, because **no Lab bot exists** (`pre-registration-ledger.md` §6a: no Lab bot
+> is named or entered yet). ⛔ **No id is invented and no row is backfilled.**
+> **PRE-REGISTERED SCHEME, on the record before any row exists:** when the first Lab bot is built,
+> `ops_rows.csv` rows carry **`OPS-<bot>-<date>-<n>`** — collision-proof against the working
+> ledger's global pairing counter **by prefix**, and structurally unable to enter the working
+> ledger because the ops-class partition runs **upstream of pairing**.
+> **REOPEN CONDITION:** the first Lab bot's build. At that point the scheme above is implemented as
+> written, or amended by an explicit ruling before any row is emitted.
+> ⚠️ **Item 8 stays NOT USABLE until then** — pointing the frozen `execution_audit.py` at
+> `ops_rows.csv` as a fixture needs populated ids, and there are none. That is a **carried** state,
+> not a defect.
+> ⛔ **The other two gated items are already closed and are not re-opened here:** the receipt clause
+> was ruled **ADDITIVE** and **O4 was FIXED** (both 2026-08-08, recorded in `state.md` and
+> `session-log.md`).
 
 **The problem, precisely.** `build_ledger.py` has **no bot, tag or group filter of any kind**. Its
 only exclusion is the temporal cutover on `open_date`; `data/archive/` is excluded not by code but

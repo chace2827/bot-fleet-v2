@@ -302,6 +302,34 @@ improvises here reproduces the v1 failure the pack quotes at −$9,618, with Ste
 > here: **a surface you did not open is not an absent control.** If no doc names where the
 > test-fire lives, that is ⬜ NOT EVALUABLE — not "unavailable".
 
+> ### ✅ RULED BY ANDY 2026-08-08 (decision-card-2026-08-08 slot 2). THE MECHANISM IS AUTHORIZED.
+> **A THEN B, AND 2a = NO.** Andy ruled at the 2026-08-08 sitting, delegating to the card's
+> recommendation (verbatim: *"Your reccomendation"*). A-11's gate is now **ANSWERED** — a Day-0
+> session no longer stops here, it executes the following:
+>
+> 1. **ATTEMPT THE BUTTON TEST-FIRE FIRST**, on one bot, and record **verbatim** whether the
+>    control exists. This step is mandatory and unchanged. ⛔ Absence is only concluded after the
+>    surfaces are opened — a surface you did not open is still not an absent control.
+> 2. **IF THE TEST-FIRE DOES NOT EXIST: `posLimitDay` = 1 IS AUTHORIZED** (and `posLimit` = 1
+>    where the two are separately settable). ⛔ **ONE BOT AT A TIME, NEVER A BATCH.** Screenshot
+>    before and after; read the Trades list the moment the position opens; **REVERT to the
+>    recorded original value immediately after the read**; log the change, the read and the revert
+>    in that bot's pre-registration entry, dated, citing this ruling.
+> 3. **2a — NO. A temporary limit does NOT fork the Step-2b signature.** It is a declared, dated,
+>    reverted **verification action**: it alters no mechanic, no exit bundle and no matched field,
+>    and it is reverted before the sample starts. ⛔ **The revert is PROVEN, not asserted** — after
+>    reverting, re-capture and re-hash the config; the hash must return to its **pre-change**
+>    value. **If it does not return, THAT is a fork** and the entry stops for a fresh signature.
+> 4. **OPTION C IS DECLINED.** Switching on at 2/2 or 10/10 and reading whatever opens converts a
+>    verification step into uncapped live exposure — the v1 −$9,618 shape.
+> 5. **OPTION D REMAINS THE FALLBACK** wherever step 2 cannot be executed on a given bot: that
+>    bot's Step 6 is ⬜ NOT EVALUABLE and **it stays OFF**.
+>
+> ⚠️ **ORDERING.** This mechanism only does work if `AUTOMATIONS` goes ON **at Step 7 and not
+> before**. A bot switched on ahead of S2 opens at its stored limit with Step 7 gating nothing.
+> ⚠️ **Residual, named:** `reactivation-runbook.md` §4 Step 6 carries the identical hole and is a
+> decision surface — **not amended by this ruling**; routed to the slot-8 doc batch.
+
 ---
 
 ## ⛔ A-12 — STEP 6b: DO NOT EDIT A SIGNED ARM, AND THE READ IS AMBIGUOUS AS SPECIFIED.
@@ -319,6 +347,20 @@ branch escalates as `FLEET STAYS OFF for the family`, over an edit this pack ord
 > Andy: run C10 on an instrument OUTSIDE the tournament, or leave C10 OPEN.** If no such instrument
 > exists on the day, **C10 STAYS OPEN** — say so by name in `state.md` and at close-out; ARM-B1
 > stays blocked, which is where it already is. Standing up a separate canary is a plan question.
+
+> ### ✅ RULED BY ANDY 2026-08-08 (sitting slot 3), verbatim: *"C for Day-0, A as the queued path"*.
+> ⛔ **C10 STAYS OPEN FOR DAY-0.** No instrument runs it on the day. **Do not edit PR-20. Do not
+> run C10 on the pilot.** C10 is named OPEN by name in `docs/state.md` and again at Day-0
+> close-out; **ARM-B1 stays blocked**, which is where it already is, and **PR-21 stays unstamped**.
+> **THE QUEUED PATH IS `TESTOPS-LAB-DSTOP`** (`exploratory-bots-design-2026-08-07.md` §2.2) — the
+> only candidate that can discriminate, because 3 contracts is the minimum count separating all
+> four candidate bases on a 2-leg vertical, and its own reporting rule requires ≥3 firings.
+> ⛔ **It is NOT authorized to be built by this ruling.** Its preconditions are unchanged and all
+> must hold first: E-3's three exclusion surfaces implemented **and verified** (implementation
+> landed 2026-08-08; the toggle gate also needs Andy's go), a **signed `PHASE LOG`** per guardrail
+> **G8**, and one of the ≤2 Lab ops slots (E-1). That is a **build-window** decision, not a Day-0
+> one. **Candidate B (the pilot) is DECLINED** — NOT ESTABLISHED hash (S0b-1) so it opens nothing,
+> and at 1 lot it could not discriminate even if it did.
 
 **(b) "CONTRACT COUNT" IS UNDEFINED AND THE TWO BRANCHES CAN COLLAPSE.** The step says record
 *"CONTRACT COUNT PER LEG"* and then branches on `−$100 × (CONTRACT COUNT)`. **At 1 contract per
@@ -597,6 +639,29 @@ two required actions refers to a payment gate A1 completed on 2026-08-07.
 > is Claude Code's lane). ⛔ **ANY OTHER unticked ⛔ box is an unqualified STOP.** ⛔ **Do not
 > resolve any of them yourself.**
 
+> ### ✅ ALL FOUR RULED BY ANDY 2026-08-08 (sitting slot 4), verbatim: *"your reccomendation"*.
+> **Step 0 no longer stops on these. Ask nothing; execute.**
+> **(i) TEMPLATE V2 ON THE PILOT — NOT FINISHED AT STEP 0. THE PILOT STAYS OFF.** Finishing V2 is
+> a **spec change plus a signature**, and the pilot already stays OFF independently on S0b-1's
+> NOT-ESTABLISHED hash — so doing it inside Step 0 buys nothing for Day-0. V2 lands in a **build
+> window** with its amended PR-03. ⛔ Do not re-price the 15:50 exit on Day-0.
+> **(ii) C9 — RUN AS A READ AT STEP 0. The family does NOT stay off.** ⛔ **READ ONLY** — never a
+> write, never an improvised spec. `C0c · C2 · C7 · C8` are CLOSED (decision card 2026-08-06);
+> C9 is the re-scoped pre-switch-on read and is the only one outstanding.
+> **(iii) A7 UNWIRED — THE FAMILY TRADES, WITH A HAND-RUN DETECTOR.** `scripts/a_series.py
+> --validate` **and** `--json` are run **by hand at EVERY close-out**, starting Day-0. The honest
+> state is reported on the page, not papered over: the detector is a **hand-run tool at 3 of 4
+> shared objects**, not a nightly. ⛔ **The 4th object, `Defang-Mon-S2-StrikeTouch` (A-13), is
+> NAMED AS AN OPEN GAP at every close-out** — its 2026-08-08 sweep entry is a **FIRST BASELINE,
+> not a pass**, so A7 reports **3/4 VERIFIED + 1 FIRST BASELINE, never 4/4**. Wiring into
+> `daily.sh` stays a queued Claude Code task and is **not** a Day-0 action.
+> **(iv) GATE A9 — CONFIRMED, AND ALREADY SATISFIED.** The rule stands as written: §4 does not
+> start until Andy's own clean end-to-end `daily.sh` n=0 run is on file, and a session's report of
+> its own run is not that check (`CLAUDE.md` §9.1a). ⛔ **It is on file: gate A9 CLOSED 2026-08-08**
+> on Andy's own 8/8 run (`execution_audit.py` v1.1.0 + `daily_brief.py` loader fixes; matrix 21/21
+> unchanged; Tier C SKIPPED BY NAME). **This box is TICKED.** Split (ii), the Tier-C contract
+> reconciliation, remains open and does **not** gate Day-0.
+
 ---
 
 ## ⛔ A-25 — PROJECT MEMORY IS CORROBORATION, NOT A PRECONDITION.
@@ -676,6 +741,17 @@ EVALUABLE — never a pass.**
 > diverges)** · **the other ELEVEN ⬜ NOT EVALUABLE** (so "the other twelve" above is the same
 > arithmetic slip). Net: **capture worklist = 11 bots; NOT-ESTABLISHED total = 12 of 14.** The
 > A-07 precondition and the three options above are UNCHANGED by this correction.
+> ⭐ **FURTHER CORRECTION 2026-08-08 (evening), on the ruling of slot 6 — evidence-backed, dated
+> first-hand observation; both counts above left standing.** The worklist of 11 was written while
+> S1 was still running. **S1 has since closed** (PR-02 and PR-04 both BUILT + VERIFIED), and a
+> direct listing of `data/captures/2026-08-08-clones/` this session shows both un-started clone
+> originals now hold **post-restore step-0 baselines**: `PR-02-step0-baseline-IC-SPX-FastPT25-S2-
+> 130PM.txt` and `PR-04-step0-baseline-QQQ-IC-0DTE-Fortress-NoPT50.txt` (the latter with an
+> original-side toggle screenshot). Both are also **renamed `-ARCHIVED-2026-08-08` and will not
+> trade**, so rider 2's first-trading-day capture cannot apply to them. **Live capture worklist =
+> the NINE leave-in-place bots.** Their A-07 disposition is unchanged and permanent: ⬜ NOT
+> EVALUABLE, no pre-restore baseline. **NOT-ESTABLISHED total is still 12 of 14** — this corrects
+> the worklist, not the disposition arithmetic.
 
 **THE THREE OPTIONS, STATED, NONE CHOSEN — ANDY PICKS:**
 1. **CAPTURE-NOW-AS-BASELINE.** Take a fresh per-bot capture of the twelve and treat it as the
@@ -695,6 +771,44 @@ EVALUABLE — never a pass.**
 - ⛔ **THE 20 GROUP-A BOTS ARE IN NO POST-RESTORE CONFIG CHECK ANYWHERE IN THIS PACK.** They are
   still active only because the ~23 archives remain queued for Andy's hand. Named here so the
   gap is on the record rather than discovered later.
+
+> ### ✅✅ RULED BY ANDY 2026-08-08 (decision-card-2026-08-08 slot 6). **THE S2 PRECONDITION IS
+> DISCHARGED — S2 MAY OPEN ON THIS ITEM.**
+> **OPTION 2 — AMEND A-07's SCOPE.** An **ESTABLISHED** config-capture hash is required **only
+> where a pre-restore baseline exists**. The **eleven** bots with no baseline are carried
+> explicitly **⬜ NOT EVALUABLE** — **not** as blockers. Day-0 proceeds with the blind spot
+> **named on the page**, which is how this folder already handles unrunnable checks
+> (`reactivation-runbook.md` §4).
+> ⛔ **Options 1 and 3 were declined, on the record.** Option 1 *"establishes nothing about the
+> past"* by A-27(c)'s own words — a first capture after the restore cannot distinguish a
+> faithfully restored bot from a rolled-back one — and costs eleven hand captures before S2 opens
+> for zero retrospective assurance. Option 3 permanently forecloses **Step 6a**, the step the
+> runbook calls *"the step that settles §1"*, because that verdict runs on the nine leave-in-place
+> bots ONLY; it also strands the five open mirror positions.
+>
+> **THREE RIDERS, RULED WITH IT AND BINDING:**
+> 1. ⛔ **IN THE FIELD, NEVER A FOOTNOTE.** Each of the eleven pre-registration entries carries
+>    `CONFIG HASH: ⬜ NOT EVALUABLE — no pre-restore baseline (A-27c ruling 2026-08-08)` **in the
+>    `CONFIG HASH` field itself**. A carry written anywhere else is one step from a carry forgotten.
+> 2. **A CAPTURE IS TAKEN ON THE FIRST DAY EACH BOT TRADES** — forward drift detection starts one
+>    day late instead of never. This is the worklist; it is **not** a precondition on S2.
+> 3. **6b — ACCEPT AND RECORD.** The **20 Group-A bots** are in no post-restore config check
+>    anywhere, and that is now written down rather than being true with nobody having said so.
+>    They are neither brought into A-07's scope nor archived by this ruling; they remain covered
+>    by the **~23 archives already queued for Andy's hand**.
+>
+> **6a — PURE READ. RULED EXPLICITLY.** Opening any of the nine leave-in-place bots for a capture
+> is a **PURE READ and does NOT spend Step 2c**. Grounds: **A-09b** already ruled the no-touch
+> observation ⬜ NOT EVALUABLE — `NO-TOUCH OBSERVATION CONFOUNDED — RESTORE` — because gate A0
+> landed on Branch 1, and the 2026-08-08 read-only sweep attested by name that the nine were not
+> opened and **Step 2c is unspent**. ⛔ **PURE READ MEANS READ:** no edit, no toggle, no rename, no
+> save, no archive, no template — a write of any kind on one of the nine is outside this ruling.
+> ⛔ **S0b's narrower instruction** (*"DO NOT touch any of the nine leave-in-place bots, in any
+> way"*) **is superseded for reads only**, by this ruling, and by nothing else.
+>
+> ⚠️ **The honest residue, carried not hidden:** eleven bots will trade with **no pre-restore
+> config baseline of any kind**. That is the state of the repository; this ruling names it instead
+> of manufacturing assurance about it.
 
 ### (d) 📝 S0b-3 — A BOOKMARKLET DEFECT, WITH THE FIX IDENTIFIED. **CLAUDE CODE'S LANE.**
 **RULING: recorded as a defect in the capture instrument, not in the page.**
@@ -1519,6 +1633,11 @@ The clone-specific points that cost real time on PR-01:
 
 0. STEP-0 BASELINE CAPTURE OF THE ORIGINAL FIRST, and hash all four of its automations. That
    baseline is what proves later that the original was never touched.
+   ✅ CORRECTED 2026-08-08 (PR04-R1, sitting slot 8; original left standing). "FOUR" IS A PR-02
+   INHERITANCE, NOT A CONSTANT. HASH **ALL OF THE ORIGINAL'S AUTOMATIONS, WHATEVER THE COUNT IS** —
+   count them on the bot page first. First-hand 2026-08-08: `IC-SPX-FastPT25-S2-130PM` has FOUR;
+   `QQQ-IC-0DTE-Fortress-NoPT50` has **TWO** (`FortNoPT-Scan-Put`, `FortNoPT-Scan-Call`), so its
+   hash proof is 2 of 2 — COMPLETE, NOT PARTIAL. ⛔ Do not read a count of 2 as a missed capture.
 1. RENAME THE ORIGINAL FIRST — `IC-SPX-FastPT25-S2-130PM-ARCHIVED-<today>`. It frees the production
    name and keeps the archived record self-labelling. Titles commit on BLUR.
 2. CLONE. ⭐ The Clone Settings drawer exposes Name + Account + Allocation BEFORE creation — set
@@ -1554,6 +1673,21 @@ The clone-specific points that cost real time on PR-01:
    ⛔ IF IT IS EMPTY OR DOES NOT MATCH -> re-add ONCE via the form control, re-read `.value`
       (typed input lands intermittently). STILL WRONG -> STOP THIS CLONE, BOT STAYS OFF, the other
       clone proceeds, ESCALATE TO ANDY: YES. Every later step would sit on a bot that never scans.
+   ✅ CORRECTED 2026-08-08 (PR02-R2, sitting slot 7; original left standing above). THE BLANKET
+   ASSERTION "IT IS NOT EMPTY" IS FALSE FOR AUTOMATION-RESIDENT-SYMBOL FAMILIES. Dated first-hand
+   observation 2026-08-08: on BOTH PR-02 sides — the clone `IC-SPX-FastPT25-S2-130PM` AND its
+   original — the Symbols panel read "No symbols yet", and the symbol is AUTOMATION-RESIDENT
+   (`Loop SPX` + action `symbol: SPX`). The same was recorded first-hand for PR-01.
+   ⛔ THE CHECK IS NOT SKIPPED — IT IS BRANCHED. FIRST determine which kind of bot you have:
+     - BOT-SYMBOLS-LOOP bot -> the panel MUST be non-empty and MUST match character-for-character.
+       An empty panel here is the real trap and the STOP branch above applies in full.
+     - AUTOMATION-RESIDENT-SYMBOL bot (`Loop <SYM>` + action `symbol: <SYM>`) -> "No symbols yet"
+       is the CORRECT and EXPECTED state on BOTH sides. Verify instead that the ORIGINAL reads the
+       same, and that the automation's Loop and action carry the symbol. ⛔ DO NOT "restore"
+       symbols into the panel of one of these bots — that is an unrequested config change.
+   ⚠️ WHY THIS MATTERS: a checklist line that cries wolf on every automation-resident bot trains
+   sessions to wave the check through, which is exactly when the REAL Bot-Symbols-loop trap gets
+   missed.
 5. THE TWO SAFETY FIXES, both per the PR-01 pattern, both Layer-1 verified after a hard reload:
    a. RE-ENTRY GATE, on BOTH scanners:
       `countpostag{cop:eq, tags:"…side", count:0, status:"open"}`
@@ -1591,7 +1725,10 @@ The clone-specific points that cost real time on PR-01:
       exits bundle and the re-entry-gate work. If it cannot be cleared in place, STOP.
 7. NO-UNINTENDED-EDITS PROOF, BY HASH, NOT BY EYE. Re-hash the ORIGINAL's automations after every
    clone edit and confirm they are byte-identical to the Step-0 baseline. Confirm all four of the
-   clone's automations carry DIFFERENT rids from the original's. (On PR-01: the original's
+   clone's automations carry DIFFERENT rids from the original's.
+   ✅ CORRECTED 2026-08-08 (PR04-R1, sitting slot 8; original left standing). READ "ALL FOUR" AS
+   **ALL OF THEM, WHATEVER THE COUNT** — PR-02's original has four, PR-04's has TWO. The proof is
+   N of N for that bot, not 4 of 4. (On PR-01: the original's
    `Scalp-Scan-Put` still hashed `91da84fd2b7aafbb…`, 5027 bytes, v2, after every edit.)
 8. CAPTURE the automation tree -> `data/captures/<date>-clones/`. Save Template V1 with the PR-02
    pre-registration note attached (⛔ DOUBLE-ESCAPE, verify byte-exact). Add the tag — it stores as
@@ -1678,6 +1815,17 @@ is NO per-bot capture file on disk, so an ESTABLISHED config-capture hash — wh
 precondition for signing at STEP 2b — is unobtainable for them from the repository as it stands. [CORRECTED 2026-08-08, CA-3: ELEVEN with no capture file; the pilot is the 12th NOT-ESTABLISHED via its DIVERGENT capture (S0b-1) — see the CA-3 banner in §0.0 A-27(c); worklist = 11, not-established = 12 of 14]
 Three options are written out in A-27c and ANDY HAS CHOSEN NONE. ⛔ IF ANDY HAS NOT RULED IT BY
 THE TIME YOU OPEN, DO NOT START: record `BLOCKED ON STEP 4b — A-27c UNRULED` and hand to him.
+✅✅ RULED BY ANDY 2026-08-08 (sitting slot 6) — THIS PRECONDITION IS DISCHARGED. S2 MAY OPEN ON
+THIS ITEM. OPTION 2: an ESTABLISHED hash is required ONLY where a pre-restore baseline exists; the
+ELEVEN without one are carried explicitly ⬜ NOT EVALUABLE, NOT as blockers, with the carry written
+INTO each entry's CONFIG HASH field ("⬜ NOT EVALUABLE — no pre-restore baseline (A-27c ruling
+2026-08-08)"), never as a footnote. A capture is taken ON THE FIRST DAY EACH BOT TRADES — that is
+the worklist, NOT a precondition on S2. 6a RULED: opening any of the nine is a PURE READ and does
+NOT spend Step 2c (A-09b already ruled that observation NOT EVALUABLE — restore confound) — READ
+ONLY, no edit/toggle/rename/save/archive/template. 6b RULED: ACCEPT AND RECORD — the 20 Group-A
+bots are in no post-restore config check anywhere; not brought into scope, not archived by this
+ruling, still covered by the ~23 archives queued for Andy's hand.
+⛔ DO NOT record `BLOCKED ON STEP 4b — A-27c UNRULED`. It is ruled.
 ⛔ AND READ A-27a's CARRY-FORWARD BEFORE STEP 7: **the seven greenfield bots' EXIT OPTIONS state
 MUST be re-read first-hand immediately before you switch AUTOMATIONS on, and NEVER inherited from
 any close-out, CSV or this pack** — if a restore reset `disableExits` once it can reset again.
@@ -1777,6 +1925,20 @@ silent proceed and not an automatic halt: Template V2 is finished here OR THE PI
 is run AS A READ before switch-on OR THE FAMILY STAYS OFF; A7-unwired is reported and ANDY RULES
 whether the family trades today with no nightly detector (wiring it is Claude Code's lane).
 ⛔ ANY OTHER unticked ⛔ box is an unqualified STOP. ⛔ Do not resolve any of them yourself.
+
+✅ ALL FOUR RULED BY ANDY 2026-08-08 (sitting slot 4). STEP 0 NO LONGER STOPS ON THESE — EXECUTE:
+ (i)   TEMPLATE V2: NOT finished at Step 0. THE PILOT STAYS OFF (it already stays off on S0b-1's
+       NOT-ESTABLISHED hash). V2 lands in a build window with its amended PR-03. Do not re-price
+       the 15:50 exit on Day-0.
+ (ii)  C9: RUN AS A READ AT STEP 0. READ ONLY — never a write. The family does NOT stay off.
+ (iii) A7 UNWIRED: THE FAMILY TRADES. Hand-run `a_series.py --validate` AND `--json` at EVERY
+       close-out from Day-0 on. Report the honest state: a hand-run tool at 3 of 4 shared objects,
+       not a nightly. NAME the 4th object (Defang-Mon-S2-StrikeTouch, A-13) as an OPEN GAP at
+       every close-out — its 08-08 entry is a FIRST BASELINE, not a pass, so A7 reports 3/4
+       VERIFIED + 1 FIRST BASELINE, never 4/4. Wiring stays a queued Claude Code task.
+ (iv)  GATE A9: CONFIRMED AS A RULE, AND ALREADY SATISFIED — CLOSED 2026-08-08 on Andy's own clean
+       end-to-end 8/8 daily.sh n=0 run. THIS BOX IS TICKED. Split (ii) Tier-C reconciliation stays
+       open and does NOT gate Day-0.
 [Original Step 0 text follows, left standing.]
 The checklist is at the foot of the runbook. Confirm EACH BOX BY READING THE ARTIFACT ITSELF, never
 from a memory of a prior session and never from another document's claim about it.
@@ -1939,6 +2101,11 @@ and move on.
 correctly at this session's close-out item 4.
 ✅ ITEM (ii), PR-18's "Breakeven" naming, IS STILL OPEN AND STILL ANDY'S — it is the WHOLE of gate
 A8. Ask; do not choose.
+✅✅ RULED 2026-08-08 (sitting slot 5) — GATE A8 IS CLOSED. OPTION C, THE SPLIT: "Breakeven" is the
+LEDGER/INTERNAL label; the MECHANICAL name (SL100 / "stop at 100% of credit") is used in anything
+PUBLISHED OR COMPARED EXTERNALLY, with the CF-1 caveat attached at that surface. CF-1 is NOT
+discharged. The OA bot name GF-QQQ-IC-SL100 is unchanged. PR-18's naming field is FILLED — it no
+longer blocks a signature under §7 item 2. DO NOT RE-PRESENT THIS TO ANDY.
 [Original text follows, left standing.]
 ⛔ THREE OPEN SIGNATURE ITEMS — ANDY'S GATE A8. Under §7 item 2 an entry with an unresolved field
 is UNSIGNED, so each of these blocks a signature until it is ruled:
@@ -1965,6 +2132,12 @@ is UNSIGNED, so each of these blocks a signature until it is ruled:
       construction objection is GONE — CF-4 is discharged and the arm CAN now reach Breakeven. The
       name is withheld PENDING ANDY'S READ OF HOW IT SHOULD BE PUBLISHED. The decision card records
       it explicitly as ANDY'S CALL AT DAY-0 SIGNING, not before. Ask; do not choose.
+      ✅ RULED 2026-08-08 (sitting slot 5): OPTION C — THE SPLIT. "Breakeven" is the LEDGER /
+      INTERNAL label. The MECHANICAL name (SL100 / "stop at 100% of credit") is used in anything
+      PUBLISHED or COMPARED EXTERNALLY, with the CF-1 caveat attached at that surface (CF-1 is NOT
+      discharged and bounds what the family can conclude against a public anchor). The OA bot name
+      GF-QQQ-IC-SL100 is unchanged. THE FIELD IS FILLED — item (ii) no longer blocks the signature.
+      ⛔ DO NOT RE-ASK. Gate A8 is CLOSED: (i) SIGNED, (ii) RULED 2026-08-08, (iii) DECLINED.
 
   (iii) G-1′ — `exit_rows.csv` under the degraded schema. U-1 came back NEGATIVE (Trades-list rows
       carry no per-row pricing-mode label and no memo field), so G-1 reverted to HOLD and the
@@ -2149,6 +2322,23 @@ Never spend a live position to route around an unanswered question.
 ⚠️ AND "TEST-FIRE UNAVAILABLE" IS NOT DECIDABLE FROM ONE SCREEN — Step 3's own rule applies here:
 A SURFACE YOU DID NOT OPEN IS NOT AN ABSENT CONTROL. If no doc names where the test-fire lives,
 that is ⬜ NOT EVALUABLE, not "unavailable".
+
+✅ RULED BY ANDY 2026-08-08 (sitting slot 2) — A THEN B, 2a = NO. THE GATE ABOVE IS ANSWERED; DO
+NOT STOP HERE, EXECUTE THIS:
+ 1. ATTEMPT THE BUTTON TEST-FIRE FIRST on one bot and record VERBATIM whether it exists.
+ 2. IF IT DOES NOT EXIST: posLimitDay = 1 IS AUTHORIZED (and posLimit = 1 where separately
+    settable). ONE BOT AT A TIME, NEVER A BATCH. Screenshot before and after. Read the Trades
+    list the moment the position opens. REVERT immediately after the read.
+ 3. 2a = NO — a temporary limit does NOT fork the Step-2b signature: declared, dated, reverted,
+    alters no mechanic / exit bundle / matched field. THE REVERT IS PROVEN, NOT ASSERTED —
+    re-capture and re-hash after reverting; the hash MUST return to its pre-change value. If it
+    does not, THAT is a fork and the entry stops for a fresh signature.
+ 4. Log the change, the read and the revert in that bot's pre-registration entry, dated, citing
+    this ruling.
+ 5. OPTION C (switch on at 2/2 or 10/10 and read whatever opens) IS DECLINED.
+ 6. WHERE STEP 2 CANNOT BE EXECUTED: that bot's Step 6 is ⬜ NOT EVALUABLE AND IT STAYS OFF.
+⚠️ This mechanism only works if AUTOMATIONS goes ON AT STEP 7 AND NOT BEFORE.
+⚠️ reactivation-runbook.md §4 Step 6 still carries the unamended hole — slot-8 doc batch.
 [Original Step 6 text follows, left standing.]
 Two acceptable proofs, in order of preference: BUTTON TEST-FIRE then read the resulting TRADES LIST;
 or allow the bot ONE position — the first-position exception — and read it the moment it opens.
@@ -2256,6 +2446,12 @@ over an edit this pack ordered. And `profits 0.05` will usually close the positi
 DAY. PUT IT TO ANDY: run C10 on an instrument OUTSIDE the tournament, or leave C10 OPEN. If no such
 instrument exists today, C10 STAYS OPEN — say so by name in state.md and at close-out; ARM-B1 stays
 blocked, which is where it already is.
+✅ RULED BY ANDY 2026-08-08 (sitting slot 3): "C for Day-0, A as the queued path". C10 STAYS OPEN
+FOR DAY-0 — no instrument runs it on the day. DO NOT EDIT PR-20. DO NOT RUN C10 ON THE PILOT
+(NOT-ESTABLISHED hash, and 1 lot cannot discriminate). Name C10 OPEN in state.md and at close-out;
+ARM-B1 stays blocked; PR-21 stays unstamped. QUEUED PATH: TESTOPS-LAB-DSTOP (exploratory-bots-
+design §2.2, 3 contracts, >=3 firings) — NOT authorized by this ruling; needs E-3 verified + a
+signed PHASE LOG (G8) + a Lab ops slot (E-1). Build-window decision, not Day-0.
 (b) "CONTRACT COUNT" IS UNDEFINED AND THE FIRST TWO BRANCHES CAN COLLAPSE. The step says record
 CONTRACT COUNT PER LEG and then branches on −$100 × (CONTRACT COUNT): at 1 contract per leg those
 are the same number and `FIRED AT NEITHER FIGURE` becomes unreachable. ⛔ IF C10 IS RUN AT ALL, the

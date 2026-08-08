@@ -7363,3 +7363,224 @@ unspent. Report: `docs/audit-report-2026-08-08.md`. FS-2 corrected in state.md (
 tid cited); FS-1/FS-4 backlogged; sitting now TEN slots (card + addendum). **Monday: GO via
 Sunday S2**, gated on the sitting + Andy's captures/templates. This entry is the state.md-level
 record of the audit; the report file is the full statement.
+
+### 2026-08-08 (SPLIT (ii) DESIGN — DESIGN MEMO ONLY, NOTHING APPLIED) — **`docs/split2-design-2026-08-08.md` written, PREPARED NOT RULED. Seven open decisions for Andy. One finding that breaks the frozen matrix.**
+
+Concurrency: Andy's ruling sitting was running in another session. `docs/decision-card-2026-08-08.md`,
+`docs/state.md` and the tracker artifact were **read-only or untouched** by this session. Writes this
+session: the memo + this log entry. No OA, no Chrome, no git, no code, no data reshaping.
+
+**The job.** Gate A9 split (i) landed 2026-08-08 (loader-only, both scripts). Split (ii) — how
+`data/bots_config_v2.csv` comes to carry the Tier-C mechanic columns so `execution_audit.py`'s five
+Tier-C rules and `daily_brief.py`'s compliance grading turn ON — was left open and separate. This is
+that design, prepared for ruling.
+
+**⛔ FINDING S2-V7 — the frozen 21/21 validation matrix BREAKS on the first column added, and the
+cause is in the test, not in the detector.** `validate()` (L861) runs the detector against **the real
+`data/bots_config_v2.csv`**, and V7 asserts `(not has_cfg)` where the third return value is
+`tierc_ran`. Measured this session through the real `run()` against a synthetic post-split-(ii) schema
+and the archive ledger (temp file, deleted; no project file written): `tierc_ran = True` → **V7 fails,
+matrix goes 20/21**. Baseline confirmed first: `python3 scripts/execution_audit.py --validate` →
+**21/21 passed**. Recommendation in the memo §4.1: re-point V7 at a deliberately non-existent path so
+it tests the *semantic* ("the detector knows what it cannot see") rather than the state of a live data
+file, and add V7b (schema-lacks-columns, the split-(i) branch, currently untested by any V) and V7c
+(bot-absent, the split-(ii) branch). Three lines of test wiring, no rule change, `VERSION` bumped.
+**NOT APPLIED — it is a code change and Claude Code's lane.**
+
+**⛔ FINDING S2-C4 — `pt_pct = 'none'` alone would false-RED four of the seven greenfield arms, every
+day.** `rule_C4_removed_exit_fired` probes rungs 0.25/0.50/0.75 at ≥3 hits. Trail (`tstop` target 40 /
+trail 15), Touch0, SL100 and SL200 have no `profits` — so `pt_pct` reads `none` — but all four close
+inside a probe band by design. `pt_pct` cannot express *"no PT, but a different mechanic governs."*
+Memo §5 D-1 recommends an `exit_mechanic` column populated verbatim from `a_series.mechanic_map()`,
+with C4's gate becoming `pt_pct == 'none' AND exit_mechanic == 'none'`.
+
+**⛔ FINDING S2-BRIEF — merging the two consumers' columns naively ships a silent mis-grade.**
+`daily_brief` sniffs `profit_target` with `re.search(r"pt\s*\d+|\d+%")`. A machine-legible `pt_pct` of
+`0.50` matches neither branch, so a PT50 bot takes the `else: 'none' / ride` path and is graded a ride
+— flagged `✓`. Renaming the column is not sufficient; the reader must change with it (memo §0, §5 D-5:
+lift `cell()` into a shared module, reader first, column second, rows third).
+
+**What the memo contains.** (1) the column contract — nine additive columns, one set serving both
+consumers, three-state per `cell()`, each with its source object and what `none` means per control
+clone; (2) the build path — the two capture shapes (bot-input family vs §2B clones), the G2 rider over
+both and why reading the action on a clone is *not* a G2 violation, reuse of `a_series.py`'s decoder,
+and the one genuinely missing thing: three fixed blocks (`DECODED EXITS` / `ENTRY GATE` / `SETTINGS`)
+in the capture **template**, not a bookmarklet field; (3) migration — a four-step additive ladder,
+eleven bots light up first (7 GF arms + 4 clones; PR-03 has a bot and a capture but no row yet), and
+the warning that adding a column with zero rows trades one loud fleet-level banner for N quiet per-bot
+ones (measured: 30 per-bot SKIPPED rows per rule); (4) acceptance — 21/21 + V7 semantics + the frozen
+35-row fixture, with two worked rows written as they would actually read (PR-02 all-`none`; PR-04
+`time_exit 15:50` / `event_backstop 15:52` with `filter` and `entry_time` honestly **blank**, because
+that capture never dumped the scanner tree); (5) seven open decisions D-1…D-7, each with a
+RECOMMENDATION.
+
+**The nine.** No rows, blank cells, announced per-bot skips — by design, until slot 6's worklist runs.
+Nothing was inferred from `data/archive/bots_config.csv` (the discredited hand-written record).
+
+**Nothing applied.** No CSV column exists. No code changed. Every claim in the memo is sourced to a
+first-hand `device_bash` read of the working tree, listed in the memo's provenance section.
+File verified per §9.1a by direct `device_bash` sha256 + single-match greps of the new text:
+`docs/split2-design-2026-08-08.md` sha256 `f47182a33108fe181e4c7c8123ab40201eeb48928b3f550a9fd6c7954f2e9a71`, 379 lines.
+
+
+## ⭐⭐ 2026-08-08 (NIGHT) — THE TEN-SLOT RULING SITTING. **ALL TEN RULED BY ANDY, ALL APPLIED SAME SESSION.** No OA, no Chrome, no git.
+
+Mandate: facilitate Andy's ruling sitting on `docs/decision-card-2026-08-08.md` + its addendum —
+ten slots, all PREPARED, none ruled. Present each compactly from the card, record the ruling
+**verbatim**, apply exactly what it authorizes, name every residual. Andy attended and ruled live.
+⛔ **No OA surface touched. No browser tool loaded. No git command run, including `status`.**
+Every edited file verified by direct `device_bash` sha256 + single-match `grep -cF` of the inserted
+text (`CLAUDE.md` §9.1a) — never a stage-back read, never a write tool's response.
+
+**Read fresh from the folder before ruling anything:** the card in full (803 lines) incl. the
+addendum, `docs/audit-report-2026-08-08.md`, `docs/state.md` 2026-08-08 EVENING block,
+`docs/session-log.md` 2026-08-08 entries, `CLAUDE.md`. Today's four prior rulings (PR02-R1 $50k ·
+CA-3 · receipt-clause ADDITIVE · fix-O4) were **not** re-opened.
+
+### THE TEN RULINGS — verbatim where Andy spoke, delegation recorded where he delegated
+
+**SLOT 1 · A-02 `LEDGER_START`.** Andy, verbatim: *"We are turning them on today or tomorrrow to
+start recofrding data starting monday open. so Aug 10 should be day=o"*; on 1a and the slip
+condition, *"WHatever you suggest"* (explicit delegation). **RULED: `LEDGER_START` = `2026-08-10`,
+FIXED** — Monday's open, the first market session on or after switch-on; not the payment date, not
+a non-trading day toggle-flip; does not move if switch-on slips (a bot that is OFF opens nothing).
+**1a = AMEND THE PLAN, YES** (CA-1). ⛔ **Supersedes the 2026-08-07 S0a/S0b ruling** *"the day you
+switch the first bot on IS `LEDGER_START`"*, which yields 08-08/09 under a weekend switch-on —
+found by re-reading `state.md` before applying, and banner'd on both blocks rather than left to
+contradict. **Applied:** `build-plan.md` §1 + §3 · `state.md` S0a + S0b blocks · the card.
+**Queued to Day-0:** `scripts/build_ledger.py` line 108 constant (that script's own line-151
+instruction). **Residual:** runbook §4 Step 1 → taken up in slot 8.
+
+**SLOT 2 · A-11 first-position control.** Andy, verbatim: *"Your reccomendation"*. **RULED: A then
+B, 2a = NO.** Test-fire attempted first and recorded verbatim; if absent, **`posLimitDay` = 1
+AUTHORIZED**, one bot at a time, never batched, screenshot before/after, Trades list read the
+moment the position opens, **reverted immediately**. ⛔ **Rider added at the sitting: the revert is
+HASH-PROVEN** — re-capture and re-hash; if the hash does not return to its pre-change value **that
+IS a fork** and the entry stops for a fresh signature. Option C **DECLINED**; option D is the
+per-bot fallback. **Applied:** both A-11 surfaces in the pack (§0.0 + S2 Step 6) · the card.
+**Residual:** runbook §4 Step 6 → slot 8.
+
+**SLOT 3 · A-12 C10 `dstop`.** Andy, verbatim: *"C for Day-0, A as the queued path"*. **RULED: C10
+STAYS OPEN for Day-0**, named by name in `state.md` and at close-out as A-12 requires. PR-20 not
+edited; the pilot **declined** (NOT-ESTABLISHED hash; 1 lot cannot discriminate). ARM-B1 stays
+blocked, PR-21 unstamped. Queued instrument `TESTOPS-LAB-DSTOP`, gated on E-3 verified + signed
+`PHASE LOG` (G8) + a Lab ops slot (E-1). ⛔ Not authorized to be built. **Applied:** both A-12
+surfaces in the pack · the card · `state.md`.
+
+**SLOT 4 · A-24 Step-0 residue, four items.** Andy, verbatim: *"your reccomendation"*. **(i)** the
+pilot **stays OFF**; Template V2 → a build window with its amended PR-03. **(ii)** C9 **runs as a
+READ** at Step 0, read only. **(iii)** the family **TRADES**, with hand-run `a_series.py
+--validate` + `--json` at **every** close-out and the 4th shared object (`Defang-Mon-S2-StrikeTouch`,
+A-13) **named as an open gap** — A7 reports **3/4 VERIFIED + 1 FIRST BASELINE, never 4/4**.
+**(iv)** gate A9 **CONFIRMED as a rule and already satisfied** (CLOSED 2026-08-08 on Andy's own 8/8
+n=0 run) — box ticked; Tier-C split (ii) still open and not a Day-0 gate. **Step 0 no longer stops
+on any of them. Applied:** both A-24 surfaces in the pack · the card.
+
+**SLOT 5 · gate A8, PR-18's name.** Andy, verbatim: *"Card's RECOMMENDATION: C"*; then on 5a,
+*"YES and for the remainging items, lets go with your suggestions"*. **RULED: OPTION C, THE SPLIT** —
+*"Breakeven"* is the **ledger / internal** label (CF-4 discharged 2026-08-06 by the C8 ruling); the
+**mechanical name `SL100` / "stop at 100% of credit"** is used in anything **published or externally
+compared**, ⛔ **with the CF-1 caveat attached at that surface — CF-1 is NOT discharged.** OA bot
+name `GF-QQQ-IC-SL100` unchanged; PR-19 follows by construction. **5a = YES** (CA-2). ⭐ **GATE A8
+IS CLOSED IN FULL**: (i) SIGNED · (ii) RULED · (iii) DECLINED. **Applied:** pack ×2 (§0.0 A-04 and
+S2 Step 2b) · `greenfield-family-spec.md` · **`pre-registration-ledger.md` — a new `NAMING` field on
+the hedge-arms entry, the field that held it UNSIGNED under §7 item 2** · `state.md` CF-4 bullet ·
+the card.
+
+**SLOT 6 · A-27(c) Step-4b.** Blanket delegation (slot 5's words). **RULED: OPTION 2 — amend A-07's
+scope.** An ESTABLISHED hash is required **only where a pre-restore baseline exists**; the rest are
+carried ⬜ NOT EVALUABLE **in the `CONFIG HASH` field itself**, not as blockers. Options 1 and 3
+declined on the record (1 *"establishes nothing about the past"*; 3 permanently forecloses Step 6a,
+*"the step that settles §1"*, and strands the five open mirror positions). **6a = PURE READ** —
+opening any of the nine does **not** spend Step 2c (A-09b already ruled it NOT EVALUABLE, restore
+confound); read only, no write of any kind. **6b = ACCEPT AND RECORD** — the 20 Group-A bots are in
+no post-restore config check anywhere; not brought into scope, not archived, still covered by the
+~23 queued archives. ⭐ **WORKLIST CORRECTED 11 → 9** on the card's own §B condition: S1 has closed,
+both un-started clone originals now hold post-restore step-0 baselines on disk **and** are renamed
+`-ARCHIVED-2026-08-08`, so they will never trade and cannot take a first-trading-day capture.
+NOT-ESTABLISHED total unchanged at 12 of 14. ⭐⭐ **THE S2 PRECONDITION IS DISCHARGED.**
+**Applied:** pack §0.0 A-27(c) + the S2 opening-precondition restatement + a dated worklist
+correction on the CA-3 banner · `pre-registration-ledger.md` — the carry written into **nine**
+`CONFIG HASH` fields (**PR-05 … PR-13**) · the card · `state.md`.
+
+**SLOT 7 · PR02-R2 symbols line.** Blanket delegation. **RULED (a): apply as an evidence-backed
+correction.** The blanket *"It is NOT empty"* is **false for automation-resident-symbol families** —
+first-hand 2026-08-08, **both** PR-02 sides read *"No symbols yet"*, symbol resident as `Loop SPX` +
+action `symbol: SPX`; same for PR-01. ⛔ **The check is BRANCHED, not skipped:** Bot-Symbols-loop →
+must be non-empty and character-exact (**the real trap**); automation-resident-symbol → *"No symbols
+yet"* on both sides is correct, and ⛔ do **not** "restore" symbols into such a bot's panel.
+**Applied:** pack §S1 step 4 · the card. **Residual:** two runbook echoes → slot 8.
+
+**SLOT 8 · the doc-correction batch — grew 3 → 5; explicit "amend the plan" on the runbook.**
+Blanket delegation. **RULED: amend all five.** (1) **PR02-R3/A-16b** — runbook §2 step 7's pre-F-C1
+*"do not remove PT25 yourself"* branch **struck and replaced**: F-C1 is RULED: REMOVE; remove only
+`profits`/`smprofits`, in place; STOP if it cannot be cleared in place. (2) **PR04-R1** — *"hash all
+four automations"* is a PR-02 inheritance; read as **all of them, whatever the count** (`-NoPT50`
+has TWO → 2 of 2 is complete, not partial). (3) **FS-3** — ⭐ **the Automation Library is at
+`/bots/automations`**, proven from the `/bots` Library button's own `data-ui` menu JSON; `/automations`
+404s and was never its path; PR04-R2's `sharing = 0` reasoning unaffected. (4) **from slot 1** —
+runbook §4 Step 1's *"This date is `LEDGER_START`"* struck; = 2026-08-10. (5) **from slots 2 and 7** —
+runbook §4 Step 6 now **names its control**, and both symbols echoes (§2 step 3 + WHAT-"CLEAN"-MEANS
+item 3) **branched**. **Applied:** `reactivation-runbook.md` (4 amendment blocks) ·
+`day0-session-pack-2026-08-07.md` (§S1 steps 0 and 7) · `state.md` (PR04-R2 note) ·
+`oa-ops-runbook.md` (trap-1 row) · the card. **Residual:** `session-log.md`'s own *"/automations
+404s"* lines **left standing** — a log records what a session observed, it is not a live-facts
+surface. The `oa-driving` skill is a v1.2 candidate and is not a folder file.
+
+**SLOT 9 · ops `trade_id` namespace.** Blanket delegation. **RULED (c) + (a): DEFER, with the scheme
+PRE-REGISTERED.** `trade_id` stays blank — nothing consumes it, no Lab bot exists, ⛔ no id invented
+and nothing backfilled. **Scheme on the record: `OPS-<bot>-<date>-<n>`**, collision-proof by prefix,
+structurally unable to reach the working ledger because the ops partition runs upstream of pairing.
+**Reopen at the first Lab bot's build.** E-3 §3.3 **item 8 stays NOT USABLE** — carried, not
+defective. **Applied:** `exploratory-bots-design-2026-08-07.md` §3.3 · `state.md` · the card.
+⛔ `data/ops_rows.csv` untouched; no script change authorized.
+
+**SLOT 10 · DA-3, the retired ≥15-condor bar.** Blanket delegation. **RULED: YES — retired IN PRINT.**
+`report.py:141` and `STATUS.md` line 17 drop the line; **G2's ≥20 is the only go-live bar**, and
+⛔ it must **not** be rendered as a single-count replacement (that reproduces the "18/15" defect
+§5 names). **Implementation QUEUED to Claude Code, not done here** — no `scripts/` file touched;
+`STATUS.md` is generated output and clears on the next `daily.sh`. **Acceptance:**
+`grep -c "Go-live gate" scripts/report.py` = **0** and no `Go-live gate` line in the next generated
+`STATUS.md`. ⚠️ If the edit misses Monday's first run the retired line prints once — cosmetic,
+nothing reads it, named rather than hidden. **Applied:** `evidence-standards.md` §5 · the card.
+
+### ⭐⭐ BOTH S2 PRECONDITIONS CLEARED — S2 CAN OPEN
+Gate A9 ✅ closed 2026-08-08 · slot 1 ✅ ruled · slot 6 ✅ ruled (precondition discharged) · slots
+2–5, 7–10 ✅ ruled and applied. **No unruled precondition on S2's opening remains.** Outstanding
+work is Andy's hands — Template V1 for PR-02 + PR-04 (`showBotMenu`), the **nine** captures,
+OA-archiving the three `-ARCHIVED-` originals — none of which gates S2 **opening**.
+
+⚠️ **ORDERING FLAG, raised at the sitting and standing.** Andy stated the intent to switch
+`AUTOMATIONS` ON 2026-08-08/09 to record from Monday's open. ⛔ **Switching on before S2 runs
+bypasses Step 6 and Step 7** — slot 2's control never applies and the champion clone would open at
+its stored `10/10`, which is the shape A-11 quotes at −$9,618. **Switch-on belongs at S2 Step 7**;
+running S2 on Sunday and switching on at its Step 7 still hits Monday's open with both gates intact.
+
+### QUEUED IMPLEMENTATIONS (none performed this session)
+1. **AT DAY-0 (S2 Step 1):** `scripts/build_ledger.py` line 108 → `LEDGER_START = "2026-08-10"`.
+   *Acceptance:* stage 1 of `daily.sh` runs without the refusal path; `n=0` pre-open and again at
+   close-out.
+2. **Claude Code:** drop the go-live-gate line from `scripts/report.py:141`. *Acceptance:*
+   `grep -c "Go-live gate" scripts/report.py` = 0; no such line in the next generated `STATUS.md`.
+3. **Claude Code, unscheduled:** wire A7 into `daily.sh` (slot 4(iii) keeps it a hand-run tool until
+   then). **Build window, unscheduled:** Template V2 on the pilot with its amended PR-03;
+   `TESTOPS-LAB-DSTOP` behind E-3-verified + signed `PHASE LOG` + a Lab ops slot.
+4. **At the first Lab bot's build:** implement `OPS-<bot>-<date>-<n>` in `ops_rows.csv`.
+
+### FILES CHANGED — device sha256 at close-out
+```
+8b800c7a835aa165ab6c36fe7f27ef6aaeaa761d148501516ca4a76e90a89f83  docs/decision-card-2026-08-08.md
+a9ea00c02b2c93ad3d9d2e745bde6bf62232010fee2d6153e868105e79c4571b  docs/build-plan.md
+24e0c03d9f8b0962dfb5da09c556cd325964200c2f9111c14966724960734c95  docs/state.md
+a74cc46ead278b98327532a87be73b2b90fcf6e2b26a9e6738eafe86e6eae799  docs/day0-session-pack-2026-08-07.md
+ab4838bbab917390287011d247e3d4a39d9874c3c1f8591845d834df87662ed2  docs/reactivation-runbook.md
+1d59b217e7da0242360c7c4337df2c582a0e9d4eb2c1ceb5802962418f7b2352  docs/pre-registration-ledger.md
+4767c7af43bc0302443b9856ee5fe3cb0aa9b978eb49a00d5afee84c4ef4a2e4  docs/greenfield-family-spec.md
+3ea67b8e606632cab3fdb4195d554f4326ce6de551749b081a4ad875b7b560a1  docs/oa-ops-runbook.md
+a4412e9ed9a57ddd3657a4ed52bc85ca0d898f0af79deaf3cf3bf16e9bfdca2f  docs/exploratory-bots-design-2026-08-07.md
+a67bc27aabbc8fc1476b3417793d5f103da5d9337fd0305088619a50f714f906  docs/evidence-standards.md
+```
+(`docs/session-log.md` — this entry — is the eleventh changed file; its own hash is stated in the
+hand-off after this write.)
+⛔ **No file under `scripts/` and no file under `data/` was touched.**
+**Uncommitted — Andy runs the commit.**
