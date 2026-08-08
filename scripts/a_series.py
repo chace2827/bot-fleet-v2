@@ -21,6 +21,16 @@ NEVER HARDCODE OA OBJECT IDS. A post-restore re-creates objects with new BOT…/
 are read from the captures/CSV at runtime; family membership keys on the STABLE bot NAME
 (GF-QQQ-IC-<Arm>), never on an id.
 
+OPS-CLASS SCOPING (E-3, exploratory-bots-design-2026-08-07 §3.3 item 6, RULED 2026-08-07).
+The two LEDGER-reading asserts — A4b and A6 — iterate every row in the ledger and are NOT scoped
+to the family. A single `TESTOPS-LAB-*` row would turn them red for reasons that have nothing to
+do with arm distinctness: A6 flags any quantity != 1 (an ops bot sized 3 for the dstop unit test
+trips it on its first fill), and A4b's `cfg_stop` returns False for any bot outside the seven-arm
+dict, so an ops bot's ≥2 fast same-day closes read as a broken input link forever. Guardrail G3:
+"no A-series assert may read them." Both now take the ops set — declared in data/bots_meta.csv's
+`ops_class` column, never a tag and never a bot name — and SKIP those bots with the skip REPORTED.
+A detector that answers "no findings" while structurally blind is worse than no detector.
+
 THE G2 RIDER (§1.2, load-bearing). The Open-Position action stores a REFERENCE
 ({"type":"input","nid":"root",…}) identical on every arm; `oldValue` is a stale pre-link snapshot.
 Config is read ONLY from the BOT INPUT OBJECT's decoded value (the per-bot end of the chain). This
@@ -32,6 +42,11 @@ import argparse, csv, hashlib, json, os, re, sys
 VERSION = "0.1.0-DRAFT"
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA = os.path.join(ROOT, "data")
+BOTS_META = os.path.join(DATA, "bots_meta.csv")
+
+# --- E-3 §3.3 — the ops-class (Lab) exclusion, mirrored from build_ledger.py --
+OPS_CLASS_COL   = "ops_class"
+OPS_CLASS_VALUE = "lab-ops"
 
 # --- the seven arms, keyed by STABLE bot name (never an id) ----------------
 RIDE   = "GF-QQQ-IC-Ride"      # PR-14 · control (base only)
@@ -448,13 +463,42 @@ def a9_bound(bots):
                   "every GF_EXITS_PUT/CALL bot input BOUND and NON-EMPTY (14/14 inputs)", lines)
 
 
-def a4_a5_a6(ledger_rows, bots):
+def load_ops_set(path):
+    """The declared ops set (E-3 §3.3 item 1). Classification is the `ops_class` COLUMN and
+    nothing else — never the export's `tags` string (lossy: OA normalises tags) and never the
+    bot name. A missing file or missing column yields an EMPTY set, which is the pre-Lab state;
+    build_ledger.py is the surface that REFUSES on a missing column, and it is the one that
+    guards the ledger. This tool only needs to know who to skip."""
+    if not path or not os.path.exists(path):
+        return set()
+    return {(r.get("bot") or "").strip()
+            for r in csv.DictReader(open(path))
+            if (r.get(OPS_CLASS_COL) or "").strip().lower() == OPS_CLASS_VALUE} - {""}
+
+
+def _ops_scope(ledger_rows, ops_set):
+    """Split the ledger on the class axis and return (kept, report_line_or_None).
+    The line is emitted whenever an ops set is DECLARED — including at zero matched rows —
+    so the scoping is never invisible (§3.3 item 6, Tier-C SKIPPED discipline)."""
+    if not ops_set:
+        return ledger_rows, None
+    kept    = [r for r in ledger_rows if (r.get("bot") or "") not in ops_set]
+    skipped = [r for r in ledger_rows if (r.get("bot") or "") in ops_set]
+    seen = sorted({r.get("bot") for r in skipped})
+    return kept, (f"    ⏸ OPS-CLASS SCOPED OUT (E-3 §3.3): {len(skipped)} of {len(ledger_rows)} "
+                  f"ledger row(s) skipped, {len(ops_set)} bot(s) declared "
+                  f"{OPS_CLASS_COL}={OPS_CLASS_VALUE} in data/bots_meta.csv; "
+                  f"present in this ledger: {seen if seen else 'none'}. "
+                  f"Guardrail G3 — reported, never silent.")
+
+
+def a4_a5_a6(ledger_rows, bots, ops_set=None):
     """A4 MOOT (F-4). A4b/A6 ledger-dependent (NOT-RUNNABLE without post-cutover rows). A5 NOT-RUN
     (no account-settings capture) — printed with last recorded values, not skipped silently."""
     r4 = Result("A4", "MOOT", detail="F-4 ruling — SENTINEL-SL1 struck; superseded by A9")
     if ledger_rows:
-        r4b = _a4b(ledger_rows, bots)
-        r6 = _a6(ledger_rows, bots)
+        r4b = _a4b(ledger_rows, bots, ops_set)
+        r6 = _a6(ledger_rows, bots, ops_set)
     else:
         r4b = Result("A4b", "NOT-RUNNABLE", detail="no post-cutover ledger rows (broken-link stop-out needs a ledger)")
         r6 = Result("A6", "NOT-RUNNABLE", detail="no ledger rows; sizing primitive is fixed quantity:1 in the shared action")
@@ -464,10 +508,16 @@ def a4_a5_a6(ledger_rows, bots):
     return [r4, r4b, r5, r6]
 
 
-def _a4b(ledger_rows, bots):
+def _a4b(ledger_rows, bots, ops_set=None):
     """A4b: an arm whose config carries no stoploss but shows a day of stop-outs within minutes of
-    open (the runtime fell back to the Default while the stored config still reads correct)."""
+    open (the runtime fell back to the Default while the stored config still reads correct).
+
+    ⛔ OPS-SCOPED (E-3 §3.3 item 6). TESTOPS-LAB-OPS *is* this signature by design — a deliberately
+    loose entry rule plus daily closes — and it carries no stoploss in the seven-arm dict, so an
+    unscoped A4b FAILs every day it trades with no broken link anywhere, permanently destroying the
+    detector it exists to be."""
     flags = []
+    ledger_rows, ops_line = _ops_scope(ledger_rows, ops_set)
     cfg_stop = {n: bool(bots[n]["mechanics"].get("stoploss")) for n in bots}
     by_bot_day = {}
     for r in ledger_rows:
@@ -482,14 +532,20 @@ def _a4b(ledger_rows, bots):
         if c >= 2 and not cfg_stop.get(bot, False):
             flags.append(f"{bot} {day}: {c} fast stop-outs, no stoploss in config")
     return Result("A4b", "FAIL" if flags else "PASS", 0 if flags else 1, 1,
-                  "broken-input-link stop-out detector", flags)
+                  "broken-input-link stop-out detector",
+                  ([ops_line] if ops_line else []) + flags)
 
 
-def _a6(ledger_rows, bots):
+def _a6(ledger_rows, bots, ops_set=None):
+    """⛔ OPS-SCOPED (E-3 §3.3 item 6). This iterates ALL ledger rows, not just GF-QQQ-IC-*; one
+    TESTOPS-LAB-DSTOP row at qty 3 — the size its own unit test REQUIRES — turns the family's
+    mandated sizing guard red on its first fill."""
+    ledger_rows, ops_line = _ops_scope(ledger_rows, ops_set)
     bad = [f"{r.get('bot')} {r.get('open_date','')[:10]} qty={r.get('quantity')}"
            for r in ledger_rows if _num(r.get("quantity")) not in (1.0, 1)]
     return Result("A6", "FAIL" if bad else "PASS", 0 if bad else 1, 1,
-                  "exactly 1 contract per leg per arm per day", bad[:20])
+                  "exactly 1 contract per leg per arm per day",
+                  ([ops_line] if ops_line else []) + bad[:20])
 
 
 def _ts(s):
@@ -537,7 +593,7 @@ def load_spec_blocks(spec_path):
 # ===========================================================================
 # Orchestration + reporting
 # ===========================================================================
-def run(captures, config, spec, ledger=None, as_json=False):
+def run(captures, config, spec, ledger=None, as_json=False, bots_meta=None):
     bots, shared = load_captures(captures)
     config_a7 = load_config_a7(config) if config and os.path.exists(config) else {}
     spec_blocks = load_spec_blocks(spec) if spec else {}
@@ -545,13 +601,14 @@ def run(captures, config, spec, ledger=None, as_json=False):
     if ledger and os.path.exists(ledger):
         ledger_rows = [r for r in csv.DictReader(open(ledger))
                        if (r.get("status") or "").lower() == "closed"]
+    ops_set = load_ops_set(bots_meta if bots_meta is not None else BOTS_META)
     missing = [n for n in FAMILY if n not in bots]
 
     r1, pairs, ctrl = a1_pairwise(bots)
     results = [r1, a2_nonbundle(bots), a3_prereg(bots, spec_blocks)]
-    results += a4_a5_a6(ledger_rows, bots)[:1]                      # A4
+    results += a4_a5_a6(ledger_rows, bots, ops_set)[:1]             # A4
     results += [a7_hashes(shared, config_a7), a8_symmetry(bots), a9_bound(bots)]
-    a4b, a5, a6 = a4_a5_a6(ledger_rows, bots)[1:]
+    a4b, a5, a6 = a4_a5_a6(ledger_rows, bots, ops_set)[1:]
     results += [a4b, a5, a6]
     order = {"A1": 0, "A2": 1, "A3": 2, "A4": 3, "A4b": 4, "A5": 5, "A6": 6, "A7": 7, "A8": 8, "A9": 9}
     results.sort(key=lambda r: order[r.name])
@@ -561,6 +618,9 @@ def run(captures, config, spec, ledger=None, as_json=False):
     print(f"A-SERIES DRIFT DETECTOR v{VERSION}  ⛔ STANDALONE / NOT WIRED into daily.sh")
     print(f"  captures: {len(bots)}/7 bots, {len(shared)}/3 shared automations"
           + (f"   ⚠ MISSING BOTS: {missing}" if missing else ""))
+    if ops_set:
+        print(f"  ops-class scoping ACTIVE (E-3 §3.3): {len(ops_set)} bot(s) excluded from "
+              f"A4b/A6 — {sorted(ops_set)}")
     print()
     for r in results:
         tag = {"PASS": "✅", "FAIL": "🛑", "MOOT": "⚪", "NOT-RUNNABLE": "⏸", "NOT-RUN": "⏸"}[r.status]
@@ -635,6 +695,121 @@ def _kn(r):
 
 
 # ===========================================================================
+# SELF-TEST — E-3 §3.3 item 6 ops-class scoping of A4b / A6.
+# ⛔ SEPARATE FROM --validate ON PURPOSE. --validate reproduces the hand-run
+# 2026-08-07 reference and its output must not move; these are new asserts
+# about new behaviour and get their own flag.
+# ===========================================================================
+def _st_ledger(bot, day, qty="1", opened="09:46:00", closed="15:50:00"):
+    return {"bot": bot, "quantity": qty, "status": "closed",
+            "open_date": f"{day} {opened}", "close_date": f"{day} {closed}"}
+
+
+def selftest():
+    OPSBOT, DSTOP = "TESTOPS-LAB-OPS", "TESTOPS-LAB-DSTOP"
+    fake_bots = {n: {"mechanics": {}} for n in FAMILY}          # control-like: no stoploss
+    fails, results = 0, []
+
+    def check(name, got, want):
+        nonlocal fails
+        ok = got == want
+        fails += not ok
+        results.append((ok, name, got, want))
+
+    # A6 fixture: the family sized 1 (legal) + an ops bot sized 3 (its unit test REQUIRES 3)
+    a6_rows = [_st_ledger(RIDE, "2026-09-01"), _st_ledger(PT50, "2026-09-01"),
+               _st_ledger(DSTOP, "2026-09-01", qty="3")]
+    # A4b fixture: the ops bot's own signature — 2 fast same-day closes, no stoploss in config
+    a4b_rows = [_st_ledger(RIDE, "2026-09-01", closed="15:50:00"),
+                _st_ledger(OPSBOT, "2026-09-01", opened="09:46:00", closed="09:48:00"),
+                _st_ledger(OPSBOT, "2026-09-01", opened="10:10:00", closed="10:12:00")]
+    ops = {OPSBOT, DSTOP}
+
+    # ---- O1: the ops set comes from the COLUMN, never a tag or a name -----
+    import tempfile, os as _os
+    fd, mp = tempfile.mkstemp(suffix=".csv"); _os.close(fd)
+    with open(mp, "w", newline="") as fo:
+        w = csv.writer(fo)
+        w.writerow(["bot", "pillar", "role", "notes", OPS_CLASS_COL])
+        w.writerow([OPSBOT, "Lab", "ops", "tags: experiment ops lab", OPS_CLASS_VALUE])
+        w.writerow(["TESTOPS-LOOKALIKE", "IC", "experiment", "ops in the notes", ""])
+        w.writerow([RIDE, "IC", "control", "", ""])
+    try:
+        check("O1  load_ops_set keys on the ops_class COLUMN only (name/notes ignored)",
+              load_ops_set(mp), {OPSBOT})
+        check("O1b a missing bots_meta.csv yields an empty set (pre-Lab state)",
+              load_ops_set(mp + ".nope"), set())
+    finally:
+        _os.unlink(mp)
+
+    # ---- O2/O3: A6 ---------------------------------------------------------
+    r = _a6(a6_rows, fake_bots, None)
+    check("O2  UNSCOPED A6 FAILs on the ops bot's qty=3 row (the defect E-3 names)",
+          (r.status, any(DSTOP in l for l in r.lines)), ("FAIL", True))
+    r = _a6(a6_rows, fake_bots, ops)
+    check("O3  SCOPED A6 PASSes — the family's sizing guard survives",
+          r.status, "PASS")
+    check("O3b …and REPORTS the skip (never silent)",
+          any("OPS-CLASS SCOPED OUT" in l and DSTOP in l for l in r.lines), True)
+
+    # ---- O4/O5: A4b --------------------------------------------------------
+    # ⛔ O4 RECORDS A PRE-EXISTING DEFECT, IT DOES NOT FIX IT. `_a4b`'s `fast` test is
+    # `(_ts(close) - _ts(open)) <= 300` — a timedelta compared to an int, which raises
+    # TypeError into the bare `except Exception: fast = False`. Every row therefore reads
+    # "not fast" and A4b CANNOT FIRE on any input. Found 2026-08-08 while building the E-3
+    # scoping tests. Out of scope here (E-3 rules the SCOPING of A4b, not its predicate);
+    # gated to Andy. The scoping below is asserted on rows-examined, not on a verdict the
+    # predicate is currently incapable of producing.
+    r = _a4b(a4b_rows, fake_bots, None)
+    check("O4  ⛔ DEFECT RECORDED: unscoped A4b does NOT fire on 2 fast same-day closes "
+          "(timedelta<=int swallowed by `except Exception` — A4b is structurally blind; "
+          "NOT fixed here, see hand-off)",
+          (r.status, r.lines), ("PASS", []))
+    r = _a4b(a4b_rows, fake_bots, ops)
+    check("O5  SCOPED A4b removes the ops rows from what the detector examines",
+          any("2 of 3 ledger row(s) skipped" in l for l in r.lines), True)
+    check("O5b …and REPORTS the skip, naming the bot (never silent)",
+          any("OPS-CLASS SCOPED OUT" in l and OPSBOT in l for l in r.lines), True)
+
+    # ---- O6: declared but absent from the ledger is still reported ---------
+    r = _a6([_st_ledger(RIDE, "2026-09-01")], fake_bots, ops)
+    check("O6  ops set declared with no ops rows in the ledger STILL reports the scoping",
+          (r.status, any("OPS-CLASS SCOPED OUT" in l and "none" in l for l in r.lines)),
+          ("PASS", True))
+
+    # ---- O7: scoping must not blind the detector to the FAMILY -------------
+    r = _a6(a6_rows + [_st_ledger(TRAIL, "2026-09-02", qty="2")], fake_bots, ops)
+    check("O7  a REAL family violation still FAILs after scoping (not blinded)",
+          (r.status, any(TRAIL in l for l in r.lines)), ("FAIL", True))
+    r = _a4b(a4b_rows + [_st_ledger(SL100, "2026-09-02", opened="09:46:00", closed="09:47:00"),
+                         _st_ledger(SL100, "2026-09-02", opened="10:00:00", closed="10:01:00")],
+             fake_bots, ops)
+    check("O7b scoping drops ONLY the ops rows — every family row still reaches A4b "
+          "(2 of 5 skipped, the 3 family rows kept)",
+          any("2 of 5 ledger row(s) skipped" in l for l in r.lines), True)
+
+    # ---- O8: the pre-Day-0 / --validate path is untouched by ops scoping ---
+    a = a4_a5_a6(None, fake_bots, ops)
+    check("O8  ledger-less run is NOT-RUNNABLE for A4b/A6 regardless of ops set "
+          "(--validate reference unmoved)",
+          [x.status for x in a], ["MOOT", "NOT-RUNNABLE", "NOT-RUN", "NOT-RUNNABLE"])
+    check("O8b an EMPTY ops set changes nothing (identical to the pre-E-3 behaviour)",
+          (_a6(a6_rows, fake_bots, set()).status, _a6(a6_rows, fake_bots, None).status,
+           _a6(a6_rows, fake_bots, set()).lines == _a6(a6_rows, fake_bots, None).lines),
+          ("FAIL", "FAIL", True))
+
+    print("SELF-TEST — E-3 §3.3 item 6 OPS-CLASS SCOPING (a_series.py A4b / A6)")
+    print("=" * 74)
+    for ok, name, got, want in results:
+        print(f"  {'PASS' if ok else 'FAIL'}  {name}")
+        if not ok:
+            print(f"        got  {got!r}\n        want {want!r}")
+    print("-" * 74)
+    print(f"{len(results) - fails}/{len(results)} passed")
+    return 1 if fails else 0
+
+
+# ===========================================================================
 # ⬇⬇⬇  daily.sh WIRING SNIPPET — EMITTED AS A COMMENT ONLY. NOT APPLIED. ⬇⬇⬇
 # Wiring is a Day-0-adjacent decision (reactivation-runbook.md §4 Step 4(b)); this tool does not
 # edit daily.sh. When Andy rules to wire it, insert as a stage AFTER the numeric stages, fail RED:
@@ -664,13 +839,19 @@ if __name__ == "__main__":
     ap.add_argument("--config", default=os.path.join(DATA, "bots_config_v2.csv"))
     ap.add_argument("--spec", default=os.path.join(ROOT, "docs", "greenfield-family-spec.md"))
     ap.add_argument("--ledger", default=None)
+    ap.add_argument("--bots-meta", default=BOTS_META,
+                    help="ops-class declaration source (E-3 §3.3); scopes A4b/A6")
     ap.add_argument("--validate", action="store_true")
+    ap.add_argument("--selftest", action="store_true",
+                    help="run the E-3 §3.3 ops-scoping tests and exit")
     ap.add_argument("--emit-wiring", action="store_true")
     ap.add_argument("--json", action="store_true")
     a = ap.parse_args()
     if a.emit_wiring:
         print(WIRING_SNIPPET)
         sys.exit(0)
+    if a.selftest:
+        sys.exit(selftest())
     if a.validate:
         sys.exit(validate(a.captures, a.config, a.spec))
-    sys.exit(run(a.captures, a.config, a.spec, a.ledger, a.json))
+    sys.exit(run(a.captures, a.config, a.spec, a.ledger, a.json, a.bots_meta))

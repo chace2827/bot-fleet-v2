@@ -6867,3 +6867,14 @@ docs/state.md · docs/session-log.md · docs/exploratory-bots-design-2026-08-07.
 **E-3's hard precondition is now implemented and verified. It is NOT a build authorization** — the
 gate is still E-3 implemented **and** the OA restore landing **and** Andy's go, and §3.4/§3.5 remain
 recommendations, not rulings.
+
+### ✅ PR02-R1 RULED — 2026-08-08, by Andy (orchestrator chat): ALLOCATION $50,000 STANDS. Zero OA edit.
+
+The clone keeps $50,000 as found. Basis: `pre-registration-ledger.md` §4 PR-02 — *"IDENTICAL
+allocation to the 11:00 arm. Non-negotiable: unequal sizing makes the A/B unreadable"* — and the
+11:00 arm (PR-01 clone) reads $50,000. The competing "equal-to-origin" reading was PR-01
+coincidence (origin and arm both $50,000), not a written rule. Caveat presented and accepted:
+the -130PM paper account read net liq ~$30,105; paper-only, compare-by-R. **PR-02's signing
+block from PR02-R1 is DISCHARGED** — remaining before Step 2b signature: Template V1 (Andy's
+hand, showBotMenu) and the standard Day-0 gates. `rename_map.csv` row 4 disposition annotated
+with the ruling, original text standing. PR02-R2/R3 remain on the 2026-08-08 sitting list.

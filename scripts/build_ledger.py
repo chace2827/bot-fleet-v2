@@ -27,6 +27,45 @@ so they are visible rather than silently dropped; only `data/mirror_baseline.csv
 (a one-time frozen snapshot, built from the capture export, read ONLY by funding
 decisions) may consume them.
 
+=============================================================================
+ SECOND EXCLUSION AXIS — LAB OPS-CLASS  (E-3 / exploratory-bots-design-2026-08-07
+ §3.3, RULED 2026-08-07; HARD PRECONDITION on any Lab bot's AUTOMATIONS toggle)
+=============================================================================
+The cutover is a TIME axis. This is a CLASS axis, and it is independent: a row
+can be post-cutover and still barred from the working ledger because the bot
+that opened it is an ops-class (Lab) probe substrate. Ops bots exist to be
+mutated at will; their numbers are activity, never evidence. Guardrail G1
+(pre-registration-ledger.md) forbids an ops number entering any Exp(R), any arm
+or variant comparison, any funding decision or any tiered claim — and G2 says
+that interdict is "enforced in code, not by intent".
+
+  ops-class      bots_meta.ops_class == "lab-ops"   -> data/ops_rows.csv
+                                                       (visible, never a ledger
+                                                        or reporting input)
+
+CLASSIFICATION COMES FROM data/bots_meta.csv's `ops_class` COLUMN. NOT from the
+export's `tags` string (OA normalises tags — lossy, and `tags` is pass-through
+here), and NOT from the bot name. Same principle as pillar/role/underlying.
+
+THE GROUP/TAG FENCE (the third exclusion surface). Group reconciles to the
+`pillar` column exactly (oa-ops-runbook.md §3), and §3.5 puts every ops bot in
+group `Lab` with tag `ops` as the cohort handle. This script therefore REFUSES,
+loudly and without writing, when the three surfaces disagree:
+  - an unknown `ops_class` value                       -> FATAL
+  - ops_class=lab-ops but pillar != Lab                -> FATAL
+  - pillar == Lab but ops_class not declared           -> FATAL
+  - an export row TAGGED `ops` whose bot is undeclared -> FATAL
+The tag is never a classifier here; it is only ever a tripwire that catches a
+Lab bot somebody forgot to declare. A bot that reached OA's `Lab` group without
+reaching this file is exactly the leak E-3 exists to prevent.
+
+⛔ BUILD-ORDER CONSTRAINT (§3.3 item 5). This exclusion must ship BEFORE the
+first ops bot trades. Ops rows that once reached data/trades.csv cannot be
+removed later without tripping the FILTERED-EXPORT GUARD and requiring surgery
+on the ledger. The daily export must still INCLUDE the ops bots — group-based
+EXPORT exclusion is the wrong mechanism and produces exactly the subset the
+guard exists to catch. The ledger excludes them POST-INGEST.
+
 REFUSAL IS THE DEFAULT. With no LEDGER_START resolved, this script exits
 non-zero and writes nothing. There is no "just this once" pass-through mode.
 
@@ -58,6 +97,7 @@ Usage:
   python3 scripts/build_ledger.py
   python3 scripts/build_ledger.py --ledger-start 2026-08-15
   LEDGER_START=2026-08-15 python3 scripts/build_ledger.py
+  python3 scripts/build_ledger.py --selftest      # ops-class exclusion tests
 """
 import argparse, csv, glob, json, os, re, sys, collections
 
@@ -72,6 +112,12 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RAW = os.path.join(ROOT, "data", "raw")
 OUT = os.path.join(ROOT, "data")
 META_PATH = os.path.join(OUT, "bots_meta.csv")
+
+# --- E-3 §3.3 — the ops-class (Lab) exclusion axis -------------------------
+OPS_CLASS_COL   = "ops_class"      # the declaring column in data/bots_meta.csv
+OPS_CLASS_VALUE = "lab-ops"        # the ONLY non-empty value this column accepts
+OPS_PILLAR      = "Lab"            # §3.5 — group == pillar, single-select
+OPS_TAG         = "ops"            # §3.5 — the cohort handle (tripwire only)
 
 _DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 
@@ -128,7 +174,92 @@ def newest_raw():
 def load_meta():
     if not os.path.exists(META_PATH):
         sys.exit(f"ERROR: missing {META_PATH} (the bot classification source)")
-    return {r["bot"]: r for r in csv.DictReader(open(META_PATH))}
+    rd = csv.DictReader(open(META_PATH))
+    rows = list(rd)
+    if OPS_CLASS_COL not in (rd.fieldnames or []):
+        sys.exit(
+            f"FATAL: {META_PATH} has no `{OPS_CLASS_COL}` column.\n"
+            "\n"
+            "  The Lab ops-class exclusion (E-3, exploratory-bots-design-2026-08-07\n"
+            "  §3.3) is a HARD PRECONDITION and it declares the ops set in that\n"
+            "  column. Without it every ops row would enter the working ledger\n"
+            "  silently, which is the contamination the exclusion exists to prevent.\n"
+            f"  Add a `{OPS_CLASS_COL}` column (empty | {OPS_CLASS_VALUE!r}). Nothing was written."
+        )
+    return {r["bot"]: r for r in rows}
+
+
+def _tag_tokens(s):
+    """OA normalises tags to lowercase and non-alphanumeric to space. Tokenize the
+    same way so `ops`, `Ops`, `lab,ops` and `lab ops` all read alike."""
+    return {t for t in re.split(r"[^a-z0-9]+", (s or "").lower()) if t}
+
+
+def ops_set_from_meta(meta):
+    """The declared ops set, PLUS the group/tag fence (E-3 §3.3, surface 3).
+
+    Classification is the `ops_class` column and nothing else. The fence only
+    ever REFUSES on disagreement between the declaring column and the pillar
+    (== OA Bot Group) it must reconcile to; it never promotes a bot into the
+    ops set on the strength of a pillar or a tag."""
+    ops, bad_value, bad_pillar, undeclared = set(), [], [], []
+    for bot, r in sorted(meta.items()):
+        v = (r.get(OPS_CLASS_COL) or "").strip().lower()
+        pil = (r.get("pillar") or "").strip()
+        if v == OPS_CLASS_VALUE:
+            ops.add(bot)
+            if pil != OPS_PILLAR:
+                bad_pillar.append(f"{bot}: {OPS_CLASS_COL}={v!r} but pillar={pil!r}")
+        elif v:
+            bad_value.append(f"{bot}: {OPS_CLASS_COL}={v!r}")
+        elif pil == OPS_PILLAR:
+            undeclared.append(f"{bot}: pillar={OPS_PILLAR!r} but {OPS_CLASS_COL} is empty")
+
+    if bad_value:
+        sys.exit(
+            f"FATAL: unrecognised `{OPS_CLASS_COL}` value(s) in {META_PATH}. Nothing written.\n"
+            f"  Allowed: empty, or {OPS_CLASS_VALUE!r} (E-3 §3.3 item 1).\n"
+            + "".join(f"    - {b}\n" for b in bad_value)
+            + "  A value this script does not recognise is NOT treated as 'not ops' —\n"
+              "  guessing which side of the exclusion a bot falls on is the failure."
+        )
+    if bad_pillar:
+        sys.exit(
+            f"FATAL: ops-class bot(s) not in pillar {OPS_PILLAR!r}. Nothing written.\n"
+            "  §3.5: every ops bot sits in Bot Group `Lab`, and oa-ops-runbook.md §3\n"
+            "  requires groups to reconcile to the `pillar` column EXACTLY.\n"
+            + "".join(f"    - {b}\n" for b in bad_pillar)
+        )
+    if undeclared:
+        sys.exit(
+            f"FATAL: pillar-{OPS_PILLAR} bot(s) with no `{OPS_CLASS_COL}` declaration. "
+            "Nothing written.\n"
+            "  A Lab bot that is not declared ops-class would enter the WORKING LEDGER\n"
+            "  (E-3 §3.3 / guardrail G1). Declare it, or move it out of the Lab pillar.\n"
+            + "".join(f"    - {b}\n" for b in undeclared)
+        )
+    return ops
+
+
+def fence_export_tags(rows, ops_bots):
+    """Tripwire, not a classifier: an export row tagged `ops` whose bot is not
+    declared in bots_meta.ops_class means a Lab bot reached OA without reaching
+    the exclusion. Refuse rather than write a ledger that may already be dirty."""
+    offenders = sorted({r.get("botName", "") for r in rows
+                        if OPS_TAG in _tag_tokens(r.get("tags"))
+                        and r.get("botName") not in ops_bots})
+    if offenders:
+        sys.exit(
+            f"FATAL: export row(s) tagged {OPS_TAG!r} from bot(s) with no "
+            f"`{OPS_CLASS_COL}` declaration. Nothing written.\n"
+            "  §3.5 uses the `ops` tag as the ops cohort handle. A bot carrying it that\n"
+            "  is undeclared here would be written straight into the working ledger.\n"
+            + "".join(f"    - {b}\n" for b in offenders)
+            + f"  Fix: add `{OPS_CLASS_COL}={OPS_CLASS_VALUE}` (pillar {OPS_PILLAR}) to "
+              "data/bots_meta.csv,\n"
+              "  or remove the tag in OA if the bot is genuinely not ops-class.\n"
+              "  (The tag never CLASSIFIES a bot here — it only catches this disagreement.)"
+        )
 
 
 TCOLS = ["bot", "pillar", "underlying", "role", "epoch", "trade_id", "symbol",
@@ -148,15 +279,45 @@ SCOLS = ["bot", "structure", "status", "pnl", "risk", "open_date", "close_date",
 STRADDLER_NOTE = ("PRE-CUTOVER OPEN — mirror baseline layer only; "
                   "NEVER a working-ledger or reporting input")
 
+# Ops rows keep the FULL ledger schema (not the straddler shape) so the FROZEN
+# execution_audit.py can be pointed at this file as an explicitly-invoked
+# fixture — the mechanism it already uses for data/archive/trades.csv
+# (§3.3 item 8) — plus a `note` column mirroring STRADDLER_NOTE's visibility.
+# ⚠️ `trade_id` is BLANK by construction: the partition happens BEFORE the condor
+# pairing block (§3.3 item 2), because pairing assigns trade_id from a global
+# counter and excluding afterwards would corrupt the numbering. Whether ops rows
+# should get their own trade_id namespace is NOT ruled — see the hand-off.
+OPSCOLS = TCOLS + ["note"]
+
+OPS_NOTE = ("LAB OPS-CLASS — excluded from the working ledger by declaration "
+            "(bots_meta.csv ops_class=lab-ops, E-3 §3.3); NEVER a reporting, "
+            "ranking, comparison or funding input (guardrail G1)")
+
 
 def write_receipt(path, **kw):
     """Machine-readable run receipt. Downstream scripts assert against this
     instead of re-deriving the cutover date."""
     kw.setdefault("contract",
-                  "working ledger is POST-CUTOVER ONLY; the filter is on open_date")
+                  "working ledger is POST-CUTOVER ONLY; the filter is on open_date. "
+                  "AND LAB-OPS-EXCLUDED; the filter is bots_meta.csv "
+                  "ops_class == 'lab-ops' (E-3 §3.3). Two independent axes: "
+                  "time and class.")
     with open(path, "w") as fo:
         json.dump(kw, fo, indent=2)
         fo.write("\n")
+
+
+def assert_no_ops_leak(out_rows, ops_bots):
+    """§3.3 item 3 — the CLASS-axis refusal assertion, mirroring the pre-cutover
+    one. If a single ops row reaches the working-ledger writer the run dies and
+    nothing is written. This is the guarantee guardrail G1 is allowed to rely on."""
+    bc = TCOLS.index("bot")
+    leaked = [r for r in out_rows if r[bc] in ops_bots]
+    if leaked:
+        names = sorted({r[bc] for r in leaked})
+        sys.exit(f"FATAL: {len(leaked)} LAB OPS-CLASS row(s) reached the working "
+                 f"ledger writer. Nothing written. Bot(s): {names}. "
+                 f"First: {leaked[0][:6]}")
 
 
 def write_empty_ledger(ledger_start, ls_source, reason):
@@ -165,29 +326,41 @@ def write_empty_ledger(ledger_start, ls_source, reason):
     os.makedirs(OUT, exist_ok=True)
     for path, cols in ((os.path.join(OUT, "trades.csv"), TCOLS),
                        (os.path.join(OUT, "bots.csv"), BCOLS),
-                       (os.path.join(OUT, "straddlers.csv"), SCOLS)):
+                       (os.path.join(OUT, "straddlers.csv"), SCOLS),
+                       (os.path.join(OUT, "ops_rows.csv"), OPSCOLS)):
         with open(path, "w", newline="") as fo:
             csv.writer(fo).writerow(cols)
     write_receipt(os.path.join(OUT, "ledger_meta.json"),
                   ledger_start=ledger_start, ledger_start_source=ls_source,
                   source_export=None,
                   counts={"export_rows": 0, "post_cutover": 0,
-                          "straddler": 0, "pre_cutover": 0},
-                  n_trades_condors=0, n_bots=0, total_pnl=0.0, note=reason)
+                          "straddler": 0, "pre_cutover": 0, "ops_rows": 0},
+                  n_trades_condors=0, n_bots=0, total_pnl=0.0,
+                  ops_bots=[], ops_rows=0, note=reason)
     print(f"LEDGER_START: {ledger_start}   (from {ls_source})")
     print(f"NOTE: {reason}")
-    print("Wrote header-only data/trades.csv, data/bots.csv, data/straddlers.csv (n=0).")
+    print("Wrote header-only data/trades.csv, data/bots.csv, data/straddlers.csv, "
+          "data/ops_rows.csv (n=0).")
 
 
 def main():
     ap = argparse.ArgumentParser(add_help=True)
     ap.add_argument("--ledger-start", default=None,
                     help="cutover date YYYY-MM-DD (overrides env and the constant)")
+    ap.add_argument("--selftest", action="store_true",
+                    help="run the E-3 §3.3 ops-class exclusion tests and exit")
     args = ap.parse_args()
+
+    if args.selftest:
+        sys.exit(selftest())
 
     ledger_start, ls_source = resolve_ledger_start(args.ledger_start)
 
     meta = load_meta()
+    # E-3 §3.3 — resolve the declared ops set (and run the group/pillar fence)
+    # BEFORE anything reads the export, so the FILTERED-EXPORT GUARD below can
+    # subtract it and so a mis-declared roster refuses without touching disk.
+    ops_bots = ops_set_from_meta(meta)
     src = newest_raw()
 
     prior_path = os.path.join(OUT, "trades.csv")
@@ -214,7 +387,13 @@ def main():
     # taken with any group deselected is a SUBSET — rebuilding from it would
     # silently erase the excluded bots' history. Compare against the PRIOR ledger
     # before we overwrite it (verified 2026-07-03).
-    dropped = sorted(prior_bots - {r["botName"] for r in rows})
+    # §3.3 item 5: subtract the ops set defensively — an ops bot is ABSENT from
+    # the working ledger by design, so its absence is never evidence of a
+    # filtered export and must not shout as if it were.
+    dropped = sorted(prior_bots - {r["botName"] for r in rows} - ops_bots)
+
+    # §3.3 surface 3 — the tag tripwire, before any partitioning.
+    fence_export_tags(rows, ops_bots)
 
     # --- THE CUTOVER PARTITION -------------------------------------------
     # Decided by open_date and nothing else. See the module docstring.
@@ -246,6 +425,17 @@ def main():
 
     rows = post  # from here on, "rows" means the post-cutover working set ONLY
 
+    # --- THE OPS-CLASS PARTITION (E-3 §3.3 item 2) ------------------------
+    # Immediately after the cutover partition and BEFORE the condor pairing
+    # block: pairing assigns trade_id from a global counter, so excluding
+    # afterwards would corrupt the numbering.
+    # `post_cutover` keeps its own meaning (the TIME axis alone); `ops_rows` is
+    # the second axis, counted separately. Working-ledger legs = post_cutover
+    # minus ops_rows.
+    ops_src = [r for r in rows if r["botName"] in ops_bots]
+    rows    = [r for r in rows if r["botName"] not in ops_bots]
+    counts["ops_rows"] = len(ops_src)
+
     # --- classification helpers (all from meta; no name guessing) ----------
     def g(bot, field, default=""):
         r = meta.get(bot)
@@ -262,6 +452,23 @@ def main():
         return "post-fix" if open_date[:10] >= b else "pre-fix"
 
     unclassified = sorted({r["botName"] for r in rows if r["botName"] not in meta})
+
+    # --- ops rows: visible, separate, never a working-ledger input --------
+    with open(os.path.join(OUT, "ops_rows.csv"), "w", newline="") as fo:
+        w = csv.writer(fo); w.writerow(OPSCOLS)
+        for r in ops_src:
+            k = parse_strikes(r.get("description", ""))
+            bot = r["botName"]
+            w.writerow([bot, pillar(bot), underlying(bot), role(bot),
+                        epoch(bot, r["openDate"]), "", r["symbol"],
+                        r["type"], r["status"], r["quantity"], r["openPrice"],
+                        r["closePrice"], r["pnl"], r["risk"], r["openDate"],
+                        r["closeDate"], r["expiration"], r["tags"], "",
+                        k["short_put"], k["long_put"], k["short_call"], k["long_call"],
+                        r.get("premium", ""), r.get("underlyingOpen", ""),
+                        r.get("underlyingClose", ""), r.get("highReturnPct", ""),
+                        r.get("lowReturnPct", ""), r.get("highReturnPctDate", ""),
+                        r.get("lowReturnPctDate", ""), OPS_NOTE])
 
     # --- pair legs into condors --------------------------------------------
     # A legged IC opens its call spread and put spread a few SECONDS apart, but a
@@ -342,6 +549,10 @@ def main():
                  f"ledger writer (LEDGER_START={ledger_start}). Nothing written. "
                  f"First: {leaked[0][:6]}")
 
+    # The same guarantee on the CLASS axis (E-3 §3.3 item 3). Guardrail G2:
+    # G1 is enforced in code, not by intent.
+    assert_no_ops_leak(out_rows, ops_bots)
+
     with open(os.path.join(OUT, "trades.csv"), "w", newline="") as fo:
         w = csv.writer(fo); w.writerow(TCOLS); w.writerows(out_rows)
 
@@ -382,7 +593,8 @@ def main():
                   ledger_start=ledger_start, ledger_start_source=ls_source,
                   source_export=os.path.basename(src), counts=counts,
                   n_trades_condors=ntr, n_bots=len(legs),
-                  total_pnl=round(tot, 2), note="")
+                  total_pnl=round(tot, 2),
+                  ops_bots=sorted(ops_bots), ops_rows=counts["ops_rows"], note="")
 
     print(f"LEDGER_START: {ledger_start}   (from {ls_source})")
     print(f"Source: {os.path.basename(src)}")
@@ -399,6 +611,17 @@ def main():
               f"{len(sb)} bot(s)) — mirror baseline layer ONLY, never reporting:")
         for b, n in sb.most_common():
             print(f"    {n:>4}  {b}")
+    if ops_bots:
+        # §3.3 item 7 — never silent. Printed whenever the class is DECLARED,
+        # even at zero rows, so an ops bot cannot vanish without a line.
+        ob = collections.Counter(r["botName"] for r in ops_src)
+        print(f"\nLAB OPS-CLASS -> data/ops_rows.csv ({counts['ops_rows']} rows, "
+              f"{len(ops_bots)} declared bot(s)) — EXCLUDED from the working ledger "
+              f"by declaration (E-3 §3.3);\n    never a reporting, ranking, comparison "
+              f"or funding input (guardrail G1):")
+        for b in sorted(ops_bots):
+            n = ob.get(b, 0)
+            print(f"    {n:>4}  {b}" + ("" if n else "   (declared; no rows in this export)"))
     if unclassified:
         print(f"\nWARNING: {len(unclassified)} unclassified bot(s) — add to data/bots_meta.csv:")
         for b in unclassified: print(f"  - {b}")
@@ -409,6 +632,197 @@ def main():
         print("!! re-export with ALL groups selected — otherwise their history is LOST:")
         for b in dropped: print(f"!!   - {b}")
         print("!" * 68)
+
+
+# ===========================================================================
+# SELF-TEST — E-3 §3.3 ops-class exclusion (house style: fixtures + a named
+# check matrix, asserted against ground truth, run with --selftest)
+# ===========================================================================
+def _st_env(tmp, meta_rows, export_rows, meta_header=None):
+    """Build a throwaway ROOT/data tree and point the module globals at it."""
+    global RAW, OUT, META_PATH
+    RAW = os.path.join(tmp, "raw"); OUT = tmp
+    META_PATH = os.path.join(tmp, "bots_meta.csv")
+    os.makedirs(RAW, exist_ok=True)
+    hdr = meta_header or ["bot", "pillar", "role", "underlying", "status",
+                          "epoch_boundary", "strike_fix", "superseded", OPS_CLASS_COL]
+    with open(META_PATH, "w", newline="") as fo:
+        w = csv.writer(fo); w.writerow(hdr)
+        for r in meta_rows:
+            w.writerow([r.get(c, "") for c in hdr])
+    ecols = ["botName", "type", "description", "symbol", "status", "quantity",
+             "openPrice", "closePrice", "premium", "pnl", "risk", "expiration",
+             "openDate", "closeDate", "tags", "underlyingOpen", "underlyingClose",
+             "highReturnPct", "lowReturnPct", "highReturnPctDate", "lowReturnPctDate"]
+    with open(os.path.join(RAW, "2099-01-02.csv"), "w", newline="") as fo:
+        w = csv.writer(fo); w.writerow(ecols)
+        for r in export_rows:
+            w.writerow([r.get(c, "") for c in ecols])
+
+
+def _st_row(bot, day="2099-01-02", qty="1", tags="", pnl="10", typ="shortputspread"):
+    return {"botName": bot, "type": typ, "description": "-500 put +498 put",
+            "symbol": "QQQ", "status": "closed", "quantity": qty, "openPrice": "0.40",
+            "closePrice": "0.20", "premium": "40", "pnl": pnl, "risk": "160",
+            "expiration": day, "openDate": f"{day} 09:46:00",
+            "closeDate": f"{day} 15:50:00", "tags": tags}
+
+
+def _st_run(argv_start="2099-01-01"):
+    """Run main() against the patched globals, capturing stdout. Returns
+    (exit_code_or_None, stdout, sys_exit_message_or_None)."""
+    import io, contextlib
+    buf = io.StringIO()
+    old_argv = sys.argv
+    sys.argv = ["build_ledger.py", "--ledger-start", argv_start]
+    try:
+        with contextlib.redirect_stdout(buf):
+            main()
+        return None, buf.getvalue(), None
+    except SystemExit as e:
+        return e.code, buf.getvalue(), str(e.code)
+    finally:
+        sys.argv = old_argv
+
+
+def selftest():
+    import tempfile, shutil
+    global RAW, OUT, META_PATH
+    keep = (RAW, OUT, META_PATH)
+    fails, results = 0, []
+
+    def check(name, got, want):
+        nonlocal fails
+        ok = got == want
+        fails += not ok
+        results.append((ok, name, got, want))
+        return ok
+
+    OPSBOT, NORMBOT = "TESTOPS-LAB-OPS", "GF-QQQ-IC-Ride"
+    ops_meta = {"bot": OPSBOT, "pillar": OPS_PILLAR, "role": "ops",
+                "underlying": "QQQ", "status": "ON", OPS_CLASS_COL: OPS_CLASS_VALUE}
+    norm_meta = {"bot": NORMBOT, "pillar": "IC", "role": "experiment",
+                 "underlying": "QQQ", "status": "ON", OPS_CLASS_COL: ""}
+
+    tmp = tempfile.mkdtemp(prefix="bl-selftest-")
+    try:
+        # ---- N1-N6: the declared ops bot is excluded, and reported -------
+        _st_env(tmp, [norm_meta, ops_meta],
+                [_st_row(NORMBOT), _st_row(NORMBOT, day="2099-01-03"),
+                 _st_row(OPSBOT, qty="3", tags="experiment,ops,lab"),
+                 _st_row(OPSBOT, day="2099-01-03", qty="3", tags="experiment,ops,lab")])
+        code, out, _ = _st_run()
+        led = list(csv.DictReader(open(os.path.join(tmp, "trades.csv"))))
+        ops = list(csv.DictReader(open(os.path.join(tmp, "ops_rows.csv"))))
+        meta_j = json.load(open(os.path.join(tmp, "ledger_meta.json")))
+        check("N1  run succeeds with an ops bot present", code, None)
+        check("N2  ZERO ops rows in the working ledger",
+              sorted({r["bot"] for r in led}), [NORMBOT])
+        check("N3  ops rows land in data/ops_rows.csv, in full ledger schema",
+              (len(ops), sorted({r["bot"] for r in ops}),
+               list(ops[0].keys()) == OPSCOLS), (2, [OPSBOT], True))
+        check("N4  every ops row carries OPS_NOTE (visible, not silent)",
+              all(r["note"] == OPS_NOTE for r in ops), True)
+        check("N5  receipt counts + ops_bots/ops_rows name the exclusion",
+              (meta_j["counts"]["post_cutover"], meta_j["counts"]["ops_rows"],
+               meta_j["ops_bots"], meta_j["ops_rows"], len(led)),
+              (4, 2, [OPSBOT], 2, 2))
+        check("N6  stdout prints the LAB OPS-CLASS block naming the bot",
+              ("LAB OPS-CLASS -> data/ops_rows.csv" in out) and (OPSBOT in out), True)
+        check("N6b receipt contract names the SECOND axis",
+              "LAB-OPS-EXCLUDED" in meta_j["contract"], True)
+        check("N6c ops bot is absent from data/bots.csv (no aggregate row)",
+              OPSBOT in open(os.path.join(tmp, "bots.csv")).read(), False)
+
+        # ---- N7: a declared ops bot with NO rows is still reported -------
+        _st_env(tmp, [norm_meta, ops_meta], [_st_row(NORMBOT)])
+        code, out, _ = _st_run()
+        check("N7  declared-but-absent ops bot still prints (zero rows, not silent)",
+              (code is None) and ("declared; no rows in this export" in out)
+              and (OPSBOT in out), True)
+
+        # ---- N8: the export-tag tripwire (undeclared Lab-tagged row) -----
+        _st_env(tmp, [norm_meta],
+                [_st_row(NORMBOT), _st_row("TESTOPS-LAB-DSTOP", tags="lab,ops")])
+        before = open(os.path.join(tmp, "trades.csv")).read()
+        code, out, msg = _st_run()
+        check("N8  undeclared `ops`-tagged row REFUSES the build (FATAL)",
+              isinstance(code, str) and code.startswith("FATAL:")
+              and "TESTOPS-LAB-DSTOP" in code, True)
+        check("N8b nothing was written on that refusal",
+              open(os.path.join(tmp, "trades.csv")).read(), before)
+
+        # ---- N9-N11: the group/pillar fence, both directions -------------
+        _st_env(tmp, [norm_meta, dict(ops_meta, pillar="IC")], [_st_row(NORMBOT)])
+        code, _, _ = _st_run()
+        check("N9  ops_class=lab-ops with pillar != Lab REFUSES",
+              isinstance(code, str) and "not in pillar 'Lab'" in code, True)
+
+        _st_env(tmp, [norm_meta, dict(ops_meta, **{OPS_CLASS_COL: ""})], [_st_row(NORMBOT)])
+        code, _, _ = _st_run()
+        check("N10 pillar-Lab bot with no ops_class declaration REFUSES",
+              isinstance(code, str) and "no `ops_class` declaration" in code, True)
+
+        _st_env(tmp, [norm_meta, dict(ops_meta, **{OPS_CLASS_COL: "lab"})], [_st_row(NORMBOT)])
+        code, _, _ = _st_run()
+        check("N11 an unrecognised ops_class value REFUSES (never 'assume not ops')",
+              isinstance(code, str) and "unrecognised `ops_class` value" in code, True)
+
+        # ---- N12: the schema addition is load-bearing --------------------
+        _st_env(tmp, [norm_meta], [_st_row(NORMBOT)],
+                meta_header=["bot", "pillar", "role", "underlying", "status"])
+        code, _, _ = _st_run()
+        check("N12 bots_meta.csv without an ops_class column REFUSES",
+              isinstance(code, str) and "has no `ops_class` column" in code, True)
+
+        # ---- N13: the class-axis leak assertion itself -------------------
+        fake = [["x"] * len(TCOLS) for _ in range(2)]
+        fake[1][TCOLS.index("bot")] = OPSBOT
+        try:
+            assert_no_ops_leak(fake, {OPSBOT})
+            got = "NO EXIT"
+        except SystemExit as e:
+            got = "FATAL" if str(e.code).startswith("FATAL: 1 LAB OPS-CLASS row") else str(e.code)
+        check("N13 assert_no_ops_leak kills the run if an ops row reaches the writer",
+              got, "FATAL")
+        try:
+            assert_no_ops_leak([["x"] * len(TCOLS)], {OPSBOT})
+            got = "CLEAN"
+        except SystemExit:
+            got = "FALSE POSITIVE"
+        check("N13b …and does not fire on a clean writer", got, "CLEAN")
+
+        # ---- N14: FILTERED-EXPORT GUARD does not shout about an ops bot --
+        _st_env(tmp, [norm_meta, ops_meta],
+                [_st_row(NORMBOT), _st_row(OPSBOT, tags="lab,ops")])
+        _st_run()                                   # seed a prior ledger
+        _st_env(tmp, [norm_meta, ops_meta], [_st_row(NORMBOT)])
+        # keep the prior trades.csv written by the seeding run
+        code, out, _ = _st_run()
+        check("N14 an ops bot missing from the export does NOT trip the "
+              "FILTERED-EXPORT GUARD", "FILTERED-EXPORT WARNING" in out, False)
+
+        # ---- N15: with NOTHING declared, behaviour is untouched ----------
+        _st_env(tmp, [norm_meta], [_st_row(NORMBOT), _st_row(NORMBOT, day="2099-01-03")])
+        code, out, _ = _st_run()
+        opsf = list(csv.DictReader(open(os.path.join(tmp, "ops_rows.csv"))))
+        mj = json.load(open(os.path.join(tmp, "ledger_meta.json")))
+        check("N15 no ops bots declared -> no ops block, empty ops_rows.csv, counts 0",
+              ("LAB OPS-CLASS" in out, len(opsf), mj["counts"]["ops_rows"], mj["ops_bots"]),
+              (False, 0, 0, []))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+        RAW, OUT, META_PATH = keep
+
+    print("SELF-TEST — E-3 §3.3 LAB OPS-CLASS EXCLUSION (build_ledger.py)")
+    print("=" * 74)
+    for ok, name, got, want in results:
+        print(f"  {'PASS' if ok else 'FAIL'}  {name}")
+        if not ok:
+            print(f"        got  {got!r}\n        want {want!r}")
+    print("-" * 74)
+    print(f"{len(results) - fails}/{len(results)} passed")
+    return 1 if fails else 0
 
 
 if __name__ == "__main__":
