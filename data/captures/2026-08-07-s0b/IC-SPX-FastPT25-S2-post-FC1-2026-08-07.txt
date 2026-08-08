@@ -1,0 +1,186 @@
+# CAPTURE — IC-SPX-FastPT25-S2 (THE PR-01 CLONE), POST-F-C1
+# captured: 2026-08-07 ~18:35–18:45 ET, S0b-RESUME session, Chrome-direct
+# METHOD: every value read from `a5.bots.bot` / `a5.bots.acedit.routine` — the hydrated client
+#         model — after a FRESH DOCUMENT LOAD of the bot settings page. Never innerText. Never a
+#         save banner. Never a stage-back (CLAUDE.md §9.1a).
+#         Each automation was re-opened from a SEPARATE fresh page load, so no read below can be
+#         a stale in-memory model left over from a prior open.
+#
+# WHY THIS FILE EXISTS: the S0b session that applied F-C1 froze before it could file a capture,
+# and its own report left the CALL side's final hard-reload verification announced but ABSENT
+# FROM THE RECORD. This session re-verified both sides first-hand from scratch and treated the
+# predecessor's report as unverified until checked. Nothing below is inherited.
+
+================================================================================
+## BOT LEVEL
+--------------------------------------------------------------------------------
+BOT             IC-SPX-FastPT25-S2
+BOT_ID          BOTfw5TkkCRF4417860821948715488
+status          "off"          AUTOMATIONS OFF        ✓ unchanged, as required
+disableExits    1              EXIT OPTIONS OFF       ✓ unchanged, as required
+group           IC-Focus  (BGfw5TkkCRF3517811337258939101)                    ✓ unchanged
+tags            "live candidate,focus ic,pr 01"                               ⭐ see TAG below
+seed            50000 · posLimit 10 · posLimitDay 10 · scanrate 1 · inputs [] · alerts {}
+tid             Tfw5TkkCRF2317861409017023081                                 ⭐ see TEMPLATE below
+version         1
+vdate           2026-08-07T22:15:01.708Z   (= 18:15:01 ET)
+closedCount     0
+symbols         none — CORRECT. The symbol lives in the automations (Loop SPX, action symbol
+                "SPX"), confirmed first-hand in the Scan-Put action payload below. Trap 2 does
+                not bite here.
+
+================================================================================
+## ⭐ THE FREEZE POINT, RESOLVED READ-ONLY: **TEMPLATE V1 EXISTS. STEP 6a IS DONE.**
+--------------------------------------------------------------------------------
+The predecessor session froze immediately after clicking "Save as Template" in `showBotMenu`,
+leaving it UNKNOWN whether the template was created. `showBotMenu` was **NOT opened** to find
+out — it is Andy's hand (3-for-3 failed from this side) and `Delete` sits ~29px below `Archive`.
+
+Established from TWO independent surfaces, neither of them that menu:
+  1. CLIENT MODEL — `a5.bots.bot.tid` = `Tfw5TkkCRF2317861409017023081`, `version` = 1,
+     `vdate` = 2026-08-07T22:15:01.708Z.
+  2. BOT SETTINGS PAGE, Template panel, rendered text verbatim:
+         Template
+         IC-SPX-FastPT25-S2
+         BOT VERSION
+         1 Aug 7, 2026
+The 18:15:01 ET timestamp post-dates the 17:54:01 ET roster capture and sits inside the frozen
+session's window. **The save landed; the session died after it, not before it.**
+⚠️ The template's OWN attached NOTE was not inspected — that would need the template surface,
+   and Step 6's rule stands: these are record artifacts and nothing in the Day-0 sequence reads
+   them. Reported as VERIFIED-EXISTS, note-content NOT VERIFIED.
+
+## TAG — `pr 01` PRESENT AND PERSISTED
+`tags` reads "live candidate,focus ic,pr 01" from the model after a fresh load, and the
+Dashboard Tags panel renders three chips. Storing as `pr 01` rather than `PR-01` is correct per
+Step 6c, not a failure. The predecessor's verification was in flight when it froze; **re-confirmed
+here.**
+
+## NOTES — PRESENT AND COMPLETE
+The full PR-01 block renders on the settings page: ID / DISPOSITION / PILLAR/ROLE / STATUS /
+HYPOTHESIS / KILL CRITERION / SAMPLE TARGET / REVIEW DATE / MAX LOSS / SIZING TIER / CONFIG HASH
+/ VERIFICATION / SIGNED. STATUS reads "DRAFT — unsigned" ✓ (no session may sign it).
+⚠️ Notes are NOT a field of `a5.bots.bot` — there is no `notes` key on the model. Read from the
+   rendered settings panel. A byte-exact compare against `pre-registration-ledger.md` §4 was
+   therefore NOT performed here; see FINDING S0b-2 for why the text deliberately diverges.
+
+================================================================================
+## ⭐ F-C1 — RE-VERIFIED FIRST-HAND, BOTH SIDES. THE CALL SIDE IS NOW IN THE RECORD.
+--------------------------------------------------------------------------------
+Ruling: F-C1 RULED 2026-08-07 (Andy, first-hand): REMOVE. Recorded in `docs/state.md` and
+`docs/session-log.md`. Spec: `build-plan.md` §2B — "PT25 removed from the Open Position action
+explicitly — not left dead behind an off toggle."
+
+### PUT SIDE — `Scalp-Scan-Put`   rid RTfw5TkkCRF4417860821948941343
+    version 4 · updated 2026-08-07T22:08:03.177Z · sharing 0
+    node root.outcome.outcomes.0.outcomes.0.outcomes.1.outcomes.0.outcomes.0
+    type `open-shortputspread`
+    input.exits = { text:"None", profits:"", dprofit:"", price:"", stoploss:"", dstop:"",
+                    tstop:"", touch:"", expdays:"", xevents:"", epsdays:"", dtype:"short" }
+      ⭐ `profits` EMPTY. No `smprofits` key present at all.  **PT25 GONE.**
+    everything else in the action, read and recorded as unchanged:
+      price {pct:75, text:"75% of bid/ask", smart:"speedy"} · amount {type:"draw", draw:5000,
+      text:"Up to $5,000 risk"} · tags "put side" · symbol "SPX"
+
+### CALL SIDE — `Scalp-Scan-Call`  rid RTfw5TkkCRF4417860821948941031
+    version 5 · updated 2026-08-07T22:09:03.953Z · sharing 0
+    node root.outcome.outcomes.0.outcomes.0.outcomes.1.outcomes.0.outcomes.0
+    type `open-shortcallspread`
+    input.exits = { text:"None", profits:"", dprofit:"", price:"", stoploss:"", dstop:"",
+                    tstop:"", touch:"", expdays:"", xevents:"", epsdays:"", dtype:"short" }
+      ⭐ `profits` EMPTY. No `smprofits` key present at all.  **PT25 GONE.**
+      ⛔ THIS IS THE READ THE PREVIOUS SESSION ANNOUNCED AND NEVER RECORDED. It is now recorded,
+         from a fresh document load, from the stored model, not from the rendering.
+
+⚠️ The `exits.sig` string still LISTS the field names (`profits|dprofit|price|…`). That is the
+   bundle's field-name signature template, not a value. `text:"None"` is the payload's own
+   statement that the bundle is empty. Do not misread `sig` as PT25 surviving.
+
+================================================================================
+## ⭐ NO-UNINTENDED-EDITS PROOF — ALL FOUR AUTOMATIONS RE-HASHED. EXACTLY TWO MOVED.
+--------------------------------------------------------------------------------
+Step 5 requires: "Re-hash all four of the clone's automations and confirm only the two scanners'
+Open actions moved." Run here for the first time.
+
+SERIALIZATION — **VALIDATED BEFORE USE, TWICE, AGAINST OBJECTS THAT DID NOT CHANGE.**
+  formula: sha256( JSON.stringify( {name, inputs, root} ) )  over `a5.bots.acedit.routine`
+  A-15's rule forbids inventing a hash input, so the formula was proven before being trusted:
+    · Scalp-Mon-S2-StrikeTouch → 01af4963aafb5856…  == its recorded baseline, EXACTLY
+    · Scalp-Mon-S2-Cleanup     → f3673f2991541420…  == its recorded baseline, EXACTLY
+    · the ARCHIVED ORIGINAL's Scalp-Scan-Put → 91da84fd2b7aafbb…, **5027 bytes**, version 2
+      == its Step-0 baseline, EXACTLY, including the byte count
+  Three independent reproductions of recorded values. The formula is confirmed, and it is
+  confirmed against objects OTHER than the ones being re-baselined — never against itself.
+
+  automation                    recorded (pre-F-C1)   live 2026-08-07        verdict
+  ----------------------------  --------------------  --------------------  ---------------------
+  Scalp-Scan-Put        v3→4    7be1cc04bbf24ae2…     f83ed32bb24c0bc2…     MOVED — EXPECTED (F-C1)
+  Scalp-Scan-Call       v4→5    e0ee1f3f9ac7626d…     892ba0c9fb7dfbfa…     MOVED — EXPECTED (F-C1)
+  Scalp-Mon-S2-StrikeTouch v4   01af4963aafb5856…     01af4963aafb5856…     UNCHANGED ✓
+  Scalp-Mon-S2-Cleanup     v2   f3673f2991541420…     f3673f2991541420…     UNCHANGED ✓
+
+  full new hashes:
+    Scalp-Scan-Put   f83ed32bb24c0bc20e703164d68d309e1423d5be9069cc577fafb434aaf1c52f
+    Scalp-Scan-Call  892ba0c9fb7dfbfa038d95eec9ed953a91e25acc12a44f7c0aee1c960755bfa7
+    StrikeTouch      01af4963aafb58566789662aafa68d94d846d042869590eccbede9fb6d57ca85
+    Cleanup          f3673f2991541420c7124f3a6d2e2a2996002f6c61dc61ac8389ea348db2ccd7
+
+⭐ `Scalp-Mon-S2-Cleanup` UNCHANGED is the load-bearing one: Step 5's hard rule is "touch nothing
+   in `Scalp-Mon-S2-Cleanup` — S2 depends on it" (build-plan §2B). Proven by hash, not by eye.
+   Its `updated` still reads 2026-08-07T06:07:41.899Z — the morning clone session's pricing fix,
+   nothing since. StrikeTouch's `updated` reads **2026-06-14T14:40:13.687Z** — untouched since June.
+
+## ARCHIVED ORIGINAL — INDEPENDENTLY RE-VERIFIED UNTOUCHED
+BOT `IC-SPX-FastPT25-S2-ARCHIVED-2026-08-07`  BOTfw5TkkCRF1217757048550308561
+  bot level:  status "off" · disableExits 1 · group IC-Focus · tags "live candidate,focus ic"
+              (correctly NO `pr 01`) · seed 50000 · limits 10/10 · closedCount 364 · tid ABSENT
+  `Scalp-Scan-Put`  rid RTfw5TkkCRF1775704999048700000051 · version 2 ·
+              updated **2026-06-07T21:40:48.242Z** · 5027 bytes ·
+              sha256 91da84fd2b7aafbb906b137f250562f0e9669cff7d62640d2f72ff81ecd946f8
+  and its Open action still carries `exits.profits = 0.25`, `text "Profits: 25%"` — **the lineage
+  record is intact and F-C1 did NOT leak onto the original**, which is exactly right: F-C1
+  applies to the clones only.
+
+================================================================================
+## ⛔ LAYER 2 — STILL OPEN. THIS EDIT IS NOT FULLY PROVEN.
+--------------------------------------------------------------------------------
+Everything above is **LAYER 1 ONLY** (re-observation from OA's own refetched model after a fresh
+load). Per `CLAUDE.md` §5 / §9.1a, Layer 1 does not close an edit.
+LAYER 2 IS DEFERRED TO DAY-0 AND IS **INVERTED** for this bot (`oa-ops-runbook.md` §4.3): the
+first new position's Trades list must show **NO PT row and NO exit-trigger row**, and the S2
+monitor **must** be observed firing. The Exit Options panel is never evidence.
+⚠️ The inverted check is no longer expected to "fail by construction" now that F-C1 is applied —
+   but it is UNRUN, and an unrun check is NOT EVALUABLE, never a pass.
+⛔ THIS EDIT STAYS AT THE TOP OF EVERY BRIEF UNTIL A POSITION CLOSES IT.
+
+================================================================================
+## ⭐ FINDING S0b-2 — THE BOT-PAGE NOTES EDITOR AND THE TEMPLATE NOTES EDITOR BEHAVE OPPOSITELY.
+--------------------------------------------------------------------------------
+STANDING FACT BEING QUALIFIED (and **NOT** rewritten): `oa-ops-runbook.md` §4.0 item 2 /
+state.md "Capture discipline" — *"OA's HTML sanitizer DECODES THEN STRIPS"*: pasting
+`&lt;capture&gt;` into **TEMPLATE Notes** round-tripped to nothing, and the documented counter is
+to **double-escape** (`&amp;lt;`) so one decode pass leaves `&lt;` intact. That finding was made
+on the template Notes editor and is separately established. IT IS LEFT EXACTLY AS IT STANDS.
+
+WHAT THE FROZEN S0b SESSION REPORTED, IN-CHAT: on the **BOT-PAGE** Notes editor the counter
+BACKFIRED — writing `&amp;lt;` produced the literal entity codes visible on screen, i.e. that
+editor does **not** perform the decode pass the template editor performs. It worked around this
+by avoiding angle brackets entirely.
+
+EVIDENCE AVAILABLE TO **THIS** SESSION, tiered honestly:
+  [NOT INDEPENDENTLY REPRODUCED] The write test itself. Reproducing it requires deliberately
+      writing malformed text into a live bot's Notes, which is an unrequested edit on a bot
+      pending signature. NOT DONE.
+  [FIRST-HAND 2026-08-07, dated observation of a value that was read] The Notes now live on the
+      bot render `CONFIG HASH      (pending capture) @ (pending hash)` — parenthesised words
+      where the pre-registration source text carries ANGLE-BRACKETED placeholders, and the same
+      substitution appears nowhere else in the block. The workaround is visible in the landed
+      text. This corroborates the report; it does not prove the mechanism.
+⛔ CONSEQUENCE FOR THE RECORD, WHICH IS THE PART THAT MATTERS: **the PR-01 Notes on this bot are
+   NOT byte-exact to `pre-registration-ledger.md` §4's source text.** They diverge, deliberately,
+   at the angle-bracket placeholders. Step 6b asks for a byte-exact verification and it CANNOT
+   pass as written. Recorded as a known, explained divergence — not as a pass, and not as a
+   silent edit to the ledger.
+⚠️ TWO EDITORS, TWO BEHAVIOURS. Whoever writes Notes next must not assume the template-Notes
+   counter works on the bot page, or vice versa. Settling it needs one deliberate write test on
+   a throwaway bot — that is a decision, and it is Andy's.

@@ -1,0 +1,115 @@
+# FLEET-WIDE TOGGLE STATE — all 41 active bots, with bot IDs
+# captured: 2026-08-07 ~18:45–18:55 ET, S0b-RESUME session, Chrome-direct
+# surface: /bots LIST VIEW ONLY. No bot page was opened for any of the nine leave-in-place bots.
+#
+# METHOD — and why this is not a screenshot (oa-ops-runbook.md §1.6 asks for one; this is
+#          strictly stronger and it is text, so it diffs and greps):
+#   Each /bots row carries TWO <i class="xicon ... fa-toggle-on|fa-toggle-off sticon"> elements
+#   whose `title` attribute states the toggle meaning in words:
+#       AUTOS : "Scheduled automations are off"  /  (…are on)
+#       EXITS : "Exit Options for positions managed by this bot are on"  /  (…are off)
+#   Read from the `title` ATTRIBUTE, never from innerText and never from the CSS class alone
+#   (state.md, "Capture discipline": `selected`/CSS classes do not imply a committed value;
+#    innerText on CSS-rendered chips returns ""). Sweep re-run three times; identical each time.
+#   Bot IDs read from each row's own `a.title[href^="/bots/bot/"]` href.
+#
+# ⭐ FINDING S0b-3 — WHY THE BOOKMARKLET MISSES THIS, PRECISELY.
+#   `oa-ops-runbook.md` §1.5 records AUTOS/EXITS as "the highest-value miss" of a /bots capture,
+#   and §1.6 concludes toggle state "does not survive text capture". BOTH REMAIN CORRECT AS
+#   WRITTEN and are NOT edited here. What this session observed first-hand refines the CAUSE:
+#     - the /bots page DOES carry AUTOS and EXITS as column HEADERS — they are present verbatim
+#       in the 17:54 bookmarklet capture's header block (…STREAK, CLOSED, AUTOS, EXITS);
+#     - the per-bot rows emit 18 values, not 20 (stride = 1 name + 18 values, verified across all
+#       41 rows), because the two toggle cells render as ICONS with no text node;
+#     - the state IS in the DOM, on the icons' `title` attribute, and is readable as shown above.
+#   So the miss is a property of the CAPTURE METHOD (`document.body.innerText`), not of the page.
+#   A bookmarklet that also emitted `i.sticon[title]` per row would close §1.5's highest-value gap.
+#   ⛔ Stated as an observation and a candidate. Changing the bookmarklet is a decision, gated.
+#
+# VERDICT
+#   AUTOMATIONS ON : 0 of 41.  ⛔ The fleet is entirely OFF. Nothing can open a position.
+#   EXIT OPTIONS ON: 7 of 41 — exactly the seven greenfield arms, i.e. S0a's seven disableExits
+#                    1→0 edits PERSIST across a session boundary and a fresh page load.
+#                    This is an independent Layer-1 RE-verification of those seven edits.
+#                    ⛔ Layer 2 (first new position's Trades list) is STILL OPEN on all seven.
+#   EXIT OPTIONS OFF on all 34 non-greenfield bots — including the pilot `QQQ-IC-0DTE-Fortress`,
+#                    whose own 2026-08-04 capture baseline records EXIT OPTIONS **ON**.
+#                    ⛔ See FINDING S0b-1 in this directory's step4b file. NOT corrected.
+#
+# bot_name	bot_id	AUTOS	EXITS
+1-45pm-Sandwich-Paper-v1	BOTfw5TkkCRF3317782764426812572	OFF	OFF
+3DTE $140-$350	BOTfw5TkkCRF2217765235512870291	OFF	OFF
+60min-ORB-10W-Paper-v1	BOTfw5TkkCRF3317782759988647731	OFF	OFF
+DIR-SPX-CallVIXdrop	BOTfw5TkkCRF217824370390678863	OFF	OFF
+DIR-SPX-Put-Control	BOTfw5TkkCRF217824312740732922	OFF	OFF
+DIR-SPX-PutVIX22-SL75	BOTfw5TkkCRF217824306963282811	OFF	OFF
+Friday 14 DTE Broken Wing IB (B-70)	BOTfw5TkkCRF1017766446781407596	OFF	OFF
+GF-QQQ-IC-Canary	BOTfw5TkkCRF4417860774419022836	OFF	ON
+GF-QQQ-IC-PT50	BOTfw5TkkCRF4417860738688735152	OFF	ON
+GF-QQQ-IC-Ride	BOTfw5TkkCRF4417860701930934951	OFF	ON
+GF-QQQ-IC-SL100	BOTfw5TkkCRF4417860767788927225	OFF	ON
+GF-QQQ-IC-SL200	BOTfw5TkkCRF4417860785000861357	OFF	ON
+GF-QQQ-IC-Touch0	BOTfw5TkkCRF4417860760818962144	OFF	ON
+GF-QQQ-IC-Trail	BOTfw5TkkCRF4417860754672239833	OFF	ON
+IC-SPX-FastPT25-S2	BOTfw5TkkCRF4417860821948715488	OFF	OFF
+IC-SPX-FastPT25-S2-130PM	BOTfw5TkkCRF3717814485128334371	OFF	OFF
+IC-SPX-FastPT25-S2-ARCHIVED-2026-08-07	BOTfw5TkkCRF1217757048550308561	OFF	OFF
+IC-SPX-Fortress-Defang	BOTfw5TkkCRF3317787969081429752	OFF	OFF
+IC-SPX-Fortress-Unstopped	BOTfw5TkkCRF3317787955825912621	OFF	OFF
+Nigiri-Paper-v1	BOTfw5TkkCRF1017766118057607741	OFF	OFF
+Opening Range Breakout 60m	BOTfw5TkkCRF1017766137341516344	OFF	OFF
+QQQ long call	BOTfw5TkkCRF1017766424258604555	OFF	OFF
+QQQ-IC-0DTE-Baseline	BOTfw5TkkCRF3317727290514286611	OFF	OFF
+QQQ-IC-0DTE-Fortress	BOTfw5TkkCRF2717857919585029021	OFF	OFF
+QQQ-IC-0DTE-Fortress-NoFilter	BOTfw5TkkCRF4517755108623629541	OFF	OFF
+QQQ-IC-0DTE-Fortress-NoPT50	BOTfw5TkkCRF2617743681996538301	OFF	OFF
+QQQ-IC-0DTE-Fortress-S2	BOTfw5TkkCRF3217755946065115241	OFF	OFF
+QQQ-IC-0DTE-HedgeA-S1	BOTfw5TkkCRF2717738719192568831	OFF	OFF
+QQQ-IC-0DTE-HedgeB-S2	BOTfw5TkkCRF2717738721388027602	OFF	OFF
+QQQ-IC-0DTE-HedgeC-S3	BOTfw5TkkCRF2717738721535026943	OFF	OFF
+QQQ-IC-0DTE-HedgeD-Conditional	BOTfw5TkkCRF2717738721652044244	OFF	OFF
+QQQ-IC-0DTE-HedgeTest	BOTfw5TkkCRF817734404268067862	OFF	OFF
+QQQ-IC-0DTE-InverseFilter-HoldToExp	BOTfw5TkkCRF4517755118383321712	OFF	OFF
+QQQ-IC-0DTE-Range075-PT50	BOTfw5TkkCRF2717738722042782917	OFF	OFF
+QQQ-IC-0DTE-Range075-PT50-Wide2-1230PM	BOTfw5TkkCRF2617743684426809593	OFF	OFF
+QQQ-IC-0DTE-Range075-PT50-Wide2-155PM	BOTfw5TkkCRF2717738721925710956	OFF	OFF
+QQQ-IC-0DTE-Raw-HoldToExp	BOTfw5TkkCRF2617743683072748392	OFF	OFF
+QQQ-IC-0DTE-VIX25-Range075-PT50	BOTfw5TkkCRF2717738721783221645	OFF	OFF
+Tasty Condor	BOTfw5TkkCRF1017766126336204213	OFF	OFF
+Trendy-Paper-v1	BOTfw5TkkCRF1017766118431160782	OFF	OFF
+Weekly-IB-SPY-Paper-v1	BOTfw5TkkCRF3317782770973508333	OFF	OFF
+
+# ⭐ THIS TABLE IS THE FIRST FULL BOT-ID ROSTER ON DISK. A-01c's identifier check previously had
+#   recorded values for the 7 GF arms, the PR-01 clone and its archived original only (9 of 41).
+#   The other 32 IDs are recorded here for the FIRST time — so for those 32 this is a BASELINE,
+#   not a re-verification, and it cannot retroactively prove they were not re-created by the
+#   restore. Say so; do not read a future match against this file as evidence about 2026-08-06.
+#
+# ⛔ ROSTER COUNT — A FALSE ALARM, RESOLVED, RECORDED SO IT IS NOT RE-RAISED.
+#   A naive sweep of `a[href^="/bots/bot/"]` returns 43 distinct link texts, not 41.
+#   The two extras are the strings "4" and "1" — the POSITION-COUNT links in the POS column of
+#   `QQQ long call` (POS 4) and `Tasty Condor` (POS 1), which also point at /bots/bot/<id>.
+#   Filtering on `a.title[…]` returns exactly 41. The footer reads 41 and the bookmarklet
+#   capture parses to exactly 41 rows. NOT A-01 branch 3a. Use `a.title`, not the bare href.
+#
+# ⚠️ OPEN POSITIONS — CARRY FORWARD TO S2 STEP 2 / AMENDMENT A-10, NOT RESOLVED HERE.
+#   Exactly two bots hold open positions, and both are leave-in-place bots:
+#       QQQ long call   POS 4   RISK $13K
+#       Tasty Condor    POS 1   RISK $1,082
+#   Four plus one is FIVE positions, which is the count S2 Step 2 expects. Account header RISK
+#   read $14,118 = $13K + $1,082, self-consistent. Both bots' mark-to-market fields are the ONLY
+#   non-artifact movement in the whole 08-06→08-07 capture diff (see step4b file), which is the
+#   expected signature of live marks on open positions and not of config drift.
+#   ⛔ THIS IS A LIST-VIEW READ ONLY. A-10 requires S2 to re-read all five FIRST-HAND — quantity,
+#   open date, current mark, unrealized P/L — and to open and screenshot EACH POSITION'S OWN
+#   Exit Options screen before any close. None of that was done here and none of it may be
+#   inferred from this file. This session did not open either bot's page (A-18 attestation).
+#
+# ⚠️ ONE TRANSIENT /login REDIRECT, LOGGED BECAUSE IT LOOKS LIKE THE LOCKOUT AND IS NOT.
+#   Mid-sweep the tab landed on `app.optionalpha.com/login?rurl=%2Fbots` showing a PLAIN
+#   Email/Password form. This is NOT the 2026-08-07 04:24 ET lockout page, which read
+#   "Account disabled, please purchase a plan" (state.md). No credential was entered — entering
+#   passwords is prohibited and is Andy's hand. The very next navigation to /bots returned an
+#   authenticated page with `a5.bots` hydrated and 41 bot links. Read it as an ordinary session
+#   flicker. ⛔ If it recurs and does NOT clear on re-navigation, that is a finding: stop and
+#   hand to Andy rather than attempting to log in.

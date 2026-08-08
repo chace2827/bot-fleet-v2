@@ -6125,3 +6125,259 @@ this correction with it. No decision changed.**
    refreshed from it.** This is the SAME open item as the missing 13-bot byte diff (Step 4b) — that
    diff runs against capture files on disk, so the missing capture blocks both. **S0b's first action
    is the capture, before anything else** — not Step 5, not the roster re-verify, the capture.
+
+---
+
+## 2026-08-07 (S0b-RESUME — Steps 5–8, finishing the session that froze)
+
+**What this session was.** The first S0b chat did most of Steps 5–6 and then FROZE mid-action —
+immediately after opening `showBotMenu` on the PR-01 clone and clicking "Save as Template". It
+filed no session-log entry and no capture. This session's job was to establish what actually
+landed, verify it rather than inherit it, finish what was left, and close out. **Nothing the
+frozen session reported was taken on trust.** Ran Chrome-direct per `CLAUDE.md` §5/§7. No git in
+any form. **Zero OA WRITES this session — every OA action was a read.**
+
+### ⛔ THE FREEZE POINT — RESOLVED READ-ONLY. TEMPLATE V1 EXISTS. STEP 6a IS DONE.
+`showBotMenu` was **not opened.** It is Andy's hand (3-for-3 failed from this side) and `Delete`
+sits ~29px below `Archive`. Established instead from two independent surfaces:
+1. `a5.bots.bot.tid` = `Tfw5TkkCRF2317861409017023081`, `version` 1,
+   `vdate` **2026-08-07T22:15:01.708Z** (= 18:15:01 ET).
+2. The bot settings page's Template panel, verbatim: `Template / IC-SPX-FastPT25-S2 /
+   BOT VERSION / 1 Aug 7, 2026`.
+The 18:15 ET timestamp post-dates the 17:54 ET roster capture and sits inside the frozen
+session's window: **the save landed and the session died after it, not before it.** The
+template's own attached NOTE was not inspected — reported as VERIFIED-EXISTS,
+note-content NOT VERIFIED. `data/bots_config_v2.csv`'s `template NOT SAVED (showBotMenu
+unresponsive)` cell is corrected.
+
+### ⭐ F-C1 — RE-VERIFIED FIRST-HAND, BOTH SIDES. THE CALL SIDE IS NOW IN THE RECORD.
+The frozen session's call-side hard-reload verification was **announced but absent from the
+record**, and its first attempt on each side had silently not persisted. Both sides were
+therefore re-read from scratch, each from a **separate fresh document load**, from the stored
+`a5.bots.acedit.routine` model — never the rendering, never a save banner, never a stage-back.
+
+- `Scalp-Scan-Put`  rid `RTfw5TkkCRF4417860821948941343`, v4, updated 2026-08-07T22:08:03.177Z
+- `Scalp-Scan-Call` rid `RTfw5TkkCRF4417860821948941031`, v5, updated 2026-08-07T22:09:03.953Z
+- Both Open actions: `exits.profits = ""`, `text: "None"`, **no `smprofits` key at all**, every
+  other exit field empty. **PT25 is gone from both sides.** Everything else in the put action
+  unchanged (`price {pct:75, smart:"speedy"}`, `amount {draw:5000}`, `tags "put side"`,
+  `symbol "SPX"`).
+- ⚠️ The `exits.sig` string still lists the field NAMES. That is the bundle's signature template,
+  not a value. Do not misread it as PT25 surviving.
+
+### ⭐ NO-UNINTENDED-EDITS PROOF — ALL FOUR AUTOMATIONS RE-HASHED. EXACTLY TWO MOVED.
+Step 5 asks for this and it had never been run. **The serialization was validated before use**,
+because A-15 forbids inventing a hash input or comparing a baseline to itself. Formula
+`sha256(JSON.stringify({name,inputs,root}))` over the routine model — the same formula this
+project already documents for the greenfield `a7_hash`. It reproduced **three** recorded values
+EXACTLY, all on objects that did not change: StrikeTouch `01af4963…`, Cleanup `f3673f29…`, and
+the archived original's Scalp-Scan-Put `91da84fd…` at **5027 bytes, version 2**. Only then were
+the two moved scanners re-hashed.
+
+| automation | recorded (pre-F-C1) | live | verdict |
+|---|---|---|---|
+| Scalp-Scan-Put v3→4 | `7be1cc04…` | `f83ed32bb24c0bc2…` | MOVED — expected |
+| Scalp-Scan-Call v4→5 | `e0ee1f3f…` | `892ba0c9fb7dfbfa…` | MOVED — expected |
+| Scalp-Mon-S2-StrikeTouch v4 | `01af4963…` | `01af4963…` | **UNCHANGED** |
+| Scalp-Mon-S2-Cleanup v2 | `f3673f29…` | `f3673f29…` | **UNCHANGED** |
+
+`Cleanup` unchanged is the load-bearing one — `build-plan.md` §2B forbids touching it because S2
+depends on it. **Proven by hash, not by eye.** StrikeTouch's `updated` still reads 2026-06-14.
+
+**Archived original independently re-verified UNTOUCHED**: `Scalp-Scan-Put` hashes `91da84fd…`,
+5027 bytes, v2, `updated` 2026-06-07, and still carries `exits.profits = 0.25` / "Profits: 25%".
+The lineage record is intact and F-C1 did not leak onto it — correct, F-C1 is clones-only.
+Bot level: `status "off"`, `disableExits 1`, tags "live candidate,focus ic" (correctly **no**
+`pr 01`), group IC-Focus, seed 50000, limits 10/10, closedCount 364, no template.
+
+**Tag re-confirmed**: `tags` reads `"live candidate,focus ic,pr 01"` after a fresh load; three
+chips render. Storing as `pr 01` is correct per Step 6c, not a failure.
+**Notes present and complete** — the full PR-01 block renders, STATUS "DRAFT — unsigned".
+**Clone bot-level unchanged**: `status "off"`, `disableExits 1`. Symbols empty is CORRECT here —
+the symbol lives in the automations (confirmed: action `symbol "SPX"`). Trap 2 does not bite.
+
+⛔ **ALL OF THIS IS LAYER 1 ONLY.** Layer 2 for F-C1 is DEFERRED TO DAY-0 and is **INVERTED**
+(`oa-ops-runbook.md` §4.3): the first new position's Trades list must show NO PT row and NO
+exit-trigger row, and the S2 monitor must be observed firing. It is no longer expected to fail
+by construction — but it is UNRUN, and an unrun check is NOT EVALUABLE, never a pass. **This
+edit stays at the top of every brief until a position closes it.**
+
+### ⛔ FINDING S0b-1 — THE PILOT'S EXIT OPTIONS DIVERGES FROM ITS OWN BASELINE. ESCALATED. NOT FIXED.
+`QQQ-IC-0DTE-Fortress` (`BOTfw5TkkCRF2717857919585029021`) reads **`disableExits: 1`** (EXIT
+OPTIONS OFF). Its own 2026-08-04 capture records, verbatim: *"EXIT OPTIONS **ON** …
+`input[name=onoff].value="true"` … It was left ON deliberately then and is left ON now.
+Switching it off would be an unrequested edit."*
+
+**This is gate A0 branch 3 sub-state (d) — "config rolled back to an older snapshot" — firing on
+an EIGHTH bot**, same field and same direction as the seven greenfield bots S0a found. S0a missed
+it: its toggle sweep read the pilot as "EXIT OPTIONS OFF … consistent with the pre-lockout lapsed
+state", which assumed a baseline the pilot's own capture file contradicts.
+
+⭐ **Why it matters beyond one bot.** S0a's own correction explicitly struck "OA restore-default"
+as an UNVERIFIED inference and left the question open. The pilot is a **second, independent
+witness** — not part of the greenfield family, built on a different day by a different session,
+untouched since 2026-08-04. Every bot in the account now reads `disableExits: 1` except the seven
+S0a flipped back. ⚠️ **Consistent with is not established.** A common symptom does not prove a
+common cause, and the PR-01 clone (baseline also 1) cannot discriminate. The question stays OPEN;
+this is evidence for it, not a closing of it.
+
+**Disposition, taken literally from A-01 and A-07:** pilot config-capture hash **NOT
+ESTABLISHED** · PR-03 **cannot be signed** at S2 Step 2b on this evidence · **BOT STAYS OFF** ·
+fleet proceeds · **ESCALATE TO ANDY: YES.** ⛔ **Not fixed.** Andy's ruling named *the seven
+greenfield bots*; extending it to an eighth is a decision, and decisions stay gated. The bot was
+read and left exactly as found. ⚠️ Note: the pilot also carries `decision-card-2026-08-06.md`
+slot 4a's "declared CLEAN" verdict, which a rollback post-dates.
+
+### STEP 4b — RUN AS FAR AS THE RECORD ALLOWS, AND THE LIMIT IS STRUCTURAL
+Full record: `data/captures/2026-08-07-s0b/STEP-4b-capture-diff-2026-08-06-vs-2026-08-07.txt`.
+
+**What ran.** A real field-by-field diff of the pre-lockout `/bots` capture (2026-08-06 17:21)
+against the post-restore one (2026-08-07 17:54, sha `34f31831…`), 18 fields per bot, 33 bots in
+common. **30 of 33 IDENTICAL on all 18 fields.** All three differences explained:
+- `IC-SPX-FastPT25-S2` → all history to `--`: a **name-key artifact**, not drift. Proof: the
+  08-07 row for `…-ARCHIVED-2026-08-07` is byte-identical on all 18 fields to the 08-06 row for
+  `IC-SPX-FastPT25-S2`. The history did not move; the label did.
+- `QQQ long call` and `Tasty Condor` → six mark-to-market fields only. They are the **only two
+  bots holding open positions**. Closed history, win rate, P-factor, streak all identical. That
+  is the live-marks signature, the opposite of a config rollback.
+Roster delta accounted both ways: +7 GF arms +1 renamed original; −2 (the 2026-08-06 deletions).
+**Zero unexplained diffs, including all nine leave-in-place bots.**
+
+⛔ **What it does NOT prove, stated because it would be easy to over-claim.** The `/bots` schema
+carries no automation trees, no exits bundles, no trigger config, no tags, no group, no bot
+inputs. AUTOS/EXITS toggle state is **not in the capture** — rows emit 18 values, not 20. And
+values above $10K are 3 significant figures. This diff cannot see the very thing A-07 asks about;
+it is exactly blind to the class of change that hit the seven greenfield bots.
+
+⛔ **AND FOR 12 OF THE 14 BOTS IN A-07's SCOPE THE DIFF IS NOT RUNNABLE AT ALL — no per-bot
+capture file exists on disk.** Full inventory taken. Only the PR-01 clone, its archived original,
+and the pilot have any per-bot baseline. `-130PM`, `-NoPT50` and **all nine** have never been
+captured per-bot. **This is a structural gap in the repository, not a task a longer session
+closes.** Per-bot disposition: clone **ESTABLISHED** · archived original **ESTABLISHED** · pilot
+**NOT ESTABLISHED** (S0b-1) · the other twelve **⬜ NOT EVALUABLE**, never a pass.
+
+⛔ **A consequence that needs Andy before S2, not inside it:** A-07 makes an ESTABLISHED hash a
+precondition for signing at Step 2b. Read literally, twelve bots — including all nine — can never
+be signed from the current contents of the repo, and therefore stay OFF. Whether that is the
+intended reading is a decision.
+
+⛔ **Scope correction, in both the pack and S0a's entry:** the arithmetic is 41 = 7 greenfield +
+5 named + 9 leave-in-place + **20 Group-A**. A-07's named scope is 5 + 9 = **FOURTEEN**, not
+thirteen, and the **20 Group-A bots appear in no post-restore config check anywhere in the pack.**
+
+### FLEET-WIDE TOGGLE STATE — AND AN INDEPENDENT RE-VERIFICATION OF S0a's SEVEN EDITS
+`data/captures/2026-08-07-s0b/toggle-state-all-41-2026-08-07.tsv` — all 41 bots, with bot IDs,
+read from each row's toggle-icon `title` attribute (never innerText, never the CSS class alone).
+- **AUTOMATIONS ON: 0 of 41.** The fleet is entirely off. Nothing can open a position.
+- **EXIT OPTIONS ON: 7 of 41 — exactly the seven greenfield arms.** S0a's seven `disableExits`
+  1→0 edits **persist** across a session boundary and a fresh load: an independent Layer-1
+  re-verification. Layer 2 still open on all seven.
+- ⭐ **First full bot-ID roster on disk.** A-01c previously had recorded IDs for 9 of 41. The
+  other 32 are recorded here for the FIRST time — a **baseline**, not a re-verification, and it
+  cannot retroactively prove those 32 were not re-created by the restore. Said so in the file.
+
+### ⭐ FINDING S0b-3 — WHY THE BOOKMARKLET MISSES AUTOS/EXITS, PRECISELY
+`oa-ops-runbook.md` §1.5/§1.6 (AUTOS/EXITS are "the highest-value miss"; toggle state "does not
+survive text capture") are **CONFIRMED and NOT edited.** What was observed refines the cause: the
+column HEADERS *are* in the capture; the rows emit 18 values because the toggle cells are icons
+with no text node; and the state **is** in the DOM on the icons' `title`. So the miss is a
+property of the capture METHOD (`document.body.innerText`), not of the page. A bookmarklet that
+also emitted `i.sticon[title]` per row would close §1.5's highest-value gap. ⛔ Stated as a
+candidate. Changing the bookmarklet is a decision, gated.
+
+### ⭐ FINDING S0b-2 — TWO NOTES EDITORS, TWO OPPOSITE SANITIZER BEHAVIOURS
+The standing fact (`oa-ops-runbook.md` §4.0 item 2 — *decodes then strips*; counter: double-escape
+`&amp;lt;`) was established on the **TEMPLATE** Notes editor and **is left exactly as it stands.**
+The frozen session reported that on the **BOT-PAGE** Notes editor the counter **backfired**:
+`&amp;lt;` produced literal entity codes on screen, i.e. that editor performs no decode pass. It
+worked around it by avoiding angle brackets entirely.
+Tiered honestly, because this session did not make that observation:
+- `[NOT INDEPENDENTLY REPRODUCED]` the write test itself — reproducing it means deliberately
+  writing malformed text into a live bot pending signature. Not done.
+- `[FIRST-HAND 2026-08-07, dated observation of a value that was read]` the landed Notes render
+  `CONFIG HASH  (pending capture) @ (pending hash)` — parenthesised words exactly where the
+  source text carries angle-bracketed placeholders, and nowhere else in the block. The workaround
+  is visible in the landed text. **Corroborates the report; does not prove the mechanism.**
+⛔ **Consequence for the record:** the PR-01 Notes are **NOT byte-exact** to
+`pre-registration-ledger.md` §4. Step 6b's byte-exact verification **cannot pass as written**.
+Recorded as a known, explained divergence — not as a pass, and not as a silent ledger edit.
+Settling it needs one deliberate write test on a throwaway bot: Andy's call.
+
+### STEP 7 — GATE A0's FINDING (F-C1/F-C2 verify-only per A-03, no second banner written)
+Read and confirmed already recorded, **not re-asked and not re-banner'd**: F-C1 RULED REMOVE,
+F-C2 RULED AUTHORIZED AS TRAP 10, the 04:24 ET lockout block, and the gate-A0 branch-1 block.
+What this session adds is the post-restore evidence above, filed as new capture artifacts.
+Footer verbatim, both this session's live read and the 17:54 capture:
+**"41 active bots • 9 left in your plan • Upgrade"**. Branch: **1 (clean restore) with sub-state
+(d) confirmed on an eighth bot** — see S0b-1.
+⛔ **ROSTER COUNT FALSE ALARM, RESOLVED AND RECORDED SO IT IS NOT RE-RAISED.** A naive sweep of
+`a[href^="/bots/bot/"]` returns **43** distinct link texts. The two extras are the strings `"4"`
+and `"1"` — the POS-column position-count links on `QQQ long call` and `Tasty Condor`. Filtering
+on `a.title` returns exactly 41. **Not A-01 branch 3a.**
+
+### ⚠️ CARRY FORWARD TO S2 STEP 2 / A-10 — THE FIVE OPEN POSITIONS ARE THERE
+Exactly two bots hold positions, both leave-in-place: `QQQ long call` POS **4** RISK $13K, and
+`Tasty Condor` POS **1** RISK $1,082. 4 + 1 = **five**, the count S2 Step 2 expects; account
+header RISK $14,118 is self-consistent. ⛔ **This is a list-view read only.** A-10 requires S2 to
+re-read all five first-hand and to open and screenshot each position's own Exit Options screen
+before any close. None of that was done and none may be inferred. Neither bot's page was opened.
+
+### STEP 8 — PRE-FLIGHT. READ AND REPORTED, NOTHING FIXED.
+- `data/brief/` — **EMPTY** (`.keep` only). ✓ as expected.
+- `data/raw/` — **NOT empty**: `2026-08-07.csv`, 428,651 bytes, sha256
+  `b6374b9609f1026e2c14b880a2e4dfffcf44479ab2183c0de49f7b8ded553a06`, 1,386 rows × 26 columns,
+  32 distinct `botName`s, `openDate` 2026-03-05 → **2026-07-02**, `closeDate` → 2026-07-27,
+  status 1,232 closed / 154 expired. ⭐ **The pack's "expected EMPTY" is superseded by the
+  capture ritual having run**: `oa-ops-runbook.md` §1.7 and `daily.sh`'s own header both say the
+  export belongs at exactly `data/raw/YYYY-MM-DD.csv`. This is the gate-A12 Export Data pull,
+  correctly filed. **It does not untick the pre-cutover-files box.** Every row is pre-cutover by
+  date; nothing in it can survive any sane cutover.
+- `data/ledger_meta.json` — `"ledger_start": "2099-01-01"`, source `$LEDGER_START`, all counts 0.
+  ✓ The refuse-everything sentinel, correct pre-Day-0. `STATUS.md` reads **EMPTY LEDGER — n=0**. ✓
+- ⛔ **A7 IS NOT WIRED INTO `daily.sh`.** Verified directly: `grep -c a_series scripts/daily.sh`
+  = **0** across all eight stages. Reported as an **OPEN Step-4(b) gate**. Wiring it is Claude
+  Code's lane. (`research_loop` = 0 too — its DO-NOT-WIRE guard still passes.)
+- ⛔ **GATE A9 IS BLOCKED ON A DETAIL THAT WOULD LOOK LIKE A DEFECT.** `build_ledger.py` line 68
+  carries `LEDGER_START = "UNSET"`; `ledger_meta.json`'s `2099-01-01` came from the **environment
+  variable**, not the constant. So a bare `bash scripts/daily.sh` **exits non-zero at stage 1 on
+  a designed refusal** ("REFUSAL IS THE DEFAULT"), not on a bug. Put to Andy with the invocation
+  question rather than resolved here — see the hand-off.
+
+### ⛔ LEDGER_START — RULED, AND DELIBERATELY NOT SET. THIS IS THE ONE TO CARRY LOUDEST.
+**Andy's ruling (2026-08-07, S0a): the post-cutover era begins at the FIRST DAY A BOT'S
+`AUTOMATIONS` ACTUALLY GOES ON — not at the 2026-08-07 ~12:06 ET payment timestamp.**
+**AUTOMATIONS is OFF on all 41 bots, verified fleet-wide this session. THAT DATE DOES NOT YET
+EXIST.** The `2099-01-01` sentinel is therefore **CORRECT and STAYS.** It was not set, not
+provisionally set, and not substituted with the payment date.
+⛔ **TO THE SESSION THAT SWITCHES THE FIRST BOT ON (S2 Step 7): that day is `LEDGER_START`.**
+Set it in `build_ledger.py`'s constant then — not before, and never by inventing a date.
+
+### ⚠️ ONE TRANSIENT `/login` REDIRECT — LOGGED BECAUSE IT LOOKS LIKE THE LOCKOUT AND IS NOT
+Mid-sweep the tab landed on `/login?rurl=%2Fbots` showing a plain Email/Password form. **This is
+not the 04:24 ET lockout page**, which read "Account disabled, please purchase a plan". **No
+credential was entered** — that is prohibited and is Andy's hand. The next navigation to `/bots`
+returned an authenticated page with `a5.bots` hydrated and 41 bot links. Ordinary session
+flicker. ⛔ If it recurs and does not clear on re-navigation, stop and hand to Andy.
+
+### ⛔ ATTESTATION (A-18) — THE NINE LEAVE-IN-PLACE BOTS
+**NONE** of `DIR-SPX-PutVIX22-SL75`, `DIR-SPX-CallVIXdrop`, `3DTE $140-$350`, `Nigiri-Paper-v1`,
+`QQQ long call`, `Friday 14 DTE Broken Wing IB (B-70)`, `Trendy-Paper-v1`,
+`60min-ORB-10W-Paper-v1`, `Tasty Condor` was opened, edited, or had a toggle touched this
+session. **No bot page was navigated to for any of the nine.** Every observation of them —
+the 18-field capture diff and the toggle-state table — is declared here as a **list-view READ**.
+⚠️ The session prompt's "do not touch the nine in any way" is narrower than A-07's "a read on the
+nine does not spend Step 2c". **The narrower instruction was obeyed** and the difference declared
+rather than resolved (CLAUDE.md §5: when it is ambiguous, it is gated). Step 2c is unspent.
+
+### Files changed this session
+`data/bots_config_v2.csv` (template cell + four automation hashes corrected; two dated banners) ·
+`data/captures/2026-08-07-s0b/` **(new dir, 3 files)** — `IC-SPX-FastPT25-S2-post-FC1-2026-08-07.txt`,
+`STEP-4b-capture-diff-2026-08-06-vs-2026-08-07.txt`, `toggle-state-all-41-2026-08-07.tsv` ·
+`docs/session-log.md` (this entry) · `docs/state.md` (S0b block).
+**OA writes: ZERO.** Nothing archived, nothing deleted, no automation edited, no toggle flipped,
+no pre-registration signed, no `showBotMenu` opened, no `LEDGER_START` set. No git in any form.
+All files verified by direct `device_bash` sha256 + single-match grep — never a write-tool
+response, never a stage-back.
+
+**HOLDING for Andy: gate A9 (the `daily.sh` n=0 run and its invocation), the S0b-1 pilot ruling,
+the A-07-signing-precondition question, the CSV schema question, and the commit.**

@@ -1,0 +1,210 @@
+# STEP 4b — POST-RESTORE CONFIG DIFF, NON-GREENFIELD BOTS
+# amendment A-07 (day0-session-pack-2026-08-07.md §0.0). Run 2026-08-07, S0b-RESUME session.
+# S0a left this OPEN: it ran a toggle-level sweep only and recorded, verbatim, "the full
+# field-by-field capture-diff A-07 requires was NOT performed... None of these 13 bots'
+# config-capture hash is therefore ESTABLISHED."  This file is what was actually run instead,
+# what it proves, and — the important half — what it CANNOT prove and why.
+
+================================================================================
+## 0. THE HONEST HEADLINE, BEFORE THE EVIDENCE
+--------------------------------------------------------------------------------
+A-07 asks for a per-bot AUTOMATION-TREE capture, resolved two hops through the input chain,
+diffed field-by-field against **that bot's own capture file on disk**.
+
+⛔ FOR 12 OF THE 14 BOTS IN A-07's SCOPE THAT DIFF IS **NOT RUNNABLE**, AND NOT FOR WANT OF TIME.
+   **There is no per-bot capture file on disk to diff against.** A full inventory of
+   `data/captures/` was taken this session. The only non-greenfield bots with any per-bot
+   baseline are:
+       IC-SPX-FastPT25-S2 (clone) + IC-SPX-FastPT25-S2-ARCHIVED-2026-08-07 (original)
+           → data/captures/2026-08-07-clones/{00-original,06-clone-final}/
+       QQQ-IC-0DTE-Fortress (pilot)
+           → data/captures/2026-08-03-pilot/{00-original,06-clone-final}/
+   `IC-SPX-FastPT25-S2-130PM`, `QQQ-IC-0DTE-Fortress-NoPT50` and **all nine leave-in-place
+   bots** have NEVER been captured per-bot. Nothing on disk describes their automation trees.
+   ⛔ This is a STRUCTURAL gap in the record, not a task a longer session closes. It is also
+   exactly what A-07's own closing line warns about from the other direction: "a capture file
+   written before the roster was lost is a record of a bot that no longer demonstrably exists" —
+   here there is not even that.
+
+⛔ ADDITIONAL SCOPE CORRECTION. The pack and S0a both say "the 13 non-greenfield bots".
+   The count is wrong in both places and the arithmetic is worth stating so it stops repeating:
+       41 active = 7 greenfield + 5 named non-greenfield + 9 leave-in-place + 20 Group-A
+   A-07's named scope is 5 + 9 = **FOURTEEN**, not thirteen. The remaining **20** bots (the
+   Group-A archive candidates, still active because the ~23 archives remain queued for Andy's
+   hand) are in NO post-restore config check anywhere in the pack. Flagged, not fixed.
+
+⛔ AND THIS SESSION DID NOT OPEN ANY OF THE NINE. The session prompt's "DO NOT touch any of the
+   nine leave-in-place bots, in any way" is narrower than A-07's "this is a READ on the nine and
+   does not spend Step 2c". Where they conflict the narrower instruction was obeyed and the
+   difference is declared here rather than resolved (CLAUDE.md §5: when it is ambiguous, it is
+   gated). The nine appear below ONLY through list-view reads.
+
+================================================================================
+## 1. WHAT *WAS* RUN — a real field-by-field diff, at the /bots-schema level
+--------------------------------------------------------------------------------
+BASELINE   data/captures/2026-08-06/oa_Bots_2026-08-06-17-21-38.txt   (PRE-LOCKOUT, 35 bots)
+POST       data/captures/2026-08-07-roster/oa_Bots_2026-08-07-21-54-01.txt  (POST-RESTORE, 41)
+           sha256 34f3183115e3ab6c5b1ebbd485af1da610318a2cb969f88520988e81e60a3bcf
+           footer verbatim: "41 active bots • 9 left in your plan • Upgrade"
+
+Parser: row stride is 1 name line + 18 value lines (verified across every row of both files).
+18 fields compared per bot:
+  TOTAL P/L · RETURN % · CLOSED P/L · CLOSED % · CHANGE · CHANGE % · POS · RISK · ALLOCATION ·
+  WIN RATE · BETA WEIGHT · BETA EXPOSURE · AVG P/L · AVG WIN · AVG LOSS · P FACTOR · STREAK · CLOSED
+
+RESULT — 33 bots common to both captures. **30 of 33 IDENTICAL on all 18 fields.**
+         THREE differ, and all three are fully explained:
+
+  (a) IC-SPX-FastPT25-S2 — every history field 08-06 → 08-07 goes to '--'.
+      ⭐ NOT DRIFT. A NAME-KEY ARTIFACT. On 08-06 that name belonged to the ORIGINAL; on 08-07
+      it belongs to the fresh CLONE (n=0). PROOF, not assertion: the 08-07 row for
+      `IC-SPX-FastPT25-S2-ARCHIVED-2026-08-07` is **byte-identical on all 18 fields** to the
+      08-06 row for `IC-SPX-FastPT25-S2` — TOTAL P/L -$11.2K, RETURN % -22.3%, WIN RATE 60%,
+      AVG P/L -$31, AVG WIN $146, AVG LOSS -$295, P FACTOR 0.73, STREAK 3W, CLOSED 364,
+      ALLOCATION $50K. The history did not move; the label did.
+
+  (b) QQQ long call — TOTAL P/L, RETURN %, CHANGE, CHANGE %, BETA WEIGHT, BETA EXPOSURE moved.
+  (c) Tasty Condor   — the same six fields, and only those six.
+      ⭐ NOT DRIFT. These are the ONLY two bots holding open positions (POS 4 and POS 1).
+      Their CLOSED P/L, CLOSED %, WIN RATE, AVG P/L, AVG WIN, AVG LOSS, P FACTOR, STREAK and
+      CLOSED are all IDENTICAL. Marks moving while closed history is frozen is the signature of
+      live mark-to-market, and is the opposite of the config-rollback signature A-01 branch 3d
+      describes.
+
+ROSTER DELTA, both directions, both accounted for:
+  + 7 GF arms + IC-SPX-FastPT25-S2-ARCHIVED-2026-08-07   → built / renamed after 08-06 17:21
+  − QQQ-IC-0DTE-InvFilter-Wide150, TEST QQQ-IC-0DTE-HedgeC-S3 Clone
+                                                          → the two 2026-08-06 deletions
+                                                            (decision-card slot 7 / C0b)
+
+⭐ ZERO UNEXPLAINED DIFFS ACROSS ALL 33 COMMON BOTS — INCLUDING ALL NINE LEAVE-IN-PLACE BOTS,
+  every one of which is IDENTICAL on all 18 fields.
+
+================================================================================
+## 2. ⛔ COVERAGE GAPS — WHAT SECTION 1 DOES **NOT** PROVE. READ BEFORE CITING IT.
+--------------------------------------------------------------------------------
+1. ⛔ **AUTOS / EXITS TOGGLE STATE IS NOT IN EITHER CAPTURE.** `oa-ops-runbook.md` §1.5 is
+   CONFIRMED, not falsified: the two column headers appear in the header block but the rows emit
+   18 values, not 20 — the toggle cells are icons with no text node. Toggle state was obtained
+   separately, from the DOM `title` attribute, and is filed as
+   `toggle-state-all-41-2026-08-07.tsv` in this directory. ⛔ REPORT THIS AS A COVERAGE GAP OF
+   THE CAPTURE, NOT AS A PASS.
+2. ⛔ **NOTHING BELOW BOT LEVEL IS IN THE /bots SCHEMA AT ALL** — no automation trees, no exits
+   bundles, no decision-node values, no trigger config, no tags, no bot group, no bot inputs,
+   no scan speeds. A-07's actual question is invisible to this diff for every bot.
+3. ⚠️ **PRECISION CEILING** (§1.5): values above $10K are 3 significant figures (`-$11.2K`).
+   A move from −$11,200 to −$11,249 does not diff. Sub-$10K values are exact.
+4. ⚠️ The 08-06 baseline is a PRE-LOCKOUT capture but it is not a pre-lockout *automation*
+   capture. It cannot see a rollback that preserved P/L and changed configuration — which is
+   precisely what A-01 branch 3d describes and precisely what happened on the seven greenfield
+   bots' `disableExits` field, invisibly to this diff.
+
+================================================================================
+## 3. ⛔ FINDING S0b-1 — THE PILOT'S EXIT OPTIONS DIVERGES FROM ITS OWN BASELINE.
+##    ESCALATED TO ANDY. NOT CORRECTED. THE BOT WAS NOT TOUCHED.
+--------------------------------------------------------------------------------
+BOT       QQQ-IC-0DTE-Fortress   BOTfw5TkkCRF2717857919585029021   (the pilot clone, PR-03)
+
+BASELINE, verbatim from data/captures/2026-08-03-pilot/06-clone-final/
+          oa_bot-settings_QQQ-IC-0DTE-Fortress-Clone_2026-08-04.txt:
+    EXIT OPTIONS       ON    (input[name=onoff].value="true";  title="Exit Options for positions
+                              managed by this bot are on")
+    …and, in that file's own words: "EXIT OPTIONS IS **ON**, NOT OFF. This is the clone's BIRTH
+    STATE … It was left ON deliberately then and is left ON now. Switching it off would be an
+    unrequested edit."
+
+LIVE, first-hand this session, `a5.bots.bot` on a fresh page load:
+    disableExits: 1        →  EXIT OPTIONS **OFF**
+    corroborated independently from the /bots list row's icon title ("…are off").
+
+⛔ THIS IS A-01 GATE A0 BRANCH 3, SUB-STATE (d) — "config rolled back to an older snapshot" —
+   FIRING ON AN EIGHTH BOT. It is the SAME field and the SAME direction as the seven greenfield
+   bots S0a found and Andy authorized fixing forward. S0a did not catch it: its toggle sweep
+   read the pilot as "EXIT OPTIONS OFF … consistent with the pre-lockout lapsed state", which
+   assumed a baseline the pilot's own capture file contradicts.
+
+⭐ WHY THIS MATTERS BEYOND ONE BOT. S0a's own correction (state.md, "HOW THE S0a EXIT OPTIONS
+   FINDING IS BOOKED", item 2) explicitly struck "OA restore-default" as an UNVERIFIED inference
+   and left open the question of whether OA's restore resets this field. **The pilot is a second,
+   independent witness on that open question**, and a cleaner one: it is not part of the
+   greenfield family, it was built on a different day by a different session, and no session has
+   touched it since 2026-08-04. Every bot in the account now reads `disableExits: 1` except the
+   seven S0a flipped back. That pattern is consistent with a fleet-wide restore default.
+   ⚠️ CONSISTENT WITH IS NOT THE SAME AS ESTABLISHED. A common cause is not proven by a common
+   symptom, and the PR-01 clone — whose recorded baseline is ALSO 1 — cannot discriminate.
+   The question stays OPEN. This is evidence for it, not a closing of it.
+
+DISPOSITION, per A-01's table and A-07's branch, taken literally:
+   → `QQQ-IC-0DTE-Fortress` config-capture hash: **NOT ESTABLISHED**
+   → its pre-registration entry (PR-03) **CANNOT BE SIGNED** at S2 Step 2b on this evidence
+   → **BOT STAYS OFF**
+   → fleet proceeds; **ESCALATE TO ANDY: YES**
+⛔ NOT FIXED. Andy's 2026-08-07 ruling authorized a forward fix on **the seven greenfield bots**,
+   by name. Extending someone's ruling to an eighth bot it did not name is a decision, and
+   decisions stay gated. The pilot was read and left exactly as found.
+⚠️ NOTE FOR WHOEVER RULES IT: the pilot is ALSO the bot carrying `decision-card-2026-08-06.md`
+   slot 4a's "declared CLEAN" verdict. A rollback on it post-dates that verdict.
+
+⚠️ SECONDARY, AND EXPLICITLY *NOT* A DIVERGENCE — recorded so the next session does not re-raise it:
+   the 08-04 baseline lists Activity Alerts as `posopen=true` etc. Live, `a5.bots.bot.alerts`
+   reads `{}` on the pilot — AND on `IC-SPX-FastPT25-S2-130PM`, `QQQ-IC-0DTE-Fortress-NoPT50`
+   and the PR-01 clone. Four for four. The baseline read those from DOM CHECKBOXES, not from the
+   model field; `{}` is the model's normal representation. Same class as the `exitrate` ABSENT
+   question already ruled in A2-EXITRATE-1. NOT a diff.
+
+================================================================================
+## 4. PER-BOT DISPOSITION — the 14 bots in A-07's scope
+--------------------------------------------------------------------------------
+LEGEND  ESTABLISHED     = automation-level baseline existed on disk, diffed, matches
+        NOT ESTABLISHED = baseline existed and a divergence was found
+        ⬜ NOT EVALUABLE = no baseline on disk; the diff is not runnable. NEVER read as a pass.
+
+ 1. IC-SPX-FastPT25-S2  (clone, PR-01)          **ESTABLISHED** — all four automations hashed
+    live this session and reconciled against the recorded baselines; the only two that moved are
+    the two scanners whose Open actions F-C1 was applied to. Full record:
+    `IC-SPX-FastPT25-S2-post-FC1-2026-08-07.txt` in this directory.
+ 2. IC-SPX-FastPT25-S2-ARCHIVED-2026-08-07      **ESTABLISHED** — `Scalp-Scan-Put` re-hashes to
+    91da84fd2b7aafbb906b137f250562f0e9669cff7d62640d2f72ff81ecd946f8, **5027 bytes, version 2**,
+    byte-identical to its Step-0 baseline. Bot-level fields all match. Untouched.
+ 3. QQQ-IC-0DTE-Fortress  (pilot, PR-03)        ⛔ **NOT ESTABLISHED** — FINDING S0b-1 above.
+ 4. IC-SPX-FastPT25-S2-130PM                    ⬜ NOT EVALUABLE — no baseline on disk.
+                                                   First record taken this session (§5).
+ 5. QQQ-IC-0DTE-Fortress-NoPT50                 ⬜ NOT EVALUABLE — no baseline on disk.
+                                                   First record taken this session (§5).
+ 6.–14. the nine leave-in-place bots            ⬜ NOT EVALUABLE — no baseline on disk, AND not
+                                                   opened this session by instruction. Both
+                                                   reasons stand independently; either alone is
+                                                   sufficient. All nine are IDENTICAL on the 18
+                                                   /bots fields (§1) and read AUTOS OFF /
+                                                   EXITS OFF (toggle file). Neither fact is the
+                                                   A-07 diff and neither may be reported as one.
+
+⛔ CONSEQUENCE, STATED PLAINLY: **twelve of the fourteen bots in A-07's scope cannot have their
+   config-capture hash ESTABLISHED by any session, ever, from the current contents of the
+   repository.** A-07 makes an ESTABLISHED hash a precondition for signing at S2 Step 2b. If
+   that is read literally, twelve bots — including all nine leave-in-place bots — cannot be
+   signed and therefore stay OFF. **Whether that is the intended reading is Andy's call, not a
+   session's**, and it should be settled before S2 Step 2b rather than discovered inside it.
+
+================================================================================
+## 5. FIRST BOT-LEVEL RECORD FOR THE TWO UN-STARTED CLONE ORIGINALS
+--------------------------------------------------------------------------------
+Read first-hand this session from `a5.bots.bot` on a fresh page load. Neither bot is one of the
+nine. **These are BASELINES, first ever taken — not verifications.** S1 clones both.
+
+IC-SPX-FastPT25-S2-130PM   BOTfw5TkkCRF3717814485128334371
+    status "off" · disableExits 1 · group "Monitor" · tags (none) · seed 30000
+    posLimit 10 · posLimitDay 10 · scanrate 1 · exitrate ABSENT · tid ABSENT (no template)
+    closedCount 70 · inputs [] · alerts {}
+    automations: Scalp-Scan-Put · Scalp-Scan-Call · Scalp-Mon-S2-StrikeTouch · Scalp-Mon-S2-Cleanup
+
+QQQ-IC-0DTE-Fortress-NoPT50   BOTfw5TkkCRF2617743681996538301
+    status "off" · disableExits 1 · group "Monitor" · tags "experiment" · seed 100000
+    posLimit 2 · posLimitDay 2 · scanrate 1 · exitrate ABSENT · tid ABSENT (no template)
+    closedCount 35 · inputs [] · alerts {}
+    automations: FortNoPT-Scan-Put · FortNoPT-Scan-Call        (2 only — no monitors, no backstop)
+
+⚠️ `-130PM` carries NO TAGS while its sibling original carries "live candidate,focus ic", and
+   both sit in group `Monitor`, not `IC-Focus`. Recorded as observed. Not corrected — group and
+   tag policy is `oa-ops-runbook.md` §3's Group = Pillar reorganisation, which state.md already
+   records as never executed. Not this session's to decide.

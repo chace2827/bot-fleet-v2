@@ -1740,3 +1740,107 @@ Full text: `post-u1-package-2026-08-07.md`, `pre-registration-ledger.md` (PR-16 
 >    is the SAME open item as the missing 13-bot byte diff (Step 4b) — that diff runs against
 >    capture files, so the missing capture blocks it too. **S0b takes the capture FIRST, before
 >    anything else.**
+
+---
+
+> ### ✅ S0b-RESUME CLOSED — 2026-08-07. STEPS 5–8 DONE. **ZERO OA WRITES.** Blocks above LEFT STANDING; read this with them.
+> The first S0b chat froze mid-action after clicking "Save as Template" and filed nothing. This
+> session verified rather than inherited every part of it. Full record: `session-log.md`,
+> "2026-08-07 (S0b-RESUME)". Captures: `data/captures/2026-08-07-s0b/` (3 new files).
+>
+> **⭐ TEMPLATE V1 EXISTS on the PR-01 clone — Step 6a is DONE.** `tid`
+> `Tfw5TkkCRF2317861409017023081`, BOT VERSION 1, `vdate` 2026-08-07T22:15:01.708Z, confirmed from
+> the client model AND the settings-page Template panel. **`showBotMenu` was NOT opened** — it
+> stays Andy's hand. The template's attached NOTE is VERIFIED-EXISTS, note-content NOT VERIFIED.
+> `pr 01` tag and the PR-01 Notes block both confirmed present after a fresh load.
+>
+> **⭐ F-C1 IS APPLIED AND RE-VERIFIED FIRST-HAND ON BOTH SIDES.** The predecessor's call-side
+> verification was announced but never recorded; it is now. Put (`Scalp-Scan-Put`, v4) and call
+> (`Scalp-Scan-Call`, v5) Open actions both read `exits.profits = ""`, `text "None"`, **no
+> `smprofits` key** — read from the stored routine model on separate fresh document loads.
+> **All four of the clone's automations re-hashed: exactly the two scanners moved.**
+> `Scalp-Mon-S2-Cleanup` is byte-unchanged (§2B's hard requirement — S2 depends on it), proven by
+> hash. The **archived original is byte-identical to its Step-0 baseline** (`91da84fd…`, 5027
+> bytes, v2) and still carries `profits 0.25` — F-C1 did not leak onto it. New hashes and the
+> corrected `template NOT SAVED` cell are in `data/bots_config_v2.csv`.
+> ⛔ **LAYER 1 ONLY. Layer 2 is INVERTED and UNRUN** — stays at the top of every brief.
+>
+> ⛔ **NEW FINDING S0b-1 — SUB-STATE (d) FIRED ON AN EIGHTH BOT. ESCALATED, NOT FIXED.**
+> The pilot **`QQQ-IC-0DTE-Fortress`** reads `disableExits: 1` (EXIT OPTIONS **OFF**) against its
+> own 2026-08-04 capture, which records EXIT OPTIONS **ON** verbatim. Same field, same direction
+> as the seven greenfield bots. S0a missed it — its sweep assumed a baseline the pilot's own
+> capture contradicts. **Disposition: config hash NOT ESTABLISHED · PR-03 cannot be signed at S2
+> Step 2b · BOT STAYS OFF · ESCALATE: YES.** Andy's ruling named *the seven greenfield bots*;
+> extending it to an eighth is a decision and stays gated. ⚠️ The pilot also carries
+> `decision-card-2026-08-06.md` slot 4a's "declared CLEAN" verdict, which this post-dates.
+> ⭐ It is a **second independent witness** on the open "does OA's restore reset `disableExits`"
+> question (S0a correction item 2) — untouched since 08-04, outside the GF family. Every bot now
+> reads 1 except the seven S0a flipped. ⚠️ **Consistent with is not established.** Still OPEN.
+>
+> **FLEET-WIDE TOGGLE STATE, all 41 bots** (`toggle-state-all-41-2026-08-07.tsv`, read from each
+> row's toggle-icon `title`): **AUTOMATIONS ON = 0 of 41.** **EXIT OPTIONS ON = 7 of 41, exactly
+> the greenfield arms** — S0a's seven edits **persist** across a session boundary (independent
+> Layer-1 re-verification; Layer 2 still open). ⭐ First full **bot-ID roster** on disk — a
+> baseline for 32 of the 41, not a re-verification.
+>
+> **STEP 4b — RUN TO THE LIMIT OF THE RECORD, AND THE LIMIT IS STRUCTURAL.** A genuine 18-field
+> diff of the pre-lockout (08-06 17:21) vs post-restore (08-07 17:54) `/bots` captures over 33
+> common bots: **30 of 33 IDENTICAL; all three differences explained** (the `IC-SPX-FastPT25-S2`
+> row is a name-key artifact — the renamed original is byte-identical to the old row; `QQQ long
+> call` and `Tasty Condor` moved only mark-to-market fields, being the only two bots with open
+> positions). **Zero unexplained diffs, including all nine leave-in-place bots.**
+> ⛔ **BUT THIS IS NOT A-07's DIFF.** The `/bots` schema carries no automation trees, exits
+> bundles, trigger config, tags, group or bot inputs, and **no AUTOS/EXITS values** (rows emit 18,
+> not 20 — §1.5 CONFIRMED, not falsified). ⛔ **For 12 of the 14 bots in A-07's scope the diff is
+> NOT RUNNABLE: no per-bot capture file exists on disk** for `-130PM`, `-NoPT50` or any of the
+> nine. Structural gap in the repo, not a time constraint. **Clone + archived original
+> ESTABLISHED · pilot NOT ESTABLISHED · the other twelve ⬜ NOT EVALUABLE.**
+> ⛔ **NEEDS ANDY BEFORE S2:** A-07 makes an ESTABLISHED hash a precondition for signing at Step
+> 2b. Read literally, twelve bots — including all nine — can never be signed from the current
+> repo and therefore stay OFF.
+> ⛔ **Scope correction:** 41 = 7 GF + 5 named + 9 leave-in-place + **20 Group-A**. A-07's named
+> scope is **14**, not 13, and the **20 Group-A bots are in no post-restore config check at all.**
+>
+> **⛔ `LEDGER_START` — RULED, AND DELIBERATELY NOT SET.** Andy's ruling stands: the era begins at
+> the **first day a bot's `AUTOMATIONS` actually goes ON**, not at the payment timestamp.
+> AUTOMATIONS is OFF on all 41 — **that date does not yet exist.** The **`2099-01-01` sentinel is
+> CORRECT and STAYS.** Not set, not provisionally set, no date invented.
+> ⛔ **S2 Step 7's session: the day you switch the first bot on IS `LEDGER_START`** — set the
+> constant in `build_ledger.py` then, and not before.
+>
+> **STEP 8 — read and reported, nothing fixed.** `data/brief/` EMPTY ✓ · `ledger_meta.json`
+> `2099-01-01` ✓ · `STATUS.md` EMPTY LEDGER n=0 ✓ · `data/raw/` **NOT empty** — it holds
+> `2026-08-07.csv` (1,386 rows, `openDate` max 2026-07-02), which is the gate-A12 Export Data
+> pull, filed exactly where `oa-ops-runbook.md` §1.7 and `daily.sh` say it belongs. **The pack's
+> "expected EMPTY" is superseded by the capture ritual having run; the box is not unticked.**
+> ⛔ **A7 IS STILL NOT WIRED INTO `daily.sh`** (`grep -c a_series` = 0 across all eight stages) —
+> OPEN Step-4(b) gate, Claude Code's lane.
+> ⛔ **GATE A9 IS BLOCKED ON AN INVOCATION QUESTION, NOT A DEFECT.** `build_ledger.py` line 68
+> reads `LEDGER_START = "UNSET"`; the recorded `2099-01-01` came from the **env var**, not the
+> constant. **A bare `bash scripts/daily.sh` exits non-zero at stage 1 on a designed refusal.**
+> Andy must choose the invocation; not resolved here.
+>
+> **New findings also recorded:** **S0b-2** — the BOT-PAGE Notes editor does **not** decode
+> double-escaped entities, the opposite of the template-Notes trap (§4.0 item 2, **left
+> unchanged** — two editors, two behaviours). Consequence: **the PR-01 Notes are NOT byte-exact to
+> `pre-registration-ledger.md` §4** and Step 6b's byte-exact check cannot pass as written.
+> **S0b-3** — AUTOS/EXITS *are* in the `/bots` DOM on the icons' `title`; the miss is a property
+> of `document.body.innerText`, not of the page. Both stated as observations; the fixes are
+> decisions and stay gated.
+>
+> ⚠️ **Carry to S2 Step 2 / A-10:** the **five open positions exist** — `QQQ long call` POS 4
+> ($13K risk) and `Tasty Condor` POS 1 ($1,082); account RISK $14,118 self-consistent. **List-view
+> read only** — A-10 still requires a first-hand re-read and a per-position Exit Options
+> screenshot before any close.
+> ⚠️ **Roster false alarm, resolved:** a bare `a[href^="/bots/bot/"]` sweep returns 43, not 41 —
+> the two extras are the POS-count links `"4"` and `"1"`. Use `a.title`. Not A-01 branch 3a.
+>
+> ⛔ **ATTESTATION (A-18): NONE of the nine leave-in-place bots was opened, edited or
+> toggle-touched. No bot page was navigated to for any of the nine.** All observations of them are
+> list-view READS. The session prompt's no-touch rule is narrower than A-07's read allowance; the
+> narrower rule was obeyed and the difference declared, not resolved. **Step 2c is unspent.**
+>
+> **Files changed:** `data/bots_config_v2.csv` · `data/captures/2026-08-07-s0b/` (3 new) ·
+> `docs/session-log.md` · `docs/state.md` (this block). All device-hash-verified. No git.
+> **Tracker artifact NOT updated — see the note in the S0a block; unchanged and still open.**
+> **Uncommitted — Andy runs the commit.**
