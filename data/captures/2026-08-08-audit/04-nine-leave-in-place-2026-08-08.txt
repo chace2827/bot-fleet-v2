@@ -1,0 +1,36 @@
+THE NINE LEAVE-IN-PLACE BOTS — ROSTER-VIEW READ ONLY.
+2026-08-08 ~12:23 ET. ⛔ NO BOT PAGE WAS OPENED FOR ANY OF THESE NINE. Step 2c stays UNSPENT.
+
+⛔ ATTESTATION (amendment A-18). None of the nine was opened, edited, toggle-touched, or had any
+   automation, template or settings page loaded. Every value below comes from the /bots list view
+   read in file 01 — the same single batched `i.sticon[title]` sweep, no per-bot navigation.
+   The bots opened this session were, exhaustively: the 7 GF arms, the PR-01/PR-02/PR-04 clones,
+   their three archived originals, and the pilot. Fourteen. No others.
+
+bot                                    bot id                              AUTOS  EXITS  POS  RISK    ALLOC
+DIR-SPX-PutVIX22-SL75                  BOTfw5TkkCRF217824306963282811      OFF    OFF    --   --      $10K
+DIR-SPX-CallVIXdrop                    BOTfw5TkkCRF217824370390678863      OFF    OFF    --   --      $10K
+3DTE $140-$350                         BOTfw5TkkCRF2217765235512870291     OFF    OFF    --   --      $5K
+Nigiri-Paper-v1                        BOTfw5TkkCRF1017766118057607741     OFF    OFF    --   --      $10K
+QQQ long call                          BOTfw5TkkCRF1017766424258604555     OFF    OFF    4    $13K    $30K
+Friday 14 DTE Broken Wing IB (B-70)    BOTfw5TkkCRF1017766446781407596     OFF    OFF    --   --      $10K
+Trendy-Paper-v1                        BOTfw5TkkCRF1017766118431160782     OFF    OFF    --   --      $10K
+60min-ORB-10W-Paper-v1                 BOTfw5TkkCRF3317782759988647731     OFF    OFF    --   --      $10K
+Tasty Condor                           BOTfw5TkkCRF1017766126336204213     OFF    OFF    1    $1,082  $10K
+
+9 of 9 AUTOMATIONS OFF · 9 of 9 EXIT OPTIONS OFF · 9 of 9 bot IDs identical to the 2026-08-07
+baseline (data/captures/2026-08-07-s0b/toggle-state-all-41-2026-08-07.tsv). NO MISMATCH.
+
+⚠️ THE FIVE OPEN POSITIONS — CARRIED FORWARD UNRESOLVED, exactly as 2026-08-07 left them.
+   QQQ long call POS 4 RISK $13K · Tasty Condor POS 1 RISK $1,082 · 4 + 1 = 5, the count S2
+   Step 2 expects. Account header RISK $14,118 = $13K + $1,082, self-consistent, and IDENTICAL to
+   the 2026-08-07 figure. ⛔ THIS IS A LIST-VIEW READ. Amendment A-10 requires S2 to re-read all
+   five FIRST-HAND — quantity, open date, current mark, unrealized P/L — and to open and
+   screenshot EACH POSITION'S OWN Exit Options screen before any close. NONE OF THAT WAS DONE
+   HERE AND NONE OF IT MAY BE INFERRED FROM THIS FILE.
+
+⛔ STILL TRUE, RESTATED SO IT IS NOT MISREAD AS CLOSED: these nine have NEVER had a per-bot
+   capture (A-27(c), as corrected by CA-3 — they are 9 of the 11-bot capture worklist). Their
+   automation trees, posLimits, tags and groups have never been read by anyone. A roster-line
+   toggle read is NOT a config check and does not establish a config-capture hash. Their A-07
+   disposition is unchanged: ⬜ NOT EVALUABLE.

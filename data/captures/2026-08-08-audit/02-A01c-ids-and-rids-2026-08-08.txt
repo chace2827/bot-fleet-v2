@@ -1,0 +1,132 @@
+A-01c MANUAL IDENTIFIER DIFF — bot IDs + automation rids
+READ-ONLY AUDIT SWEEP, 2026-08-08 ~12:25-13:05 ET. ZERO OA writes.
+
+WHY THIS EXISTS: the A-series is name-keyed and RELATIONAL by construction. A restore that
+re-creates every object under the same names yields a fully green A-series over dead identifiers
+(pack A-26 note; A-01 branch 3c). This file is the check the script cannot do.
+
+METHOD, first-hand:
+  bot id      : /bots row a.title[href^="/bots/bot/"] href (file 01), cross-read per bot page.
+  automation  : bot SETTINGS page -> a[data-click="editAuto"] row, full pointer-sequence dispatch
+    rid         (pointerover/enter, pointerdown, mousedown, pointerup, mouseup, click) -> read
+                `a5.bots.acedit.routine.id` from the hydrated model. Element-ref clicks no-op on
+                this app; the sequence is the documented method (oa-driving skill).
+  HARD RELOAD BETWEEN EVERY AUTOMATION (skill TRAP 6 - stale editor DOM). One automation per page
+  life, always. No DOM card was read or acted on; the model is the truth.
+  ⛔ rids are NOT present anywhere on the /bots page or the bot settings page DOM/HTML (searched:
+     all attributes, dataset, documentElement.innerHTML -> 0 matches). The row's `data-id` is the
+     bot's ATTACHMENT id, NOT the routine id. Opening the editor is the only read path found.
+
+⚠️ SESSION NOTE, RECORDED RATHER THAN OMITTED. First attempt at the editor used
+   `a5.bots.editAuto(element)` directly. That call path sets `e.rid ||= __` and hydrated an EMPTY
+   "New Automation" draft (name "New Automation", sharing 0, 0 inputs) into `acedit`. NOTHING WAS
+   SAVED - no save was dispatched, no automation-level Save (`a.saveclose`) touched, and the page
+   was hard-reloaded immediately, discarding the client-side draft. The bot's automation list was
+   re-read afterwards and still shows exactly its three originals. Method switched to the
+   documented pointer-sequence click for every subsequent read.
+
+════════ PART 1 — SHARED AUTOMATIONS (recorded baseline in data/bots_config_v2.csv) ════════
+object                          RECORDED rid                      LIVE rid           ver  sharing  verdict
+GF-ScannerA-PutSpread           RTfw5TkkCRF178605283747821        identical           9    1       MATCH
+GF-ScannerB-CallSpread          RTfw5TkkCRF178606271659881        identical           2    1       MATCH
+GF-Backstop-1552-FlatClose      RTfw5TkkCRF178606373201751        identical           1    1       MATCH
+  sharing = 1 on all THREE (they are Library-shared). Every clone-owned automation read this
+  session returned sharing = 0. That contrast is itself the not-in-Library fact PR04-R2 relied on.
+  Automation inputs: IN178605447966781 = GF_EXITS_PUT (ScannerA)  MATCH
+                     IN178606782436781 = GF_EXITS_CALL (ScannerB) MATCH
+                     Backstop takes no inputs                     MATCH
+  ScannerA version 9 == the A7-DRIFT-1 baseline ADOPTED by Andy 2026-08-07. No new drift.
+  ⛔ EACH OF THE THREE WAS OPENED SEPARATELY FROM ALL SEVEN ARMS (21 reads), so this is not one
+     object read seven times - it proves each arm is attached to THE SAME object, not to a
+     same-named re-creation.
+
+════════ PART 2 — THE SEVEN GREENFIELD ARMS ════════
+(⚠️ the sweep prompt says "the 8 greenfield bots"; data/bots_config_v2.csv carries SEVEN GF bot
+ rows and /bots carries seven GF- names. Read as 7 of 7. Recorded as a prompt/record wording
+ mismatch, not a fleet finding.)
+bot                  bot id MATCH  status  disableExits  seed   posLimit/day  exitrate  tid  attached
+GF-QQQ-IC-Ride       MATCH         off     0             2500   2/2           1         yes  3/3 MATCH
+GF-QQQ-IC-PT50       MATCH         off     0             2500   2/2           1         yes  3/3 MATCH
+GF-QQQ-IC-Trail      MATCH         off     0             2500   2/2           1         yes  3/3 MATCH
+GF-QQQ-IC-Touch0     MATCH         off     0             2500   2/2           1         yes  3/3 MATCH
+GF-QQQ-IC-SL100      MATCH         off     0             2500   2/2           1         yes  3/3 MATCH
+GF-QQQ-IC-SL200      MATCH         off     0             2500   2/2           1         yes  3/3 MATCH
+GF-QQQ-IC-Canary     MATCH         off     0             2500   2/2           1         yes  3/3 MATCH
+  tags read: experiment,gfam,arm <x>,pr 14..20 (Ride 14 / PT50 15 / Trail 16 / Touch0 17 /
+  SL100 18 / SL200 19 / Canary 20). group = IC on all seven. sim = true (Paper) on all seven.
+  `exitrate` STORED = 1 on all seven: the A2-EXITRATE-1 fix PERSISTS (Ride included).
+
+════════ PART 3 — THE FOUR CLONE LINEAGES ════════
+--- PR-01 --- IC-SPX-FastPT25-S2 (clone, holds production name)
+  bot id BOTfw5TkkCRF4417860821948715488  MATCH (bots_config_v2.csv)
+  seed 50000 - capital 50000 - posLimit 10/10 - status off - disableExits 1 - group IC-Focus
+  tags "live candidate,focus ic,pr 01" - tid PRESENT (Template V1 exists) - sim true
+  Scalp-Scan-Put            RTfw5TkkCRF4417860821948941343  v4  sharing 0  MATCH
+  Scalp-Scan-Call           RTfw5TkkCRF4417860821948941031  v5  sharing 0  MATCH
+  Scalp-Mon-S2-StrikeTouch  RTfw5TkkCRF4417860821948941404  v4  sharing 0  MATCH
+  Scalp-Mon-S2-Cleanup      RTfw5TkkCRF4417860821948941435  v2  sharing 0  MATCH
+  All four versions equal the versions recorded alongside the post-F-C1 / post-S0b hashes.
+--- PR-01 ORIGINAL --- IC-SPX-FastPT25-S2-ARCHIVED-2026-08-07
+  bot id BOTfw5TkkCRF1217757048550308561  MATCH (rename_map.csv row 2: renamed, NOT re-created)
+  seed 50000 - capital 38845 - posLimit 10/10 - status off - disableExits 1 - group IC-Focus
+  tags "live candidate,focus ic" - tid ABSENT
+  Scalp-Scan-Put            RTfw5TkkCRF177570499048700000051  v2  FIRST BASELINE
+  Scalp-Scan-Call           RTfw5TkkCRF1217757057095244611    v3  FIRST BASELINE
+  Scalp-Mon-S2-StrikeTouch  RTfw5TkkCRF17757059677665 2       v4  FIRST BASELINE
+  Scalp-Mon-S2-Cleanup      RTfw5TkkCRF177570685755260000023  v1  FIRST BASELINE
+  ⭐ ALL FOUR rids DIFFER from the clone's - independently re-confirms the §2B clone-ownership
+     property. Cleanup v1 (the clone's is v2) is the expected signature of 5b applied to the
+     clone only: the original never got the pricing edit.
+--- PR-02 --- IC-SPX-FastPT25-S2-130PM (clone, holds production name)
+  bot id BOTfw5TkkCRF3017861977616287731  MATCH
+  seed 50000 - posLimit 10/10 - status off - disableExits 1 - group IC-Focus
+  tags "live candidate,focus ic,pr 02" - tid ABSENT (Template V1 GATED, Andy's hand) - sim true
+  Scalp-Scan-Put            RTfw5TkkCRF3017861977616606732  v6  sharing 0  MATCH
+  Scalp-Scan-Call           RTfw5TkkCRF3017861977616606341  v7  sharing 0  MATCH
+  Scalp-Mon-S2-StrikeTouch  RTfw5TkkCRF3017861977616606813  v4  sharing 0  MATCH
+  Scalp-Mon-S2-Cleanup      RTfw5TkkCRF3017861977616606854  v2  sharing 0  MATCH
+  Versions 6/7/4/2 == the versions recorded with the PR-02 hashes. Allocation $50,000 = PR02-R1
+  AS RULED (rename_map.csv row 3).
+--- PR-02 ORIGINAL --- IC-SPX-FastPT25-S2-130PM-ARCHIVED-2026-08-08
+  bot id BOTfw5TkkCRF3717814485128334371  MATCH (renamed, same id, NOT re-created)
+  seed 30000 - capital 30105 - posLimit 10/10 - status off - disableExits 1 - group Monitor
+  tags key ABSENT - tid ABSENT
+  Scalp-Scan-Put            RTfw5TkkCRF3717814485128620923  v4  FIRST BASELINE
+  Scalp-Scan-Call           RTfw5TkkCRF3717814485128620331  v5  FIRST BASELINE
+  Scalp-Mon-S2-StrikeTouch  RTfw5TkkCRF3717814485128620994  v4  FIRST BASELINE
+  Scalp-Mon-S2-Cleanup      RTfw5TkkCRF3717814485128621045  v1  FIRST BASELINE
+  ⭐ All four DIFFER from the PR-02 clone's. Cleanup v1 again (5b not applied to the original).
+--- PR-04 --- QQQ-IC-0DTE-Fortress-NoPT50 (clone, holds production name)
+  bot id BOTfw5TkkCRF3017862038322323202  MATCH
+  seed 100000 - posLimit 2/2 - status off - disableExits 1 - group Monitor
+  tags "experiment,pr 04" - tid ABSENT (Template V1 GATED) - sim true
+  FortNoPT-Scan-Put                 RTfw5TkkCRF3017862038322605095  v9  sharing 0  MATCH
+  FortNoPT-Scan-Call                RTfw5TkkCRF3017862038322605296  v9  sharing 0  MATCH
+  FortNoPT-Backstop-1552-FlatClose  RTfw5TkkCRF178620440961331      v1  sharing 0  MATCH
+--- PR-04 ORIGINAL --- QQQ-IC-0DTE-Fortress-NoPT50-ARCHIVED-2026-08-08
+  bot id BOTfw5TkkCRF2617743681996538301  MATCH (renamed, same id, NOT re-created)
+  seed 100000 - capital 97951 - posLimit 2/2 - status off - disableExits 1 - group Monitor
+  tags "experiment" - tid ABSENT
+  FortNoPT-Scan-Put   RTfw5TkkCRF2617743681996756891  v9  FIRST BASELINE
+  FortNoPT-Scan-Call  RTfw5TkkCRF2617743681996757322  v9  FIRST BASELINE
+  ⭐ EXACTLY TWO AUTOMATIONS - the 15:52 backstop did NOT leak onto the original. Re-verified
+     first-hand today, independent of the PR-04 build session's own attestation.
+--- PR-03 / PILOT --- QQQ-IC-0DTE-Fortress
+  bot id BOTfw5TkkCRF2717857919585029021  MATCH (toggle-state-all-41 baseline)
+  seed 100000 - posLimit 2/2 - status off - disableExits 1 - NO Bot Group key - tags "experiment"
+  tid PRESENT - sim true
+  Fortress-ScannerA-PutSpread       RTfw5TkkCRF2717857919585272551      v11  FIRST BASELINE
+  Fortress-ScannerB-CallSpread      RTfw5TkkCRF2717857919585272882      v8   FIRST BASELINE
+  Fortress-Backstop-1552-FlatClose  RTfw5TkkCRF17857953294060999999 91  v1   FIRST BASELINE
+  Exactly THREE automations (index 3 returned "ONLY 3").
+
+════════ VERDICT ════════
+BOT IDs        43 of 43 match their recorded values (file 01 diff): 41 preserved from the
+               2026-08-07 baseline, 2 new clones matching bots_config_v2.csv, 2 renames carrying
+               the SAME id. ZERO re-creations. A-01 branch 3c: NOT PRESENT.
+RECORDED rids  21 of 21 (3 shared x 7 arms) + 4 (PR-01) + 4 (PR-02) + 3 (PR-04) = 32 of 32 MATCH.
+FIRST BASELINE 13 rids with no prior recorded value (pilot 3, PR-01 orig 4, PR-02 orig 4,
+               PR-04 orig 2). These CANNOT retroactively prove anything about the past - they
+               make future drift detectable and nothing more. Say so; do not read a future match
+               against this file as evidence about 2026-08-07.
+MISMATCHES     NONE.

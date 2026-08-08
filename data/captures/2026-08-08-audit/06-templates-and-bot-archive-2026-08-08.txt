@@ -1,0 +1,51 @@
+BOT TEMPLATES + BOT ARCHIVE — COUNTS vs THE RECORD.  2026-08-08 READ-ONLY SWEEP.
+
+════════ BOT TEMPLATES  —  /bots/templates  ("My Templates") ════════
+LIVE, 10 templates, in page order:
+   1 GF-QQQ-IC-Canary          6 GF-QQQ-IC-Touch0
+   2 GF-QQQ-IC-PT50            7 GF-QQQ-IC-Trail
+   3 GF-QQQ-IC-Ride            8 IC-SPX-FastPT25-S2
+   4 GF-QQQ-IC-SL100           9 QQQ-IC-0DTE-Fortress
+   5 GF-QQQ-IC-SL200          10 TEST QQQ-IC-0DTE-HedgeA-S1
+
+RECORDED: docs/state.md line 1720, verbatim — "all 9 Bot Templates (the 7 `GF-QQQ-IC-*` +
+`QQQ-IC-0DTE-Fortress` + `TEST HedgeA-S1`)", dated 2026-08-07 ~12:06-12:30 ET (the roster-loss
+incident block).
+
+LIVE 10 vs RECORDED 9. **DELTA = +1, AND IT IS FULLY ACCOUNTED FOR — NOT A FINDING.**
+   The extra template is `IC-SPX-FastPT25-S2`. data/bots_config_v2.csv's S0b-RESUME banner
+   records it first-hand: tid `Tfw5TkkCRF2317861409017023081`, BOT VERSION 1,
+   vdate **2026-08-07T22:15:01.708Z** — i.e. created ~10 hours AFTER the 9-count read, later the
+   same day. Arithmetic: 9 + 1 = 10. Both numbers are correct for their own timestamps.
+   ⛔ state.md's "9" is therefore STALE, not wrong-at-writing. It is a dated observation inside a
+      dated incident block, and this file does not edit it. GATED to Andy as a possible carry-line.
+   ⚠️ Note what this does NOT say: PR-02 and PR-04 still have NO template (`tid` ABSENT on both,
+      file 02). Template V1 for them is `showBotMenu` = Andy's hand and remains OPEN.
+
+════════ BOT ARCHIVE  —  /settings/archive ════════
+LIVE: exactly ONE archived bot.
+   QQQ-IC-0DTE-Fortress-ARCHIVED-2026-08-03   (row carries a "Restore" control; NOT touched)
+RECORDED: pack §0.0 A-01 evidence block and docs/state.md line 1721 — "the Bot Archive (exactly
+the 1 expected bot, `Fortress-ARCHIVED-2026-08-03`)".
+VERDICT: MATCH, 1 of 1. And it is correctly ABSENT from /bots (file 01 has no such row) — the
+name-collision sub-state A-01 3f is NOT present.
+
+⛔ THE THREE QUEUED ARCHIVES HAVE NOT HAPPENED, AS EXPECTED. `IC-SPX-FastPT25-S2-ARCHIVED-2026-08-07`,
+`IC-SPX-FastPT25-S2-130PM-ARCHIVED-2026-08-08` and `QQQ-IC-0DTE-Fortress-NoPT50-ARCHIVED-2026-08-08`
+are RENAMED but still on /bots, still counting against the 43. That is the KNOWN state
+(rename_map.csv: "RENAMED not yet OA-archived (archive queued for Andy's hand)"; `archiveBot` is
+3-for-3 failed from this side, gate A5). Three -ARCHIVED- names on /bots, one bot in the Archive.
+
+⚠️ PATH FINDING, RECORDED BECAUSE IT COST THIS SESSION THREE ATTEMPTS. The Bot Archive is at
+   **/settings/archive** (Settings -> "Bot Archive"), NOT under /bots. `/bots/archive` 404s; the
+   /bots page carries no archive link or filter; the string "archived" does not occur in the
+   /apps/bots.*.js bundle. No project document names the path. Recorded here so the next session
+   does not re-run the ladder. ⛔ Not a doc edit — GATED for Andy alongside the PR04-R2 Library
+   path (file 03).
+
+════════ SLOT ARITHMETIC ════════
+/bots footer, verbatim: "43 active bots - 7 left in your plan". 43 + 7 = 50 = the Pro cap.
+The one archived bot does NOT appear in the 43 and does NOT consume a slot — consistent with
+C12 as settled (state.md: "archived bots do not consume slots"), now observed a second time.
+⚠️ Still the SAME weak observation C12's reopen clause warns about: n=1 archived bot against a
+   sweep that will archive ~23. C12's pre-declared reopen condition is UNCHANGED by this reading.

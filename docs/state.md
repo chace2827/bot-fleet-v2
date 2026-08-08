@@ -1717,7 +1717,7 @@ Full text: `post-u1-package-2026-08-07.md`, `pre-registration-ledger.md` (PR-16 
 > `/bots` with ALL filters cleared reads **"0 active bots • 50 left in your plan"** — was **41
 > active** per `day0-session-pack-2026-08-07.md` §1.1's expected-roster arithmetic (35 − 2 + 7 + 1
 > = 41, 9 left of the Pro 50). **SURVIVED:** the Automation Library (all 4 objects, each reading
-> "Unused"), all 9 Bot Templates (the 7 `GF-QQQ-IC-*` + `QQQ-IC-0DTE-Fortress` + `TEST HedgeA-S1`),
+> "Unused"), all 9 Bot Templates (the 7 `GF-QQQ-IC-*` + `QQQ-IC-0DTE-Fortress` + `TEST HedgeA-S1`), **[CORRECTED 2026-08-08, sweep FS-2: TEN live — the +1 is the IC-SPX-FastPT25-S2 Template V1 deliberately created 2026-08-07 (tid Tfw5TkkCRF2317861409017023081, vdate 22:15:01Z), after this count was written. Accounted for, applied at the orchestrator close-out.]**
 > and the Bot Archive (exactly the 1 expected bot, `Fortress-ARCHIVED-2026-08-03`). **LOST:** every
 > active bot — the entire built-and-leave-in-place roster is gone from `/bots`.
 > Support told Andy in writing, the day before, "all of your account data is still intact." Andy
@@ -2337,3 +2337,86 @@ Full text: `post-u1-package-2026-08-07.md`, `pre-registration-ledger.md` (PR-16 
 > toggle screenshots) · `data/archive/rename_map.csv` · `data/bots_config_v2.csv` ·
 > `docs/session-log.md` · `docs/state.md` (this block). All device-hash-verified. No git.
 > **Uncommitted — Andy runs the commit.** **All four §2B clones now exist.**
+
+---
+
+## ⭐ READ-ONLY FLEET AUDIT SWEEP — 2026-08-08 (post-PR-04). **43·7 CONFIRMED. ZERO OA WRITES. FIVE ITEMS GATED, NONE APPLIED.**
+
+> **The fleet, as it actually is, read fresh today and diffed against the record.** Nothing was
+> fixed, toggled, renamed, saved or archived. Disk writes: `data/captures/2026-08-08-audit/`
+> (7 files) + the session-log entry + this block. No git.
+>
+> **ROSTER — `/bots` footer verbatim: "43 active bots · 7 left in your plan".** = the 2026-08-07
+> restore's 41 + the PR-02 clone + the PR-04 clone. Gate A0 **BRANCH 1**. No duplicate production
+> names. Three `-ARCHIVED-` names on `/bots` is the KNOWN state (archives queued for Andy, gate A5).
+>
+> **⭐ A-01c IS CLEAN — the relational asserts cannot see this, so it was done by hand.**
+> **43/43 bot IDs match** (41 preserved · 0 lost · 2 new clones matching `bots_config_v2.csv` ·
+> the 2 renames carry the **SAME id**, renamed not re-created). **32/32 recorded automation rids
+> match**, the three shared objects read **separately from all seven arms** so attachment is
+> proven per-arm, not assumed. 13 further rids recorded as **FIRST BASELINES** (pilot 3, and the
+> three archived originals) — they prove nothing about the past and are labelled so.
+> **A-01 branch 3c: NOT PRESENT.**
+>
+> **⭐ TOGGLE STATE, one batched `i.sticon[title]` read of all 43 rows:**
+> **AUTOMATIONS ON = 0 of 43. EXIT OPTIONS ON = 7 of 43 — exactly the seven greenfield arms.**
+> **Zero drift** against 2026-08-07 on every surviving bot. S0a's seven `disableExits` flips now
+> persist across a THIRD session boundary. ⛔ **A-27(a)'s carry-forward is NOT retired by this:**
+> toggle state is re-read first-hand immediately before Step 7, on every bot, never inherited —
+> including from this sweep.
+>
+> **⭐ THE AUTOMATION LIBRARY IS AT `/bots/automations`** (not `/automations` — PR04-R2's 404
+> was a wrong path, not a broken page; its `sharing = 0` reasoning stands). Enumerated: **1 folder,
+> 4 objects, bot-counts 7/7/7/2 as expected**, attached-bot lists read via `showBots`.
+> **A7 RUN LIVE AGAINST OA** (formula validated first against ScannerB's recorded baseline, per
+> A-15): all **3 of 3** recorded hashes byte-identical — ScannerA `3308ce8b…` v9 (the ADOPTED
+> A7-DRIFT-1 baseline, no new drift), ScannerB `bb4ba866…` v2, Backstop `116069bd…` v1. A second
+> independent evidence path agreeing with the script's capture-file A7.
+> **A-13:** `Defang-Mon-S2-StrikeTouch` = rid `RTfw5TkkCRF3317787955826108344`, v5, sha256
+> `291e05ad09c2f6f801a7dcab0a121d503525fb6c015e27763cca3effa20155b6`. ⛔ **FIRST baseline, not a
+> re-verification. A7 remains 3/4 VERIFIED + 1 FIRST BASELINE — never 4/4.** The
+> `bots_config_v2.csv` row was **NOT written**; it is GATED and drafted for Andy.
+>
+> **A-SERIES via `scripts/a_series.py` (A-26), script unedited.** `--validate` reproduced the
+> reference EXACTLY. **A1 21/21 · A2 7/7 · A3 7/7 · A4 MOOT · A4b NOT-RUNNABLE · A5 NOT-RUN ·
+> A6 NOT-RUNNABLE · A7 3/3 · A8 7/7 · A9 7/7 · §8.2 6/6+2/2+13/13 · FAMILY GREEN.**
+> ⛔ **A4b did NOT fire and that is NOT a pass** — today's O4 fix made it fire against the
+> SELF-TEST fixture; against the real repo `LEDGER_START = 2099-01-01` leaves zero rows, so it is
+> NOT-RUNNABLE. It becomes a live detector on the first post-cutover trading day, not before.
+>
+> **COUNTS.** Bot Archive **1 of 1** (`QQQ-IC-0DTE-Fortress-ARCHIVED-2026-08-03`) at
+> **`/settings/archive`** — a path no project document names (`/bots/archive` 404s). Templates
+> **10** live vs **9** recorded above; the +1 is `IC-SPX-FastPT25-S2` (tid
+> `Tfw5TkkCRF2317861409017023081`, vdate 2026-08-07T22:15Z — created after that count was taken,
+> same day). PR-02 and PR-04 still have **NO** template (`tid` ABSENT).
+> Account settings: **`itmpaper` = `itmlive` = `market`** — S0a's write persists, no `auto`
+> rollback (A-01 sub-state 3d watch item, clear).
+>
+> **SPOT-VERIFIES.** PR-02 clone **seed 50000 / $50K** = PR02-R1 as ruled (original still $30K).
+> Both new clones **AUTOMATIONS OFF + EXIT OPTIONS OFF** on two independent surfaces each.
+> **Pilot `QQQ-IC-0DTE-Fortress` `disableExits` = 1 → EXIT OPTIONS OFF**, against its own
+> 2026-08-04 capture's `ON` — **S0b-1, now a THIRD dated first-hand observation. RULED DO NOT FIX
+> (A-27(a)). Read, recorded, NOT fixed.** PR-03 stays UNSIGNABLE, as expected.
+>
+> **⛔ FIVE ITEMS GATED — NONE APPLIED. Full text: `session-log.md`, this date.**
+> **FS-1** (LOW) `scripts/a_series.py:507` prints `itmlive=auto`; live and this page say `market`.
+> Changes no verdict (A5 is NOT-RUN) but prints into every close-out. Claude Code's lane.
+> **FS-2** (INFO) this page's "all 9 Bot Templates" is stale at 10 — accounted for, not corrected.
+> **FS-3** (INFO) the Library path, a doc-correction candidate against PR04-R2 and the pack.
+> **FS-4** (LOW) `exitrate` ABSENT from `a5.bots.bot` on **all seven** non-greenfield bots opened,
+> while all seven GF arms carry a stored `1` — the same not-stored condition A2-EXITRATE-1 found.
+> No CSV column holds it; adding one is a **schema decision**, same disposition as before.
+> **FS-5** (INFO) the sweep prompt said "8 greenfield bots"; the record carries **seven**.
+> Plus a documentation gap, not a mismatch: **no project document names `/settings/archive`**.
+>
+> **⛔ ATTESTATION (A-18): NONE of the nine leave-in-place bots was opened, edited or
+> toggle-touched.** Exactly fourteen bot pages were opened — the 7 GF arms, the three clones,
+> their three archived originals, and the pilot. **STEP 2c REMAINS UNSPENT.**
+> **⛔ Unchanged by this sweep:** the nine still have no per-bot capture (9 of CA-3's 11-bot
+> worklist), A-07 disposition ⬜ NOT EVALUABLE; and the five open positions (QQQ long call 4,
+> Tasty Condor 1, account RISK **$14,118** — identical to 08-07) were read from the LIST VIEW
+> only, so A-10's first-hand re-read is untouched.
+>
+> **Files changed:** `data/captures/2026-08-08-audit/` (7 new) · `docs/session-log.md` ·
+> `docs/state.md` (this block). Device-hash-verified (§9.1a). No OA write. No git.
+> **Uncommitted — Andy runs the commit.**

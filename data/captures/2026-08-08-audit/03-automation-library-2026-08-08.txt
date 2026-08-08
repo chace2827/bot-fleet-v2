@@ -1,0 +1,67 @@
+AUTOMATION LIBRARY — FULL ENUMERATION.  A-13 CLOSED (as a first baseline).  PR04-R2 RESOLVED.
+READ-ONLY AUDIT SWEEP, 2026-08-08 ~12:44-12:55 ET. ZERO OA writes. Nothing removed, nothing edited.
+
+⭐ PR04-R2 — THE KNOWN ISSUE IS RESOLVED, AND THE CAUSE IS A WRONG PATH, NOT A BROKEN PAGE.
+   The Library is at  /bots/automations  — NOT  /automations  (which is why the prior session's
+   attempt 404'd and was correctly recorded ⬜ NOT EVALUABLE rather than guessed at).
+   Evidence, first-hand: the /bots top bar carries an <a class="btn gray menu"> labelled "Library"
+   with NO href; its `data-ui` attribute holds the menu definition, verbatim:
+     [{"icon":"fa-tpl","text":"Templates","href":"/bots/templates"},
+      {"text":"Automations","href":"/bots/automations","icon":{...}}]
+   Both paths load. Page title: "Automation Library - Option Alpha". Header text, verbatim:
+   "These automations are shared by your bots. Modifications affect all bots using them."
+   ⛔ NOT a doc edit — recorded here and GATED for Andy (see the close-out; PR04-R2's own
+      "sharing = 0 is the not-in-Library fact" reasoning was sound and is UNAFFECTED).
+
+════════ THE LIBRARY, AS FOUND ════════
+Folders: ONE — "My Automations". Objects: FOUR. No other folder, no hidden object.
+Every object exposes showAuto / showBots / removeAuto. ⛔ removeAuto was NEVER dispatched.
+
+object                        rid                                 ver  sharing  bots  attached-to
+Defang-Mon-S2-StrikeTouch     RTfw5TkkCRF3317787955826108344       5    1        2     IC-SPX-Fortress-Defang,
+                                                                                        IC-SPX-Fortress-Unstopped
+GF-Backstop-1552-FlatClose    RTfw5TkkCRF178606373201751           1    1        7     the seven GF arms
+GF-ScannerA-PutSpread         RTfw5TkkCRF178605283747821           9    1        7     the seven GF arms
+GF-ScannerB-CallSpread        RTfw5TkkCRF178606271659881           2    1        7     the seven GF arms
+
+Attached-bot lists read first-hand via each row's `showBots` (not inferred from the count chip).
+All three GF objects returned the SAME seven names: PT50, Touch0, Canary, SL200, Ride, Trail,
+SL100. Expected 7/7/7/2 (pack S0 Step 3) — OBSERVED 7/7/7/2. MATCH.
+
+════════ A7 — RUN LIVE, AGAINST THE HYDRATED MODEL, NOT AGAINST A CAPTURE FILE ════════
+Formula (documented in data/bots_config_v2.csv's own header and in the oa-driving skill; NOT
+invented here):   sha256( JSON.stringify( {name, inputs, root} ) )  over `a5.bots.acedit.routine`,
+read after a HARD RELOAD, one automation per page life.
+
+⭐ METHOD VALIDATED BEFORE USE (A-15: never invent a hash input, never compare a baseline to
+   itself). Run first against GF-ScannerB-CallSpread, whose recorded baseline this session did NOT
+   set: it reproduced  bb4ba866a13e7ecd682f7bda9a19011003e9e3ef73fffd0fb64a80a4cd0eb32e  EXACTLY.
+   Only then was it applied to the object with no baseline.
+
+object                      payload B  live sha256                                                        vs RECORDED
+GF-ScannerA-PutSpread       5482       3308ce8b476d2bd090d9519b445748fc4c0d0fdbe71861c83a249729b1a5a30a   IDENTICAL
+GF-ScannerB-CallSpread      5151       bb4ba866a13e7ecd682f7bda9a19011003e9e3ef73fffd0fb64a80a4cd0eb32e   IDENTICAL
+GF-Backstop-1552-FlatClose  1441       116069bddf8b8c9e58bd8f28313c2ad95726fa3f7205df4dfde82de7a3e2e5b5   IDENTICAL
+Defang-Mon-S2-StrikeTouch   4529       291e05ad09c2f6f801a7dcab0a121d503525fb6c015e27763cca3effa20155b6   ⬜ NO BASELINE
+
+A7 LIVE = 3 of 3 recorded objects UNCHANGED, byte-for-byte, read from OA itself rather than from
+data/captures/. ScannerA is at the version-9 baseline Andy ADOPTED under the A7-DRIFT-1 ruling
+(2026-08-07) — no new drift on top of it.
+
+⛔ A-13, PLAINLY STATED. `Defang-Mon-S2-StrikeTouch` now HAS a payload hash and a rid, read
+   first-hand. THIS IS A **FIRST** BASELINE, NOT A RE-VERIFICATION. It establishes nothing about
+   the object's past — it cannot distinguish a faithfully restored object from an altered one. It
+   makes future drift detectable, and that is all it buys. A7 therefore still reports **3/4
+   VERIFIED + 1 FIRST BASELINE**, never 4/4 verified.
+⛔ THE bots_config_v2.csv ROW FOR IT WAS **NOT** WRITTEN. A-13 permits recording it as a
+   read-and-record, but this session's mandate is READ-ONLY with disk writes limited to captures
+   and the close-out, and adding a fourth shared_automation row also changes what an operational
+   assert compares against — the same ambiguity that got A7-DRIFT-1 gated. GATED TO ANDY. The row
+   is drafted verbatim in the close-out so it is one paste, not a re-derivation.
+⛔ scripts/a_series.py's SHARED_AUTOMATIONS list still carries THREE objects. A green `A7 3/3`
+   from the tool remains 3 of 4. Unchanged by this file; scripts/ is Claude Code's lane.
+
+════════ WHAT THIS PAGE DOES **NOT** SAY ════════
+The Library lists ONLY shared objects. The clone-owned automations (Scalp-*, FortNoPT-*,
+Fortress-*) are correctly ABSENT — every one of them read `sharing = 0` in file 02, and sharing is
+opt-in via this page. Their absence here is the expected state, not a missing attachment.

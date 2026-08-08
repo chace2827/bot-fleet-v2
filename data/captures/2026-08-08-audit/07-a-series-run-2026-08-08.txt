@@ -1,0 +1,146 @@
+A-SERIES RUN — 2026-08-08 READ-ONLY AUDIT SWEEP. Run via scripts/a_series.py per A-26.
+Never hand-derived. Script NOT edited. Output below is verbatim stdout.
+
+════════ $ python3 scripts/a_series.py --validate ════════
+A-SERIES --validate  (reproduce data/captures/…/ASSERTS-A1-A9-and-capture-diff.txt)
+
+  PASS  A1   got (21, 21)  want (21, 21)
+  PASS  A2   got (7, 7)  want (7, 7)
+  PASS  A3   got (7, 7)  want (7, 7)
+  PASS  A7   got (3, 3)  want (3, 3)
+  PASS  A8   got (7, 7)  want (7, 7)
+  PASS  A9   got (7, 7)  want (7, 7)
+  PASS  A4   got MOOT  want MOOT
+  PASS  A4b  got NOT-RUNNABLE  want NOT-RUNNABLE
+  PASS  A5   got NOT-RUN  want NOT-RUN
+  PASS  A6   got NOT-RUNNABLE  want NOT-RUNNABLE
+  PASS  spot: exitrate==1 on all seven
+  PASS  spot: Backstop ntime==1552 on all seven
+  PASS  spot: §9 fenced-block UTF-16 lengths == recorded notes lengths
+
+  ✅ REPRODUCED THE REFERENCE EXACTLY
+
+════════ $ python3 scripts/a_series.py ════════
+A-SERIES DRIFT DETECTOR v0.1.0-DRAFT  ⛔ STANDALONE / NOT WIRED into daily.sh
+  captures: 7/7 bots, 3/3 shared automations
+
+  ✅ A1   PASS         21/21   pairwise mechanic distinctness (amended)
+    ✓ GF-QQQ-IC-Ride / GF-QQQ-IC-PT50         arm-vs-control  diff=['profits'] expect 1
+    ✓ GF-QQQ-IC-Ride / GF-QQQ-IC-Trail        arm-vs-control  diff=['tstop'] expect 1
+    ✓ GF-QQQ-IC-Ride / GF-QQQ-IC-Touch0       arm-vs-control  diff=['touch'] expect 1
+    ✓ GF-QQQ-IC-Ride / GF-QQQ-IC-SL100        arm-vs-control  diff=['stoploss'] expect 1
+    ✓ GF-QQQ-IC-Ride / GF-QQQ-IC-SL200        arm-vs-control  diff=['stoploss'] expect 1
+    ✓ GF-QQQ-IC-Ride / GF-QQQ-IC-Canary       arm-vs-control  diff=['profits'] expect 1
+    ✓ GF-QQQ-IC-PT50 / GF-QQQ-IC-Trail        arm-vs-arm      diff=['profits', 'tstop'] expect 2
+    ✓ GF-QQQ-IC-PT50 / GF-QQQ-IC-Touch0       arm-vs-arm      diff=['profits', 'touch'] expect 2
+    ✓ GF-QQQ-IC-PT50 / GF-QQQ-IC-SL100        arm-vs-arm      diff=['profits', 'stoploss'] expect 2
+    ✓ GF-QQQ-IC-PT50 / GF-QQQ-IC-SL200        arm-vs-arm      diff=['profits', 'stoploss'] expect 2
+    ✓ GF-QQQ-IC-PT50 / GF-QQQ-IC-Canary       shared-field    diff=['profits'] expect 1
+    ✓ GF-QQQ-IC-Trail / GF-QQQ-IC-Touch0       arm-vs-arm      diff=['touch', 'tstop'] expect 2
+    ✓ GF-QQQ-IC-Trail / GF-QQQ-IC-SL100        arm-vs-arm      diff=['stoploss', 'tstop'] expect 2
+    ✓ GF-QQQ-IC-Trail / GF-QQQ-IC-SL200        arm-vs-arm      diff=['stoploss', 'tstop'] expect 2
+    ✓ GF-QQQ-IC-Trail / GF-QQQ-IC-Canary       arm-vs-arm      diff=['profits', 'tstop'] expect 2
+    ✓ GF-QQQ-IC-Touch0 / GF-QQQ-IC-SL100        arm-vs-arm      diff=['stoploss', 'touch'] expect 2
+    ✓ GF-QQQ-IC-Touch0 / GF-QQQ-IC-SL200        arm-vs-arm      diff=['stoploss', 'touch'] expect 2
+    ✓ GF-QQQ-IC-Touch0 / GF-QQQ-IC-Canary       arm-vs-arm      diff=['profits', 'touch'] expect 2
+    ✓ GF-QQQ-IC-SL100 / GF-QQQ-IC-SL200        shared-field    diff=['stoploss'] expect 1
+    ✓ GF-QQQ-IC-SL100 / GF-QQQ-IC-Canary       arm-vs-arm      diff=['profits', 'stoploss'] expect 2
+    ✓ GF-QQQ-IC-SL200 / GF-QQQ-IC-Canary       arm-vs-arm      diff=['profits', 'stoploss'] expect 2
+  ✅ A2   PASS         7/7     16 non-bundle fields incl. trigger config + rid list, equal across the family
+  ✅ A3   PASS         7/7     decoded set == §9 pre-registration (table = sole verdict; notes byte-compared)
+    ✓ GF-QQQ-IC-Ride         mechanics [] vs §9 []   [notes: recorded firstDiff=-1, utf16=2339]
+    ✓ GF-QQQ-IC-PT50         mechanics ['profits'] vs §9 ['profits']   [notes: recorded firstDiff=-1, utf16=1722]
+    ✓ GF-QQQ-IC-Trail        mechanics ['tstop'] vs §9 ['tstop']   [notes: recorded firstDiff=-1, utf16=5412]
+    ✓ GF-QQQ-IC-Touch0       mechanics ['touch'] vs §9 ['touch']   [notes: recorded firstDiff=-1, utf16=2917]
+    ✓ GF-QQQ-IC-SL100        mechanics ['stoploss'] vs §9 ['stoploss']   [notes: recorded firstDiff=-1, utf16=4389]
+    ✓ GF-QQQ-IC-SL200        mechanics ['stoploss'] vs §9 ['stoploss']   [notes: recorded firstDiff=-1, utf16=4546]
+    ✓ GF-QQQ-IC-Canary       mechanics ['profits'] vs §9 ['profits']   [notes: recorded firstDiff=-1, utf16=3018]
+  ⚪ A4   MOOT                 F-4 ruling — SENTINEL-SL1 struck; superseded by A9
+  ⏸ A4b  NOT-RUNNABLE         no post-cutover ledger rows (broken-link stop-out needs a ledger)
+  ⏸ A5   NOT-RUN              no account-settings capture supplied; last recorded itmpaper=market, itmlive=auto, maxexits=0 — D2 is the Day-0 gate (stated, not skipped)
+  ⏸ A6   NOT-RUNNABLE         no ledger rows; sizing primitive is fixed quantity:1 in the shared action
+  ✅ A7   PASS         3/3     shared-automation payload hash vs recorded baseline
+    ✓ GF-ScannerA-PutSpread        v9 3308ce8b476d2bd0… vs baseline 3308ce8b476d2bd0…
+    ✓ GF-ScannerB-CallSpread       v2 bb4ba866a13e7ecd… vs baseline bb4ba866a13e7ecd…
+    ✓ GF-Backstop-1552-FlatClose   v1 116069bddf8b8c9e… vs baseline 116069bddf8b8c9e…
+  ✅ A8   PASS         7/7     decoded(GF_EXITS_PUT) == decoded(GF_EXITS_CALL), per bot (from dual-side record)
+    ✓ GF-QQQ-IC-Ride: PUT≡CALL (recorded identical)
+    ✓ GF-QQQ-IC-PT50: PUT≡CALL (recorded identical)
+    ✓ GF-QQQ-IC-Trail: PUT≡CALL (recorded identical)
+    ✓ GF-QQQ-IC-Touch0: PUT≡CALL (recorded identical)
+    ✓ GF-QQQ-IC-SL100: PUT≡CALL (recorded identical)
+    ✓ GF-QQQ-IC-SL200: PUT≡CALL (recorded identical)
+    ✓ GF-QQQ-IC-Canary: PUT≡CALL (recorded identical)
+  ✅ A9   PASS         7/7     every GF_EXITS_PUT/CALL bot input BOUND and NON-EMPTY (14/14 inputs)
+    ✓ GF-QQQ-IC-Ride: PUT IN178607080900761 / CALL IN178607092377072  non-empty=True
+    ✓ GF-QQQ-IC-PT50: PUT IN178607449758461 / CALL IN178607460887972  non-empty=True
+    ✓ GF-QQQ-IC-Trail: PUT IN178607567686951 / CALL IN17860757187372  non-empty=True
+    ✓ GF-QQQ-IC-Touch0: PUT IN178607636188121 / CALL IN178607647487782  non-empty=True
+    ✓ GF-QQQ-IC-SL100: PUT IN178607699688851 / CALL IN178607709288872  non-empty=True
+    ✓ GF-QQQ-IC-SL200: PUT IN178607891888981 / CALL IN178607897588482  non-empty=True
+    ✓ GF-QQQ-IC-Canary: PUT IN178607794990451 / CALL IN178607800989862  non-empty=True
+
+  §8.2 CAPTURE-DIFF — 21 unordered pairs. Both G2 hops resolved on every arm:
+    hop1 action→automation-input {nid:root} = a REFERENCE, NOT read for config.
+    hop2 automation-input→BOT input {nid:bot, input:IN<this bot>} = the read end.
+    oldValue IGNORED everywhere (§1.2 rule 2).
+    GF-QQQ-IC-Ride         bot inputs ['IN178607080900761', 'IN178607092377072'] (read end; action ref & oldValue ignored)
+    GF-QQQ-IC-PT50         bot inputs ['IN178607449758461', 'IN178607460887972'] (read end; action ref & oldValue ignored)
+    GF-QQQ-IC-Trail        bot inputs ['IN178607567686951', 'IN17860757187372'] (read end; action ref & oldValue ignored)
+    GF-QQQ-IC-Touch0       bot inputs ['IN178607636188121', 'IN178607647487782'] (read end; action ref & oldValue ignored)
+    GF-QQQ-IC-SL100        bot inputs ['IN178607699688851', 'IN178607709288872'] (read end; action ref & oldValue ignored)
+    GF-QQQ-IC-SL200        bot inputs ['IN178607891888981', 'IN178607897588482'] (read end; action ref & oldValue ignored)
+    GF-QQQ-IC-Canary       bot inputs ['IN178607794990451', 'IN178607800989862'] (read end; action ref & oldValue ignored)
+    control = GF-QQQ-IC-Ride (empty mechanic map)
+    PASS: arm-vs-control 6/6 · shared-field 2/2 · arm-vs-arm 13/13
+
+  ✅ FAMILY GREEN — every runnable assert passes; A4 moot, A4b/A5/A6 pre-Day-0.
+
+
+════════ READING OF THIS RUN — added by the audit session, not by the script ════════
+
+SUMMARY LINES, VERBATIM (the ones the close-out carries):
+  ✅ A1   PASS   21/21   pairwise mechanic distinctness (amended)
+  ✅ A2   PASS   7/7     16 non-bundle fields incl. trigger config + rid list, equal across the family
+  ✅ A3   PASS   7/7     decoded set == §9 pre-registration (table = sole verdict; notes byte-compared)
+  ⚪ A4   MOOT           F-4 ruling — SENTINEL-SL1 struck; superseded by A9
+  ⏸ A4b  NOT-RUNNABLE   no post-cutover ledger rows (broken-link stop-out needs a ledger)
+  ⏸ A5   NOT-RUN        no account-settings capture supplied
+  ⏸ A6   NOT-RUNNABLE   no ledger rows; sizing primitive is fixed quantity:1 in the shared action
+  ✅ A7   PASS   3/3     shared-automation payload hash vs recorded baseline
+  ✅ A8   PASS   7/7     decoded(GF_EXITS_PUT) == decoded(GF_EXITS_CALL), per bot
+  ✅ A9   PASS   7/7     every GF_EXITS_PUT/CALL bot input BOUND and NON-EMPTY (14/14 inputs)
+  §8.2 capture-diff: arm-vs-control 6/6 · shared-field 2/2 · arm-vs-arm 13/13
+  ✅ FAMILY GREEN — every runnable assert passes; A4 moot, A4b/A5/A6 pre-Day-0.
+`--validate` REPRODUCED THE 2026-08-07 HAND-RUN REFERENCE EXACTLY, including the three spot
+checks (exitrate==1 on all seven · Backstop ntime==1552 on all seven · §9 UTF-16 note lengths).
+
+⛔ A4b DID **NOT** FIRE, AND THAT IS NOT A PASS. Today's self-test fixed A4b's predicate (O4) and
+   the E-3 close-out noted "A4b fires for the first time in its existence" — that was against the
+   SELF-TEST fixture, where O4 is the positive control. Against the REAL repository A4b is
+   NOT-RUNNABLE because `LEDGER_START = 2099-01-01` leaves ZERO post-cutover ledger rows. Nothing
+   was suppressed; there was nothing to run on. A4b becomes a live detector on the first
+   post-cutover trading day, and not before. ⬜ NOT EVALUABLE ≠ PASS.
+
+⛔ THE SCRIPT IS NAME-KEYED AND READS NO OA IDENTIFIER. A green A-series here proves nothing about
+   whether the objects behind those names are the originals. That is what file 02 (A-01c) is for,
+   and file 02 says they are — 32 of 32 recorded rids and 43 of 43 bot IDs matched. Read the two
+   together; neither closes the other.
+
+⛔ A7 IS 3 OF 4 (A-13), AND THE SCRIPT CANNOT CHANGE THAT — its SHARED_AUTOMATIONS list carries
+   three objects. `Defang-Mon-S2-StrikeTouch` is the fourth; its FIRST baseline was read live this
+   session (file 03) and is GATED, not written. A green `A7 3/3` from the tool is still 3 of 4.
+   ⭐ Independent corroboration this session: all three A7 hashes were also recomputed from the
+   LIVE OA model (file 03) and matched the same baselines the script compares capture files to.
+   The script's A7 PASS and the live read agree — two different evidence paths, same answer.
+
+📝 FS-1 (LOW, GATED) — A5's detail string carries a STALE `itmlive`.
+   scripts/a_series.py line 507 emits: "last recorded itmpaper=market, itmlive=auto, maxexits=0".
+   LIVE, read first-hand 2026-08-08 from /settings: `itmlive` = **market** (and itmpaper=market,
+   maxexits=0). S0a SET `itmlive` = market on 2026-08-07 — session-log.md "STEP 2 — `itmlive` =
+   market", "Seven account-level fields recorded: `itmlive` = market (NEW)". So the script's
+   fallback text lags OA by one day.
+   Impact: NONE on any verdict — A5 is NOT-RUN either way and D2 stays the Day-0 gate. But it is
+   a stale value printed into every A-series close-out, which is exactly how a wrong number gets
+   inherited. ⛔ NOT FIXED HERE: scripts/ is Claude Code's lane and the pack forbids editing the
+   script to change what an assert says. GATED to Andy.

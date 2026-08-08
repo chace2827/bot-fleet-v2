@@ -1,0 +1,72 @@
+# FLEET-WIDE ROSTER + TOGGLE STATE — all 43 active bots, with bot IDs
+# captured: 2026-08-08 ~12:23 ET (page clock), READ-ONLY AUDIT SWEEP session, Chrome-direct
+# surface: /bots LIST VIEW ONLY. ZERO OA writes this session. No bot page opened for any of the
+#          nine leave-in-place bots (A-18 attestation holds; Step 2c unspent).
+#
+# METHOD (unchanged from data/captures/2026-08-07-s0b/toggle-state-all-41-2026-08-07.tsv):
+#   ONE batched page script. Per /bots row, two <i class="... sticon"> elements carry the toggle
+#   meaning in words on their `title` ATTRIBUTE (never innerText, never the CSS class):
+#       AUTOS : "Scheduled automations are off"  /  (...are on)
+#       EXITS : "Exit Options for positions managed by this bot are on" / (...are off)
+#   Bot IDs from each row's own a.title[href^="/bots/bot/"] href. `a.title`, NOT the bare href
+#   (the bare href also matches the POS-count links on QQQ long call and Tasty Condor -> 45 not 43).
+#   POS / RISK / ALLOCATION parsed from the innerText row stride (1 name + 18 values, verified).
+#   ALLOCATION is the LIST-VIEW ABBREVIATION ($50K); exact values are read from a5.bots.bot in 05-*.
+#
+# FOOTER, verbatim: "43 active bots - 7 left in your plan - Upgrade"
+# Account header RISK: $14,118  (= $13K + $1,082, self-consistent; identical to 2026-08-07)
+#
+# VERDICT
+#   AUTOMATIONS ON : 0 of 43.  The fleet is entirely OFF. Nothing can open a position.
+#   EXIT OPTIONS ON: 7 of 43 - exactly the seven greenfield arms. Independent Layer-1
+#                    re-verification of S0a's seven disableExits 1->0 edits, now across a THIRD
+#                    session boundary (2026-08-06 edit -> 08-07 re-read -> 08-08 re-read).
+#   EXIT OPTIONS OFF: all 36 non-greenfield bots, INCLUDING the pilot QQQ-IC-0DTE-Fortress
+#                    (whose own 2026-08-04 capture records EXIT OPTIONS ON - FINDING S0b-1,
+#                    ruled DO NOT FIX, A-27(a)). Re-observed here, NOT corrected.
+#   Two -ARCHIVED-2026-08-08 names present: KNOWN state (renames commit; OA-archive is Andy's hand).
+#
+# bot_name	bot_id	AUTOS	EXITS	POS	RISK	ALLOCATION(list)
+1-45pm-Sandwich-Paper-v1	BOTfw5TkkCRF3317782764426812572	OFF	OFF	--	--	$10K
+3DTE $140-$350	BOTfw5TkkCRF2217765235512870291	OFF	OFF	--	--	$5K
+60min-ORB-10W-Paper-v1	BOTfw5TkkCRF3317782759988647731	OFF	OFF	--	--	$10K
+DIR-SPX-CallVIXdrop	BOTfw5TkkCRF217824370390678863	OFF	OFF	--	--	$10K
+DIR-SPX-Put-Control	BOTfw5TkkCRF217824312740732922	OFF	OFF	--	--	$10K
+DIR-SPX-PutVIX22-SL75	BOTfw5TkkCRF217824306963282811	OFF	OFF	--	--	$10K
+Friday 14 DTE Broken Wing IB (B-70)	BOTfw5TkkCRF1017766446781407596	OFF	OFF	--	--	$10K
+GF-QQQ-IC-Canary	BOTfw5TkkCRF4417860774419022836	OFF	ON	--	--	$2.5K
+GF-QQQ-IC-PT50	BOTfw5TkkCRF4417860738688735152	OFF	ON	--	--	$2.5K
+GF-QQQ-IC-Ride	BOTfw5TkkCRF4417860701930934951	OFF	ON	--	--	$2.5K
+GF-QQQ-IC-SL100	BOTfw5TkkCRF4417860767788927225	OFF	ON	--	--	$2.5K
+GF-QQQ-IC-SL200	BOTfw5TkkCRF4417860785000861357	OFF	ON	--	--	$2.5K
+GF-QQQ-IC-Touch0	BOTfw5TkkCRF4417860760818962144	OFF	ON	--	--	$2.5K
+GF-QQQ-IC-Trail	BOTfw5TkkCRF4417860754672239833	OFF	ON	--	--	$2.5K
+IC-SPX-FastPT25-S2	BOTfw5TkkCRF4417860821948715488	OFF	OFF	--	--	$50K
+IC-SPX-FastPT25-S2-130PM	BOTfw5TkkCRF3017861977616287731	OFF	OFF	--	--	$50K
+IC-SPX-FastPT25-S2-130PM-ARCHIVED-2026-08-08	BOTfw5TkkCRF3717814485128334371	OFF	OFF	--	--	$30K
+IC-SPX-FastPT25-S2-ARCHIVED-2026-08-07	BOTfw5TkkCRF1217757048550308561	OFF	OFF	--	--	$50K
+IC-SPX-Fortress-Defang	BOTfw5TkkCRF3317787969081429752	OFF	OFF	--	--	$50K
+IC-SPX-Fortress-Unstopped	BOTfw5TkkCRF3317787955825912621	OFF	OFF	--	--	$50K
+Nigiri-Paper-v1	BOTfw5TkkCRF1017766118057607741	OFF	OFF	--	--	$10K
+Opening Range Breakout 60m	BOTfw5TkkCRF1017766137341516344	OFF	OFF	--	--	$10K
+QQQ long call	BOTfw5TkkCRF1017766424258604555	OFF	OFF	4	$13K	$30K
+QQQ-IC-0DTE-Baseline	BOTfw5TkkCRF3317727290514286611	OFF	OFF	--	--	$100K
+QQQ-IC-0DTE-Fortress	BOTfw5TkkCRF2717857919585029021	OFF	OFF	--	--	$100K
+QQQ-IC-0DTE-Fortress-NoFilter	BOTfw5TkkCRF4517755108623629541	OFF	OFF	--	--	$100K
+QQQ-IC-0DTE-Fortress-NoPT50	BOTfw5TkkCRF3017862038322323202	OFF	OFF	--	--	$100K
+QQQ-IC-0DTE-Fortress-NoPT50-ARCHIVED-2026-08-08	BOTfw5TkkCRF2617743681996538301	OFF	OFF	--	--	$100K
+QQQ-IC-0DTE-Fortress-S2	BOTfw5TkkCRF3217755946065115241	OFF	OFF	--	--	$100K
+QQQ-IC-0DTE-HedgeA-S1	BOTfw5TkkCRF2717738719192568831	OFF	OFF	--	--	$100K
+QQQ-IC-0DTE-HedgeB-S2	BOTfw5TkkCRF2717738721388027602	OFF	OFF	--	--	$100K
+QQQ-IC-0DTE-HedgeC-S3	BOTfw5TkkCRF2717738721535026943	OFF	OFF	--	--	$100K
+QQQ-IC-0DTE-HedgeD-Conditional	BOTfw5TkkCRF2717738721652044244	OFF	OFF	--	--	$100K
+QQQ-IC-0DTE-HedgeTest	BOTfw5TkkCRF817734404268067862	OFF	OFF	--	--	$100K
+QQQ-IC-0DTE-InverseFilter-HoldToExp	BOTfw5TkkCRF4517755118383321712	OFF	OFF	--	--	$100K
+QQQ-IC-0DTE-Range075-PT50	BOTfw5TkkCRF2717738722042782917	OFF	OFF	--	--	$100K
+QQQ-IC-0DTE-Range075-PT50-Wide2-1230PM	BOTfw5TkkCRF2617743684426809593	OFF	OFF	--	--	$100K
+QQQ-IC-0DTE-Range075-PT50-Wide2-155PM	BOTfw5TkkCRF2717738721925710956	OFF	OFF	--	--	$100K
+QQQ-IC-0DTE-Raw-HoldToExp	BOTfw5TkkCRF2617743683072748392	OFF	OFF	--	--	$100K
+QQQ-IC-0DTE-VIX25-Range075-PT50	BOTfw5TkkCRF2717738721783221645	OFF	OFF	--	--	$100K
+Tasty Condor	BOTfw5TkkCRF1017766126336204213	OFF	OFF	1	$1,082	$10K
+Trendy-Paper-v1	BOTfw5TkkCRF1017766118431160782	OFF	OFF	--	--	$10K
+Weekly-IB-SPY-Paper-v1	BOTfw5TkkCRF3317782770973508333	OFF	OFF	--	--	$10K

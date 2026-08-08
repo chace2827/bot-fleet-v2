@@ -1,0 +1,49 @@
+SPOT-VERIFIES — 2026-08-08 READ-ONLY AUDIT SWEEP. Nothing fixed. Nothing toggled.
+All values from the hydrated model `a5.bots.bot` after a fresh page load, or from the /bots
+list-view read in file 01. No Exit Options panel was used as evidence anywhere.
+
+── 5a · PR-02 CLONE ALLOCATION = $50,000 (ruling PR02-R1) ────────────────────────────────
+   IC-SPX-FastPT25-S2-130PM  BOTfw5TkkCRF3017861977616287731
+     a5.bots.bot.seed    = 50000     <- the allocation field
+     a5.bots.bot.capital = 50000     <- current account value (no P/L, so equal)
+     /bots ALLOCATION column         = $50K
+   RECORDED: rename_map.csv row 3, Andy's ruling 2026-08-08 — "$50,000 STANDS".
+   VERDICT: MATCH. Signing is unblocked on allocation grounds. (Template V1 remains GATED —
+   `tid` reads ABSENT on this bot, consistent with "showBotMenu is Andy's hand".)
+   Control reading, same sweep: its archived original IC-SPX-FastPT25-S2-130PM-ARCHIVED-2026-08-08
+   reads seed 30000 / $30K — the $30,000 the ruling declined to copy. Both sides of the ruled
+   disagreement are on the record and unchanged.
+
+── 5b · BOTH NEW CLONES: AUTOMATIONS OFF **AND** EXIT OPTIONS OFF ────────────────────────
+   Two independent surfaces per bot, agreeing:
+   IC-SPX-FastPT25-S2-130PM      status "off" · disableExits 1 || /bots titles: AUTOS OFF, EXITS OFF
+   QQQ-IC-0DTE-Fortress-NoPT50   status "off" · disableExits 1 || /bots titles: AUTOS OFF, EXITS OFF
+   VERDICT: MATCH, 2 of 2, on both surfaces. Consistent with each build session's own attestation
+   — but read fresh today, not inherited from it (A-27(a) carry-forward: a recorded toggle state
+   is a fact about the moment it was read, never a property of the bot).
+
+── 5c · THE PILOT'S EXIT OPTIONS STATE — READ, RECORDED, ⛔ NOT FIXED ─────────────────────
+   QQQ-IC-0DTE-Fortress  BOTfw5TkkCRF2717857919585029021
+     LIVE  2026-08-08: a5.bots.bot.disableExits = 1  ->  EXIT OPTIONS **OFF**
+                       /bots title attribute: "Exit Options for positions managed by this bot are off"
+     ITS OWN CAPTURE: data/captures/2026-08-03-pilot/06-clone-final/
+                      oa_bot-settings_QQQ-IC-0DTE-Fortress-Clone_2026-08-04.txt records verbatim
+                      `EXIT OPTIONS ON (input[name=onoff].value="true")`
+   DIVERGENCE CONFIRMED — this is FINDING S0b-1, first raised 2026-08-07, RULED BY ANDY
+   (pack §0.0 A-27(a)): **the pilot STAYS AS FOUND, EXIT OPTIONS OFF.** Arming it is Day-0 Step 3
+   and belongs to S2. PR-03 stays UNSIGNABLE; that is expected and blocks nothing.
+   ⛔ NOT FIXED HERE, NOT RE-CAPTURED-AND-MOVED-ON. This is now the THIRD dated first-hand
+   observation of the same state (2026-08-07 S0b, 2026-08-07 toggle sweep, 2026-08-08 this sweep).
+   ⭐ AND THE CARRY-FORWARD STILL BINDS: the seven greenfield arms read EXIT OPTIONS **ON** again
+      today (file 01), so the reset that hit the pilot has NOT recurred on them across three
+      session boundaries. That is evidence, not a guarantee. Toggle state is re-read first-hand
+      immediately before Step 7, on every bot, and NEVER inherited — including from this file.
+
+── 5d · EXTRA, UNASKED BUT READ IN PASSING (recorded so it is not re-derived) ────────────
+   Account settings page /settings, read first-hand:
+     itmpaper = market · itmlive = market   <- S0a's setting PERSISTS; `itmlive` is the value
+                                               state.md records. No `auto` rollback (A-01 3d watch item).
+     scanstart 09:31 · scanend 5 (min before close) · exitstart 09:31 · exitend 1 · maxexits 0
+   ⛔ These are ACCOUNT-level and have no row in bots_config_v2.csv's schema (shared_automation |
+      bot only). Recorded here, NOT written into that CSV — adding a third object_kind is a schema
+      decision and it is Andy's (same disposition as A2-EXITRATE-1 and the S0b disableExits item).

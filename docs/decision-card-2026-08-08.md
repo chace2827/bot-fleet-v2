@@ -789,3 +789,15 @@ cost now, no invented ids, and the namespace is on record before any row exists.
 | PR-04 clone | 🔄 in progress (S1 continuation session) |
 | Fleet sweep (read-only audit) + master audit report | queued behind PR-04 |
 | FLEET-STAYS-OFF / A-06 | no such verdict fired today; nothing switched ON |
+
+## SLOT 10 — DA-3: the retired ≥15-condor go-live bar still prints (added post-sweep)
+**Question:** does evidence-standards §5's retirement of the ≥15-condor bar govern, so
+`report.py:141` / STATUS.md line 17 drop that line? **Evidence:** both verified first-hand
+2026-08-08; the line will print on the dashboard every trading day from Monday.
+**RECOMMENDATION: yes — rule it retired-in-print; the one-line report.py edit is Claude Code's
+lane after the ruling.**
+
+## SLOT 8 SCOPE NOTE (added post-sweep): the doc-correction batch now carries THREE items —
+runbook §2 step 7 pre-F-C1 line (PR02-R3) · pack §S1 clone-2 "four automations/traps" is two
+for the Fortress family (PR04-R1) · Library path is /bots/automations, not unreachable (FS-3,
+proven from the /bots Library button's own menu JSON).
