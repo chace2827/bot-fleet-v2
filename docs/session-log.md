@@ -6878,3 +6878,83 @@ the -130PM paper account read net liq ~$30,105; paper-only, compare-by-R. **PR-0
 block from PR02-R1 is DISCHARGED** — remaining before Step 2b signature: Template V1 (Andy's
 hand, showBotMenu) and the standard Day-0 gates. `rename_map.csv` row 4 disposition annotated
 with the ruling, original text standing. PR02-R2/R3 remain on the 2026-08-08 sitting list.
+
+### ✅ E-3 GATED ITEMS (1)+(3) RULED — 2026-08-08, by Andy (orchestrator chat)
+**(1) "ADDITIVE OK"** — the §3.3 receipt clause is read as: pre-existing `ledger_meta.json`
+keys byte-identical (verified by Worker B, every key), NEW keys permitted for items 2/4.
+The contradiction in the ruled text is resolved additively; 4 additions / 0 changed values
+stands as built. **(3) "FIX O4"** — the pre-existing `_a4b` blind-detector defect
+(timedelta<=int, TypeError swallowed) is authorized for repair by the orchestrator session,
+mechanical scope only: correct the comparison, make the failure path loud, flip self-test O4
+from defect-recording to firing, `--validate` must remain reproduction-exact. Item (2)
+(ops trade_id namespace) joins tonight's sitting, unruled.
+
+### ✅ O4 FIXED — 2026-08-08 (orchestrator session, at Andy's explicit "fix O4"). A4b sees for the first time.
+
+`a_series.py::_a4b` predicate repaired: `(_ts(c)-_ts(o)).total_seconds() <= 300` (was
+timedelta<=int, TypeError eaten by a bare except — the detector was **structurally blind since
+birth**). Blank/short `close_date` (an OPEN position) is legitimately not-fast; a
+PRESENT-but-unparseable date is now a **LOUD A4b flag** ("row NOT evaluated"), never a silent
+skip. Self-test **O4 flipped from defect-recording to POSITIVE CONTROL** — the fixture's 2 fast
+stop-outs MUST fire the detector. Verified on device: `--selftest` **13/13** ·
+`--validate` **REPRODUCED THE REFERENCE EXACTLY** (A4b is NOT-RUNNABLE on that path, per O8 —
+unmoved, as required). File sha256-verified cloud==device: `ca7f80dfb45fc8c0…`.
+E-3 gated item (2) — ops `trade_id` namespace — remains on tonight's sitting.
+
+## 2026-08-08 — S0b-3 FIX: bookmarklet now reads `i.sticon`'s `title` attribute, additive. No OA, no Chrome, no git.
+
+**Ruling executed:** `day0-session-pack-2026-08-07.md` §0.0 A-27(d), "Claude Code's lane"
+(`CLAUDE.md` §7) — S0b-3's identified fix, landed in `oa-ops-runbook.md` §1.2's bookmarklet
+source. Session ran under the device bridge only: **NO OA, NO CHROME, NO GIT** per this
+session's own instruction.
+
+**THE CHANGE, additive, no restructure.** The bookmarklet's existing behavior — name header, URL,
+`captured:` line, blank line, full `document.body.innerText` — is byte-identical on every page.
+A new trailing section is appended **only when** the page has `a[href^="/bots/bot/"]` row anchors
+carrying two `i.sticon[title]` elements (i.e. only `/bots`; automation-tree captures on other
+pages are unaffected because that selector matches nothing there). New section format, tab-
+separated, one line per bot:
+```
+BOTfw5TkkCRF3317782764426812572	Scheduled automations are off	Exit Options for positions managed by this bot are off
+```
+No field renamed or removed; nothing restructured.
+
+**Readers checked (grep, before deciding the output shape) — no restructure needed anywhere:**
+`scripts/*.py` grepped for `oa_Bots`, `innerText`, `sticon`, `AUTOS`, `EXITS`, `/bots`-roster
+patterns — **zero scripts parse the `/bots` list-view capture programmatically.**
+`data/bots_config_v2.csv` is built from PER-BOT automation-tree captures via `a_series.py`'s
+`classify_and_parse` (`BOT_ID` / `BOT GF-QQQ-IC-` / `AUTOMATION GF-` markers) — a different
+capture class, confirmed unaffected. `build_ledger.py`'s `data/bots.csv` is built from the
+ledger / Export Data, not this capture — confirmed unaffected. The only consumers of the raw
+`/bots` capture text today are first-hand human/Claude reads (S0a Step 3's roster verification;
+STEP 4b's manual field-by-field diff, `data/captures/2026-08-07-s0b/STEP-4b-capture-diff-…txt`)
+— an appended trailing section changes nothing read from the unchanged prefix.
+
+**VERIFICATION LIMIT, stated plainly (A-22 — captures are Andy's hand).** This cannot be run
+against live OA from here. What WAS done:
+1. **Unit-checked** the extraction/tab-join logic against a synthetic DOM built to the exact
+   documented shape (`i.sticon[title]` strings quoted verbatim in this file's own S0b-3 finding
+   and in `data/captures/2026-08-07-s0b/toggle-state-all-41-2026-08-07.tsv`'s header comment) —
+   reproduces the expected line shape exactly, including the id-less/no-match skip path.
+   `node --check` confirms the minified bookmarklet parses as valid JS.
+2. Marked ⛔ **VERIFY-ON-NEXT-CAPTURE** in both `oa-ops-runbook.md` banners (§1.2, §1.5) — the
+   assumed selectors (`a[href^="/bots/bot/"]` as row anchor, `tr` as row container, exactly two
+   `i.sticon[title]` per row in AUTOS-then-EXITS order) are UNVERIFIED against the real DOM.
+3. **Expected output shape written above** (the example line) so Andy's next `/bots` capture
+   proves or falsifies it in one look: the trailing section appears (fix confirmed) or it does
+   not, with zero effect on the existing 18-field-per-bot prefix either way (a new finding, not
+   a silent failure).
+
+**Doc edits, both additive, dated, evidence-cited, original left standing (`CLAUDE.md` §5):**
+`oa-ops-runbook.md` §1.2 — the bookmarklet source line replaced (behavior additive, not a claim)
+plus a dated banner underneath; §1.5 — a short dated pointer added after the "What `/bots` loses"
+table, the table's own claims **not amended**. `state.md`'s S0b-3 line updated per §9.1 (the
+"until it lands" fact changed) — see banner appended there this session.
+
+**Files changed, device-hash-verified (direct `device_bash` sha256 + single-match grep, never a
+stage-back read, per §9.1a):**
+- `docs/oa-ops-runbook.md`
+- `docs/state.md`
+- `docs/session-log.md` (this entry)
+
+**Uncommitted — Andy runs the commit.**

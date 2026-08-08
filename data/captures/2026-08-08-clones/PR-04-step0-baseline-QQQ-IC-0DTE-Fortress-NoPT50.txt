@@ -1,0 +1,83 @@
+# PR-04 STEP-0 BASELINE — ORIGINAL `QQQ-IC-0DTE-Fortress-NoPT50`
+https://app.optionalpha.com/bots/bot/BOTfw5TkkCRF2617743681996538301/settings
+captured: 2026-08-08 (S1 CLONE 2 / PR-04, step 0 — BEFORE the rename, BEFORE the clone)
+method: Claude-in-Chrome. Bot state from the hydrated client model `a5.bots.bot` after a page
+        load; automation payloads from `a5.bots.acedit.routine` after opening each automation
+        fresh; toggles from the /bots row `i.sticon` title attribute AND the settings header
+        screenshot. NOT innerText. NOT a save confirmation.
+purpose: this is what proves later that the ORIGINAL was never touched (S1 step 7).
+
+--- IDENTITY ---
+bot_id           BOTfw5TkkCRF2617743681996538301
+name             QQQ-IC-0DTE-Fortress-NoPT50
+created          2026-03-24T16:03:19.654Z
+closedCount      35        pcount (open) 0
+
+--- HEADER / SAFEGUARDS (screenshot: PR-04-original-step0-toggles-2026-08-08.png) ---
+ACCOUNT          Paper Trading   (accountId "sim", account.type "sim")
+BOT GROUP        Monitor         (BGfw5TkkCRF3117831133096486382)
+AUTOMATIONS      OFF   (status "off"; input[name=onoff].value "false";
+                        /bots title "Scheduled automations are off")
+EXIT OPTIONS     OFF   (disableExits = 1; /bots title "Exit Options for positions managed by
+                        this bot are off")
+TAGS             experiment
+ALLOCATION       $100,000        (seed = 100000; capital/value/cash = 97951)
+DAILY POSITIONS  2 per day       (posLimitDay 2 — EVEN, IC = 2 positions)
+POSITION LIMIT   2 at once       (posLimit 2 — EVEN)
+DAY TRADING      Allowed
+SCAN SPEEDS      AUTOMATIONS Every 1m (scanrate 1) · EXIT OPTIONS Every 1m (exitrate 1)
+SYMBOLS          "No symbols yet" — EMPTY, and CORRECT for this family: the symbol is
+                 AUTOMATION-RESIDENT (`symbolloop` "Loop QQQ" + action `symbol "QQQ"`).
+                 Same as the pilot pair. The Bot-Symbols clone trap does not bite here.
+BOT INPUTS       NONE (inputs [] , input {})
+NOTES            empty ("Add Notes")
+ACTIVITY ALERTS  open/close/warn/error all ON
+
+--- AUTOMATIONS: TWO, NOT FOUR ---
+SCANNERS
+  1. FortNoPT-Scan-Put    rid RTfw5TkkCRF2617743681996756891
+  2. FortNoPT-Scan-Call   rid RTfw5TkkCRF2617743681996757322
+TRIGGERS   NONE
+MONITORS   NONE
+COUNT: 2
+NOTE (finding PR04-R1): the S1 prompt says "hash all four automations of the original".
+That count is inherited from PR-02 (a 4-automation bot). THIS bot has TWO. The hash proof
+below therefore covers 2 of 2 — complete for this bot, not a partial run.
+NOTE: no 15:52 backstop exists on the original. Building it is the spec delta (see below).
+
+--- STEP-0 HASHES (formula: sha256(JSON.stringify({name, inputs, root})) over
+    `a5.bots.acedit.routine`, read after opening each automation on a FRESH page load —
+    the same formula documented in bots_config_v2.csv's header) ---
+FortNoPT-Scan-Put    2eab2d95541b44536c452fcb4b7acd005ae45dd712ce07675d4d66d95db211e2
+                     4682 bytes · version 9 · sharing 0 · created 2026-03-13T21:51:29.614Z
+                     · updated 2026-03-24T16:04:07.637Z
+FortNoPT-Scan-Call   7dd2df800d47d4c4f4ba97cfd5fc83d588fcc4c20d9fd12ef9928b4e607bc6be
+                     4649 bytes · version 9 · sharing 0 · created 2026-03-13T21:51:29.614Z
+                     · updated 2026-03-24T16:04:25.259Z
+sharing = 0 on BOTH: neither automation is in the Automation Library, so a clone-side edit
+cannot propagate (runbook §2 step 2 / oa-ops-runbook §5 Trap 1 as corrected).
+
+--- OPEN POSITION ACTION — exits bundle, BOTH SIDES, byte-identical in the exit block ---
+exits.profits      ""            <-- NO PT. Key present, value EMPTY, on BOTH sides.
+exits.smprofits    (absent)
+exits.expdays      0.01          text "Expiration: 10 minutes"  <-- THE 15:50 TIME EXIT
+exits.smexpdays    {"text":"Market","smart":"market"}
+exits.dstop / dprofit / price / stoploss / tstop / touch / epsdays   all ""
+exits.dtype        short
+price (ENTRY)      {"text":"Market","smart":"market"}
+amount             {"draw":5000,"text":"Up to $5,000 risk","type":"draw"}
+series             exactly 0 days      filter.minPrice 0.08      symbol "QQQ"
+longPut            $2.00 below short put leg (put side)
+tree               symbolloop "Loop QQQ" -> timeofday "Current market time is after 1:30pm"
+                   -> stockchangepct > -0.75 / < 0.75 since previous close
+                   -> postagtoday "Bot opened a position with <side> today" -> NO -> Open
+                   (plain postagtoday with the action on NO — the greenfield form, NOT the
+                   `not:true` re-entry-gate form. That fix is PR-01/PR-02 spec, not PR-04's.)
+
+--- READ-ONLY OBSERVATIONS, NOT ACTED ON (nothing beyond spec; runbook §2 step 4) ---
+o1. The 15:50 Expiration exit is priced MARKET on both sides. The pilot's Decision-6 /
+    Template-V2 re-price (Market -> speedy) is PILOT-ONLY and is a spec change requiring an
+    amended pre-registration (reactivation-runbook.md §2 step 6a). NOT applied here.
+o2. Entry `price` is MARKET. oa-ops-runbook §5 Trap 6 was extended to entries 2026-08-06.
+    That is a fleet rule about future builds, not a licence to edit a frozen clone spec on
+    Day-0. Recorded, NOT changed. Andy's to rule.

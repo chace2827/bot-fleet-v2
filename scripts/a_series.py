@@ -520,17 +520,31 @@ def _a4b(ledger_rows, bots, ops_set=None):
     ledger_rows, ops_line = _ops_scope(ledger_rows, ops_set)
     cfg_stop = {n: bool(bots[n]["mechanics"].get("stoploss")) for n in bots}
     by_bot_day = {}
+    parse_errors = []
     for r in ledger_rows:
-        try:
-            fast = (_ts(r.get("close_date")) - _ts(r.get("open_date"))) <= 300
-        except Exception:
+        # FIXED 2026-08-08 (self-test O4; authorized by Andy, orchestrator chat): was
+        # `(_ts(c) - _ts(o)) <= 300` — a timedelta compared to an int raises TypeError
+        # into a bare `except`, so every row read "not fast" and A4b could never fire.
+        # Now: .total_seconds(); a missing/blank close_date (an OPEN position) is
+        # legitimately not-fast; a PRESENT-but-unparseable date is a LOUD flag, never
+        # a silent skip.
+        od, cd = (r.get("open_date") or "").strip(), (r.get("close_date") or "").strip()
+        if len(cd) < 19 or len(od) < 19:
             fast = False
+        else:
+            try:
+                fast = (_ts(cd) - _ts(od)).total_seconds() <= 300
+            except (ValueError, TypeError) as e:
+                parse_errors.append(f"UNPARSEABLE date on {r.get('bot')} "
+                                    f"open={od!r} close={cd!r} ({e}) — row NOT evaluated")
+                fast = False
         if r.get("open_date", "")[:10] == r.get("close_date", "")[:10] and fast:
             by_bot_day.setdefault((r.get("bot"), r.get("open_date", "")[:10]), 0)
             by_bot_day[(r.get("bot"), r.get("open_date", "")[:10])] += 1
     for (bot, day), c in by_bot_day.items():
         if c >= 2 and not cfg_stop.get(bot, False):
             flags.append(f"{bot} {day}: {c} fast stop-outs, no stoploss in config")
+    flags = parse_errors + flags   # unparseable dates are findings, never silence
     return Result("A4b", "FAIL" if flags else "PASS", 0 if flags else 1, 1,
                   "broken-input-link stop-out detector",
                   ([ops_line] if ops_line else []) + flags)
@@ -753,18 +767,16 @@ def selftest():
           any("OPS-CLASS SCOPED OUT" in l and DSTOP in l for l in r.lines), True)
 
     # ---- O4/O5: A4b --------------------------------------------------------
-    # ⛔ O4 RECORDS A PRE-EXISTING DEFECT, IT DOES NOT FIX IT. `_a4b`'s `fast` test is
-    # `(_ts(close) - _ts(open)) <= 300` — a timedelta compared to an int, which raises
-    # TypeError into the bare `except Exception: fast = False`. Every row therefore reads
-    # "not fast" and A4b CANNOT FIRE on any input. Found 2026-08-08 while building the E-3
-    # scoping tests. Out of scope here (E-3 rules the SCOPING of A4b, not its predicate);
-    # gated to Andy. The scoping below is asserted on rows-examined, not on a verdict the
-    # predicate is currently incapable of producing.
+    # O4 HISTORY: as written 2026-08-08 (Worker B) this test RECORDED a pre-existing
+    # defect — timedelta<=int swallowed by a bare except made A4b structurally blind,
+    # ("PASS", []) on rows it should have flagged. FIXED same day by the orchestrator
+    # session at Andy's explicit "fix O4": predicate uses .total_seconds(), blank
+    # close_date (open position) is legitimately not-fast, unparseable dates are LOUD
+    # flags. O4 is now the POSITIVE control: the detector MUST fire on this fixture.
     r = _a4b(a4b_rows, fake_bots, None)
-    check("O4  ⛔ DEFECT RECORDED: unscoped A4b does NOT fire on 2 fast same-day closes "
-          "(timedelta<=int swallowed by `except Exception` — A4b is structurally blind; "
-          "NOT fixed here, see hand-off)",
-          (r.status, r.lines), ("PASS", []))
+    check("O4  unscoped A4b FIRES on 2 fast same-day closes with no stoploss in config "
+          "(predicate fixed 2026-08-08 — was structurally blind since birth)",
+          (r.status, len(r.lines) == 1 and OPSBOT in r.lines[0]), ("FAIL", True))
     r = _a4b(a4b_rows, fake_bots, ops)
     check("O5  SCOPED A4b removes the ops rows from what the detector examines",
           any("2 of 3 ledger row(s) skipped" in l for l in r.lines), True)

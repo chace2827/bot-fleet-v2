@@ -37,8 +37,50 @@ Install once: Chrome → Bookmark Manager (`⌥⌘B`) → ⋮ → Add new bookma
 paste as the URL:
 
 ```
-javascript:(function(){var h=document.querySelector('h1,h2');var n=((h&&h.innerText)||document.title||'oa').trim().replace(/[^\w\-]+/g,'_').slice(0,60);var d=new Date().toISOString().slice(0,19).replace(/[:T]/g,'-');var t='# '+n+'\n'+location.href+'\ncaptured: '+new Date().toString()+'\n\n'+document.body.innerText;var b=new Blob([t],{type:'text/plain'});var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='oa_'+n+'_'+d+'.txt';document.body.appendChild(a);a.click();a.remove();})()
+javascript:(function(){var h=document.querySelector('h1,h2');var n=((h&&h.innerText)||document.title||'oa').trim().replace(/[^\w\-]+/g,'_').slice(0,60);var d=new Date().toISOString().slice(0,19).replace(/[:T]/g,'-');var t='# '+n+'\n'+location.href+'\ncaptured: '+new Date().toString()+'\n\n'+document.body.innerText;var g=[];document.querySelectorAll('a[href^="/bots/bot/"]').forEach(function(a){var id=(a.getAttribute('href')||'').split('/').pop();var row=a.closest('tr')||a.closest('[role="row"]')||a.parentElement;if(!row||!id)return;var ic=row.querySelectorAll('i.sticon[title]');if(ic.length<2)return;g.push(id+'\t'+(ic[0].getAttribute('title')||'')+'\t'+(ic[1].getAttribute('title')||''));});if(g.length){t+='\n\n# AUTOS/EXITS -- i.sticon title attribute, S0b-3 fix, additive. bot_id\tautos_title\texits_title\n'+g.join('\n')+'\n';}var b=new Blob([t],{type:'text/plain'});var el=document.createElement('a');el.href=URL.createObjectURL(b);el.download='oa_'+n+'_'+d+'.txt';document.body.appendChild(el);el.click();el.remove();})()
 ```
+
+> ### 📝 APPENDED 2026-08-08 — S0b-3 FIX LANDED IN THE INSTRUMENT. ⛔ VERIFY-ON-NEXT-CAPTURE, NOT YET RUN AGAINST LIVE OA.
+> **Finding, evidence, ruling:** `session-log.md` S0b-3 (2026-08-07, S0b-RESUME session) — the
+> `/bots` rows emit 18 values, not 20, because the AUTOS/EXITS cells are icons with no text node,
+> but the state is on `i.sticon`'s `title` attribute. Ruled `day0-session-pack-2026-08-07.md`
+> §0.0 A-27(d): *"the bookmarklet must read the icon `title` attribute, not `innerText`…
+> Implementing it is Claude Code's lane (`CLAUDE.md` §7)."*
+>
+> **The change above, additive only.** On any page, the prefix — name header, URL, `captured:`
+> line, blank line, full `document.body.innerText` — is byte-identical to the prior version. A
+> new trailing section is appended **only when** `a[href^="/bots/bot/"]` rows carrying two
+> `i.sticon[title]` elements are found — i.e. only on `/bots`; zero elsewhere, so output on
+> every other page this bookmarklet is used on (automation-tree captures included) is unchanged.
+> Example output line, appended verbatim per bot, tab-separated:
+> ```
+> BOTfw5TkkCRF3317782764426812572	Scheduled automations are off	Exit Options for positions managed by this bot are off
+> ```
+> §1.5's "AUTOS/EXITS counts — the highest-value miss" and §1.6's "does not survive text
+> capture" are **left standing, not amended** — both describe the OLD capture and remain true of
+> it; this is new output, not a correction to those claims.
+>
+> **Readers checked, no restructure needed.** Grepped `scripts/*.py` for `oa_Bots`, `innerText`,
+> `sticon`, `AUTOS`, `EXITS`, and `/bots`-roster patterns: no script parses the `/bots` list-view
+> capture programmatically. `data/bots_config_v2.csv` is built from PER-BOT automation-tree
+> captures via `a_series.py`'s `classify_and_parse` (`BOT_ID` / `BOT GF-QQQ-IC-` / `AUTOMATION
+> GF-` markers) — a different capture class, unaffected. `build_ledger.py`'s `data/bots.csv` is
+> built from the ledger / Export Data, not this capture — unaffected. The only consumers of the
+> raw `/bots` capture text today are first-hand human/Claude reads (S0a Step 3; the STEP 4b manual
+> field-by-field diff) — an appended trailing section changes nothing read from the unchanged
+> prefix.
+>
+> **Unit-checked, not live-verified.** The extraction/tab-join logic was run against a synthetic
+> DOM shaped exactly to the documented `i.sticon[title]` strings (`session-log.md` S0b-3 / the
+> s0b toggle TSV comment) and reproduces the expected line shape exactly. **What this does NOT
+> prove: that the real `/bots` DOM matches the assumed selectors** — `a[href^="/bots/bot/"]` as
+> the row anchor, `tr` as the row container, exactly two `i.sticon[title]` per row in
+> AUTOS-then-EXITS order. Captures are Andy's hand (A-22); this cannot be run against live OA
+> from here.
+> ⛔ **VERIFY-ON-NEXT-CAPTURE.** The next `/bots` bookmarklet pull either produces the trailing
+> section above (fix confirmed) or the unchanged old-format output with zero new lines (selectors
+> wrong — a new finding, not a silent failure, since the `document.body.innerText` prefix is
+> unaffected either way).
 
 Use:
 1. Open the automation so **the full tree is visible on screen**.
@@ -93,6 +135,10 @@ AVG_PL, AVG_WIN, AVG_LOSS, P_FACTOR, STREAK, CLOSED
 | Live/Paper per bot | Only inferable from the global filter chip |
 | Bot Group membership | No trace |
 | **Precision above $10K** | `-$11.2K`, `-$31.6K` — 3 significant figures. **A move from −$11,200 to −$11,249 will not diff.** Sub-$10K values are exact. |
+
+> ### 📝 APPENDED 2026-08-08 — the AUTOS/EXITS miss above has a fix in the instrument now; table above LEFT STANDING (still true of the OLD capture).
+> §1.2's banner has the change, the evidence, the readers checked, and the unit-check. ⛔
+> VERIFY-ON-NEXT-CAPTURE — not yet run against live OA.
 
 **Normalise before diffing**, or you get false positives every single day: strip the `captured:`
 line, the sidebar clock, the `Opportunities N` counter, the two-line *"Account inactive, no

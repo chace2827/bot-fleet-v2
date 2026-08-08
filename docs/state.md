@@ -2198,3 +2198,31 @@ Full text: `post-u1-package-2026-08-07.md`, `pre-registration-ledger.md` (PR-16 
 > superseded mid-session verify) · `data/archive/rename_map.csv` · `data/bots_config_v2.csv` ·
 > `docs/session-log.md` · `docs/state.md` (this block). All device-hash-verified. No git.
 > **Uncommitted — Andy runs the commit. PR-04 remains NOT STARTED.**
+
+> ### 📝 S0b-3 UPDATE — 2026-08-08 (device-bridge session, `CLAUDE.md` §7 lane). FIX LANDED IN THE INSTRUMENT, ⛔ NOT YET LIVE-VERIFIED.
+> Supersedes the "S0b-3 → ... FIX IDENTIFIED ... **Until it lands**, toggle state comes from
+> `toggle-state-all-41-2026-08-07.tsv`" line above (both the S0b-RESUME block and the S0b
+> rulings block) — **those blocks are LEFT STANDING**, this is the fact that changed.
+>
+> **What changed:** `oa-ops-runbook.md` §1.2's bookmarklet now additionally reads each `/bots`
+> row's two `i.sticon[title]` attributes and appends them, tab-separated by `bot_id`, as a
+> trailing section — additive only, the existing 18-field-per-bot capture is byte-unchanged.
+> Ruling executed: `day0-session-pack-2026-08-07.md` §0.0 A-27(d).
+>
+> **Still true, unchanged by this fix:** toggle state for anything captured **before** this
+> fix — including this file's own S0a/S0b-RESUME records and
+> `data/captures/2026-08-07-s0b/toggle-state-all-41-2026-08-07.tsv` — was read by a one-off
+> DOM query in-session, not by the bookmarklet, and remains the authority for those dates.
+> **The carry-forward instruction is unchanged: toggle state before Step 7 is re-read
+> first-hand, never inherited** — from a close-out, from `bots_config_v2.csv`, or from this fix.
+>
+> ⛔ **VERIFY-ON-NEXT-CAPTURE.** Unit-checked against a synthetic DOM built to the documented
+> `i.sticon[title]` shape (reproduces the expected line exactly); **not** run against live OA
+> (A-22 — captures are Andy's hand). Andy's next `/bots` bookmarklet pull either shows the new
+> trailing section (confirmed) or shows the unchanged old-format output with nothing new
+> (selectors wrong — a new finding, zero effect on the existing capture either way).
+>
+> **Files changed:** `docs/oa-ops-runbook.md` · `docs/session-log.md` · `docs/state.md` (this
+> block). Device-hash-verified via direct `device_bash` sha256 + single-match grep — never a
+> stage-back read (§9.1a). No OA, no Chrome, no git.
+> **Uncommitted — Andy runs the commit.**
