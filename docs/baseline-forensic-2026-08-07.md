@@ -463,3 +463,166 @@ ordinary.
 
 *Standalone report. Gates nothing. Cites the frozen v1 ledger as history only, never as the state
 of the fleet (`CLAUDE.md` §3.1, §10).*
+
+---
+
+# ⊕ ADDENDUM — 2026-08-08 · Monday-tracking lessons
+
+> **Added 2026-08-08 at Andy's explicit instruction**, as an appended section rather than a second
+> forensic. The report above is unchanged; nothing in it was edited, restated or re-derived here
+> beyond re-verification (§A.0).
+>
+> **THIS ADDENDUM GATES NOTHING AND AMENDS NOTHING.** It proposes candidate lessons for the daily
+> loop. It does **not** amend `docs/daily-loop-spec.md`, `docs/evidence-standards.md`,
+> `scripts/execution_audit.py`, or any spec — those are decisions and decisions are gated
+> (`CLAUDE.md` §5). No row was written to `data/lessons.csv`. Adopting any item below requires an
+> explicit "amend the plan."
+>
+> **Scope note.** The body of this report answers "what killed this bot." This addendum answers a
+> different question — *what does it teach the loop that starts tracking a live fleet* — and the
+> answer is deliberately narrow: five items, each tied to one measured fact about the Baseline and
+> one named anchor in the live machinery. Where the Baseline teaches nothing, nothing is claimed.
+
+## A.0 — Re-verification of the body, 2026-08-08
+
+Every headline figure in §§1–4 above was independently re-derived this session by a fresh script
+against `data/archive/trades.csv` (sha256 `218d7f733d6fab87…`, byte-identical to the provenance
+table in §0). **43 rows → 43 condors, 0 exclusions; Σpnl −31,580.00; Σrisk 427,601.00; Exp(R)
+−0.073738 per condor whole life (σ 0.3529, se 0.0538); epoch A 10 condors −0.1653, epoch B 33
+condors −0.0460; PT bucket 19 @ +0.0877, 15:50 bucket 14 @ −0.2275; bucket reconciliation
+−16,460 + 16,579 − 31,699 = −31,580 exact; worst-3 −29,861 = 94.6% net / 47.6% gross; 30 of 43
+condors positive, median R +0.0492; risk/position $9,944, sd $63.** Zero discrepancies against the
+text above. **T1 LIVE · the arithmetic is confirmed; the sample gates it fails are unchanged.**
+
+---
+
+## A.1 ⭐ The detector's blind window is 20 positions. This bot was killed in 10.
+
+**T1 LIVE on the Baseline fact · first-hand code read on the detector · confidence HIGH.**
+
+`scripts/execution_audit.py` (read 2026-08-08) computes `need = FLIP_WINDOW + FLIP_BASELINE_MIN`
+= **10 + 10 = 20**. Below 20 positions `EXPIRY_RATIO_FLIP` emits `SKIPPED` with the reason *"too
+few positions to evaluate a flip — NOT a pass."* That is correct behaviour and the rule is right
+to refuse — a flip needs a baseline ratio to flip *from*.
+
+**But `EXPIRY_RATIO_FLIP` is the fleet's one structural rule for an exit engine that is not
+generating orders, and the Baseline's entire kill window is 10 positions long.** All ten of its
+pre-arm sessions carry `status = expired` on a 16:15 settlement stamp; they cost −$16,460 and
+contain the three −1.000R expiries that are 94.6% of the net loss. Run against the Baseline's own
+first 10 positions the rule would have returned SKIPPED — not because the detector is weak, but
+because the damage completes inside the window the detector cannot yet see.
+
+Every bot restarts at **n = 0** on Day-0 (`daily-loop-spec.md` §3). **For roughly the first four
+trading weeks per bot, MECHANICS is carried entirely by the Trades-list read, and the detector
+contributes nothing to it.**
+
+> **Candidate corollary — not adopted.** While a bot is under 20 positions, the brief prints its
+> `EXPIRY_RATIO_FLIP` SKIPPED row *with the current n*, so the blind window is visible on the page
+> and shrinking in view, rather than inferred. `daily-loop-spec.md` §5 already requires the SKIPPED
+> list to reach §6; what is not stated is that this particular skip is **worst exactly when it is
+> most likely to be read as quiet.**
+
+## A.2 Tier C is SKIPPED BY NAME on Monday — and Tier C is this bot's rule set
+
+**First-hand file reads, 2026-08-08 · confidence HIGH · nothing here is a defect claim.**
+
+`data/bots_config_v2.csv` **exists** (read 2026-08-08; 12 data rows). Its own header comment
+declares it **PARTIAL** — *"Phase A is incomplete — 2 of 3 shared automations captured"*, with
+*"Ride and the six arms … explicitly deferred."* Its schema is object/input-level
+(`object_kind,name,oa_id,version,attached_to,input_id,input_type,input_label,input_default,
+a7_hash,captured,layer2_status`) and carries **no declared-mechanic columns**. `execution_audit.py`
+handles this openly: it runs in **REDUCED** mode and skips each Tier C rule **by name**, citing
+*"until bots_config_v2.csv carries the mechanic columns."*
+
+The rules so skipped are `PT_DECLARED_NOT_TAKEN`, `PT_NEVER_FIRES` and `TIME_EXIT_MISSED`.
+**`PT_NEVER_FIRES` is a one-line description of Baseline epoch A.** The machinery is behaving
+correctly and reporting its own blindness — the point is only that the blindness and the failure
+mode coincide, so the coverage has to come from the human read for now.
+
+⚠️ **`CLAUDE.md` §3.2 and §6 both still describe `bots_config_v2.csv` as "not yet written — Phase 2 /
+Phase 2–4 deliverable."** That is stale against the file on disk. It is a factual line in a
+governing doc; it is **flagged, not edited** — listed for Andy in the hand-off.
+
+## A.3 The Trades list is perishable. NOT EVALUABLE is reversible on the day and permanent after.
+
+**T1 LIVE · confidence HIGH.**
+
+§H5's seven anomalous PT50 non-fills are the most-cited unresolved item in this report, and §6
+item 5 records why they can never be closed: the distinction between *"order never generated"* and
+*"order generated, never filled"* lives in the position's Trades list, which is in neither witness
+and is now unreachable. `daily-loop-spec.md` §2 already rules that MECHANICS is answered by the
+Trades list **or it is NOT EVALUABLE**, and that NOT EVALUABLE is *"never a pass."*
+
+What the spec does not say — and what this bot demonstrates at a measurable price — is the
+**asymmetry in time**: a MECHANICS ambiguity costs one same-day capture to resolve and is
+**unresolvable forever** once the account state moves on. −$31,580 of forensic ends with seven
+positions permanently undecidable for want of a screenshot nobody took.
+
+> **Candidate corollary — not adopted.** Any position whose close is not explained by a declared
+> exit gets its Trades list captured **that day**, before the next session. Deferral is not
+> "later"; it is "never."
+
+## A.4 Order the per-bot review by R, with risk/position printed beside it
+
+**T1 LIVE · confidence HIGH · this is §5.5 above, turned into a display rule.**
+
+Across the v1 `QQQ-IC-0DTE-*` family, risk per position spanned **$187 → $9,944 — a 53× range**
+(§H4). The Baseline ranked **#1 of 32 bots by dollars lost** and **mid-pack by Exp(R)**, and its
+one genuinely anomalous property — the 43/43 call-side strike skew — is **invisible in a dollar
+ranking**. A dollars-ordered review points attention at the biggest bot; an R-ordered review with
+risk/position beside it points at the most broken one, and separates the two questions on sight.
+
+The live fleet is heterogeneous by design, so the condition that produced the v1 mis-ranking is
+present again from Day-0. `CLAUDE.md` §4's *"compare by R, never raw P/L"* already governs the
+**analysis**; this is the narrower claim that it should govern the **sort order of the page**,
+because the sort order is what decides which bot gets looked at on a busy evening.
+
+## A.5 A −1.000R day is a MECHANICS question before it is a STRATEGY question
+
+**T1 LIVE · confidence HIGH.**
+
+The Baseline's three max-loss days look like three bad bets and were not: they were an exit engine
+that did not exist yet (§H1). Its bet was *also* bad — payoff geometry needing an **84.6%** win
+rate against **69.8%** delivered (§H2) — and the two facts are independent. Grading those sessions
+as "bad tape" would have missed both: the missing engine, because a −1.000R expiry is what a
+correctly-unstopped bot does too; and the geometry, because a bot that is 30-for-43 on win rate
+reads as working.
+
+This is `daily-loop-spec.md` §2's three-verdict spine, and the Baseline is a clean worked example
+of why it refuses to blend them: **FIRE was green on all three days, MECHANICS was red, STRATEGY
+was red for an unrelated reason.** One grade would have been wrong however it was assigned.
+
+> **Candidate corollary — not adopted.** A close at or near −1.000R routes to the MECHANICS axis
+> first and does not receive a STRATEGY grade in the same pass. The standing exception matters
+> here: the legacy champion and its `-130PM` clone are deliberate Exit-Option-free ride+S2 controls
+> (`CLAUDE.md` §5), for which a −1.000R expiry **is** the design and is not a MECHANICS finding.
+
+---
+
+## A.6 Two incidental findings, flagged and NOT edited
+
+Both were found while grounding the lessons above. Both sit on gated or code surfaces, so both are
+reported for Andy's ruling and neither was touched.
+
+**(i) The detector's stated freeze does not match the file on disk.** Four documents describe
+`execution_audit.py` as *"FROZEN … v1.0.0, sha `67a537977c5d0896`"* —
+`daily-loop-spec.md` lines 36 and 152, `exploratory-bots-design-2026-08-07.md` line 553, and
+`session-log.md` lines 415 and 603. The file read 2026-08-08 reports **`VERSION = "1.1.0"`**
+(`FROZEN_ON` still `"2026-07-30"`) and hashes to sha256 **`fdc43d0dcb7275560069048e62d897f528d9620b5a6be87de7a410fae1851e2d`**,
+16-char form **`fdc43d0dcb727556`**. The detector that runs on Monday is **not** the artifact the
+loop spec names. This may be an intended revision whose docs lag, or an unrecorded change; the
+ledger of that decision is not in the folder as far as this session read. **`daily-loop-spec.md`
+is a spec — gated. Not edited.**
+
+**(ii) `self_hash()` does not do what its docstring says.** The docstring claims the value is
+*"sha256 of this file, with the stored hash line itself excluded so the value is stable."* The
+implementation hashes the file whole — there is no exclusion — so the printed provenance hash
+changes whenever the file does, including when a stored hash line is updated. Harmless today
+because no hash line is stored inside the file; it defeats the docstring's stated purpose the
+moment one is. **Code surface — Claude Code's lane (`CLAUDE.md` §7). Not edited.**
+
+---
+
+*Addendum ends. Gates nothing, amends nothing, decides nothing. Proposed lessons are proposals;
+`data/lessons.csv` was not written. Cites the frozen v1 ledger as history only, never as the state
+of the fleet (`CLAUDE.md` §3.1, §10).*

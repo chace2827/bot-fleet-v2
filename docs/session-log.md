@@ -6958,3 +6958,279 @@ stage-back read, per §9.1a):**
 - `docs/session-log.md` (this entry)
 
 **Uncommitted — Andy runs the commit.**
+
+---
+
+### 2026-08-08 (S1 CLONE 2 — PR-04 ONLY) — **PR-04 BUILT AND LAYER-1 VERIFIED. THE 15:52 BACKSTOP IS BUILDABLE AND IS BUILT.** Three findings, all recorded, none acted on.
+
+**Scope.** PR-04 (`QQQ-IC-0DTE-Fortress-NoPT50`) and nothing else. PR-02 was finished by another
+session and was not touched; the PR-01 clone, the pilot and the nine leave-in-place bots were
+never navigated to. No archiving, no signing, no Day-0 sequence, no git in any form.
+
+**Precondition (A-06) — CLEARED.** S1's previous close-out is the `2026-08-08 (S1-RESUME — PR-02
+ONLY)` entry above: complete hand-off, no `FLEET STAYS OFF`, gate A0 not branch 2 or 3.
+
+**GATE A0 re-check, first-hand, own read.** `/bots` footer: **"42 active bots • 8 left in your
+plan"** — exactly the state PR-02's close-out recorded (41 clean restore + the PR-02 clone), read
+via 44 raw `/bots/bot/` links = 42 bots + the 2 POS-count links. **No duplicate production
+names.** Two `-ARCHIVED-` names present (PR-01's and PR-02's originals) — not branch 3f: renames
+commit and OA-archiving is Andy's hand. After this session's clone the footer reads **43 • 7**,
+and the +1 is this clone (`created 2026-08-08T15:43:52.233Z`).
+
+**Step 0 — baseline of the original, BEFORE the rename.** `BOTfw5TkkCRF2617743681996538301` ·
+Paper Trading · group **Monitor** · **$100,000** (seed) · 2/2 limits (even, IC=2) · tags
+`experiment` · `disableExits 1` · `status off` · Symbols **empty** (automation-resident `Loop
+QQQ`) · no bot inputs · 35 closed positions.
+⭐ **FINDING PR04-R1 — THIS BOT HAS TWO AUTOMATIONS, NOT FOUR.** The prompt's "hash all four
+automations" is inherited from PR-02. `FortNoPT-Scan-Put` (`2eab2d95…`, 4682B, v9) and
+`FortNoPT-Scan-Call` (`7dd2df80…`, 4649B, v9), both `sharing 0`. The hash proof below is 2 of 2 —
+complete for this bot, not a partial run. **No backstop existed on the original.**
+
+**Order of work, per A-16a.** Step-0 capture → rename the original → clone → traps → spec →
+hash-proof. Rename first: `…-ARCHIVED-2026-08-08`, committed on blur, verified after a hard
+reload — **same bot id**, so renamed, not re-created; every other field unchanged.
+
+**Clone Settings drawer — the allocation trap pre-empted, not repaired.** Name, Account and
+Allocation were set **before creation**: `QQQ-IC-0DTE-Fortress-NoPT50` · Paper Trading ·
+**$100,000**. The drawer's default was the flat **1000**. ⛔ **No allocation gate here, unlike
+PR02-R1:** both readings agree — the original is $100,000 and `pre-registration-ledger.md` §4
+PR-04 says *"IDENTICAL to the Fortress arm"*, whose own capture records $100,000.
+
+**The four clone traps, every one read back after a hard reload.**
+| trap | found on the clone | action |
+|---|---|---|
+| allocation | **$100,000** | pre-empted in the drawer — no repair needed |
+| bot group | **None** (bit) | restored to **Monitor**, matching the original |
+| tags | **empty** (bit) | restored `experiment`, then step-8 `PR-04` added → stores `experiment,pr 04` |
+| **TRAP 10 `disableExits`** | **0 — EXIT OPTIONS ON** (bit) | restored to **1**, verified after a hard reload AND screenshotted |
+| symbols | "No symbols yet" | **PASS — the ORIGINAL is empty too.** Same family property as PR-02's PR02-R2. |
+
+**SPEC (build-plan.md §2B: 15:50 time exit + 15:52 flat-close backstop, NO PT50).**
+1. ⛔ **NO PT50 — CONFIRMED PRESENT-AS-ABSENT. F-C1 NOT INVOKED.** `exits.profits` is `""` and
+   there is no `smprofits` key on **both** Open Position actions, on the clone **and** on the
+   original; `0.5` occurs nowhere in either routine. Nothing was removed because nothing was
+   there. The S1 CLONE-2 branch ("if a profits node IS present, that is a NEW finding — record,
+   GATE") **did not fire.**
+2. **15:50 time exit — inherited, untouched.** `expdays 0.01`, text "Expiration: 10 minutes",
+   `smexpdays {"text":"Market","smart":"market"}`, both sides.
+3. ⭐ **15:52 BACKSTOP — BUILT.** Decision Point B is answered again, first-hand: the Repeating
+   trigger's Market Time (EST) picker carries a **Custom** entry whose dialog states its own
+   bound — *"Select a time from 9:31AM to 3:55PM EST"* — so **15:52 is inside the reachable
+   range.** ⛔ No time was substituted. Built as `FortNoPT-Backstop-1552-FlatClose` (rid
+   `RTfw5TkkCRF178620440961331`, v1, `6794b56b…`, 1447B), tree
+   `Repeat for each position → Close Position` with `price {"text":"Market","smart":"market"}`,
+   `closeqty 100% of position`, memo **"1552 backstop flat close"** — the pilot's shape exactly,
+   including the permitted end-of-day Market carve-out. Trigger stored verbatim:
+   `{"startDate":"2026-08-10T20:52:00.000Z","freq":2,"interval":1,"ntime":1552,"byweekday":{"value":[0,1,2,3,4],"text":"Mon-Fri"},"holidays":"skip"}`,
+   rendered on the bot page as **"Every week on Mon-Fri, 3:52pm EST"** after a hard reload.
+   Naming follows this bot's own prefix (`FortNoPT-`), as the pilot's followed `Fortress-`.
+
+**⛔ D-3 IS OPEN AND THIS BOT IS AFFECTED — nothing was re-timed.** The stored `startDate`
+`…T20:52:00.000Z` is 15:52 at UTC−5 but **16:52 ET in August (EDT)**, while `ntime` = 1552.
+Which field wins is unobserved. It is read at **Day-0 Step 5a**, not here.
+
+**⛔ FINDING PR04-R3 — NEW, GATED, NOT FIXED: the cached next-fire disagrees with the saved
+trigger.** After the schedule was saved and hard-reloaded, `a5.bots.bot.rdata.next` reads
+**1786369500000 = 2026-08-10T13:45:00Z (09:45 ET)** — the picker's pre-change 9:45am default —
+while the stored `repeat` input reads `ntime 1552`. Either the cached next-fire was computed at
+attach and never recomputed, or the scheduler is keyed off something other than `ntime`. **This
+is the same question D-3 asks, from a second direction, and it is now a live disagreement rather
+than a theoretical one.** Cost of deferring: none — `AUTOMATIONS` is OFF, the bot is unsigned and
+has no positions. ⛔ **Not touched.** It belongs with the Step-5a read.
+
+**📝 FINDING PR04-R2 — the Automation Library page was NOT opened; the check was satisfied a
+different way and that is stated rather than claimed.** The Library's URL is not recorded in the
+folder and `/automations` 404s; a `Library` link exists on `/bots` and was not pursued past the
+ladder's third attempt. What stands in its place is **first-hand and stronger for this purpose**:
+`sharing = 0` on all three of the clone's automations and on both of the original's, read from
+the stored model. Sharing is opt-in via the Library, so `sharing 0` **is** the not-in-Library
+fact. Corroborated by the folder's own record that the Library holds exactly four objects, none
+named `FortNoPT-*`. ⬜ **The Library page read itself is NOT EVALUABLE this session — recorded as
+such, never as a pass.** In any case no existing automation was edited: the spec delta was a new
+object, so the propagation risk the check exists to catch had no surface to act on.
+
+**⭐ STEP-7 NO-UNINTENDED-EDITS PROOF — RE-RUN AFTER EVERY EDIT, BY HASH, NOT BY EYE.** Both of
+the ORIGINAL's automations still hash **byte-identically** to the step-0 baseline —
+`2eab2d95…211e2` (4682B, v9, updated 2026-03-24T16:04:07.637Z) and `7dd2df80…c6be` (4649B, v9,
+updated 2026-03-24T16:04:25.259Z). The original still holds **exactly two** automations: **the
+backstop did not leak onto it.** Its seed, group, tags, `disableExits` and `status` are all as at
+step 0; the only changed field is the name, which is the intended edit. All three clone rids
+differ from the original's.
+
+**⛔ NOT DONE, GATED, NOT FAILED.**
+- **Template V1 + the PR-04 pre-registration note** — `showBotMenu` → "Save as Template" is
+  **ANDY'S HAND**. **NOT ATTEMPTED.** `tid` is `null`.
+- **Bot-page Notes** — **S0b-2 is OPEN, ruling = DO NOT RETRY.** Left unwritten deliberately.
+- **OA archive of the renamed original** — Andy's hand (gate A5).
+- **Layer 2** — DEFERRED TO DAY-0: the first new position's Trades list must show a **time-exit
+  row**, **NO PT row**, and `BACKSTOP_CAUGHT_IT` must be **NEGATIVE** — a backstop doing the work
+  means the Exit-Options side is dead.
+
+**Tool notes.** The `computer` click tool's coordinate space is **2× the returned screenshot's
+pixels**, i.e. exactly the documented `scale = screenshotWidth / window.innerWidth` applied to
+CSS-px rects — a mid-session mis-derivation (halving it) sent two clicks into empty canvas and
+cost three attempts on the tag widget. The tag widget's real target is
+`input.textinput[placeholder="Add tag"]`, **not** the hidden `input[name=tags]`; it needs
+per-character `input` events and a click on the suggestion item. Hard reloads were taken between
+every automation editor (the 2026-08-08 stale-DOM trap); no stale-DOM incident occurred.
+
+**⛔ ATTESTATION (A-18): NONE of the nine leave-in-place bots — `DIR-SPX-PutVIX22-SL75`,
+`DIR-SPX-CallVIXdrop`, `3DTE $140-$350`, `Nigiri-Paper-v1`, `QQQ long call`, `Friday 14 DTE Broken
+Wing IB (B-70)`, `Trendy-Paper-v1`, `60min-ORB-10W-Paper-v1`, `Tasty Condor` — was opened, edited,
+or had a toggle touched this session. NONE. No bot page was navigated to for any of the nine.**
+The only bots opened were PR-04's clone and PR-04's own original. **Step 2c remains unspent.**
+**Nothing was switched ON. Nothing was archived. Nothing was signed. The pilot, the PR-01 clone
+and PR-02 were not touched.**
+
+**Files changed:** `data/captures/2026-08-08-clones/PR-04-step0-baseline-QQQ-IC-0DTE-Fortress-NoPT50.txt`
+(new) · `data/captures/2026-08-08-clones/PR-04-clone-final-2026-08-08.txt` (new) ·
+`data/captures/2026-08-08-clones/PR-04-original-step0-toggles-2026-08-08.jpg` (new) ·
+`data/captures/2026-08-08-clones/PR-04-clone-final-toggles-2026-08-08.jpg` (new) ·
+`data/archive/rename_map.csv` · `data/bots_config_v2.csv` · `docs/state.md` ·
+`docs/session-log.md` (this entry). All sha256-verified by direct `device_bash`. **No git in any
+form. Uncommitted — Andy runs the commit.**
+
+---
+
+## 2026-08-08 — Evidence-standards REDESIGN PROPOSAL prepared. PREPARED, NOT RULED. One new file; no existing file edited. No OA, no Chrome, no git.
+
+**Scope, stated first because the whole point is what was *not* done.** Andy asked for the
+scoring redesign `evidence-standards.md`'s own ✍️ WRITTEN TO BE REVISED header has been asking
+for. This session **prepared a proposal and ruled nothing**. `docs/evidence-standards.md` was
+**not edited** — verified unchanged by direct `device_bash` sha256 before and after
+(`5f21c134dbc1ed63…`, identical). Nothing was propagated. No decision was made.
+
+**Deliverable:** `docs/evidence-standards-redesign-proposal-2026-08-08.md`, 541 lines, sha256
+`0948ef2afa932cf26a8081fbecedddd0ab782616b0c89a561c6855d12c892d14`.
+
+**The downstream-consumer map (built first, §1 of the proposal — it did not previously exist).**
+Five consumer classes by `grep -rl` over `docs/`, `scripts/`, `CLAUDE.md`, `STATUS.md`, `data/`:
+evidence tiers T1–T5 = **10 files** · audit gates A–K = **8** · board gates G1–G6 = **4** ·
+gate T3 = **6** · the undocumented bracket provenance vocabulary = **29 surfaces, 342 tagged
+instances**. Plus a third vocabulary in data: `data/oa_facts.csv`'s `tier` column over **1,548
+facts**, values `DOCUMENTED` (1,401) / `DOCS-SILENT` (147) — neither T1–T5 nor the bracket set.
+
+**Diagnosis — eight strains, each with a repo worked example.** Headline three:
+1. **The tier saturates.** `baseline-forensic-2026-08-07.md` scores all five ranked hypotheses at
+   T1 LIVE and says so: that is *"the least interesting thing about it, because T1 data at n=43
+   still fails gate B1."* The tier did none of the work.
+2. **So the author invented the missing axis and mis-cited it into existence** — the
+   `tier · confidence · gate status` citation form, attributed to `evidence-standards.md`
+   *"§2.1 note 4"* (§2.1 has **three** notes) and to §3 for the tiers (they are §2).
+   ⚠️ **Recorded as diagnosis only — NOT corrected. This session edited no existing file.**
+3. **Residual attachment is a working primitive with no home in the standards.** C12's discharge
+   travels as {claim · tier · residual · pre-declared reopen condition}, governed by a rule
+   written into `state.md` and `track-b-arms-spec.md` — not into the standards document.
+
+⛔ **Live finding, needs a ruling regardless of the redesign (DA-3):** §5 retires the ≥15-condor
+go-live bar (*"Do not reinstate a 15-condor bar."*), but **`scripts/report.py` line 141 still
+emits it and `STATUS.md` line 17 carries it today** — the numeric source-of-truth page publishes
+a gate the standards document retired. Not fixed here (code change + it changes what STATUS.md
+asserts). Also recorded: `grep 'gate [A-K]' scripts/` = **0** — audit System I is not implemented
+anywhere, and §4-I's 0–100 score has one value ever recorded (9/100, at the audit).
+
+**Three options, each with cost + migration story.** (1) Ratify the practice — vocabulary,
+citation form, residual attachment, consumer registry; zero re-litigation but **no scoring**.
+(2) **Tier × corroboration C0–C3 + a D0–D5 decision-grade threshold table**; corroboration never
+loosens a gate, it triggers a mandatory residual and constrains citation; migration is additive,
+lazy, no sweep, under an explicit **no-re-litigation clause**. (3) A **computed decision-grade
+ladder** printed nightly — largest cost, a code deliverable competing with Day-0, and the only
+option that can loosen a gate; **admissible only in additive form** — a ladder that *replaces*
+gate I re-opens the scoring basis of the overruled kill-IC verdict and is disqualified under the
+proposal's own backward-compat requirement.
+
+**RECOMMENDATION (a recommendation, not a ruling): Option 2, staged** — Stage A = Option 1,
+Stage B = the C-axis + threshold table, Stage C = the ladder (additive only) deferred to the
+earlier of the first D3+ decision or **2026-11-30**, deliberately the same date B3's detector
+trigger already carries. Rationale: the project already invented both halves independently
+(baseline-forensic's confidence column; C12's residual), so this writes down what works rather
+than inventing what might. **Five of §10's seven items survive the recommendation** and the
+proposal says so.
+
+**Backward compatibility.** G-12b's constants are signed *values*, untouched; its `T1` is a
+**test identifier, not an evidence tier** (§1.3 of the proposal) and is out of scope by
+construction. C12's residual maps to C1-with-residual with **zero text change**. The 342 bracket
+tags stay permanently valid and re-tag lazily on next edit — no sweep, because a mechanical
+re-tag of 29 surfaces is exactly this repo's documented propagation failure surface.
+
+**§1 / §9.2 preserved verbatim under every option** (proposal §7): the ADOPTED/OVERRULED table
+(kill-IC, Fortress auto-kill, custody separation + independent go-live authority DECLINED) and
+the 2026-07-31 "third-party switch" correction are a **record**, never scored, never migrated,
+never reworded. §10 item 7's optional reconsideration is deliberately not argued.
+
+**10 DECISION — ANDY items registered (DA-1…DA-10).** DA-1 adopt-which; **DA-3 is required under
+every option including "adopt none"**; DA-7 is the locking-clause declaration (is "B1 was never a
+gate on build/sizing decisions" a clarification or a loosening?).
+
+**Files changed, device-hash-verified (direct `device_bash` sha256 + single-match grep of the
+inserted text; never a stage-back read, per §9.1a):**
+- `docs/evidence-standards-redesign-proposal-2026-08-08.md` — **NEW**, `0948ef2a…`
+- `docs/session-log.md` (this entry)
+- ⛔ `docs/evidence-standards.md` — **READ ONLY, NOT EDITED**, sha `5f21c134…` unchanged.
+
+⚠️ Three sessions shared the device bridge today; other files carry today's mtime from work that
+is not this session's. **This session wrote exactly the two files listed above.**
+
+**Uncommitted — Andy runs the commit.**
+
+---
+
+## 2026-08-08 — QQQ-IC-0DTE-Baseline forensic: REPLICATED, NOT REWRITTEN. Monday-tracking addendum appended. No OA, no Chrome, no git.
+
+**Task as briefed:** write `docs/baseline-forensic-qqq-2026-08-08.md` — a forensic on
+`QQQ-IC-0DTE-Baseline` (−$31,580, 38% of the v1 fleet loss), using
+`docs/baseline-forensic-2026-08-07.md` as the model, described in the brief as "the champion
+forensic."
+
+**⛔ THE BRIEF'S PREMISE WAS WRONG AND THE DELIVERABLE WAS NOT WRITTEN.**
+`docs/baseline-forensic-2026-08-07.md` **is** the QQQ-IC-0DTE-Baseline forensic — Sprint Task 12,
+written 2026-08-07, closing correction C3. It is not the champion forensic; that is
+`execution-audit-ic-spx-fastpt25-s2-2026-07-27.md`, a removed v1 doc carried as an index entry
+only in `history-index.md`. Writing the briefed file would have put **two forensics on one
+archived bot, from one frozen ledger, under near-identical names** — the `v3-DRAFT` stale-branch
+failure mode plus a citation-loop hazard. Session stopped and reported instead of writing.
+
+**Instead, an independent replication.** A fresh script (no reference to the doc's figures while
+computing) re-derived every headline number from `data/archive/trades.csv`
+(sha `218d7f733d6fab87…`, byte-identical to the doc's own provenance table). **Zero discrepancies.**
+43 rows → 43 condors, 0 exclusions · Σpnl −31,580.00 · Σrisk 427,601.00 · Exp(R) **−0.073738 per
+condor, whole life** (σ 0.3529, se 0.0538) — *pools two epochs; not this bot's expectancy* ·
+epoch A 10 condors −0.1653 / epoch B 33 condors −0.0460 · PT bucket 19 @ +0.0877, 15:50 bucket
+14 @ −0.2275 · recon −16,460 + 16,579 − 31,699 = −31,580 exact · worst-3 −29,861 = **94.6% net /
+47.6% gross** · 30 of 43 condors positive, median R +0.0492 · risk/position $9,944 (sd $63) vs
+family $187–$4,941 · 37.99% of the −83,130 v1 fleet total across 32 bots. **The 2026-08-07
+forensic stands as written.**
+
+**Andy ruled (orchestrator chat): option B** — a short Monday-tracking addendum appended to the
+existing file under a dated banner, not a new forensic. Appended as **§A.1–A.6**, five candidate
+lessons, each tied to one measured Baseline fact and one named anchor in the live machinery:
+A.1 `EXPIRY_RATIO_FLIP`'s 20-position floor vs this bot's 10-position kill window · A.2 Tier C
+SKIPPED BY NAME and `PT_NEVER_FIRES` being epoch A's one-line description · A.3 the Trades list is
+perishable · A.4 sort the per-bot review by R with risk/position beside it · A.5 a −1.000R day is
+MECHANICS before STRATEGY. **Gates nothing, amends nothing. `data/lessons.csv` NOT written**
+(sha `2d1fe118898badb8…`, mtime unchanged 2026-07-30).
+
+### Three findings flagged, NONE acted on — all on gated or code surfaces
+
+1. **The detector's stated freeze does not match the file on disk.** `daily-loop-spec.md` (lines 36,
+   152), `exploratory-bots-design-2026-08-07.md` (553) and `session-log.md` (415, 603) all say
+   `execution_audit.py` is **FROZEN v1.0.0, sha `67a537977c5d0896`**. The file read 2026-08-08 is
+   **`VERSION = "1.1.0"`** (`FROZEN_ON` still `2026-07-30`), sha256
+   `fdc43d0dcb7275560069048e62d897f528d9620b5a6be87de7a410fae1851e2d`. **The detector that runs on
+   Monday is not the artifact the loop spec names.** Whether this is an intended revision with
+   lagging docs or an unrecorded change is not answerable from the folder. `daily-loop-spec.md` is a
+   spec — **gated, not edited.**
+2. **`CLAUDE.md` §3.2 and §6 are stale on `bots_config_v2.csv`** — both call it "not yet written";
+   it exists (12 data rows, self-declared **PARTIAL**, object/input-level schema with no
+   declared-mechanic columns, so Tier C runs REDUCED and skips by name). `CLAUDE.md` — **not edited.**
+3. **`self_hash()` does not do what its docstring says** — claims the stored hash line is excluded;
+   the implementation hashes the file whole. Harmless today, defeats its stated purpose the moment a
+   hash line is stored. Code — **Claude Code's lane (§7), not edited.**
+
+**Files changed:** `docs/baseline-forensic-2026-08-07.md` (addendum §A.1–A.6 appended; sha256
+`3e725980a52101f1588bc92151e1a5b5ac412b66637b5f2385d8e7b3653e2963`, 628 lines) ·
+`docs/session-log.md` (this entry). **Nothing else.** No `data/` file written, no OA surface
+touched, no browser tool run, no git command run. Append guarded by a pre-write marker count
+(0 before, 1 after) against the shared-bridge append-twice hazard; verified by direct
+`device_bash` sha256 + single-match greps, never a stage-back read (§9.1a).
+**Uncommitted — Andy runs the commit.**

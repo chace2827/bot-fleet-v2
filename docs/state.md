@@ -2,7 +2,10 @@
 
 *The live facts. Updated whenever a stated fact changes (CLAUDE.md §9.1). Numbers live in
 `STATUS.md`; the plan in `docs/build-plan.md`; progress in the `bot-fleet-migration` tracker.
-Last updated 2026-08-08 (E-3 §3.3 hard precondition IMPLEMENTED & VERIFIED — see the
+Last updated 2026-08-08 (S1 CLONE 2 — PR-04 BUILT, 15:52 backstop BUILDABLE and BUILT, finding
+PR04-R3 gated: see the BOTTOM block. Earlier same evening: orchestrator batch — gate A9 CLOSED, PR-02 BUILT+RULED,
+O4 fixed, CA-3 applied, bookmarklet fixed: see the NEW top block. Earlier same day: E-3 §3.3
+hard precondition IMPLEMENTED & VERIFIED — see the
 top block; three items gated. Previously 2026-08-07: E-1/E-2/E-3 applied — see block below; supersedes the ceiling-28 /
 no-OPS-class facts in every section beneath this one, which are historical as of their own dates).
 Previously: 2026-08-06 (decision-card-2026-08-06.md — all seven ruling slots decided by Andy;
@@ -19,13 +22,41 @@ the released gated batch — C12 and S-2 propagated to
 every surface, D-1 propagated, `research-loop-spec.md` corrected ×6, §8.4 step 1 corrected on
 explicit authorization; earlier the same day: R-edit package applied + edit-policy split).*
 
+## ⭐ 2026-08-08 EVENING — THE DAY'S SETTLED FACTS (orchestrator session batch)
+
+- **GATE A9 CLOSED.** Andy's own clean end-to-end 8/8 `daily.sh` n=0 run is on file
+  (`LEDGER_START=2099-01-01` sentinel pending A-02). Two loader fixes shipped same day:
+  `execution_audit.py` **v1.1.0** (split (i): comment-skip, name/bot dual key, schema-unrecognized
+  branch → Tier-C SKIPPED BY NAME; matrix 21/21 unchanged) and `daily_brief.py` (same class;
+  CONFIG-BLIND loudly with schema reason). **Day-0 §4 is unblocked.** Split (ii) still open.
+- **PR-02 CLONE BUILT, VERIFIED, RULED.** S1-RESUME completed the interrupted build; original's
+  four automation hashes byte-identical to the step-0 baseline after every edit; F-C1 removed in
+  place both sides; 5b applied (speedy, == PR-01 byte-for-byte); Trap 10 held (disableExits=1,
+  screenshot). **PR02-R1 RULED by Andy: allocation $50,000 STANDS** (pre-reg §4
+  identical-to-11:00-arm; equal-to-origin was coincidence). Signing unblocked pending Template V1
+  (Andy's hand) + Day-0 gates. Layer 2 deferred to Day-0, INVERTED + monitor-liveness.
+  PR02-R2/R3 (two doc corrections) on the 2026-08-08 sitting.
+- **CA-3 APPLIED** (pack A-27c, both surfaces): capture worklist = **11 bots**; the pilot is the
+  12th NOT-ESTABLISHED via its DIVERGENT capture (S0b-1 path, never a re-capture).
+- **E-3 GATED ITEMS RULED:** (1) receipt clause = **ADDITIVE** (pre-existing keys byte-identical,
+  new keys permitted) · (3) **O4 FIXED** — `_a4b` predicate repaired (`.total_seconds()`, loud
+  unparseable-date flags); self-test 13/13 with O4 as POSITIVE CONTROL; `--validate` reference
+  reproduced exactly. **A4b fires for the first time in its existence.** (2) ops `trade_id`
+  namespace: on the sitting, unruled.
+- **S0b-3 FIXED** — bookmarklet captures both toggle titles as an additive trailing section;
+  zero programmatic readers affected; ⛔ VERIFY-ON-NEXT-CAPTURE (Andy's Monday worklist run).
+- **S1 status: PR-04 build in progress** (separate Opus session) — last build item before the
+  read-only fleet sweep and the master audit report.
+- **Sitting queue (one document, decision-card-2026-08-08.md + its addendum):** slots 1–6 ·
+  PR02-R2 · PR02-R3 · ops trade_id namespace.
+
 ## ⭐ E-3 §3.3 HARD PRECONDITION — IMPLEMENTED & VERIFIED 2026-08-08
 
 All **three exclusion surfaces** are built, tested and device-verified. This **discharges the
 implementation half** of E-3's hard precondition; it is **not a build authorization**. The gate on
 any Lab bot's `AUTOMATIONS` toggle is still: E-3 implemented **AND** the OA roster restore landing
 **AND** Andy's go. §3.4 (paper vs live-tiny) and §3.5 (Bot Group) remain recommendations, not
-rulings. Fleet is still **0 active bots**.
+rulings. Fleet is still **0 active bots**. **[CORRECTED 2026-08-08 evening: stale at writing — the restore landed 2026-08-07 (S0a gate A0 Branch 1, 41·9 verified) and the same-day S1-RESUME gate-A0 read counted 42 active incl. the PR-02 clone, first-hand. All AUTOMATIONS remain OFF; the E-3 gate on any Lab bot's toggle is unchanged.]**
 
 1. **`build_ledger.py` ops-class exclusion.** `data/bots_meta.csv` gains an **`ops_class`** column
    (empty | `lab-ops`) — the sole classifier, never a tag and never a bot name; the script **FATALs
@@ -2226,3 +2257,83 @@ Full text: `post-u1-package-2026-08-07.md`, `pre-registration-ledger.md` (PR-16 
 > block). Device-hash-verified via direct `device_bash` sha256 + single-match grep — never a
 > stage-back read (§9.1a). No OA, no Chrome, no git.
 > **Uncommitted — Andy runs the commit.**
+
+---
+
+## ⭐ PR-04 CLONE BUILT — 2026-08-08 (S1 CLONE 2). **THE 15:52 BACKSTOP IS BUILDABLE AND IS BUILT.** Three findings; one is a live disagreement worth Andy's eye.
+
+> **Gate A0, own first-hand read before starting:** `/bots` = **42 active • 8 left**, exactly the
+> state PR-02's close-out recorded; no duplicate production names; two `-ARCHIVED-` names present
+> and that is not branch 3f. After this clone: **43 • 7**, the +1 accounted for.
+>
+> **`QQQ-IC-0DTE-Fortress-NoPT50`** — clone `BOTfw5TkkCRF3017862038322323202` holds the production
+> name; the original `BOTfw5TkkCRF2617743681996538301` was renamed `-ARCHIVED-2026-08-08`
+> (**same id** — renamed, not re-created) and is **not** OA-archived (Andy's hand, gate A5).
+> AUTOMATIONS **OFF**, EXIT OPTIONS **OFF** (`disableExits 1`, restored from the clone's 0 and
+> screenshotted), group **Monitor**, tags `experiment,pr 04`, Paper Trading, **$100,000**, 2/2.
+> **Symbols empty — and that is CORRECT: the ORIGINAL is empty too** (automation-resident
+> `Loop QQQ` + action `symbol "QQQ"`), the same family property recorded for the pilot and, as
+> PR02-R2, for the SPX pair.
+>
+> ⛔ **NO ALLOCATION GATE HERE, UNLIKE PR02-R1.** Both readings agree at **$100,000**: the
+> original is $100,000, and `pre-registration-ledger.md` §4 PR-04 says *"IDENTICAL to the Fortress
+> arm"*, whose own capture records $100,000. Set in the Clone Settings drawer **before creation**,
+> so the flat-1000 trap was pre-empted rather than repaired.
+>
+> **SPEC (build-plan.md §2B) — COMPLETE.**
+> **NO PT50 — confirmed present-as-absent; F-C1 NOT invoked.** `exits.profits` is `""` with no
+> `smprofits` key on **both** Open Position actions, on the clone **and** on the original; `0.5`
+> occurs nowhere. Nothing removed because nothing was there — the CLONE-2 "a profits node is a NEW
+> finding" branch **did not fire.**
+> **15:50 time exit** — inherited untouched (`expdays 0.01`, "Expiration: 10 minutes", Market).
+> ⭐ **15:52 backstop — BUILT.** The Repeating trigger's Market Time (EST) picker carries a
+> **Custom** entry whose dialog states its own bound, *"Select a time from 9:31AM to 3:55PM EST"* —
+> **15:52 is inside the reachable range.** No time was substituted. `FortNoPT-Backstop-1552-FlatClose`
+> (rid `RTfw5TkkCRF178620440961331`, v1, `6794b56b…`, 1447B): `Repeat for each position → Close
+> Position`, price **Market** (the permitted end-of-day carve-out), 100% of position, memo
+> **"1552 backstop flat close"** — the pilot's shape exactly. Stored trigger:
+> `startDate 2026-08-10T20:52:00.000Z · freq 2 · interval 1 · ntime 1552 · Mon-Fri · holidays skip
+> · no end`, rendered "Every week on Mon-Fri, 3:52pm EST" after a hard reload.
+>
+> **⭐ ORIGINAL UNTOUCHED, PROVEN BY HASH AFTER EVERY EDIT** — `2eab2d95…` (4682B, v9) and
+> `7dd2df80…` (4649B, v9), both still `updated 2026-03-24`, both byte-identical to the step-0
+> baseline. The original still holds **exactly two** automations: **the backstop did not leak onto
+> it.** All three clone rids differ from the original's.
+>
+> ⛔ **PR04-R3 — NEW, GATED, NOT FIXED. THE CACHED NEXT-FIRE DISAGREES WITH THE SAVED TRIGGER.**
+> After the save and a hard reload, `a5.bots.bot.rdata.next` = **1786369500000 =
+> 2026-08-10T13:45:00Z (09:45 ET)** — the picker's pre-change 9:45am default — while the stored
+> `repeat` input reads `ntime 1552`. Either the next-fire was computed at attach and never
+> recomputed, or the scheduler keys off something other than `ntime`. **This is D-3's question
+> arriving from a second direction, as a live disagreement rather than a theoretical one.**
+> AUTOMATIONS is OFF, the bot is unsigned and has no positions, so nothing can fire. **Read it at
+> Day-0 Step 5a; do not re-time anything before then.**
+>
+> ⛔ **D-3 IS OPEN AND THIS BOT IS AFFECTED** — `startDate …T20:52:00.000Z` is 15:52 at UTC−5 but
+> **16:52 ET in August (EDT)**; `ntime` is the operative field and nobody has observed which wins.
+>
+> 📝 **PR04-R1 — the S1 prompt's "hash all four automations" is a PR-02 inheritance.** This bot has
+> **TWO** (`FortNoPT-Scan-Put`, `FortNoPT-Scan-Call`). The hash proof is 2 of 2 — complete, not
+> partial. Pack line for Andy to amend.
+> 📝 **PR04-R2 — the Automation Library PAGE was NOT opened; ⬜ NOT EVALUABLE, recorded as such.**
+> `/automations` 404s and the ladder's third attempt was reached. What stands in its place is
+> first-hand and sufficient for the purpose: `sharing = 0` on all five automations read (three on
+> the clone, two on the original). Sharing is opt-in via the Library, so `sharing 0` **is** the
+> not-in-Library fact. No existing automation was edited anyway — the spec delta was a new object.
+>
+> ⛔ **STILL OPEN ON PR-04, GATED NOT FAILED:** **Template V1 + the PR-04 pre-registration Notes**
+> (`showBotMenu` → Save as Template is **Andy's hand**; `tid` null; **NOT ATTEMPTED**) and the
+> **bot-page Notes block** (**S0b-2 OPEN, ruling = DO NOT RETRY**). Both are record artifacts;
+> nothing in the Day-0 sequence reads them.
+> ⛔ **LAYER 2 IS UNRUN** — Day-0, first new position: a **time-exit row present**, **NO PT row**,
+> and **`BACKSTOP_CAUGHT_IT` NEGATIVE**. A backstop doing the closing means the Exit-Options side
+> is dead.
+>
+> ⛔ **ATTESTATION (A-18): NONE of the nine leave-in-place bots was opened, edited or
+> toggle-touched.** Only PR-04's clone and PR-04's own original were opened. The pilot, the PR-01
+> clone and PR-02 were not touched. **Step 2c is still unspent.**
+>
+> **Files changed:** `data/captures/2026-08-08-clones/` (4 new: step-0 baseline, final capture, two
+> toggle screenshots) · `data/archive/rename_map.csv` · `data/bots_config_v2.csv` ·
+> `docs/session-log.md` · `docs/state.md` (this block). All device-hash-verified. No git.
+> **Uncommitted — Andy runs the commit.** **All four §2B clones now exist.**

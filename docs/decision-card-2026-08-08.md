@@ -745,3 +745,47 @@ read.
 exactly what each ruling authorizes, with per-file dated amendment conventions, originals left
 standing where required, and every edited file verified by direct `device_bash` sha256 +
 single-match grep of the inserted text.*
+
+---
+
+# ADDENDUM — 2026-08-08 evening. Three slots added by the day's work; S2-precondition status. PREPARED, NOTHING RULED.
+
+*Appended by the orchestrator session so tonight's sitting is ONE document. Same rules as the
+card: every recommendation is a RECOMMENDATION, not a ruling.*
+
+## SLOT 7 — PR02-R2: the §S1 "Symbols panel is NOT empty" line is FALSE for this family
+**Question:** amend the pack's §S1 step-4 symbols text (and the runbook §2 echo if present)?
+**Evidence:** first-hand on BOTH PR-02 sides 2026-08-08 — clone AND original read "No symbols
+yet"; the symbol is automation-resident (`Loop SPX` / action `symbol: SPX`). Same finding
+recorded for PR-01. **Options:** (a) apply as evidence-backed correction (CA-3 class, dated
+banner, original standing) — the sentence is guidance falsified twice first-hand; (b) leave for
+a pack rewrite. **RECOMMENDATION: (a)** — a checklist line that cries wolf on every
+automation-resident-symbol bot trains sessions to skip the one check that catches the REAL
+symbols trap on Bot-Symbols-loop bots.
+
+## SLOT 8 — PR02-R3: runbook §2 step 7 still carries the pre-F-C1 "do not remove PT25" branch
+**Question:** amend `reactivation-runbook.md` §2 step 7 to the F-C1 RULED: REMOVE state?
+**Status:** flagged at S0b close-out AND by A-16b (pack already supersedes it; sessions are
+instructed not to stop on the conflict). Runbook is a decision surface — **amend-the-plan, yours
+only.** **RECOMMENDATION: amend at the sitting** — the pack-vs-runbook contradiction is exactly
+the A-16 class that cost an adversarial-review pass to find.
+
+## SLOT 9 — ops `trade_id` namespace (E-3 gated item (2))
+**Question:** what `trade_id` scheme do `data/ops_rows.csv` rows carry?
+**Status:** blank today — Worker B correctly invented nothing; blank blocks E-3 item 8's fixture
+use. **Options:** (a) `OPS-<bot>-<date>-<n>` synthetic namespace, collision-proof by prefix,
+never enters the working ledger (partition is upstream); (b) carry OA's native ids when the Lab
+bots exist and backfill nothing; (c) defer until the first Lab bot is built (nothing consumes
+the column today). **RECOMMENDATION: (c) defer with (a) pre-registered as the scheme** — zero
+cost now, no invented ids, and the namespace is on record before any row exists.
+
+## S2-PRECONDITION STATUS — as of this addendum, from the folder
+| Precondition | Status |
+|---|---|
+| Gate A9 clean end-to-end n=0 run on Andy's machine, on file | ✅ CLOSED 2026-08-08 |
+| A-27c / Step-4b capture disposition | ⛔ UNRULED — slot 6 (worklist = 11, per CA-3) |
+| Slots 1–5 (A-02 · A-11 · A-12 · A-24 · gate A8/PR-18) | ⛔ UNRULED |
+| PR-02 clone | ✅ built + verified; R1 RULED $50k; Template V1 = Andy's hand at Day-0 |
+| PR-04 clone | 🔄 in progress (S1 continuation session) |
+| Fleet sweep (read-only audit) + master audit report | queued behind PR-04 |
+| FLEET-STAYS-OFF / A-06 | no such verdict fired today; nothing switched ON |
