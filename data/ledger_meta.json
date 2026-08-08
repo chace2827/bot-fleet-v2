@@ -1,16 +1,16 @@
 {
   "ledger_start": "2099-01-01",
   "ledger_start_source": "$LEDGER_START",
-  "source_export": null,
+  "source_export": "2026-08-07.csv",
   "counts": {
-    "export_rows": 0,
+    "export_rows": 1386,
     "post_cutover": 0,
     "straddler": 0,
-    "pre_cutover": 0
+    "pre_cutover": 1386
   },
   "n_trades_condors": 0,
   "n_bots": 0,
-  "total_pnl": 0.0,
-  "note": "no export in data/raw/ yet \u2014 pre-Day-0 empty ledger",
+  "total_pnl": 0,
+  "note": "",
   "contract": "working ledger is POST-CUTOVER ONLY; the filter is on open_date"
 }

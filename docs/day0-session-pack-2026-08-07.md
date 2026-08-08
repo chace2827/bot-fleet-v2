@@ -32,6 +32,11 @@ attempted (impossible — the account is disabled). No git command in any form.
 > a decision that needed making, the amendment routes it to Andy rather than resolving it.
 > **Andy may reject any amendment at commit review** (`CLAUDE.md` §5).
 >
+> ⛔ **UPDATED 2026-08-07 (post-S0b): 27 amendments, A-01…A-27. A-27 IS FILED LAST AND IT IS THE
+> ONE THAT GATES S2's OPENING** — it carries Andy's four S0b rulings, including a hard
+> carry-forward that **the seven greenfield bots' EXIT OPTIONS state must be re-read first-hand
+> immediately before Step 7 and never inherited.** Read A-27 before starting S2.
+>
 > **26 amendments, A-01…A-26.** ⭐ **A-26 is filed OUT OF NUMERIC ORDER — it sits immediately after
 > A-15 because it supersedes A-15's hand-derivation fallback.** It is the one amendment that adds a
 > tool rather than a gate: **the A-series now executes via `python3 scripts/a_series.py`.**
@@ -607,6 +612,93 @@ unsatisfiable precondition on line one.
 
 ---
 
+## ⛔ A-27 — S0b's FOUR FINDINGS, RULED BY ANDY 2026-08-07. **THREE OF THEM GATE S2's OPENING.**
+**Governs: S2's opening precondition, S2 Step 3, S2 Step 7, S2 Step 2b; and S0/S1's Step 6b.**
+**Added 2026-08-07 at Andy's explicit ruling, after the S0b-RESUME session. Not a session's own
+judgment — the four dispositions below are Andy's, verbatim in intent. Full evidence:
+`session-log.md` "2026-08-07 (S0b-RESUME)" and `data/captures/2026-08-07-s0b/`.**
+
+### (a) ⛔ S0b-1 — DO NOT FIX THE PILOT. AND THE CARRY-FORWARD IS THE IMPORTANT HALF.
+**[Evidence: dated first-hand read 2026-08-07, `a5.bots.bot.disableExits` = 1 on
+`QQQ-IC-0DTE-Fortress` (`BOTfw5TkkCRF2717857919585029021`), against that bot's own
+`data/captures/2026-08-03-pilot/06-clone-final/oa_bot-settings_QQQ-IC-0DTE-Fortress-Clone_2026-08-04.txt`
+which records verbatim: `EXIT OPTIONS ON (input[name=onoff].value="true")`.]**
+
+**RULING: the pilot STAYS AS FOUND, EXIT OPTIONS OFF.** Arming it is **Day-0 Step 3** and it
+belongs to **S2**. It is recorded as a **second witness** on the `disableExits`-reset question —
+**8 of 8 bots examined** now point the same way. **PR-03 stays UNSIGNABLE; that is expected and
+blocks nothing on the current path.**
+
+> ### ⛔⛔ CARRY FORWARD, PROMINENTLY — THIS IS THE ONE THAT CAN COST A DAY-0.
+> **IF THE RESTORE RESET `disableExits`, IT MAY RESET AGAIN.** Therefore **the seven greenfield
+> bots S0a armed CANNOT BE ASSUMED STILL ARMED.**
+> ⛔ **TOGGLE STATE MUST BE RE-READ FIRST-HAND IMMEDIATELY BEFORE STEP 7, ON EVERY BOT, AND NEVER
+> INHERITED** — not from S0a's close-out, not from S0b's, not from `bots_config_v2.csv`, not from
+> this pack. A recorded ON is a historical fact about the moment it was read, not a property of
+> the bot. Re-read it, then switch AUTOMATIONS on.
+> ⚠️ **AND S2 STILL DOES NOT RE-DO STEP 3 ON THE SEVEN** (the S0a correction in `state.md`
+> stands). **Re-reading is not re-doing.** If the re-read comes back OFF, that is a NEW finding —
+> record it, escalate, and do not silently re-arm inside Step 7.
+> Cheapest instrument, first-hand 2026-08-07: the `/bots` list carries both toggles per row on
+> `i.sticon`'s `title` attribute — one page read covers all 41 bots. See (d).
+
+### (b) ⛔ S0b-2 — STEP 6b CANNOT PASS AS WRITTEN. RECORD IT OPEN; **DO NOT RETRY IT.**
+**RULING: OPEN.** The PR-01 Notes on the clone are **NOT byte-exact** to
+`pre-registration-ledger.md` §4, because the **bot-page** Notes editor does **not** perform the
+decode pass the **template** Notes editor does — so §4.0 item 2's double-escape counter backfires
+there, and the writing session worked around it by dropping the angle-bracketed placeholders.
+**Two editors, two behaviours; the §4.0 trap text is CORRECT for templates and is NOT amended.**
+⛔ **DO NOT RETRY THE BYTE-EXACT WRITE.** The Notes are a **record artifact** and **nothing in the
+Day-0 sequence reads them.** Step 6b's byte-exact clause is unsatisfiable on this surface; record
+NOT-BYTE-EXACT-BY-KNOWN-CAUSE and move on. Settling the mechanism needs a deliberate write test on
+a throwaway bot — a decision, not a Day-0 action.
+
+### (c) ⛔ S0b / STEP 4b — **GATED AND DEFERRED. IT BLOCKS S2's OPENING, NOT S0b's CLOSE.**
+**RULING: this is a NAMED PRECONDITION ON S2 OPENING, and NO OPTION IS CHOSEN.**
+
+⛔ **S2 DOES NOT START UNTIL ANDY HAS RULED THIS.** A-07 makes an **ESTABLISHED** config-capture
+hash a precondition for signing at **Step 2b**. First-hand inventory of `data/captures/`,
+2026-08-07: **for 12 of the 14 bots in A-07's scope there is NO per-bot capture file on disk at
+all** — `IC-SPX-FastPT25-S2-130PM`, `QQQ-IC-0DTE-Fortress-NoPT50` and **all nine leave-in-place
+bots** have never been captured per bot. **This is a structural gap in the repository, not a task
+a longer session closes.** Current dispositions: PR-01 clone **ESTABLISHED** · its archived
+original **ESTABLISHED** · the pilot **NOT ESTABLISHED** (a) · **the other twelve ⬜ NOT
+EVALUABLE — never a pass.**
+
+**THE THREE OPTIONS, STATED, NONE CHOSEN — ANDY PICKS:**
+1. **CAPTURE-NOW-AS-BASELINE.** Take a fresh per-bot capture of the twelve and treat it as the
+   baseline. ⚠️ Honest cost: this **establishes nothing about the past.** A first capture taken
+   after the restore cannot distinguish a faithfully restored bot from a rolled-back one — it
+   only makes future drift detectable. It buys forward coverage, not retrospective assurance.
+   ⛔ It also requires opening the nine, which **spends Step 2c** unless taken as a pure read.
+2. **AMEND A-07's SCOPE** so an ESTABLISHED hash is required only where a pre-restore baseline
+   exists, with the twelve carried explicitly as ⬜ NOT EVALUABLE rather than blocking.
+3. **LEAVE THEM OFF PERMANENTLY.** The literal reading of A-07 as written: no ESTABLISHED hash,
+   no signature at Step 2b, bot stays OFF. Applies to all nine leave-in-place bots.
+
+**TWO CORRECTIONS THAT TRAVEL WITH THIS RULING, BOTH RECORDED:**
+- ⛔ **A-07's scope is FOURTEEN bots, not thirteen.** The pack and S0a's close-out both say
+  "13 non-greenfield bots". The arithmetic: **41 active = 7 greenfield + 5 named +
+  9 leave-in-place + 20 Group-A**, and A-07's named list is 5 + 9 = **14**.
+- ⛔ **THE 20 GROUP-A BOTS ARE IN NO POST-RESTORE CONFIG CHECK ANYWHERE IN THIS PACK.** They are
+  still active only because the ~23 archives remain queued for Andy's hand. Named here so the
+  gap is on the record rather than discovered later.
+
+### (d) 📝 S0b-3 — A BOOKMARKLET DEFECT, WITH THE FIX IDENTIFIED. **CLAUDE CODE'S LANE.**
+**RULING: recorded as a defect in the capture instrument, not in the page.**
+`oa-ops-runbook.md` §1.5 calls the missing `AUTOS`/`EXITS` columns "the highest-value miss" and
+§1.6 concludes toggle state "does not survive text capture". **Both are CORRECT and NEITHER is
+amended.** The cause, first-hand 2026-08-07: the `/bots` rows emit **18** values, not 20, because
+the two toggle cells are **icons with no text node** — but the state **is** in the DOM, on
+`i.sticon`'s **`title`** attribute ("Scheduled automations are off" / "Exit Options for positions
+managed by this bot are on").
+**FIX, IDENTIFIED: the bookmarklet must read the icon `title` attribute, not `innerText`.**
+⛔ **Implementing it is Claude Code's lane** (`CLAUDE.md` §7), not a Day-0 session's. Until it
+lands, toggle state comes from a separate DOM read — the method and a full 41-bot table are in
+`data/captures/2026-08-07-s0b/toggle-state-all-41-2026-08-07.tsv`.
+
+---
+
 *Amendments A-01…A-25 written 2026-08-07 (evening) under `CLAUDE.md` §5's
 evidence-backed-correction rule: each one either corrects a claim falsified by a dated first-hand
 read of the folder, or adds a gate/branch where the review found none. **A-26 added the same
@@ -831,6 +923,16 @@ un-renamed.**
   A-series runner. The A-series is currently run by hand. That is an open Step-4(b) gate.
   `C0c · C2 · C7 · C8` are **CLOSED** (decision card 2026-08-06 late-night Phase 0 closure).
 - ✅ `data/raw/` and `data/brief/` are **empty** — the pre-cutover-files box is satisfiable by a read.
+  ⛔ **CORRECTED 2026-08-07/08 (Andy's rulings). Original left standing.** **NEITHER DIRECTORY IS
+  EMPTY ANY MORE, AND NEITHER SHOULD BE.** `data/raw/` holds the filed Export Data pull
+  `2026-08-07.csv` (⛔ **DO-NOT-DELETE** — it is stage 1's input); `data/brief/` holds
+  `2026-08-08_tape.json`, a **gate-A9 test artifact** written on a **Saturday** with an empty
+  payload — correct degradation, labelled in place, **not a real brief**. **A populated
+  `data/brief/` is working output, not contamination.**
+  **The box is NOT satisfiable by a directory listing, a file move, or a deletion.** It is
+  satisfied by `build_ledger.py`'s own counts: **`export_rows` 1,386 → `post_cutover` 0 ·
+  `straddler` 0 · `pre_cutover` 1,386 discarded · n=0**, verified first-hand 2026-08-07.
+  Matching amendment: `reactivation-runbook.md` §4 checklist. See S0's Step 8.
 - ✅ `data/mirror_baseline.csv` written 2026-08-04, 10 rows / 174 positions. **It is an anchor — do
   not recompute it, do not pass `--force`.**
 
@@ -1212,6 +1314,28 @@ footer read verbatim, the capture timestamps, and the branch taken.
 STEP 8 — PRE-FLIGHT FOR THE NEXT SESSIONS. Read and REPORT, do not fix:
   - `data/raw/` and `data/brief/` — expected EMPTY (they were on 2026-08-07). If not, the
     pre-cutover-files box is unticked and the runbook says resolve before §4 starts.
+    ⛔ CORRECTED 2026-08-07 ON ANDY'S RULING — THE "EXPECTED EMPTY" CLAUSE ABOVE IS SUPERSEDED.
+    ORIGINAL LEFT STANDING; READ THIS WITH IT. `data/brief/` IS empty ✅. `data/raw/` IS **NOT**
+    EMPTY AND MUST NOT BE MADE EMPTY: it holds `data/raw/2026-08-07.csv` (428KB, 1,386 rows), the
+    Export Data pull Andy filed. ⛔ DO NOT DELETE IT. It is filed exactly where
+    `oa-ops-runbook.md` §1.7 and `daily.sh`'s own header ("drop the OA positions CSV in data/raw/
+    named YYYY-MM-DD.csv first") say the export belongs. The clause was written BEFORE the capture
+    ritual had run and it mistakes the instrument for the hazard.
+    ⭐ RE-READ THE BOX TO WHAT IT ACTUALLY PROTECTS AGAINST: **pre-cutover rows reaching the
+    WORKING LEDGER.** That is the test, and it PASSED first-hand on 2026-08-07 — stage 1 took
+    1,386 export rows to **0 post-cutover / 1,386 discarded pre-cutover / WORKING LEDGER n=0**.
+    ⛔ SO THE BOX IS SATISFIED BY THE LEDGER COUNTS, NOT BY AN EMPTY DIRECTORY. An empty
+    `data/raw/` proves nothing; a 1,386 → 0 filter proves the cutover works under real load.
+    ⛔ UPDATED AGAIN 2026-08-08 — `data/brief/` IS NO LONGER EMPTY EITHER, AND THAT IS ALSO FINE.
+    SAME RULE, NO EXCEPTION: **a populated `data/brief/` is WORKING OUTPUT, not contamination.**
+    It holds `2026-08-08_tape.json` — a **GATE-A9 TEST ARTIFACT**, generated 2026-08-08T09:34:30
+    by the `daily.sh` test run on a **SATURDAY**, empty payload (`underlyings {}`,
+    `any_reconstructed false`, `divergence null`). That is **correct degradation on a non-trading
+    day**, not a data failure and not a flat tape. It is labelled in place with a `_note` key
+    (inert — every consumer reads only `underlyings` via `.get()`). ⛔ **NO LATER SESSION MAY READ
+    IT AS A REAL BRIEF** or treat the absent underlyings as zeros.
+    ⛔ **NEITHER DIRECTORY IS EXPECTED TO BE EMPTY FROM DAY-0 ONWARD.** Matching amendment:
+    `reactivation-runbook.md` §4's checklist box, amended 2026-08-07 on Andy's authorization.
   - `data/ledger_meta.json` — expected `"ledger_start": "2099-01-01"` (the refuse-everything
     sentinel). It is CORRECT pre-Day-0 and it is NOT the value to keep.
   - ⛔ ANDY'S GATE A9: `daily.sh` at n=0 has NOT been run and is a HARD BLOCKER. You cannot run it
@@ -1536,6 +1660,18 @@ FIRST. IF either records a `FLEET STAYS OFF` verdict, OR gate A0 landed on branc
 a close-out is missing or its hand-off block incomplete -> ⛔ DO NOT START. Record
 `BLOCKED ON <session> — <verbatim branch>` and hand to Andy.
 
+⛔⛔ SECOND PRECONDITION, ADDED 2026-08-07 AT ANDY'S RULING (AMENDMENT A-27c). **STEP 4b IS A NAMED
+BLOCKER ON THIS SESSION'S OPENING AND IT IS UNRULED.** For 12 of the 14 bots in A-07's scope there
+is NO per-bot capture file on disk, so an ESTABLISHED config-capture hash — which A-07 makes a
+precondition for signing at STEP 2b — is unobtainable for them from the repository as it stands.
+Three options are written out in A-27c and ANDY HAS CHOSEN NONE. ⛔ IF ANDY HAS NOT RULED IT BY
+THE TIME YOU OPEN, DO NOT START: record `BLOCKED ON STEP 4b — A-27c UNRULED` and hand to him.
+⛔ AND READ A-27a's CARRY-FORWARD BEFORE STEP 7: **the seven greenfield bots' EXIT OPTIONS state
+MUST be re-read first-hand immediately before you switch AUTOMATIONS on, and NEVER inherited from
+any close-out, CSV or this pack** — if a restore reset `disableExits` once it can reset again.
+Re-reading is NOT re-doing Step 3. Cheapest instrument: the `/bots` list carries both toggles per
+row on `i.sticon`'s `title` attribute, all 41 bots in one page read (A-27d).
+
 ⛔ READ `docs/day0-session-pack-2026-08-07.md` §0.0 — THE AMENDMENTS — BEFORE ANYTHING ELSE. Where
 §0.0 and the text below conflict, §0.0 WINS. The ones that change this session: A-01 (gate A0) ·
 A-02 (LEDGER_START is a GATED question at Step 1, not a copy) · A-04 (gate A8 is ONE item, not
@@ -1643,7 +1779,16 @@ Known state entering this session — VERIFY each, do not assume:
   ✅ Pilot ritual complete + declared clean by Andy 2026-08-06; `rename_map.csv` started.
   ❓ `LEDGER_START` — Step 1 below.
   ❓ `data/raw/` + `data/brief/` pre-cutover files resolved — S0 reported them empty.
-  ❓ `daily.sh` n=0 dry run — S0 asked Andy to run it. ⛔ HARD BLOCKER. Read the output against
+  ✅ RESOLVED 2026-08-07 (Andy's ruling), AND NOT BY THEM BEING EMPTY. `data/brief/` is empty;
+     `data/raw/` holds the filed export `2026-08-07.csv` and ⛔ STAYS. The box is satisfied by the
+     LEDGER COUNTS — 1,386 export rows -> 0 post-cutover, 1,386 discarded, n=0, first-hand.
+  ❌ `daily.sh` n=0 dry run — RUN BY ANDY 2026-08-07. **GATE A9 FAILED AT STAGE 3.**
+     Stages 1 and 2 PASSED; `execution_audit.py` raises `KeyError: 'bot'` on
+     `data/bots_config_v2.csv`. ⛔ IT IS A SCRIPT DEFECT AND IT IS QUEUED TO CLAUDE CODE —
+     ⛔ DO NOT RESHAPE THE CSV. Full diagnosis and the fix constraints: `state.md` and
+     `session-log.md`, 2026-08-07. **Day-0's §4 does not start until a clean end-to-end n=0 run
+     is on file, so this blocker is still OPEN.**
+     [Original line left standing:] ⛔ HARD BLOCKER. Read the output against
      runbook §3 Step E's branches: a script that raises -> FIX THE SCRIPT, NEVER THE DATA, and
      NEVER seed a synthetic row to make it pass. `0.0%` expectancy / a flat R / a populated-looking
      table at n=0 is a FAILURE, not a pass — an absent number is not a zero. Tier C reporting

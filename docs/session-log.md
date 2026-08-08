@@ -6381,3 +6381,146 @@ response, never a stage-back.
 
 **HOLDING for Andy: gate A9 (the `daily.sh` n=0 run and its invocation), the S0b-1 pilot ruling,
 the A-07-signing-precondition question, the CSV schema question, and the commit.**
+
+### 📝 ANDY'S RULINGS ON S0b's FOUR FINDINGS — 2026-08-07, applied same session. No OA, no git.
+All four ruled after the close-out above. **Applied to `day0-session-pack-2026-08-07.md` §0.0 as
+AMENDMENT A-27 (parts a–d)**, the §0.0 amendment-count header updated 26 → 27, and a **second
+PRECONDITION block added at S2's prompt opening**. Session was already logged out of OA and
+stayed out — zero OA actions in this pass.
+
+- **S0b-1 → DO NOT FIX.** Pilot stays EXIT OPTIONS OFF; arming it is Step 3 and belongs to S2.
+  Second witness on the `disableExits`-reset question, **8 of 8 bots examined**. PR-03 stays
+  unsignable — expected, blocks nothing. ⛔⛔ **CARRY-FORWARD, and it is the load-bearing part:
+  a reset that happened once can happen again, so the seven bots S0a armed CANNOT be assumed
+  still armed. Toggle state is re-read first-hand immediately before Step 7 and never inherited
+  from a close-out, the CSV, or the pack.** Re-reading is not re-doing Step 3; a re-read that
+  returns OFF is a new finding, escalated, not silently re-armed.
+- **Step 4b → GATED, DEFERRED, BLOCKS S2's OPENING (not S0b's close).** Written as a named
+  precondition with **three options stated and none chosen**: capture-now-as-baseline (⚠️ proves
+  nothing about the past; opening the nine risks Step 2c) / amend A-07's scope to require an
+  ESTABLISHED hash only where a pre-restore baseline exists / leave them OFF permanently.
+  Both corrections recorded alongside it: **A-07's scope is 14 bots, not 13**, and **the 20
+  Group-A bots appear in no post-restore config check anywhere.**
+- **S0b-2 → OPEN, DO NOT RETRY.** Step 6b unsatisfiable on the bot-page Notes editor; the Notes
+  are a record artifact nothing in the sequence reads. §4.0 item 2 correct for templates, unamended.
+- **S0b-3 → BOOKMARKLET DEFECT, fix identified (read `i.sticon`'s `title`, not `innerText`),
+  Claude Code's lane.** §1.5/§1.6 correct and unamended — the defect is the instrument, not the page.
+
+⚠️ **FLAGGED, NOT EDITED — runbook-level, same class as A-16.** `reactivation-runbook.md` §4
+Step 7 is where the first bot actually goes ON and it carries **no re-read-the-toggle line**.
+A-27a lives in the pack and at S2's prompt opening; the runbook is a decision surface and not
+this session's to edit. **A session working from the runbook rather than the pack would not see
+the carry-forward.** Andy's call.
+
+**Files changed:** `docs/day0-session-pack-2026-08-07.md` · `docs/state.md` · `docs/session-log.md`.
+sha256-verified on device. No git. **Gate A9 output still awaited from Andy.**
+
+### ❌ GATE A9 — RUN BY ANDY 2026-08-07. FAILED AT STAGE 3. Plus three rulings applied. No OA, no git.
+
+**✅ STAGE 1 `build_ledger.py` — PASSED, and it is the substantive result of the whole gate.**
+**1,386 export rows → 0 post-cutover · 1,386 discarded pre-cutover · WORKING LEDGER n=0.**
+⭐ Recorded as **the first first-hand verification of the data cutover under real load** — the
+cutover WORKING, not a null result. Source `data/raw/2026-08-07.csv` (`openDate` max 2026-07-02)
+against the `2099-01-01` sentinel. `STATUS.md` reads EMPTY LEDGER — n=0, correctly.
+**✅ STAGE 2 `tape.py` — PASSED.**
+
+**❌ STAGE 3 `execution_audit.py` — `KeyError: 'bot'`.** Reproduced first-hand this session by
+importing the module and calling `load_config()` in isolation — no writes, nothing run end to end.
+Two independent loader defects, confirmed by direct read rather than transcribed:
+1. **77-line `#` preamble consumed as the header.** `csv.DictReader` has no comment skipping;
+   `len(fieldnames) == 2` (line 1 splitting on its own comma). Every data row is garbage.
+2. **No `bot` column exists.** `load_config()` ends `{r["bot"]: r for r in DictReader(...)}`;
+   the real header is `object_kind,name,oa_id,version,attached_to,input_id,input_type,
+   input_label,input_default,a7_hash,captured,layer2_status` — identity is `name`, rows are
+   heterogeneous objects keyed by `object_kind`.
+⚠️ **A THIRD DEFECT, FOUND WHILE VERIFYING, NOT IN THE ORIGINAL DIAGNOSIS AND LARGER THAN BOTH:**
+`load_config()`'s docstring declares the Tier-C column contract — `pt_pct`, `sl_pct`, `time_exit`,
+`event_backstop`, `capture_file`, `capture_hash` — and **none of those columns exists in the
+file.** The docstring itself says *"proposed contract; confirm against the Phase 4 capture before
+building the file"*; the file was built to a different shape and the two were never reconciled.
+**Fixing the join key alone moves the failure, it does not remove it.**
+⚠️ Loader has a file-absent branch (`→ None` → Tier C SKIPPED, loudly — verified) and **no
+schema-unrecognized branch**, so with the file present the run dies instead of degrading.
+
+⛔ **SCRIPT FIX, NEVER A DATA FIX** (`reactivation-runbook.md` §3 Step E). **DO NOT RESHAPE
+`data/bots_config_v2.csv`** — it is built only from capture (`CLAUDE.md` §3 rule 2).
+
+**📌 QUEUED CLAUDE CODE TASK.** Skip `#` comments · key on `name` and respect `object_kind` · add
+a **schema-unrecognized branch** degrading to Tier C SKIPPED-with-reason (never silence, never a
+crash) · reconcile the declared-config contract or state which Tier-C rules cannot run.
+⛔ **ACCEPTANCE TEST: the frozen 35-row `data/execution_audit.csv` fixture and the 12/12
+validation matrix must pass UNCHANGED after the fix** — both T00147 and T00845 surfaced, silent on
+the R>1 winners. **That is what proves the LOADER was fixed and not the DETECTOR.**
+(`execution_audit.py` `VERSION 1.0.0`, `FROZEN_ON 2026-07-30`.) ⚠️ The fixture's own `bot` column
+is a ledger/finding column, not a config column — do not point the loader at it.
+⛔ **Day-0's §4 does not start until a clean end-to-end n=0 run is on file. STILL OPEN.**
+
+**STEP 8's `data/raw/` BOX — CORRECTED AT ALL THREE PACK SURFACES, originals left standing.**
+⛔ **`data/raw/2026-08-07.csv` STAYS — do not delete it.** `data/brief/` is empty ✅. The export is
+filed exactly where `oa-ops-runbook.md` §1.7 and `daily.sh`'s own header say it belongs; the
+"expected EMPTY" clause predates the capture ritual and mistakes the instrument for the hazard.
+⭐ **Re-read to what the box protects against: pre-cutover rows reaching the WORKING LEDGER — which
+PASSED, 1,386 → 0.** Satisfied by ledger counts, never by a directory listing.
+⚠️ **FLAGGED, NOT EDITED:** `reactivation-runbook.md` §4's checklist still carries the unticked box
+*"`data/raw/` + `data/brief/` pre-cutover files resolved (filtered or moved to `data/archive/`)"* —
+whose parenthetical prescribes the action that is now wrong. Andy's amend authorization was scoped
+to Step 7's line only, so it was left alone. **Needs one more amend-the-plan.**
+
+**✅ AMEND THE PLAN — `reactivation-runbook.md` §4 Step 7, on Andy's explicit authorization, THAT
+LINE ONLY.** Added: before any bot's `AUTOMATIONS` goes ON, **re-read its `EXIT OPTIONS` toggle
+state first-hand; never inherit it from an earlier session; a re-read returning OFF is a NEW
+FINDING, not a silent re-arm.** Carries the forcing evidence (the pilot — 8 of 8 bots examined),
+the rider that **re-reading is not re-doing Step 3**, the cheapest instrument (`i.sticon`'s `title`
+on `/bots`, all 41 in one read), and a cross-reference to §0.0 **A-27a**. **Nothing else in the
+runbook was touched.** The carry-forward now survives on both paths — pack and runbook.
+
+**Files changed:** `docs/reactivation-runbook.md` · `docs/day0-session-pack-2026-08-07.md` ·
+`docs/state.md` · `docs/session-log.md`. All sha256-verified on device. No git. No OA action.
+
+### 📝 GATE-A9 FOLLOW-UP — 2026-08-08. Andy's rulings applied: checklist box, test artifact, task split. No OA, no git.
+
+**✅ AMEND THE PLAN — `reactivation-runbook.md` §4 checklist box, THAT BOX ONLY.** Old
+parenthetical *"(filtered or moved to `data/archive/`)"* struck and left standing — it prescribed
+the action that is now wrong. Rewritten to the ledger-count test: **the box's purpose is that no
+pre-cutover row reaches the working ledger; it is satisfied by `build_ledger.py`'s counts and
+never by a directory listing, a file move or a deletion.** Marked SATISFIED with the first-hand
+figures read from `data/ledger_meta.json`: `export_rows 1386 · post_cutover 0 · straddler 0 ·
+pre_cutover 1386 · n=0`, `ledger_start 2099-01-01`, `source_export 2026-08-07.csv`. Two additions:
+the box **covers `data/brief/` too**, and ⛔ **`data/raw/2026-08-07.csv` is DO-NOT-DELETE**, said
+in the box rather than only in the pack. Wording matched to the pack's surfaces. Nothing else in
+the runbook touched. (This is the gap flagged at the previous close-out, now closed.)
+
+**⛔ `data/brief/2026-08-08_tape.json` LABELLED IN PLACE as a GATE-A9 TEST ARTIFACT.** Generated
+2026-08-08T09:34:30 by the test run; **2026-08-08 is a Saturday** — verified, market closed. Empty
+payload (`underlyings {}`, `any_reconstructed false`, `divergence null`) is **correct degradation
+on a non-trading day**, not a failure and not a flat tape. ⛔ Not to be read as a real brief or
+its absent underlyings as zeros. Labelled via a `_note` key, **verified inert before writing**:
+`daily_brief.py`, `hedge_tournament.py` and `trade_window.py` all read only `underlyings` via
+`.get()` — no top-level iteration, no schema validation. JSON re-parsed afterwards and the five
+original fields asserted byte-preserved. First file ever written to `data/brief/` post-cutover;
+**working output, not contamination.**
+
+**📌 QUEUED CLAUDE CODE TASK — SPLIT, and explicitly NOT all-or-nothing.**
+**(i) MINIMUM, clears gate A9 and unblocks §4 on its own:** add a **schema-unrecognized branch
+alongside the existing file-absent branch**; skip `#` comments; key on `name` not `bot`; respect
+`object_kind`; **load what is loadable and report every rule with missing columns as SKIPPED BY
+NAME, loudly.** Never silence, never a crash.
+**(ii) SEPARATE:** the Tier-C contract reconciliation (`pt_pct`, `sl_pct`, `time_exit`,
+`event_backstop`, `capture_file`, `capture_hash` exist in no column of the file) — reconcile, or
+state which Tier-C rules cannot run.
+⭐ **Recorded so it is not misread as failure: "structural rules run · Tier C SKIPPED until
+`bots_config_v2.csv` carries the mechanic columns" is an ACCEPTABLE INTERIM STATE and the design
+working as intended** — the runbook's own checklist already says Tier C *"reports SKIPPED with a
+reason, never silence"* and *"Day-0 proceeds with the blind spot on the page."*
+⛔ **Acceptance test stays non-optional on both:** the frozen 35-row fixture and the 12/12 matrix
+must pass UNCHANGED (T00147 + T00845 surfaced, silent on the R>1 winners) — that is what proves
+the LOADER was fixed and not the DETECTOR. ⛔ Do not reshape `data/bots_config_v2.csv`.
+
+⚠️ **Andy's A9 run also rewrote `data/ledger_meta.json`, `data/trades.csv`, `data/bots.csv` and
+`data/straddlers.csv`** to their correct n=0 state — they are in the commit. `STATUS.md` and
+`dashboard.html` were NOT regenerated (the run died at stage 3, before stage 8); `STATUS.md`
+still carries its 2026-07-31 stamp and correctly reads EMPTY LEDGER — n=0, so nothing on it is
+stale in substance.
+
+**Files changed:** `docs/reactivation-runbook.md` · `docs/day0-session-pack-2026-08-07.md` ·
+`data/brief/2026-08-08_tape.json` · `docs/state.md` · `docs/session-log.md`. sha256-verified. No git.

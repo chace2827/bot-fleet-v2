@@ -733,6 +733,29 @@ Hard gate, not a preference. A bot that cannot be proven stays OFF until it can.
 **For each bot that passed Step 6** — and **only** those — set **`AUTOMATIONS` → ON** and screenshot.
 **A bot that did not pass Step 6 does not get this step**, including any of the nine.
 
+> ### ⛔ AMENDED 2026-08-07 ON ANDY'S EXPLICIT "AMEND THE PLAN" — RE-READ THE TOGGLE BEFORE EVERY SWITCH-ON.
+> *Authorization is scoped to **this line only**; nothing else in this runbook was touched.
+> Cross-reference: `day0-session-pack-2026-08-07.md` §0.0 **A-27a**.*
+>
+> **Before any bot's `AUTOMATIONS` goes ON, re-read that bot's `EXIT OPTIONS` toggle state
+> FIRST-HAND. Never inherit it from an earlier session** — not from a close-out, not from
+> `data/bots_config_v2.csv`, not from the session pack. **A re-read that returns OFF is a NEW
+> FINDING, not a silent re-arm:** record it, escalate to Andy, and do not switch that bot on.
+>
+> **[Forcing evidence, dated first-hand 2026-08-07 (S0b-RESUME):** the pilot
+> `QQQ-IC-0DTE-Fortress` read `disableExits: 1` (EXIT OPTIONS **OFF**) against its own 2026-08-04
+> capture, which records `EXIT OPTIONS ON (input[name=onoff].value="true")` verbatim. That is the
+> **eighth of eight** bots examined to show the same reset, after the seven greenfield arms S0a
+> found and re-armed.**]** ⛔ **The inference that matters: a state that was reset once can be
+> reset again.** The seven bots S0a armed cannot be assumed still armed at Step 7. A recorded ON
+> is a fact about the moment it was read, not a property of the bot.
+>
+> ⚠️ **Re-reading is NOT re-doing Step 3.** Step 3 arms `EXIT OPTIONS`; this is a verification
+> immediately before the switch-on, and it does not license a second pass over the seven.
+> ⚠️ Cheapest instrument, first-hand 2026-08-07: the `/bots` list carries **both** toggles per row
+> on `i.sticon`'s **`title`** attribute — all 41 bots in one page read, no bot page opened.
+> (Text capture misses this; §1.5/§1.6 of `oa-ops-runbook.md` explain why. A-27d.)
+
 ⛔ **IF Step 6a returned MECHANISM REFUTED, no bot gets this step. FLEET STAYS OFF.**
 
 ### Step 8 — Day-1 monitoring
@@ -783,7 +806,28 @@ PT and no PT order. Any RED emits an instruction card, repeated at the top of ev
 - [x] ~~`data/mirror_baseline.csv` written — the one-time frozen pre-lapse snapshot for the 7 mirrors~~
       — ✅ **WRITTEN 2026-08-04** (174 positions, 10 mirrors, zero excluded). ⛔ **It is an anchor —
       do not recompute it and do not pass `--force`.**
-- [ ] ⛔ `data/raw/` + `data/brief/` pre-cutover files resolved (filtered or moved to `data/archive/`)
+- [x] ~~⛔ `data/raw/` + `data/brief/` pre-cutover files resolved (filtered or moved to `data/archive/`)~~
+      ⛔ **AMENDED 2026-08-07 ON ANDY'S EXPLICIT "AMEND THE PLAN" — THIS BOX ONLY. Original struck,
+      left standing.** The parenthetical prescribed **moving or deleting files, and that is now the
+      wrong action.** ⭐ **THE BOX'S PURPOSE IS THAT NO PRE-CUTOVER ROW REACHES THE WORKING
+      LEDGER.** It is satisfied by `build_ledger.py`'s own counts in `data/ledger_meta.json` —
+      `export_rows` / `post_cutover` / `straddler` / `pre_cutover` discarded — and **NEVER by a
+      directory listing, a file move, or a deletion.** An empty `data/raw/` proves nothing; a
+      1,386 → 0 filter proves the cutover works under load.
+      ✅ **SATISFIED 2026-08-07, first-hand, under real load:** `export_rows 1386 · post_cutover 0
+      · straddler 0 · pre_cutover 1386 discarded · WORKING LEDGER n=0`, `ledger_start 2099-01-01`,
+      `source_export 2026-08-07.csv`. That is the cutover **working**, not a null result.
+      ⛔ **`data/raw/2026-08-07.csv` IS THE LIVE EXPORT AND IS DO-NOT-DELETE.** It is filed exactly
+      where `oa-ops-runbook.md` §1.7 and `daily.sh`'s own header ("drop the OA positions CSV in
+      `data/raw/` named `YYYY-MM-DD.csv` first") say the export belongs. It is stage 1's input, not
+      contamination. Removing it breaks the ledger build.
+      ⛔ **THIS BOX COVERS `data/brief/` TOO, AND `data/brief/` IS ALSO NO LONGER EMPTY.** Same
+      rule, no exception: **a populated `data/brief/` is WORKING OUTPUT, not contamination.** It
+      holds `2026-08-08_tape.json`, a **gate-A9 test artifact** written on a **Saturday** with an
+      empty payload — correct degradation, labelled in place, and **not to be read as a real
+      brief.** Neither directory is expected to be empty from Day-0 onward.
+      *Wording matches the three corrected surfaces in `day0-session-pack-2026-08-07.md` (S0
+      Step 8, the §1 pre-flight list, and the S1 hand-off checklist) so the two documents agree.*
 - [ ] ⚠️ `execution_audit.py` passing its validation matrix against the frozen 35-row fixture, surfacing
       **both** T00147 and T00845 and staying silent on the R>1 winners — an unpassed matrix means Tier C
       **reports SKIPPED with a reason, never silence**; Day-0 proceeds with the blind spot on the page

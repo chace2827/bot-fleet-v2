@@ -35,3 +35,4 @@ venv/
 
 # Logs (raw; session-log.md is intentionally tracked)
 *.log
+.claude/

@@ -1,0 +1,8 @@
+{
+  "_note": "⛔ GATE-A9 TEST ARTIFACT — NOT A TRADING DAY, NOT A REAL BRIEF. Generated 2026-08-08T09:34:30 by the gate-A9 `daily.sh` test run. 2026-08-08 IS A SATURDAY: the market was closed, so the empty payload below (underlyings {}, any_reconstructed false, divergence null) is CORRECT DEGRADATION, not a data failure and not a flat tape. ⛔ NO LATER SESSION MAY READ THIS AS A REAL BRIEF, cite it as a regime read, or treat the absent underlyings as zeros — an absent number is not a zero (CLAUDE.md §10). It is also the first file ever written to data/brief/ post-cutover; a populated data/brief/ is WORKING OUTPUT, not contamination (reactivation-runbook.md §4 checklist, amended 2026-08-07). Safe to delete; safe to leave. This key is inert — every consumer reads only `underlyings` via .get(). Record: docs/state.md and docs/session-log.md, 2026-08-07/08.",
+  "date": "2026-08-08",
+  "generated": "2026-08-08T09:34:30",
+  "any_reconstructed": false,
+  "underlyings": {},
+  "divergence": null
+}
