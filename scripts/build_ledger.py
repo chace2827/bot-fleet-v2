@@ -105,7 +105,7 @@ import argparse, csv, glob, json, os, re, sys, collections
 # SET THIS ON DAY-0. It is the reactivation date, format YYYY-MM-DD.
 # Leave as the sentinel until then — the sentinel makes the script REFUSE to
 # build a ledger, which is the safe state. See reactivation-runbook.md §4 Step 1.
-LEDGER_START = "UNSET"
+LEDGER_START = "2026-08-10"
 # ---------------------------------------------------------------------------
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

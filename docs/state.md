@@ -24,6 +24,69 @@ the released gated batch — C12 and S-2 propagated to
 every surface, D-1 propagated, `research-loop-spec.md` corrected ×6, §8.4 step 1 corrected on
 explicit authorization; earlier the same day: R-edit package applied + edit-policy split).*
 
+## ⭐⭐⭐ 2026-08-09 — S2, THE DAY-0 MAIN SEQUENCE. **THE FLEET IS LIVE: 7 of 43 AUTOMATIONS ON.**
+
+*Steps 0 → 7 executed. Andy attended and ruled six gates live. Full record: `session-log.md`
+2026-08-09; evidence `data/captures/2026-08-09-s2/` (6 text files + 19 screenshots). No git.*
+
+- ⭐ **`LEDGER_START` IS SET AND PROVEN.** `scripts/build_ledger.py` line 108 = `"2026-08-10"`
+  (sha `9ec21da902e23cdb…`). Run at Day-0: **1,386 export rows → 0 post-cutover, 0 straddlers,
+  1,386 pre-cutover discarded, WORKING LEDGER n=0**. `data/ledger_meta.json` now reads
+  `ledger_start 2026-08-10`; the `2099-01-01` sentinel is retired. No pre-cutover row entered.
+- ⭐ **STEP 7 DONE ON THE SEVEN GREENFIELD ARMS.** `GF-QQQ-IC-Ride · PT50 · Trail · Touch0 · SL100
+  · SL200 · Canary` all read `status "on"` after a hard reload, `disableExits 0`, limits **2/2**.
+  Second surface (`/bots` `i.sticon[title]`): **AUTOMATIONS ON = 7 of 43 · EXIT OPTIONS ON = 14 of
+  43 · footer "43 active bots • 7 left"**. A-27a was honoured PER BOT — the same script re-read
+  each bot's own EXIT OPTIONS immediately before the flip, with a hard abort on anything but
+  `true`. 0 aborts.
+- ⭐ **GATE A6 RULED: RIDE, all five open mirror positions.** Ledger gains **§5a `PR-RC-01`**,
+  drafted, ruled and signed — §8 item 5's *"not yet drafted"* is discharged. `QQQ long call` and
+  `Tasty Condor` are EXCLUDED from Step 3, stay EXIT OPTIONS OFF, and their entries **PR-09 and
+  PR-13 are deliberately UNSIGNED**. Cost accepted and named: **Step 6a can now reach at most 7 of
+  its 9 subjects.**
+- ⭐ **GATE A7 — SIXTEEN SIGNATURES.** PR-14…PR-20 (all seven arms) · PR-01 · PR-05 · PR-06 ·
+  PR-07 · PR-08 · PR-10 · PR-11 · PR-12 · PR-RC-01. Every one carries `SIGNED != VERIFIED` and the
+  owed first-trading-day capture. **STILL UNSIGNED:** PR-02 and PR-04 (**no Template V1** —
+  `showBotMenu` is Andy's hand; `/bots/templates` read 10 and neither is there), PR-03 (ruled OFF),
+  PR-09 / PR-13 (ride ruling).
+- **STEP 2b field resolution, on Andy's explicit amend-the-plan:** `GATE EVAL DATE` → **2027-02-10**
+  on all seven arms · `REVIEW DATE` PR-14 → 2027-02-10, PR-20 → **2026-11-10** · `CONFIG HASH`
+  filled on all seven **and** on PR-01, as *capture path @ file sha256 + the recorded A7 /
+  per-automation hashes* (there is no bot-level payload hash by design) · **PR-14's MECHANISM
+  corrected in place** — sibling-close was NEVER BUILT (C8), the bot input is TWO not one, and the
+  size primitive is a fixed 1 contract. That C8 correction had reached the other arms in 2026-08-06
+  and never reached PR-14's own block.
+- ⛔ **STEP 6 IS NOT SATISFIED FOR ANY BOT.** The market was closed on 2026-08-09, so no Trades list
+  exists. Every ON bot's Step 6 verdict is ⬜ NOT EVALUABLE and **due 2026-08-10** from its first
+  new position. The arms could go ON ahead of it only because their **2/2 limits already ARE the
+  first-position control** (S2-R5).
+- ⛔ **STEP 2c: `NO-TOUCH OBSERVATION CONFOUNDED — RESTORE`, ⬜ NOT EVALUABLE** (A-09b). Both toggles
+  read OFF on one live mirror and one directional and on all nine — recorded verbatim — but gate A0
+  was Branch 1, so re-arm and reactivation were never cleanly separated. **This must be said inside
+  the Step 6a verdict; a CONFIRMED verdict resting on it is weaker than it looks.**
+
+### FIVE FINDINGS — all first-hand, none resolved by the session's own judgment
+| # | Finding | Disposition |
+|---|---|---|
+| **S2-R1** | The **third toggle surface**, read for the first time ever on lapse-surviving positions. P1 (Tasty Condor) and P2 (QQQ long call) had **already satisfied their per-position EXPIRATION rung** — arming those bots would have closed them at Monday's first scan. | Forced gate A6. Recorded in ledger §5a. |
+| **S2-R2** | **The button test-fire EXISTS**, against A-11's ⬜ NOT EVALUABLE: `<a class="btn gray sm" data-click="runAuto" title="Run automation now">Run</a>`, on every bot's Settings tab. | Recorded verbatim. NOT FIRED — no Trades list on a closed market. |
+| **S2-R3** | ⛔ **`a_series.py --validate` now returns `🛑 1 DIVERGENCE`** — the spot check *"§9 fenced-block UTF-16 lengths == recorded notes lengths"*. Caused by the authorized Day-0 signing edits (Ride 2,339 → 6,258). A1–A9 all still PASS. **A true positive, not a tool defect.** | ⛔ **GATED.** Both repairs need a ruling: rewrite Notes on 7 signed bots (S0b-2 says DO NOT RETRY), or re-baseline `RECORDED_NOTE_LEN` (a second `scripts/` edit). Prints at every close-out until closed. Not a divergence under A-21. |
+| **S2-R4** | **PR04-R3 is not confined to PR-04.** `GF-QQQ-IC-Ride` carries the identical `rdata.next = 1786369500000` (09:45 ET Monday) as `-NoPT50`, to the millisecond — different bot, different backstop object. | Consistent with a bot-level next-scan stamp, which would dissolve PR04-R3 — ⛔ **inference, not observation. Discharges nothing.** D-3 stays OPEN. |
+| **S2-R5** | ⛔ **`posLimitDay = 1` would break the condor on all seven arms.** An IC is TWO positions, so `2/2` already IS one condor/day; setting 1 opens a put spread and blocks the call side. Runbook §3 Step A criterion 4: limits must be even. | ✅ RULED: *"arms stay 2/2, PR-01 → 2/2, mirrors → 1/1"*. **Arms untouched — no edit, no hash fork, nothing to revert.** |
+
+### ⛔ WHAT IS STILL OFF, AND WHY — carried, not hidden
+**PR-01** (signed) needs `10/10 → 2/2` first. **PR-05 · PR-06 · PR-07 · PR-08 · PR-10 · PR-11 ·
+PR-12** (all signed) need their stored limits read and set to `1/1`. The session **stopped at a
+clean per-bot boundary (A-23)** rather than start numeric limit edits late. **PR-02 / PR-04** need
+Template V1 — Andy's hand. **PR-03** stays OFF by ruling. Gate **A12**'s bookmarklet + `Export Data`
+sweep was NOT run (Andy's hand), so `data/bots_config_v2.csv` **lags OA by this session's 7
+`disableExits` flips**.
+
+**Files changed:** `scripts/build_ledger.py` · `docs/greenfield-family-spec.md` ·
+`docs/pre-registration-ledger.md` · `docs/state.md` (this block) · `docs/session-log.md` ·
+`data/captures/2026-08-09-s2/` (25 new files) · `data/ledger_meta.json` · `data/trades.csv` ·
+`data/bots.csv` · `data/straddlers.csv`. All device-hash-verified. **Uncommitted — Andy commits.**
+
 ## ⭐⭐ 2026-08-08 NIGHT — THE TEN-SLOT RULING SITTING. ALL TEN RULED BY ANDY, ALL APPLIED SAME SESSION.
 
 *Card + addendum: `docs/decision-card-2026-08-08.md`, now carrying a `✅ RULINGS` section with every

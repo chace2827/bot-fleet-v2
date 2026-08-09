@@ -1,0 +1,91 @@
+S2 — DAY-0 STEP 6 (first-position control) and STEP 7 (AUTOMATIONS -> ON)
+2026-08-09 ~12:45-13:35 ET, Chrome-direct.
+
+================================================================================
+STEP 6 ITEM 1 — THE BUTTON TEST-FIRE. IT EXISTS. RECORDED VERBATIM.
+================================================================================
+⭐ FINDING S2-R2. A-11 and decision-card-2026-08-08 both carried the test-fire as ⬜ NOT EVALUABLE
+on the grounds that "no document in this folder names where it lives". It is named now.
+
+  LOCATION  every bot's Settings tab -> the `Automations` panel header, beside `+ Add Automation`.
+  VERBATIM  <a class="btn gray sm" data-click="runAuto" title="Run automation now">Run</a>
+  Observed first-hand 2026-08-09 on QQQ-IC-0DTE-HedgeTest and present on every bot page opened.
+  ⚠️ DISTINCT from the `Button` TRIGGER class, which is a different mechanism — read verbatim from
+     the Schedule picker the same session: "Button — Add a button to bot dashboard" (MANUAL, 0/10).
+
+⛔ NOT FIRED, AND WHY. Step 6's proof is the test-fire FOLLOWED BY the resulting Trades list. The
+market was closed on 2026-08-09, so a fire produces no position and therefore no Trades list; and
+Andy had already ruled the posLimitDay path for exactly this reason. Firing it would have produced
+no evidence and is an action on a signed arm. Recorded as EXISTS / NOT FIRED, never as "unavailable".
+
+================================================================================
+STEP 6 ITEM 2 — THE FIRST-POSITION CONTROL. RULED ROUND S2-R5.
+================================================================================
+⭐ FINDING S2-R5 — `posLimitDay = 1` WOULD BREAK THE CONDOR ON ALL SEVEN ARMS.
+Read live 2026-08-09 from the Safeguards panel:
+  GF-QQQ-IC-Ride (and all seven arms)  ALLOCATION $2,500 · DAILY POSITIONS 2 per day ·
+                                       POSITION LIMIT 2 at once · DAY TRADING Allowed
+  IC-SPX-FastPT25-S2 (PR-01)           ALLOCATION $50,000 · DAILY POSITIONS 10 per day ·
+                                       POSITION LIMIT 10 at once
+An iron condor is TWO positions. `2/2` therefore ALREADY IS "exactly one condor per day, one at a
+time" — the first-position exception's intent, satisfied by construction. Setting an arm to 1 would
+let the put-side scanner open and then BLOCK the call side: a single spread instead of the
+pre-registered condor, on day one, on all seven arms at once. `reactivation-runbook.md` §3 Step A's
+clean criterion 4 says it outright: "Daily and Total position limits are even numbers (an IC = 2
+positions)." Slot 2 named `2/2` and `10/10` together as one problem; they are not one problem.
+
+✅ RULED BY ANDY 2026-08-09, in-chat, verbatim: "Condor-aware: arms stay 2/2, PR-01 -> 2/2,
+mirrors -> 1/1".
+  ARMS      NO EDIT MADE. Limits left at 2/2 on all seven. ⭐ Consequence worth stating: because
+            nothing was changed, no config hash forked, and there is NOTHING TO REVERT and no
+            revert to hash-prove. Slot 2's rider 3 does not apply to these seven.
+  PR-01     10/10 -> 2/2 : NOT DONE THIS SESSION (see the hand-off).
+  MIRRORS   1/1 where the unit is a single position : NOT DONE THIS SESSION.
+
+================================================================================
+STEP 7 — AUTOMATIONS -> ON, PER BOT. SEVEN BOTS. THE SEVEN GREENFIELD ARMS.
+================================================================================
+⛔ A-27a WAS HONOURED PER BOT, NOT PER SESSION. On every one of the seven, the SAME script that
+dispatched the AUTOMATIONS flip FIRST re-read that bot's own EXIT OPTIONS hidden input, with a hard
+abort if it came back anything but `true`. Not inherited from S0a's close-out, not from the
+2026-08-08 sweep, not from this session's own Step 2c read, not from bots_config_v2.csv. The label
+order [0]=AUTOMATIONS / [1]=EXIT OPTIONS was asserted before every dispatch.
+
+  BOT                 A-27a EXITS re-read   AUTOS before -> after   POST-HARD-RELOAD
+  GF-QQQ-IC-Ride      true                  false -> true           status "on" · disableExits 0 · 2/2
+  GF-QQQ-IC-PT50      true                  false -> true           status "on" · disableExits 0 · 2/2
+  GF-QQQ-IC-Trail     true                  false -> true           status "on" · disableExits 0 · 2/2
+  GF-QQQ-IC-Touch0    true                  false -> true           status "on" · disableExits 0 · 2/2
+  GF-QQQ-IC-SL100     true                  false -> true           status "on" · disableExits 0 · 2/2
+  GF-QQQ-IC-SL200     true                  false -> true           status "on" · disableExits 0 · 2/2
+  GF-QQQ-IC-Canary    true                  false -> true           status "on" · disableExits 0 · 2/2
+  0 of 7 aborted. 0 reverts. Screenshots 13-19 in ./screenshots/, all taken AFTER the reload.
+
+SECOND INDEPENDENT SURFACE — /bots `i.sticon[title]`, batched read after the sweep:
+  footer "43 active bots • 7 left in your plan"
+  AUTOMATIONS ON  = 7 of 43 — exactly the seven arms, nothing else
+  EXIT OPTIONS ON = 14 of 43
+  `QQQ long call` and `Tasty Condor`: BOTH OFF. The gate-A6 ride is intact.
+
+⛔ WHAT DID NOT GET STEP 7, AND WHY — each by name:
+  PR-01 IC-SPX-FastPT25-S2 ....... SIGNED. OFF. Needs 10/10 -> 2/2 first (S2-R5). Session stopped
+                                   at a clean boundary rather than start a numeric edit late.
+  PR-05 DIR-SPX-PutVIX22-SL75 .... SIGNED. OFF. Needs its limits read and set to 1/1 first.
+  PR-06 DIR-SPX-CallVIXdrop ...... SIGNED. OFF. Same.
+  PR-07 3DTE $140-$350 ........... SIGNED. OFF. Same.
+  PR-08 Nigiri-Paper-v1 .......... SIGNED. OFF. Same.
+  PR-10 Friday 14 DTE BW IB ...... SIGNED. OFF. Same.
+  PR-11 Trendy-Paper-v1 .......... SIGNED. OFF. Same.
+  PR-12 60min-ORB-10W-Paper-v1 ... SIGNED. OFF. Same.
+  PR-09 QQQ long call ............ UNSIGNED BY RULING. OFF. Gate A6 = RIDE (ledger §5a).
+  PR-13 Tasty Condor ............. UNSIGNED BY RULING. OFF. Gate A6 = RIDE (ledger §5a).
+  PR-02 IC-SPX-FastPT25-S2-130PM . UNSIGNED. OFF. NO Template V1 (`showBotMenu` is Andy's hand).
+  PR-04 QQQ-IC-0DTE-Fortress-NoPT50 UNSIGNED. OFF. NO Template V1. Same cause.
+  PR-03 QQQ-IC-0DTE-Fortress ..... UNSIGNED. OFF. Ruled 2026-08-08 slot 4(i) + NOT-ESTABLISHED
+                                   hash (S0b-1). Expected, blocks nothing.
+  20 Group-A bots ................ OFF. Out of scope; queued for archiving (Andy's hand).
+
+⛔ STEP 6 IS NOT SATISFIED FOR ANY BOT. No Trades list exists — the market was closed. Every ON
+bot's Step 6 verdict is ⬜ NOT EVALUABLE TODAY and is due on 2026-08-10 from its first new
+position. The arms went ON under the first-position control being ALREADY IN PLACE at 2/2, which is
+the only reason Step 7 could precede the read (slot 2's ordering rider).

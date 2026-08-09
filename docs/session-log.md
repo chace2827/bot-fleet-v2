@@ -7584,3 +7584,136 @@ a67bc27aabbc8fc1476b3417793d5f103da5d9337fd0305088619a50f714f906  docs/evidence-
 hand-off after this write.)
 ⛔ **No file under `scripts/` and no file under `data/` was touched.**
 **Uncommitted — Andy runs the commit.**
+
+---
+
+## ⭐⭐ 2026-08-09 (S2 — DAY-0 MAIN SEQUENCE, Steps 0 → 7). **THE GREENFIELD FAMILY IS LIVE. 7 of 43 AUTOMATIONS ON.** Andy attended and ruled six gates live. No git.
+
+**Precondition (A-06) — CLEARED, read in the folder, not from memory.** S0a: gate A0 **Branch 1**,
+gate A4 accepted in-chat, S0a CLOSED. S0b-RESUME: closed, ZERO OA writes. S1-RESUME (PR-02) and
+S1 CLONE 2 (PR-04): both closed. **All four carry the A-18 attestation**, so `2c PRECONDITION
+UNVERIFIED` was NOT recorded. No `FLEET STAYS OFF` verdict anywhere.
+
+**GATE A0 — BRANCH 1, own first-hand read.** `/bots`, all filters cleared, footer verbatim
+`43 active bots • 7 left in your plan`. AUTOMATIONS ON 0/43 · EXIT OPTIONS ON 7/43 (the GF arms).
+Zero drift against the 2026-08-08 sweep.
+
+**STEP 0 — CLOSED.** All four slot-4 items executed; nothing stopped. **C9 run AS A READ**, verbatim
+from the Schedule picker: `Position closed — After the bot closes a position`; no "closed by"
+qualifier anywhere in the picker. The behavioural discriminator needs a live close and is ⬜ NOT
+EVALUABLE today — family does NOT stay off. The one ⛔ box needing a real check, **sizing written
+down**, is satisfied first-hand: `build-plan.md` line 338 + ledger §2's `SIZING TIER` line + the
+per-entry lines. **STEP 0a — PASS** after a hard reload: `itmlive=market · itmpaper=market ·
+maxexits=0 · scanstart 09:31 · scanend 5 · exitstart 09:31 · exitend 1`.
+
+**STEP 1 — PASS.** `scripts/build_ledger.py` line 108 `"UNSET"` → **`"2026-08-10"`** (the ONLY
+`scripts/` edit authorized). Verified: sha256 `9ec21da902e23cdb…`, single-match grep, no `.env`
+override. Run: `Export rows: 1386 -> post-cutover 0 | straddlers 0 | pre-cutover discarded 1386`,
+`WORKING LEDGER Legs: 0 Trades(condors): 0`, `EMPTY LEDGER (n=0)`. `ledger_meta.json` regenerated
+with `ledger_start 2026-08-10`. No row entered; header-only CSVs.
+
+### ⛔ FIVE FINDINGS. All recorded first-hand. None resolved by this session's own judgment.
+
+**S2-R1 — the per-position Exit Options screens, FIRST EVER OBSERVATION on lapse-surviving
+positions.** A close destroys that screen permanently, so it was read before anything was armed.
+All five positions present, structure unchanged (A-10: fresh numbers, NOT mooted). P1 Tasty Condor
+SPY IC AUG 21 **+$197** (47.13%), **PT 50%**, **EXPIRATION 21 days vs 12 days to expiration**. P2
+QQQ LCS AUG 31 **−$2,335**, PT 25%, **EXPIRATION 30 days vs 22 days to expiration**. P3/P4/P5 at
+40/52/52 days. Account −$7,545 on RISK $14,118. ⛔ **P1 and P2 have ALREADY satisfied their
+Expiration rung**, so arming those two bots at Step 3 would have CLOSED them at Monday's first
+Exit-Options scan — a capital disposition executed by a re-arm sweep. Runbook §4 Step 2 item 3's
+branch was live for both.
+
+**S2-R2 — the button test-fire EXISTS**, against A-11's and the card's ⬜ NOT EVALUABLE. Verbatim:
+`<a class="btn gray sm" data-click="runAuto" title="Run automation now">Run</a>`, on every bot's
+Settings tab in the Automations panel header. NOT FIRED — a closed market yields no Trades list.
+
+**S2-R3 — `a_series.py --validate` now returns `🛑 1 DIVERGENCE`, and this session caused it.**
+`A1 21/21 · A2 7/7 · A3 7/7 · A7 3/3 · A8 7/7 · A9 7/7` all PASS; the failing item is the spot
+check `§9 fenced-block UTF-16 lengths == recorded notes lengths`. The Day-0 signing edits lengthened
+every §9 entry (Ride 2,339 → 6,258 · PT50 1,722 → 4,005 · Trail 5,412 → 7,698), so the Notes
+written into the bots at build time no longer reproduce their entries. **A true positive, not a tool
+defect.** Both repairs are GATED and neither was made: rewriting Notes on seven signed bots (and
+S0b-2 ruled that editor DO NOT RETRY), or re-baselining `RECORDED_NOTE_LEN` in `scripts/a_series.py`
+(a second `scripts/` edit, unauthorized). ⚠️ Under A-21's definition this is NOT a divergence — it is
+not one of A1–A9 — so it did not stop Step 7. It will print at every close-out until ruled.
+
+**S2-R4 — PR04-R3 is not confined to PR-04.** `QQQ-IC-0DTE-Fortress-NoPT50` reproduces it exactly:
+`rdata.next = 1786369500000` = 09:45 ET Monday against a rendered "Every week on Mon-Fri, 3:52pm
+EST". **`GF-QQQ-IC-Ride` carries the identical value to the millisecond** — a different bot with a
+different backstop object. Consistent with `rdata.next` being a bot-level next-scan stamp rather
+than the backstop's next fire, which would dissolve PR04-R3 — ⛔ **that is an inference, recorded as
+one, and it discharges nothing.** No edit made; re-timing is gated.
+
+**S2-R5 — `posLimitDay = 1` would break the condor on all seven arms.** Live: every arm is
+`2 per day / 2 at once`; PR-01 is `10/10`. An IC is TWO positions, so 2/2 already IS one condor per
+day — setting 1 would open a put spread and block the call side, producing seven half-condors on
+day one. Runbook §3 Step A clean criterion 4 says limits must be even. Slot 2 named 2/2 and 10/10 as
+one problem; they are not.
+
+### ✅ ANDY'S SIX RULINGS, in-chat, recorded verbatim
+1. **Gate A6 — "Ride: leave both bots' EXIT OPTIONS OFF"**. RIDE on all five. `QQQ long call` and
+   `Tasty Condor` excluded from Step 3, unsigned, OFF. Cost accepted and named: Step 6a can now
+   reach at most 7 of the 9 subjects.
+2. **Step 6/7 ordering — "Switch on today at Step 7 with posLimitDay=1"**, treating the closed
+   market as "test-fire cannot execute".
+3. **The nine — "Sign the seven that can trade (ledger reading)"**, following the ledger's own
+   CONFIG HASH text ("does NOT block this signature") over the prompt's stricter line.
+4. **CONFIG HASH convention — "Both: capture path @ file sha256, plus the three A7 hashes"**.
+5. **Entry fields — "Amend the plan: resolve all three classes"** (CONFIG HASH · the relational
+   dates · PR-14's MECHANISM).
+6. **Gate A7 — "Sign all seven"** (PR-14…PR-20) and **"Fill its CONFIG HASH and sign it"** (PR-01).
+   Then **S2-R5 — "Condor-aware: arms stay 2/2, PR-01 -> 2/2, mirrors -> 1/1"**.
+
+### STEP 2b — WHAT WAS SIGNED, AND WHAT THE SIGNING FOUND
+`greenfield-family-spec.md` §9: `GATE EVAL DATE` resolved on all seven to **2027-02-10**; `REVIEW
+DATE` PR-14 → 2027-02-10, PR-20 → 2026-11-10; `CONFIG HASH` **filled on all seven, 0 placeholders
+left**; **PR-14's MECHANISM corrected in place** (dated banner, original struck not deleted) —
+sibling-close **never built** (C8; Library holds 4 objects not 5, 7/7/7/2), **two** bot inputs not
+one, size primitive recorded as a fixed 1 contract. That correction had reached the other arms' §12
+rows in 2026-08-06 and **never reached PR-14's own MECHANISM block** — the same propagation class
+this folder keeps catching.
+`pre-registration-ledger.md`: **new §5a `PR-RC-01`, the ride-or-close entry, drafted / ruled /
+signed** — §8 item 5's "not yet drafted" is discharged. PR-01, PR-05, PR-06, PR-07, PR-08, PR-10,
+PR-11, PR-12 **SIGNED**; PR-09 and PR-13 carry an explicit **NOT SIGNED** with the ride ruling and
+S2-R1 written into the field. Every signature carries `SIGNED != VERIFIED` and the owed
+first-trading-day capture.
+⛔ **PR-02 and PR-04 have NO Template V1** (`/bots/templates` read: My Templates = 10, neither is
+there). Runbook Step 4: bot stays OFF. `showBotMenu` is Andy's hand.
+
+### STEPS 2c / 3 / 4 / 5 / 5a / 6 / 7
+**2c** — run before any toggle moved; both toggles OFF on `Tasty Condor` and `DIR-SPX-PutVIX22-SL75`
+and on all nine; branch "both read OFF" recorded verbatim. ⛔ Verdict **`NO-TOUCH OBSERVATION
+CONFOUNDED — RESTORE`**, ⬜ NOT EVALUABLE (A-09b) — and that must be said inside the Step 6a verdict.
+**3** — EXIT OPTIONS ON, AUTOMATIONS untouched, on SEVEN of the nine (the two ride bots excluded by
+ruling). 7/7 held through a hard reload; `disableExits 0`, `status "off"` on each; per-bot
+screenshots after the reload; second surface `/bots` → EXIT OPTIONS ON 14/43, AUTOMATIONS ON 0/43.
+None of the three failure branches fired; the revert branch remains unobserved, recorded as such.
+**4** — `a_series.py --validate` + `--json` run by hand (A-24 iii); FAMILY GREEN on every assert;
+**A7 reported 3/4 VERIFIED + 1 FIRST BASELINE, never 4/4** (`Defang-Mon-S2-StrikeTouch`, A-13).
+**5** — seven account fields captured. ⛔ Gate A12's bookmarklet + Export Data NOT RUN (Andy's hand);
+`bots_config_v2.csv` lags OA by this session's 7 flips until it is.
+**5a** — stored read only; behavioural DST read NOT DUE until a bot has been ON on a trading day.
+Recorded DUE 2026-08-10, not passed and not failed.
+**6/7** — the test-fire exists but yields nothing on a closed market; the arms' 2/2 already is the
+first-position control, so **no arm was edited, no hash forked, nothing to revert**. **AUTOMATIONS
+→ ON on the seven arms**, each with A-27a's re-read inside the same script and a hard abort if EXIT
+OPTIONS came back anything but `true`. 0 aborts. Post-reload `status "on"` on all seven. Second
+surface: **AUTOMATIONS ON = 7 of 43**, exactly the arms.
+
+⛔ **STEP 8 NOT REACHED** — Day-1 monitoring is a trading-day step.
+⛔ **SESSION STOPPED AT A CLEAN PER-BOT BOUNDARY (A-23)**, with PR-01 and the seven signed
+mirrors/directionals still OFF: both need limit work (PR-01 10/10 → 2/2; the seven read-then-1/1)
+that should not be started late in a session. Everything they need is on file.
+
+**⛔ ATTESTATION (A-18):** the nine leave-in-place bots WERE opened and seven of them WERE
+toggle-touched this session — that is Step 3, authorized. `QQQ long call` and `Tasty Condor` were
+opened READ-ONLY (their positions and per-position Exit Options screens) and neither toggle was
+moved on either.
+
+**Files changed:** `scripts/build_ledger.py` · `docs/greenfield-family-spec.md` ·
+`docs/pre-registration-ledger.md` · `data/captures/2026-08-09-s2/` (6 text files + 19 screenshots) ·
+`data/ledger_meta.json` · `data/trades.csv` · `data/bots.csv` · `data/straddlers.csv` ·
+`docs/state.md` · `docs/session-log.md` (this entry). All verified by direct `device_bash` sha256 +
+single-match grep (§9.1a) — never a write-tool response, never a stage-back read. **No git in any
+form. Uncommitted — Andy runs the commit.**

@@ -1,0 +1,59 @@
+S2 — DAY-0 STEP 3 · RE-ARM SWEEP: EXIT OPTIONS ONLY. AUTOMATIONS LEFT OFF.
+Executed 2026-08-09 ~12:15-12:41 ET, Chrome-direct. AUTOMATIONS was NOT touched on any bot.
+
+SCOPE: SEVEN of the nine leave-in-place bots.
+⛔ TWO OF THE NINE ARE DELIBERATELY EXCLUDED — `QQQ long call` and `Tasty Condor`.
+   Gate A6 ruled RIDE (Andy, in-chat 2026-08-09). Runbook §4 Step 2 item 3: "If anything would act
+   on the five open positions against the decision, leave that bot's EXIT OPTIONS OFF." Finding
+   S2-R1 shows arming them would close P1 and P2 at Monday's first Exit-Options scan. They stay OFF.
+   This is an EXCLUSION BY RULING, not a failed flip. See ledger §5a (PR-RC-01).
+
+METHOD (oa-driving skill; element-ref clicks silently no-op on this app):
+  the two dashboard toggles are `div.autoswitch.hdbox`, in fixed order [0]=AUTOMATIONS,
+  [1]=EXIT OPTIONS, each holding a hidden `input[name=onoff]` and an `a.onoffbtn`.
+  Every flip: label order asserted FIRST (abort if [0]!=AUTOMATIONS or [1]!=EXIT OPTIONS), then the
+  full pointer sequence pointerover→pointerenter→pointerdown→mousedown→pointerup→mouseup→click
+  dispatched at the button's bounding-rect centre. AUTOMATIONS' hidden input re-read after every
+  flip to prove it did not move.
+
+LAYER 1 PER BOT — re-observed after a HARD RELOAD (a fresh document load of the bot URL), never
+from the save response, never from the pre-reload DOM:
+
+  #  BOT                                   BEFORE            AFTER (post-hard-reload)
+  1  DIR-SPX-PutVIX22-SL75                 onoff=false       disableExits 0 · EXITS true · AUTOS false · status "off"
+  2  DIR-SPX-CallVIXdrop                   onoff=false       disableExits 0 · EXITS true · AUTOS false · status "off"
+  3  3DTE $140-$350                        onoff=false       disableExits 0 · EXITS true · AUTOS false · status "off"
+  4  Nigiri-Paper-v1                       onoff=false       disableExits 0 · EXITS true · AUTOS false · status "off"
+  5  Friday 14 DTE Broken Wing IB (B-70)   onoff=false       disableExits 0 · EXITS true · AUTOS false · status "off"
+  6  Trendy-Paper-v1                       onoff=false       disableExits 0 · EXITS true · AUTOS false · status "off"
+  7  60min-ORB-10W-Paper-v1                onoff=false       disableExits 0 · EXITS true · AUTOS false · status "off"
+
+  7 of 7 held ON through a hard reload. Per-bot toggle screenshots (both toggles in one frame,
+  header zoom, taken AFTER the reload):
+  data/captures/2026-08-09-s2/screenshots/03-step3-<bot>-toggles-2026-08-09.png
+
+SECOND, INDEPENDENT SURFACE — /bots list `i.sticon[title]`, one batched read after the sweep:
+  footer verbatim "43 active bots • 7 left in your plan"
+  AUTOMATIONS ON  = 0 of 43   (unchanged — Step 3 did not authorize a single entry)
+  EXIT OPTIONS ON = 14 of 43  = the 7 greenfield arms + the 7 armed here, by name:
+    3DTE $140-$350 · 60min-ORB-10W-Paper-v1 · DIR-SPX-CallVIXdrop · DIR-SPX-PutVIX22-SL75 ·
+    Friday 14 DTE Broken Wing IB (B-70) · GF-QQQ-IC-Canary · GF-QQQ-IC-PT50 · GF-QQQ-IC-Ride ·
+    GF-QQQ-IC-SL100 · GF-QQQ-IC-SL200 · GF-QQQ-IC-Touch0 · GF-QQQ-IC-Trail · Nigiri-Paper-v1 ·
+    Trendy-Paper-v1
+  `QQQ long call` and `Tasty Condor` read EXIT OPTIONS OFF — the ride is intact.
+
+FAILURE BRANCHES — NONE FIRED, recorded explicitly rather than by silence:
+  - TOGGLE NOT PRESENT ON THE DASHBOARD .................. did not occur (present on all 7)
+  - TOGGLE REVERTS TO OFF / post-save screenshot reads OFF  did not occur (0 of 7)
+  - THREE OR MORE OF THE NINE WILL NOT HOLD ON ........... did not occur
+  The revert branch remains a DRAFTED remedy with no corpus observation behind it; this sweep adds
+  no observation of a reverting toggle either. Recorded as "still unobserved", not as "tested".
+
+⛔ THE SEVEN GREENFIELD ARMS WERE NOT RE-DONE. S0a performed Step 3 on them 2026-08-07 (state.md's
+S0a correction item 3: "S2 VERIFIES STEP 3 ON THESE SEVEN, IT DOES NOT RE-DO IT"). Their EXIT
+OPTIONS were read, not written — a FOURTH persistence boundary for S0a's seven flips.
+
+⛔ THE NINE ARE NOT EXEMPT FROM STEP 6. This step scoped RE-ARMING, not VERIFICATION.
+⛔ THE THIRD TOGGLE SURFACE was read before this sweep, not after: each of the five open positions'
+own Exit Options screen is captured in step2-five-positions-2026-08-09.txt. It was an UNOPENED
+SCREEN until today and a close would have destroyed it permanently.

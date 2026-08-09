@@ -1,0 +1,77 @@
+S2 — DAY-0 STEP 5 (account capture + comparator) and STEP 5a (D-3 / DST)
+Read 2026-08-09, Chrome-direct. READ ONLY — no write on any surface named here.
+
+================================================================================
+STEP 5 — THE SEVEN ACCOUNT-LEVEL FIELDS (/settings), read after a HARD RELOAD
+================================================================================
+Read from input[name=...].value at 2026-08-09 11:22:14 ET (page clock), post-reload:
+  itmlive     market      <- Step 0a's HARD GATE. PASS. S0a's 2026-08-07 write persists.
+  itmpaper    market      <- unchanged, not re-set (runbook 0a: "do not re-set it")
+  maxexits    0           <- "Unlimited". THE DANGEROUS ONE. Unchanged from 2026-08-04 and S0a.
+                             A non-zero value reproduces the June failure shape with nothing
+                             per-bot to show for it. MAKE THIS A DRIFT-AUDIT ROW.
+  scanstart   09:31
+  scanend     5           <- "5 minutes before market close" = 15:55
+  exitstart   09:31
+  exitend     1           <- "1 minute before market close" = 15:59
+Screenshot: data/captures/2026-08-09-s2/screenshots/02-settings-2026-08-09.jpg
+Footnote read verbatim on the page: "Repeating and date/time scheduled automations are not
+affected by this schedule and run at the selected date and time even if it's outside the range
+defined above" — so neither window binds the 15:52 backstop.
+
+⛔ GATE A12 — THE BOOKMARKLET CAPTURE AND `Export Data` ARE ANDY'S HAND (A-22) AND WERE NOT RUN.
+A get_page_text scrape is NOT a capture and is not recorded as one. The /bots roster reads in this
+session are batched DOM reads of `i.sticon[title]` + `a[href^="/bots/bot/"].title`, declared as
+reads. The formal Step 5 sweep is OUTSTANDING and is Andy's.
+⛔ CONSEQUENCE, NAMED: `data/bots_config_v2.csv` LAGS OA by this session's 7 `disableExits` flips
+until that capture is taken. Same open item as S0a's.
+
+COMPARATOR CHECK ("confirm the comparator is real"): `scripts/a_series.py --json` resolved 7/7 bot
+captures and 3/3 shared-automation captures, decoded both G2 hops on every arm, and reported
+A7 3/3 byte-identical to the recorded baselines. The 2026-08-08 read-only sweep separately ran A7
+LIVE against OA and got the same three hashes. Tier C in the daily loop is a different question and
+is SKIPPED BY NAME (gate A9's loader fix) — the drift detector runs config-blind on Tier C and the
+brief says so, which is the designed degradation, not a green baseline.
+
+================================================================================
+STEP 5a — D-3 / THE DST QUESTION. READ, NOT CLOSED.
+================================================================================
+⛔ THE BEHAVIOURAL READ IS NOT DUE TODAY AND WAS NOT FAKED. Runbook §4 Step 5a: "OBSERVE, on the
+pilot's backstop automation, ON THE FIRST TRADING DAY THE BOT IS ON: bot Log -> filter Type=Event
+-> find the backstop's run row -> read THAT ROW'S `title` attribute." 2026-08-09 is a SUNDAY, no
+bot has been ON, and no Event row can exist. The check becomes due 2026-08-10.
+⛔ This is NOT the "no Event row for the backstop that day" failure branch — that branch is scoped
+to a trading day on which the bot was ON. Recorded as DUE, not as FAILED, and not as PASSED.
+
+WHAT WAS READ TODAY — the stored/cached state, per the 2026-08-08 sitting slot 9:
+
+  `QQQ-IC-0DTE-Fortress-NoPT50` (PR-04), the recorded PR04-R3 case:
+      a5.bots.bot.rdata.next = 1786369500000
+                             = 2026-08-10T13:45:00.000Z = 09:45:00 ET Monday
+      rendered schedule text, verbatim: "Every week on Mon-Fri, 3:52pm EST"
+      status "off", disableExits 1.  PR04-R3 REPRODUCES EXACTLY.
+
+  ⭐ FINDING S2-R4 — IT IS NOT CONFINED TO PR-04.
+  `GF-QQQ-IC-Ride` (PR-14), a signed greenfield arm with a DIFFERENT backstop object
+  (shared Library rid RTfw5TkkCRF178606373201751, not PR-04's clone-built rid …178620440961331):
+      a5.bots.bot.rdata.next = 1786369500000  — THE IDENTICAL VALUE, to the millisecond.
+      status "off", disableExits 0.
+
+  ⚠️ WHAT THIS DOES AND DOES NOT ESTABLISH.
+  OBSERVED: two bots, different automation sets, different backstop objects, carry the same
+  `rdata.next` constant. That is a fact, read first-hand today.
+  NOT ESTABLISHED: what `rdata.next` is. An identical value across structurally different bots is
+  CONSISTENT WITH `rdata.next` being a bot-level next-scan-window stamp rather than the backstop
+  trigger's next fire — in which case PR04-R3's "the cached next-fire disagrees with the saved
+  trigger" is comparing two different things and the disagreement dissolves. ⛔ THAT IS AN
+  INFERENCE, NOT AN OBSERVATION (CLAUDE.md §5), and it is recorded as such. It is NOT a discharge
+  of PR04-R3 and it is NOT an answer to D-3.
+  ⛔ NO EDIT WAS MADE. Slot 9: "if it requires an edit, that is GATED to Andy." Nothing was re-timed.
+
+DISPOSITION CARRIED TO MONDAY:
+  D-3 / DST ........................ OPEN. Read the backstop's Event row `title` on 2026-08-10.
+  PR04-R3 .......................... OPEN, and WIDENED by S2-R4 to at least two bots.
+  RULING-REOPENER (G-1', §4.3) ..... if the 15:52 backstop's own close_date confirms the export
+                                     clock on day 1, that reading also supports per-arm time-based
+                                     exit attribution and must be FLAGGED BACK TO ANDY, not just
+                                     logged.

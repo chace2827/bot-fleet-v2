@@ -1267,6 +1267,24 @@ MECHANISM        Short-premium VRP on 0DTE QQQ, harvested by time decay with no 
                  else + a Repeating Events-class 15:52 Market flat close + a Position-closed
                  sibling-close automation with all three §5.4 interlocks. Size primitive per
                  §5.4 check C4 — RECORD WHICH ONE WAS USED BEFORE BUILD.
+                 CORRECTED AT DAY-0 SIGNING 2026-08-09 — the MECHANISM text above is PRE-BUILD
+                 and describes a bot that was not built that way. Original left standing; this
+                 banner governs. Amend-the-plan given by Andy in-chat at the S2 Day-0 sitting,
+                 2026-08-09, scoped to this block. Three corrections:
+                 (1) THE SIBLING-CLOSE AUTOMATION WAS NEVER BUILT. C8 ruled 2026-08-06 (BUILD
+                     WITHOUT SIBLING-CLOSE); `GF-SiblingClose` does not exist. The Automation
+                     Library holds FOUR objects, not five — enumerated first-hand 2026-08-08 at
+                     /bots/automations, bot-counts 7/7/7/2. Each arm carries THREE attachments.
+                     The spread, not the condor, is the unit for early exits (spec §4.3).
+                 (2) THE BOT INPUT IS TWO INPUTS, NOT ONE. Built as `GF_EXITS_PUT`
+                     (IN178607080900761) and `GF_EXITS_CALL` (IN178607092377072), both
+                     bundle-typed, both bound, decoded field sets EQUAL (A8 PASS 7/7). C0b's
+                     literal answer is NO — one automation input cannot span two automations —
+                     which is why there are two.
+                 (3) THE SIZE PRIMITIVE IS RECORDED: a FIXED CONTRACT COUNT of 1 (`amount` = 1
+                     contract on both Open Position actions), NOT the `$250 risk` fallback.
+                     "RECORD WHICH ONE WAS USED BEFORE BUILD" is discharged by this line.
+                 Nothing else in this entry is changed.
 KILL CRITERION   Exp(R) per condor < 0 with the CI entirely below 0 at n ≥ 60 condors.
                  Plus the family-level, liveness (inverted) and sentinel criteria above.
                  📝 AMENDED 2026-08-06 (G-8, SEQUENCE+CS, ruled by Andy) — the n≥60 read above is
@@ -1274,15 +1292,39 @@ KILL CRITERION   Exp(R) per condor < 0 with the CI entirely below 0 at n ≥ 60 
                  kill cannot fire before this arm's own stamped GATE EVAL DATE (below).
                  Family-level and sentinel criteria (execution-integrity rules) are unaffected.
 SAMPLE TARGET    n = 100 condors.
-REVIEW DATE      Day-0 + 6 months; interim at n = 60.
-GATE EVAL DATE   Day-0 + 6 months (relational; resolves to calendar at Day-0); interim look at
-                 n=60.
+REVIEW DATE      ✅ RESOLVED 2026-08-09 — **2027-02-10**; interim at n = 60.
+                 ~~Day-0 + 6 months~~ (same amend-the-plan as GATE EVAL DATE below).
+GATE EVAL DATE   ✅ RESOLVED AT DAY-0 SIGNING 2026-08-09 — **2027-02-10** (= LEDGER_START
+                 2026-08-10 + 6 months). Interim look at n=60. Amend-the-plan given by Andy
+                 in-chat at the S2 Day-0 sitting, 2026-08-09, scoped to resolving this
+                 relational literal to a calendar date. Original, left standing:
+                 ~~Day-0 + 6 months (relational; resolves to calendar at Day-0)~~
 MAX LOSS         ≈$185 net risk per condor; 1 condor/day.
 SIZING TIER      1 lot — IDENTICAL across arms.
-CONFIG HASH      <capture> @ <hash>
+CONFIG HASH      FILLED AT DAY-0 SIGNING 2026-08-09
+                 CAPTURE  data/captures/2026-08-07-greenfield/GF-QQQ-IC-Ride/GF-QQQ-IC-Ride.txt
+                 SHA256   5b333324e93ab8331cab6e89a4d66eb392bf7058f66918cc22160632297edb19
+                 SHARED-OBJECT A7 BASELINES (identical across all seven arms by construction):
+                   GF-ScannerA-PutSpread       3308ce8b476d2bd090d9519b445748fc4c0d0fdbe71861c83a249729b1a5a30a  (v9)
+                   GF-ScannerB-CallSpread      bb4ba866a13e7ecd682f7bda9a19011003e9e3ef73fffd0fb64a80a4cd0eb32e  (v2)
+                   GF-Backstop-1552-FlatClose  116069bddf8b8c9e58bd8f28313c2ad95726fa3f7205df4dfde82de7a3e2e5b5  (v1)
+                 (No bot-level payload hash exists, by design — data/bots_config_v2.csv's BOT ROWS
+                 note: "a7_hash is N/A - A7 is a SHARED-AUTOMATION assert. For a bot the matching
+                 proof is the pairwise capture-diff over the DECODED bot-input field set." What
+                 distinguishes THIS arm is its decoded bundle, carried in that CSV row and in full
+                 in the capture file above. Filled per Andy's ruling in-chat at the S2 Day-0
+                 sitting 2026-08-09: "capture path @ file sha256, plus the three A7 hashes".
 VERIFICATION     INVERTED Trades-list check: no PT / trail / touch / stop row, and a ~15:50
                  SmartPricing close row. Plus the pairwise capture-diff of §8.2.
-SIGNED           ..............................
+SIGNED           2026-08-09 · ANDY — gate A7, in-chat at the S2 Day-0 sitting. Ruling
+                 recorded verbatim: "Sign all seven". Signed after every field on this
+                 entry was resolved the same session: CONFIG HASH filled, GATE EVAL DATE
+                 and REVIEW DATE resolved to calendar dates, and (PR-14 only) the
+                 MECHANISM block corrected. Day-0 = 2026-08-10 = LEDGER_START.
+                 SIGNED != VERIFIED — runbook §4 Step 6 order-level Trades-list check on
+                 the first new position is still required, and is deferred to the first
+                 trading session (2026-08-10) because the market was closed on the day
+                 this entry was signed. [PR-14 · GF-QQQ-IC-Ride]
 ```
 
 ```
@@ -1305,10 +1347,34 @@ KILL CRITERION   Exp(R) per condor < 0 with CI entirely below 0 at n ≥ 60. Plu
                  emitted as an always-valid confidence sequence, not a fixed-n CI; the absolute
                  kill cannot fire before this arm's own stamped GATE EVAL DATE (below).
                  Family-level and sentinel criteria (execution-integrity rules) are unaffected.
-GATE EVAL DATE   Day-0 + 6 months (relational; resolves to calendar at Day-0); interim look at
-                 n=60.
+GATE EVAL DATE   ✅ RESOLVED AT DAY-0 SIGNING 2026-08-09 — **2027-02-10** (= LEDGER_START
+                 2026-08-10 + 6 months). Interim look at n=60. Amend-the-plan given by Andy
+                 in-chat at the S2 Day-0 sitting, 2026-08-09, scoped to resolving this
+                 relational literal to a calendar date. Original, left standing:
+                 ~~Day-0 + 6 months (relational; resolves to calendar at Day-0)~~
 VERIFICATION     A 50% profit-taking row in the first new position's Trades list.
-SIGNED           ..............................
+CONFIG HASH      FILLED AT DAY-0 SIGNING 2026-08-09
+                 CAPTURE  data/captures/2026-08-07-greenfield/GF-QQQ-IC-PT50/GF-QQQ-IC-PT50.txt
+                 SHA256   8ea2743a81762bbc8b0537bc797c9599d5adbd88b7b2d98d8a7d67d9d91ac6f4
+                 SHARED-OBJECT A7 BASELINES (identical across all seven arms by construction):
+                   GF-ScannerA-PutSpread       3308ce8b476d2bd090d9519b445748fc4c0d0fdbe71861c83a249729b1a5a30a  (v9)
+                   GF-ScannerB-CallSpread      bb4ba866a13e7ecd682f7bda9a19011003e9e3ef73fffd0fb64a80a4cd0eb32e  (v2)
+                   GF-Backstop-1552-FlatClose  116069bddf8b8c9e58bd8f28313c2ad95726fa3f7205df4dfde82de7a3e2e5b5  (v1)
+                 (No bot-level payload hash exists, by design — data/bots_config_v2.csv's BOT ROWS
+                 note: "a7_hash is N/A - A7 is a SHARED-AUTOMATION assert. For a bot the matching
+                 proof is the pairwise capture-diff over the DECODED bot-input field set." What
+                 distinguishes THIS arm is its decoded bundle, carried in that CSV row and in full
+                 in the capture file above. Filled per Andy's ruling in-chat at the S2 Day-0
+                 sitting 2026-08-09: "capture path @ file sha256, plus the three A7 hashes".
+SIGNED           2026-08-09 · ANDY — gate A7, in-chat at the S2 Day-0 sitting. Ruling
+                 recorded verbatim: "Sign all seven". Signed after every field on this
+                 entry was resolved the same session: CONFIG HASH filled, GATE EVAL DATE
+                 and REVIEW DATE resolved to calendar dates, and (PR-14 only) the
+                 MECHANISM block corrected. Day-0 = 2026-08-10 = LEDGER_START.
+                 SIGNED != VERIFIED — runbook §4 Step 6 order-level Trades-list check on
+                 the first new position is still required, and is deferred to the first
+                 trading session (2026-08-10) because the market was closed on the day
+                 this entry was signed. [PR-15 · GF-QQQ-IC-PT50]
 ```
 
 ```
@@ -1373,10 +1439,34 @@ KILL CRITERION   Exp(R) per condor < 0 with CI entirely below 0 at n ≥ 60. Plu
                  emitted as an always-valid confidence sequence, not a fixed-n CI; the absolute
                  kill cannot fire before this arm's own stamped GATE EVAL DATE (below).
                  Family-level and sentinel criteria (execution-integrity rules) are unaffected.
-GATE EVAL DATE   Day-0 + 6 months (relational; resolves to calendar at Day-0); interim look at
-                 n=60.
+GATE EVAL DATE   ✅ RESOLVED AT DAY-0 SIGNING 2026-08-09 — **2027-02-10** (= LEDGER_START
+                 2026-08-10 + 6 months). Interim look at n=60. Amend-the-plan given by Andy
+                 in-chat at the S2 Day-0 sitting, 2026-08-09, scoped to resolving this
+                 relational literal to a calendar date. Original, left standing:
+                 ~~Day-0 + 6 months (relational; resolves to calendar at Day-0)~~
 VERIFICATION     A trailing-stop row in the first new position's Trades list.
-SIGNED           ..............................
+CONFIG HASH      FILLED AT DAY-0 SIGNING 2026-08-09
+                 CAPTURE  data/captures/2026-08-07-greenfield/GF-QQQ-IC-Trail/GF-QQQ-IC-Trail.txt
+                 SHA256   b65faab35c70c3fa2fa7437b85c77e3f7f90b5d3e70207544488cf96e6c67db3
+                 SHARED-OBJECT A7 BASELINES (identical across all seven arms by construction):
+                   GF-ScannerA-PutSpread       3308ce8b476d2bd090d9519b445748fc4c0d0fdbe71861c83a249729b1a5a30a  (v9)
+                   GF-ScannerB-CallSpread      bb4ba866a13e7ecd682f7bda9a19011003e9e3ef73fffd0fb64a80a4cd0eb32e  (v2)
+                   GF-Backstop-1552-FlatClose  116069bddf8b8c9e58bd8f28313c2ad95726fa3f7205df4dfde82de7a3e2e5b5  (v1)
+                 (No bot-level payload hash exists, by design — data/bots_config_v2.csv's BOT ROWS
+                 note: "a7_hash is N/A - A7 is a SHARED-AUTOMATION assert. For a bot the matching
+                 proof is the pairwise capture-diff over the DECODED bot-input field set." What
+                 distinguishes THIS arm is its decoded bundle, carried in that CSV row and in full
+                 in the capture file above. Filled per Andy's ruling in-chat at the S2 Day-0
+                 sitting 2026-08-09: "capture path @ file sha256, plus the three A7 hashes".
+SIGNED           2026-08-09 · ANDY — gate A7, in-chat at the S2 Day-0 sitting. Ruling
+                 recorded verbatim: "Sign all seven". Signed after every field on this
+                 entry was resolved the same session: CONFIG HASH filled, GATE EVAL DATE
+                 and REVIEW DATE resolved to calendar dates, and (PR-14 only) the
+                 MECHANISM block corrected. Day-0 = 2026-08-10 = LEDGER_START.
+                 SIGNED != VERIFIED — runbook §4 Step 6 order-level Trades-list check on
+                 the first new position is still required, and is deferred to the first
+                 trading session (2026-08-10) because the market was closed on the day
+                 this entry was signed. [PR-16 · GF-QQQ-IC-Trail]
 ```
 
 ```
@@ -1411,12 +1501,36 @@ KILL CRITERION   Exp(R) per condor < 0 with CI entirely below 0 at n ≥ 60. Plu
                  emitted as an always-valid confidence sequence, not a fixed-n CI; the absolute
                  kill cannot fire before this arm's own stamped GATE EVAL DATE (below).
                  Family-level and sentinel criteria (execution-integrity rules) are unaffected.
-GATE EVAL DATE   Day-0 + 6 months (relational; resolves to calendar at Day-0); interim look at
-                 n=60.
+GATE EVAL DATE   ✅ RESOLVED AT DAY-0 SIGNING 2026-08-09 — **2027-02-10** (= LEDGER_START
+                 2026-08-10 + 6 months). Interim look at n=60. Amend-the-plan given by Andy
+                 in-chat at the S2 Day-0 sitting, 2026-08-09, scoped to resolving this
+                 relational literal to a calendar date. Original, left standing:
+                 ~~Day-0 + 6 months (relational; resolves to calendar at Day-0)~~
 VERIFICATION     A touch row at/after the underlying crosses the short strike.
                  📝 CORRECTED 2026-08-06: ~~plus a `sibling close` row on the second leg at
                  `:00`/`:00`~~ — VOID, that row will not exist (C8 ruling).
-SIGNED           ..............................
+CONFIG HASH      FILLED AT DAY-0 SIGNING 2026-08-09
+                 CAPTURE  data/captures/2026-08-07-greenfield/GF-QQQ-IC-Touch0/GF-QQQ-IC-Touch0.txt
+                 SHA256   f5937391c74f201b7d9965c3ed890c5b2100dd331a4758a946053759fb675051
+                 SHARED-OBJECT A7 BASELINES (identical across all seven arms by construction):
+                   GF-ScannerA-PutSpread       3308ce8b476d2bd090d9519b445748fc4c0d0fdbe71861c83a249729b1a5a30a  (v9)
+                   GF-ScannerB-CallSpread      bb4ba866a13e7ecd682f7bda9a19011003e9e3ef73fffd0fb64a80a4cd0eb32e  (v2)
+                   GF-Backstop-1552-FlatClose  116069bddf8b8c9e58bd8f28313c2ad95726fa3f7205df4dfde82de7a3e2e5b5  (v1)
+                 (No bot-level payload hash exists, by design — data/bots_config_v2.csv's BOT ROWS
+                 note: "a7_hash is N/A - A7 is a SHARED-AUTOMATION assert. For a bot the matching
+                 proof is the pairwise capture-diff over the DECODED bot-input field set." What
+                 distinguishes THIS arm is its decoded bundle, carried in that CSV row and in full
+                 in the capture file above. Filled per Andy's ruling in-chat at the S2 Day-0
+                 sitting 2026-08-09: "capture path @ file sha256, plus the three A7 hashes".
+SIGNED           2026-08-09 · ANDY — gate A7, in-chat at the S2 Day-0 sitting. Ruling
+                 recorded verbatim: "Sign all seven". Signed after every field on this
+                 entry was resolved the same session: CONFIG HASH filled, GATE EVAL DATE
+                 and REVIEW DATE resolved to calendar dates, and (PR-14 only) the
+                 MECHANISM block corrected. Day-0 = 2026-08-10 = LEDGER_START.
+                 SIGNED != VERIFIED — runbook §4 Step 6 order-level Trades-list check on
+                 the first new position is still required, and is deferred to the first
+                 trading session (2026-08-10) because the market was closed on the day
+                 this entry was signed. [PR-17 · GF-QQQ-IC-Touch0]
 ```
 
 ```
@@ -1477,10 +1591,34 @@ KILL CRITERION   Exp(R) per condor < 0 with CI entirely below 0 at n ≥ 60. Plu
                  emitted as an always-valid confidence sequence, not a fixed-n CI; the absolute
                  kill cannot fire before this arm's own stamped GATE EVAL DATE (below).
                  Family-level and sentinel criteria (execution-integrity rules) are unaffected.
-GATE EVAL DATE   Day-0 + 6 months (relational; resolves to calendar at Day-0); interim look at
-                 n=60.
+GATE EVAL DATE   ✅ RESOLVED AT DAY-0 SIGNING 2026-08-09 — **2027-02-10** (= LEDGER_START
+                 2026-08-10 + 6 months). Interim look at n=60. Amend-the-plan given by Andy
+                 in-chat at the S2 Day-0 sitting, 2026-08-09, scoped to resolving this
+                 relational literal to a calendar date. Original, left standing:
+                 ~~Day-0 + 6 months (relational; resolves to calendar at Day-0)~~
 VERIFICATION     A stop-loss row in the first new position's Trades list.
-SIGNED           ..............................
+CONFIG HASH      FILLED AT DAY-0 SIGNING 2026-08-09
+                 CAPTURE  data/captures/2026-08-07-greenfield/GF-QQQ-IC-SL100/GF-QQQ-IC-SL100.txt
+                 SHA256   bc6dbb4647dfb1599154ab5457f64e92d01e7d84c6cd0eae1ae76659300d94c5
+                 SHARED-OBJECT A7 BASELINES (identical across all seven arms by construction):
+                   GF-ScannerA-PutSpread       3308ce8b476d2bd090d9519b445748fc4c0d0fdbe71861c83a249729b1a5a30a  (v9)
+                   GF-ScannerB-CallSpread      bb4ba866a13e7ecd682f7bda9a19011003e9e3ef73fffd0fb64a80a4cd0eb32e  (v2)
+                   GF-Backstop-1552-FlatClose  116069bddf8b8c9e58bd8f28313c2ad95726fa3f7205df4dfde82de7a3e2e5b5  (v1)
+                 (No bot-level payload hash exists, by design — data/bots_config_v2.csv's BOT ROWS
+                 note: "a7_hash is N/A - A7 is a SHARED-AUTOMATION assert. For a bot the matching
+                 proof is the pairwise capture-diff over the DECODED bot-input field set." What
+                 distinguishes THIS arm is its decoded bundle, carried in that CSV row and in full
+                 in the capture file above. Filled per Andy's ruling in-chat at the S2 Day-0
+                 sitting 2026-08-09: "capture path @ file sha256, plus the three A7 hashes".
+SIGNED           2026-08-09 · ANDY — gate A7, in-chat at the S2 Day-0 sitting. Ruling
+                 recorded verbatim: "Sign all seven". Signed after every field on this
+                 entry was resolved the same session: CONFIG HASH filled, GATE EVAL DATE
+                 and REVIEW DATE resolved to calendar dates, and (PR-14 only) the
+                 MECHANISM block corrected. Day-0 = 2026-08-10 = LEDGER_START.
+                 SIGNED != VERIFIED — runbook §4 Step 6 order-level Trades-list check on
+                 the first new position is still required, and is deferred to the first
+                 trading session (2026-08-10) because the market was closed on the day
+                 this entry was signed. [PR-18 · GF-QQQ-IC-SL100]
 ```
 
 ```
@@ -1535,10 +1673,34 @@ KILL CRITERION   Exp(R) per condor < 0 with CI entirely below 0 at n ≥ 60 matc
                  emitted as an always-valid confidence sequence, not a fixed-n CI; the absolute
                  kill cannot fire before this arm's own stamped GATE EVAL DATE (below).
                  Family-level and sentinel criteria (execution-integrity rules) are unaffected.
-GATE EVAL DATE   Day-0 + 6 months (relational; resolves to calendar at Day-0); interim look at
-                 n=60.
+GATE EVAL DATE   ✅ RESOLVED AT DAY-0 SIGNING 2026-08-09 — **2027-02-10** (= LEDGER_START
+                 2026-08-10 + 6 months). Interim look at n=60. Amend-the-plan given by Andy
+                 in-chat at the S2 Day-0 sitting, 2026-08-09, scoped to resolving this
+                 relational literal to a calendar date. Original, left standing:
+                 ~~Day-0 + 6 months (relational; resolves to calendar at Day-0)~~
 VERIFICATION     A stop-loss row in the first new position's Trades list.
-SIGNED           ..............................
+CONFIG HASH      FILLED AT DAY-0 SIGNING 2026-08-09
+                 CAPTURE  data/captures/2026-08-07-greenfield/GF-QQQ-IC-SL200/GF-QQQ-IC-SL200.txt
+                 SHA256   e01578f924ab431be02520569199e6780397b00d7e17b522522976ae71f38e36
+                 SHARED-OBJECT A7 BASELINES (identical across all seven arms by construction):
+                   GF-ScannerA-PutSpread       3308ce8b476d2bd090d9519b445748fc4c0d0fdbe71861c83a249729b1a5a30a  (v9)
+                   GF-ScannerB-CallSpread      bb4ba866a13e7ecd682f7bda9a19011003e9e3ef73fffd0fb64a80a4cd0eb32e  (v2)
+                   GF-Backstop-1552-FlatClose  116069bddf8b8c9e58bd8f28313c2ad95726fa3f7205df4dfde82de7a3e2e5b5  (v1)
+                 (No bot-level payload hash exists, by design — data/bots_config_v2.csv's BOT ROWS
+                 note: "a7_hash is N/A - A7 is a SHARED-AUTOMATION assert. For a bot the matching
+                 proof is the pairwise capture-diff over the DECODED bot-input field set." What
+                 distinguishes THIS arm is its decoded bundle, carried in that CSV row and in full
+                 in the capture file above. Filled per Andy's ruling in-chat at the S2 Day-0
+                 sitting 2026-08-09: "capture path @ file sha256, plus the three A7 hashes".
+SIGNED           2026-08-09 · ANDY — gate A7, in-chat at the S2 Day-0 sitting. Ruling
+                 recorded verbatim: "Sign all seven". Signed after every field on this
+                 entry was resolved the same session: CONFIG HASH filled, GATE EVAL DATE
+                 and REVIEW DATE resolved to calendar dates, and (PR-14 only) the
+                 MECHANISM block corrected. Day-0 = 2026-08-10 = LEDGER_START.
+                 SIGNED != VERIFIED — runbook §4 Step 6 order-level Trades-list check on
+                 the first new position is still required, and is deferred to the first
+                 trading session (2026-08-10) because the market was closed on the day
+                 this entry was signed. [PR-19 · GF-QQQ-IC-SL200]
 ```
 
 > ### 📝 APPENDED 2026-08-06 — double-testing RULED, RETIRE-SCOPED (PR-18/PR-19 vs Track A's signed SL100/SL200). Applied on Andy's explicit "amend the plan" (`decision-card-2026-08-06.md` ruling 5).
@@ -1600,11 +1762,36 @@ KILL CRITERION   NONE ON P/L. Exempt by design, stated here so it cannot later b
                  detector whose own failure rule is human judgement is the thing it exists to
                  prevent. It also carries the family-level and sentinel criteria.
 SAMPLE TARGET    n/a — daily fill / no-fill is the output.
-REVIEW DATE      Day-0 + 3 months: is it still earning its slot?
-GATE EVAL DATE   Day-0 + 6 months (relational; resolves to calendar at Day-0); interim look at
-                 n=60.
+REVIEW DATE      ✅ RESOLVED 2026-08-09 — **2026-11-10** (= LEDGER_START + 3 months): is it
+                 still earning its slot? ~~Day-0 + 3 months~~ (same amend-the-plan).
+GATE EVAL DATE   ✅ RESOLVED AT DAY-0 SIGNING 2026-08-09 — **2027-02-10** (= LEDGER_START
+                 2026-08-10 + 6 months). Interim look at n=60. Amend-the-plan given by Andy
+                 in-chat at the S2 Day-0 sitting, 2026-08-09, scoped to resolving this
+                 relational literal to a calendar date. Original, left standing:
+                 ~~Day-0 + 6 months (relational; resolves to calendar at Day-0)~~
 VERIFICATION     A profit-taking fill on DAY 1, read from the Trades list.
-SIGNED           ..............................
+CONFIG HASH      FILLED AT DAY-0 SIGNING 2026-08-09
+                 CAPTURE  data/captures/2026-08-07-greenfield/GF-QQQ-IC-Canary/GF-QQQ-IC-Canary.txt
+                 SHA256   28baa673c8a7da4ac20c5c16f2c7acc3d6d75f9ca6213d833f34c6d76fef3df7
+                 SHARED-OBJECT A7 BASELINES (identical across all seven arms by construction):
+                   GF-ScannerA-PutSpread       3308ce8b476d2bd090d9519b445748fc4c0d0fdbe71861c83a249729b1a5a30a  (v9)
+                   GF-ScannerB-CallSpread      bb4ba866a13e7ecd682f7bda9a19011003e9e3ef73fffd0fb64a80a4cd0eb32e  (v2)
+                   GF-Backstop-1552-FlatClose  116069bddf8b8c9e58bd8f28313c2ad95726fa3f7205df4dfde82de7a3e2e5b5  (v1)
+                 (No bot-level payload hash exists, by design — data/bots_config_v2.csv's BOT ROWS
+                 note: "a7_hash is N/A - A7 is a SHARED-AUTOMATION assert. For a bot the matching
+                 proof is the pairwise capture-diff over the DECODED bot-input field set." What
+                 distinguishes THIS arm is its decoded bundle, carried in that CSV row and in full
+                 in the capture file above. Filled per Andy's ruling in-chat at the S2 Day-0
+                 sitting 2026-08-09: "capture path @ file sha256, plus the three A7 hashes".
+SIGNED           2026-08-09 · ANDY — gate A7, in-chat at the S2 Day-0 sitting. Ruling
+                 recorded verbatim: "Sign all seven". Signed after every field on this
+                 entry was resolved the same session: CONFIG HASH filled, GATE EVAL DATE
+                 and REVIEW DATE resolved to calendar dates, and (PR-14 only) the
+                 MECHANISM block corrected. Day-0 = 2026-08-10 = LEDGER_START.
+                 SIGNED != VERIFIED — runbook §4 Step 6 order-level Trades-list check on
+                 the first new position is still required, and is deferred to the first
+                 trading session (2026-08-10) because the market was closed on the day
+                 this entry was signed. [PR-20 · GF-QQQ-IC-Canary]
 ```
 
 ---

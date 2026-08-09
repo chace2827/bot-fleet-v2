@@ -1,0 +1,151 @@
+=== a_series.py --validate  (run 2026-08-09, S2 Day-0, Step 4 / A-26) ===
+A-SERIES --validate  (reproduce data/captures/…/ASSERTS-A1-A9-and-capture-diff.txt)
+
+  PASS  A1   got (21, 21)  want (21, 21)
+  PASS  A2   got (7, 7)  want (7, 7)
+  PASS  A3   got (7, 7)  want (7, 7)
+  PASS  A7   got (3, 3)  want (3, 3)
+  PASS  A8   got (7, 7)  want (7, 7)
+  PASS  A9   got (7, 7)  want (7, 7)
+  PASS  A4   got MOOT  want MOOT
+  PASS  A4b  got NOT-RUNNABLE  want NOT-RUNNABLE
+  PASS  A5   got NOT-RUN  want NOT-RUN
+  PASS  A6   got NOT-RUNNABLE  want NOT-RUNNABLE
+  PASS  spot: exitrate==1 on all seven
+  PASS  spot: Backstop ntime==1552 on all seven
+  FAIL  spot: §9 fenced-block UTF-16 lengths == recorded notes lengths
+
+  🛑 1 DIVERGENCE(S) — tool defect
+
+=== a_series.py --json ===
+A-SERIES DRIFT DETECTOR v0.1.0-DRAFT  ⛔ STANDALONE / NOT WIRED into daily.sh
+  captures: 7/7 bots, 3/3 shared automations
+
+  ✅ A1   PASS         21/21   pairwise mechanic distinctness (amended)
+    ✓ GF-QQQ-IC-Ride / GF-QQQ-IC-PT50         arm-vs-control  diff=['profits'] expect 1
+    ✓ GF-QQQ-IC-Ride / GF-QQQ-IC-Trail        arm-vs-control  diff=['tstop'] expect 1
+    ✓ GF-QQQ-IC-Ride / GF-QQQ-IC-Touch0       arm-vs-control  diff=['touch'] expect 1
+    ✓ GF-QQQ-IC-Ride / GF-QQQ-IC-SL100        arm-vs-control  diff=['stoploss'] expect 1
+    ✓ GF-QQQ-IC-Ride / GF-QQQ-IC-SL200        arm-vs-control  diff=['stoploss'] expect 1
+    ✓ GF-QQQ-IC-Ride / GF-QQQ-IC-Canary       arm-vs-control  diff=['profits'] expect 1
+    ✓ GF-QQQ-IC-PT50 / GF-QQQ-IC-Trail        arm-vs-arm      diff=['profits', 'tstop'] expect 2
+    ✓ GF-QQQ-IC-PT50 / GF-QQQ-IC-Touch0       arm-vs-arm      diff=['profits', 'touch'] expect 2
+    ✓ GF-QQQ-IC-PT50 / GF-QQQ-IC-SL100        arm-vs-arm      diff=['profits', 'stoploss'] expect 2
+    ✓ GF-QQQ-IC-PT50 / GF-QQQ-IC-SL200        arm-vs-arm      diff=['profits', 'stoploss'] expect 2
+    ✓ GF-QQQ-IC-PT50 / GF-QQQ-IC-Canary       shared-field    diff=['profits'] expect 1
+    ✓ GF-QQQ-IC-Trail / GF-QQQ-IC-Touch0       arm-vs-arm      diff=['touch', 'tstop'] expect 2
+    ✓ GF-QQQ-IC-Trail / GF-QQQ-IC-SL100        arm-vs-arm      diff=['stoploss', 'tstop'] expect 2
+    ✓ GF-QQQ-IC-Trail / GF-QQQ-IC-SL200        arm-vs-arm      diff=['stoploss', 'tstop'] expect 2
+    ✓ GF-QQQ-IC-Trail / GF-QQQ-IC-Canary       arm-vs-arm      diff=['profits', 'tstop'] expect 2
+    ✓ GF-QQQ-IC-Touch0 / GF-QQQ-IC-SL100        arm-vs-arm      diff=['stoploss', 'touch'] expect 2
+    ✓ GF-QQQ-IC-Touch0 / GF-QQQ-IC-SL200        arm-vs-arm      diff=['stoploss', 'touch'] expect 2
+    ✓ GF-QQQ-IC-Touch0 / GF-QQQ-IC-Canary       arm-vs-arm      diff=['profits', 'touch'] expect 2
+    ✓ GF-QQQ-IC-SL100 / GF-QQQ-IC-SL200        shared-field    diff=['stoploss'] expect 1
+    ✓ GF-QQQ-IC-SL100 / GF-QQQ-IC-Canary       arm-vs-arm      diff=['profits', 'stoploss'] expect 2
+    ✓ GF-QQQ-IC-SL200 / GF-QQQ-IC-Canary       arm-vs-arm      diff=['profits', 'stoploss'] expect 2
+  ✅ A2   PASS         7/7     16 non-bundle fields incl. trigger config + rid list, equal across the family
+  ✅ A3   PASS         7/7     decoded set == §9 pre-registration (table = sole verdict; notes byte-compared)
+    ✓ GF-QQQ-IC-Ride         mechanics [] vs §9 []   [notes: recorded firstDiff=-1, utf16=2339 ≠ §9 len 6258]
+    ✓ GF-QQQ-IC-PT50         mechanics ['profits'] vs §9 ['profits']   [notes: recorded firstDiff=-1, utf16=1722 ≠ §9 len 4005]
+    ✓ GF-QQQ-IC-Trail        mechanics ['tstop'] vs §9 ['tstop']   [notes: recorded firstDiff=-1, utf16=5412 ≠ §9 len 7698]
+    ✓ GF-QQQ-IC-Touch0       mechanics ['touch'] vs §9 ['touch']   [notes: recorded firstDiff=-1, utf16=2917 ≠ §9 len 5206]
+    ✓ GF-QQQ-IC-SL100        mechanics ['stoploss'] vs §9 ['stoploss']   [notes: recorded firstDiff=-1, utf16=4389 ≠ §9 len 7494]
+    ✓ GF-QQQ-IC-SL200        mechanics ['stoploss'] vs §9 ['stoploss']   [notes: recorded firstDiff=-1, utf16=4546 ≠ §9 len 6832]
+    ✓ GF-QQQ-IC-Canary       mechanics ['profits'] vs §9 ['profits']   [notes: recorded firstDiff=-1, utf16=3018 ≠ §9 len 5418]
+  ⚪ A4   MOOT                 F-4 ruling — SENTINEL-SL1 struck; superseded by A9
+  ⏸ A4b  NOT-RUNNABLE         no post-cutover ledger rows (broken-link stop-out needs a ledger)
+  ⏸ A5   NOT-RUN              no account-settings capture supplied; last recorded itmpaper=market, itmlive=auto, maxexits=0 — D2 is the Day-0 gate (stated, not skipped)
+  ⏸ A6   NOT-RUNNABLE         no ledger rows; sizing primitive is fixed quantity:1 in the shared action
+  ✅ A7   PASS         3/3     shared-automation payload hash vs recorded baseline
+    ✓ GF-ScannerA-PutSpread        v9 3308ce8b476d2bd0… vs baseline 3308ce8b476d2bd0…
+    ✓ GF-ScannerB-CallSpread       v2 bb4ba866a13e7ecd… vs baseline bb4ba866a13e7ecd…
+    ✓ GF-Backstop-1552-FlatClose   v1 116069bddf8b8c9e… vs baseline 116069bddf8b8c9e…
+  ✅ A8   PASS         7/7     decoded(GF_EXITS_PUT) == decoded(GF_EXITS_CALL), per bot (from dual-side record)
+    ✓ GF-QQQ-IC-Ride: PUT≡CALL (recorded identical)
+    ✓ GF-QQQ-IC-PT50: PUT≡CALL (recorded identical)
+    ✓ GF-QQQ-IC-Trail: PUT≡CALL (recorded identical)
+    ✓ GF-QQQ-IC-Touch0: PUT≡CALL (recorded identical)
+    ✓ GF-QQQ-IC-SL100: PUT≡CALL (recorded identical)
+    ✓ GF-QQQ-IC-SL200: PUT≡CALL (recorded identical)
+    ✓ GF-QQQ-IC-Canary: PUT≡CALL (recorded identical)
+  ✅ A9   PASS         7/7     every GF_EXITS_PUT/CALL bot input BOUND and NON-EMPTY (14/14 inputs)
+    ✓ GF-QQQ-IC-Ride: PUT IN178607080900761 / CALL IN178607092377072  non-empty=True
+    ✓ GF-QQQ-IC-PT50: PUT IN178607449758461 / CALL IN178607460887972  non-empty=True
+    ✓ GF-QQQ-IC-Trail: PUT IN178607567686951 / CALL IN17860757187372  non-empty=True
+    ✓ GF-QQQ-IC-Touch0: PUT IN178607636188121 / CALL IN178607647487782  non-empty=True
+    ✓ GF-QQQ-IC-SL100: PUT IN178607699688851 / CALL IN178607709288872  non-empty=True
+    ✓ GF-QQQ-IC-SL200: PUT IN178607891888981 / CALL IN178607897588482  non-empty=True
+    ✓ GF-QQQ-IC-Canary: PUT IN178607794990451 / CALL IN178607800989862  non-empty=True
+
+  §8.2 CAPTURE-DIFF — 21 unordered pairs. Both G2 hops resolved on every arm:
+    hop1 action→automation-input {nid:root} = a REFERENCE, NOT read for config.
+    hop2 automation-input→BOT input {nid:bot, input:IN<this bot>} = the read end.
+    oldValue IGNORED everywhere (§1.2 rule 2).
+    GF-QQQ-IC-Ride         bot inputs ['IN178607080900761', 'IN178607092377072'] (read end; action ref & oldValue ignored)
+    GF-QQQ-IC-PT50         bot inputs ['IN178607449758461', 'IN178607460887972'] (read end; action ref & oldValue ignored)
+    GF-QQQ-IC-Trail        bot inputs ['IN178607567686951', 'IN17860757187372'] (read end; action ref & oldValue ignored)
+    GF-QQQ-IC-Touch0       bot inputs ['IN178607636188121', 'IN178607647487782'] (read end; action ref & oldValue ignored)
+    GF-QQQ-IC-SL100        bot inputs ['IN178607699688851', 'IN178607709288872'] (read end; action ref & oldValue ignored)
+    GF-QQQ-IC-SL200        bot inputs ['IN178607891888981', 'IN178607897588482'] (read end; action ref & oldValue ignored)
+    GF-QQQ-IC-Canary       bot inputs ['IN178607794990451', 'IN178607800989862'] (read end; action ref & oldValue ignored)
+    control = GF-QQQ-IC-Ride (empty mechanic map)
+    PASS: arm-vs-control 6/6 · shared-field 2/2 · arm-vs-arm 13/13
+
+  ✅ FAMILY GREEN — every runnable assert passes; A4 moot, A4b/A5/A6 pre-Day-0.
+{
+  "engine_version": "0.1.0-DRAFT",
+  "wired": false,
+  "results": {
+    "A1": {
+      "status": "PASS",
+      "k": 21,
+      "n": 21
+    },
+    "A2": {
+      "status": "PASS",
+      "k": 7,
+      "n": 7
+    },
+    "A3": {
+      "status": "PASS",
+      "k": 7,
+      "n": 7
+    },
+    "A4": {
+      "status": "MOOT",
+      "k": null,
+      "n": null
+    },
+    "A4b": {
+      "status": "NOT-RUNNABLE",
+      "k": null,
+      "n": null
+    },
+    "A5": {
+      "status": "NOT-RUN",
+      "k": null,
+      "n": null
+    },
+    "A6": {
+      "status": "NOT-RUNNABLE",
+      "k": null,
+      "n": null
+    },
+    "A7": {
+      "status": "PASS",
+      "k": 3,
+      "n": 3
+    },
+    "A8": {
+      "status": "PASS",
+      "k": 7,
+      "n": 7
+    },
+    "A9": {
+      "status": "PASS",
+      "k": 7,
+      "n": 7
+    }
+  },
+  "a7_drift": []
+}

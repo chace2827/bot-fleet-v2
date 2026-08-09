@@ -1,0 +1,92 @@
+S2 — DAY-0 STEP 2 (gate A6) · A-10 FIRST-HAND RE-READ OF THE FIVE OPEN MIRROR POSITIONS
+Read 2026-08-09 ~11:27-11:30 ET, Chrome-direct, app.optionalpha.com/positions (Open Positions).
+READ ONLY. Nothing closed, nothing overridden, no toggle touched, no Edit opened.
+Source of every value below: the live page (list view + each position's own Position Details panel),
+read as DOM innerText. NOT inherited from any capture file.
+
+=== A-10 BRANCH: ALL FIVE PRESENT. Structure unchanged (same legs, same qty, same open dates).
+=== Only mark-to-market moved. => PROCEED AS WRITTEN WITH THE FRESH NUMBERS.
+=== `RIDE-OR-CLOSE MOOTED BY THE 2026-08-07 ROSTER LOSS` is NOT recorded — it does not apply.
+
+--- ACCOUNT-LEVEL HEADER (verbatim) ---
+TOTAL P/L -$7,545 | RETURN ON RISK -53.4% | CHANGE $827 | CHANGE % +5.9%
+PREMIUM -$12,618 | RISK $14,118 | COUNT 5
+(RISK $14,118 is IDENTICAL to the 2026-08-07 and 2026-08-08 list-view reads.)
+
+--- P1 · Tasty Condor · SPY Iron Condor · AUG 21 · 689P/704P/784C/799C ---
+TOTAL P/L +$197 | RETURN % 47.13% | CREDIT TO OPEN $418 | MARKET VALUE $221
+CAPITAL AT RISK $1,082 | RETURN ON RISK 18.21% | TRADE PRICE $4.18 | MID $2.21
+BID/ASK $2.18 -> $2.25 | QUANTITY 1 contract | DIT 48 days | PRICE AT OPEN 746.50
+DTE 12d
+TRADES: "Open 1 contract - Jun 22, 2026 10:30AM   4.19 -> 4.15   filled at $4.18"  [+ Automation Log link]
+PER-POSITION EXIT OPTIONS (the THIRD toggle surface — FIRST EVER OBSERVATION on a lapse-surviving position):
+  banner: "Bot exit options are off"
+  PROFIT %     50%     (77.5% high 10 days ago)
+  PROFIT $     None    ($324 high 10 days ago)
+  STOP LOSS %  None    (-0.2% low Jun 22)
+  STOP LOSS $  None    (-$1 low Jun 22)
+  EXPIRATION   21 days (12 days to expiration)
+
+--- P2 · QQQ long call · QQQ Long Call Spread · AUG 31 · 743C/850C ---
+TOTAL P/L -$2,335 | RETURN % -78.59% | DEBIT TO OPEN $2,971 | MARKET VALUE $636
+CAPITAL AT RISK $2,971 | TRADE PRICE $29.71 | MID $6.36 | BID/ASK $6.28 -> $6.43
+QUANTITY 1 contract | DIT 69 days | PRICE AT OPEN 737.64 | DTE 22d
+TRADES: "Open 1 contract - Jun 1, 2026 10:15AM   29.71 -> 29.80   filled at $29.71"
+PER-POSITION EXIT OPTIONS:
+  banner: "Bot exit options are off"
+  PROFIT %       25%      (19.3% high Jun 3)
+  PROFIT $       None     ($573 high Jun 3)
+  STOP LOSS %    None     (-95.9% low 12 days ago)
+  STOP LOSS $    None     (-$2,850 low 12 days ago)
+  EXPIRATION     30 days  (22 days to expiration)
+  EARNINGS       None
+  BID/ASK GUARD  $0.50    (Currently $0.15)
+
+--- P3 · QQQ long call · QQQ Long Call Spread · SEP 18 · 745C/865C ---
+TOTAL P/L -$2,181 | RETURN % -66.11% | DIT 55 days | DTE 40d | QTY 1
+TRADES: "Open 1 contract - Jun 15, 2026 9:45AM   32.99 -> 33.10"
+PER-POSITION EXIT OPTIONS:
+  banner: "Bot exit options are off"
+  PROFIT % 25% (9.9% high Jun 22) | PROFIT $ None ($328 high Jun 22)
+  STOP LOSS % None (-90.5% low 12 days ago) | STOP LOSS $ None (-$2,987 low 12 days ago)
+  EXPIRATION 30 days (40 days to expiration) | EARNINGS None | BID/ASK GUARD $0.50 (Currently $0.32)
+
+--- P4 · QQQ long call · QQQ Long Call Spread · SEP 30 · 745C/870C ---
+TOTAL P/L -$2,113 | RETURN % -60.58% | DIT 48 days | DTE 52d | QTY 1
+TRADES: "Open 1 contract - Jun 22, 2026 2:15PM   34.88 -> 35.00"
+PER-POSITION EXIT OPTIONS:
+  banner: "Bot exit options are off"
+  PROFIT % 25% (1.0% high Jun 22) | PROFIT $ None ($35 high Jun 22)
+  STOP LOSS % None (-87.4% low 12 days ago) | STOP LOSS $ None (-$3,049 low 12 days ago)
+  EXPIRATION 30 days (52 days to expiration) | EARNINGS None | BID/ASK GUARD $0.50 (Currently $0.25)
+
+--- P5 · QQQ long call · QQQ Long Call Spread · SEP 30 · 727C/839C ---
+TOTAL P/L -$1,113 | RETURN % -33.95% | DIT 41 days | DTE 52d | QTY 1
+TRADES: "Open 1 contract - Jun 29, 2026 12:30PM   32.77 -> 32.92   filled at $32.78"
+PER-POSITION EXIT OPTIONS:
+  banner: "Bot exit options are off"
+  PROFIT % 25% (22.5% high Jun 30) | PROFIT $ None ($737 high Jun 30)
+  STOP LOSS % None (-75.5% low 12 days ago) | STOP LOSS $ None (-$2,475 low 12 days ago)
+  EXPIRATION 30 days (52 days to expiration) | EARNINGS None | BID/ASK GUARD $0.50 (Currently $0.25)
+
+================================================================================
+FINDING S2-R1 — WHAT WOULD FIRE IF STEP 3 ARMS THESE TWO BOTS. GATED TO ANDY.
+================================================================================
+Runbook Step 2 rider 3 requires this read before either toggle is flipped. Result:
+
+  * P1 (Tasty Condor):     EXPIRATION rung = 21 days.  12 days to expiration.  CONDITION ALREADY MET.
+  * P2 (QQQ long call):    EXPIRATION rung = 30 days.  22 days to expiration.  CONDITION ALREADY MET.
+  * P3:                    EXPIRATION rung = 30 days.  40 days to expiration.  fires ~2026-08-19.
+  * P4, P5:                EXPIRATION rung = 30 days.  52 days to expiration.  fires ~2026-08-31.
+
+=> Turning EXIT OPTIONS ON for `Tasty Condor` and `QQQ long call` at Step 3 does not merely
+   re-arm exits. It CLOSES P1 and P2 at the first Exit-Options scan after the toggle
+   (i.e. Monday 2026-08-10 09:31 ET), and pre-commits P3/P4/P5 to close at their 30-DTE marks.
+   P2 would realise approximately -$2,335. P1 would realise approximately +$197.
+=> P1 additionally carries PROFIT % 50% and is currently at 47.13% return — a second rung
+   within ~3 points of firing.
+=> Runbook Step 2 item 3, verbatim: "If anything would act on the five positions against the
+   decision, LEAVE THAT BOT'S EXIT OPTIONS OFF until the positions are closed or the exits are
+   removed." That branch is LIVE for BOTH bots.
+
+RECORDED, NOT ACTED ON. No toggle moved. Andy's gate A6 decides.

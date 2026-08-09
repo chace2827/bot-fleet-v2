@@ -218,11 +218,37 @@ SAMPLE TARGET    n = 100 positions (condors), T2 paper.
 REVIEW DATE      Day-0 + 6 months, with an interim read at n=60.
 MAX LOSS         ≈$5K risk/position. Daily aggregate ≤ $10K across the SPX IC sleeve.
 SIZING TIER      ≈$5K risk/position (CANDIDATE tier).
-CONFIG HASH      <capture> @ <hash>
+CONFIG HASH      FILLED AT DAY-0 SIGNING 2026-08-09 (same convention as the greenfield arms,
+                 per Andy's ruling in-chat: capture path @ file sha256, plus the recorded
+                 per-automation hashes).
+                 CAPTURE  data/captures/2026-08-07-s0b/IC-SPX-FastPT25-S2-post-FC1-2026-08-07.txt
+                 SHA256   ee39ef7f1abde0402daac70cd08aac732c4cd0eb8c78e4b6453d689ed145f656
+                 PER-AUTOMATION HASHES (from data/bots_config_v2.csv, post-F-C1):
+                   Scalp-Scan-Put           f83ed32bb24c0bc20e703164d68d309e1423d5be9069cc577fafb434aaf1c52f  (v4)
+                   Scalp-Scan-Call          892ba0c9fb7dfbfa038d95eec9ed953a91e25acc12a44f7c0aee1c960755bfa7  (v5)
+                   Scalp-Mon-S2-StrikeTouch  01af4963aafb58566789662aafa68d94d846d042869590eccbede9fb6d57ca85  (v4, unchanged)
+                   Scalp-Mon-S2-Cleanup     f3673f2991541420c7124f3a6d2e2a2996002f6c61dc61ac8389ea348db2ccd7  (v2, unchanged)
+                 This bot's hash IS established — it has a pre-restore baseline and its archived
+                 original is byte-identical to its own step-0 baseline. A-27c's NOT-EVALUABLE
+                 carry does NOT apply here.
 VERIFICATION     INVERTED — the first new position's Trades list must contain NO PT row and NO
                  exit-trigger row, and the S2 monitor must be observed firing. Both toggles
                  screenshotted. Exit Options panel is not evidence.
-SIGNED           ..............................
+SIGNED           2026-08-09 · ANDY — gate A7, in-chat at the S2 Day-0 sitting. Ruling recorded
+                 verbatim: "Fill its CONFIG HASH and sign it".
+                 SIGNED != VERIFIED. The INVERTED Step-6 check is deferred to the first trading
+                 session (2026-08-10) — the market was closed on the day this was signed — and
+                 it stays ADVISORY until D4 is answered (whether the account-level ITM action
+                 appears in a Trades list, and under what label, is UNOBSERVED; a mislabelled
+                 ITM close reads as a PT row and would kill a ride control on day one). READ
+                 THE LABEL FIRST, FIRE THE RULE SECOND.
+                 FLAGGED at signing, not a blocker: PR-02, this entry's 13:00 A/B partner, has
+                 no Template V1 and therefore cannot trade, so the 11:00-vs-13:00 comparison
+                 starts with one arm. PR-01 stands alone as the RIDE BENCHMARK and is
+                 unaffected; the cost falls on PR-02's matched-day count.
+                 CONFIG NOTE: limits are 10/10 on this bot. Per decision-card-2026-08-08 slot 2,
+                 posLimitDay/posLimit are set to 1 for the first-position read and REVERTED
+                 immediately after, with the revert HASH-PROVEN.
 ```
 > ⚠️ **This entry deliberately does NOT inherit the 29 post-fix condors.** `build-plan.md` §4:
 > the clone is a fresh pre-registered control at n=0; the old "the baseline continues unbroken"
@@ -346,7 +372,14 @@ CONFIG HASH      <capture> @ <hash>
 VERIFICATION     ⚠️ CANNOT be verified from position data. A correctly-gated bot and a dead bot
                  are indistinguishable. **The bot LOG is the only proof**: a scanner run with no
                  entry = healthy. Both toggles ON and screenshotted.
-SIGNED           ..............................
+SIGNED           2026-08-09 · ANDY — in-chat at the S2 Day-0 sitting. Ruling recorded
+                 verbatim: "Sign the seven that can trade (ledger reading)". The A-27c
+                 carry in the CONFIG HASH field above does NOT block this signature
+                 (decision-card-2026-08-08 slot 6, OPTION 2). Signed for Day-0
+                 2026-08-10; LEDGER_START = 2026-08-10.
+                 SIGNED != VERIFIED — runbook §4 Step 6's order-level Trades-list check is
+                 still required before this bot may trade, and rider 2's first-trading-day
+                 capture is still owed. [PR-05]
 ```
 > ⛔ **The zero-trade bot that must NOT be deleted.** Zero positions in 22 days because its
 > VIX≥22 gate correctly never fired. `build-plan.md` §2 and runbook Step B both carry this as a
@@ -380,7 +413,14 @@ CONFIG HASH      <capture> @ <hash>
                  Opening this bot for that capture is a PURE READ (6a) and does not spend Step 2c.
 VERIFICATION     Trades list shows an SL row and NO PT row. Confirm AUTOMATIONS is ON — it was
                  OFF at creation.
-SIGNED           ..............................
+SIGNED           2026-08-09 · ANDY — in-chat at the S2 Day-0 sitting. Ruling recorded
+                 verbatim: "Sign the seven that can trade (ledger reading)". The A-27c
+                 carry in the CONFIG HASH field above does NOT block this signature
+                 (decision-card-2026-08-08 slot 6, OPTION 2). Signed for Day-0
+                 2026-08-10; LEDGER_START = 2026-08-10.
+                 SIGNED != VERIFIED — runbook §4 Step 6's order-level Trades-list check is
+                 still required before this bot may trade, and rider 2's first-trading-day
+                 capture is still owed. [PR-06]
 ```
 
 ### The seven live mirrors — one shared frame, seven entries
@@ -508,7 +548,14 @@ CONFIG HASH      PENDING DAY-0 CAPTURE — the per-bot config capture does not e
 VERIFICATION     Both toggles ON and screenshotted (1 of the 7 mirrors in the Day-0 re-arm
                  sweep), plus the FIRST post-cutover position's **Trades list** read. The Exit
                  Options panel is never evidence (`oa-platform-reference.md` §0.3).
-SIGNED           ..............................
+SIGNED           2026-08-09 · ANDY — in-chat at the S2 Day-0 sitting. Ruling recorded
+                 verbatim: "Sign the seven that can trade (ledger reading)". The A-27c
+                 carry in the CONFIG HASH field above does NOT block this signature
+                 (decision-card-2026-08-08 slot 6, OPTION 2). Signed for Day-0
+                 2026-08-10; LEDGER_START = 2026-08-10.
+                 SIGNED != VERIFIED — runbook §4 Step 6's order-level Trades-list check is
+                 still required before this bot may trade, and rider 2's first-trading-day
+                 capture is still owed. [PR-07]
 ```
 
 ### `Nigiri-Paper-v1`
@@ -554,7 +601,14 @@ CONFIG HASH      PENDING DAY-0 CAPTURE — does not exist yet; do not invent one
                  Opening this bot for that capture is a PURE READ (6a) and does not spend Step 2c.
 VERIFICATION     Both toggles ON and screenshotted (Day-0 re-arm sweep), plus the first
                  post-cutover position's Trades list.
-SIGNED           ..............................
+SIGNED           2026-08-09 · ANDY — in-chat at the S2 Day-0 sitting. Ruling recorded
+                 verbatim: "Sign the seven that can trade (ledger reading)". The A-27c
+                 carry in the CONFIG HASH field above does NOT block this signature
+                 (decision-card-2026-08-08 slot 6, OPTION 2). Signed for Day-0
+                 2026-08-10; LEDGER_START = 2026-08-10.
+                 SIGNED != VERIFIED — runbook §4 Step 6's order-level Trades-list check is
+                 still required before this bot may trade, and rider 2's first-trading-day
+                 capture is still owed. [PR-08]
 ```
 
 ### `QQQ long call`
@@ -612,7 +666,17 @@ VERIFICATION     ⛔ **Ordering is load-bearing: the ride-or-close call must be 
                  requires the decision logged but never executed, while Step 3 then arms this
                  very bot. Then: both toggles ON and screenshotted, and the first post-cutover
                  position's Trades list.
-SIGNED           ..............................
+SIGNED           NOT SIGNED — 2026-08-09. Andy's gate-A6 ruling at the S2 Day-0 sitting:
+                 RIDE on all five open mirror positions. Runbook §4 Step 2 item 3 therefore
+                 keeps this bot's EXIT OPTIONS OFF so the ride survives Step 3, and an
+                 unsigned bot never reaches Step 7. **BOT STAYS OFF for the whole of Day-0.**
+                 FORCING OBSERVATION (finding S2-R1, first-hand 2026-08-09, capture
+                 data/captures/2026-08-09-s2/step2-five-positions-2026-08-09.txt): this bot's
+                 4 open QQQ long call spreads ALREADY satisfy the per-position EXPIRATION
+                 rung read off their own Exit Options screen, so arming EXIT OPTIONS would
+                 close them at Monday's first Exit-Options scan — a capital disposition
+                 executed by a re-arm sweep. Recorded, not acted on.
+                 REOPEN: when the ride ends (closed or expired), or on Andy's ruling. [PR-09]
 ```
 
 ### `Friday 14 DTE Broken Wing IB (B-70)`
@@ -662,7 +726,14 @@ CONFIG HASH      PENDING DAY-0 CAPTURE — does not exist yet; do not invent one
 VERIFICATION     Both toggles ON and screenshotted, **plus an explicit read that the stop switch
                  is still OFF** — its state is the mirror's fidelity to the source. Then the
                  first post-cutover position's Trades list, confirming the 60/40 structure.
-SIGNED           ..............................
+SIGNED           2026-08-09 · ANDY — in-chat at the S2 Day-0 sitting. Ruling recorded
+                 verbatim: "Sign the seven that can trade (ledger reading)". The A-27c
+                 carry in the CONFIG HASH field above does NOT block this signature
+                 (decision-card-2026-08-08 slot 6, OPTION 2). Signed for Day-0
+                 2026-08-10; LEDGER_START = 2026-08-10.
+                 SIGNED != VERIFIED — runbook §4 Step 6's order-level Trades-list check is
+                 still required before this bot may trade, and rider 2's first-trading-day
+                 capture is still owed. [PR-10]
 ```
 
 ### `Trendy-Paper-v1`
@@ -709,7 +780,14 @@ VERIFICATION     Both toggles ON and screenshotted, plus the first post-cutover 
                  Trades list. If a breach fires, the hedge leg must appear as its own row in the
                  Trades list — an intended hedge that never executed is the HedgeD lesson
                  (`hedge-research.md` §7).
-SIGNED           ..............................
+SIGNED           2026-08-09 · ANDY — in-chat at the S2 Day-0 sitting. Ruling recorded
+                 verbatim: "Sign the seven that can trade (ledger reading)". The A-27c
+                 carry in the CONFIG HASH field above does NOT block this signature
+                 (decision-card-2026-08-08 slot 6, OPTION 2). Signed for Day-0
+                 2026-08-10; LEDGER_START = 2026-08-10.
+                 SIGNED != VERIFIED — runbook §4 Step 6's order-level Trades-list check is
+                 still required before this bot may trade, and rider 2's first-trading-day
+                 capture is still owed. [PR-11]
 ```
 
 ### `60min-ORB-10W-Paper-v1`
@@ -757,7 +835,14 @@ VERIFICATION     ⚠️ **NAME-COLLISION GUARD — read the bot name character b
                  is a DIFFERENT bot, is OFF, and is **being archived** (`build-plan.md` §2A;
                  memo §1). Arming the wrong one re-arms a bot with a draft KILL against it. Then
                  both toggles ON and screenshotted, plus the first post-cutover Trades list.
-SIGNED           ..............................
+SIGNED           2026-08-09 · ANDY — in-chat at the S2 Day-0 sitting. Ruling recorded
+                 verbatim: "Sign the seven that can trade (ledger reading)". The A-27c
+                 carry in the CONFIG HASH field above does NOT block this signature
+                 (decision-card-2026-08-08 slot 6, OPTION 2). Signed for Day-0
+                 2026-08-10; LEDGER_START = 2026-08-10.
+                 SIGNED != VERIFIED — runbook §4 Step 6's order-level Trades-list check is
+                 still required before this bot may trade, and rider 2's first-trading-day
+                 capture is still owed. [PR-12]
 ```
 
 ### `Tasty Condor`
@@ -805,8 +890,94 @@ VERIFICATION     Both toggles ON and screenshotted, plus the first post-cutover 
                  Trades list showing the 50%-credit OR 21-DTE exit — this bot has **no
                  monitors**, so the Exit Options preset is the entire exit engine and its
                  execution is the only thing that proves it lives.
-SIGNED           ..............................
+SIGNED           NOT SIGNED — 2026-08-09. Andy's gate-A6 ruling at the S2 Day-0 sitting:
+                 RIDE on all five open mirror positions. Runbook §4 Step 2 item 3 therefore
+                 keeps this bot's EXIT OPTIONS OFF so the ride survives Step 3, and an
+                 unsigned bot never reaches Step 7. **BOT STAYS OFF for the whole of Day-0.**
+                 FORCING OBSERVATION (finding S2-R1, first-hand 2026-08-09, capture
+                 data/captures/2026-08-09-s2/step2-five-positions-2026-08-09.txt): this bot's
+                 1 open SPY iron condor ALREADY satisfy the per-position EXPIRATION
+                 rung read off their own Exit Options screen, so arming EXIT OPTIONS would
+                 close them at Monday's first Exit-Options scan — a capital disposition
+                 executed by a re-arm sweep. Recorded, not acted on.
+                 REOPEN: when the ride ends (closed or expired), or on Andy's ruling. [PR-13]
 ```
+
+---
+
+## 5a. The ride-or-close decision on the five open mirror positions — DRAFTED AND RULED 2026-08-09
+
+*Opened by `reactivation-runbook.md` §4 Step 2 (gate A6) and by §8 item 5 of this ledger, which
+recorded that this entry "is not yet drafted". It is drafted here, at Day-0, before Step 3 touched
+any toggle. It is a CAPITAL decision and go-live authority is Andy's.*
+
+```
+ID               PR-RC-01   (ride-or-close, not a bot)
+DISPOSITION      capital decision on pre-cutover positions   STATUS  RULED 2026-08-09
+SCOPE            The five mirror positions open through the 2026-06 lapse, the 2026-08-07 account
+                 disable, and the 2026-08-07 roster loss. Two bots: `QQQ long call` (4) and
+                 `Tasty Condor` (1).
+A-10 BRANCH      ALL FIVE PRESENT, structure unchanged (same legs, same quantity, same open
+                 dates); only mark-to-market moved. => proceed as written with FRESH numbers.
+                 `RIDE-OR-CLOSE MOOTED BY THE 2026-08-07 ROSTER LOSS` is NOT recorded — it does
+                 not apply. Re-read first-hand 2026-08-09 ~11:27 ET; capture
+                 data/captures/2026-08-09-s2/step2-five-positions-2026-08-09.txt
+                 sha256 068922df08b133306f44f103f9c17a31515d367478f12a36fb88c7f16f1a31ef
+THE FIVE         P1 Tasty Condor  SPY IC AUG 21 689P/704P/784C/799C  +$197 (47.13%)  risk $1,082
+                 P2 QQQ long call QQQ LCS AUG 31 743C/850C          -$2,335 (-78.59%) risk $2,971
+                 P3 QQQ long call QQQ LCS SEP 18 745C/865C          -$2,181 (-66.11%) risk $3,299
+                 P4 QQQ long call QQQ LCS SEP 30 745C/870C          -$2,113 (-60.58%) risk $3,488
+                 P5 QQQ long call QQQ LCS SEP 30 727C/839C          -$1,113 (-33.95%) risk $3,278
+                 Account: TOTAL P/L -$7,545 · RISK $14,118 · COUNT 5.
+THE DECISION     RIDE, all five. Andy, in-chat at the S2 Day-0 sitting 2026-08-09, gate A6.
+THE REASON       Two reasons, both stated at the gate rather than inferred afterwards.
+                 (a) The alternative on the day was not a hand close — the market was closed on
+                     2026-08-09 — but ARMING, and arming is not a close: it is a disposition
+                     executed by the exit stack on a schedule nobody chose. See EXECUTION below.
+                 (b) `mirror-funding-memo-2026-08-05.md` §1: ZERO of ten mirrors clears the
+                     evidence bar and none can before late Oct 2026. The Day-0 mirror action is
+                     RE-ARM, WATCH-ONLY, SIZE NOTHING. There is no evidentiary basis on which to
+                     realise -$7,545 today, and none on which to add.
+                 SAID OUT LOUD, per Step 2 item 4: "insufficient evidence" is NOT "do nothing".
+                     For a RUNNING position, riding IS a capital decision, and it is being made
+                     here deliberately, by Andy, on the record — not by default.
+EXECUTION        A RIDE executes by NOT acting, but it only survives if Step 3 leaves it alone.
+                 Finding S2-R1, first-hand 2026-08-09, read from each position's OWN Exit Options
+                 screen (the third toggle surface — FIRST observation ever on a lapse-surviving
+                 position; a close destroys it permanently):
+                   P1  PROFIT % 50%  · EXPIRATION 21 days · 12 days to expiration  -> rung ALREADY MET
+                   P2  PROFIT % 25%  · EXPIRATION 30 days · 22 days to expiration  -> rung ALREADY MET
+                   P3  PROFIT % 25%  · EXPIRATION 30 days · 40 days to expiration  -> fires ~2026-08-19
+                   P4  PROFIT % 25%  · EXPIRATION 30 days · 52 days to expiration  -> fires ~2026-08-31
+                   P5  PROFIT % 25%  · EXPIRATION 30 days · 52 days to expiration  -> fires ~2026-08-31
+                 P1 additionally sits at 47.13% against a 50% PT rung.
+                 => Arming EXIT OPTIONS on either bot would CLOSE P1 and P2 at Monday's first
+                 Exit-Options scan and pre-commit P3/P4/P5. Runbook §4 Step 2 item 3 governs:
+                 "If anything would act on the five positions against the decision, leave that
+                 bot's EXIT OPTIONS OFF." APPLIED: `QQQ long call` and `Tasty Condor` are EXCLUDED
+                 from the Step 3 re-arm sweep, stay EXIT OPTIONS OFF, stay AUTOMATIONS OFF, and
+                 their entries PR-09 and PR-13 are deliberately NOT SIGNED.
+COST, NAMED      Step 6a — the mechanism verdict, "the step that settles §1" — runs on the NINE
+                 leave-in-place bots ONLY. Two of the nine are now out of scope for Day-0, so 6a
+                 can reach at most 7 subjects, and only once those seven open a first position.
+                 This is a real reduction in the evidence available to settle the June cause and
+                 it is accepted with the ruling, not discovered later.
+STRADDLE RULE    All five opened pre-cutover (Jun 1 - Jun 29 2026), so under `CLAUDE.md` §3 their
+                 P/L resolves into the MIRROR BASELINE layer and NEVER into the working ledger.
+                 `data/mirror_baseline.csv` is an ANCHOR and is NOT recomputed (no --force).
+                 `QQQ long call`'s baseline record stays structurally incomplete — the export held
+                 only closed positions, so these four were never in the source. Its +0.3401 must
+                 not be read (mirror-funding-memo §1). That does not change on a ride.
+REVIEW           Re-read at every close-out while any of the five is open. The ride ENDS by
+                 expiry or by an explicit later ruling — never by an unremarked re-arm.
+REOPEN           (i) Any position closes or expires; (ii) Andy rules otherwise; (iii) either bot
+                 is proposed for the Step 3 sweep again — at which point S2-R1 is re-read FIRST.
+SIGNED           2026-08-09 · ANDY — in-chat at the S2 Day-0 sitting, gate A6, ruling recorded
+                 verbatim: "Ride: leave both bots' EXIT OPTIONS OFF".
+```
+
+**§8 item 5 is discharged by this entry.** It read *"The ride-or-close decision on the five open
+mirror positions belongs in this ledger and is not yet drafted"*. It is drafted, ruled and signed.
 
 ---
 

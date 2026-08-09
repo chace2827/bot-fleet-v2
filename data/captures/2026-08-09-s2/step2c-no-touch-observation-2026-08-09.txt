@@ -1,0 +1,67 @@
+S2 — DAY-0 STEP 2c · THE NO-TOUCH OBSERVATION
+Read 2026-08-09 ~11:21 ET, Chrome-direct, app.optionalpha.com/bots, all filters cleared.
+Instrument: the /bots list's two i.sticon `title` attributes per row (A-27d), one batched page read,
+43 rows, no bot page opened. READ ONLY — nothing flipped, no editor opened, no value changed.
+Taken BEFORE any toggle was moved this session, as Step 2c requires.
+
+=== PRECONDITION (A-18) — VERIFIED, NOT INFERRED ===
+All four prior close-outs carry the explicit ATTESTATION line, read first-hand in
+docs/session-log.md this session:
+  S0a            "None of the nine leave-in-place bots ... was opened, edited, or had a toggle
+                 touched this session."
+  S0b-RESUME     "NONE of [the nine] was opened, edited, or had a toggle touched this session.
+                 No bot page was navigated to for any of the nine. ... Step 2c is unspent."
+  S1-RESUME      "ATTESTATION (A-18): NONE of the nine leave-in-place bots was opened, edited, or
+                 had a toggle touched."
+  S1 CLONE 2     "ATTESTATION (A-18): NONE of the nine ... NONE. No bot page was navigated to for
+                 any of the nine. ... Step 2c remains unspent."
+`2c PRECONDITION UNVERIFIED` is therefore NOT recorded. Step 2c was unspent when this session opened.
+
+=== THE OBSERVATION, VERBATIM ===
+Toggle title strings as OA emits them:
+  "Scheduled automations are off"                                   -> AUTOMATIONS OFF
+  "Exit Options for positions managed by this bot are off"/"...on"  -> EXIT OPTIONS OFF/ON
+
+FLEET-WIDE, 43 of 43 rows:
+  AUTOMATIONS ON  = 0 of 43
+  EXIT OPTIONS ON = 7 of 43 — exactly GF-QQQ-IC-{Canary,PT50,Ride,SL100,SL200,Touch0,Trail}
+                              (the seven S0a armed on 2026-08-07; a FOURTH persistence boundary)
+
+THE NINE LEAVE-IN-PLACE BOTS, each read individually:
+  DIR-SPX-PutVIX22-SL75                  AUTOMATIONS OFF   EXIT OPTIONS OFF
+  DIR-SPX-CallVIXdrop                    AUTOMATIONS OFF   EXIT OPTIONS OFF
+  3DTE $140-$350                         AUTOMATIONS OFF   EXIT OPTIONS OFF
+  Nigiri-Paper-v1                        AUTOMATIONS OFF   EXIT OPTIONS OFF
+  QQQ long call                          AUTOMATIONS OFF   EXIT OPTIONS OFF
+  Friday 14 DTE Broken Wing IB (B-70)    AUTOMATIONS OFF   EXIT OPTIONS OFF
+  Trendy-Paper-v1                        AUTOMATIONS OFF   EXIT OPTIONS OFF
+  60min-ORB-10W-Paper-v1                 AUTOMATIONS OFF   EXIT OPTIONS OFF
+  Tasty Condor                           AUTOMATIONS OFF   EXIT OPTIONS OFF
+
+Runbook's required pair, named explicitly:
+  ONE LIVE MIRROR      `Tasty Condor`          — both toggles OFF
+  ONE DIRECTIONAL BOT  `DIR-SPX-PutVIX22-SL75` — both toggles OFF
+
+=== BRANCH TAKEN ===
+"BOTH READ OFF ON BOTH BOTS -> the toggle candidate survives. RECORD IT VERBATIM ANYWAY — a
+confirmed expectation is evidence and an unrecorded one is not."
+RECORDED. Neither toggle came back ON without intervention. Proceed.
+
+=== ⛔ AND THE VERDICT IS STILL NOT EVALUABLE — A-09b ===
+NO-TOUCH OBSERVATION CONFOUNDED — RESTORE.
+Gate A0 landed on BRANCH 1 (a clean restore), so the roster was RESTORED by OA rather than
+surviving the inactive->active transition intact. A restored bot's toggle state is whatever the
+snapshot or OA's restore default carries; it cannot separate BILLING STATE from HAND-SET. The
+inactive->active transition this step exists to measure happened at ~12:06 ET 2026-08-07, two
+sessions before this one, and the roster was wiped and rebuilt across it.
+DISPOSITION: NOT EVALUABLE. It is NOT a negative result, and the "OFF on both" reading above must
+NOT be reported as evidence that the toggle candidate was tested and survived.
+
+⛔ THIS MUST BE SAID INSIDE THE STEP 6a VERDICT, per A-09b: a CONFIRMED mechanism verdict resting
+on this observation is WEAKER THAN IT LOOKS, because re-arm and reactivation were never cleanly
+separated on this account. rebuild-contingency-2026-08-07.md §2 records the rebuild case as
+FORECLOSED, not delayed — there is no second chance at this measurement.
+
+=== SCREENSHOT ===
+data/captures/2026-08-09-s2/screenshots/01-bots-roster-toggles-2026-08-09.jpg  (/bots, all filters
+cleared, footer "43 active bots • 7 left in your plan" visible, taken before any toggle moved)

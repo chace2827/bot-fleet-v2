@@ -137,8 +137,7 @@ for p in sorted(bypillar):
 L += ["", f"## Champion — {champ or '(none flagged in bots_meta.csv)'}",
       f"- P/L **${champ_pnl:,.0f}**  ·  {champ_trades} condors ({len(champ_t)} legs)  ·  "
       f"{len(sd)} trading days ({green} green / {red} red)",
-      f"- Max drawdown (daily cumulative): ${dd:,.0f}",
-      f"- Go-live gate (≥15 clean post-fix condor trades): **{post_trades} / 15**", ""]
+      f"- Max drawdown (daily cumulative): ${dd:,.0f}", ""]
 
 # --- Roster by STATE (mirrors the OA groups) --------------------------------
 # State rule (matches the OA Bot Groups): focus=yes -> Focus (*-Focus groups);

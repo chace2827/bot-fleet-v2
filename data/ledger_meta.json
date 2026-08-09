@@ -1,6 +1,6 @@
 {
-  "ledger_start": "2099-01-01",
-  "ledger_start_source": "$LEDGER_START",
+  "ledger_start": "2026-08-10",
+  "ledger_start_source": "the LEDGER_START constant in build_ledger.py",
   "source_export": "2026-08-07.csv",
   "counts": {
     "export_rows": 1386,
