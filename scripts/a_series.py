@@ -84,8 +84,12 @@ PRE_REGISTRATION = {
 REFERENCE = {"A1": (21, 21), "A2": (7, 7), "A3": (7, 7), "A7": (3, 3), "A8": (7, 7), "A9": (7, 7),
              "A4": "MOOT", "A4b": "NOT-RUNNABLE", "A5": "NOT-RUN", "A6": "NOT-RUNNABLE"}
 # recorded Notes UTF-16 lengths (ASSERTS file "NOTES BYTE-EXACTNESS" line) — spot-checked in A3
-RECORDED_NOTE_LEN = {RIDE: 2339, PT50: 1722, TRAIL: 5412, TOUCH0: 2917,
-                     SL100: 4389, SL200: 4546, CANARY: 3018}
+# ⛔ RE-BASELINED 2026-08-09 (S2-R3, Andy's ruling option A): the Day-0 signing edits lengthened
+# every §9 entry, so the §9-vs-recorded check now baselines on the SIGNED §9 lengths. The bots'
+# in-app Notes remain the build-time snapshot (old values, kept below for the record):
+# build-time: {RIDE: 2339, PT50: 1722, TRAIL: 5412, TOUCH0: 2917, SL100: 4389, SL200: 4546, CANARY: 3018}
+RECORDED_NOTE_LEN = {RIDE: 6258, PT50: 4005, TRAIL: 7698, TOUCH0: 5206,
+                     SL100: 7494, SL200: 6832, CANARY: 5418}
 
 
 # ===========================================================================

@@ -1,0 +1,158 @@
+S2b — PART A. POSITION LIMITS (ruled S2-R5) THEN AUTOMATIONS -> ON. EIGHT BOTS.
+2026-08-09 ~12:44-13:01 ET (page clock), Chrome-direct. Andy attending.
+
+================================================================================
+METHOD — what was read, and from where
+================================================================================
+STORED LIMITS   `a5.bots.bot.posLimitDay` / `.posLimit` / `.seed`, read from the hydrated
+                server model after a full page load. Not the rendered Safeguards text.
+EDIT PATH       Safeguards pencil = `a[data-click="editLimits"]` -> the `Bot Safeguards` drawer.
+                `posLimitDay` and `posLimit` are HIDDEN INPUTS behind `a.mpickbox` 1-10 pickers
+                (greenfield-family-spec.md 5.3, check #9). Each picker opened by the documented
+                dispatch chain (pointerover/pointerenter/pointerdown/mousedown/pointerup/
+                mouseup/click at the element's own getBoundingClientRect centre); the option is
+                `item[data-value="N"]`, discriminated by its own text ("N per day" vs
+                "N position(s)") because both menus expose data-value 1..10.
+                COMMIT = the drawer's own `button.btn.green` Save, same dispatch chain.
+LAYER 1 PROOF   HARD RELOAD, then re-read the model. Screenshot AFTER the reload, never before.
+                A save confirmation was never treated as evidence (CLAUDE.md 9.1a).
+A-27a           Re-read PER BOT, IMMEDIATELY before that bot's switch-on, on TWO surfaces:
+                (1) the /bots list row's own `i.sticon` TITLE attributes (never innerText), and
+                (2) the bot page's own `div.autoswitch.hdbox input[name=onoff]` hidden inputs,
+                read inside THE SAME SCRIPT that dispatched the flip, with a HARD ABORT on
+                anything but the expected value. Never inherited from S2, never from the roster.
+LABEL ORDER     Asserted before every dispatch: [0] = AUTOMATIONS, [1] = EXIT OPTIONS.
+NOT TOUCHED     Allocation (`seed`) on all eight. Day Trading. Scan speeds. Notes. Names. Tags.
+                Groups. The seven GF arms. PR-09 `QQQ long call` and PR-13 `Tasty Condor` were
+                NOT OPENED (gate A6 ride).
+
+================================================================================
+FINDING S2b-R1 — THE LAUNCH PROMPT'S PR-01 BOT ID IS WRONG. VERIFIED BEFORE ANY EDIT.
+================================================================================
+The prompt carried PR-01 as "bot id ends ...7616287731?" with an explicit instruction to verify.
+  BOTfw5TkkCRF3017861977616287731  =  IC-SPX-FastPT25-S2-130PM  =  PR-02
+  BOTfw5TkkCRF4417860821948715488  =  IC-SPX-FastPT25-S2        =  PR-01
+Sources, three independent: data/captures/2026-08-08-audit/01-roster-toggles-43-2026-08-08.tsv
+lines 44-45; data/bots_config_v2.csv line 168 (which names ...7616287731 as the -130PM clone);
+and PR-01's own OA Notes panel, which renders the PR-01 ledger entry verbatim ("ID PR-01").
+NO EDIT WAS MADE ON THE WRONG BOT. PR-02 was not opened in Part A.
+
+================================================================================
+FINDING S2b-R2 — THE THREE ARCHIVE-QUEUED ORIGINALS ARE NOT ALL DATED 08-08.
+================================================================================
+The prompt names "the three -ARCHIVED-2026-08-08 originals". Read from /bots:
+  IC-SPX-FastPT25-S2-130PM-ARCHIVED-2026-08-08      BOTfw5TkkCRF3717814485128334371
+  QQQ-IC-0DTE-Fortress-NoPT50-ARCHIVED-2026-08-08   BOTfw5TkkCRF2617743681996538301
+  IC-SPX-FastPT25-S2-ARCHIVED-2026-08-07            BOTfw5TkkCRF1217757048550308561   <-- 08-07
+Same three bots, one different date label. Recorded so the Part B verification target
+(43 -> 40) is not read against a set of three that does not exist by that name.
+
+================================================================================
+PER-BOT RECORD — read -> edit -> proof -> A-27a -> ON -> post-reload
+================================================================================
+Format: STORED FOUND (day/atonce) | EDIT | POST-RELOAD | A-27a autos/exits | POST-FLIP
+
+PR-05  DIR-SPX-PutVIX22-SL75          BOTfw5TkkCRF217824306963282811
+  STORED FOUND  1 / 1  seed $10,000  disableExits 0  status "off"   == RULED. NO EDIT MADE.
+  POST-RELOAD   posLimitDay 1 - posLimit 1 - seed 10000             screenshots/01
+  A-27a         /bots row: "Scheduled automations are off" / "Exit Options ... are on"
+                bot page: onoff [false, true]
+  FLIP          AUTOMATIONS false -> true
+  POST-RELOAD   status "on" - disableExits 0 - 1/1 - onoff [true,true]  screenshots/02
+  NOTE          The flip script's own post-dispatch read was cut short by the ~45s
+                Runtime.evaluate boundary (skill trap 2). Per that trap the action was NOT
+                re-fired; state was re-read instead and showed the flip committed.
+
+PR-06  DIR-SPX-CallVIXdrop             BOTfw5TkkCRF217824370390678863
+  STORED FOUND  1 / 1  seed $10,000  disableExits 0  status "off"   == RULED. NO EDIT MADE.
+  PRE-FLIP      screenshots/03  (AUTOMATIONS OFF - EXIT OPTIONS ON - 1 per day - 1 at a time)
+  A-27a         /bots row: automations off / Exit Options on ; bot page onoff [false, true]
+  FLIP          AUTOMATIONS false -> true   (same 45s boundary; re-read, not re-fired)
+  POST-RELOAD   status "on" - disableExits 0 - 1/1 - onoff [true,true]  screenshots/04
+
+PR-07  3DTE $140-$350                  BOTfw5TkkCRF2217765235512870291
+  STORED FOUND  1 / 5  seed $5,000  disableExits 0  status "off"    screenshots/05
+  EDIT          posLimit 5 -> 1 (posLimitDay already 1, not touched). Drawer hidden input read
+                back "1", display "1 position", seed unchanged "5000". Saved.
+  POST-RELOAD   posLimitDay 1 - posLimit 1 - seed 5000              screenshots/06
+  A-27a         /bots row: automations off / Exit Options on ; bot page onoff [false, true]
+  FLIP          AUTOMATIONS false -> true  (guard also asserted limits == 1/1 before dispatch)
+  POST-RELOAD   status "on" - disableExits 0 - 1/1 - onoff [true,true]  screenshots/07
+
+PR-08  Nigiri-Paper-v1                 BOTfw5TkkCRF1017766118057607741
+  STORED FOUND  10 / 10  seed $10,000  disableExits 0  status "off"  screenshots/08
+  EDIT          posLimitDay 10 -> 1 - posLimit 10 -> 1. Both hidden inputs read back "1",
+                seed unchanged "10000". Saved.
+  POST-RELOAD   posLimitDay 1 - posLimit 1 - seed 10000             screenshots/09
+  A-27a         /bots row: automations off / Exit Options on ; bot page onoff [false, true]
+  FLIP          AUTOMATIONS false -> true
+  POST-RELOAD   status "on" - disableExits 0 - 1/1 - onoff [true,true]  screenshots/10
+
+PR-10  Friday 14 DTE Broken Wing IB (B-70)   BOTfw5TkkCRF1017766446781407596
+  STORED FOUND  3 / 10  seed $10,000  disableExits 0  status "off"   screenshots/11
+  EDIT          posLimitDay 3 -> 1 - posLimit 10 -> 1. Read back "1"/"1", seed "10000". Saved.
+  POST-RELOAD   posLimitDay 1 - posLimit 1 - seed 10000             screenshots/12
+  A-27a         /bots row: automations off / Exit Options on ; bot page onoff [false, true]
+  FLIP          AUTOMATIONS false -> true
+  POST-RELOAD   status "on" - disableExits 0 - 1/1 - onoff [true,true]  screenshots/13
+  NOT TOUCHED   This bot renders BOT VERSION 4 vs LATEST VERSION 6 and an "Upgrade Bot" button.
+                Out of scope, not pressed, recorded only.
+
+PR-11  Trendy-Paper-v1                 BOTfw5TkkCRF1017766118431160782
+  STORED FOUND  2 / 2  seed $10,000  disableExits 0  status "off"    screenshots/14
+  EDIT          posLimitDay 2 -> 1 - posLimit 2 -> 1. Read back "1"/"1", seed "10000". Saved.
+  POST-RELOAD   posLimitDay 1 - posLimit 1 - seed 10000             screenshots/15
+  A-27a         /bots row: automations off / Exit Options on ; bot page onoff [false, true]
+  FLIP          AUTOMATIONS false -> true
+  POST-RELOAD   status "on" - disableExits 0 - 1/1 - onoff [true,true]  screenshots/16
+
+PR-12  60min-ORB-10W-Paper-v1          BOTfw5TkkCRF3317782759988647731
+  STORED FOUND  1 / 1  seed $10,000  disableExits 0  status "off"   == RULED. NO EDIT MADE.
+  PRE-FLIP      screenshots/17
+  A-27a         /bots row: automations off / Exit Options on ; bot page onoff [false, true]
+  FLIP          AUTOMATIONS false -> true
+  POST-RELOAD   status "on" - disableExits 0 - 1/1 - onoff [true,true]  screenshots/18
+  NOT TOUCHED   BOT VERSION 2 vs LATEST VERSION 3 + "Upgrade Bot". Out of scope, recorded only.
+
+PR-01  IC-SPX-FastPT25-S2              BOTfw5TkkCRF4417860821948715488   <-- see S2b-R1
+  STORED FOUND  10 / 10  seed $50,000  disableExits 1  status "off"  screenshots/19
+  EDIT          posLimitDay 10 -> 2 - posLimit 10 -> 2 (S2-R5: condor-aware, an IC is TWO
+                positions). Read back "2"/"2", seed unchanged "50000". Saved.
+  POST-RELOAD   posLimitDay 2 - posLimit 2 - seed 50000 - disableExits STILL 1  screenshots/20
+  A-27a         INVERTED GUARD. /bots row: "Scheduled automations are off" /
+                "Exit Options for positions managed by this bot are OFF" — which is CORRECT
+                for this bot. bot page onoff [false, false]. The flip script asserted
+                onoff[1] === 'false' AND disableExits === 1 and would have aborted on 'true':
+                this is the Exit-Option-free ride+S2 control and it must NOT be "fixed"
+                (CLAUDE.md 5 standing exception; oa-ops-runbook.md 4.3).
+  FLIP          AUTOMATIONS false -> true. EXIT OPTIONS NOT TOUCHED.
+  POST-RELOAD   status "on" - disableExits 1 - 2/2 - onoff [true,false]  screenshots/21
+
+================================================================================
+SECOND INDEPENDENT SURFACE — /bots `i.sticon[title]`, batched read after Part A
+================================================================================
+  footer, verbatim   "43 active bots - 7 left in your plan - Upgrade"
+  rows parsed        43
+  AUTOMATIONS ON     15 of 43
+                     3DTE $140-$350 - 60min-ORB-10W-Paper-v1 - DIR-SPX-CallVIXdrop -
+                     DIR-SPX-PutVIX22-SL75 - Friday 14 DTE Broken Wing IB (B-70) -
+                     GF-QQQ-IC-Canary - GF-QQQ-IC-PT50 - GF-QQQ-IC-Ride - GF-QQQ-IC-SL100 -
+                     GF-QQQ-IC-SL200 - GF-QQQ-IC-Touch0 - GF-QQQ-IC-Trail -
+                     IC-SPX-FastPT25-S2 - Nigiri-Paper-v1 - Trendy-Paper-v1
+                     == EXACTLY {the 7 GF arms} + PR-01 + PR-05/06/07/08/10/11/12. NOTHING ELSE.
+  EXIT OPTIONS ON    14 of 43 — UNCHANGED from S2's close. PR-01 is correctly NOT in this set.
+  QQQ long call / Tasty Condor   BOTH toggles OFF. The gate-A6 ride is intact.
+  screenshot         screenshots/22
+
+================================================================================
+STEP 6 — NOT SATISFIED FOR ANY BOT SWITCHED ON TODAY
+================================================================================
+The market was closed on 2026-08-09. The button test-fire (S2-R2, `data-click="runAuto"`) was
+NOT FIRED — a closed market yields no Trades list, and Andy's S2 ruling 2 authorized switch-on
+under ruled limits precisely on that basis. Every bot switched on today carries Step 6
+NOT EVALUABLE, DUE 2026-08-10 from its first new position.
+  PR-05/06/07/08/10/11/12   standard check: the Trades list carries the expected exit rows.
+  PR-01                     INVERTED check: NO PT row and NO exit-trigger row, and the S2
+                            monitor observed firing. Read the label before firing the rule
+                            (D4 unanswered: an account-level ITM close could read as a PT row).
+The 1/1 and 2/2 limits ARE the first-position control for these eight, by construction.

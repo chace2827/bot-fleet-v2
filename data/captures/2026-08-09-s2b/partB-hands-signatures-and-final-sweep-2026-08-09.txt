@@ -1,0 +1,237 @@
+S2b — PART B. ANDY'S HANDS, THE PR-02 / PR-04 SIGNATURES, AND THE FINAL SWEEP.
+2026-08-09 ~13:20-14:07 ET (page clock), Chrome-direct. Andy attending, ruled live.
+
+================================================================================
+HAND ITEM 1 — TEMPLATE V1 FOR PR-02 AND PR-04. DONE BY ANDY. VERIFIED TWO WAYS.
+================================================================================
+BASELINE, read BEFORE his hand touched anything (so the delta is provable):
+  /bots/templates -> My Templates = 10
+  GF-QQQ-IC-{Ride,PT50,Trail,Touch0,SL100,SL200,Canary} · IC-SPX-FastPT25-S2 ·
+  QQQ-IC-0DTE-Fortress · TEST QQQ-IC-0DTE-HedgeA-S1
+  Neither -130PM nor -NoPT50 present. Matches S2's own read of 10.
+
+AFTER:  My Templates = 12.   10 -> 12 as required.
+  IC-SPX-FastPT25-S2-130PM      Tfw5TkkCRF1717862960217463041
+        card subtitle, verbatim: "Template V1 — pre-reg PR-02 — saved 2026-08-09"
+  QQQ-IC-0DTE-Fortress-NoPT50   Tfw5TkkCRF1717862960769161432
+        card subtitle, verbatim: "Template V1 — pre-reg PR-04 — saved 2026-08-09"
+  screenshots/23 (list, count 12) · screenshots/24 (both cards, zoomed, verbatim)
+
+⭐ SECOND SURFACE, and the one that actually proves the LINK: each clone's own
+   `a5.bots.bot.tid` now RESOLVES to its template id, read from the bot page after
+   a full load. A templates-list entry alone would not prove the bot is attached;
+   `tid` does. Both previously read `tid: null` ("NO TEMPLATE" in bots_config_v2.csv).
+     PR-02  tid Tfw5TkkCRF1717862960217463041
+     PR-04  tid Tfw5TkkCRF1717862960769161432
+`showBotMenu` was never clicked by this session. Andy's hand throughout.
+
+================================================================================
+HAND ITEM 2 — PR-02 AND PR-04 SIGNED AT THE LEDGER.
+================================================================================
+Runbook Step 4's precondition (Template V1) is MET as of hand item 1, and it was
+the LAST block on both entries:
+  PR-02 — PR02-R1 (allocation $50,000 vs the original's $30,000) was RULED by Andy
+          2026-08-08, "$50,000 STANDS", and the session log records the block as
+          DISCHARGED with Template V1 named as the only remainder. Confirmed by
+          reading the folder, not assumed. NOTE: bots_config_v2.csv's PR-02 row
+          still carries a stale "⛔ DO NOT SIGN — allocation GATED" cell; that cell
+          is superseded and is now flagged in that file's staleness banner.
+  PR-04 — no allocation gate (both readings agree at $100,000).
+
+CONFIG HASH filled on the convention Andy ruled at S2 (ruling 4): capture path @
+file sha256, plus the recorded per-automation hashes. Template id added to both.
+  PR-02  data/captures/2026-08-08-clones/PR-02-clone-final-2026-08-08.txt
+         d542587ffa4b012fd63e0b2ef50d6aa8d900fec477c2718102cae7c1f9d06162
+  PR-04  data/captures/2026-08-08-clones/PR-04-clone-final-2026-08-08.txt
+         e58db65fff3f0c69141eeb80a0db01791bfdf6b4dfbe8045d08493e06667bdc0
+Both marked SIGNED 2026-08-09 · ANDY · S2b, in-chat, with SIGNED != VERIFIED and
+the owed first-trading-day capture. docs/pre-registration-ledger.md now
+sha256 6dc0a658fefb9d396c66db58cc25b416c2351b143f69623e702912936b6323bc.
+The only remaining Group-B placeholder is PR-03, unsigned by ruling (slot 4(i)).
+
+================================================================================
+HAND ITEM 3 — LIMITS. GATED TO ANDY, RULED, APPLIED.
+================================================================================
+S2-R5 named the arms, PR-01 and the mirrors, but NOT PR-02/PR-04. Gated in-chat.
+✅ RULED BY ANDY 2026-08-09, S2b, in-chat: PR-02 and PR-04 -> 2 per day / 2 at once.
+   The condor-aware reading, identical to PR-01 and the seven arms: an IC is TWO
+   positions, so 2/2 IS exactly one condor per day, one at a time. 1/1 would open
+   one vertical and block the other side — the S2-R5 failure.
+
+PR-02  IC-SPX-FastPT25-S2-130PM   BOTfw5TkkCRF3017861977616287731
+  STORED FOUND  10 / 10  seed $50,000  disableExits 1  status "off"  tid present
+  EDIT          posLimitDay 10 -> 2 · posLimit 10 -> 2. Read back "2"/"2",
+                seed unchanged "50000". Saved via the drawer's own Save.
+  POST-RELOAD   2/2 · seed 50000 · disableExits STILL 1        screenshots/25, 26
+  A-27a         INVERTED GUARD, same as PR-01. /bots row: "Scheduled automations
+                are off" / "Exit Options ... are off" — CORRECT for this bot.
+                bot page onoff [false,false]. The flip script asserted
+                onoff[1]==='false' AND disableExits===1 AND tid present, and would
+                have aborted on 'true'. This is the -130PM Exit-Option-free control
+                (oa-ops-runbook.md 4.3). NOT "fixed".
+  FLIP          AUTOMATIONS false -> true. EXIT OPTIONS NOT TOUCHED.
+  POST-RELOAD   status "on" · disableExits 1 · 2/2 · onoff [true,false]  screenshots/27
+
+PR-04  QQQ-IC-0DTE-Fortress-NoPT50   BOTfw5TkkCRF3017862038322323202
+  STORED FOUND  2 / 2  seed $100,000  disableExits 1  status "off"  tid present
+  EDIT          NONE — 2/2 is ALREADY the ruled value. Nothing forked, nothing to
+                revert. (Same disposition as the seven arms at S2.)
+  See S2b-R3 below for its EXIT OPTIONS arm and switch-on.
+
+================================================================================
+⛔ FINDING S2b-R3 — PR-04 EXIT OPTIONS READ OFF. GATED, CHALLENGED BY ANDY, RULED.
+================================================================================
+FOUND. PR-04 read `disableExits` 1 / EXIT OPTIONS OFF. It is NOT an Exit-Option-free
+control — PR-01 and PR-02 are, by design; PR-04 is not. Its own ledger VERIFICATION
+line requires "a time-exit row" and "BACKSTOP_CAUGHT_IT NEGATIVE", and its 15:50
+Expiration exit is an EXIT OPTION, inherited untouched at clone time. With the
+master switch OFF that rung cannot fire and the 15:52 flat-close backstop becomes
+the closing mechanism BY CONSTRUCTION — BACKSTOP_CAUGHT_IT positive on day one and
+the pre-registered mechanism is not the one that ran. It was never armed because
+PR-04 is a Group-B clone, outside the nine that S2's Step 3 swept.
+
+PRE-CHECK BEFORE OFFERING THE ARM (the S2-R1 lesson): PR-04's Positions tab read
+verbatim "No open positions". Arming here can dispose of nothing. Recorded first-hand.
+
+✅ RULED BY ANDY: "Arm EXIT OPTIONS, then switch ON."
+
+⛔ THEN ANDY CHALLENGED HIS OWN RULING, MID-EXECUTION: *"the title says NoPT50 ...
+   so shouldnt there be no exit options?"* The AUTOMATIONS flip was HELD at a clean
+   boundary (exits armed, automations still off) and the question was answered with
+   a first-hand read, not an argument:
+
+   THE TWO LAYERS ARE DISTINCT.
+     NoPT50      = the PROFIT-TARGET rung is DELETED FROM THE OPEN POSITION ACTION
+                   (`exits.profits` = ""). build-plan.md 2B / ledger 4: "removed
+                   from the action, NOT toggled off". The master switch was never
+                   the mechanism.
+     EXIT OPTIONS = the bot-level master switch that lets any rung copied onto a
+                   position actually fire. An empty rung has nothing to copy.
+
+   READ FIRST-HAND 2026-08-09 from both Open Position actions, via each row's own
+   click path (never a5.bots.editAuto direct — phantom-draft trap), hard reload
+   between the two, model read (`a5.bots.acedit.routine`) not DOM:
+
+     FortNoPT-Scan-Put   RTfw5TkkCRF3017862038322605095
+       profits ""  stoploss ""  touch ""  dstop ""  dprofit ""  tstop ""  epsdays ""
+       expdays 0.01   smexpdays {"text":"Market","smart":"market"}
+     FortNoPT-Scan-Call  RTfw5TkkCRF3017862038322605296
+       profits ""  stoploss ""  touch ""  dstop ""
+       expdays 0.01   smexpdays {"text":"Market","smart":"market"}
+
+   => EXACTLY ONE LIVE RUNG PER SIDE, and it is the expiration/time exit. `profits`
+      is genuinely empty, so arming CANNOT resurrect a PT50. NoPT50 is intact with
+      EXIT OPTIONS ON. Andy's ruling was correct; the challenge was correctly raised
+      and is answered by observation.
+
+   ⭐ CONFIG HASHES RE-COMPUTED LIVE during that read, formula
+      sha256(JSON.stringify({name,inputs,root})):
+        FortNoPT-Scan-Put   2eab2d95541b44536c452fcb4b7acd005ae45dd712ce07675d4d66d95db211e2  4682 B  MATCH
+        FortNoPT-Scan-Call  7dd2df800d47d4c4f4ba97cfd5fc83d588fcc4c20d9fd12ef9928b4e607bc6be  4649 B  MATCH
+      Byte-for-byte against the recorded baselines. Double duty: (a) opening the
+      editors mutated NOTHING, (b) the CONFIG HASH written into PR-04's signature
+      earlier this sitting is confirmed LIVE-CORRECT today, not merely a stored note.
+
+   ANDY RE-CONFIRMED: "Go — flip AUTOMATIONS ON."
+
+  EDIT 1  EXIT OPTIONS off -> on (`disableExits` 1 -> 0). Guard asserted exits false,
+          autos false, correct bot, correct label order before dispatch.
+  POST-RELOAD  disableExits 0 · onoff [false,true] · AUTOMATIONS STILL OFF · 2/2 ·
+               seed 100000                                        screenshots/28
+  A-27a   /bots row: "Scheduled automations are off" / "Exit Options ... are on"
+          bot page onoff [false,true]. Guard also asserted disableExits===0,
+          limits 2/2, tid present.
+  EDIT 2  AUTOMATIONS false -> true.
+  POST-RELOAD  status "on" · disableExits 0 · 2/2 · seed 100000 · tid present ·
+               onoff [true,true]                                  screenshots/29
+
+================================================================================
+📝 FINDING S2b-R4 — THE "15:50 EXIT" LABEL AND THE STORED VALUE DISAGREE.
+================================================================================
+Stored `expdays` = 0.01 on both PR-04 scanners. 0.01 day x 24h = 14.4 minutes, so
+against a 16:00 ET expiry the rung arms at ~15:45-15:46, not 15:50. The folder calls
+this "the 15:50 Expiration exit" throughout (ledger 4, bots_config_v2.csv, state.md).
+⛔ THE 14.4-MINUTE FIGURE IS ARITHMETIC ON THE STORED VALUE, NOT AN OBSERVATION OF
+   OA'S SEMANTICS. Fractional `expdays` may be evaluated against a session convention
+   rather than a literal expiry timestamp. NOT VERIFIED.
+✅ RULED BY ANDY 2026-08-09: RECORD ONLY, CORRECT THE DOCS AFTER MONDAY. No doc edit
+   was made. Rewriting five surfaces off an inference is the propagation-error class
+   this folder keeps catching; Monday's first observed close prints the real time and
+   settles it in one reading.
+   Does NOT change today's decision: whatever the exact minute, the time exit precedes
+   the 15:52 backstop, so the ordering PR-04's spec depends on holds.
+   ⭐ MONDAY CHECK, OWED: record the OBSERVED close time on PR-04's first position and
+   reconcile it against `expdays` 0.01 and the "15:50" label.
+
+================================================================================
+HAND ITEM 4 — OA-ARCHIVE THE THREE ORIGINALS. NOT DONE. RECORDED SKIPPED.
+================================================================================
+`archiveBot` is Andy's hand and resists every documented method; this session never
+attempted it. The three are still present and still OFF/OFF at close:
+  IC-SPX-FastPT25-S2-130PM-ARCHIVED-2026-08-08      BOTfw5TkkCRF3717814485128334371
+  IC-SPX-FastPT25-S2-ARCHIVED-2026-08-07            BOTfw5TkkCRF1217757048550308561
+  QQQ-IC-0DTE-Fortress-NoPT50-ARCHIVED-2026-08-08   BOTfw5TkkCRF2617743681996538301
+⭐ VERIFY BY ID, NOT BY NAME — see finding S2b-R2: only two carry the -08-08 label.
+   Acceptance when Andy runs it: footer 43 -> 40 AND all three ids GONE from /bots.
+Blocks nothing. No trading behaviour depends on it.
+
+================================================================================
+GATE A12 / bots_config_v2.csv — RULED, BANNER APPLIED, SWEEP STILL OWED.
+================================================================================
+Checked who actually consumes the file before recommending anything:
+  a_series.py load_config_a7()  -> ONLY object_kind == shared_automation rows
+                                   (a7_hash + version). UNAFFECTED by today: today
+                                   changed per-BOT fields, and two shared hashes were
+                                   re-verified live and matched. Re-parsed after the
+                                   banner: still returns its 3 rows.
+  execution_audit.py Tier C     -> already SKIPPED BY NAME (split (ii) pending)
+  daily_brief.py                -> already config-blind for week one, reports why
+  research_loop.py              -> 0.1.0-DRAFT, not wired in
+=> NOTHING MACHINE-CONSUMES THE STALE COLUMNS. An earlier claim in-chat that week
+   one's drift checks would run blind was WRONG and was retracted to Andy before he
+   ruled. The live risk is the HUMAN/AGENT read — above all PR-02's stale
+   "DO NOT SIGN" cell, which contradicts a settled ruling and reads as an instruction.
+✅ RULED BY ANDY: comment banner today, sweep at his convenience. NOT a Monday blocker.
+APPLIED: 61 COMMENT LINES ONLY, inserted above the CSV header row. NO DATA ROW
+   TOUCHED — verified: every inserted line begins with '#', the header row is intact,
+   the CSV still parses, and load_config_a7() still returns its 3 shared_automation
+   rows. The file's own "never hand-written" rule is preserved.
+   data/bots_config_v2.csv sha256 e54ee4ea9f3bfa7da5939920cddf5f88814297f3fb5f6be0151c7f43a462aef9
+
+================================================================================
+FINAL SWEEP — /bots, ONE PAGE READ, `i.sticon[title]`. THE CLOSING STATE.
+================================================================================
+  footer, verbatim   "43 active bots • 7 left in your plan • Upgrade"
+  rows parsed        43
+  AUTOMATIONS ON     17 of 43
+      3DTE $140-$350 · 60min-ORB-10W-Paper-v1 · DIR-SPX-CallVIXdrop ·
+      DIR-SPX-PutVIX22-SL75 · Friday 14 DTE Broken Wing IB (B-70) ·
+      GF-QQQ-IC-Canary · GF-QQQ-IC-PT50 · GF-QQQ-IC-Ride · GF-QQQ-IC-SL100 ·
+      GF-QQQ-IC-SL200 · GF-QQQ-IC-Touch0 · GF-QQQ-IC-Trail ·
+      IC-SPX-FastPT25-S2 · IC-SPX-FastPT25-S2-130PM · Nigiri-Paper-v1 ·
+      QQQ-IC-0DTE-Fortress-NoPT50 · Trendy-Paper-v1
+      == EXACTLY {7 GF arms} + PR-01 + PR-02 + PR-04 + PR-05/06/07/08/10/11/12.
+         NOTHING ELSE. Matches the required set with Part B completed.
+  EXIT OPTIONS ON    15 of 43  (S2's 14, + PR-04 armed today under S2b-R3)
+      PR-01 and PR-02 are correctly ABSENT — Exit-Option-free controls.
+  RIDE BOTS          QQQ long call  BOTfw5TkkCRF1017766424258604555  autos OFF / exits OFF
+                     Tasty Condor   BOTfw5TkkCRF1017766126336204213  autos OFF / exits OFF
+                     ⭐ GATE A6 INTACT. Neither bot was opened this session.
+  PILOT PR-03        QQQ-IC-0DTE-Fortress — OFF. Unsigned by ruling. Expected.
+  THREE ARCHIVED     present, OFF/OFF (hand item 4 not run)
+  screenshot         screenshots/30
+
+================================================================================
+STEP 6 — OWED MONDAY 2026-08-10, FIRST-TRADING-DAY CAPTURE, PER BOT
+================================================================================
+17 bots are ON. The market was closed 2026-08-09, so the test-fire (S2-R2,
+`data-click="runAuto"`) yields no Trades list and was NOT fired. Every bot below
+carries Step 6 NOT EVALUABLE, DUE 2026-08-10 from its first new position.
+  FROM S2 (7):   GF-QQQ-IC-Ride · -PT50 · -Trail · -Touch0 · -SL100 · -SL200 · -Canary
+  FROM S2b (10): PR-01 · PR-02 · PR-04 · PR-05 · PR-06 · PR-07 · PR-08 · PR-10 ·
+                 PR-11 · PR-12
+  INVERTED CHECK (NO PT row, NO exit-trigger row, S2 monitor firing): PR-01, PR-02.
+     Advisory until D4 is answered — a mislabelled account-level ITM close reads as
+     a PT row and would kill a ride control on day one. READ THE LABEL FIRST.
+  PR-04 additionally: TIME-EXIT row present, NO PT row, BACKSTOP_CAUGHT_IT NEGATIVE,
+     plus the S2b-R4 observed-close-time reconciliation.

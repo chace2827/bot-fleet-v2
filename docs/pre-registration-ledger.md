@@ -273,11 +273,44 @@ REVIEW DATE      Day-0 + 6 months, interim at n=60.
 MAX LOSS         ≈$5K risk/position, inside the same $10K SPX IC daily aggregate.
 SIZING TIER      ≈$5K risk/position — IDENTICAL allocation to the 11:00 arm. Non-negotiable:
                  unequal sizing makes the A/B unreadable.
-CONFIG HASH      <capture> @ <hash>
+CONFIG HASH      FILLED AT S2b SIGNING 2026-08-09, same convention as PR-01 and the greenfield
+                 arms (Andy's ruling 4 at the S2 sitting: capture path @ file sha256, plus the
+                 recorded per-automation hashes).
+                 CAPTURE  data/captures/2026-08-08-clones/PR-02-clone-final-2026-08-08.txt
+                 SHA256   d542587ffa4b012fd63e0b2ef50d6aa8d900fec477c2718102cae7c1f9d06162
+                 PER-AUTOMATION HASHES (from data/bots_config_v2.csv, post-F-C1 + post-5b):
+                   Scalp-Scan-Put            41f2505a0f5119f3ed7b4d712f881afa68d104a43f13bbb15600989124238d87  (v6, 4796B)
+                   Scalp-Scan-Call           144b45e69c40289714752715a3986d1c1b6e7ab8190797f67081c120e7ccad3d  (v7, 4813B)
+                   Scalp-Mon-S2-StrikeTouch  01af4963aafb58566789662aafa68d94d846d042869590eccbede9fb6d57ca85  (v4, 4584B, byte-identical to PR-01's)
+                   Scalp-Mon-S2-Cleanup      f3673f2991541420c7124f3a6d2e2a2996002f6c61dc61ac8389ea348db2ccd7  (v2, 2610B, byte-identical to PR-01's)
+                 TEMPLATE V1  Tfw5TkkCRF1717862960217463041 ("Template V1 - pre-reg PR-02 -
+                 saved 2026-08-09"), by Andy's hand 2026-08-09. The clone's own `tid` resolves
+                 to it, so the link is proven BOT-SIDE, not only in the templates list.
+                 This bot's hash IS established (a pre-restore baseline exists) - A-27c's
+                 NOT-EVALUABLE carry does not apply here.
 VERIFICATION     INVERTED, as above. PLUS: the first five entries' timestamps land in the
                  declared window. The 11:00 gate on the v1 bot was never implemented and ran
                  20+ sessions before anyone noticed.
-SIGNED           ..............................
+SIGNED           2026-08-09 - ANDY - gate cleared at S2b, in-chat. Runbook Step 4's
+                 precondition (Template V1) is MET as of this sitting; PR02-R1 (allocation
+                 $50,000 STANDS) was ruled 2026-08-08 and is DISCHARGED, and it was the only
+                 other block on this entry.
+                 SIGNED != VERIFIED. The INVERTED Step-6 check (NO PT row, NO exit-trigger row,
+                 and the S2 monitor observed firing) is DEFERRED to the first trading session,
+                 2026-08-10 - the market was closed on the day this was signed - and it stays
+                 ADVISORY until D4 is answered, exactly as on PR-01. READ THE LABEL FIRST,
+                 FIRE THE RULE SECOND.
+                 FIRST-TRADING-DAY CAPTURE OWED 2026-08-10.
+                 CONFIG NOTE: limits read 10/10 at signing and were set to 2/2 in the same
+                 sitting on Andy's in-chat ruling - "2 per day / 2 at once", condor-aware: an IC
+                 is TWO positions, so 2/2 IS one condor per day, one at a time. Per slot-2
+                 ruling 2a a position-limit edit does NOT fork this signature. Allocation
+                 untouched at $50,000.
+                 EXIT OPTIONS stays OFF by design - this is the -130PM Exit-Option-free control
+                 (oa-ops-runbook.md 4.3, build-plan.md 4). Do not "fix" it.
+                 A/B NOTE: PR-01, this entry's 11:00 partner, went ON at S2b the same sitting,
+                 so the 11:00-vs-13:00 comparison starts with BOTH arms live - the one-armed
+                 start flagged in PR-01's signature on 2026-08-09 no longer applies.
 ```
 
 ### `QQQ-IC-0DTE-Fortress` (clone; original archived) — the pilot bot
@@ -327,9 +360,43 @@ SAMPLE TARGET    n = 100 positions, matched days with the Fortress arm.
 REVIEW DATE      Day-0 + 6 months, interim at n=60.
 MAX LOSS         ≈$5K risk/position, inside the same $10K QQQ IC daily aggregate.
 SIZING TIER      ≈$5K risk/position — IDENTICAL to the Fortress arm.
-CONFIG HASH      <capture> @ <hash>
+CONFIG HASH      FILLED AT S2b SIGNING 2026-08-09, same convention as PR-01 and the greenfield
+                 arms (Andy's ruling 4 at the S2 sitting: capture path @ file sha256, plus the
+                 recorded per-automation hashes).
+                 CAPTURE  data/captures/2026-08-08-clones/PR-04-clone-final-2026-08-08.txt
+                 SHA256   e58db65fff3f0c69141eeb80a0db01791bfdf6b4dfbe8045d08493e06667bdc0
+                 PER-AUTOMATION HASHES (from data/bots_config_v2.csv). PR04-R1 governs the
+                 count: this family has TWO scanners plus the built backstop, so THREE is the
+                 COMPLETE set, not a partial capture.
+                   FortNoPT-Scan-Put                 2eab2d95541b44536c452fcb4b7acd005ae45dd712ce07675d4d66d95db211e2  (v9, 4682B, UNEDITED)
+                   FortNoPT-Scan-Call                7dd2df800d47d4c4f4ba97cfd5fc83d588fcc4c20d9fd12ef9928b4e607bc6be  (v9, 4649B, UNEDITED)
+                   FortNoPT-Backstop-1552-FlatClose  6794b56b672e7e625ee731ac949ddeffddf5e325522b38a8f73d6d0cb34f7e04  (v1, 1447B, BUILT 2026-08-08)
+                 TEMPLATE V1  Tfw5TkkCRF1717862960769161432 ("Template V1 - pre-reg PR-04 -
+                 saved 2026-08-09"), by Andy's hand 2026-08-09. The clone's own `tid` resolves
+                 to it, so the link is proven BOT-SIDE, not only in the templates list.
 VERIFICATION     Trades list contains a time-exit row and NO PT row. Same backstop check.
-SIGNED           ..............................
+SIGNED           2026-08-09 - ANDY - gate cleared at S2b, in-chat. Runbook Step 4's
+                 precondition (Template V1) is MET as of this sitting, and it was this entry's
+                 only block: there is no allocation gate here, unlike PR02-R1 - both readings
+                 agree at $100,000.
+                 SIGNED != VERIFIED. Step 6 (the Trades list carries a TIME-EXIT row and NO PT
+                 row, plus BACKSTOP_CAUGHT_IT NEGATIVE) is DEFERRED to 2026-08-10.
+                 FIRST-TRADING-DAY CAPTURE OWED 2026-08-10.
+                 CONFIG NOTE: limits read 2/2 at signing - ALREADY the value Andy ruled for this
+                 bot in-chat at S2b ("2 per day / 2 at once", condor-aware). NO EDIT WAS MADE,
+                 so nothing forked and there is nothing to revert. Allocation $100,000 untouched.
+                 CARRIED, NOT BLOCKING: PR04-R3 / S2-R4 - `rdata.next` = 1786369500000 (09:45 ET
+                 Monday) against a rendered "Every week on Mon-Fri, 3:52pm EST". It reproduces to
+                 the millisecond on `GF-QQQ-IC-Ride`, a different bot with a different backstop
+                 object, which is consistent with a bot-level next-scan stamp - but that is an
+                 INFERENCE and it discharges nothing. Not re-timed. Monday's first 15:52 fire
+                 disambiguates it.
+                 SIGNED WITH AN OPEN GATE NAMED: finding S2b-R3 - this bot's EXIT OPTIONS read
+                 OFF (`disableExits` 1) at signing, while the VERIFICATION line above requires a
+                 TIME-EXIT row and a NEGATIVE BACKSTOP_CAUGHT_IT. With Exit Options off the
+                 inherited 15:50 exit cannot fire and the 15:52 backstop becomes the closing
+                 mechanism by construction. THIS SIGNATURE DOES NOT AUTHORIZE SWITCH-ON. The bot
+                 stays OFF until that finding is ruled. See the S2b session-log entry.
 ```
 > The name is accurate under this spec — `build-plan.md` §2B resolved the earlier
 > name-vs-spec conflict in favour of keeping the name and removing the PT.

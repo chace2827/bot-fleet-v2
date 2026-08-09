@@ -7717,3 +7717,210 @@ moved on either.
 `docs/state.md` · `docs/session-log.md` (this entry). All verified by direct `device_bash` sha256 +
 single-match grep (§9.1a) — never a write-tool response, never a stage-back read. **No git in any
 form. Uncommitted — Andy runs the commit.**
+
+---
+
+## ⭐⭐ 2026-08-09 (S2b — SCOPED FOLLOW-ON TO S2). **THE FLEET IS AT 17 of 43 AUTOMATIONS ON.** Ten bots switched on, PR-02 and PR-04 signed and live, four findings. Andy attended and ruled five gates live, one of them against his own earlier ruling. No git.
+
+**Scope, honoured:** bring the eight ruled-ready bots ON for Monday's open and process Andy's
+three hand items. S2 was not re-run; no ruling was re-opened. Evidence
+`data/captures/2026-08-09-s2b/` (2 text files + 30 screenshots).
+
+**Precondition read fresh, not inherited:** `state.md` 2026-08-08 NIGHT block · `session-log.md`
+2026-08-09 S2 entry in full · `decision-card-2026-08-08.md` ✅ RULINGS · `oa-ops-runbook.md`
+§4/§4.3 · `pre-registration-ledger.md` §4–§6 · project memory `greenfield-build-status`.
+Opening `/bots` read **zero drift** against S2's close: AUTOMATIONS ON 7/43, EXIT OPTIONS ON
+14/43, footer `43 active bots • 7 left in your plan`.
+
+### ⛔ FOUR FINDINGS. All first-hand. None resolved by this session's own judgment.
+
+**S2b-R1 — THE LAUNCH PROMPT'S PR-01 BOT ID WAS WRONG, AND THE PROMPT SAID SO.** It carried
+PR-01 as *"bot id ends …7616287731?"* with an explicit instruction to verify. It does not:
+`BOTfw5TkkCRF3017861977616287731` is **PR-02** (`IC-SPX-FastPT25-S2-130PM`); PR-01
+(`IC-SPX-FastPT25-S2`) is **`BOTfw5TkkCRF4417860821948715488`**. Three independent sources agree
+— the 2026-08-08 roster TSV lines 44–45, `bots_config_v2.csv` line 168, and PR-01's own OA Notes
+panel, which renders its ledger entry verbatim (`ID PR-01`). ⭐ **Verified BEFORE any edit; no
+edit was made on the wrong bot, and PR-02 was not opened during Part A.** The question mark in
+the prompt did its job.
+
+**S2b-R2 — the three archive-queued originals are NOT all dated 08-08.** The prompt names "the
+three `-ARCHIVED-2026-08-08` originals"; `IC-SPX-FastPT25-S2-**ARCHIVED-2026-08-07**` carries the
+other date. Same three bots, one different label. **Recorded so hand item 4 is verified by ID and
+by the footer 43 → 40, never by name-matching.** No doc edit.
+
+**S2b-R3 — PR-04's EXIT OPTIONS read OFF, and that is not benign.** ⛔ GATED, then ruled, then
+**challenged by Andy mid-execution**, then answered by observation. Full record in the Part B
+capture. In short: PR-04 is **not** an Exit-Option-free control (PR-01 and PR-02 are, by design);
+its own VERIFICATION line requires a **time-exit row** and a **NEGATIVE** `BACKSTOP_CAUGHT_IT`,
+and its 15:50 Expiration exit **is** an Exit Option. With the master switch off that rung cannot
+fire and the 15:52 backstop becomes the closer *by construction* — Step 6 would have been
+meaningless on day one. It was never armed because PR-04 is a Group-B clone, outside the nine
+S2's Step 3 swept. Before offering the arm, the S2-R1 lesson was applied: PR-04's Positions tab
+read verbatim **"No open positions"**, so arming could dispose of nothing.
+✅ **RULED: "Arm EXIT OPTIONS, then switch ON."**
+⛔ **THEN ANDY CHALLENGED HIS OWN RULING** — *"the title says NoPT50 … so shouldnt there be no
+exit options?"* — and the AUTOMATIONS flip was **held at a clean boundary** (exits armed,
+automations still off) while it was answered **first-hand rather than argued**. The two layers
+are distinct: **NoPT50** = the profit-target rung is *deleted from the Open Position action*
+(`exits.profits = ""`, per `build-plan.md` §2B: *"removed from the action, NOT toggled off"*);
+**EXIT OPTIONS** = the master switch that lets a rung fire, and an empty rung has nothing to
+copy. Both Open Position actions were read from the model (`a5.bots.acedit.routine`), opened via
+each row's own click path and hard-reloaded between them:
+`profits "" · stoploss "" · touch "" · dstop "" · dprofit "" · tstop "" · epsdays ""` on both
+sides, with **`expdays 0.01` the only live rung**. ⭐ Both config hashes were **re-computed live**
+and matched byte-for-byte (`FortNoPT-Scan-Put 2eab2d95…` 4,682 B · `FortNoPT-Scan-Call
+7dd2df80…` 4,649 B) — proving the read mutated nothing **and** that the CONFIG HASH written into
+PR-04's signature earlier the same sitting is live-correct today, not merely a stored note.
+Andy re-confirmed **"Go"**. The challenge was right to raise and is discharged by observation.
+
+**S2b-R4 — the "15:50 exit" label and the stored value disagree.** `expdays = 0.01` on both PR-04
+scanners; 0.01 day = 14.4 minutes, so against a 16:00 expiry the rung arms at ~15:45–15:46, not
+15:50. The folder says "15:50" on at least three surfaces. ⛔ **The 14.4-minute figure is
+arithmetic on the stored value, NOT an observation of OA's semantics** — fractional `expdays`
+may be evaluated against a session convention rather than a literal timestamp.
+✅ **RULED: record only, correct the docs after Monday.** No doc edit made — rewriting several
+surfaces off an inference is the propagation class this folder keeps catching. Does not change
+today's decision: whatever the minute, the time exit still precedes the 15:52 backstop, so the
+ordering PR-04's spec depends on holds. **Monday check owed:** record the OBSERVED close time and
+reconcile it against `expdays 0.01` and the label.
+
+### ✅ ANDY'S FIVE RULINGS, in-chat, recorded verbatim in effect
+1. **PR-02 / PR-04 position limits** — S2-R5 never named them. Gated. **"2 per day / 2 at once"**,
+   the condor-aware reading, identical to PR-01 and the seven arms.
+2. **S2b-R3 — "Arm EXIT OPTIONS, then switch ON"** for PR-04; then the self-challenge above; then
+   **"Go — flip AUTOMATIONS ON"** once the empty `profits` was proven.
+3. **S2b-R4 — "Record only, correct after Monday."**
+4. **S2-R3 (carried from S2) — DEFERRED.** Not ruled this sitting. `a_series --validate` keeps
+   printing its 1 true-positive divergence at every close-out; A1–A9 stay green, nothing blocked.
+   Session recommendation on file: option A, re-baseline `RECORDED_NOTE_LEN` — a `scripts/` edit
+   with no OA surface, so a Claude Code task, not this lane.
+5. **Gate A12 / `bots_config_v2.csv` — "comment banner today, sweep at your convenience."**
+
+### PART A — THE EIGHT. LIMITS FIRST, ON SECOND, PER BOT.
+Every stored limit read from the hydrated model (`a5.bots.bot`), never from rendered text. Every
+edit through the Safeguards drawer's `a.mpickbox` 1–10 pickers (hidden inputs) and committed by
+the drawer's own Save. **Every edit proven by a HARD RELOAD + fresh model read + screenshot taken
+after the reload.** A-27a honoured **per bot on two surfaces** — the `/bots` row's `i.sticon`
+`title` attributes, and the bot page's own `onoff` hidden inputs read *inside the same script
+that dispatched the flip*, with a hard abort. Label order `[0]=AUTOMATIONS, [1]=EXIT OPTIONS`
+asserted before every dispatch. **0 aborts.**
+
+| bot | stored found | edit | proven | exits at flip | now |
+|---|---|---|---|---|---|
+| PR-05 `DIR-SPX-PutVIX22-SL75` | 1/1 | none needed | 1/1 | ON | **ON** |
+| PR-06 `DIR-SPX-CallVIXdrop` | 1/1 | none needed | 1/1 | ON | **ON** |
+| PR-07 `3DTE $140-$350` | **1/5** | posLimit 5→1 | 1/1 | ON | **ON** |
+| PR-08 `Nigiri-Paper-v1` | **10/10** | both→1 | 1/1 | ON | **ON** |
+| PR-10 `Friday 14 DTE BW IB (B-70)` | **3/10** | both→1 | 1/1 | ON | **ON** |
+| PR-11 `Trendy-Paper-v1` | **2/2** | both→1 | 1/1 | ON | **ON** |
+| PR-12 `60min-ORB-10W-Paper-v1` | 1/1 | none needed | 1/1 | ON | **ON** |
+| PR-01 `IC-SPX-FastPT25-S2` | **10/10** | both→2 | 2/2 | **OFF — correct** | **ON** |
+
+⭐ **Three of the seven already stored their ruled value** and were recorded and skipped rather
+than force-edited (pickers no-op on the displayed value). **Six bots were edited; allocations
+were untouched on all eight** ($10K/$10K/$5K/$10K/$10K/$10K/$10K/$50K).
+⭐ **PR-01's guard was INVERTED**: it asserted `onoff[1] === 'false'` **and** `disableExits === 1`
+and would have aborted on `true`. Its EXIT OPTIONS stayed OFF — the Exit-Option-free ride+S2
+control, never "fixed". ⛔ The seven GF arms were **not touched** (ON, 2/2, correct). ⛔ PR-09
+`QQQ long call` and PR-13 `Tasty Condor` were **not opened** — gate A6 ride.
+⚠️ Two flips returned the ~45s `Runtime.evaluate` boundary (PR-05, PR-06). Per the standing trap
+the action was **NOT re-fired**; state was re-read and showed both committed. No double-write.
+
+### PART B — ANDY'S HANDS
+1. **TEMPLATE V1 — DONE.** Baseline read *before* his hand: My Templates **10**, neither clone
+   present. After: **12**. `PR-02 → Tfw5TkkCRF1717862960217463041`, `PR-04 →
+   Tfw5TkkCRF1717862960769161432`, card subtitles read verbatim *"Template V1 — pre-reg PR-0x —
+   saved 2026-08-09"*. ⭐ Verified on a **second surface that actually proves the link**: each
+   clone's own `a5.bots.bot.tid` now resolves (both previously `null`). A list entry alone would
+   not have proven attachment. `showBotMenu` was never clicked by this session.
+2. **PR-02 AND PR-04 SIGNED.** Runbook Step 4's precondition is met and it was the **last** block
+   on both — PR02-R1 (allocation $50,000 STANDS) was ruled 2026-08-08 and confirmed DISCHARGED by
+   reading the folder, and PR-04 has no allocation gate. CONFIG HASH filled on Andy's S2 ruling-4
+   convention plus the template id. Both carry `SIGNED != VERIFIED` and the owed capture.
+   **PR-04's signature explicitly names S2b-R3 as an open gate and states that it does not
+   authorize switch-on** — the switch-on came later, from the ruling, not from the signature.
+   ⛔ Only Group-B placeholder left: **PR-03**, unsigned by ruling.
+3. **LIMITS — gated, ruled 2/2, applied.** PR-02 `10/10 → 2/2` (proven; EXIT OPTIONS stayed OFF,
+   inverted guard, it is the -130PM control). PR-04 **already stored 2/2** — no edit, nothing
+   forked, nothing to revert. Both then switched **ON**.
+4. **OA-ARCHIVE — NOT DONE. RECORDED SKIPPED.** `archiveBot` is Andy's hand and was never
+   attempted. All three originals still present and OFF/OFF; ids in the Part B capture.
+   **Acceptance when he runs it: footer 43 → 40 AND all three ids gone — verified by ID, per
+   S2b-R2, never by name.** Blocks nothing.
+
+### GATE A12 — `bots_config_v2.csv`
+Before recommending anything, the consumers were **read, not assumed**: `a_series.py`'s
+`load_config_a7()` reads **only** `shared_automation` rows (`a7_hash` + `version`) and today
+changed per-**bot** fields only; `execution_audit.py` Tier C is already SKIPPED BY NAME;
+`daily_brief.py` is already config-blind for week one; `research_loop.py` is 0.1.0-DRAFT and not
+wired in. ⭐ **Nothing machine-consumes the stale columns.** An earlier in-chat claim that week
+one's drift checks would run blind was **WRONG and was retracted to Andy before he ruled** — the
+live risk is the human/agent read, above all PR-02's stale `⛔ DO NOT SIGN` cell, which
+contradicts a settled ruling and reads as an instruction. **Applied: 61 COMMENT LINES ONLY above
+the CSV header. No data row touched** — verified that every inserted line begins with `#`, the
+header row is intact, the file still parses, and `load_config_a7()` still returns its 3 rows. The
+file's own *"never hand-written"* rule is preserved. **The sweep is still owed** and is not a
+Monday blocker.
+
+### FINAL SWEEP — /bots, one page read
+`43 active bots • 7 left in your plan` · 43 rows.
+**AUTOMATIONS ON = 17 of 43** — the 7 GF arms + PR-01 + PR-02 + PR-04 + PR-05/06/07/08/10/11/12,
+**and nothing else**. **EXIT OPTIONS ON = 15 of 43** (S2's 14, plus PR-04 armed today). PR-01 and
+PR-02 correctly absent from the exits set. ⭐ **`QQQ long call` and `Tasty Condor` both read
+OFF/OFF — gate A6 intact, neither opened this session.** PR-03 OFF, expected.
+
+### ⛔ WHAT IS STILL OFF, AND WHY
+**PR-03** ruled OFF (slot 4(i), unsigned). **PR-09 / PR-13** gate-A6 ride, deliberately unsigned.
+**20 Group-A bots** out of scope, queued for archiving. **The three renamed originals** await
+`archiveBot`.
+
+⛔ **STEP 6 IS NOT SATISFIED FOR ANY OF THE 17.** The market was closed; the test-fire (S2-R2)
+yields no Trades list and was **not fired**. Every ON bot is ⬜ NOT EVALUABLE, **due 2026-08-10**
+from its first new position. The ruled limits (1/1, 2/2) **are** the first-position control by
+construction. **INVERTED check on PR-01 and PR-02**, advisory until D4 is answered. **PR-04 also
+owes** the S2b-R4 observed-close-time reconciliation.
+
+⛔ **ATTESTATION (A-18):** ten bots were toggle-touched this session — that is Part A + Part B,
+authorized. PR-04's two Open Position actions were **opened READ-ONLY** to answer Andy's
+challenge; nothing was saved, and both config hashes were re-verified byte-identical afterwards.
+`QQQ long call` and `Tasty Condor` were **not opened at all**.
+
+**Files changed:** `docs/pre-registration-ledger.md` · `data/bots_config_v2.csv` (comment banner
+only) · `data/captures/2026-08-09-s2b/` (2 text files + 30 screenshots) · `docs/state.md` ·
+`docs/session-log.md` (this entry). All verified by direct `device_bash` sha256 + single-match
+grep (§9.1a) — never a write-tool response, never a stage-back read. **No git in any form,
+including `status`. Uncommitted — Andy runs the commit.**
+
+
+## 2026-08-09 — ORCHESTRATOR SESSION (no OA, no Chrome, no git): S2 + S2b accepted; DA-3 and S2-R3 applied; tracker updated; one correction banner.
+
+- **S2 hand-off ACCEPTED** after first-hand verification: all 5 file sha256 + all 6 capture
+  sha256 matched by direct `device_bash`; signature count re-derived (16 = spec 7 + ledger 9,
+  incl. §5a); `build_ledger.py:108` read directly = `"2026-08-10"`; n=0 regeneration on disk.
+- **DA-3 APPLIED (slot-10 authority, inline):** `scripts/report.py` go-live-gate line removed.
+  Accept met: `grep -c "Go-live gate" scripts/report.py` = 0, `py_compile` OK.
+  sha256 `0020ea925389b44338651c95bf9d7b45d0570e3575366eab808e99ffd8230529`.
+- **S2-R3 RULED BY ANDY — OPTION A — in this orchestrator chat (AskUserQuestion, before S2b
+  opened), and APPLIED here:** `scripts/a_series.py` `RECORDED_NOTE_LEN` re-baselined to the
+  signed §9 lengths {Ride 6258 · PT50 4005 · Trail 7698 · Touch0 5206 · SL100 7494 · SL200 6832 ·
+  Canary 5418}; build-time values kept in a dated comment. Accept met: `--validate` =
+  ✅ REPRODUCED THE REFERENCE EXACTLY (0 divergences, A1–A9 unchanged), `--json` clean.
+  sha256 `8d80a6727e6ab8f793cffd0239e84da4faa1368b578289805270848a2e2079cf`.
+  ⛔ **Correction banner added to `state.md` "CARRIED, NOT CLOSED"**: the S2b entry above
+  (item 4, "S2-R3 DEFERRED — not ruled") recorded the worker's honest view — its prompt
+  omitted the ruling. Orchestrator prompt gap, named here. **S2-R3 is CLOSED.**
+- **S2b hand-off ACCEPTED** after first-hand verification: all 6 file sha256 matched, 30
+  screenshots present, signatures re-counted 18 (ledger 11 incl. PR-02/PR-04 + spec 7).
+  Fleet state accepted as recorded: **AUTOMATIONS ON = 17/43, EXIT OPTIONS ON = 15/43,
+  gate A6 intact (QQQ long call + Tasty Condor OFF/OFF)**.
+- **S2b-R1 noted against the orchestrator:** the S2b prompt carried PR-02's bot id for PR-01
+  (a stale project-memory line). Worker caught it pre-edit; memory corrected this session
+  (PR-01 = `IC-SPX-FastPT25-S2`, id `…4417860821948715488`).
+- **Tracker** `bot-fleet-migration` updated via `update_artifact` (Day-0 rows + blocked-on);
+  Andy's visual confirm requested.
+- **Still open at close:** Andy's hands — OA-archive the 3 originals (verify by ID + footer
+  43→40, per S2b-R2) · gate A12 roster sweep (bots_config_v2.csv baseline) · the commit.
+  Monday 2026-08-10: 17 first-trading-day captures owed; Step 6 order-level verification
+  (INVERTED on PR-01/PR-02; PR-04 TIME-EXIT row + BACKSTOP_CAUGHT_IT negative + S2b-R4
+  observed close time); Step 8 day-1 monitoring; deferred reads (DST 5a · 15:50 attribution ·
+  mechanism 6a · Automation Log link · Tier-2 §9 #5); ~17:30 ET capture → daily.sh → brief.
