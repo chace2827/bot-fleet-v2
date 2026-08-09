@@ -87,7 +87,9 @@ lane**.
 > comment), sha256 `8d80a6727e6ab8f793cffd0239e84da4faa1368b578289805270848a2e2079cf`;
 > `--validate` = ✅ REPRODUCED THE REFERENCE EXACTLY, `--json` clean. The S2b worker recorded
 > DEFERRED because its prompt omitted the ruling — an orchestrator prompt gap, named, not a
-> worker error. **S2-R3 is CLOSED.** **S2-R4 / PR04-R3** (`rdata.next` 09:45 ET) carried, not re-timed; Monday's first 15:52
+> worker error. **S2-R3 is CLOSED.**
+
+**S2-R4 / PR04-R3** (`rdata.next` 09:45 ET) carried, not re-timed; Monday's first 15:52
 fire disambiguates. **C10** open · **ARM-B1** blocked · **PR-21** unstamped · **CF-1** attached.
 
 **Files changed:** `docs/pre-registration-ledger.md` · `data/bots_config_v2.csv` (comment banner
@@ -141,7 +143,7 @@ only) · `data/captures/2026-08-09-s2b/` (32 files) · `docs/state.md` (this blo
 |---|---|---|
 | **S2-R1** | The **third toggle surface**, read for the first time ever on lapse-surviving positions. P1 (Tasty Condor) and P2 (QQQ long call) had **already satisfied their per-position EXPIRATION rung** — arming those bots would have closed them at Monday's first scan. | Forced gate A6. Recorded in ledger §5a. |
 | **S2-R2** | **The button test-fire EXISTS**, against A-11's ⬜ NOT EVALUABLE: `<a class="btn gray sm" data-click="runAuto" title="Run automation now">Run</a>`, on every bot's Settings tab. | Recorded verbatim. NOT FIRED — no Trades list on a closed market. |
-| **S2-R3** | ⛔ **`a_series.py --validate` now returns `🛑 1 DIVERGENCE`** — the spot check *"§9 fenced-block UTF-16 lengths == recorded notes lengths"*. Caused by the authorized Day-0 signing edits (Ride 2,339 → 6,258). A1–A9 all still PASS. **A true positive, not a tool defect.** | ⛔ **GATED.** Both repairs need a ruling: rewrite Notes on 7 signed bots (S0b-2 says DO NOT RETRY), or re-baseline `RECORDED_NOTE_LEN` (a second `scripts/` edit). Prints at every close-out until closed. Not a divergence under A-21. |
+| **S2-R3** | ⛔ **`a_series.py --validate` now returns `🛑 1 DIVERGENCE`** — the spot check *"§9 fenced-block UTF-16 lengths == recorded notes lengths"*. Caused by the authorized Day-0 signing edits (Ride 2,339 → 6,258). A1–A9 all still PASS. **A true positive, not a tool defect.** | ⛔ **GATED.** Both repairs need a ruling: rewrite Notes on 7 signed bots (S0b-2 says DO NOT RETRY), or re-baseline `RECORDED_NOTE_LEN` (a second `scripts/` edit). Prints at every close-out until closed. Not a divergence under A-21. ⛔ CLOSED SAME DAY — ruled OPTION A by Andy (orchestrator chat) and applied; see the S2-R3 CLOSED banner in the S2b block above. |
 | **S2-R4** | **PR04-R3 is not confined to PR-04.** `GF-QQQ-IC-Ride` carries the identical `rdata.next = 1786369500000` (09:45 ET Monday) as `-NoPT50`, to the millisecond — different bot, different backstop object. | Consistent with a bot-level next-scan stamp, which would dissolve PR04-R3 — ⛔ **inference, not observation. Discharges nothing.** D-3 stays OPEN. |
 | **S2-R5** | ⛔ **`posLimitDay = 1` would break the condor on all seven arms.** An IC is TWO positions, so `2/2` already IS one condor/day; setting 1 opens a put spread and blocks the call side. Runbook §3 Step A criterion 4: limits must be even. | ✅ RULED: *"arms stay 2/2, PR-01 → 2/2, mirrors → 1/1"*. **Arms untouched — no edit, no hash fork, nothing to revert.** |
 
