@@ -2,7 +2,7 @@
 
 *The live facts. Updated whenever a stated fact changes (CLAUDE.md §9.1). Numbers live in
 `STATUS.md`; the plan in `docs/build-plan.md`; progress in the `bot-fleet-migration` tracker.
-Last updated 2026-08-09 S2b (⭐ THE SWITCH-ON SITTING — **17 of 43 AUTOMATIONS ON**; PR-02 and
+Last updated 2026-08-10 DAY 1 (⭐ THE FIRST TRACKING DAY — the ledger is LIVE at n=3 positions / +$500; the eight zero-entry bots are ADJUDICATED to one root cause; PR-01 Step-6 inverted check CLOSED: see the NEW top block, which supersedes every "EMPTY LEDGER / n=0" statement beneath it). Earlier 2026-08-09 S2b (⭐ THE SWITCH-ON SITTING — **17 of 43 AUTOMATIONS ON**; PR-02 and
 PR-04 SIGNED and LIVE; findings S2b-R1…R4; gate A12 bannered, sweep still owed: see the NEW top
 block, which supersedes the S2 block's "7 of 43" ON-count. Earlier 2026-08-08 NIGHT (⭐ THE TEN-SLOT RULING SITTING — all ten slots RULED and APPLIED;
 both S2 preconditions CLEARED; LEDGER_START = 2026-08-10; gate A8 CLOSED: see the NEW top block).
@@ -25,6 +25,56 @@ C5 PASS, C11/C4/C6 answered, C10 still blocking ARM-B1; earlier the same day: pr
 the released gated batch — C12 and S-2 propagated to
 every surface, D-1 propagated, `research-loop-spec.md` corrected ×6, §8.4 step 1 corrected on
 explicit authorization; earlier the same day: R-edit package applied + edit-policy split).*
+
+## ⭐⭐⭐⭐ 2026-08-10 — DAY 1. **THE LEDGER IS LIVE: n=3 POSITIONS, +$500.**
+
+**This block supersedes every "EMPTY LEDGER — n=0" fact beneath it.** `STATUS.md` regenerated
+2026-08-10 by `scripts/daily.sh` from `data/raw/2026-08-10.csv`
+(sha `34ca4d1798b76dba4c577e2a311e0a28204484fed245654b889eec6b3d826f8f`). LEDGER_START = 2026-08-10
+confirmed live in the generated banner. **Total closed P/L $500 · 4 legs · 3 bots.**
+PR-01 +$50 (+0.010R) · PR-02 +$600 (+0.125R, 1 condor) · 60min-ORB -$150 (-0.165R).
+Open and not yet in the ledger: 3DTE $140-$350 (SPX Aug 13) and Nigiri-Paper-v1 (SPY Aug 14).
+**n=3. T5. No inference is licensed at this sample.**
+
+- **⭐ STEP 6 INVERTED CHECK, PR-01: PASS — CLOSED.** The 11:03 close is attributed by the OA
+  automation log to `Scalp-Mon-S2-Cleanup`, **Triggered by: Monitor**
+  (`open >= 2 minutes` YES -> `bot has exactly 1 position` YES -> Close Position). Exits are OFF;
+  **no Exit Option was involved.** It was the one-sided-position cleanup, **not** a PT25 capture —
+  the call side never filled. §5 two-layer behavioural check satisfied for the inverted control.
+- **⭐ THE 7 GF ARMS + PR-04 TOOK ZERO ENTRIES — AND NOTHING IS SILENTLY ON.** GF-QQQ-IC-Ride
+  logged **770 scanners / 1,234 decisions** since 09:30. One criterion blocked every entry:
+  **"Mid price is above $0.08" ✗ — mid price $0.02.** Verified first-hand on GF-Ride, GF-Canary
+  and PR-04 — same minute, same candidate (QQQ Short Put Spread Aug 10, -716/+714), same rejection.
+  **The ±0.75% regime gate PASSED today; it is not the blocker.** PR-01's call side is the same
+  condition (SPX -7,820/+7,825, mid $0.05).
+  **Whether the 1:30–2:00pm window can ever clear $0.08 is a BUILD-PLAN question and is GATED.**
+  No window, strike-selection or floor value was touched.
+- **⭐ TWO `execution_audit.py` BLIND SPOTS, found by the first real run. GATED, not edited.**
+  (1) A bot with **no ledger history is invisible to `SILENT_BOT`** — the 7 GF arms are NOT among
+  the 13 bots it flagged, and they are the seven the day was about. (2) A bot that **opened but
+  has not closed is flagged silent** — 3DTE and Nigiri both entered today and both are AMBER.
+- **⭐ OA's RISK COLUMN SUMS BOTH WINGS OF A CONDOR — CONFIRMED.** PR-02 dashboard RISK $9,400;
+  export legs $4,800 + $4,600 = $9,400. Under §4, **risk = the larger side = $4,800**. R taken off
+  OA's RISK column is understated ~2×. Method note for `evidence-standards.md` — **GATED.**
+- **TOGGLE DRIFT: CLEAN.** 16:01 capture: 43 ids, **AUTOS ON = 17, EXITS ON = 15** — byte-identical
+  to the 2026-08-09 A12 baseline; PR-01/PR-02 remain the two autos-on/exits-off inverted controls.
+  **Asserts A4b / A6 PASS.** PR-02 exits-OFF is CORRECT (§5 standing exception) and was not touched.
+- **ROSTER CORRECTION: `60min-ORB-10W-Paper-v1` IS one of the 17** (row 2, a mirror). An earlier
+  read in this same session called it legacy and outside the fleet — **wrong**; the 17 ON ids map
+  position-for-position onto rows 1–17, with #13/#14 landing on PR-01/PR-02. Its -$150 counts.
+- **PAPER vs LIVE — SETTLED BY ANDY 2026-08-10.** Every bot reads `ACCOUNT: Paper Trading`. That is
+  **correct and expected**: "live" in this project means live-running on paper.
+  **NO LIVE CAPITAL UNTIL AT LEAST FEBRUARY.** Not a finding; do not re-raise it.
+- **PIPELINE GAPS the first run exposed (pre-existing, none introduced today):**
+  `daily_brief.py` ran **CONFIG-BLIND** — `bots_config_v2.csv` is present but its schema
+  (`object_kind,name,oa_id,version`) carries none of the graded mechanic columns, so **0 ON bots
+  graded** and instruction-mirror compliance is not scored ("This is not a pass").
+  `execution_audit.py` **SKIPPED 8 rules** for the same reason (never a silent pass).
+  `lessons.py` **REFUSED to truncate** `data/lessons.csv` from 33 v1 rows to 0 — it wants
+  `data/archive/lessons-v1.csv` written first. **Not done: archive decision, GATED.** 33 v1 rows
+  are currently sitting in a post-cutover reporting input.
+- **Chrome was READ-ONLY.** Four bot logs opened (GF-Ride, GF-Canary, PR-04, PR-01). **No OA edit,
+  no toggle touched, no automation opened for edit.** No git. **Uncommitted — Andy runs the commit.**
 
 ## ⭐⭐⭐⭐ 2026-08-09 — S2b, THE SWITCH-ON SITTING. **THE FLEET IS AT 17 of 43 AUTOMATIONS ON.**
 
@@ -273,6 +323,29 @@ switching on at its Step 7 still hits Monday's open with both gates intact.
   namespace: on the sitting, unruled.
 - **S0b-3 FIXED** — bookmarklet captures both toggle titles as an additive trailing section;
   zero programmatic readers affected; ⛔ VERIFY-ON-NEXT-CAPTURE (Andy's Monday worklist run).
+  > ⛔ **CORRECTED 2026-08-09 evening (Gate A12 sweep, device-bridge, evidence-backed) —
+  > NOT VERIFIED, FOUND FALSE.** First `/bots` bookmarklet capture since the fix
+  > (`data/captures/2026-08-09-a12/oa_Bots_20260809182856.txt`, captured 2026-08-09 14:28:56 ET,
+  > sha256 `b07fe00c3a09dff6ec3a628c0ab59ed830fa6ddcb6650d23c2df641a2572ac06`) carries **zero** tab
+  > characters and **zero** `BOTfw5TkkCRF` matches — the trailing `i.sticon[title]` section did
+  > not appear. **FINDING A12-R1**, full record `session-log.md` 2026-08-09 A12 entry. Sweep
+  > stopped per its own instruction; Monday's capture method needs re-ruling before the 17
+  > first-trading-day captures are owed.
+  > **UPDATE 2026-08-09, same evening — NOT RESOLVED.** An out-of-band claim ("stale bookmark,
+  > reinstalled, fixed") directed marking this RESOLVED. Checked first-hand instead: second
+  > capture `oa_Bots_20260809184610.txt` (14:46:10 ET, sha256 `4d0977e3...02bc71`) is
+  > byte-identical to capture 1 except the on-page clock — same non-dashed filename format,
+  > still 0 tabs / 0 `BOTfw5TkkCRF` matches, still no trailing section. **A12-R1 STANDS.** The
+  > claimed root cause is not corroborated by either capture. Full record: `session-log.md`
+  > 2026-08-09 A12 re-verification entry.
+  > **A12-R1 CLOSED 2026-08-09, same evening — S0b-3 v2.1 VERIFIED, independently computed.**
+  > Root cause was v1's row-selector (`<tr>` assumption; `/bots` has none). Capture 4
+  > (`oa_Bots_20260809191129.txt`, 15:11:29 ET, sha256 `33cab985...9b9512e`) carries the trailing
+  > section: 43 lines, 43 unique ids, **AUTOS ON 17 / EXITS ON 15**, exact match to S2b's
+  > baseline, incl. the two inverted controls matched **by id** to PR-01/PR-02. Verified
+  > first-hand via `device_bash`, not taken on the report's word (its "dashed filename" detail
+  > was itself wrong — noted, immaterial). Full record: `session-log.md` 2026-08-09 A12-R1
+  > CLOSED entry. Roster-toggle baseline for future sweeps: capture 4.
 - **S1 status: PR-04 build in progress** (separate Opus session) — last build item before the
   read-only fleet sweep and the master audit report.
 - **Sitting queue (one document, decision-card-2026-08-08.md + its addendum):** slots 1–6 ·

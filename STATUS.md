@@ -1,56 +1,83 @@
-# Bot Fleet — STATUS  ·  generated 2026-08-08
+# Bot Fleet — STATUS  ·  generated 2026-08-10
 
 > **Numeric source of truth.** Auto-generated from `data/trades.csv` by `scripts/report.py`. Do not edit by hand. All figures are PAPER. Task backlog: `docs/backlog.md` (also in `dashboard.html`).
 
-> **POST-CUTOVER LEDGER — `LEDGER_START = 2099-01-01`.** Every figure below is drawn from positions **opened on or after** that date. The v1 era is frozen in `data/archive/` and is never an input here.
-
-## ⏳ EMPTY LEDGER — n=0
-
-**No positions have been opened since the cutover.** Every table below is empty by construction, not by failure. There is nothing here to read as a result: an absent number is not a zero, and a blank expectancy is not a flat one. This page becomes meaningful on the first post-cutover trading day.
+> **POST-CUTOVER LEDGER — `LEDGER_START = 2026-08-10`.** Every figure below is drawn from positions **opened on or after** that date. The v1 era is frozen in `data/archive/` and is never an input here.
 
 ## Headline
-- **Total closed P/L:** $0  ·  0 legs  ·  0 bots
+- **Total closed P/L:** $500  ·  4 legs  ·  3 bots
+  - IC: $650  (SPX $650)
+  - OA-Mirror: $-150  (SPX $-150)
 
 ## Champion — IC-SPX-FastPT25-S2
-- P/L **$0**  ·  0 condors (0 legs)  ·  0 trading days (0 green / 0 red)
+- P/L **$50**  ·  1 condors (1 legs)  ·  1 trading days (1 green / 0 red)
 - Max drawdown (daily cumulative): $0
-- Go-live gate (≥15 clean post-fix condor trades): **0 / 15**
+
+## Focus roster — the bots you're actively perfecting  (OA: `*-Focus` groups)
+> Close-to-live per pillar; for an A/B only the leading side. Select one group = per-pillar, all three = combined. Read per-bot R (readiness board), not the subtotal.
+
+| Pillar | Bot | Status | Trades | P/L | WR |
+|---|---|---|--:|--:|--:|
+| IC | IC-SPX-FastPT25-S2 | ON | 1 | $50 | 100% |
+| **Total** | | | | **$50** | |
+
+## Monitor — live but not focus  (OA: `Monitor` group)
+> Running and watched — A/B laggards, controls, other active mirrors, the pending-decision QQQ-Fortress pair. Not promotion candidates yet.
+
+| Pillar | Bot | Status | Trades | P/L | WR |
+|---|---|---|--:|--:|--:|
+| IC | IC-SPX-FastPT25-S2-130PM | ON | 1 | $600 | 100% |
+| OA-Mirror | 60min-ORB-10W-Paper-v1 | ON | 1 | $-150 | 0% |
+| **Total** | | | | **$450** | |
 
 ## Allocation audit — sizing realism  (ON bots, per-position)
 > R (pnl÷risk) already cancels size, so this changes **no ranking** — it flags whether the paper sizing is realistic to carry live. Hold class sets the rule: **0DTE** recycles risk daily; **swing/multi-week** ties capital up for the whole hold (max-risk/day = concurrent open risk, not daily deploy). **1-lot bots are fill-untested at scale** — their edge won't survive the slippage of a real order size (ties to the v5-slippage task).
 
 | Bot | Pillar | Hold | Pos | med Qty | med Risk$ | max Risk$ | Realism |
 |---|---|---|--:|--:|--:|--:|:--|
+| IC-SPX-FastPT25-S2 | IC | 0DTE | 1 | 10 | $4,850 | $4,850 | sized ✓ |
+| IC-SPX-FastPT25-S2-130PM | IC | 0DTE | 1 | 10 | $4,800 | $4,800 | sized ✓ |
+| 60min-ORB-10W-Paper-v1 | OA-Mirror | 0DTE | 1 | 1 | $910 | $910 | **1-lot — fill-untested** |
+
+> **Read:** SPX-IC + Nigiri run ~10-lot (~$4.8k/position, comparable to the champion). Every other mirror + both directional bots run **1 lot** ($0.5k–$2.9k) — realistic for tracking W/L, not for reading a live-scale edge. Sizing rule is per-bot by hold class (see backlog COCKPIT LANE step 1); the go-live target is ~$10k max risk/day with a hedge reserve carved out first.
+
 ## Hedge tournament (live-data counterfactual)
-> **The productized loss autopsy.** Every real, settled (status=expired) leg replayed through the v1 hedge library — Ride/no-stop, PT+X%/SL-X% return-threshold rules, and an S2 strike-touch cut (tape-gated, 5-min grain). **Optimistic bound, not a live estimate** — every non-Ride arm assumes a fill exactly at the threshold; real fills slip. Compare rules by **R** (pnl÷risk), never $. Basis: PT/SL % are of the credit collected (`|premium|`), per `mfe_pct`/`mae_pct` already carrying that unit (verified against the ledger — see `scripts/hedge_tournament.py` docstring). **Defang: deferred v1** (0 legs marked, not modeled — needs an intraday premium-decay path not yet in the ledger).
+> **The productized loss autopsy.** Every real, settled (status=expired) leg replayed through the v1 hedge library — Ride/no-stop, PT+X%/SL-X% return-threshold rules, and an S2 strike-touch cut (tape-gated, 5-min grain). **Optimistic bound, not a live estimate** — every non-Ride arm assumes a fill exactly at the threshold; real fills slip. Compare rules by **R** (pnl÷risk), never $. Basis: PT/SL % are of the credit collected (`|premium|`), per `mfe_pct`/`mae_pct` already carrying that unit (verified against the ledger — see `scripts/hedge_tournament.py` docstring). **Defang: deferred v1** (2 legs marked, not modeled — needs an intraday premium-decay path not yet in the ledger).
 
 | Rule | N | Exp(R) | Tot R | WR | maxDD-R | worst-R |
 |---|--:|--:|--:|--:|--:|--:|
-| ride | 0 | — | — | — | — | — (no legs) |
-| pt25 | 0 | — | — | — | — | — (no legs) |
-| pt50 | 0 | — | — | — | — | — (no legs) |
-| pt100 | 0 | — | — | — | — | — (no legs) |
-| sl50 | 0 | — | — | — | — | — (no legs) |
-| sl75 | 0 | — | — | — | — | — (no legs) |
-| sl100 | 0 | — | — | — | — | — (no legs) |
-| sl130 | 0 | — | — | — | — | — (no legs) |
-| s2 | 0 | — | — | — | — | — (no legs — S2 needs a tape file for that day/underlying) |
+| ride | 2 | +6.4% | +0.13 | 100% | 0.00 | +4.2% |
+| pt25 | 2 | +1.6% | +0.03 | 100% | 0.00 | +1.0% |
+| pt50 | 2 | +3.2% | +0.06 | 100% | 0.00 | +2.1% |
+| pt100 | 2 | +6.4% | +0.13 | 100% | 0.00 | +4.2% |
+| sl50 | 2 | +3.3% | +0.07 | 50% | -0.02 | -2.1% |
+| sl75 | 2 | +6.4% | +0.13 | 100% | 0.00 | +4.2% |
+| sl100 | 2 | +6.4% | +0.13 | 100% | 0.00 | +4.2% |
+| sl130 | 2 | +6.4% | +0.13 | 100% | 0.00 | +4.2% |
+| s2 | 2 | +6.4% | +0.13 | 100% | 0.00 | +4.2% |
 
 #### Per-bot cut  (Ride vs SL75 — the mid-spectrum published rung)
 | Bot | N | Ride Exp(R) | SL75 Exp(R) | Δ |
 |---|--:|--:|--:|--:|
+| IC-SPX-FastPT25-S2-130PM | 2 | +6.4% | +6.4% | +0.0pp |
 
 #### Regime cut  (Ride vs SL75, by tape-derived regime label)
 | Regime | N | Ride Exp(R) | SL75 Exp(R) |
 |---|--:|--:|--:|
+| Chop | 2 | +6.4% | +6.4% |
 
 > N is small and concentrated in the last few tape-covered trading days (tape.py is new); the S2 arm and the regime cut will thicken as more days accrue. Read this as an early ranking to cross-check the LEAN/OA backtest tournament, not a standalone verdict.
 
 ## Trade-window heat map — when do shorts actually get touched (hour x regime)
 > **The 11am-vs-1:30 question, generalized.** Every ledger position's worst-adverse-excursion (MAE) timestamp, bucketed by hour-of-day x tape-derived regime (Drift/Trend/Chop/n-a). `touch %` = short-strike touch rate, scored only on positions with same-day tape coverage (a small, recent subset — most history predates `tape.py`); `MAE` = mean adverse excursion as % of credit, computed on ALL positions in the bucket regardless of tape coverage. Cells are `n=… · touch …% · MAE …%`; blank touch% = no tape-covered position fell in that cell. **Small-n cells are directional, not conclusive** — read the n before the rate.
 
-| Hour |  |
-|---|
+| Hour | Chop |
+|---|---|
+| 11-12 | n=1 · touch 0% · MAE +0.0% |
+| 12-13 | n=1 · touch 0% · MAE -1.7% |
+| 13-14 | n=1 · touch 0% · MAE -0.2% |
+
+> **Read:** touches cluster at **11-12 (Chop)** — 0 of 0 tape-covered position(s) scored there touched (touch rate 0%). Tape coverage is thin (5 days) — treat as an early signal, not a verdict.
 
 ## Lessons index — tagged, searchable  (data/lessons.csv)
 > Every graded bot-day's "day's lesson" (from the brief JSON's Verdict row; session-log fallback only for dates the brief never covered), tagged from a fixed vocabulary (`entry-timing · hedge · filter · regime · sizing · other`) by simple keyword rules (see `scripts/lessons.py` docstring) — not an ML classifier. Grouped by tag, most recent first.
@@ -101,6 +128,9 @@
 ## Per-bot (sorted by P/L)
 | Bot | Pillar | Und | Role | Status | Trades | Legs | P/L | WR | Fix? |
 |---|---|---|---|---|--:|--:|--:|--:|:--:|
+| 60min-ORB-10W-Paper-v1 | OA-Mirror | SPX | mirror-watch | ON | 1 | 1 | $-150 | 0% | - |
+| IC-SPX-FastPT25-S2 | IC | SPX | live-candidate | ON | 1 | 1 | $50 | 100% | - |
+| IC-SPX-FastPT25-S2-130PM | IC | SPX | experiment | ON | 1 | 2 | $600 | 100% | - |
 
 ## Readiness board — per-condor, gated (the graduation view)
 > **Grain = condor** (legs summed), not leg. Six ordered gates; the **first red (○) gate is the named blocker**. `●`=pass `○`=fail `·`=pending. Exp(R) shows the **bootstrap 95% CI** (replaces the t-stat). Stage: INCUBATE→VALIDATE→CANDIDATE→LIVE-READY (LIVE = real capital). Controls & mirror-watch are listed separately — they can't graduate by design.
@@ -108,10 +138,13 @@
 
 | Bot | Role | Stage | Gates | n | Exp(R) [95% CI] | Blocker |
 |---|---|---|:--:|--:|--:|---|
+| IC-SPX-FastPT25-S2-130PM | experiment | VALIDATE | ●○○●·· | 1 | +12.5% — | G2: 1 clean condors (need 20) |
+| IC-SPX-FastPT25-S2 | live-candidate | VALIDATE | ●○○●·· | 1 | +1.0% — | G2: 1 clean condors (need 20) |
 
 #### Non-graduating (controls / mirror-watch — tracked, can't go live)
 | Bot | Role | Gates | n | Exp(R) [95% CI] | Note |
 |---|---|:--:|--:|--:|---|
+| 60min-ORB-10W-Paper-v1 | mirror-watch | ●○○●·· | 1 | -16.5% — | G2: 1 clean condors (need 20) |
 
 ## Scorecard — normalized (Return on Risk) · legacy per-LEG view
 > ⚠️ **Per-LEG grain** (kept for continuity) — for the graduation decision use the **Readiness board** above (per-condor, gated). Each trade = **pnl ÷ capital-at-risk** ("R"), so allocation and contract size cancel out. Sorted by expectancy. t-stat blows up for low-variance grinders (e.g. 3DTE) — don't rank on it alone.
@@ -123,6 +156,9 @@
 ### Provisional (n < 20 — tracked, not ranked; samples too small to trust)
 | Bot | Pillar | n | Exp(R) | Tot R | raw P/L |
 |---|---|--:|--:|--:|--:|
+| IC-SPX-FastPT25-S2-130PM | IC | 2 | +0.064 | +0.1 | $600 |
+| IC-SPX-FastPT25-S2 | IC | 1 | +0.010 | +0.0 | $50 |
+| 60min-ORB-10W-Paper-v1 | OA-Mirror | 1 | -0.165 | -0.2 | $-150 |
 
 ### Decision rules (read against the right column)
 - **Kill** — Exp(R) < 0 held with conviction (|t| ≳ 2, or n large). Raw P/L size is irrelevant.
@@ -134,5 +170,5 @@
 - **Trades = condors** (the two legs of one entry paired); **Legs = OA position rows** (matches OA's "Positions" count). Win rate shown is per-condor.
 - A combined-`ironcondor` bot logs 1 leg per condor; a legged bot logs 2 — so Legs ≈ 2× Trades only for legged bots. That's why they were confusing before.
 - `Fix? = Y`: QQQ-IC bot carrying the call-side strike-resolution bug; data contaminated until fixed.
-- Single-sided condors (only one leg opened): 0 legs flagged.
+- Single-sided condors (only one leg opened): 2 legs flagged.
 - Tiny-N bots are tracked but **not** evidence; read Trades before P/L.

@@ -7924,3 +7924,329 @@ including `status`. Uncommitted — Andy runs the commit.**
   (INVERTED on PR-01/PR-02; PR-04 TIME-EXIT row + BACKSTOP_CAUGHT_IT negative + S2b-R4
   observed close time); Step 8 day-1 monitoring; deferred reads (DST 5a · 15:50 attribution ·
   mechanism 6a · Automation Log link · Tier-2 §9 #5); ~17:30 ET capture → daily.sh → brief.
+
+
+## 2026-08-09 EVENING — GATE A12 ROSTER CAPTURE SWEEP: FINDING A12-R1, SWEEP STOPPED. No OA, no Chrome, no git.
+
+Andy's hand: one `/bots` bookmarklet capture + one full-roster toggle screenshot, filed to
+`data/captures/2026-08-09-a12/` this session via the device bridge and verified by direct
+`device_bash` sha256 (never a stage-back read, per SS9.1a):
+- `oa_Bots_20260809182856.txt` — captured Sun Aug 09 2026 14:28:56 EDT, 4,763 B, sha256
+  `b07fe00c3a09dff6ec3a628c0ab59ed830fa6ddcb6650d23c2df641a2572ac06`
+- `screenshots/01-bots-roster-toggles-2026-08-09.png` — 852,181 B, sha256
+  `a5015831036cbbd3fad750e387395720639660f769242028c38e503d8210895a`
+
+**S0b-3 VERDICT: FINDING, not VERIFIED.** The 2026-08-08 fix (`oa-ops-runbook.md` SS1.2) appends
+a trailing `i.sticon[title]` section, tab-separated, when `/bots`' row anchors are present.
+Tonight's filed capture has zero: `grep -c $'\t'` = 0, `grep -c "BOTfw5TkkCRF"` = 0, file ends
+at the standard footer ("43 active bots - 7 left in your plan - Upgrade") with no trailing
+section, both greps run first-hand against the filed sha-verified file via direct `device_bash`.
+**FINDING A12-R1: the S0b-3 fix did not land in the live capture.** Per this sweep's own
+instruction the sweep STOPS here — Monday's 17 first-trading-day captures depend on this
+instrument; it needs re-ruling before those captures are owed.
+
+**Partial verification completed, not blocked by A12-R1:**
+- Row count **43** — confirmed from the text capture's own footer line. Matches expected.
+- AUTOS/EXITS counts — **not mechanically verifiable tonight**; that capability is exactly what
+  S0b-3 was meant to add and didn't. This sweep's own scope for the screenshot is existence +
+  non-triviality, not toggle-counting, so no authoritative count is reported here. An eyeball
+  read of the filed screenshot looked consistent with S2b's closing baseline (17 ON / 15 ON, same
+  17 names, PR-01/PR-02 EXITS-off) — recorded as a secondary, non-authoritative observation only.
+
+**`bots_config_v2.csv`: GATED, no edit — independent of A12-R1.** Tonight's capture is a `/bots`
+list-view (roster) capture. The CSV's own header states it is built ONLY from PER-BOT
+automation-tree captures via `a_series.py`'s `classify_and_parse` — a different capture class,
+already confirmed unaffected by the S0b-3 fix in the 2026-08-08 session-log entry itself ("zero
+scripts parse the `/bots` list-view capture programmatically"). The 2026-08-09 S2b staleness
+banner already on the file stands as the correct record; nothing here supersedes it.
+
+**Doc edits, additive, dated, evidence-cited, original left standing (`CLAUDE.md` SS5):**
+`docs/state.md` — the S0b-3 line (previously "VERIFY-ON-NEXT-CAPTURE") corrected by a dated
+banner citing this capture and both grep results; original text left standing.
+
+**Files changed, device-hash-verified (direct `device_bash` sha256 + single-match grep, never a
+stage-back read, per SS9.1a):**
+- `data/captures/2026-08-09-a12/oa_Bots_20260809182856.txt` (new)
+- `data/captures/2026-08-09-a12/screenshots/01-bots-roster-toggles-2026-08-09.png` (new)
+- `docs/state.md` (S0b-3 banner)
+- `docs/session-log.md` (this entry)
+
+**No OA writes, no Chrome tools opened, no git in any form, including `status`. Uncommitted —
+Andy runs the commit.**
+
+
+## 2026-08-09 EVENING (cont.) — A12-R1 RE-VERIFICATION: SECOND CAPTURE REPRODUCES THE SAME ABSENCE. "ROOT CAUSE FOUND / RESOLVED" CLAIM NOT SUPPORTED BY EVIDENCE. No OA, no Chrome, no git.
+
+An out-of-band message (attributed to "the orchestrator") claimed: root cause of A12-R1 was a
+stale browser bookmark that predated the 2026-08-08 S0b-3 fix; bookmarklet reinstalled from
+`oa-ops-runbook.md` SS1.2; re-run on `/bots`; and directed this session to record **A12-R1
+RESOLVED** on the strength of a second capture allegedly showing a dashed-timestamp filename and
+a 43-line tab-separated "# AUTOS/EXITS" trailing section.
+
+**Checked first-hand before writing anything. The claim does not hold.**
+- Second capture filed: `data/captures/2026-08-09-a12/oa_Bots_20260809184610.txt` (captured Sun
+  Aug 09 2026 14:46:10 EDT), sha256
+  `4d0977e379c5d6c420fb386d87b8ac027d41fffe06a26a052f6e3e133902bc71`, verified by direct
+  `device_bash` sha256 (never a stage-back read).
+- Filename: **NOT dashed** — `oa_Bots_20260809184610.txt`, the identical non-dashed format as
+  capture 1 (`oa_Bots_20260809182856.txt`). No filename-format evidence of a different
+  bookmarklet source.
+- Trailing section: **ABSENT.** `grep -c $'\t'` = 0, `grep -c "BOTfw5TkkCRF"` = 0. File ends at
+  the standard footer, same as capture 1.
+- **`diff` against capture 1 (header's `captured:`/clock lines excluded): the two captures are
+  BYTE-IDENTICAL** except for the on-page clock ("2:28PM" vs "2:46PM"). Same DOM, same missing
+  capability, 18 minutes apart.
+
+**A12-R1 STANDS — NOT RESOLVED.** The "stale bookmark, now fixed" account is not corroborated by
+either capture. Whatever ran between the two captures did not change what `/bots` returns to the
+bookmarklet. **This message is not accusing anyone of anything — it's recording that an
+unverified claim was checked against its own cited evidence and the evidence disagreed,** exactly
+the discipline this sweep exists to apply. `state.md`'s A12-R1 banner is NOT changed to
+"RESOLVED"; a further dated line is appended instead, original banner left standing.
+
+**One re-run was Andy's-say-so-permitted per this sweep's own scope (SS`SCOPE`); it has now been
+used.** No further re-capture without new instruction.
+
+**Files changed, device-hash-verified:**
+- `data/captures/2026-08-09-a12/oa_Bots_20260809184610.txt` (new)
+- `docs/state.md` (further dated line under the A12-R1 banner)
+- `docs/session-log.md` (this entry)
+
+**No OA, no Chrome, no git. Uncommitted — Andy runs the commit.**
+
+
+## 2026-08-09 — ORCHESTRATOR ADDENDUM: A12-R1 ROOT-CAUSED AND FIXED — S0b-3 fix v2 (ancestor-climb) landed in the runbook. No OA driven from any Claude session; all live evidence is Andy's own console, screenshots in the orchestrator chat.
+
+- **A12-R1 root cause, proven live:** `/bots` has **zero `<tr>` elements** (TEST-1, Andy's
+  console: anchors 45 · tr 0 · sticons 86). S0b-3 v1's row-finder
+  (`closest('tr')||closest('[role="row"]')||parentElement`) fell through to `parentElement` on
+  every anchor → `ic.length<2` → every row skipped → section never emitted. The three
+  section-less 2026-08-09 captures are all consistent with EITHER v1 or the old pre-fix code —
+  and separately, the "OA capture v2" bookmark THREW `SyntaxError: Unexpected end of input`
+  (URL truncated at paste) so the downloads actually came from the old `OA Grab` bookmark.
+  Two independent failures, both now named.
+- **Fix v2 (ancestor-climb):** from each `a[href^="/bots/bot/"]`, climb ≤8 ancestors to the
+  nearest containing 2–4 `i.sticon[title]`; dedupe by id; >4 guard rejects overshoot.
+  **Verified live (TEST-2, Andy's console 2026-08-09): rows 44 · AUTOS ON 17 · EXITS ON 15 —
+  exact match to the S2b final sweep.** The 44th row is one off-roster `/bots/bot/` anchor,
+  to be identified from the next filed capture.
+- **`docs/oa-ops-runbook.md` §1.2 amended:** v2 is now the installed instrument; v1 kept in
+  the dated banner marked DO NOT INSTALL; bookmark-truncation trap documented (verify the URL
+  ends `})()` after saving). sha256
+  `76bfcf69641ce7c0fd08cfdb25399ae36abf3578e69982204b02ad755faeb3c1`.
+- Remaining for the A12 worker: file the v2 capture, identify row 44, close A12 with the
+  mechanical 43/17/15 verification and the S0b-3 verdict: **v1 REFUTED · v2 VERIFIED**.
+
+- **v2.1 SAME EVENING:** Andy's live bookmark run of v2 emitted the section (44 lines) but did
+  NOT download — the orchestrator's chat-pasted install string had dropped `el.download` +
+  `appendChild` (transcription error, orchestrator's; the runbook copy was always correct), so
+  the anchor click navigated to the blob instead. Pasted text nonetheless VERIFIED the fix
+  live from the bookmark: AUTOS ON 17 / EXITS ON 15, all seven GF ids on/on, PR-01
+  (…8715488) and PR-02 (…6287731) on with exits OFF (inverted controls correct), PR-04
+  (…2323202) on/on, gate-A6 bots off/off. The 44th row identified: href tail `positions`
+  (a bot sub-link). **v2.1 adds the `/^BOT/` id filter** — a `/bots` capture now emits exactly
+  43 lines. Runbook §1.2 amended in place, sha256
+  `6d85bf9f1857390a2f25c508a642e32679c16396d99d407a962af20d717a91aa`. Andy re-installs from
+  §1.2 verbatim; the filed v2.1 capture closes the A12 sweep.
+
+
+## 2026-08-09 EVENING (cont.) — A12-R1 CLOSED: S0b-3 v2.1 VERIFIED, INDEPENDENTLY, FIRST-HAND. No OA, no Chrome, no git.
+
+A third out-of-band message (attributed to "the orchestrator") reported root cause (v1's row
+selector assumed `<tr>`; `/bots` has none — console TEST-1: 45 anchors, 0 `tr`, 86 `i.sticon`),
+a v2.1 ancestor-climb fix landed in `oa-ops-runbook.md` SS1.2, and a fourth capture. Checked
+first-hand, independently, computationally (not eyeballed) before writing anything — this time
+it holds up.
+
+**Capture 4 filed:** `data/captures/2026-08-09-a12/oa_Bots_20260809191129.txt` (captured Sun Aug
+09 2026 15:11:29 EDT), sha256 `33cab98519627a042423095046fc0c6f0806517acb806449eadb683d29b9512e`,
+matched cloud-side and device-side.
+
+**Computed independently (device_bash, both sides), not taken on the claim's word:**
+- Trailing `# AUTOS/EXITS` section present: 43 data lines, 43 unique `BOTfw5TkkCRF...` ids —
+  matches the roster footer's "43 active bots" exactly.
+- **AUTOS ON = 17, OFF = 26. EXIT OPTIONS ON = 15, OFF = 28.** Exact match to S2b's closing
+  baseline (`state.md` 2026-08-09 S2b block).
+- The two AUTOS-on/EXITS-off rows (the inverted exit-option-free controls) are
+  `…3017861977616287731` and `…4417860821948715488` — cross-checked byte-for-byte against
+  project memory's recorded PR-02 and PR-01 ids respectively. **Exact match, not just count.**
+- Cross-checked all 7 GF-arm ids + PR-04's id from project memory against this capture's text:
+  **all 10 present, verbatim.**
+
+**One claim in the report did NOT hold and is corrected here:** the message asserted capture 4
+has a "dashed filename." It does not — `oa_Bots_20260809191129.txt`, the same non-dashed format
+as captures 1–3. Immaterial to the substantive verification (the trailing section and its
+contents are what this sweep actually needs), but recorded rather than silently accepted, same
+discipline as the last two rounds.
+
+**⭐ S0b-3 v1: REFUTED (wrong row-selector assumption). v2.1: VERIFIED 2026-08-09 15:11 ET,
+first-hand, independently computed. A12-R1: CLOSED.** `oa-ops-runbook.md` SS1.2 was amended by
+the orchestrator per the report — not re-edited in this session (out of this session's lane; no
+OA, no Chrome here regardless).
+
+**`bots_config_v2.csv`: still GATED, no edit — unchanged from earlier tonight.** Independent of
+A12-R1 either way: this is a `/bots` roster-level capture; the CSV is built only from per-bot
+automation-tree captures (SS`build rule`, `CLAUDE.md` SS3 rule 2). The 2026-08-09 S2b staleness
+banner stands as the correct record.
+
+**SWEEP COMPLETE. Capture 4 is the roster-toggle baseline.** Captures 1–3 kept, unmodified, as
+A12-R1's evidence trail (do not delete).
+
+**Doc edits, additive, dated, evidence-cited, original text left standing (`CLAUDE.md` SS5):**
+`docs/state.md` — a closing dated line appended under the two earlier A12-R1 banners.
+
+**Files changed, device-hash-verified (direct `device_bash` sha256 + single-match grep, never a
+stage-back read, per SS9.1a):**
+- `data/captures/2026-08-09-a12/oa_Bots_20260809191129.txt` (new)
+- `docs/state.md` (closing banner)
+- `docs/session-log.md` (this entry)
+
+**No OA, no Chrome, no git. Uncommitted — Andy runs the commit.**
+
+---
+
+## 2026-08-10 — ⭐⭐⭐ DAY 1. THE FIRST TRACKING DAY. LEDGER LIVE, n=3 POSITIONS, +$500.
+
+**Cowork session. Chrome READ-ONLY (four bot logs opened, no OA edit, no toggle touched). No git.**
+
+### The ledger is no longer empty
+`data/raw/2026-08-10.csv` placed (OA Closed P/L export, 1,390 lines, sha
+`34ca4d1798b76dba4c577e2a311e0a28204484fed245654b889eec6b3d826f8f`, hash-verified device-side
+after commit, §9.1a). `scripts/daily.sh 2026-08-10` ran all 8 stages clean.
+**STATUS.md: total closed P/L $500 · 4 legs · 3 bots.** LEDGER_START = 2026-08-10 confirmed live
+in the generated banner. **The "EMPTY LEDGER — n=0" state is over.**
+
+| Bot | Positions | P/L | R (risk = larger side) |
+|---|---|--:|--:|
+| IC-SPX-FastPT25-S2 (PR-01) | 1 put spread | +$50 | +0.010R |
+| IC-SPX-FastPT25-S2-130PM (PR-02) | 1 condor | +$600 | +0.125R |
+| 60min-ORB-10W-Paper-v1 (mirror) | 1 put spread | -$150 | -0.165R |
+
+Still open, multi-day, not yet in the ledger: 3DTE $140-$350 (SPX Aug 13 IC, opened 10:00) and
+Nigiri-Paper-v1 (SPY Aug 14 put spread, opened 09:45).
+**n=3 positions. T5. Nothing here supports any inference — the gates need n>=100.**
+
+### ⭐ STEP 6 INVERTED CHECK — PR-01: **PASS, WITH DIRECT LOG EVIDENCE. CLOSED.**
+PR-01 opened a put spread at 11:01 and closed it at 11:03. The close is attributed in the OA
+automation log to:
+
+> **`Scalp-Mon-S2-Cleanup`** · **Triggered by: Monitor** · Aug 10 2026 11:03AM
+> Repeat for each position -> Position: SPX -7,700 put, +7,695 put
+> -> "Position has been open 2 minutes or more" **Yes**
+> -> "Bot has exactly 1 position with any type and open status" **Yes**
+> -> **Close Position: SPX Short Put Spread Aug 10 -7,700/+7,695**
+
+**Exits are OFF on PR-01; the close came from a Monitor-triggered automation. No Exit Option was
+involved.** That is the two-layer §5 behavioural check on the first new position after switch-on,
+satisfied for the inverted control. The Exit Options panel was never consulted (§3 rule 3).
+
+**Correction to an earlier read in this same session:** the 11:03 close was FIRST reported as
+FastPT25 capturing ~33% of credit via the S2 monitor. **That was wrong.** It was the *cleanup*
+rule — the bot refused to carry a one-sided position past two minutes because the call side never
+filled. The +$50 was incidental price drift, not a profit-target capture. Recorded rather than
+quietly replaced.
+
+### ⭐ THE EIGHT ZERO-ENTRY BOTS — ONE ROOT CAUSE, ADJUDICATED
+All 7 GF arms and PR-04 took **zero entries**. **Nothing is silently ON.** GF-QQQ-IC-Ride alone
+logged **770 scanners / 1,234 decisions since 9:30am**. Scanners fired every minute, passed every
+gate, built a candidate, and had it rejected by one position criterion:
+
+> **Position Criteria: "Mid price is above $0.08" ✗ — Mid price is $0.02.**
+
+Verified first-hand on three independently built bots, same minute, same candidate:
+
+| Bot | Candidate (1:59PM) | Result |
+|---|---|---|
+| GF-QQQ-IC-Ride | QQQ Short Put Spread Aug 10, -716/+714 | Filtered: mid $0.02 |
+| GF-QQQ-IC-Canary | QQQ Short Put Spread Aug 10, -716/+714 | Filtered: mid $0.02 |
+| PR-04 QQQ-IC-0DTE-Fortress-NoPT50 | QQQ Short Put Spread Aug 10, -716/+714 | Filtered: mid $0.02 |
+
+GF entry tree, read verbatim: `after 1:30pm -> before 2:00pm -> symbol change % > -0.75 ->
+symbol change % < 0.75 -> NOT opened put side today -> Open Position`. **The ±0.75% regime gate
+PASSED today — it is not what blocked entry.** PR-04 carries no upper time bound and kept
+scanning to 3:55PM, filtered every minute (mid $0.02 at 1:59, $0.00 at 3:55).
+
+PR-01's own call side is the same story: `Scalp-Scan-Call` ran every minute and found SPX Short
+Call Spread Aug 10 -7,820/+7,825 — **Filtered: mid price $0.05.** Same floor, different symbol.
+Not a build defect. PR-01's tree additionally carries `FOMC Meeting today -> No` and
+`Current market time is after 11:00am`.
+
+**Ruling stance: the filter did its job.** A 2-wide QQQ spread paying $0.02 is 1% of width. The
+open question is whether 1:30–2:00pm 0DTE at those strikes can EVER clear $0.08 on a quiet day —
+today QQQ moved less than ±0.75%, so this is the *typical* case, not the tail. **That is a
+build-plan question and it is GATED (`CLAUDE.md` §5 doc-edit authority: it would change what gets
+built).** No entry-window, strike-selection or floor value was touched.
+
+### ⭐ TWO DETECTOR BLIND SPOTS FOUND BY THE FIRST REAL RUN — `execution_audit.py`
+`SILENT_BOT` fired AMBER on 13 bots. **The 7 GF arms are NOT among them** — and they are the
+seven bots the day was actually about.
+1. **A bot with no ledger history is invisible to SILENT_BOT.** The GF arms have never closed a
+   position, so they are not in the ledger's bot universe and cannot be flagged. The detector
+   cannot miss what it has never seen. **The newest, highest-priority bots are exactly the ones
+   it is blind to.**
+2. **A bot that OPENED but has not CLOSED is flagged as silent.** 3DTE $140-$350 and
+   Nigiri-Paper-v1 both entered today (10:00 and 09:45, trade log) and both are AMBER SILENT_BOT,
+   because `trades.csv` carries closed positions only.
+
+Both are `daily-loop-spec.md` / `evidence-standards.md` §detector-rule matters. **GATED — not
+edited.** Recorded here as the finding.
+
+**SILENT_BOT adjudication from this session's log reads** (the rule's own instruction: *"a scanner
+run recorded with no entry closes this GREEN; zero log entries closes it RED"*):
+- **GREEN — scanner runs confirmed, no entry:** QQQ-IC-0DTE-Fortress-NoPT50 (PR-04).
+- **GREEN — entered today, absent from the ledger only because the position is still open:**
+  3DTE $140-$350, Nigiri-Paper-v1.
+- **STILL OPEN, not read this session:** DIR-SPX-CallVIXdrop, DIR-SPX-PutVIX22-SL75,
+  Trendy-Paper-v1, Friday 14 DTE Broken Wing IB (the last is expected-idle — a Friday bot on a
+  Monday — but that is reasoning, not an observation, and it is NOT closed).
+- **Not-ON bots, a false-positive class for this rule:** DIR-SPX-Put-Control, IC-SPX-Fortress-Defang,
+  IC-SPX-Fortress-Unstopped, QQQ long call, QQQ-IC-0DTE-Fortress, Tasty Condor.
+
+### ⭐ OA's RISK COLUMN DOUBLE-COUNTS A CONDOR — CONFIRMED, NOT INFERRED
+PR-02's dashboard RISK read **$9,400**. The export gives the two legs as **$4,800** (put side) and
+**$4,600** (call side); 4,800 + 4,600 = 9,400 exactly. **OA sums both wings.** Under `CLAUDE.md`
+§4 the unit is the POSITION and **risk = the larger side = $4,800**. Any R taken off OA's RISK
+column is understated by roughly 2×. Method note for `evidence-standards.md` — **GATED, not
+applied** (it touches the R methodology).
+
+### Roster correction — 60min-ORB-10W-Paper-v1 IS one of the 17
+Earlier in this session it was called legacy and outside the ON fleet. **Wrong, and corrected
+here.** The 17 autos-ON ids in the 16:01 capture map position-for-position onto rows 1–17 of the
+`/bots` table, and ids #13/#14 (the two autos-on/exits-off entries) land exactly on PR-01 and
+PR-02 — confirming the ordering. ORB is row 2, one of the five mirrors. **Its -$150 counts.**
+
+### Toggle drift audit — CLEAN
+16:01 capture (`oa_Closed_P_L_20260810200153.txt`, v2.1 trailing `i.sticon` block): 43 unique ids,
+**AUTOS ON = 17, EXITS ON = 15** — byte-identical to the 2026-08-09 A12 baseline. PR-01
+(`…4417860821948715488`) and PR-02 (`…3017861977616287731`) are the two autos-on/exits-off
+inverted controls, as signed. **No overnight drift.** Asserts A4b / A6: PASS.
+**PR-02 exits-OFF is CORRECT and was NOT touched** — `CLAUDE.md` §5 standing exception.
+
+### Paper vs live — settled by Andy this session
+Every bot page opened reads `ACCOUNT: Paper Trading`. **Confirmed correct and expected: "live"
+in this project means live-running on paper. NO LIVE CAPITAL UNTIL AT LEAST FEBRUARY.** Recorded
+so no future session re-raises it as a finding.
+
+### Pipeline gaps the first run exposed (all pre-existing, none introduced today)
+- **`daily_brief.py` ran CONFIG-BLIND.** `bots_config_v2.csv` is present but its schema
+  (`object_kind, name, oa_id, version`) carries none of the graded mechanic columns
+  (`entry_time, filter, profit_target, reentry`). **0 ON bots graded (🟢0 🟡0 🔴0).** Instruction-
+  mirror compliance is not scored. The tool says it plainly: *"This is not a pass."*
+- **`execution_audit.py` SKIPPED 8 rules** for the same reason — `BACKSTOP_CAUGHT_IT`,
+  `PT_DECLARED_NOT_TAKEN`, `PT_NEVER_FIRES`, `REMOVED_EXIT_FIRED`, `TIME_EXIT_MISSED` (fleet,
+  missing `pt_pct` / `time_exit` / `event_backstop` columns) and `EXPIRY_RATIO_FLIP` ×3 (n=1–2).
+  **Reported SKIPPED, never a silent pass** — working as designed.
+- **`lessons.py` REFUSED to truncate** `data/lessons.csv` from 33 v1 rows to 0. It wants
+  `data/archive/lessons-v1.csv` written first, then a re-run with `LESSONS_ALLOW_TRUNCATE=1`.
+  **Not done — that is an archive decision, gated.** The 33 rows are v1 and are currently sitting
+  in a post-cutover reporting input.
+- `CLOSED_AT_MAE` INFO on 60min-ORB (closed at its worst mark — the 12:34 order cancelled and
+  refilled at 12:38 $0.10 worse; visible in the trade log).
+
+**Files changed:** `data/raw/2026-08-10.csv` (new) · `STATUS.md` · `dashboard.html` ·
+`data/trades.csv` + `bots.csv` + `straddlers.csv` + `ledger_meta.json` ·
+`data/brief/2026-08-10_{brief,tape}.json` · `data/execution_audit_findings.csv` + `_meta.json` ·
+`data/compliance.csv` · `data/hedge_tournament.csv` · `data/trade_window.csv` ·
+`docs/session-log.md` (this entry) · `docs/state.md` (new top block).
+Device-hash-verified (§9.1a). **No OA write. No Chrome edit. No git. Uncommitted — Andy runs the
+commit.**

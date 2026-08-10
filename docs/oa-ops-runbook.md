@@ -37,8 +37,33 @@ Install once: Chrome → Bookmark Manager (`⌥⌘B`) → ⋮ → Add new bookma
 paste as the URL:
 
 ```
-javascript:(function(){var h=document.querySelector('h1,h2');var n=((h&&h.innerText)||document.title||'oa').trim().replace(/[^\w\-]+/g,'_').slice(0,60);var d=new Date().toISOString().slice(0,19).replace(/[:T]/g,'-');var t='# '+n+'\n'+location.href+'\ncaptured: '+new Date().toString()+'\n\n'+document.body.innerText;var g=[];document.querySelectorAll('a[href^="/bots/bot/"]').forEach(function(a){var id=(a.getAttribute('href')||'').split('/').pop();var row=a.closest('tr')||a.closest('[role="row"]')||a.parentElement;if(!row||!id)return;var ic=row.querySelectorAll('i.sticon[title]');if(ic.length<2)return;g.push(id+'\t'+(ic[0].getAttribute('title')||'')+'\t'+(ic[1].getAttribute('title')||''));});if(g.length){t+='\n\n# AUTOS/EXITS -- i.sticon title attribute, S0b-3 fix, additive. bot_id\tautos_title\texits_title\n'+g.join('\n')+'\n';}var b=new Blob([t],{type:'text/plain'});var el=document.createElement('a');el.href=URL.createObjectURL(b);el.download='oa_'+n+'_'+d+'.txt';document.body.appendChild(el);el.click();el.remove();})()
+javascript:(function(){var h=document.querySelector('h1,h2');var n=((h&&h.innerText)||document.title||'oa').trim().replace(/[^\w\-]+/g,'_').slice(0,60);var d=new Date().toISOString().slice(0,19).replace(/[:T]/g,'-');var t='# '+n+'\n'+location.href+'\ncaptured: '+new Date().toString()+'\n\n'+document.body.innerText;var seen={},g=[];document.querySelectorAll('a[href^="/bots/bot/"]').forEach(function(a){var id=(a.getAttribute('href')||'').split('/').pop();if(!id||!/^BOT/.test(id)||seen[id])return;var row=a,i,ic;for(i=0;i<8&&row;i++){ic=row.querySelectorAll?row.querySelectorAll('i.sticon[title]'):[];if(ic.length>=2)break;row=row.parentElement;}if(!row||!ic||ic.length<2||ic.length>4)return;seen[id]=1;g.push(id+'\t'+(ic[0].getAttribute('title')||'')+'\t'+(ic[1].getAttribute('title')||''));});if(g.length){t+='\n\n# AUTOS/EXITS -- i.sticon title attribute, S0b-3 fix v2.1 (ancestor-climb 2026-08-09), additive. bot_id\tautos_title\texits_title\n'+g.join('\n')+'\n';}var b=new Blob([t],{type:'text/plain'});var el=document.createElement('a');el.href=URL.createObjectURL(b);el.download='oa_'+n+'_'+d+'.txt';document.body.appendChild(el);el.click();el.remove();})()
 ```
+
+> ### ⛔ CORRECTED 2026-08-09 — S0b-3 FIX v2 (ancestor-climb). v1's row selector was REFUTED against the live DOM; the line ABOVE is now the instrument.
+> **Evidence, first-hand (Andy's console on `/bots`, 2026-08-09, screenshots in the orchestrator
+> chat; A12 sweep session-log entry):** `TEST-1: anchors 45 · tr rows 0 · sticons 86` — the page
+> has NO `<tr>` elements (OA renders custom `<ct>` elements), so v1's
+> `a.closest('tr')||a.closest('[role="row"]')||a.parentElement` fell through to `parentElement`,
+> which never contains the two icons; every row was skipped and the section never emitted
+> (A12-R1: three section-less captures 2026-08-09). **v2 replaces the row-finder with an
+> ancestor-climb:** from each bot anchor, climb ≤8 levels to the nearest ancestor containing
+> 2–4 `i.sticon[title]` icons; dedupe by bot id; the >4 guard rejects overshoot into the shared
+> container. **Verified live 2026-08-09** (`TEST-2`): rows 44 (43 roster + 1 off-roster anchor,
+> identified at the next capture), **AUTOS ON 17 · EXITS ON 15 — exact match to the S2b final
+> sweep.** Everything else — prefix, filename (dashed ISO), additive-only behavior — unchanged
+> from v1. v1's source, kept for the record (DO NOT INSTALL):
+> ```
+> javascript:(function(){var h=document.querySelector('h1,h2');var n=((h&&h.innerText)||document.title||'oa').trim().replace(/[^\w\-]+/g,'_').slice(0,60);var d=new Date().toISOString().slice(0,19).replace(/[:T]/g,'-');var t='# '+n+'\n'+location.href+'\ncaptured: '+new Date().toString()+'\n\n'+document.body.innerText;var g=[];document.querySelectorAll('a[href^="/bots/bot/"]').forEach(function(a){var id=(a.getAttribute('href')||'').split('/').pop();var row=a.closest('tr')||a.closest('[role="row"]')||a.parentElement;if(!row||!id)return;var ic=row.querySelectorAll('i.sticon[title]');if(ic.length<2)return;g.push(id+'\t'+(ic[0].getAttribute('title')||'')+'\t'+(ic[1].getAttribute('title')||''));});if(g.length){t+='\n\n# AUTOS/EXITS -- i.sticon title attribute, S0b-3 fix, additive. bot_id\tautos_title\texits_title\n'+g.join('\n')+'\n';}var b=new Blob([t],{type:'text/plain'});var el=document.createElement('a');el.href=URL.createObjectURL(b);el.download='oa_'+n+'_'+d+'.txt';document.body.appendChild(el);el.click();el.remove();})()
+> ```
+> 📝 v2.1 SAME DAY: live run surfaced a 44th junk row — an anchor whose href tail is
+> `positions` (a bot sub-link), not a bot id. Filter `/^BOT/` added to the id check; a `/bots`
+> capture now emits exactly 43 lines (one per roster row). Verified counts from the v2 live
+> run stand: AUTOS ON 17 · EXITS ON 15, PR-01/PR-02 exits-off (the inverted controls).
+> ⚠️ Bookmark-install trap, learned 2026-08-09: Chrome can silently TRUNCATE a long
+> `javascript:` URL pasted into the bookmark editor (symptom: `SyntaxError: Unexpected end of
+> input` at click, no download). After saving, re-open the bookmark and confirm the URL ends
+> with `})()`.
 
 > ### 📝 APPENDED 2026-08-08 — S0b-3 FIX LANDED IN THE INSTRUMENT. ⛔ VERIFY-ON-NEXT-CAPTURE, NOT YET RUN AGAINST LIVE OA.
 > **Finding, evidence, ruling:** `session-log.md` S0b-3 (2026-08-07, S0b-RESUME session) — the
