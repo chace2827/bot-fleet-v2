@@ -8441,3 +8441,108 @@ different instruments.**
 **Still do NOT lower the floor to $0.02.** At 1.5% span it authorizes $1–5 of credit per contract
 against full spread risk, and PR-04 — unsigned, ON, $100,000 allocation — starts trading the day it
 lands. See the 08-11 addendum on unsigned bots.
+
+### 2026-08-11 — GF'S STRIKE RULE FOUND ON DISK. NO BROWSER NEEDED. IT IS `legpctprice pct=0.75`.
+
+Question #1 (what selection rule does the working bot use) was put to a browser read. Half of it
+was already captured. `data/captures/2026-08-06-gfam/` — read first-hand, value layer:
+
+**GF-ScannerA-PutSpread**
+```
+shortPut   legpctprice  pct=0.75 cop=lt priceprop=last mode=closest
+longPut    leggap       gap=2 cop=lt shlg=short ltype=put   text "$2.00 below short put leg"
+price      {"limitType":"pct","limit":100,"smart":"normal","text":"100% of bid/ask"}
+filter     {"minPrice":0.08}        <- "Mid price is between $0.08 - (no max)"
+entry      {}
+```
+**GF-ScannerB-CallSpread** — identical, mirrored: `shortCall legpctprice pct=0.75 cop=gt
+priceprop=last`, `longCall leggap gap=2 cop=gt`, same `filter {"minPrice":0.08}`.
+
+**⭐ THE RULE IS: SHORT STRIKE AT EXACTLY ±0.75% OF LAST, WINGS $2.00 WIDE, FLOOR $0.08.**
+
+**⭐ ARITHMETIC CONFIRMATION — the observed strikes reproduce exactly from one price.**
+Solve the put: `713 = last × (1 − 0.0075)` ⇒ **last = 718.39**. Feed that to the call:
+`718.39 × 1.0075 = 723.78` ⇒ **724**, which is the observed call strike. **Both legs reproduce from
+a single `last ≈ 718.4`.** The 08-11 bracket estimate (713 < QQQ < 724, span 1.52–1.54%) is now a
+POINT value: **span = 1.50% exactly, by construction, not by inference.** The measurement stands and
+is now exact.
+
+**⭐ HYPOTHESIS, NAMED, NOT ESTABLISHED — the 0.75 is probably a collision.** The regime gate on
+these same bots is `Symbol change % > -0.75` / `< 0.75`. The strike offset is also `0.75`. Two
+unrelated purposes, one number. Plausible that the band figure was reused as the strike offset when
+the scanners were built. **This is a hypothesis from a coincidence of digits — it is NOT evidence.
+Do not record it as cause.** It is, however, cheap to confirm or kill in the build history.
+
+**⛔ WHAT IS STILL NOT CAPTURED — PR-01 and PR-02's strike rule.**
+`PR-02-clone-final-2026-08-08.txt` and `PR-04-clone-final-2026-08-08.txt` contain **no leg-selection
+fields at all**. `IC-SPX-FastPT25-S2-post-FC1-2026-08-07.txt` records `type open-shortputspread` /
+`open-shortcallspread`, `input.exits`, `price`, `amount`, `tags`, `symbol` — and then says
+*"everything else in the action, read and recorded as unchanged"* **without recording it.** The
+strike rule for the one bot that works is therefore UNKNOWN and must be read from OA.
+
+**⭐ A SECOND DIFFERENCE, ALREADY ON DISK.** PR-01 prices at `{pct:75, text:"75% of bid/ask",
+smart:"speedy"}`; GF prices at `{limit:100, "100% of bid/ask", smart:"normal"}`. **PR-01 bids a 25%
+haircut to mid with speedy SmartPricing; GF bids full.** This does NOT cause the rejections — the
+`minPrice` filter tests the MID, not the bid — but it is a live difference in fill behaviour between
+the two and belongs in the mechanics record. PR-01 also sizes `{type:"draw", draw:5000}` = "up to
+$5,000 risk", which reconciles with its observed $4,900.
+
+**NEXT:** one narrow OA read — PR-01 + PR-02 Open Position value layer, the `legpctprice` /
+`leggap` / `legdelta` fields. That single number for PR-02 either turns the strike-selection ruling
+into a copy operation or falsifies the whole diagnosis.
+
+### 2026-08-11 — ⭐⭐⭐ CAUSE ESTABLISHED. `legpctprice` vs `delta`. ONE FIELD.
+
+OA read, all four PR-01/PR-02 scanner automations, from `a5.bots.acedit.routine` on fresh page
+loads. Read-only, no edits, no Save.
+
+| | PR-02 (fills daily) | PR-01 (never fills, call side) | GF ×7 (never fills) |
+|---|---|---|---|
+| short strike | **`delta 0.1 / -0.1 mode=closest`** | **`legpctprice pct=0.75 priceprop=last`** | **`legpctprice pct=0.75`** |
+| long strike | `leggap gap=5` | `leggap gap=5` | `leggap gap=2` |
+| price | `{pct:75, smart:"speedy"}` | `{pct:75, smart:"speedy"}` | `{limit:100, smart:"normal"}` |
+| amount | `{type:"draw", draw:5000}` | `{type:"draw", draw:5000}` | — |
+| filter | `{minPrice:0.08}` | `{minPrice:0.08}` | `{minPrice:0.08}` |
+
+Routine ids — PR-02 call `RTfw5TkkCRF3017861977616606341` / put `…616606732`;
+PR-01 call `RTfw5TkkCRF4417860821948941031` / put `…821948941343`.
+
+**⭐ PR-01 AND PR-02 DIFFER IN EXACTLY ONE FIELD.** Wings, price, sizing and filter are byte-identical
+across both bots and both legs. **The only variable is the short-strike selection METHOD.**
+
+**MEASURED EFFECT.** PR-02's 0.10-delta strikes landed **19.1 pts (0.247%)** and **25.9 pts
+(0.335%)** from spot on 08-11. PR-01's fixed rule places them at **0.75%** — **2–3× further out**,
+same symbol, same wings, same tape, same floor.
+
+**⭐ WHY THE FRAME IS *METHOD*, NOT *NUMBER*.** Delta adapts to volatility and time-to-expiry; a
+fixed percentage of last price is blind to both. A 0.10-delta strike walks IN as 0DTE decay
+proceeds; `0.75% of last` does not move. **Any 0DTE bot using `legpctprice` sits outside tradeable
+premium by construction.** Tuning the number does not fix that it cannot adapt.
+
+**⭐ THE CONFOUNDS ARE CONTROLLED — this is why the conclusion holds.**
+- PR-01 vs PR-02 is confounded by **entry time** (11:00 vs 13:30)… but **GF trades the SAME
+  13:30–14:00 window as PR-02 and still fails.** ⇒ time-of-day eliminated.
+- GF vs PR-02 is confounded by **symbol + wing width** (QQQ $2 vs SPX $5)… but **PR-01 is the SAME
+  symbol and SAME $5 wings as PR-02 and still fails.** ⇒ symbol and width eliminated.
+- Neither comparison is clean alone; **they intersect on exactly one field.**
+**⇒ `legpctprice` IS THE CAUSE. Distance was the symptom, method is the mechanism.** This refines —
+does not overturn — the 08-11 span-% diagnosis.
+
+**⭐ SCOPE IS SMALLER THAN NINE EDITS.** GF-ScannerA/B are **SHARED automations** across all seven
+arms. **2 edits fix 7 bots.**
+
+**RECOMMENDATION (GATED — nothing touched):**
+1. **AUTHORIZE: GF-ScannerA-PutSpread + GF-ScannerB-CallSpread → `delta`. 2 edits, 7 arms live.**
+   $2,500/arm, deliberately small, and entering is the entire purpose of the family.
+2. **HOLD PR-01.** Signed control; its 2-day record is the janitor artifact. Changing entry
+   mid-stream destroys the only clean read on the `Scalp-Mon-S2-Cleanup` monitor. Fix after the
+   arms report.
+3. **HOLD PR-04 — and sign it first (§3 ruling 08-11).** Unsigned, **$100,000**. Fixing its entry
+   puts an unsigned six-figure bot into the market the same day. Last to change, not first.
+
+**OPEN, NOT DERIVED: what delta for QQQ?** PR-02's 0.10 is the only observed-working value, but it
+is SPX with $5 wings; GF is QQQ with $2. **Copying 0.10 is a defensible STARTING POINT because it is
+the one configuration known to work — it is not a derivation.** Recorded as such.
+
+**RETIRED:** the "0.75 is a collision with the ±0.75 regime band" hypothesis is now moot as a cause
+question — the defect is the method, not the number. Leaving it unpursued.
