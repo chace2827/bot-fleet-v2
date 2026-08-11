@@ -8250,3 +8250,143 @@ so no future session re-raises it as a finding.
 `docs/session-log.md` (this entry) · `docs/state.md` (new top block).
 Device-hash-verified (§9.1a). **No OA write. No Chrome edit. No git. Uncommitted — Andy runs the
 commit.**
+
+## 2026-08-11 — DAY 2. Ledger run; PR-01 root-caused; the $0.08 floor is not the bug.
+
+**Ledger.** `scripts/daily.sh 2026-08-11` ran all 8 stages clean from `data/raw/2026-08-11.csv`
+(sha `de5df230…`). **STATUS.md: $1,200 · 9 legs · 4 bots.** Day-2 closes: PR-02 +$600 (+0.126R,
+1 condor, both sides expired worthless) · PR-01 +$50 · 60min-ORB +$50 · Nigiri $0 (0.08→0.08, flat).
+n=9 legs over 2 days. **T5. No inference licensed.**
+
+**PR-01 (IC-SPX-FastPT25-S2) — the "champion" record is a janitor artifact.** Day 2 reproduced Day 1
+exactly: put side only, opened 11:07:00, closed **11:09:02** by `Scalp-Mon-S2-Cleanup`
+(`open ≥ 2 min` + `exactly 1 position` → Close). Not a PT25 capture. The call side has never filled.
+STATUS.md's "$100 · 100% WR · 2/2 green" measures the one-sided-position cleanup, not the condor.
+
+**OA log read, 2026-08-11 10:55–11:15 (first-hand, read-only, no settings touched).**
+`Scalp-Scan-Call` ran **every minute, 21 runs** — nothing is silently off. 10:55–11:00: 4 decisions,
+never reached position-open. 11:01–11:15: 5 decisions + 1 filtered position, **filtered every single
+run**, including 11:07–11:09. All five entry gates PASSED every run (±0.75% regime, FOMC → No,
+after 11:00am, NOT-opened-call-today). The only ✗ is downstream, at Position Criteria:
+
+> **SECONDARY CHECK · Position Criteria ✗ — "Mid price is above $0.08" · Mid price is $0.05.**
+> (verbatim, 11:13AM instance. The 11:07AM instance shows the same summary line, `Filtered: Mid
+> price is 0.` — its sub-panel was not expanded. Recorded as partial, not inferred.)
+
+Every run evaluated the **identical single strike pair**: SPX Short Call Spread Aug 11,
+**-7,810 / +7,815**. No auto-cascade to alternate strikes — "Retry Position" is a manual button.
+
+**⭐ THE REFRAME — THE $0.08 FLOOR IS THE GUARDRAIL WORKING, NOT THE DEFECT.**
+Measured from the export, OTM distance at entry vs mid price:
+
+| bot | day | side | short | underlying | OTM pts | mid | R |
+|---|---|---|--:|--:|--:|--:|--:|
+| PR-01 | 08-10 | put  | 7700 | 7756.88 | 56.9 | 0.15 | 0.010 |
+| PR-01 | 08-11 | put  | 7695 | 7753.28 | 58.3 | 0.10 | 0.010 |
+| PR-01 | both  | call | 7810 | ~7753   | ~57  | 0.05 | never filled |
+| PR-02 | 08-10 | call | 7770 | 7755.11 | 14.9 | 0.40 | 0.087 |
+| PR-02 | 08-10 | put  | 7730 | 7755.09 | 25.1 | 0.20 | 0.042 |
+| PR-02 | 08-11 | call | 7750 | 7730.92 | 19.1 | 0.35 | 0.075 |
+| PR-02 | 08-11 | put  | 7705 | 7730.88 | 25.9 | 0.25 | 0.053 |
+
+**PR-01 selects ~57 points OTM. PR-02 selects 15–26.** Same symbol, same 5-wide spread, same tape,
+same $0.08 floor — PR-02 clears it every time with 2–8× the credit. PR-01's put *barely* clears
+(0.10–0.15) and its call sits at 0.05, under the floor, permanently. **The defect is strike
+selection, not the floor.** This supersedes the 08-10 read that framed it as "QQQ 2-wide specific" —
+PR-01 is SPX 5-wide and fails identically. Width is not the variable; distance is.
+
+**Consequence for the gated build decision.** Lowering the floor to $0.02 would "fix" the
+zero-entry by authorizing the sale of ~57-point-OTM SPX spreads for **$5 of credit per contract
+against $4,900 of risk**. Even PR-01's *filled* legs earn **0.010R** — an order of magnitude under
+PR-02's 0.042–0.087R, at full spread risk. That fix would have looked like success in the entry
+count and been strictly worse in R. **Nothing was touched. The decision is Andy's** and it should
+now be read as a strike-selection question (delta/offset), not a floor question.
+
+**Still open on this thread:** whether the GF ×7 + PR-04 QQQ arms share the distance cause or a
+genuinely different one — no QQQ underlying is in the export (zero GF rows have ever existed), so
+that is UNMEASURED, not answered.
+
+**Config / split (ii).** `bots_config_v2.csv` inspected: **13 real rows** (10 bots + 3
+shared_automation) behind a 77-line `#` preamble; schema is an object/input registry
+(`object_kind,name,oa_id,version,attached_to,input_id,…,a7_hash`). It carries none of the graded
+mechanic columns, so `daily_brief` ran CONFIG-BLIND (**0 ON bots graded**) and `execution_audit`
+SKIPPED 9 rules — 2 days running. `execution_audit.py`'s own loader docstring already names this as
+**split (ii), still open**, and carries the proposed mechanics contract. Recommendation put to Andy:
+a second file `data/bots_mechanics_v2.csv` joined on `oa_id`, three-state cells per `cell()`.
+**PROPOSED ONLY — a schema is a spec, gated. Nothing written.**
+
+**Files written, NOT committed:** `data/raw/2026-08-11.csv`, `STATUS.md`, `dashboard.html`,
+`data/{trades,bots,straddlers,compliance,hedge_tournament,trade_window,execution_audit_findings}.csv`,
+`data/execution_audit_findings_meta.json`, `data/brief/2026-08-11_brief.json`, `ledger_meta.json`,
+this log. **Three batches now pending Andy's commit** (08-09 A12, 08-10 Day 1, 08-11 Day 2).
+
+### 2026-08-11 addendum — TWO UNSIGNED BOTS ARE ON. The record does not say who turned them on.
+
+Chased down while checking `data/captures/` for the `none`-cell provenance (split (ii)). Not a
+config question in the end.
+
+**OBSERVED, first-hand from files on disk:**
+1. `data/captures/2026-08-09-s2/step6-7-switchon-2026-08-09.txt` — the document that records what
+   Step 7 authorized — reads, from a batched second-surface `/bots` read after the sweep:
+   > `AUTOMATIONS ON = 7 of 43 — exactly the seven arms, nothing else`
+   and names, under "⛔ WHAT DID NOT GET STEP 7, AND WHY":
+   > `PR-02 IC-SPX-FastPT25-S2-130PM . UNSIGNED. OFF. NO Template V1 (showBotMenu is Andy's hand).`
+   > `PR-04 QQQ-IC-0DTE-Fortress-NoPT50 UNSIGNED. OFF. NO Template V1. Same cause.`
+   > `PR-01 IC-SPX-FastPT25-S2 ....... SIGNED. OFF. Needs 10/10 -> 2/2 first (S2-R5).`
+2. `data/captures/2026-08-09-a12/oa_Bots_20260809191129.txt` (**19:11:29 the same evening**) reads
+   **AUTOS_ON=17 / EXITS_ON=15**, with PR-01, PR-02 and PR-04 all `Scheduled automations are on`.
+   (The 18:28:56 and 18:46:10 captures carry no toggle block — the S0b-3 title-attribute fix
+   post-dates them — so 19:11:29 is the first toggle-bearing surface of that evening.)
+3. Today's 08-11 16:21 capture: **17 autos on / 15 exits on, per-id identical to 19:11:29.**
+   **No drift since 08-09.** The 08-10 "matches the A12 baseline" note is confirmed, per-id.
+
+**THEREFORE:** between the Step-7 sweep read and 19:11:29 on 2026-08-09, **ten further bots were
+switched on** — 7 arms + 10 = the 17 that have been ON ever since. The step6-7 record does not
+record that action. **WHO and WHY IS NOT ESTABLISHED.** Most likely Andy, deliberately, after that
+document closed; this is a **gap in the record, not evidence of an unauthorized change.** Do not
+write it up as one.
+
+**THE MATERIAL FACTS, which stand regardless of who acted:**
+- **PR-02 is ON, scanning, trading — and recorded UNSIGNED with no Template V1.** It is also
+  producing **100% of the post-cutover ledger's positive P/L** (+$1,200 / 2 days, both full
+  condors). §5: *"Pre-register before restart… No entry in the ledger, no restart."* The headline
+  number is coming from a bot the project's own rule says should not be running.
+- **PR-04 is ON and scanning every minute against a $100,000 allocation, recorded UNSIGNED, and
+  the ONLY thing stopping it entering is the $0.08 mid-price floor.** That is the same floor under
+  consideration in the strike-selection decision. **Lower the floor and an unsigned $100K bot starts
+  trading the same day.** This links today's #1 finding to the discipline layer and is the single
+  strongest argument for treating that decision as strike-selection, not floor.
+- **PR-04's config record is stale on exits.** `bots_config_v2.csv` `layer2_status` (written
+  2026-08-08) says `AUTOMATIONS OFF, EXIT OPTIONS OFF (disableExits 1, screenshotted)`. Both
+  08-09 19:11 and 08-11 read **EXIT OPTIONS ON**. Recorded, not corrected — a config row is
+  capture-derived and this needs a fresh capture, not an edit (§3 rule 2).
+
+**SCHEMA CONSEQUENCE for split (ii) — a FOURTH call for Andy.** PR-04 shows `pt_pct` = `none`
+(captured: `exits.profits = ""` both sides), `time_exit` = `15:50` (inherited untouched) and
+`event_backstop` = `15:52` (built, Layer-1 verified) — the canonical C5 BACKSTOP_CAUGHT_IT case,
+capturable today. **But its Exit Options toggle state changes what those cells mean.** With exits
+OFF the declared 15:50 can never fire and `TIME_EXIT_MISSED` would go RED daily on a bot that is
+behaving correctly. The three-state cell cannot express this. **Proposal: add an `exits_enabled`
+column (0/1, captured from `disableExits`) and gate the Exit-Options-side rules on it.** The
+Automations-side `event_backstop` is deliberately NOT gated — that is the whole point of C5.
+**PROPOSED ONLY. GATED. Nothing written.**
+
+**No OA settings touched this session. All reads.**
+
+### 2026-08-11 — ANDY'S RULINGS (6 items put, 6 ruled)
+1. **PR-02 + PR-04 STAY ON**, unsigned. Recorded as a knowing exception to §5 pre-registration,
+   not an oversight. **Consequence: the post-cutover headline P/L is produced by an unsigned bot
+   and every report that states it must say so.** STATUS.md is machine-generated ("do not edit by
+   hand") — the banner belongs in `scripts/report.py`, Claude Code lane, NOT a hand edit.
+2. **GF ×7 / PR-04 QQQ log read AUTHORIZED** — test whether they share PR-01's distance cause.
+   Read-only, Sonnet lane.
+3. **Join key = `oa_id`** (Andy: "your suggestion"). Names change at archive; a broken name-join
+   reads identically to a blind spot.
+4. **Store `pt_pct` only**, format for the brief. Two representations that can disagree is the v1
+   failure mode. `daily_brief`'s check is a loose regex (`pt\s*\d+|\d+%`) that "PT25" satisfies.
+5. **Add `exits_enabled`** (0/1, captured from `disableExits`); gate Exit-Options-side rules on it.
+   **`event_backstop` is NOT gated** — the two disagreeing is the point of C5.
+6. **`none` requires a capture; the standing exception is NOT sufficient provenance.** PR-04's
+   `pt_pct = none` lands now (`exits.profits = ""`, read). PR-01's stays **blank** → reported
+   SKIPPED, an announced blind spot, until the Day-0 Layer-2 read. PR-02: check its clone-final
+   capture for an `exits.profits` read first; blank if absent. **BLANK IS NOT NONE.**

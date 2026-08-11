@@ -21,12 +21,12 @@ h2{font-size:15px;margin:30px 0 6px;border-top:1px solid #eee;padding-top:18px}
 code{background:#f0f0f3;padding:1px 4px;border-radius:4px;font-size:12px}
 </style></head><body>
 <h1>Bot Fleet — Status</h1>
-<div class="sub">generated 2026-08-10 · PAPER · source: data/trades.csv + docs/backlog.md</div>
+<div class="sub">generated 2026-08-11 · PAPER · source: data/trades.csv + docs/backlog.md</div>
 <div>
-<div class="card"><span>Total P/L</span><b class="pos">$500</b></div>
-<div class="card"><span>Legs</span><b>4</b></div>
-<div class="card"><span>Bots</span><b>3</b></div>
-<div class="card"><span>Scalp P/L</span><b class="pos">$50</b></div>
+<div class="card"><span>Total P/L</span><b class="pos">$1,200</b></div>
+<div class="card"><span>Legs</span><b>9</b></div>
+<div class="card"><span>Bots</span><b>4</b></div>
+<div class="card"><span>Scalp P/L</span><b class="pos">$100</b></div>
 </div>
 <canvas id="ch"></canvas>
 <h2>Per-bot</h2>
@@ -35,7 +35,7 @@ code{background:#f0f0f3;padding:1px 4px;border-radius:4px;font-size:12px}
 <div class="sub" style="margin-top:6px">Trades = condors · Legs = OA position rows (≈2× trades for legged bots) · WR is per-condor</div>
 <h2>Backlog</h2><div id="bl"></div>
 <script>
-const rows=[{"bot": "60min-ORB-10W-Paper-v1", "proj": "OA-Mirror", "status": "ON", "trades": 1, "legs": 1, "pnl": -150, "wr": "0%", "fix": ""}, {"bot": "IC-SPX-FastPT25-S2", "proj": "IC", "status": "ON", "trades": 1, "legs": 1, "pnl": 50, "wr": "100%", "fix": ""}, {"bot": "IC-SPX-FastPT25-S2-130PM", "proj": "IC", "status": "ON", "trades": 1, "legs": 2, "pnl": 600, "wr": "100%", "fix": ""}], cum=[{"d": "2026-08-10", "c": 50}];
+const rows=[{"bot": "60min-ORB-10W-Paper-v1", "proj": "OA-Mirror", "status": "ON", "trades": 2, "legs": 2, "pnl": -100, "wr": "50%", "fix": ""}, {"bot": "Nigiri-Paper-v1", "proj": "OA-Mirror", "status": "ON", "trades": 1, "legs": 1, "pnl": 0, "wr": "0%", "fix": ""}, {"bot": "IC-SPX-FastPT25-S2", "proj": "IC", "status": "ON", "trades": 2, "legs": 2, "pnl": 100, "wr": "100%", "fix": ""}, {"bot": "IC-SPX-FastPT25-S2-130PM", "proj": "IC", "status": "ON", "trades": 2, "legs": 4, "pnl": 1200, "wr": "100%", "fix": ""}], cum=[{"d": "2026-08-10", "c": 50}, {"d": "2026-08-11", "c": 100}];
 const tb=document.querySelector('#t tbody');
 rows.sort((a,b)=>a.pnl-b.pnl).forEach(r=>{
  const tr=document.createElement('tr');

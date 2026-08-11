@@ -1,0 +1,28 @@
+{
+  "date": "2026-08-11",
+  "generated": "2026-08-11T20:23:33",
+  "any_reconstructed": true,
+  "underlyings": {
+    "SPX": {
+      "symbol": "SPX",
+      "source": "reconstructed",
+      "prior_close": 7753.11,
+      "open": 7753.28,
+      "high": 7753.28,
+      "low": 7728.2,
+      "close": 7728.2,
+      "series": [],
+      "series_interval": null,
+      "pct_move": -0.32,
+      "gap_pct": 0.0,
+      "full_pct": -0.32,
+      "range_pct": 0.32,
+      "net_pct": -0.32,
+      "directionality": null,
+      "label": "Chop",
+      "label_approx": true,
+      "meaning": "IC day \u2014 move stayed within the \u00b10.75% band (approx; no intraday path)."
+    }
+  },
+  "divergence": null
+}
