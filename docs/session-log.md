@@ -8390,3 +8390,54 @@ Automations-side `event_backstop` is deliberately NOT gated — that is the whol
    `pt_pct = none` lands now (`exits.profits = ""`, read). PR-01's stays **blank** → reported
    SKIPPED, an announced blind spot, until the Day-0 Layer-2 read. PR-02: check its clone-final
    capture for an `exits.profits` read first; blank if absent. **BLANK IS NOT NONE.**
+
+### 2026-08-11 — QQQ DISTANCE TEST: ANSWERED. ONE DEFECT CLASS, NOT TWO.
+
+Read-only OA log pass on GF-QQQ-IC-Ride (`…4417860701930934951`) and PR-04
+(`…3017862038322323202`), 13:30–14:00 window, 2026-08-11. No edits, no toggles.
+
+**OBSERVED (verbatim, identical on both bots, both legs, every sampled run):**
+> `SECONDARY CHECK` ✗ `Mid price is above $0.08` — `Mid price is $0.01.`
+
+Every upstream node green on both bots: `Loop QQQ` → time gates → `Symbol change % > -0.75` /
+`< 0.75` → `Bot opened a position with call/put side today` = No. **No other criterion ever fails.**
+Only one `SECONDARY CHECK` section, one criterion in it. **Nothing is silently off.**
+Strikes, timestamp-for-timestamp IDENTICAL across the two bots (PR-04 is a faithful clone):
+  call `-724/+726` (1:59, 1:57) and `-723/+725` (1:58) — tracks price run to run
+  put  `-713/+711` — static across all sampled runs
+`QQQ change % is -0.3829% since previous close`. **No QQQ price level anywhere in either log** —
+the reading agent correctly declined to infer strike distance without it. It does not need to.
+
+**⭐ THE ASSUMPTION-FREE MEASUREMENT.** Both legs are quoted, so spot is BRACKETED: `713 < QQQ < 724`.
+The short-strike span is therefore 11 points, and span-as-%-of-underlying is **1.52–1.54% wherever
+spot sits inside the bracket**. No midpoint assumption, no external quote. Same metric on SPX:
+
+| bot | short span | underlying | span % | mid | outcome |
+|---|--:|--:|--:|--:|---|
+| PR-02 | 7750−7705 = 45 | 7730.9 | **0.58%** | 0.35 / 0.25 | fills both sides, 2/2 days |
+| PR-01 | 7810−7695 = 115 | 7753.3 | **1.48%** | 0.05 / 0.10 | call never fills; put scrapes by |
+| GF-Ride / PR-04 | 724−713 = 11 | ~718 | **1.53%** | 0.01 | never fills, either leg |
+
+**PR-01 and the QQQ bots sit at the SAME span % (1.48 / 1.53) and both fail. PR-02 at 0.58% clears
+every time.** ⇒ **ONE DEFECT CLASS: strike selection, expressed as short-strike span % of
+underlying.** The 08-10 "QQQ 2-wide specific" framing is **RETIRED** — PR-01 is SPX 5-wide and sits
+in the same failure band as QQQ 2-wide.
+
+**Internal consistency check (passes):** SPY 772 / SPX 7730.9 = 10.01 (correct); QQQ bracketed
+~718 ⇒ QQQ/SPY = 0.93 (correct). The bracket is sound.
+
+**⭐ THE COMPOUNDING FACTOR — THE FLOOR IS NOT SCALE-INVARIANT.** GF/PR-04 spreads are **$2 wide**;
+PR-01/PR-02 are **$5 wide**. A flat $0.08 floor demands **4% of width on QQQ vs 1.6% on SPX** — the
+same nominal threshold is **2.5× stricter on the narrower spread**. That is why GF reads $0.01 where
+PR-01 reads $0.05 at nearly identical span %. **The floor silently means different things on
+different instruments.**
+
+**RECOMMENDATION (GATED — nothing touched, Andy's ruling):** two separable pieces.
+1. **The fix is strike selection** — bring span % toward PR-02's ~0.6%. This is the single cause of
+   zero entries across nine bots (GF ×7 + PR-04 + PR-01's call side).
+2. **Separately, express the floor as a fraction of spread width, not a flat dollar** — otherwise
+   every future instrument inherits an arbitrary and invisible difficulty. Design cleanup, not
+   today's blocker.
+**Still do NOT lower the floor to $0.02.** At 1.5% span it authorizes $1–5 of credit per contract
+against full spread risk, and PR-04 — unsigned, ON, $100,000 allocation — starts trading the day it
+lands. See the 08-11 addendum on unsigned bots.
