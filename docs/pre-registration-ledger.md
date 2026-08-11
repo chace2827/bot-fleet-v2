@@ -1406,3 +1406,56 @@ checks is worse than none.
    nine rows"*, and `CLAUDE.md` §3 lists it as *"not yet written"*. Neither is inside a PR entry
    and neither changes a decision (the funding scope is still the **7** live mirrors; the other
    three are OFF and out of scope, memo §1), so both are **flagged here, not edited**.
+
+---
+
+### PR-23 — `GF-QQQ-IC-Ride-Delta`   ⚠️ DRAFT, UNSIGNED. Authored 2026-08-11.
+
+> ⛔ **NOT AN ARM OF THE PR-14…PR-20 GREENFIELD FAMILY.** Registered deliberately OUTSIDE it.
+> The family-level kill criterion (PR-14…PR-17 entry) voids the family's ranking if two ARMS
+> differ in more than one mechanic. Ride-Delta differs from `GF-QQQ-IC-Ride` in the entry
+> selection METHOD, which is not an exit mechanic — counting it as an eighth arm would VOID the
+> exit comparison the family exists to run. It is a **paired external control**, measured against
+> Ride, and it is excluded from every family-level ranking, gate and re-base.
+
+```
+ID               PR-23
+DISPOSITION      clone of GF-QQQ-IC-Ride    PILLAR/ROLE  IC · external control    STATUS  DRAFT
+SOURCE           GF-QQQ-IC-Ride  BOTfw5TkkCRF4417860701930934951
+HYPOTHESIS       Short-strike selection by DELTA adapts to volatility and time-to-expiry;
+                 selection by FIXED PERCENT OF LAST does not. Paired against Ride — identical
+                 symbol, wings, window, regime gates, sizing, pricing, floor and exit policy
+                 (ride to expiry) — the two differ in EXACTLY ONE input: the short-strike
+                 selection method. Any divergence in entry FREQUENCY or in realised OTM% over
+                 time is therefore attributable to that method alone.
+MECHANISM        Established 2026-08-11, first-hand: PR-01 and the seven GF arms use
+                 `legpctprice pct=0.75`; PR-02 uses `delta 0.1` and is the only bot in the
+                 fleet filling daily. PR-01 vs PR-02 are byte-identical in wings, price,
+                 sizing and filter — the selection method is the sole differing field.
+                 Supporting: credit at >=0.70% OTM on SPX 0DTE fell ~60% Apr->Aug 2026
+                 (0.320 / 0.291 / 0.343 / 0.153 / 0.125), i.e. the fixed-% spec aged out of
+                 its regime rather than breaking.
+PRIMARY READ     ENTRY FREQUENCY and REALISED OTM% — not P/L. This bot is run to answer a
+                 mechanical question, and n will be far too small for an R read for months.
+KILL CRITERION   Exp(R) per condor < 0 with CI entirely below 0 at n>=60, emitted as an
+                 always-valid confidence sequence (per G-8), and not before GATE EVAL DATE.
+                 ⚠️ P/L IS NOT THE POINT AND MUST NOT RETIRE IT EARLY. If at n>=20 the bot has
+                 taken ZERO entries, the delta value is wrong, not the method — re-tune, do not
+                 kill.
+GATE EVAL DATE   2026-11-11 (3 months from authoring).
+ALLOCATION       $2,500 — matched to the GF arms. Sizing `amount:{"type":"quantity",
+                 "quantity":1}`, fixed 1 contract, per the PR-14…PR-20 SIZING STAMP 2026-08-06.
+                 Position limit 2/2.
+STARTING DELTA   0.10 / -0.10 — PR-02's observed-working value, NOT a derivation. On QQQ a given
+                 delta sits further out in percent terms than on SPX, so this may land near the
+                 0.40% the pct arms will run. ⚠️ RECORD WHERE IT ACTUALLY LANDS ON DAY ONE. If
+                 it lands far from 0.40%, the pairing is degraded and must be re-tuned before
+                 any comparison is read.
+RISK NOTE        PAPER. $2,500 allocation, 1 contract, $2 wings — max risk ~$200/condor.
+SIGNED           ____________________  (date + config-capture hash)
+```
+
+> **Andy authorised the build and the switch-on verbally, 2026-08-11** ("i give permission to
+> for you to turn the clone on. its just a test."). **That authorisation is recorded, but it is
+> NOT a signature** — §5's `SIGNED` line takes a date and a config-capture hash, and the hash
+> does not exist until the bot is built. Sign it from the build capture.
