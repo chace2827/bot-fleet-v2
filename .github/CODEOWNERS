@@ -1,0 +1,33 @@
+# Ownership of the gated surfaces (CLAUDE.md §3, §5).
+#
+# CODEOWNERS only *requests* review until branch protection is set to require it:
+# Settings -> Branches -> master -> Require a pull request before merging ->
+# Require review from Code Owners. Until that toggle is on, this file is advisory.
+#
+# Everything is Andy's by default; the entries below exist so the decision surfaces
+# can never be merged by a rule that says "code changes don't need review".
+
+*                                   @chace2827
+
+# Decisions. Amending any of these requires an explicit "amend the plan" (§5).
+/docs/build-plan.md                 @chace2827
+/docs/pre-registration-ledger.md    @chace2827
+/docs/evidence-standards.md         @chace2827
+/CLAUDE.md                          @chace2827
+
+# Specs: they define what gets built, so they are decisions too.
+/docs/daily-loop-spec.md            @chace2827
+/docs/comparative-machinery-spec.md @chace2827
+/docs/research-loop-spec.md         @chace2827
+/docs/split2-design-2026-08-08.md   @chace2827
+/docs/greenfield-family-spec.md     @chace2827
+/docs/track-b-arms-spec.md          @chace2827
+
+# Source-of-truth data. Numbers come from here; nothing edits them casually.
+/data/trades.csv                    @chace2827
+/data/bots_meta.csv                 @chace2827
+/data/bots_config_v2.csv            @chace2827
+/data/ledger_meta.json              @chace2827
+
+# Frozen v1. Never a reporting input (§3).
+/data/archive/                      @chace2827

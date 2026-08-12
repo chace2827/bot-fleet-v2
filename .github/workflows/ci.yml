@@ -1,0 +1,31 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [master]
+
+jobs:
+  validate:
+    name: validation suites
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+      - run: pip install numpy
+      - run: python3 scripts/ci/validate_all.py
+
+  reproducible:
+    name: pipeline reproduces its committed outputs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+      - run: pip install numpy
+      # No TRADIER_TOKEN in CI on purpose: the reconstructed-tape path is the one
+      # that must stay deterministic, and a live API call would make this job flaky.
+      - run: python3 scripts/ci/rerun_diff.py
