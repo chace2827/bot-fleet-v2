@@ -8546,3 +8546,51 @@ the one configuration known to work — it is not a derivation.** Recorded as su
 
 **RETIRED:** the "0.75 is a collision with the ±0.75 regime band" hypothesis is now moot as a cause
 question — the defect is the method, not the number. Leaving it unpursued.
+
+---
+
+## 2026-08-11 (Devin lane) — CI MERGE GATE LANDED. The pipeline now has to prove it reproduces its own outputs. First thing it caught: `hedge_tournament.csv`.
+
+**Devin session, not Cowork.** No OA, no decisions, no doc content changed beyond this entry.
+PR opened for Andy's review; nothing merged from this side.
+
+**What landed** (`.github/workflows/ci.yml`, two jobs, on every PR):
+1. `scripts/ci/validate_all.py` — runs all four `--validate` suites and compares to a committed
+   baseline (`scripts/ci/validate_baseline.txt`). Baseline rather than "must be green" because
+   comparative_machinery is **35/36** today: R-1 reads the live `ledger_meta.json` instead of a
+   fixture, so it stopped exercising the `2099-01-01` sentinel path the day the ledger went live.
+   Editing the test to make it pass would be the wrong fix. CI now fails on any *movement* from
+   35/36 — in either direction.
+2. `scripts/ci/rerun_diff.py` — reruns `daily.sh` on committed inputs and fails on any artifact
+   that changes beyond its generated timestamp (`scripts/ci/normalize.py` strips exactly the
+   `generated` fields, nothing else — a pattern that blanked bare dates would also blank
+   `open_date` and hide the drift this exists to catch). An artifact the pipeline writes that git
+   does not track also fails: a graded output living outside the audit trail.
+
+**It failed on its first run, correctly.** `data/hedge_tournament.csv` carried `T00001` for the
+2026-08-10 130PM condor; the ledger now keys that trade `T00005`. Regenerated in this PR —
+**20 rows changed, all of them `trade_id` only; every modeled_pnl, risk and R is byte-identical**
+(verified by diffing the rows with the id field masked). No number moved.
+
+**Root cause is NOT fixed and this is a detector, not a cure.** `trade_id` is positional — assigned
+by sequence at ledger rebuild — so any accumulator file keyed on it goes stale again the next time
+a row lands out of order. The fix is a content-addressed id (bot + open timestamp + strikes);
+that's the next PR in `docs/devin-queue.md` (P1). Until then CI catches the recurrence at merge
+instead of it sitting committed and unnoticed, which is what happened here.
+
+**Also landed:** `.github/CODEOWNERS` — the frozen plan, the specs, the pre-registration ledger,
+`CLAUDE.md`, and the source-of-truth data files are Andy's. **Advisory until branch protection
+requires Code Owner review** (Settings → Branches → master); that toggle is Andy's, not Devin's.
+And `.env.example` un-ignored (`!.env.example` in `.gitignore`) documenting `TRADIER_TOKEN`,
+`TRADIER_BASE`, `LEDGER_START`, `LESSONS_ALLOW_TRUNCATE`.
+
+**Still true, unaddressed by this PR:** no `TRADIER_TOKEN` is set, so the tape is reconstructed and
+`2026-08-11_tape.json` carries `series: []`, `directionality: null` — the brief's regime read is
+not being produced. CI deliberately runs without the token so the reconstructed path stays
+deterministic; setting it locally is a separate five-minute fix.
+
+**MCP:** the Devin connector authenticates from Claude Code (user scope, `Authorization: Bearer` +
+`X-Org-Id`) — `devin_session_search` returns live sessions. The **Cowork** connector remains
+unauthenticated (public mode): its Add-connector dialog offers OAuth client id/secret only, and
+`mcp.devin.ai` publishes no OAuth discovery, so there is nowhere to put a key until Anthropic's
+request-header beta is enabled on the account. Git remains the durable channel either way.
