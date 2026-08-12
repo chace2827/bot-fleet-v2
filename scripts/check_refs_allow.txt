@@ -1,0 +1,26 @@
+# check_refs allowlist — paths that are cited but legitimately absent.
+# One repo-relative path per line, with the reason. A path listed here is
+# classified DECLARED instead of DANGLING. Nothing here is a decision; this
+# file records why an absent path is not a broken citation.
+
+# --- outputs of engines that are validated but deliberately unwired ---------
+data/exit_rows.csv          # comparative_machinery.py output, not yet wired into daily.sh
+data/counterfactuals.csv    # research_loop.py output, gated behind config prerequisites
+data/research_log.md        # research_loop.py output, same gate
+data/c1_rows.csv            # regime_coverage.py input, produced when that lane runs
+data/regime_coverage.md     # regime_coverage.py output
+data/renames_pending.csv    # rename_tool.py working file, created on demand
+data/goal_config.json       # intraday lane, out of scope per CLAUDE.md §1
+
+# --- out-of-scope lane retained in the archive ------------------------------
+data/intraday/read.html         # Intraday Cockpit, explicitly out of scope (CLAUDE.md §1)
+data/intraday/read.json         # same
+data/intraday/lessons.json      # same
+data/intraday/.gate_state.json  # same
+docs/intraday-cockpit.md        # same
+
+# --- Phase-2 deliverables not yet built -------------------------------------
+data/bots_mechanics_v2.csv  # tracked in pending-tracker-items-2026-08-10.md
+scripts/build_config.py     # specified in split2-design-2026-08-08.md, not implemented
+scripts/lean_run.sh         # specified in quantconnect-lean-exploration-brief.md
+scripts/cw_git.sh           # tracked in pending-tracker-items-2026-08-10.md
