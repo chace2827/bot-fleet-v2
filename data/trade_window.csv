@@ -1,5 +1,4 @@
 hour,regime,n_positions,n_touches,touch_rate,avg_mae_pct
-11-12,Chop,3,0,0.0,0.0458
+11-12,Chop,1,0,0.0,0.0
 12-13,Chop,1,0,0.0,-1.6667
-12-13,n/a,1,0,,-0.375
-13-14,Chop,2,0,0.0,-0.8464
+13-14,Chop,1,0,0.0,-0.25

@@ -15,6 +15,24 @@ def fl(x):
     try: return float(x)
     except (TypeError, ValueError): return 0.0
 
+
+def now_iso():
+    """Reproducible 'generated' timestamp. SOURCE_DATE_EPOCH wins over wall clock."""
+    epoch = os.environ.get("SOURCE_DATE_EPOCH")
+    if epoch:
+        return datetime.datetime.fromtimestamp(
+            int(epoch), tz=datetime.timezone.utc).replace(tzinfo=None).isoformat(timespec="seconds")
+    return datetime.datetime.now().isoformat(timespec="seconds")
+
+
+def today_iso():
+    """Reproducible 'today' for the report date. SOURCE_DATE_EPOCH wins over wall clock."""
+    epoch = os.environ.get("SOURCE_DATE_EPOCH")
+    if epoch:
+        return datetime.datetime.fromtimestamp(
+            int(epoch), tz=datetime.timezone.utc).date().isoformat()
+    return datetime.date.today().isoformat()
+
 trades = list(csv.DictReader(open(os.path.join(D, "trades.csv"))))
 bots = list(csv.DictReader(open(os.path.join(D, "bots.csv"))))
 
@@ -72,7 +90,7 @@ for d in sorted(sd):
     cumlist.append({"d": d, "c": round(cum)})
 
 ss = sum(1 for t in trades if t["single_sided"] == "True")
-date = datetime.date.today().isoformat()
+date = today_iso()
 
 # --- R-metrics (normalized: Return on Risk = pnl/risk per leg) ------------
 # allocation- and size-independent. R is the unit; the right summary column

@@ -1,41 +1,41 @@
 date,trade_id,bot,pillar,underlying,structure,regime,rule,modeled_pnl,risk,R,approx_flag,basis_note
-2026-08-10,T00001,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortcallspread,Chop,defang,,4600.0,,True,DEFERRED v1 — needs the intraday premium-decay path (mark short leg to ~$0.05) not present in the ledger. TODO: model once tick/1-min option-premium history is available.
-2026-08-10,T00001,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortputspread,Chop,defang,,4800.0,,True,DEFERRED v1 — needs the intraday premium-decay path (mark short leg to ~$0.05) not present in the ledger. TODO: model once tick/1-min option-premium history is available.
-2026-08-10,T00001,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortcallspread,Chop,pt100,400.0,4600.0,0.087,True,optimistic bound: booked +100% of credit_basis at mfe_pct threshold
-2026-08-10,T00001,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortputspread,Chop,pt100,200.0,4800.0,0.0417,True,optimistic bound: booked +100% of credit_basis at mfe_pct threshold
-2026-08-10,T00001,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortcallspread,Chop,pt25,100.0,4600.0,0.0217,True,optimistic bound: booked +25% of credit_basis at mfe_pct threshold
-2026-08-10,T00001,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortputspread,Chop,pt25,50.0,4800.0,0.0104,True,optimistic bound: booked +25% of credit_basis at mfe_pct threshold
-2026-08-10,T00001,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortcallspread,Chop,pt50,200.0,4600.0,0.0435,True,optimistic bound: booked +50% of credit_basis at mfe_pct threshold
-2026-08-10,T00001,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortputspread,Chop,pt50,100.0,4800.0,0.0208,True,optimistic bound: booked +50% of credit_basis at mfe_pct threshold
-2026-08-10,T00001,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortcallspread,Chop,ride,400.0,4600.0,0.087,False,"settlement pnl (ledger, verbatim)"
-2026-08-10,T00001,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortputspread,Chop,ride,200.0,4800.0,0.0417,False,"settlement pnl (ledger, verbatim)"
-2026-08-10,T00001,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortcallspread,Chop,s2,400.0,4600.0,0.087,True,"strike-touch cut, 5-min tape grain (not sub-second latch); cut priced at the leg's own worst-excursion (mae_pct) extreme"
-2026-08-10,T00001,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortputspread,Chop,s2,200.0,4800.0,0.0417,True,"strike-touch cut, 5-min tape grain (not sub-second latch); cut priced at the leg's own worst-excursion (mae_pct) extreme"
-2026-08-10,T00001,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortcallspread,Chop,sl100,400.0,4600.0,0.087,True,optimistic bound: no SL hit -> rode to settlement
-2026-08-10,T00001,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortputspread,Chop,sl100,200.0,4800.0,0.0417,True,optimistic bound: no SL hit -> rode to settlement
-2026-08-10,T00001,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortcallspread,Chop,sl130,400.0,4600.0,0.087,True,optimistic bound: no SL hit -> rode to settlement
-2026-08-10,T00001,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortputspread,Chop,sl130,200.0,4800.0,0.0417,True,optimistic bound: no SL hit -> rode to settlement
-2026-08-10,T00001,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortcallspread,Chop,sl50,400.0,4600.0,0.087,True,optimistic bound: no SL hit -> rode to settlement
-2026-08-10,T00001,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortputspread,Chop,sl50,-100.0,4800.0,-0.0208,True,optimistic bound: booked -50% of credit_basis at mae_pct threshold
-2026-08-10,T00001,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortcallspread,Chop,sl75,400.0,4600.0,0.087,True,optimistic bound: no SL hit -> rode to settlement
-2026-08-10,T00001,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortputspread,Chop,sl75,200.0,4800.0,0.0417,True,optimistic bound: no SL hit -> rode to settlement
-2026-08-11,T00001,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortcallspread,Chop,defang,,4650.0,,True,DEFERRED v1 — needs the intraday premium-decay path (mark short leg to ~$0.05) not present in the ledger. TODO: model once tick/1-min option-premium history is available.
-2026-08-11,T00001,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortputspread,Chop,defang,,4750.0,,True,DEFERRED v1 — needs the intraday premium-decay path (mark short leg to ~$0.05) not present in the ledger. TODO: model once tick/1-min option-premium history is available.
-2026-08-11,T00001,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortcallspread,Chop,pt100,350.0,4650.0,0.0753,True,optimistic bound: booked +100% of credit_basis at mfe_pct threshold
-2026-08-11,T00001,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortputspread,Chop,pt100,250.0,4750.0,0.0526,True,optimistic bound: booked +100% of credit_basis at mfe_pct threshold
-2026-08-11,T00001,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortcallspread,Chop,pt25,87.5,4650.0,0.0188,True,optimistic bound: booked +25% of credit_basis at mfe_pct threshold
-2026-08-11,T00001,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortputspread,Chop,pt25,62.5,4750.0,0.0132,True,optimistic bound: booked +25% of credit_basis at mfe_pct threshold
-2026-08-11,T00001,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortcallspread,Chop,pt50,175.0,4650.0,0.0376,True,optimistic bound: booked +50% of credit_basis at mfe_pct threshold
-2026-08-11,T00001,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortputspread,Chop,pt50,125.0,4750.0,0.0263,True,optimistic bound: booked +50% of credit_basis at mfe_pct threshold
-2026-08-11,T00001,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortcallspread,Chop,ride,350.0,4650.0,0.0753,False,"settlement pnl (ledger, verbatim)"
-2026-08-11,T00001,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortputspread,Chop,ride,250.0,4750.0,0.0526,False,"settlement pnl (ledger, verbatim)"
-2026-08-11,T00001,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortcallspread,Chop,s2,350.0,4650.0,0.0753,True,"strike-touch cut, 5-min tape grain (not sub-second latch); cut priced at the leg's own worst-excursion (mae_pct) extreme"
-2026-08-11,T00001,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortputspread,Chop,s2,250.0,4750.0,0.0526,True,"strike-touch cut, 5-min tape grain (not sub-second latch); cut priced at the leg's own worst-excursion (mae_pct) extreme"
-2026-08-11,T00001,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortcallspread,Chop,sl100,350.0,4650.0,0.0753,True,optimistic bound: no SL hit -> rode to settlement
-2026-08-11,T00001,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortputspread,Chop,sl100,-250.0,4750.0,-0.0526,True,optimistic bound: booked -100% of credit_basis at mae_pct threshold
-2026-08-11,T00001,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortcallspread,Chop,sl130,350.0,4650.0,0.0753,True,optimistic bound: no SL hit -> rode to settlement
-2026-08-11,T00001,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortputspread,Chop,sl130,-325.0,4750.0,-0.0684,True,optimistic bound: booked -130% of credit_basis at mae_pct threshold
-2026-08-11,T00001,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortcallspread,Chop,sl50,350.0,4650.0,0.0753,True,optimistic bound: no SL hit -> rode to settlement
-2026-08-11,T00001,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortputspread,Chop,sl50,-125.0,4750.0,-0.0263,True,optimistic bound: booked -50% of credit_basis at mae_pct threshold
-2026-08-11,T00001,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortcallspread,Chop,sl75,350.0,4650.0,0.0753,True,optimistic bound: no SL hit -> rode to settlement
-2026-08-11,T00001,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortputspread,Chop,sl75,-187.5,4750.0,-0.0395,True,optimistic bound: booked -75% of credit_basis at mae_pct threshold
+2026-08-10,T00006,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortcallspread,Chop,defang,,4600.0,,True,DEFERRED v1 — needs the intraday premium-decay path (mark short leg to ~$0.05) not present in the ledger. TODO: model once tick/1-min option-premium history is available.
+2026-08-10,T00006,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortputspread,Chop,defang,,4800.0,,True,DEFERRED v1 — needs the intraday premium-decay path (mark short leg to ~$0.05) not present in the ledger. TODO: model once tick/1-min option-premium history is available.
+2026-08-10,T00006,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortcallspread,Chop,pt100,400.0,4600.0,0.087,True,optimistic bound: booked +100% of credit_basis at mfe_pct threshold
+2026-08-10,T00006,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortputspread,Chop,pt100,200.0,4800.0,0.0417,True,optimistic bound: booked +100% of credit_basis at mfe_pct threshold
+2026-08-10,T00006,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortcallspread,Chop,pt25,100.0,4600.0,0.0217,True,optimistic bound: booked +25% of credit_basis at mfe_pct threshold
+2026-08-10,T00006,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortputspread,Chop,pt25,50.0,4800.0,0.0104,True,optimistic bound: booked +25% of credit_basis at mfe_pct threshold
+2026-08-10,T00006,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortcallspread,Chop,pt50,200.0,4600.0,0.0435,True,optimistic bound: booked +50% of credit_basis at mfe_pct threshold
+2026-08-10,T00006,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortputspread,Chop,pt50,100.0,4800.0,0.0208,True,optimistic bound: booked +50% of credit_basis at mfe_pct threshold
+2026-08-10,T00006,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortcallspread,Chop,ride,400.0,4600.0,0.087,False,"settlement pnl (ledger, verbatim)"
+2026-08-10,T00006,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortputspread,Chop,ride,200.0,4800.0,0.0417,False,"settlement pnl (ledger, verbatim)"
+2026-08-10,T00006,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortcallspread,Chop,s2,400.0,4600.0,0.087,True,"strike-touch cut, 5-min tape grain (not sub-second latch); cut priced at the leg's own worst-excursion (mae_pct) extreme"
+2026-08-10,T00006,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortputspread,Chop,s2,200.0,4800.0,0.0417,True,"strike-touch cut, 5-min tape grain (not sub-second latch); cut priced at the leg's own worst-excursion (mae_pct) extreme"
+2026-08-10,T00006,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortcallspread,Chop,sl100,400.0,4600.0,0.087,True,optimistic bound: no SL hit -> rode to settlement
+2026-08-10,T00006,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortputspread,Chop,sl100,200.0,4800.0,0.0417,True,optimistic bound: no SL hit -> rode to settlement
+2026-08-10,T00006,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortcallspread,Chop,sl130,400.0,4600.0,0.087,True,optimistic bound: no SL hit -> rode to settlement
+2026-08-10,T00006,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortputspread,Chop,sl130,200.0,4800.0,0.0417,True,optimistic bound: no SL hit -> rode to settlement
+2026-08-10,T00006,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortcallspread,Chop,sl50,400.0,4600.0,0.087,True,optimistic bound: no SL hit -> rode to settlement
+2026-08-10,T00006,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortputspread,Chop,sl50,-100.0,4800.0,-0.0208,True,optimistic bound: booked -50% of credit_basis at mae_pct threshold
+2026-08-10,T00006,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortcallspread,Chop,sl75,400.0,4600.0,0.087,True,optimistic bound: no SL hit -> rode to settlement
+2026-08-10,T00006,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortputspread,Chop,sl75,200.0,4800.0,0.0417,True,optimistic bound: no SL hit -> rode to settlement
+2026-08-11,T00005,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortcallspread,Chop,defang,,4650.0,,True,DEFERRED v1 — needs the intraday premium-decay path (mark short leg to ~$0.05) not present in the ledger. TODO: model once tick/1-min option-premium history is available.
+2026-08-11,T00005,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortputspread,Chop,defang,,4750.0,,True,DEFERRED v1 — needs the intraday premium-decay path (mark short leg to ~$0.05) not present in the ledger. TODO: model once tick/1-min option-premium history is available.
+2026-08-11,T00005,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortcallspread,Chop,pt100,350.0,4650.0,0.0753,True,optimistic bound: booked +100% of credit_basis at mfe_pct threshold
+2026-08-11,T00005,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortputspread,Chop,pt100,250.0,4750.0,0.0526,True,optimistic bound: booked +100% of credit_basis at mfe_pct threshold
+2026-08-11,T00005,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortcallspread,Chop,pt25,87.5,4650.0,0.0188,True,optimistic bound: booked +25% of credit_basis at mfe_pct threshold
+2026-08-11,T00005,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortputspread,Chop,pt25,62.5,4750.0,0.0132,True,optimistic bound: booked +25% of credit_basis at mfe_pct threshold
+2026-08-11,T00005,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortcallspread,Chop,pt50,175.0,4650.0,0.0376,True,optimistic bound: booked +50% of credit_basis at mfe_pct threshold
+2026-08-11,T00005,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortputspread,Chop,pt50,125.0,4750.0,0.0263,True,optimistic bound: booked +50% of credit_basis at mfe_pct threshold
+2026-08-11,T00005,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortcallspread,Chop,ride,350.0,4650.0,0.0753,False,"settlement pnl (ledger, verbatim)"
+2026-08-11,T00005,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortputspread,Chop,ride,250.0,4750.0,0.0526,False,"settlement pnl (ledger, verbatim)"
+2026-08-11,T00005,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortcallspread,Chop,s2,350.0,4650.0,0.0753,True,"strike-touch cut, 5-min tape grain (not sub-second latch); cut priced at the leg's own worst-excursion (mae_pct) extreme"
+2026-08-11,T00005,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortputspread,Chop,s2,250.0,4750.0,0.0526,True,"strike-touch cut, 5-min tape grain (not sub-second latch); cut priced at the leg's own worst-excursion (mae_pct) extreme"
+2026-08-11,T00005,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortcallspread,Chop,sl100,350.0,4650.0,0.0753,True,optimistic bound: no SL hit -> rode to settlement
+2026-08-11,T00005,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortputspread,Chop,sl100,-250.0,4750.0,-0.0526,True,optimistic bound: booked -100% of credit_basis at mae_pct threshold
+2026-08-11,T00005,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortcallspread,Chop,sl130,350.0,4650.0,0.0753,True,optimistic bound: no SL hit -> rode to settlement
+2026-08-11,T00005,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortputspread,Chop,sl130,-325.0,4750.0,-0.0684,True,optimistic bound: booked -130% of credit_basis at mae_pct threshold
+2026-08-11,T00005,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortcallspread,Chop,sl50,350.0,4650.0,0.0753,True,optimistic bound: no SL hit -> rode to settlement
+2026-08-11,T00005,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortputspread,Chop,sl50,-125.0,4750.0,-0.0263,True,optimistic bound: booked -50% of credit_basis at mae_pct threshold
+2026-08-11,T00005,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortcallspread,Chop,sl75,350.0,4650.0,0.0753,True,optimistic bound: no SL hit -> rode to settlement
+2026-08-11,T00005,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortputspread,Chop,sl75,-187.5,4750.0,-0.0395,True,optimistic bound: booked -75% of credit_basis at mae_pct threshold

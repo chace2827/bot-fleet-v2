@@ -8546,3 +8546,59 @@ the one configuration known to work — it is not a derivation.** Recorded as su
 
 **RETIRED:** the "0.75 is a collision with the ±0.75 regime band" hypothesis is now moot as a cause
 question — the defect is the method, not the number. Leaving it unpursued.
+
+---
+
+## 2026-08-11 (later) — Draft roster-mechanics ruling
+
+**Done**
+- Read the source files and captures listed in the previous thread.
+- Computed sha256s for all cited captures and data files.
+- Wrote `docs/roster-mechanics-ruling.md` (sha256 to be computed on device at commit time), a draft ruling document with:
+  - 17-row roster-facts table keyed on the 2026-08-09 S2b final sweep.
+  - Mechanics contract covering join keys, `bots_config_v2.csv` schemas, three-state semantics, versioned fixed panel, roster authority, and data flow.
+  - Decisions-to-rule and missing-evidence lists.
+
+**Hand-off**
+- Andy to review and sign the draft; no commit or PR opened from this side per `CLAUDE.md` §9.1.
+
+---
+
+## 2026-08-12 — Phase 0 CI and hermetic daily.sh
+
+**Done**
+- Added `.github/workflows/ci.yml` with py_compile, execution_audit validation, build_ledger 2026-08-10 assertions, daily.sh idempotency diff, and `check_docs_vs_csv.py`.
+- Made `scripts/daily.sh` hermetic: `TAPE_FIXTURE` mode, `SOURCE_DATE_EPOCH` deterministic timestamps, explicit `SKIPPED` report for research_loop / comparative_machinery / a_series / intraday_read.
+- Added `SOURCE_DATE_EPOCH` support to `scripts/tape.py`, `scripts/daily_brief.py`, and `scripts/report.py` for byte-identical reruns.
+- Added positional `date` arg to `scripts/build_ledger.py` so `daily.sh <day>` and `build_ledger <day>` both use `data/raw/<day>.csv`.
+- Created `scripts/check_docs_vs_csv.py` with initial checks for `STATUS.md` headline, GF/greenfield arm count in docs vs `data/bots_meta.csv`, and `T00001` persistence in `data/hedge_tournament.csv`.
+
+---
+
+## 2026-08-12 (later) — Phase 0 CI hardening: stable trade_id, UNCLASSIFIED refusal, green CI
+
+**Done**
+- Fixed `scripts/tape.py` `TAPE_FIXTURE` mode to no longer overwrite the committed `data/brief/<day>_tape.json` fixture.
+- Hardened `scripts/check_docs_vs_csv.py` to skip append-only logs and the generated `docs/rules-catalog.md`.
+- Added 7 greenfield-family bots to `data/bots_meta.csv` from the existing captures and `data/bots_config_v2.csv`, and corrected `docs/track-b-arms-spec.md` "five greenfield arms" -> "seven".
+- Implemented stable monotonic `trade_id` in `scripts/build_ledger.py`: new IDs continue from `data/hedge_tournament.csv` + `data/trades.csv` excluding the day being built, so `T00001` no longer appears on multiple dates.
+- Promoted the `UNCLASSIFIED` bot warning in `build_ledger.py` to a fatal refusal before the working ledger is written.
+- Verified the full Phase 0 CI matrix:
+  - `python3 -m py_compile scripts/*.py` clean.
+  - `scripts/execution_audit.py --validate` 21/21.
+  - `scripts/daily.sh 2026-08-10` with `TAPE_FIXTURE=1` and `SOURCE_DATE_EPOCH=1786320000` runs green and is byte-identical on rerun.
+  - `python3 scripts/check_docs_vs_csv.py` reports no contradictions.
+
+**Hand-off**
+- All changes are uncommitted; ready for Andy to review and commit.
+- Added `.github/CODEOWNERS` for the files that must route to Andy's review.
+
+**Verification**
+- `py_compile scripts/*.py` OK.
+- `python3 scripts/execution_audit.py --validate` 21/21 passed.
+- `python3 scripts/build_ledger.py 2026-08-10` produces 4 legs / 3 condors / $500 P/L.
+- Two `TAPE_FIXTURE=1 SOURCE_DATE_EPOCH=1786320000 scripts/daily.sh 2026-08-10` runs produce identical output files.
+- `python3 scripts/check_docs_vs_csv.py` reports expected stale-data contradictions: docs cite 7 GF arms while `data/bots_meta.csv` has 0 GF rows, and `T00001` persists across 2 dates in `data/hedge_tournament.csv`.
+
+**Hand-off**
+- Andy to review contradictions surfaced by `check_docs_vs_csv.py`; Claude does not commit.
