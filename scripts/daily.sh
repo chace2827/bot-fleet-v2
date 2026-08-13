@@ -44,6 +44,9 @@
 # Tape uses Tradier when TRADIER_TOKEN is set (env or ./.env); otherwise it
 # reconstructs from the ledger and says so.
 #
+# TAPE_FIXTURE mode (CI / hermetic runs): set TAPE_FIXTURE=1 and the script will
+# use the committed data/brief/<date>_tape.json instead of calling any live API.
+#
 # n=0: every stage degrades gracefully on an empty post-cutover ledger. Verified
 # 2026-07-30 by the Phase-3 dry run. An empty stage says so; none of them crash,
 # and none of them render an absent number as a zero.
@@ -52,8 +55,21 @@ cd "$(dirname "$0")/.."
 
 DAY="${1:-}"
 
-echo "== 1/8 build_ledger =="
-python3 scripts/build_ledger.py
+# Make timestamps deterministic for a given DAY so two runs are byte-identical.
+if [ -n "$DAY" ] && [ -z "${SOURCE_DATE_EPOCH:-}" ]; then
+  export SOURCE_DATE_EPOCH="$(python3 - <<PY
+import datetime
+d = "$DAY"
+print(int(datetime.datetime(int(d[:4]), int(d[5:7]), int(d[8:10]),
+                            tzinfo=datetime.timezone.utc).timestamp()))
+PY
+  )"
+fi
+export TAPE_FIXTURE=${TAPE_FIXTURE:-}
+export PYTHONDONTWRITEBYTECODE=1
+
+echo "== 1/8 build_ledger ${DAY:-} =="
+python3 scripts/build_ledger.py ${DAY:-}
 
 echo "== 2/8 tape ${DAY} =="
 python3 scripts/tape.py ${DAY}
@@ -78,3 +94,11 @@ python3 scripts/report.py
 
 echo "== done -> STATUS.md, dashboard.html, data/brief/${DAY:-<newest>}_brief.json,"
 echo "           data/execution_audit_findings.csv =="
+
+# Missing/empty stand-alone research / audit tools are intentionally NOT wired
+# into the daily loop (their own docstrings forbid it).  List them so they do
+# not silently appear to be passing in CI.
+echo "== SKIPPED (not wired to daily loop) =="
+for s in research_loop comparative_machinery a_series intraday_read; do
+  echo "  $s: SKIPPED — standalone tooling, see scripts/$s.py"
+done

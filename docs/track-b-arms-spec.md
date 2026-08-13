@@ -593,7 +593,7 @@ decisive, and it is §7's answer.
 > Applied on Andy's explicit ruling (`comparative-machinery-spec.md` §3.4). **One family, one
 > correction** — ruling S-1 (§3.3 above) governs bot-slot allocation only and says nothing about
 > error rates; both arms share `GF-QQQ-IC-Ride` as control, the entry automations, the day-series
-> and 1-lot sizing with the five greenfield arms. This does not change this section's own finding
+> and 1-lot sizing with the seven greenfield arms. This does not change this section's own finding
 > — ARM-B2 is still the only proposed arm that does not double-test a signed Track A variant — it
 > changes how ARM-B2's own K1 read is corrected: as one arm inside a K-arm family, not a family of
 > its own. ⚠️ **Also ruled the same session: G-10 SWITCH** — the family correction is no longer

@@ -64,6 +64,24 @@ def load_token():
     return (os.environ.get("TRADIER_TOKEN") or "").strip() or None
 
 
+def now_iso():
+    """Reproducible 'generated' timestamp. SOURCE_DATE_EPOCH wins over wall clock."""
+    epoch = os.environ.get("SOURCE_DATE_EPOCH")
+    if epoch:
+        return datetime.datetime.fromtimestamp(
+            int(epoch), tz=datetime.timezone.utc).replace(tzinfo=None).isoformat(timespec="seconds")
+    return datetime.datetime.now().isoformat(timespec="seconds")
+
+
+def today_iso():
+    """Reproducible 'today' for newest_date() fallback."""
+    epoch = os.environ.get("SOURCE_DATE_EPOCH")
+    if epoch:
+        return datetime.datetime.fromtimestamp(
+            int(epoch), tz=datetime.timezone.utc).date().isoformat()
+    return datetime.date.today().isoformat()
+
+
 def _get(base, path, params, token):
     url = f"{base.rstrip('/')}/v1/{path}?{urllib.parse.urlencode(params)}"
     req = urllib.request.Request(url, headers={
@@ -274,6 +292,17 @@ def regime(o, h, l, c, pc, has_path):
 
 # ----------------------------------------------------------------------------
 def build(day):
+    fixture_path = os.path.join(BRIEF, f"{day}_tape.json")
+    if os.environ.get("TAPE_FIXTURE"):
+        if not os.path.exists(fixture_path):
+            sys.exit(f"ERROR: TAPE_FIXTURE set but no committed fixture at {fixture_path}")
+        with open(fixture_path) as f:
+            out = json.load(f)
+        out["generated"] = now_iso()
+        srcs = ", ".join(f"{s}:{t['source']}" for s, t in out.get("underlyings", {}).items())
+        print(f"tape.py: TAPE_FIXTURE using committed {os.path.relpath(fixture_path, ROOT)} | {srcs}")
+        return out
+
     trades = load_trades()
     syms = underlyings_on(trades, day)
     if not syms:
@@ -336,7 +365,7 @@ def build(day):
         if a is not None and b is not None:
             div = {"spx_full_pct": a, "qqq_full_pct": b, "spread_pct": round(a - b, 2)}
 
-    out = {"date": day, "generated": datetime.datetime.now().isoformat(timespec="seconds"),
+    out = {"date": day, "generated": now_iso(),
            "any_reconstructed": any(t["source"] == "reconstructed" for t in tapes.values()),
            "underlyings": tapes, "divergence": div}
     os.makedirs(BRIEF, exist_ok=True)
@@ -351,7 +380,7 @@ def build(day):
 
 def newest_date():
     trades = load_trades()
-    return max((t["open_date"][:10] for t in trades), default=datetime.date.today().isoformat())
+    return max((t["open_date"][:10] for t in trades), default=today_iso())
 
 
 if __name__ == "__main__":

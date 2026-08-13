@@ -1,0 +1,8 @@
+# Phase 0: Andy must review any change to the plan, source-of-truth config,
+# or the daily loop entry point.
+docs/build-plan.md @chace2827
+CLAUDE.md @chace2827
+data/bots_meta.csv @chace2827
+data/bots_config_v2.csv @chace2827
+.github/workflows/ci.yml @chace2827
+scripts/daily.sh @chace2827

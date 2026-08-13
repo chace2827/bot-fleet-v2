@@ -1,0 +1,74 @@
+name: Phase 0 CI
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+    branches: [master, main]
+
+jobs:
+  phase0:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: py_compile all Python scripts
+        run: python3 -m py_compile scripts/*.py
+
+      - name: execution audit validation matrix
+        run: python3 scripts/execution_audit.py --validate
+
+      - name: build ledger for 2026-08-10
+        run: |
+          python3 scripts/build_ledger.py 2026-08-10
+          python3 - <<'PY'
+          import csv, json, os, sys
+          trades = list(csv.DictReader(open('data/trades.csv')))
+          meta = json.load(open('data/ledger_meta.json'))
+          want = {'post_cutover': 4, 'n_trades_condors': 3, 'n_bots': 3, 'total_pnl': 500.0}
+          for k, v in want.items():
+            got = (meta.get('counts', {}) if k == 'post_cutover' else meta).get(k)
+            if got != v:
+              print(f'ledger_meta.json: {k} want {v}, got {got}', file=sys.stderr)
+              sys.exit(1)
+          if len(trades) != 4:
+            print(f'data/trades.csv: want 4 legs, got {len(trades)}', file=sys.stderr)
+            sys.exit(1)
+          PY
+
+      - name: run daily.sh twice and diff outputs
+        env:
+          TAPE_FIXTURE: '1'
+          SOURCE_DATE_EPOCH: '1786320000'
+        run: |
+          set -euo pipefail
+          # First run
+          scripts/daily.sh 2026-08-10
+          mkdir -p /tmp/run1
+          cp -f data/trades.csv data/bots.csv data/straddlers.csv data/ledger_meta.json \
+                data/execution_audit_findings.csv data/execution_audit_findings_meta.json \
+                data/hedge_tournament.csv data/trade_window.csv \
+                data/lessons.csv data/brief/2026-08-10_brief.json \
+                data/brief/2026-08-10_tape.json STATUS.md dashboard.html /tmp/run1/
+          # Second run
+          scripts/daily.sh 2026-08-10
+          # Diff the idempotent outputs
+          for f in data/trades.csv data/bots.csv data/straddlers.csv data/ledger_meta.json \
+                   data/execution_audit_findings.csv data/execution_audit_findings_meta.json \
+                   data/hedge_tournament.csv data/trade_window.csv \
+                   data/lessons.csv data/brief/2026-08-10_brief.json \
+                   data/brief/2026-08-10_tape.json STATUS.md dashboard.html; do
+            if ! diff -q "$f" "/tmp/run1/$(basename "$f")" > /dev/null; then
+              echo "IDEMPOTENCY FAIL: $f differs between the two daily.sh runs" >&2
+              diff "$f" "/tmp/run1/$(basename "$f")" >&2 || true
+              exit 1
+            fi
+          done
+          echo "daily.sh outputs are identical between the two runs"
+
+      - name: check docs vs csv
+        run: python3 scripts/check_docs_vs_csv.py

@@ -44,6 +44,24 @@ def fl(x):
         return None
 
 
+def now_iso():
+    """Reproducible 'generated' timestamp. SOURCE_DATE_EPOCH wins over wall clock."""
+    epoch = os.environ.get("SOURCE_DATE_EPOCH")
+    if epoch:
+        return datetime.datetime.fromtimestamp(
+            int(epoch), tz=datetime.timezone.utc).replace(tzinfo=None).isoformat(timespec="seconds")
+    return datetime.datetime.now().isoformat(timespec="seconds")
+
+
+def today_iso():
+    """Reproducible 'today' for newest_date() fallback."""
+    epoch = os.environ.get("SOURCE_DATE_EPOCH")
+    if epoch:
+        return datetime.datetime.fromtimestamp(
+            int(epoch), tz=datetime.timezone.utc).date().isoformat()
+    return datetime.date.today().isoformat()
+
+
 def load(name, required=True):
     """Missing OPTIONAL inputs degrade to empty rather than crashing. The n=0
     state (no post-cutover data yet) must produce a brief that says so, not a
@@ -422,7 +440,7 @@ def build(day):
                           "naked_losses": len(card["naked_losses"])})
 
     out = {"date": day,
-           "generated": datetime.datetime.now().isoformat(timespec="seconds"),
+           "generated": now_iso(),
            "tape": tape, "cards": cards,
            "hedge_clinic": [nl for c in cards for nl in c["naked_losses"]],
            "grades": {g: sum(1 for c in cards if c["grade"] == g)
@@ -442,7 +460,7 @@ def build(day):
 
 def newest_date():
     return max((t["open_date"][:10] for t in load("trades.csv")),
-               default=datetime.date.today().isoformat())
+               default=today_iso())
 
 
 if __name__ == "__main__":

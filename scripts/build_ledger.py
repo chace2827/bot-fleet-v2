@@ -171,6 +171,38 @@ def newest_raw():
     return files[-1] if files else None
 
 
+def _tid_int(s):
+    try:
+        return int(s[1:]) if s and s[0] == "T" else 0
+    except (ValueError, TypeError):
+        return 0
+
+
+def max_existing_tid(day, root=ROOT):
+    """Largest trade_id already assigned to a day other than `day`.
+
+    build_ledger.py overwrites data/trades.csv, so the counter must continue from
+    the persisted hedge_tournament.csv (and any trades.csv rows from other days)
+    rather than resetting.  Re-running the same day ignores that day's own rows
+    so trade_ids are deterministic.
+    """
+    m = 0
+    for name, date_key in (("data/hedge_tournament.csv", "date"),
+                           ("data/trades.csv", "open_date")):
+        path = os.path.join(root, name)
+        if not os.path.exists(path):
+            continue
+        with open(path) as f:
+            for r in csv.DictReader(f):
+                d = (r.get(date_key) or "")[:10]
+                if d == day:
+                    continue
+                t = _tid_int(r.get("trade_id", ""))
+                if t > m:
+                    m = t
+    return m
+
+
 def load_meta():
     if not os.path.exists(META_PATH):
         sys.exit(f"ERROR: missing {META_PATH} (the bot classification source)")
@@ -345,6 +377,8 @@ def write_empty_ledger(ledger_start, ls_source, reason):
 
 def main():
     ap = argparse.ArgumentParser(add_help=True)
+    ap.add_argument("date", nargs="?", default=None,
+                    help="use data/raw/DATE.csv as the export source; otherwise newest")
     ap.add_argument("--ledger-start", default=None,
                     help="cutover date YYYY-MM-DD (overrides env and the constant)")
     ap.add_argument("--selftest", action="store_true",
@@ -361,7 +395,14 @@ def main():
     # BEFORE anything reads the export, so the FILTERED-EXPORT GUARD below can
     # subtract it and so a mis-declared roster refuses without touching disk.
     ops_bots = ops_set_from_meta(meta)
-    src = newest_raw()
+    if args.date:
+        src = os.path.join(RAW, f"{args.date}.csv")
+        if not os.path.exists(src):
+            sys.exit(f"ERROR: raw export fixture not found: {src}")
+        day = args.date
+    else:
+        src = newest_raw()
+        day = os.path.basename(src)[:10] if src else ""
 
     prior_path = os.path.join(OUT, "trades.csv")
     prior_rows = list(csv.DictReader(open(prior_path))) if os.path.exists(prior_path) else []
@@ -452,6 +493,12 @@ def main():
         return "post-fix" if open_date[:10] >= b else "pre-fix"
 
     unclassified = sorted({r["botName"] for r in rows if r["botName"] not in meta})
+    if unclassified:
+        print("\nERROR: UNCLASSIFIED bot(s) in the post-cutover working set:")
+        for b in unclassified:
+            print(f"  - {b}")
+        print("Refusing to write the working ledger. Add them to data/bots_meta.csv first.")
+        sys.exit(1)
 
     # --- ops rows: visible, separate, never a working-ledger input --------
     with open(os.path.join(OUT, "ops_rows.csv"), "w", newline="") as fo:
@@ -500,8 +547,8 @@ def main():
 
     trade_of = {}
     trade_size = collections.Counter()
-    tid = 0
-    for (bot, day), b in buckets.items():
+    tid = max_existing_tid(day)
+    for (bot, bday), b in buckets.items():
         for i in b["ic"]:
             tid += 1; k = f"T{tid:05d}"; trade_of[i] = k; trade_size[k] = 1
         cand = sorted((abs(secs(ci) - secs(pi)), ci, pi)
@@ -622,9 +669,6 @@ def main():
         for b in sorted(ops_bots):
             n = ob.get(b, 0)
             print(f"    {n:>4}  {b}" + ("" if n else "   (declared; no rows in this export)"))
-    if unclassified:
-        print(f"\nWARNING: {len(unclassified)} unclassified bot(s) — add to data/bots_meta.csv:")
-        for b in unclassified: print(f"  - {b}")
     if dropped:
         print("\n" + "!" * 68)
         print(f"!! FILTERED-EXPORT WARNING: {len(dropped)} bot(s) in the prior ledger are")
