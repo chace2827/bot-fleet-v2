@@ -2,7 +2,7 @@
 
 *The live facts. Updated whenever a stated fact changes (CLAUDE.md §9.1). Numbers live in
 `STATUS.md`; the plan in `docs/build-plan.md`; progress in the `bot-fleet-migration` tracker.
-Last updated 2026-08-10 DAY 1 (⭐ THE FIRST TRACKING DAY — the ledger is LIVE at n=3 positions / +$500; the eight zero-entry bots are ADJUDICATED to one root cause; PR-01 Step-6 inverted check CLOSED: see the NEW top block, which supersedes every "EMPTY LEDGER / n=0" statement beneath it). Earlier 2026-08-09 S2b (⭐ THE SWITCH-ON SITTING — **17 of 43 AUTOMATIONS ON**; PR-02 and
+Last updated 2026-08-12 DAY 1 (⭐ THE FIRST TRACKING DAY — the ledger is LIVE at n=3 positions / +$500; the eight zero-entry bots are ADJUDICATED to one root cause; PR-01 Step-6 inverted check CLOSED: see the NEW top block, which supersedes every "EMPTY LEDGER / n=0" statement beneath it). Earlier 2026-08-09 S2b (⭐ THE SWITCH-ON SITTING — **17 of 43 AUTOMATIONS ON**; PR-02 and
 PR-04 SIGNED and LIVE; findings S2b-R1…R4; gate A12 bannered, sweep still owed: see the NEW top
 block, which supersedes the S2 block's "7 of 43" ON-count. Earlier 2026-08-08 NIGHT (⭐ THE TEN-SLOT RULING SITTING — all ten slots RULED and APPLIED;
 both S2 preconditions CLEARED; LEDGER_START = 2026-08-10; gate A8 CLOSED: see the NEW top block).
@@ -25,6 +25,14 @@ C5 PASS, C11/C4/C6 answered, C10 still blocking ARM-B1; earlier the same day: pr
 the released gated batch — C12 and S-2 propagated to
 every surface, D-1 propagated, `research-loop-spec.md` corrected ×6, §8.4 step 1 corrected on
 explicit authorization; earlier the same day: R-edit package applied + edit-policy split).*
+
+## 2026-08-12 — repo governance
+
+- Branch protection rule active on `master`: PR required, 1 approval, CODEOWNERS review, required status check `phase0`, stale PR approval dismissal, force pushes blocked.
+- PR #7 merged: Phase 0 CI (`.github/workflows/ci.yml`, `CODEOWNERS`, hermetic `daily.sh`, stable `trade_id`, UNCLASSIFIED refusal, `check_docs_vs_csv.py`).
+- PR #6 merged: canonical `docs/RULINGS.md` rulings registry.
+- PR #3 closed as superseded by PR #7.
+- Local `master` pulled to `01a9875`.
 
 ## ⭐⭐⭐⭐ 2026-08-10 — DAY 1. **THE LEDGER IS LIVE: n=3 POSITIONS, +$500.**
 
