@@ -80,6 +80,8 @@ def check_gf_arm_count(bots, errors):
     def is_gf(r):
         b = (r.get("bot") or "").lower()
         n = (r.get("notes") or "").lower()
+        if (r.get("role") or "").lower() == "external control":
+            return False  # paired control, deliberately outside the PR-14…PR-20 family
         return "gf-" in b or "greenfield" in b or "greenfield" in n
 
     gf_count = sum(1 for r in bots if is_gf(r))
