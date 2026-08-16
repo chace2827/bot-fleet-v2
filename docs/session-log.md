@@ -8602,3 +8602,17 @@ question — the defect is the method, not the number. Leaving it unpursued.
 
 **Hand-off**
 - Andy to review contradictions surfaced by `check_docs_vs_csv.py`; Claude does not commit.
+
+---
+
+## 2026-08-12 — repo governance: merge, branch protection, closeout
+
+**Done**
+- Merged PR #7 (Phase 0 CI: hermetic `daily.sh`, stable `trade_id`, UNCLASSIFIED refusal, `.github/workflows/ci.yml`, `CODEOWNERS`).
+- Merged PR #6 (canonical `docs/RULINGS.md` append-only rulings registry).
+- Closed PR #3 as superseded by PR #7.
+- Set branch protection rule on `master`: PR required, 1 approval, CODEOWNERS review, required status check `phase0`, stale PR approval dismissal, force pushes blocked.
+- Pulled `origin/master` to local at `01a9875`.
+
+**Hand-off**
+- Andy to review `docs/state.md` and `docs/session-log.md` changes, then run the commit. Claude does not commit.
