@@ -8616,3 +8616,38 @@ question — the defect is the method, not the number. Leaving it unpursued.
 
 **Hand-off**
 - Andy to review `docs/state.md` and `docs/session-log.md` changes, then run the commit. Claude does not commit.
+
+## 2026-08-16 — Roster re-baseline (carried forward) + option-alpha skill
+
+**What changed**
+- `data/bots_meta.csv`: six statuses corrected ON → OFF (`IC-SPX-Fortress-Unstopped`,
+  `IC-SPX-Fortress-Defang`, `QQQ-IC-0DTE-Fortress`, `QQQ long call`, `Tasty Condor`,
+  `DIR-SPX-Put-Control`) from a first-hand read of OA `/bots?on=1` on **2026-08-11 21:34 ET**.
+  Each corrected row carries that capture as provenance in `notes`.
+- Added `GF-QQQ-IC-Ride-Delta` (ON, $2,500, PR-23). Registered in
+  `docs/pre-registration-ledger.md` §PR-23 as **DRAFT, UNSIGNED** — the `SIGNED` line still needs a
+  date and a config-capture hash. Row records that it is a **paired external control**, not an
+  eighth arm of the PR-14…PR-20 family.
+- Added three `*-ARCHIVED-*` rows (renamed originals per `rename_map.csv`) so a straddling row
+  cannot land `UNCLASSIFIED` under the Phase 0 fatal refusal.
+- Added `.agents/skills/option-alpha/SKILL.md` — durable OA operating knowledge (evidence
+  hierarchy, Trades-list rule, log/liveness semantics, capture ritual, clone traps). Canonical
+  `docs/` files override it where they disagree.
+- `scripts/check_docs_vs_csv.py`: the GF-arm counter now excludes `role = external control`.
+  Without this it counted Ride-Delta as an eighth arm and flagged five correct doc statements.
+  The docs' "seven GF arms" is right; the heuristic was wrong.
+
+**Not done / open for Andy**
+- PR-23 is unsigned. Ride-Delta's row says ON because OA says ON, not because the gate is closed.
+- **Day-one check owed**: PR-23 requires recording where delta 0.10 actually lands in OTM% — read
+  it off the first filled position's Trades list, not the Exit Options panel.
+- The status read is dated 2026-08-11; anything toggled in OA since is not reflected. Nothing
+  writes OA → repo automatically, which remains the central gap.
+
+**Verification**
+- `python3 -m py_compile scripts/*.py` clean.
+- `python3 scripts/execution_audit.py --validate` 21/21 passed.
+- `TAPE_FIXTURE=1 SOURCE_DATE_EPOCH=1786320000 scripts/daily.sh 2026-08-10` green; generated
+  execution-audit artifacts regenerated and committed.
+- `python3 scripts/check_docs_vs_csv.py` — no contradictions.
+- No OA edits were made in this session.
