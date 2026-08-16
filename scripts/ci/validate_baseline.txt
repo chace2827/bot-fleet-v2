@@ -1,0 +1,4 @@
+execution_audit exit=0 21/21
+a_series exit=0 -
+research_loop exit=0 62/62
+comparative_machinery exit=1 35/36

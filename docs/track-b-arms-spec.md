@@ -112,7 +112,7 @@ Filtered in four passes:
 | `DSTOP_100` | ✓ | ✓ §3 (R-1 basis) | ✓ `dstop`, confirmed §6.1a | **no** — excluded by greenfield §3.1 | ⭐ **ARM-B1** |
 | `DSTOP_150` | ✓ | ✓ §3 (R-1 basis) | ✓ `dstop` | no | **hold for wave 2, §8.2** |
 | `COND_*` (trough-timing) | ✓ | ✓ §3 | ⛔ **NO** | — | **drop — §8.3, platform limit** |
-| Time `expdays` 0.015 | ✓ (see §7) | ✓ ruled R-2 | ✓ enumerated first-hand | **no** — all 7 greenfield arms hold 0.01 | ⭐ **ARM-B2** |
+| Time `expdays` 0.015 | ✓ (see §7) | ✓ ruled R-2 | ✓ enumerated first-hand | **no** — all 8 greenfield arms hold 0.01 | ⭐ **ARM-B2** |
 | Time `expdays` 0.005 | ✓ | ✓ ruled R-2 | ⛔ **NO in this family** | — | **drop — §6.4, backstop preempts it** |
 | Combined-MFE condor (R-6) | profit side | ✓ ruled R-6 | ⛔ not as an arm of this family | — | **defer — §8.4** |
 | `PT40` / `PT60` / `PT70` | ✗ profit side | ✓ §3 | ✓ | partly (`GF-PT50`) | **defer — §4 says loss side first** |
@@ -452,7 +452,7 @@ All fields below are from `oa-platform-reference.md` §6.1a, **[FIRST-HAND 2026-
 | 13 | ☐ Save as presets | `pretext` | `GF-DSTOP100-EXITS` |
 
 Sentinel Default Value on the automation input: `SENTINEL-SL1`, subject to C6.
-Bid-Ask Guard **OFF**, identically to all seven greenfield arms (§4.4) — it disables Exit Options
+Bid-Ask Guard **OFF**, identically to all eight greenfield arms (§4.4) — it disables Exit Options
 with no error while a spread is wide, which on a stop arm is the worst-timed possible failure.
 
 ### 5.4 ⛔ `<D100>` — the value cannot be stamped at Day-0, and this is the arm's real blocker
@@ -593,7 +593,7 @@ decisive, and it is §7's answer.
 > Applied on Andy's explicit ruling (`comparative-machinery-spec.md` §3.4). **One family, one
 > correction** — ruling S-1 (§3.3 above) governs bot-slot allocation only and says nothing about
 > error rates; both arms share `GF-QQQ-IC-Ride` as control, the entry automations, the day-series
-> and 1-lot sizing with the seven greenfield arms. This does not change this section's own finding
+> and 1-lot sizing with the eight greenfield arms. This does not change this section's own finding
 > — ARM-B2 is still the only proposed arm that does not double-test a signed Track A variant — it
 > changes how ARM-B2's own K1 read is corrected: as one arm inside a K-arm family, not a family of
 > its own. ⚠️ **Also ruled the same session: G-10 SWITCH** — the family correction is no longer
@@ -618,7 +618,7 @@ automations inside a bot are turned off"* — the inverse being the backstop's w
 exist), and closes 100% at market.
 
 ⛔ **Do not "fix" this by moving or removing the backstop for one arm.** The backstop is a shared
-object; changing it changes all seven greenfield arms, and exempting one arm breaks matching.
+object; changing it changes all eight greenfield arms, and exempting one arm breaks matching.
 **The 15:55 rung is therefore deferred with a stated reason: it requires a family whose backstop
 is later than 15:55, which this family is not and should not become.** R-2's time question is
 funded here in its **earlier** direction only — which is the loss-side direction, and the one §4
@@ -730,7 +730,7 @@ control**, i.e. a confound in the one comparison the arm exists to make.
 **Cost, stated:** on the five triggered greenfield arms, a trigger firing in [15:44, 15:50) leaves
 the sibling open until its own 15:50 Expiration exit closes it — the condor still closes, at worst
 six minutes later, with no orphan. **Benefit:** the gate keeps doing exactly what §4.3(c) built it
-to do, for both the 15:52 backstop and the 15:45 exit, and all seven greenfield arms plus both new
+to do, for both the 15:52 backstop and the 15:45 exit, and all eight greenfield arms plus both new
 arms share one unchanged object. ⚠️ Because it changes a shared object, it requires re-verification
 of every attached arm (assert **A7**, payload-hash baseline) and is **Andy's**, since
 `greenfield-family-spec.md` is not this session's to amend.
@@ -1110,7 +1110,7 @@ return to Andy with the tournament. **C1** gates ARM-B1's secondary reading only
 | **2** | ⛔ **The four consequential edits still NOT applied to `research-loop-spec.md`** (review §9): §5's `n ≥ 100 positions` line · §5's `**adjusted for the 12-variant count**` phrase, now contradicted by §10a · **§6 limit 5, the censoring block — R-2's applied §3 text already references it as `(§6.5)` and that reference dangles** · §1a's `74 (19%)`, correctly **101/394 = 25.6%** | Outside the §3/§10 authorisation. **Both SAMPLE TARGETs above are written against the signed-but-unapplied §5 wording**, so until item 1 of that list is applied, this spec's targets and §5's text disagree on their face. Review §9 recommends ruling 1–3 together. |
 | **1g** | ⛔ ⭐ **NEW — `state.md` still carries TWO figures its own rulings retired.** Its greenfield block, item 4: *"**The family consumes 7 of the 8 signed Track B slots**"* — superseded by S-1, and **corrected in `greenfield-family-spec.md` but not in `state.md`**. Same block, item 3: *"`research-loop-spec.md` §10's signed **0.10R** margin is unreachable here"* — superseded by **R-3** (+0.015R), the same staleness as item 3 below. | ~~`state.md` is the fleet's own state page and the first thing a cold session reads. **Two retired figures on it outrank two retired figures in an appendix.** Not this session's file to edit. ⚠️ Note `state.md` *elsewhere* records the S-2 discharge correctly (as ruling S4) — so the file is internally inconsistent, which is harder to spot than uniformly stale.~~<br><br>✅ **CLOSED — and this item was itself STALE. Corrected 2026-08-05.** **[FIRST-HAND 2026-08-05, direct `device_bash` read of `docs/state.md`]**: both figures are already carried **struck and superseded**, not asserted. Item 4 reads `~~The family consumes 7 of the 8 signed Track B slots~~ 📝 **SUPERSEDED 2026-08-04 by ruling S-1**`, and item 3 reads `~~…§10's signed 0.10R margin is unreachable here.~~ ✅ **RESOLVED 2026-08-04 by ruling R-3**` with the +0.015R replacement spelled out. **`state.md` was corrected by its own owner at 23:57, two minutes after this spec was written at 23:55** — so this row was true when written and false within the same task. ⭐ **The finding survives as a method result, not as a defect:** a propagation flag is itself a propagation dependency, and it goes stale on the same clock as the thing it flags. **What `state.md` WAS still carrying, and what this sweep fixed:** its greenfield-spec hash (`da3c440e…`, one amendment behind) and the C12 caveat in two places (§11 item **1f**). |
 | **3** | ⭐ **`greenfield-family-spec.md` §12 item 10 is STALE** — it is written against the superseded `≥0.10R` margin and concludes *"nothing here can ever graduate"*. **R-3 lowered the margin to +0.015R**, which that family's theoretical range (+0.083R to +0.162R) clears comfortably. The item should be re-scoped: the **effect-size** objection is resolved; the **power** objection is not (n=100 → ±0.026R; ~307 matched condors for ±0.015R; ~560 with Bonferroni) | Not this spec's file to edit. Flagged so the greenfield build does not carry a resolved blocker as if it were live — and so the surviving half is not lost with it. |
-| **4** | **PR-21 / PR-22 ID literals are PROPOSED.** `pre-registration-ledger.md` §8 item 1: PR-01…PR-13 are stamped and final; §6's are ranges until the fresh-build counts are fixed. Greenfield proposes PR-14…PR-20 | These follow greenfield's block and become final when Andy fixes both counts. **If the greenfield count lands below 7, these shift down.** |
+| **4** | **PR-21 / PR-22 ID literals are PROPOSED.** `pre-registration-ledger.md` §8 item 1: PR-01…PR-13 are stamped and final; §6's are ranges until the fresh-build counts are fixed. Greenfield proposes PR-14…PR-23 | These follow greenfield's block and become final when Andy fixes both counts. **If the greenfield count lands below 7, these shift down.** |
 | **5** | **`pre-registration-ledger.md` §2's template has no GATE EVALUATION DATE field**, which §10a item 2 now requires *before* n reaches 100 | Editing that template is a change to a signed document. Both entries above carry the field anyway, marked ⭐, so nothing is lost if the template is amended later. |
 | **6** | ~~⭐ **"Regime change" is undefined everywhere.**~~ 📝 **CORRECTED 2026-08-06 — FALSE. `evidence-standards.md` §4 gate B3 already defines it**: *"a VIX move of ≥ 10 points peak-to-trough, or both a sub-15 and an above-25 VIX period"* — cross-referenced by that file's own T3.3. **What is still genuinely open, and it is narrower:** B3 is not wired to a detector in `scripts/`, and no pre-registration entry cites B3 by name. `research-loop-spec.md` §5 and `build-plan.md` §5 remain **conjunctive** gates. | ~~No arm and no variant can graduate until it is written and signed, regardless of n or elapsed time.~~ **No arm and no variant can graduate until B3 is wired to a detector and cited by name at signing** — the definition exists; the plumbing does not. `decision-card-2026-08-06.md` slot 6 deferred a *definition* on the false premise that none existed; Andy's fresh read is needed on whether to wire B3's detector now or defer that separately. |
 | **7** | ⭐ **The comparative machinery does not exist.** Nothing produces a cross-bot **paired ΔR with a bootstrap CI**; `research_loop.py` is `0.1.0-DRAFT`, advisory-only, carries **three fatal defects** and **must not be wired in**; §10a's stratified sign-flip permutation test is unimplemented; and the liveness criteria need an **exit-reason field the export may not carry** | Every comparative criterion in §9 is currently uncomputable. `pre-registration-ledger.md` §7 item 3 makes it a **signing gate**, so this blocks signing, not just analysis. Largest unbuilt dependency these arms imply. |

@@ -158,8 +158,8 @@ Lab ops slots** as a third, separate allocation (🔓 amended 2026-08-07, banner
 |---|--:|---|
 | **B — clone-to-spec** (original archived) | 4 | §4 |
 | **C — untouched** (validated, lived through the lapse) | 9 | §5 |
-| **D — fresh builds** | 5–7 | §6 |
-| **plan-bot subtotal** | **≈18–20** | |
+| **D — fresh builds** | 5–8 | §6 |
+| **plan-bot subtotal** | **≈19–21** | |
 | **Track B arms** (separate allocation, `research-loop-spec.md` §10) | **≤8** | `track-b-arms-spec.md` §9 — PR-21 / PR-22 proposed, wave-1 spend **2** |
 | **E — Lab ops bots** (non-inferential; separate allocation, `exploratory-bots-design-2026-08-07.md` §3.1) | **≤2** | §6a |
 | **ceiling** | **30** | |
@@ -1072,7 +1072,7 @@ MECHANISM        Short-premium VRP on 0DTE. The arms share every other input, so
                  📝 SIZING STAMP 2026-08-06: primitive observed FIRST-HAND as the FIXED
                  CONTRACT COUNT (1), not the `Up to $250 risk` fallback (spec §5.4/C4) —
                  `GF-ScannerA-PutSpread`, Phase A build, `amount:{"type":"quantity",
-                 "quantity":1}`. Applies to all seven greenfield-family arms, PR-14…PR-20
+                 "quantity":1}`. Applies to all eight greenfield-family arms, PR-14…PR-23
                  (`greenfield-family-spec.md` C4, memory row).
 KILL CRITERION   Per arm: Exp(R) per condor < 0 with CI entirely below 0 at n≥60.
                  📝 AMENDED 2026-08-06 (G-8, SEQUENCE+CS, ruled by Andy) — the n≥60 read
@@ -1254,7 +1254,7 @@ MECHANISM        Per arm, one hedge mechanic from the library. Shared automation
                  📝 SIZING STAMP 2026-08-06: primitive observed FIRST-HAND as the FIXED
                  CONTRACT COUNT (1), not the `Up to $250 risk` fallback (spec §5.4/C4) —
                  `GF-ScannerA-PutSpread`, Phase A build, `amount:{"type":"quantity",
-                 "quantity":1}`. Applies to all seven greenfield-family arms, PR-14…PR-20
+                 "quantity":1}`. Applies to all eight greenfield-family arms, PR-14…PR-23
                  (`greenfield-family-spec.md` C4, memory row).
 KILL CRITERION   The tournament is VOID (not the bots) if any of hedge-research.md §5.2's five
                  conditions fails: shared automation · one differing input proven by
@@ -1299,7 +1299,7 @@ MECHANISM        n/a — this bot is not run for edge. Its P/L is expected to be
                  📝 SIZING STAMP 2026-08-06: primitive observed FIRST-HAND as the FIXED
                  CONTRACT COUNT (1), not the `Up to $250 risk` fallback (spec §5.4/C4) —
                  `GF-ScannerA-PutSpread`, Phase A build, `amount:{"type":"quantity",
-                 "quantity":1}`. Applies to all seven greenfield-family arms, PR-14…PR-20
+                 "quantity":1}`. Applies to all eight greenfield-family arms, PR-14…PR-23
                  (`greenfield-family-spec.md` C4, memory row).
 KILL CRITERION   None on P/L — it is exempt by design, and that exemption is stated here so it
                  cannot later be mistaken for a losing bot nobody killed. It is retired when the
@@ -1382,7 +1382,7 @@ checks is worse than none.
 
 7. **PR-05 and PR-06 predate the `GATE EVAL DATE` field** and do not carry it. The field was
    added to §2's template on 2026-08-06 (**G-7**, STAMP, ruled by Andy); PR-07…PR-13 carry it,
-   PR-14…PR-20 carry it, and the two Directional entries in §5 do not. Under §7 item 2 an entry
+   PR-14…PR-23 carry it, and the two Directional entries in §5 do not. Under §7 item 2 an entry
    with an unresolved field is unsigned, so this must be closed before Day-0 — but adding the
    field to a written entry is an edit to that entry, and the Task-10 scope forbade one. **Andy's
    call: stamp both, or rule the field inapplicable to non-comparative bots.**
@@ -1411,16 +1411,14 @@ checks is worse than none.
 
 ### PR-23 — `GF-QQQ-IC-Ride-Delta`   ⚠️ DRAFT, UNSIGNED. Authored 2026-08-11.
 
-> ⛔ **NOT AN ARM OF THE PR-14…PR-20 GREENFIELD FAMILY.** Registered deliberately OUTSIDE it.
-> The family-level kill criterion (PR-14…PR-17 entry) voids the family's ranking if two ARMS
-> differ in more than one mechanic. Ride-Delta differs from `GF-QQQ-IC-Ride` in the entry
-> selection METHOD, which is not an exit mechanic — counting it as an eighth arm would VOID the
-> exit comparison the family exists to run. It is a **paired external control**, measured against
-> Ride, and it is excluded from every family-level ranking, gate and re-base.
+> ✅ **AMENDED 2026-08-12.** Andy ruled `GF-QQQ-IC-Ride-Delta` is the **8th greenfield family
+> arm**, not an external control. The family definition in `greenfield-family-spec.md` §0/§1 is
+> widened from "one Exit-Options bundle" to "one input value" so that a strike-selection method
+> (delta vs fixed percent) is a valid arm variable. The original rationale is left standing below.
 
 ```
 ID               PR-23
-DISPOSITION      clone of GF-QQQ-IC-Ride    PILLAR/ROLE  IC · external control    STATUS  DRAFT
+DISPOSITION      8th greenfield arm    PILLAR/ROLE  IC · experiment    STATUS  DRAFT
 SOURCE           GF-QQQ-IC-Ride  BOTfw5TkkCRF4417860701930934951
 HYPOTHESIS       Short-strike selection by DELTA adapts to volatility and time-to-expiry;
                  selection by FIXED PERCENT OF LAST does not. Paired against Ride — identical
@@ -1428,7 +1426,7 @@ HYPOTHESIS       Short-strike selection by DELTA adapts to volatility and time-t
                  (ride to expiry) — the two differ in EXACTLY ONE input: the short-strike
                  selection method. Any divergence in entry FREQUENCY or in realised OTM% over
                  time is therefore attributable to that method alone.
-MECHANISM        Established 2026-08-11, first-hand: PR-01 and the seven GF arms use
+MECHANISM        Established 2026-08-11, first-hand: PR-01 and the eight GF arms use
                  `legpctprice pct=0.75`; PR-02 uses `delta 0.1` and is the only bot in the
                  fleet filling daily. PR-01 vs PR-02 are byte-identical in wings, price,
                  sizing and filter — the selection method is the sole differing field.
@@ -1444,7 +1442,7 @@ KILL CRITERION   Exp(R) per condor < 0 with CI entirely below 0 at n>=60, emitte
                  kill.
 GATE EVAL DATE   2026-11-11 (3 months from authoring).
 ALLOCATION       $2,500 — matched to the GF arms. Sizing `amount:{"type":"quantity",
-                 "quantity":1}`, fixed 1 contract, per the PR-14…PR-20 SIZING STAMP 2026-08-06.
+                 "quantity":1}`, fixed 1 contract, per the PR-14…PR-23 SIZING STAMP 2026-08-06.
                  Position limit 2/2.
 STARTING DELTA   0.10 / -0.10 — PR-02's observed-working value, NOT a derivation. On QQQ a given
                  delta sits further out in percent terms than on SPX, so this may land near the

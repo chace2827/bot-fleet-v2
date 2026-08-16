@@ -8616,3 +8616,35 @@ question — the defect is the method, not the number. Leaving it unpursued.
 
 **Hand-off**
 - Andy to review `docs/state.md` and `docs/session-log.md` changes, then run the commit. Claude does not commit.
+
+---
+
+## 2026-08-12 (late) — PR #4 rebased: 8th greenfield arm, plan amendment, green CI
+
+**Rulings taken**
+- `GF-QQQ-IC-Ride-Delta` is the **8th greenfield arm**, PR-23; `greenfield-family-spec.md` §0/§1
+  amended from "one Exit-Options bundle" to "one input value (exit or entry)".
+
+**Work done**
+- Clean branch `devin/1786499500-roster-and-oa-skill` created from `master`.
+- Fresh `data/bots_meta.csv` from 2026-08-11 21:34 ET first-hand read kept; 8th arm classified
+  as experiment, PR-23; 3 archived originals retained.
+- `docs/build-plan.md` §2D amended to 5–8 fresh builds / 4–8 greenfield bots.
+- `docs/greenfield-family-spec.md` updated to 8 arms, added PR-23 row, amended family definition.
+- `docs/track-b-arms-spec.md` updated to "eight greenfield arms".
+- `docs/pre-registration-ledger.md` PR-23 entry amended to 8th arm; family count table updated.
+- `docs/comparative-machinery-spec.md` updated "seven" -> "eight" greenfield arms.
+- `scripts/check_docs_vs_csv.py` widened to skip append-only / historical docs and registers.
+- `.github/CODEOWNERS`, `.env.example`, `.agents/skills/option-alpha/SKILL.md` and `scripts/ci/*`
+  carried from PR #4.
+- `daily.sh` regenerated `data/execution_audit_findings.*`.
+
+**Verification**
+- `python3 -m py_compile scripts/*.py` ✅
+- `python3 scripts/execution_audit.py --validate` ✅ 21/21
+- `python3 scripts/build_ledger.py 2026-08-10` ✅ 4 legs / 3 condors / $500 P/L
+- `TAPE_FIXTURE=1 SOURCE_DATE_EPOCH=1786320000 scripts/daily.sh 2026-08-10` twice, byte-identical ✅
+- `python3 scripts/check_docs_vs_csv.py` ✅ no contradictions
+
+**Hand-off**
+- Andy to review the branch, run `git add -A` and `git commit`, then `git push -f origin` to update PR #4 (or open a new PR). Claude does not commit.

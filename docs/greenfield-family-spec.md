@@ -1,5 +1,11 @@
 # Greenfield family — build spec
 
+> ### ✅ AMENDED 2026-08-12
+> Andy ruled `GF-QQQ-IC-Ride-Delta` (PR-23) is the **8th greenfield arm**. §0, §1 and §3 are
+> updated to eight; the pre-registration ledger (`PR-23`) and `data/bots_meta.csv` are updated.
+> Older dated notes that still say "seven" are left standing as history — read them as "eight"
+> for current state.
+
 *Written 2026-08-04. The design document Phase 4's fresh builds are built from, mechanically.
 It **implements** `build-plan.md` §2D and §5; it does not amend them. Nothing here has been
 built, and no OA surface was touched in the session that wrote it.*
@@ -40,12 +46,13 @@ built, and no OA surface was touched in the session that wrote it.*
 
 ## 0. What this document is, in six lines
 
-Seven fresh bots, built as **one matched family**, not two families.
+Eight fresh bots, built as **one matched family**, not two families.
 
-Every bot shares **the same entry automations, the same backstop, the same sibling-close, the
-same bot settings, and the same sizing** — shared as Library objects, so they are identical *by
-construction* rather than by repetition. Each bot differs in **exactly one mechanic**: the value
-of a per-bot input whose type is the whole Exit-Options bundle (one per side, asserted equal).
+Every bot shares **the same backstop, the same sibling-close, the same bot settings, and the
+same sizing** — shared as Library objects, so they are identical *by construction* rather than by
+repetition. Each bot differs in **exactly one input value**: one per-bot field, asserted equal
+across all other fields. For PR-14…PR-20 this is the Exit-Options bundle (one per side); for
+PR-23 it is the short-strike selection method (delta vs fixed percent).
 
 The "greenfield IC family" and the "rebuilt hedge tournament arms" of `build-plan.md` §2D are
 **two views of this one family**, not two builds. That is what makes the hedge arms matched to a
@@ -68,7 +75,7 @@ consequence.
 So: **one shared Open Position action → one Automation Input → N Bot Inputs, one per arm.**
 
 ```
-   Fortress-family ScannerA-PutSpread      (ONE Library automation object, shared by all 7 bots)
+   Fortress-family ScannerA-PutSpread      (ONE Library automation object, shared by all 8 bots)
       └─ Open Short Put Spread
            └─ Exit Options  =  🔗 automation input  GF_EXITS_PUT
                                     (ScannerB carries its own GF_EXITS_CALL — see §4.1)
@@ -255,11 +262,11 @@ error shape.
 
 ---
 
-## 3. The roster — seven bots, and how they fit `build-plan.md` §2D's arithmetic
+## 3. The roster — eight bots, and how they fit `build-plan.md` §2D's arithmetic
 
-§2D allows **5–7 fresh builds** total, covering the greenfield IC family (4–6 bots), the rebuilt
-hedge tournament arms, and the optional canary. Four + hedge arms + canary does not obviously fit
-inside seven. It fits here because the hedge arms are arms of the same family, sharing the same
+§2D now allows **5–8 fresh builds** total, covering the greenfield IC family (4–8 bots), the rebuilt
+hedge tournament arms, and the optional canary. Five + hedge arms + canary fits inside eight.
+It fits here because the hedge arms are arms of the same family, sharing the same
 control.
 
 | # | Bot name | Role | Arm variable (the whole bundle) | PR |
@@ -271,17 +278,15 @@ control.
 | 5 | `GF-QQQ-IC-SL100` | experiment (hedge arm) | time exit + Stop Loss 100 | PR-18 |
 | 6 | `GF-QQQ-IC-SL200` | experiment (hedge arm) | time exit + Stop Loss 200 | PR-19 |
 | 7 | `GF-QQQ-IC-Canary` | instrument | time exit + Profit Taking % 5 | PR-20 |
+| 8 | `GF-QQQ-IC-Ride-Delta` | experiment | short-strike selection by delta (0.10/-0.10) vs fixed percent | PR-23 |
 
-**Total fresh = 7.** At §2D's ceiling, with no remainder. `build-plan.md` §2's accounting —
-35 = 20 archived + 2 deleted + 4 cloned + 9 untouched — is untouched; end state is 20 active
-bots (4 clones + 9 untouched + 7 fresh), inside §2D's `≈18–20`.
+**Total fresh = 8.** `build-plan.md` §2's accounting —
+35 = 20 archived + 2 deleted + 4 cloned + 9 untouched — is untouched; end state is 21 active
+bots (4 clones + 9 untouched + 8 fresh), inside §2D's `≈18–20`.
 
-> ⚠️ **Finding, not an amendment.** §2D's `Greenfield IC family (4–6 bots)` reads most naturally
-> as 4–6 bots *before* the hedge arms and the canary, which would exceed the 5–7 total in the
-> same paragraph. This spec resolves the tension by treating the IC family and the hedge arms as
-> one matched set (4 IC arms + 2 hedge arms = 6, inside "4–6"), plus the canary. **If Andy reads
-> §2D as requiring separate families, the arithmetic needs an "amend the plan" and this spec's
-> §3 is what changes.** Flagged, not decided here.
+> ✅ **AMENDMENT 2026-08-12.** §2D is now amended to `Greenfield IC family (4–8 bots)` and
+> `Fresh builds (5–8)`. `GF-QQQ-IC-Ride-Delta` is the 8th arm; its mechanic is delta and is
+> pending a first-hand Bot Input capture.
 
 **Arm IDs.** `pre-registration-ledger.md` §8 item 1 holds PR-14…PR-17 for the IC family and
 `PR-18 onward` for the hedge arms, with the literals unstamped until the counts are decided.
@@ -1944,7 +1949,7 @@ because it is an instrument, not an arm.*
 | **D2** | ⛔ **Set `itmlive` = `market`** before any capital is live (§7, hard gate) |
 | **D3** | ⭐ **BEFORE the arms are switched on: observe the 15:52 backstop's actual fire time** on the pilot — the DST / `Market Time (EST)` question (§4.2). **Reordered under review.** If it fires at 16:52 or not at all, seven arms would otherwise run a full day with no flat close and the absence would look like "nothing needed closing" |
 | **D4** | Read whether the ITM Position Action appears in a Trades list, and under what label (§6.2 rule 2). **Until this is answered the Ride control's inverted liveness rule is ADVISORY, not fireable** (§9) |
-| **D5** | Andy signs each of PR-14…PR-20 per `pre-registration-ledger.md` §7. **Only then may a bot be switched ON** |
+| **D5** | Andy signs each of PR-14…PR-23 per `pre-registration-ledger.md` §7. **Only then may a bot be switched ON** |
 | **D6** | Switch `AUTOMATIONS` ON per arm; read **each arm's first new position's Trades list** against §8.5. **Signed ≠ verified** |
 | **D7** | Record the `UNATTRIBUTED` bucket count for [15:50, 15:53] Market closes (§6.2 rule 3), and the per-arm count of Market-priced closes — the CF-1 instrumentation |
 

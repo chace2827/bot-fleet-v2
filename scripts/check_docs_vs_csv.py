@@ -44,11 +44,25 @@ def fl(x):
 def md_files():
     out = [os.path.join(ROOT, "STATUS.md")]
     docs = os.path.join(ROOT, "docs")
+    # Historical / append-only / registers may carry figures from their own date.
+    SKIP = {
+        "session-log.md",
+        "rules-catalog.md",
+        "RULINGS.md",
+        "state.md",
+        "roster-mechanics-ruling.md",
+        "day0-session-pack-2026-08-07.md",
+        "rebuild-contingency-2026-08-07.md",
+        "reactivation-runbook.md",
+        "audit-report-2026-08-08.md",
+        "decision-card-2026-08-08.md",
+        "g-rulings-card-2026-08-07.md",
+        "split2-design-2026-08-08.md",
+    }
     if os.path.isdir(docs):
         for root, _dirs, files in os.walk(docs):
             for f in files:
-                if f.endswith(".md") and f not in ("session-log.md", "rules-catalog.md") \
-                        and not f.startswith("_"):
+                if f.endswith(".md") and f not in SKIP and not f.startswith("_"):
                     out.append(os.path.join(root, f))
     return out
 
