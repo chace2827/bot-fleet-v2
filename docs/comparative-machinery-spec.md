@@ -554,7 +554,7 @@ It lands here as **three** things, and the third was missed in the draft:
 3. ⭐ **An obligation this engine must carry: the no-influence rule.** Package part 3 — *"a Track A
    advisory read on a dual-tested variant may not trigger, accelerate, or veto any arm disposition
    **before that arm's own pre-declared gate date**"* — is carried into PR-14…PR-22 **at signing**.
-   It is anchored on a date that, for five of the seven greenfield arms, **does not exist** (G-7).
+   It is anchored on a date that, for five of the eight greenfield arms, **does not exist** (G-7).
    The engine enforces what it can: no verdict without a stamped gate-eval date, and no read of
    Track A output at all.
 

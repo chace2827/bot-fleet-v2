@@ -113,12 +113,17 @@ Validated builds with negligible or specially-treated history. No clone, no spec
   `Friday 14 DTE Broken Wing IB (B-70)`, `Trendy-Paper-v1`, `60min-ORB-10W-Paper-v1`, `Tasty Condor`.
   **Never refactored, watch-only.** Their lifetime record is the funding-decision input — see §3.
 
-### D. Fresh builds (5–7)
-- **Greenfield IC family (4–6 bots)** — the matched tournament: hard-PT vs trailing vs ride, arms differing
+### D. Fresh builds (5–8)
+- **Greenfield IC family (4–8 bots)** — the matched tournament: hard-PT vs trailing vs ride, arms differing
   in exactly one input value.
 - **Rebuilt hedge tournament arms** — shared automation, shared inputs, same execution class, Range075 as a
   preset. Proof of matching is a capture-diff showing one differing input. No ranking until then.
 - **Optional 1-lot canary** whose PT should fill every single day. If it stops filling, the exit engine died.
+
+> ### 🔓 AMENDMENT 2026-08-12 — 8th greenfield arm
+> Andy ruled `GF-QQQ-IC-Ride-Delta` is added as the 8th greenfield arm. The greenfield family
+> now counts 8 bots, so the family-size range and fresh-build range are widened accordingly.
+> End-state arithmetic below is unchanged except the greenfield count.
 
 **End state: ≈18–20 plan bots plus ≤8 pre-registered Track B arms
 (`research-loop-spec.md` §10, signed) plus ≤2 Lab ops slots (a third, separate allocation —
