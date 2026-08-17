@@ -73,6 +73,56 @@ jobs:
           done
           echo "daily.sh outputs are identical between the two runs"
 
+      - name: rerun-and-diff is hermetic under disabled network
+        env:
+          TAPE_FIXTURE: '1'
+          SOURCE_DATE_EPOCH: '1786320000'
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/run1
+          cp -f data/trades.csv data/bots.csv data/straddlers.csv data/ledger_meta.json \
+                data/execution_audit_findings.csv data/execution_audit_findings_meta.json \
+                data/hedge_tournament.csv data/trade_window.csv \
+                data/lessons.csv data/brief/2026-08-10_brief.json \
+                data/brief/2026-08-10_tape.json STATUS.md dashboard.html /tmp/run1/
+          run_no_net() {
+            if command -v unshare >/dev/null 2>&1 && unshare -n true 2>/dev/null; then
+              unshare -n bash scripts/daily.sh 2026-08-10
+            else
+              echo "unshare not usable; blocking HTTP(S) egress via unreachable proxy" >&2
+              HTTP_PROXY=127.0.0.1:1 HTTPS_PROXY=127.0.0.1:1 bash scripts/daily.sh 2026-08-10
+            fi
+          }
+          run_no_net
+          for f in data/trades.csv data/bots.csv data/straddlers.csv data/ledger_meta.json \
+                   data/execution_audit_findings.csv data/execution_audit_findings_meta.json \
+                   data/hedge_tournament.csv data/trade_window.csv \
+                   data/lessons.csv data/brief/2026-08-10_brief.json \
+                   data/brief/2026-08-10_tape.json STATUS.md dashboard.html; do
+            if ! diff -q "$f" "/tmp/run1/$(basename "$f")" > /dev/null; then
+              echo "NETWORK HERMETICITY FAIL: $f differs when network is disabled" >&2
+              diff "$f" "/tmp/run1/$(basename "$f")" >&2 || true
+              exit 1
+            fi
+          done
+          echo "daily.sh outputs are identical with network disabled"
+
+      - name: corrupted tape fixture is rejected
+        env:
+          TAPE_FIXTURE: '1'
+        run: |
+          set -euo pipefail
+          fixture=data/brief/2026-08-10_tape.json
+          cp -f "$fixture" /tmp/orig-fixture.json
+          restore() { cp -f /tmp/orig-fixture.json "$fixture" || true; }
+          trap restore EXIT
+          echo 'not-json' > "$fixture"
+          if scripts/daily.sh 2026-08-10; then
+            echo "FAIL: daily.sh did not fail on a corrupted fixture" >&2
+            exit 1
+          fi
+          echo "PASS: daily.sh rejected the corrupted tape fixture"
+
       - name: check docs vs csv
         run: python3 scripts/check_docs_vs_csv.py
 
