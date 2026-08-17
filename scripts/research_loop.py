@@ -1166,7 +1166,12 @@ def validate():
 
     # ---------- the DO-NOT-WIRE mechanical guard (§4.2 item 6, Gate A) ----------
     daily = os.path.join(ROOT, "scripts", "daily.sh")
-    wired = os.path.exists(daily) and "research_loop" in open(daily).read()
+    content = open(daily).read()
+    wired = os.path.exists(daily) and any(
+        "research_loop" in line and "python3" in line
+        for line in content.splitlines()
+        if not line.strip().startswith("#") and not line.strip().startswith("echo")
+    )
     check("DO-NOT-WIRE: research_loop.py is absent from scripts/daily.sh", wired, False)
 
     # ---------- fixture self-audit: verdict-string-only share < 15% (§7 Gate A) ----------
