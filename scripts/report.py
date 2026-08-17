@@ -6,10 +6,217 @@ dashboard.html (numbers + backlog). Never edit STATUS.md by hand.
 N reporting: 'Trades' = condors (legs paired into one entry); 'Legs' = OA position
 rows (matches OA's "Positions" count). Win rate shown is trade-level (per condor).
 """
-import csv, os, re, collections, datetime, json, math, random
+import argparse, collections, csv, datetime, json, math, os, random, re, shutil, subprocess, sys, tempfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 D = os.path.join(ROOT, "data")
+
+
+def set_root(root):
+    """Repoint ROOT and D at a scratch root (G-3 fixture / live separation)."""
+    global ROOT, D
+    ROOT = os.path.abspath(root)
+    D = os.path.join(ROOT, "data")
+
+
+CLI_TODAY = None
+
+
+def add_weekdays(d, n):
+    """Add n trading days (Mon-Fri) to date d; n may be negative."""
+    step = 1 if n >= 0 else -1
+    count = 0
+    while count < abs(n):
+        d += datetime.timedelta(days=step)
+        if d.weekday() < 5:
+            count += 1
+    return d
+
+
+def count_weekdays(start, end):
+    """Count weekdays in [start, end] inclusive."""
+    n = 0
+    d = start
+    while d <= end:
+        if d.weekday() < 5:
+            n += 1
+        d += datetime.timedelta(days=1)
+    return n
+
+
+DECIDABILITY_WINDOW = 20          # trading days
+DECIDABILITY_MIN_CLOSES = 3       # closes in window needed to project
+
+
+def resolve_report_today(cli_today, status_today, epoch, ledger_start, trades):
+    """Deterministic projection anchor; never uses the system clock."""
+    if cli_today:
+        return datetime.date.fromisoformat(cli_today)
+    if status_today:
+        return datetime.date.fromisoformat(status_today)
+    if epoch:
+        return datetime.datetime.fromtimestamp(
+            int(epoch), tz=datetime.timezone.utc).date()
+    close_dates = []
+    for t in trades:
+        cd = t.get("close_date")
+        if cd:
+            try:
+                close_dates.append(datetime.date.fromisoformat(cd[:10]))
+            except ValueError:
+                pass
+    if close_dates:
+        return max(close_dates)
+    if ledger_start:
+        try:
+            return datetime.date.fromisoformat(ledger_start)
+        except ValueError:
+            pass
+    return datetime.date(1970, 1, 1)
+
+
+def _condor_close_dates(trades):
+    """Group legs by trade_id and return [(bot, close_date)] for closed condors."""
+    by_id = collections.defaultdict(list)
+    for t in trades:
+        by_id[t["trade_id"]].append(t)
+    out = []
+    for legs in by_id.values():
+        if not legs:
+            continue
+        if all(l.get("close_date") for l in legs):
+            cd = max(l["close_date"][:10] for l in legs)
+            out.append((legs[0]["bot"], cd))
+    return out
+
+
+def decidability_countdown(trades, meta, today, ledger_start,
+                           window=DECIDABILITY_WINDOW, min_closes=DECIDABILITY_MIN_CLOSES):
+    """Render a PROJECTION section: fire rate and 100-condor date per armed arm.
+
+    Unit of account is the POSITION (condor = two spread rows paired by trade_id).
+    An arm is "armed" if its bots_meta status is ON.  Insufficient data is explicit.
+    """
+    condors = _condor_close_dates(trades)
+    by_bot = collections.defaultdict(list)
+    for bot, cd in condors:
+        by_bot[bot].append(cd)
+
+    armed = sorted(b for b, r in meta.items() if r.get("status", "").upper() == "ON")
+    if not armed:
+        return []
+
+    window_start = add_weekdays(today, -window)
+    effective_start = max(window_start,
+                          datetime.date.fromisoformat(ledger_start) if ledger_start else window_start)
+    trading_days_present = count_weekdays(effective_start, today)
+
+    lines = ["", "---", "",
+             "## Decidability countdown — per armed arm (PROJECTION, not evidence)",
+             "> **This is a forward projection, not a result.** It extrapolates the recent fire rate "
+             "and assumes that rate holds. Calendar projection skips weekends and does **not** model "
+             "market holidays, so the date is approximate. The unit of account is the **POSITION** "
+             "(a condor = two spread rows paired by `trade_id`); *n* = 100 means **100 condors**, "
+             "not 100 legs. The recent window is the last **{} trading days**; the post-cutover "
+             "ledger currently contributes **{} trading day{}** to this window.".format(
+                 window, trading_days_present, "s" if trading_days_present != 1 else ""),
+             "",
+             "| Arm | Pillar | Current condors, positions | Closes in {}-trading-day window | Fire rate "
+             "(closes/trading-day, condors) | Projected 100-condor date |".format(window),
+             "|---|---|--:|--:|--:|---|"]
+
+    for bot in armed:
+        rec = meta[bot]
+        pillar = rec.get("pillar", "—")
+        all_dates = sorted(by_bot.get(bot, []))
+        total = len(all_dates)
+        window_dates = [d for d in all_dates if window_start <= datetime.date.fromisoformat(d) <= today]
+        n_window = len(window_dates)
+
+        if n_window < min_closes:
+            rate_s = "insufficient data"
+            proj_s = "insufficient data"
+        else:
+            fire_rate = n_window / window
+            rate_s = f"{fire_rate:.2f}"
+            remaining = 100 - total
+            if remaining <= 0:
+                # 100th close already happened
+                hundredth = all_dates[99] if len(all_dates) > 99 else all_dates[-1]
+                proj_s = f"reached (n=100 at {hundredth})"
+            else:
+                needed = math.ceil(remaining / fire_rate)
+                proj_date = add_weekdays(today, needed)
+                proj_s = proj_date.isoformat()
+
+        lines.append(f"| {bot} | {pillar} | {total} | {n_window} | {rate_s} | {proj_s} |")
+
+    return lines
+
+
+def validate():
+    """Self-test: fire-rate fixture with a scratch root (never touches live data/)."""
+    root = tempfile.mkdtemp(prefix="report-validate-")
+    try:
+        os.makedirs(os.path.join(root, "data"), exist_ok=True)
+
+        # bots_meta.csv fixture
+        with open(os.path.join(root, "data", "bots_meta.csv"), "w") as f:
+            f.write("bot,pillar,role,underlying,status,champion,epoch_boundary,hedge,strike_fix,superseded,focus,notes,ops_class\n")
+            f.write("TestArm,IC,experiment,SPX,ON,,,,,,,,\n")
+            f.write("SparseArm,IC,experiment,SPX,ON,,,,,,,,\n")
+
+        # bots.csv fixture (report.py uses this for roster, totals, etc.)
+        with open(os.path.join(root, "data", "bots.csv"), "w") as f:
+            f.write("bot,pillar,underlying,role,status,n_trades,n_legs,total_pnl,win_rate_trade,win_rate_leg,first_trade,last_trade,epoch_start,needs_strike_fix,superseded\n")
+            f.write("TestArm,IC,SPX,experiment,ON,20,20,0,100%,100%,2026-08-10,2026-08-14,2026-08-10,,\n")
+            f.write("SparseArm,IC,SPX,experiment,ON,1,1,0,100%,100%,2026-08-14,2026-08-14,2026-08-10,,\n")
+
+        # trades.csv fixture: 20 condors for TestArm, 1 for SparseArm, all closing on consecutive weekdays ending 2026-08-14
+        with open(os.path.join(root, "data", "trades.csv"), "w") as f:
+            f.write("bot,pillar,underlying,role,epoch,trade_id,symbol,structure,status,quantity,credit,exit_price,pnl,risk,open_date,close_date,expiration,tags,single_sided,short_put,long_put,short_call,long_call,premium,underlying_open,underlying_close,mfe_pct,mae_pct,mfe_date,mae_date\n")
+            today = datetime.date(2026, 8, 14)
+            for i in range(20):
+                cd = add_weekdays(today, -(19 - i))
+                f.write(f"TestArm,IC,SPX,experiment,post-fix,T{i:04d},SPX,ironcondor,closed,1,0.20,0.10,0,50,2026-08-10 10:00:00,{cd.isoformat()} 16:00:00,2026-08-14 16:00:00,,False,100,95,110,115,0.20,100,100,1,0,2026-08-14 15:00:00,2026-08-14 10:00:00\n")
+            f.write("SparseArm,IC,SPX,experiment,post-fix,T9000,SPX,ironcondor,closed,1,0.20,0.10,0,50,2026-08-10 10:00:00,2026-08-14 16:00:00,2026-08-14 16:00:00,,False,100,95,110,115,0.20,100,100,1,0,2026-08-14 15:00:00,2026-08-14 10:00:00\n")
+
+        # ledger_meta.json fixture
+        with open(os.path.join(root, "data", "ledger_meta.json"), "w") as f:
+            json.dump({"ledger_start": "2026-08-10"}, f)
+
+        # Run report.py against the scratch root, pinned today.
+        proc = subprocess.run(
+            [sys.executable, __file__, "--root", root, "--today", "2026-08-14"],
+            capture_output=True, text=True,
+        )
+        if proc.returncode != 0:
+            print("report.py selftest subprocess failed:", file=sys.stderr)
+            print(proc.stdout, file=sys.stderr)
+            print(proc.stderr, file=sys.stderr)
+            return 1
+
+        status_path = os.path.join(root, "STATUS.md")
+        status = open(status_path).read()
+
+        # Fixture: TestArm has 20/20 = 1.0 condors/trading-day, 80 more condors needed.
+        # 80 trading days after 2026-08-14 = 2026-12-04.
+        if "2026-12-04" not in status:
+            print("FAIL: expected projected date 2026-12-04 for TestArm not found", file=sys.stderr)
+            print(status, file=sys.stderr)
+            return 1
+
+        # SparseArm has only 1 close in window -> insufficient data.
+        if "insufficient data" not in status.lower():
+            print("FAIL: expected 'insufficient data' state not found", file=sys.stderr)
+            print(status, file=sys.stderr)
+            return 1
+
+        print("report.py selftest OK")
+        return 0
+    finally:
+        shutil.rmtree(root, ignore_errors=True)
+
 
 # --- pre-registration ledger parsing (T-13) -------------------------------
 import pre_registration_ledger
@@ -36,6 +243,22 @@ def today_iso():
         return datetime.datetime.fromtimestamp(
             int(epoch), tz=datetime.timezone.utc).date().isoformat()
     return datetime.date.today().isoformat()
+
+
+if __name__ == "__main__":
+    _ap = argparse.ArgumentParser()
+    _ap.add_argument("--today", default=None, help="YYYY-MM-DD projection anchor")
+    _ap.add_argument("--root", default=None, help="scratch root for data/ output (G-3)")
+    _ap.add_argument("--validate", action="store_true", help="run self-test in a scratch root")
+    _args = _ap.parse_args()
+    if _args.validate:
+        sys.exit(validate())
+    if _args.root:
+        set_root(_args.root)
+    elif os.environ.get("FLEET_ROOT"):
+        set_root(os.environ["FLEET_ROOT"])
+    CLI_TODAY = _args.today
+
 
 trades = list(csv.DictReader(open(os.path.join(D, "trades.csv"))))
 bots = list(csv.DictReader(open(os.path.join(D, "bots.csv"))))
@@ -688,6 +911,13 @@ L += ["",
       "- **Size live capital** — among graduates, weight by Tot R + low maxDD-R (consistency); never size on raw P/L.",
       "- **Exp(R)** = avg return per $1 risked. **Tot R** = size-free analog of total P/L. "
       "**maxDD-R** = worst cumulative-R drawdown (risk shape). **t** = evidence the edge is real."]
+
+L += decidability_countdown(
+    trades, meta,
+    resolve_report_today(CLI_TODAY, os.environ.get("STATUS_TODAY"),
+                         os.environ.get("SOURCE_DATE_EPOCH"), _ledger_start, trades),
+    _ledger_start)
+
 L += ["", "## Caveats",
       "- **Trades = condors** (the two legs of one entry paired); **Legs = OA position "
       "rows** (matches OA's \"Positions\" count). Win rate shown is per-condor.",
