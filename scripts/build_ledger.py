@@ -78,6 +78,28 @@ The OA website export is FULL trade history (not a delta), so re-importing the
 newest daily file reconstructs the entire ledger. Drop a new export in data/raw/
 named YYYY-MM-DD.csv and re-run; the newest file wins.
 
+-----------------------------------------------------------------------------
+ THE MONOTONICITY GUARD  (G-2, ledger-truncation-forensics-2026-08-17.md §7)
+-----------------------------------------------------------------------------
+Because that rebuild is FULL and destructive, aiming it at a STALE or PINNED
+export DELETES every trading day newer than that export. On 2026-08-12 a CI
+determinism run pinned to the 2026-08-10 fixture did exactly that: five legs
+across 2026-08-11 vanished from data/trades.csv, the truncated file was
+committed in 0051b5e6, and it was the state of the fleet's numbers on master
+for five days before anyone noticed.
+
+None of the three pre-existing guards covers that axis. The FILTERED-EXPORT
+GUARD protects against a *bot* vanishing; the refusal assertion protects
+against *pre-cutover* rows reaching the writer; the "would erase them" check
+only fires when data/raw/ is empty. The axis that actually moved — the ledger's
+maximum open_date going BACKWARDS — was unguarded.
+
+So: this script REFUSES, and writes nothing, when the maximum `open_date` of
+the working ledger it is about to write is EARLIER than the maximum `open_date`
+of the data/trades.csv already on disk. Rewinding is a legitimate operation but
+it is never an accident — ask for it with `--allow-rewind`, and the rewind is
+printed as a banner so it lands in the run log.
+
 CLASSIFICATION COMES FROM data/bots_meta.csv, NOT from bot-name heuristics.
 That file is the single source for pillar / role / underlying / on-off /
 epoch-boundary / strike-fix / superseded / champion, keyed by exact OA bot name.
@@ -97,7 +119,8 @@ Usage:
   python3 scripts/build_ledger.py
   python3 scripts/build_ledger.py --ledger-start 2026-08-15
   LEDGER_START=2026-08-15 python3 scripts/build_ledger.py
-  python3 scripts/build_ledger.py --selftest      # ops-class exclusion tests
+  python3 scripts/build_ledger.py 2026-08-10 --allow-rewind   # deliberate rewind
+  python3 scripts/build_ledger.py --selftest      # exclusion + rewind-guard tests
 """
 import argparse, csv, glob, json, os, re, sys, collections
 
@@ -201,6 +224,53 @@ def max_existing_tid(day, root=ROOT):
                 if t > m:
                     m = t
     return m
+
+
+def max_open_date(rows, key):
+    """Largest YYYY-MM-DD open date across `rows`, or "" when there are none.
+
+    `key` differs by side of the comparison: export rows carry `openDate`, ledger
+    rows carry `open_date`. Blank/absent dates are ignored rather than sorting to
+    the front, so a malformed row cannot fake a rewind.
+    """
+    days = [d for d in ((r.get(key) or "")[:10] for r in rows) if d]
+    return max(days) if days else ""
+
+
+def rewind_refusal(prior_max, new_max, prior_legs, new_legs, src, ledger_start):
+    """The G-2 refusal text. Names BOTH dates, the export that caused it, and the
+    one flag that overrides it. Returned (not raised) so the selftest can read it."""
+    bar = "!" * 72
+    return (
+        "\n" + bar + "\n"
+        "REFUSED: this rebuild would walk the working ledger BACKWARDS in time.\n"
+        "\n"
+        f"  prior data/trades.csv  max open_date : {prior_max}"
+        f"   ({prior_legs} leg(s))\n"
+        f"  this rebuild would write max open_date: "
+        f"{new_max or '(none — the ledger would be emptied)'}   ({new_legs} leg(s))\n"
+        f"  source export                        : {os.path.basename(src)}\n"
+        f"  LEDGER_START                         : {ledger_start}\n"
+        "\n"
+        "  build_ledger.py is a FULL rebuild from ONE export: it truncates\n"
+        "  data/trades.csv and rewrites it from the source named above. Every\n"
+        f"  trading day after {new_max or 'the cutover'} would therefore be DELETED from the\n"
+        "  working ledger — and from every reporting surface derived from it.\n"
+        "\n"
+        "  This is the exact shape of the 2026-08-12 truncation (commit 0051b5e6):\n"
+        "  a run pinned to a stale fixture erased 2026-08-11 and the loss was\n"
+        "  committed to master. See docs/ledger-truncation-forensics-2026-08-17.md.\n"
+        "\n"
+        "  NOTHING WAS WRITTEN.\n"
+        "\n"
+        "  To rebuild from the NEWEST export, drop the pinned date argument:\n"
+        "      python3 scripts/build_ledger.py\n"
+        "  To prove determinism without touching the live ledger, use a scratch\n"
+        "  root rather than a pinned rebuild of data/ (G-3).\n"
+        "  If you genuinely intend to rewind the ledger, say so explicitly:\n"
+        f"      python3 scripts/build_ledger.py {os.path.basename(src)[:10]} --allow-rewind\n"
+        + bar
+    )
 
 
 def load_meta():
@@ -383,6 +453,9 @@ def main():
                     help="cutover date YYYY-MM-DD (overrides env and the constant)")
     ap.add_argument("--selftest", action="store_true",
                     help="run the E-3 §3.3 ops-class exclusion tests and exit")
+    ap.add_argument("--allow-rewind", action="store_true",
+                    help="permit a rebuild whose max open_date is EARLIER than the "
+                         "prior data/trades.csv's (G-2). Never implicit.")
     args = ap.parse_args()
 
     if args.selftest:
@@ -454,6 +527,28 @@ def main():
 
     counts = {"export_rows": len(rows), "post_cutover": len(post),
               "straddler": len(straddlers), "pre_cutover": len(pre)}
+
+    # --- THE MONOTONICITY GUARD (G-2) ------------------------------------
+    # Runs BEFORE the first byte is written — ahead of straddlers.csv, ops_rows.csv
+    # and trades.csv — so a refusal here leaves the whole ledger untouched.
+    # The comparison is against the WORKING ledger, so the ops set is subtracted
+    # on the new side exactly as it will be by the partition below; ops rows are
+    # absent from data/trades.csv by design and must not count as forward motion.
+    new_working = [r for r in post if r["botName"] not in ops_bots]
+    new_max   = max_open_date(new_working, "openDate")
+    prior_max = max_open_date(prior_rows, "open_date")
+    if prior_max and new_max < prior_max:
+        if not args.allow_rewind:
+            sys.exit(rewind_refusal(prior_max, new_max, len(prior_rows),
+                                    len(new_working), src, ledger_start))
+        print("\n" + "!" * 72)
+        print("!! LEDGER REWIND — explicitly authorised with --allow-rewind.")
+        print(f"!!   max open_date  {prior_max}  ->  {new_max or '(empty ledger)'}")
+        print(f"!!   legs           {len(prior_rows)}  ->  {len(new_working)}")
+        print(f"!!   source export  {os.path.basename(src)}")
+        print("!! Every trading day after "
+              f"{new_max or 'the cutover'} is being removed from data/trades.csv.")
+        print("!" * 72)
 
     # --- straddlers: visible, separate, never a working-ledger input ------
     os.makedirs(OUT, exist_ok=True)
@@ -682,12 +777,29 @@ def main():
 # SELF-TEST — E-3 §3.3 ops-class exclusion (house style: fixtures + a named
 # check matrix, asserted against ground truth, run with --selftest)
 # ===========================================================================
-def _st_env(tmp, meta_rows, export_rows, meta_header=None):
-    """Build a throwaway ROOT/data tree and point the module globals at it."""
+def _st_env(tmp, meta_rows, export_rows, meta_header=None, exports=None,
+            keep_prior=False):
+    """Build a throwaway ROOT/data tree and point the module globals at it.
+
+    `export_rows` is written as data/raw/2099-01-02.csv. `exports` is an optional
+    {YYYY-MM-DD: rows} of ADDITIONAL exports, for tests that need more than one
+    file to choose between. RAW is cleared first so exports never leak across
+    cases within a shared tmp dir.
+
+    trades.csv is reset to header-only unless `keep_prior` — otherwise one case's
+    ledger is the next case's PRIOR ledger, and the G-2 monotonicity guard reads
+    a rewind that the case never meant to set up. N14 is the one case that does
+    want the previous run's ledger, and says so.
+    """
     global RAW, OUT, META_PATH
     RAW = os.path.join(tmp, "raw"); OUT = tmp
     META_PATH = os.path.join(tmp, "bots_meta.csv")
     os.makedirs(RAW, exist_ok=True)
+    for stale in glob.glob(os.path.join(RAW, "*.csv")):
+        os.remove(stale)
+    if not keep_prior:
+        with open(os.path.join(OUT, "trades.csv"), "w", newline="") as fo:
+            csv.writer(fo).writerow(TCOLS)
     hdr = meta_header or ["bot", "pillar", "role", "underlying", "status",
                           "epoch_boundary", "strike_fix", "superseded", OPS_CLASS_COL]
     with open(META_PATH, "w", newline="") as fo:
@@ -698,10 +810,11 @@ def _st_env(tmp, meta_rows, export_rows, meta_header=None):
              "openPrice", "closePrice", "premium", "pnl", "risk", "expiration",
              "openDate", "closeDate", "tags", "underlyingOpen", "underlyingClose",
              "highReturnPct", "lowReturnPct", "highReturnPctDate", "lowReturnPctDate"]
-    with open(os.path.join(RAW, "2099-01-02.csv"), "w", newline="") as fo:
-        w = csv.writer(fo); w.writerow(ecols)
-        for r in export_rows:
-            w.writerow([r.get(c, "") for c in ecols])
+    for day, rws in [("2099-01-02", export_rows)] + sorted((exports or {}).items()):
+        with open(os.path.join(RAW, f"{day}.csv"), "w", newline="") as fo:
+            w = csv.writer(fo); w.writerow(ecols)
+            for r in rws:
+                w.writerow([r.get(c, "") for c in ecols])
 
 
 def _st_row(bot, day="2099-01-02", qty="1", tags="", pnl="10", typ="shortputspread"):
@@ -712,13 +825,14 @@ def _st_row(bot, day="2099-01-02", qty="1", tags="", pnl="10", typ="shortputspre
             "closeDate": f"{day} 15:50:00", "tags": tags}
 
 
-def _st_run(argv_start="2099-01-01"):
+def _st_run(argv_start="2099-01-01", extra=()):
     """Run main() against the patched globals, capturing stdout. Returns
-    (exit_code_or_None, stdout, sys_exit_message_or_None)."""
+    (exit_code_or_None, stdout, sys_exit_message_or_None). `extra` appends argv
+    (a pinned date, --allow-rewind, ...)."""
     import io, contextlib
     buf = io.StringIO()
     old_argv = sys.argv
-    sys.argv = ["build_ledger.py", "--ledger-start", argv_start]
+    sys.argv = ["build_ledger.py", "--ledger-start", argv_start] + list(extra)
     try:
         with contextlib.redirect_stdout(buf):
             main()
@@ -840,7 +954,7 @@ def selftest():
         _st_env(tmp, [norm_meta, ops_meta],
                 [_st_row(NORMBOT), _st_row(OPSBOT, tags="lab,ops")])
         _st_run()                                   # seed a prior ledger
-        _st_env(tmp, [norm_meta, ops_meta], [_st_row(NORMBOT)])
+        _st_env(tmp, [norm_meta, ops_meta], [_st_row(NORMBOT)], keep_prior=True)
         # keep the prior trades.csv written by the seeding run
         code, out, _ = _st_run()
         check("N14 an ops bot missing from the export does NOT trip the "
@@ -854,11 +968,68 @@ def selftest():
         check("N15 no ops bots declared -> no ops block, empty ops_rows.csv, counts 0",
               ("LAB OPS-CLASS" in out, len(opsf), mj["counts"]["ops_rows"], mj["ops_bots"]),
               (False, 0, 0, []))
+
+        # ---- G1-G8: THE MONOTONICITY GUARD (G-2) -------------------------
+        # G2 is commit 0051b5e6 rebuilt to scale: a ledger holding two days, then
+        # a rebuild PINNED to the older, stale export. That is the run that
+        # silently deleted 2026-08-11 on 2026-08-12. It must now refuse.
+        day1, day2 = "2099-01-02", "2099-01-03"
+        stale = [_st_row(NORMBOT)]                             # day1 only
+        full  = [_st_row(NORMBOT), _st_row(NORMBOT, day=day2)]  # day1 + day2
+        _st_env(tmp, [norm_meta], stale, exports={day2: full})
+
+        code, out, _ = _st_run()                     # newest export -> both days
+        led = list(csv.DictReader(open(os.path.join(tmp, "trades.csv"))))
+        check("G1  baseline — the newest export builds a two-day ledger",
+              (code, sorted({r["open_date"][:10] for r in led})), (None, [day1, day2]))
+
+        before = open(os.path.join(tmp, "trades.csv")).read()
+        code, out, _ = _st_run(extra=[day1])
+        check("G2  0051b5e6 scenario — rebuild pinned to the OLDER export REFUSES",
+              isinstance(code, str)
+              and "REFUSED: this rebuild would walk the working ledger BACKWARDS" in code,
+              True)
+        check("G2b the refusal names BOTH max open_dates and the source export",
+              isinstance(code, str) and (f": {day2}" in code) and (f": {day1}" in code)
+              and (f"{day1}.csv" in code), True)
+        check("G2c nothing was written — trades.csv is byte-identical",
+              open(os.path.join(tmp, "trades.csv")).read(), before)
+
+        code, out, _ = _st_run(extra=[day1, "--allow-rewind"])
+        led = list(csv.DictReader(open(os.path.join(tmp, "trades.csv"))))
+        check("G3  --allow-rewind permits the rewind, and says so in a banner",
+              (code, "LEDGER REWIND" in out,
+               sorted({r["open_date"][:10] for r in led})), (None, True, [day1]))
+
+        code, out, _ = _st_run()                     # newest again -> forward
+        led = list(csv.DictReader(open(os.path.join(tmp, "trades.csv"))))
+        check("G4  a FORWARD rebuild is never refused",
+              (code, sorted({r["open_date"][:10] for r in led})), (None, [day1, day2]))
+
+        code, out, _ = _st_run()
+        check("G5  an idempotent re-run at the same max open_date is not a rewind",
+              (code, "REFUSED" in out), (None, False))
+
+        code, _, _ = _st_run(argv_start="2099-06-01")
+        check("G6  a rebuild that would EMPTY a non-empty ledger refuses too",
+              isinstance(code, str) and "the ledger would be emptied" in code, True)
+
+        os.remove(os.path.join(tmp, "trades.csv"))
+        code, _, _ = _st_run(extra=[day1])
+        check("G7  no prior ledger -> nothing to rewind, the pinned build runs",
+              code, None)
+
+        check("G8  max_open_date ignores blanks rather than sorting them first",
+              (max_open_date([{"open_date": ""}, {"open_date": f"{day1} 09:46:00"}],
+                             "open_date"),
+               max_open_date([], "open_date")), (day1, ""))
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
         RAW, OUT, META_PATH = keep
 
-    print("SELF-TEST — E-3 §3.3 LAB OPS-CLASS EXCLUSION (build_ledger.py)")
+    print("SELF-TEST — build_ledger.py")
+    print("  N* = E-3 §3.3 LAB OPS-CLASS EXCLUSION")
+    print("  G* = G-2 MONOTONICITY GUARD (ledger-truncation-forensics-2026-08-17.md §7)")
     print("=" * 74)
     for ok, name, got, want in results:
         print(f"  {'PASS' if ok else 'FAIL'}  {name}")
