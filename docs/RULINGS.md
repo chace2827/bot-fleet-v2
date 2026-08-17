@@ -2394,6 +2394,88 @@ unclear: >-
   the two files were duplicates rather than a live file and a distinct history.
 ```
 
+```yaml
+ruling_id: R-2026-08-17-GF-CALL-SIDE-DEFECT
+date: 2026-08-17
+scope: >-
+  The greenfield family's one-sided entries are ruled a DEFECT to repair, not a redesign. The GF
+  arms remain a condor program and their pre-registrations stand unamended.
+verbatim: >-
+  Defect to fix.
+verbatim_of: andy
+owner: Andy
+status: Active
+applies_to: >-
+  The GF shared scanners (call side); GF-QQQ-IC-Ride, PT50, Trail, Touch0, SL100, SL200, Canary and
+  Ride-Delta; docs/greenfield-family-spec.md; the PR-14..PR-20 pre-registrations, which are NOT
+  amended by this ruling.
+superseded_by: none
+source: >-
+  Andy's answer to Roll Call ruling R-1, 2026-08-17 Cowork session.
+unclear: >-
+  [UNCLEAR] The cause is not established. Evidence is that on both GF trading days (2026-08-14 and
+  2026-08-17) every GF row is a short put spread and no call spread has ever filled. Repair is an
+  OA automation change and inherits the shared-surface rule (project memory
+  shared-automation-edit-surface): the scanners are sharing:1, so the edit happens ONLY from
+  /bots/automations, never from a bot page, with cross-arm Layer-1 verification on at least two
+  member bots.
+```
+
+```yaml
+ruling_id: R-2026-08-17-RIDE-DELTA-STAYS-ON
+date: 2026-08-17
+scope: >-
+  GF-QQQ-IC-Ride-Delta (PR-23, retired 2026-08-17) stays armed for one further trading day,
+  deliberately, as a detector.
+verbatim: >-
+  On for now. See if it detects anything tomorrow.
+verbatim_of: andy
+owner: Andy
+status: Active
+applies_to: >-
+  GF-QQQ-IC-Ride-Delta in OA; R-2026-08-17-PR23-RETIRE, which is not reversed by this ruling; the
+  2026-08-18 daily brief, where the decision is retaken.
+superseded_by: none
+source: >-
+  Andy's answer to Roll Call ruling R-2, 2026-08-17 Cowork session.
+unclear: >-
+  [UNCLEAR] The arm is running on a RETIRED pre-registration. Its fills are therefore evidence for
+  no arm and must not be pooled with any sibling. It filled twice on 2026-08-14 and twice on
+  2026-08-17 while every sibling filled once; that double-fill is unexplained and is the behaviour
+  this extra day is meant to observe. Decision to be retaken 2026-08-18.
+```
+
+```yaml
+ruling_id: R-2026-08-17-CONDOR-LABEL-CLASS-A
+date: 2026-08-17
+scope: >-
+  The condor/position vocabulary defect in report.py and build_ledger.py is Class A and
+  LABELLING ONLY. Counting logic is frozen.
+verbatim: >-
+  Fix is display-only: read the existing single_sided column and print '39 positions (6 condors, 33
+  single-sided)'. The ruling explicitly forbids changing trade_id pairing, the single_sided
+  derivation, or what counts as a position - if the implementer finds they must, it STOPS and
+  returns as Class C. CI determinism fixtures get updated to match the new output text.
+verbatim_of: ruling_text
+owner: Andy
+status: Active
+applies_to: >-
+  scripts/report.py (the champion line and the Caveats section's "Trades = condors" claim);
+  scripts/build_ledger.py stdout ("Trades(condors)"); STATUS.md; the CI determinism fixtures that
+  compare daily.sh output byte-for-byte; PR #26's decidability countdown, which must CONSUME
+  single_sided rather than redefine it.
+superseded_by: none
+source: >-
+  Andy's answer to Roll Call ruling R-4, 2026-08-17 Cowork session.
+unclear: >-
+  [UNCLEAR] Deliberately recorded, not a gap: changing WHAT IS COUNTED as a position would rewrite
+  every banked R and destroy comparability with every prior day - that is the fixed panel and is
+  Class C. Changing what a number is CALLED is Class A. A NEW surface with no banked history (e.g.
+  the decidability countdown) may define its counting correctly from the start without breaking
+  comparability; that is not a change to the frozen counting.
+```
+
+
 
 
 

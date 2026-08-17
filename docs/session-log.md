@@ -9419,3 +9419,71 @@ the gate exists to resist.
   editing the cell directly). Until then INC-01 generates no evidence at all.
 - **R-4 · The condor/position vocabulary defect** in `report.py` and `build_ledger.py`. A guard-
   adjacent reporting change — needs naming as such under the charter's new Class C line.
+
+## 2026-08-17 (evening) — ROLL CALL RULINGS + DEVIN REVIEW (#26 changes requested, #27 merged)
+
+**Three Roll Call rulings signed and recorded:** `R-2026-08-17-GF-CALL-SIDE-DEFECT` (the one-sided
+entries are a **defect to repair**, not a redesign — GF stays a condor program, PR-14…PR-20 stand
+unamended; repair is an OA change on a `sharing:1` surface, so **`/bots/automations` only**, with
+cross-arm Layer-1) · `R-2026-08-17-RIDE-DELTA-STAYS-ON` (armed one further day **as a detector**;
+running on a retired pre-registration, so **its fills are evidence for no arm**; retaken 08-18) ·
+`R-2026-08-17-CONDOR-LABEL-CLASS-A` (labelling only; `trade_id` pairing, the `single_sided`
+derivation and the definition of a position are **frozen**).
+
+**R-3 remains open** — `bots_meta.csv` INC-01 `status=OFF` must be corrected by **fresh capture**,
+never by editing the cell (§3 rule 2). Andy is supplying bot screenshots and an export.
+
+### Devin review — read from the checked-out branches, not from the PR bodies
+
+**PR #27 — `heartbeat-check` scratch root — APPROVED AND MERGED** (squash, auto-merge; master now
+`fb16e0c`). Verified in the file itself, not the description:
+`FLEET_ROOT: '/tmp/fleet-scratch'` on the `daily.sh` step; the `data/` tree hash is a deterministic
+`find -print0 | sort -z | xargs -0 sha256sum | sha256sum` taken before and after, with **`diff -q`
+at line 61 — it exits 1 on mismatch and fails the job**, not merely printing; and the workaround is
+named **in the workflow file at lines 46–50**, where it will outlive the PR description, together
+with its reason (`check_heartbeat.py` resolves from the repo root, does not honour `FLEET_ROOT`,
+and fixing it is a G-3 guard change needing pre-authorisation). Devin **refused that guard change
+and reported the refusal** — the requested behaviour.
+
+⭐ **Why this fix is the right shape.** The CI step now runs `scripts/daily.sh 2026-08-10
+--allow-rewind` — *the exact command shape that truncated the live ledger for five days* — and the
+only thing making it safe is `FLEET_ROOT` being honoured. Drop or misspell that variable and the
+job truncates `data/` again. The before/after hash assertion is precisely the net that catches
+that. The failure mode is now **self-detecting** rather than silent.
+
+**PR #26 — decidability countdown — CHANGES REQUESTED. Two substantive defects, both green on CI.**
+
+1. **One-sided spreads are counted as condors.** `_condor_close_dates` (`report.py:78`) groups by
+   `trade_id` and emits one entry per group **without consulting `single_sided`**. `report.py`'s own
+   Caveats section explains why that is ambiguous: a combined-`ironcondor` bot logs **one** row per
+   condor, a legged bot logs **two** — so a 1-row `trade_id` may be a real condor or a one-sided
+   spread. `build_ledger` already resolves this and writes the answer. With 31 of 45 rows
+   `single_sided=True`, `GF-QQQ-IC-Ride` would report **2 condors when it has zero**, and its
+   "projected 100-condor date" would be the date it reaches 100 put spreads. The countdown's whole
+   purpose is to say when an arm is decidable; this version would call an arm decidable on a sample
+   containing no condors.
+2. **The fire-rate denominator is the nominal window, not the days that exist.**
+   `fire_rate = n_window / window` always divides by **20**. `trading_days_present` is computed
+   correctly and printed in the prose, then never used. The ledger contributes **6** trading days,
+   so PR-02's true **1.00 condor/day renders as 6/20 = 0.30** and its projected date is ~**3.3×**
+   too far out. Every row is wrong in the same direction.
+
+Correct in #26 and left alone: `--validate` genuinely runs in its own scratch root via `--root`;
+`today` injectable three ways; weekends excluded and holidays disclaimed **in the section itself**;
+explicit `insufficient data`; section placed below the R table and above Caveats; unit prose
+correct even though the counting behind it is not.
+
+**Noted, not a change request:** the countdown keys "armed" off `bots_meta.status == ON`, so
+**INC-01 is excluded** — the same stale-metadata blind spot that hides it from the execution audit.
+R-3 fixes both at once.
+
+**A note on the ruling boundary, recorded because it will recur.** Telling #26 to consume
+`single_sided` is **not** a violation of `R-2026-08-17-CONDOR-LABEL-CLASS-A`'s counting freeze. The
+freeze protects **banked comparability**; the countdown is a **new surface with no banked history**,
+so defining its counting correctly at birth breaks nothing. Changing what `build_ledger` counts as a
+position would break everything. New surface: define it right. Existing surface: relabel only.
+
+**Devin left one question unanswered.** It was asked to state how it obtained `7e74890` or to
+confirm it had inferred the ref from the dispatch prompt; it answered a different question (that
+the branches are based on `65c3f75` — correct, and verified). The unanswered one matters: an agent
+that reports a premise as observed will do it again somewhere unverifiable.
