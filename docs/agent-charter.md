@@ -143,7 +143,7 @@ Roles per `AI Agent Stack.md` §6. Status points at its source; no figures here.
 | Lesson-Extractor | A | Cowork proposes · Devin builds queue | Daily path per §6; queue not built | lessons archive ruling |
 | Surface-Explorer | A | Cowork | Ad hoc. Seed material: `AI Agent Stack.md` §9 | — |
 | Propagator | A | Devin builds · any agent runs | Not built as a check | — |
-| Reconciler *(proposed 10th)* | A | Cowork | Proposed, unsigned | — |
+| Reconciler | A | Cowork | **Signed 2026-08-17** (`R-2026-08-17-RECONCILER`) — read-only; writes nowhere but `docs/reconciler/`; weekday 07:30 ET. Contract: `docs/reconciler/README.md` | — |
 
 ---
 

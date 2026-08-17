@@ -2289,6 +2289,33 @@ source: >-
 unclear: false
 ```
 
+```yaml
+ruling_id: R-2026-08-17-RECONCILER
+date: 2026-08-17
+scope: >-
+  Rules the Reconciler IN as the tenth role (tracker T-30): a standalone, read-only,
+  contradiction-reporting role, confined to docs/reconciler/, running each weekday morning.
+verbatim: >-
+  Reconciler ruled IN as a standalone read-only role. Written into the ruling itself: reports
+  contradictions ONLY - no analysis, no proposals, no fixes; may write nowhere except
+  docs/reconciler/YYYY-MM-DD.md; every contradiction cites both sides with file and line; an empty
+  day still produces a report saying so. Weekday scheduled task ~7:30am ET.
+verbatim_of: ruling_text
+owner: Andy
+status: Active
+applies_to: >-
+  docs/agent-charter.md section 7 roster (Reconciler row); docs/reconciler/README.md (the role
+  contract); docs/reconciler/YYYY-MM-DD.md reports; the weekday scheduled task that runs the role;
+  its read set - the previous day's merged PRs, docs/RULINGS.md, docs/session-log.md, the ledger
+  CSVs, and the heartbeat artifact.
+superseded_by: none
+source: >-
+  Andy's ruling in the 2026-08-17 Cowork signing session, Phase 2
+  ("Ruled IN, read-only + confined").
+unclear: false
+```
+
+
 ```
 
 

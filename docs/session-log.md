@@ -9149,3 +9149,49 @@ after the write: **126 blocks, 126 unique ids, 0 field mismatches, 0 YAML failur
 **Owed, named and unsigned:** a signed `oa_id` map (§2.1 joins on exact `botName`, which breaks on
 rename — and three `-ARCHIVED-` renamed bots are in `/bots` now); the reconciliation PR that
 unblocks §2.4/§2.5; §3's eight open decisions.
+
+## 2026-08-17 (evening) — PHASE 2: Reconciler ruled IN (T-30), contract written, task scheduled
+
+**`R-2026-08-17-RECONCILER`** — the Reconciler is ruled IN as the tenth role: standalone,
+**read-only**, contradiction-reporting, **confined to `docs/reconciler/`**, weekday ~07:30 ET.
+Three constraints were written into the ruling text itself rather than only into the task prompt,
+because prompts get rewritten and rulings do not: contradictions ONLY (no analysis, no proposals,
+no fixes); writes nowhere but `docs/reconciler/YYYY-MM-DD.md`; every contradiction cites **both
+sides with file and line**. An empty day still produces a report — silence is indistinguishable
+from a crashed job, a report is not.
+
+**Why the role earns its keep:** every serious failure in this project has been contradiction-
+shaped, and no one owned looking for disagreement as a category. `daily-loop-spec.md` declaring
+`execution_audit.py` frozen at `67a53797…` while the file hashes `fdc43d0d…` — sat. `STATUS.md`
+reporting 4 legs while OA held 34 — sat five days. The step6-7 record saying PR-02 was OFF while
+the 19:11 capture said ON — sat two days. Each individually discoverable; none individually
+anyone's job.
+
+**Written this pass:**
+
+- `docs/reconciler/README.md` (98 lines, sha `149b0718914fbc7073f45ee43d6241c560db8d9ead154c899ac996142b63e5f9`)
+  — the binding role contract. Declared binding **over** the scheduled task's prompt: a session
+  finding the two in conflict follows the file and reports the conflict as a contradiction. Carries
+  worked ✅/❌ examples of what is and is not a contradiction (a gap is not; an opinion is not; an
+  unapplied signed ruling is), the read set, the four highest-yield checks drawn from real failures,
+  and the exact output format.
+- `docs/RULINGS.md` — record inserted **above** the untouched garbage region (byte-identical,
+  verified). Register re-parsed: **127 blocks, 127 unique ids, 0 field mismatches.**
+- `docs/agent-charter.md` §7 roster — Reconciler row moved from "Proposed, unsigned" to signed.
+  Status cell only; **no version bump**, since §7 status cells point at sources and this changes no
+  permission.
+
+**Scheduled task created:** `trig_01MoCzv46JZGah5Bu3v5Cd4C`, cron `30 11 * * 1-5` UTC = 07:30 ET
+weekdays, push notification on. First run 2026-08-18.
+
+**Two things flagged to Andy at creation, neither silently decided:**
+
+1. **A rule-3 scope reading.** "Cowork/browser sessions never run git" is written against the
+   *mounted* tree, where git strands `.git/index.lock`. The scheduled session runs at 07:30 when
+   the desktop bridge may well be offline, so it **clones from GitHub into its own cloud workspace**
+   and runs git only there — no mount involved, so no lock to strand. The prompt states this
+   explicitly and forbids the session from touching the bridge at all. **Andy may veto this
+   reading**; the alternative is a bridge-dependent job that silently does nothing whenever the
+   laptop is shut.
+2. **DST.** `30 11` UTC is 07:30 ET only while ET is UTC-4. When ET returns to UTC-5 in November
+   the job fires at 06:30 ET until the cron is moved to `30 12`.
