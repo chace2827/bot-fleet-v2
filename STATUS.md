@@ -4,6 +4,15 @@
 
 > **POST-CUTOVER LEDGER — `LEDGER_START = 2026-08-10`.** Every figure below is drawn from positions **opened on or after** that date. The v1 era is frozen in `data/archive/` and is never an input here.
 
+
+## ⚠️ UNSIGNED PRE-REGISTRATION BOTS — DO NOT SWITCH ON
+
+> The following bots have a pre-registration ledger entry with a blank, missing, or `NOT SIGNED` `SIGNED` line. No bot may be switched ON until the entry is signed and dated.
+
+- QQQ long call
+- QQQ-IC-0DTE-Fortress
+- Tasty Condor
+
 ## Headline
 - **Total closed P/L:** $500  ·  4 legs  ·  3 bots
   - IC: $650  (SPX $650)
