@@ -1,5 +1,13 @@
 # State — Bot Fleet v2
 
+## 2026-08-17 — PR-02 and PR-04 shown as UNSIGNED
+
+- `scripts/pre_registration_ledger.py` now parses the full multi-line `SIGNED` block and treats a
+  signature that carries `SIGNED != VERIFIED` **and** `FIRST-TRADING-DAY CAPTURE OWED` as unsigned.
+- As a result, `STATUS.md` now lists **PR-02 (`IC-SPX-FastPT25-S2-130PM`)** and **PR-04
+  (`QQQ-IC-0DTE-Fortress-NoPT50`)** in the UNSIGNED banner. They will move to signed once the owed
+  first-trading-day capture (Step-6/Step-4 verification) is closed.
+
 *The live facts. Updated whenever a stated fact changes (CLAUDE.md §9.1). Numbers live in
 `STATUS.md`; the plan in `docs/build-plan.md`; progress in the `bot-fleet-migration` tracker.
 Last updated 2026-08-12 DAY 1 (⭐ THE FIRST TRACKING DAY — the ledger is LIVE at n=3 positions / +$500; the eight zero-entry bots are ADJUDICATED to one root cause; PR-01 Step-6 inverted check CLOSED: see the NEW top block, which supersedes every "EMPTY LEDGER / n=0" statement beneath it). Earlier 2026-08-09 S2b (⭐ THE SWITCH-ON SITTING — **17 of 43 AUTOMATIONS ON**; PR-02 and

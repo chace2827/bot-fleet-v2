@@ -9,8 +9,10 @@
 
 > The following bots have a pre-registration ledger entry with a blank, missing, or `NOT SIGNED` `SIGNED` line. No bot may be switched ON until the entry is signed and dated.
 
+- IC-SPX-FastPT25-S2-130PM
 - QQQ long call
 - QQQ-IC-0DTE-Fortress
+- QQQ-IC-0DTE-Fortress-NoPT50
 - Tasty Condor
 
 ## Headline
