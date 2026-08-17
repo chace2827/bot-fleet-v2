@@ -75,38 +75,51 @@ def resolve_report_today(cli_today, status_today, epoch, ledger_start, trades):
     return datetime.date(1970, 1, 1)
 
 
-def _condor_close_dates(trades):
-    """Group legs by trade_id and return [(bot, close_date)] for closed condors."""
+def _position_close_dates(trades):
+    """Group legs by trade_id and return two (bot, close_date) lists: condors and one-sided spreads.
+
+    A position is one-sided if any of its legs is flagged `single_sided` == "True".
+    The ledger (build_ledger.py) already made this determination; we only consume it.
+    """
     by_id = collections.defaultdict(list)
     for t in trades:
         by_id[t["trade_id"]].append(t)
-    out = []
+    condors = []
+    one_sided = []
     for legs in by_id.values():
-        if not legs:
+        if not legs or not all(l.get("close_date") for l in legs):
             continue
-        if all(l.get("close_date") for l in legs):
-            cd = max(l["close_date"][:10] for l in legs)
-            out.append((legs[0]["bot"], cd))
-    return out
+        cd = max(l["close_date"][:10] for l in legs)
+        bot = legs[0]["bot"]
+        if any(l.get("single_sided") == "True" for l in legs):
+            one_sided.append((bot, cd))
+        else:
+            condors.append((bot, cd))
+    return condors, one_sided
 
 
 def decidability_countdown(trades, meta, today, ledger_start,
                            window=DECIDABILITY_WINDOW, min_closes=DECIDABILITY_MIN_CLOSES):
     """Render a PROJECTION section: fire rate and 100-condor date per armed arm.
 
-    Unit of account is the POSITION (condor = two spread rows paired by trade_id).
+    Unit of account is the POSITION (a two-sided condor). One-sided spreads are
+    reported in their own column and do NOT count toward the 100-condor target.
     An arm is "armed" if its bots_meta status is ON.  Insufficient data is explicit.
     """
-    condors = _condor_close_dates(trades)
-    by_bot = collections.defaultdict(list)
+    condors, one_sided = _position_close_dates(trades)
+    condors_by_bot = collections.defaultdict(list)
     for bot, cd in condors:
-        by_bot[bot].append(cd)
+        condors_by_bot[bot].append(cd)
+    one_sided_by_bot = collections.defaultdict(list)
+    for bot, cd in one_sided:
+        one_sided_by_bot[bot].append(cd)
 
     armed = sorted(b for b, r in meta.items() if r.get("status", "").upper() == "ON")
     if not armed:
         return []
 
-    window_start = add_weekdays(today, -window)
+    # The recent window is the last *window* trading days ending at today, inclusive.
+    window_start = add_weekdays(today, -(window - 1))
     effective_start = max(window_start,
                           datetime.date.fromisoformat(ledger_start) if ledger_start else window_start)
     trading_days_present = count_weekdays(effective_start, today)
@@ -116,28 +129,30 @@ def decidability_countdown(trades, meta, today, ledger_start,
              "> **This is a forward projection, not a result.** It extrapolates the recent fire rate "
              "and assumes that rate holds. Calendar projection skips weekends and does **not** model "
              "market holidays, so the date is approximate. The unit of account is the **POSITION** "
-             "(a condor = two spread rows paired by `trade_id`); *n* = 100 means **100 condors**, "
-             "not 100 legs. The recent window is the last **{} trading days**; the post-cutover "
+             "(a two-sided condor = two spread rows paired by `trade_id`); *n* = 100 means **100 condors**, "
+             "not 100 legs. One-sided spreads are listed separately and do **not** count toward the "
+             "100-condor target. The recent window is the last **{} trading days**; the post-cutover "
              "ledger currently contributes **{} trading day{}** to this window.".format(
                  window, trading_days_present, "s" if trading_days_present != 1 else ""),
              "",
-             "| Arm | Pillar | Current condors, positions | Closes in {}-trading-day window | Fire rate "
-             "(closes/trading-day, condors) | Projected 100-condor date |".format(window),
-             "|---|---|--:|--:|--:|---|"]
+             "| Arm | Pillar | Current condors, positions | One-sided positions, spreads | Closes in "
+             "{}-trading-day window | Fire rate (closes/trading-day, condors) | Projected 100-condor date |".format(window),
+             "|---|---|--:|--:|--:|--:|---|"]
 
     for bot in armed:
         rec = meta[bot]
         pillar = rec.get("pillar", "—")
-        all_dates = sorted(by_bot.get(bot, []))
+        all_dates = sorted(condors_by_bot.get(bot, []))
         total = len(all_dates)
         window_dates = [d for d in all_dates if window_start <= datetime.date.fromisoformat(d) <= today]
         n_window = len(window_dates)
+        n_one_sided = len(one_sided_by_bot.get(bot, []))
 
-        if n_window < min_closes:
+        if n_window < min_closes or trading_days_present == 0:
             rate_s = "insufficient data"
             proj_s = "insufficient data"
         else:
-            fire_rate = n_window / window
+            fire_rate = n_window / trading_days_present
             rate_s = f"{fire_rate:.2f}"
             remaining = 100 - total
             if remaining <= 0:
@@ -149,9 +164,21 @@ def decidability_countdown(trades, meta, today, ledger_start,
                 proj_date = add_weekdays(today, needed)
                 proj_s = proj_date.isoformat()
 
-        lines.append(f"| {bot} | {pillar} | {total} | {n_window} | {rate_s} | {proj_s} |")
+        lines.append(f"| {bot} | {pillar} | {total} | {n_one_sided} | {n_window} | {rate_s} | {proj_s} |")
 
     return lines
+
+
+def _parse_table_row(status, arm):
+    """Return the split cells of the countdown table row for *arm*."""
+    m = re.search(r"## Decidability countdown.*?\n(.*?)\n## ", status, re.S)
+    if not m:
+        return []
+    section = m.group(1)
+    for line in section.splitlines():
+        if line.startswith(f"| {arm} "):
+            return [c.strip() for c in line.split("|")]
+    return []
 
 
 def validate():
@@ -160,34 +187,48 @@ def validate():
     try:
         os.makedirs(os.path.join(root, "data"), exist_ok=True)
 
+        today = datetime.date(2026, 8, 14)
+        # The 20-trading-day window ends at today.  Ledger starts on the first day of
+        # the window so every present trading day has a condor (fire rate = 1.00).
+        ledger_start = add_weekdays(today, -(DECIDABILITY_WINDOW - 1)).isoformat()
+
         # bots_meta.csv fixture
         with open(os.path.join(root, "data", "bots_meta.csv"), "w") as f:
             f.write("bot,pillar,role,underlying,status,champion,epoch_boundary,hedge,strike_fix,superseded,focus,notes,ops_class\n")
             f.write("TestArm,IC,experiment,SPX,ON,,,,,,,,\n")
             f.write("SparseArm,IC,experiment,SPX,ON,,,,,,,,\n")
+            f.write("OneSidedArm,IC,experiment,SPX,ON,,,,,,,,\n")
 
         # bots.csv fixture (report.py uses this for roster, totals, etc.)
         with open(os.path.join(root, "data", "bots.csv"), "w") as f:
             f.write("bot,pillar,underlying,role,status,n_trades,n_legs,total_pnl,win_rate_trade,win_rate_leg,first_trade,last_trade,epoch_start,needs_strike_fix,superseded\n")
-            f.write("TestArm,IC,SPX,experiment,ON,20,20,0,100%,100%,2026-08-10,2026-08-14,2026-08-10,,\n")
-            f.write("SparseArm,IC,SPX,experiment,ON,1,1,0,100%,100%,2026-08-14,2026-08-14,2026-08-10,,\n")
+            f.write(f"TestArm,IC,SPX,experiment,ON,20,20,0,100%,100%,{ledger_start},{today.isoformat()},{ledger_start},,\n")
+            f.write(f"SparseArm,IC,SPX,experiment,ON,1,1,0,100%,100%,{today.isoformat()},{today.isoformat()},{ledger_start},,\n")
+            f.write(f"OneSidedArm,IC,SPX,experiment,ON,1,1,0,100%,100%,{today.isoformat()},{today.isoformat()},{ledger_start},,\n")
 
-        # trades.csv fixture: 20 condors for TestArm, 1 for SparseArm, all closing on consecutive weekdays ending 2026-08-14
+        # trades.csv fixture:
+        #  - TestArm: 20 two-sided condors, one closing on each trading day of the window (1.00 condors/day).
+        #  - SparseArm: 1 condor -> insufficient data.
+        #  - OneSidedArm: 1 one-sided shortputspread -> 0 condors, 1 one-sided position.
         with open(os.path.join(root, "data", "trades.csv"), "w") as f:
             f.write("bot,pillar,underlying,role,epoch,trade_id,symbol,structure,status,quantity,credit,exit_price,pnl,risk,open_date,close_date,expiration,tags,single_sided,short_put,long_put,short_call,long_call,premium,underlying_open,underlying_close,mfe_pct,mae_pct,mfe_date,mae_date\n")
-            today = datetime.date(2026, 8, 14)
-            for i in range(20):
-                cd = add_weekdays(today, -(19 - i))
-                f.write(f"TestArm,IC,SPX,experiment,post-fix,T{i:04d},SPX,ironcondor,closed,1,0.20,0.10,0,50,2026-08-10 10:00:00,{cd.isoformat()} 16:00:00,2026-08-14 16:00:00,,False,100,95,110,115,0.20,100,100,1,0,2026-08-14 15:00:00,2026-08-14 10:00:00\n")
-            f.write("SparseArm,IC,SPX,experiment,post-fix,T9000,SPX,ironcondor,closed,1,0.20,0.10,0,50,2026-08-10 10:00:00,2026-08-14 16:00:00,2026-08-14 16:00:00,,False,100,95,110,115,0.20,100,100,1,0,2026-08-14 15:00:00,2026-08-14 10:00:00\n")
+            condor_row = "{},IC,SPX,experiment,post-fix,{},SPX,ironcondor,closed,1,0.20,0.10,0,50,{},{},2026-08-14 16:00:00,,False,100,95,110,115,0.20,100,100,1,0,2026-08-14 15:00:00,2026-08-14 10:00:00\n"
+            one_sided_row = "OneSidedArm,IC,SPX,experiment,post-fix,TOS1,SPX,shortputspread,closed,1,0.20,0.10,0,50,2026-08-14 10:00:00,2026-08-14 16:00:00,2026-08-14 16:00:00,,True,100,95,,,0.20,100,100,1,0,2026-08-14 15:00:00,2026-08-14 10:00:00\n"
+            for i in range(DECIDABILITY_WINDOW):
+                cd = add_weekdays(today, -(DECIDABILITY_WINDOW - 1 - i))
+                od = f"{cd.isoformat()} 10:00:00"
+                cdts = f"{cd.isoformat()} 16:00:00"
+                f.write(condor_row.format("TestArm", f"T{i:04d}", od, cdts))
+            f.write(condor_row.format("SparseArm", "T9000", "2026-08-14 10:00:00", "2026-08-14 16:00:00"))
+            f.write(one_sided_row)
 
         # ledger_meta.json fixture
         with open(os.path.join(root, "data", "ledger_meta.json"), "w") as f:
-            json.dump({"ledger_start": "2026-08-10"}, f)
+            json.dump({"ledger_start": ledger_start}, f)
 
         # Run report.py against the scratch root, pinned today.
         proc = subprocess.run(
-            [sys.executable, __file__, "--root", root, "--today", "2026-08-14"],
+            [sys.executable, __file__, "--root", root, "--today", today.isoformat()],
             capture_output=True, text=True,
         )
         if proc.returncode != 0:
@@ -199,10 +240,17 @@ def validate():
         status_path = os.path.join(root, "STATUS.md")
         status = open(status_path).read()
 
-        # Fixture: TestArm has 20/20 = 1.0 condors/trading-day, 80 more condors needed.
-        # 80 trading days after 2026-08-14 = 2026-12-04.
-        if "2026-12-04" not in status:
-            print("FAIL: expected projected date 2026-12-04 for TestArm not found", file=sys.stderr)
+        # Defect-1: one-sided spreads do NOT count as condors.
+        one_sided_cells = _parse_table_row(status, "OneSidedArm")
+        if not one_sided_cells or one_sided_cells[3] != "0" or one_sided_cells[4] != "1":
+            print(f"FAIL: OneSidedArm row should have 0 condors and 1 one-sided spread; got {one_sided_cells}", file=sys.stderr)
+            print(status, file=sys.stderr)
+            return 1
+
+        # Defect-2: an arm closing on every present trading day must render fire rate 1.00.
+        test_cells = _parse_table_row(status, "TestArm")
+        if not test_cells or test_cells[6] != "1.00" or test_cells[7] != "2026-12-04":
+            print(f"FAIL: TestArm row should have fire rate 1.00 and projected date 2026-12-04; got {test_cells}", file=sys.stderr)
             print(status, file=sys.stderr)
             return 1
 
