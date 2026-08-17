@@ -100,6 +100,10 @@ SCRIPTS="$FLEET_ROOT/scripts"
 cd "$FLEET_ROOT"
 
 DAY="${1:-}"
+ALLOW_REWIND=""
+if [ "${2:-}" = "--allow-rewind" ]; then
+  ALLOW_REWIND="--allow-rewind"
+fi
 
 # G-5 — read by scripts/run_receipt.py from the exit trap below.
 # FLEET_RUN_STARTED is what lets a receipt tell "the ledger stage rewrote
@@ -194,7 +198,7 @@ run_stage() {
   fi
 }
 
-run_stage "build_ledger" python3 "$SCRIPTS/build_ledger.py" --root "$FLEET_ROOT" "$DAY"
+run_stage "build_ledger" python3 "$SCRIPTS/build_ledger.py" --root "$FLEET_ROOT" "$DAY" $ALLOW_REWIND
 run_stage "tape" python3 "$SCRIPTS/tape.py" "$DAY"
 run_stage "execution_audit" python3 "$SCRIPTS/execution_audit.py"
 run_stage "daily_brief" python3 "$SCRIPTS/daily_brief.py" "$DAY"
