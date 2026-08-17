@@ -73,8 +73,14 @@ jobs:
           # them: run 2 must see run 1's output, or this stops testing the
           # accumulators (hedge_tournament.csv, lessons.csv) for idempotency and
           # only tests two independent from-clean builds.
+          # G-5: the receipts log is append-only, so it is the one output that
+          # MUST differ between the two runs. Snapshot it instead of diffing it.
+          RCPT="$FLEET_ROOT/data/receipts/daily-runs.jsonl"
+          BEFORE=0
+          if [ -f "$RCPT" ]; then BEFORE=$(wc -l < "$RCPT" | tr -d ' '); fi
           # First run
           scripts/daily.sh 2026-08-10
+          cp -f "$RCPT" /tmp/receipts-after-run1
           mkdir -p /tmp/run1
           cp -f "$FLEET_ROOT"/data/trades.csv "$FLEET_ROOT"/data/bots.csv \
                 "$FLEET_ROOT"/data/straddlers.csv "$FLEET_ROOT"/data/ledger_meta.json \
@@ -102,6 +108,24 @@ jobs:
             fi
           done
           echo "daily.sh outputs are identical between the two runs"
+
+          # G-5 ACCEPTANCE — one receipt per run, APPENDED. If run 2 had
+          # rewritten the file rather than appending to it, this is what catches
+          # it: the receipts log would stop being a history and become another
+          # ledger_meta.json, which is the artifact whose overwriting made the
+          # 2026-08-12 truncation invisible for five days.
+          AFTER=$(wc -l < "$RCPT" | tr -d ' ')
+          if [ "$AFTER" -ne "$((BEFORE + 2))" ]; then
+            echo "RECEIPT FAIL: expected $((BEFORE + 2)) receipts, found $AFTER" >&2
+            exit 1
+          fi
+          if ! head -c "$(wc -c < /tmp/receipts-after-run1 | tr -d ' ')" "$RCPT" \
+               | diff -q - /tmp/receipts-after-run1 > /dev/null; then
+            echo "RECEIPT FAIL: run 2 modified run 1's receipt — not append-only" >&2
+            exit 1
+          fi
+          python3 -c "import json,sys; [json.loads(l) for l in open(sys.argv[1])]" "$RCPT"
+          echo "receipts: $BEFORE -> $AFTER, append-only, every line valid JSON"
 
       # Both checks below arrived on master in #13, aimed at data/. Repointed at
       # the scratch root — unchanged in what they assert, and now unable to
@@ -183,6 +207,9 @@ jobs:
 
       - name: check docs vs csv
         run: python3 scripts/check_docs_vs_csv.py
+
+      - name: run-receipt selftest
+        run: python3 scripts/run_receipt.py --selftest
 
       - name: pre-registration ledger parser selftest
         run: python3 scripts/pre_registration_ledger.py

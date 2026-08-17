@@ -31,6 +31,14 @@
 # The brief JSON is the pack Claude renders (charts + instruction-mirror cards +
 # hedge clinic). Everything numeric is regenerated from the ledger.
 #
+# Then, from the EXIT trap and outside the eight stages: the heartbeat, and a
+# per-run RECEIPT appended to data/receipts/daily-runs.jsonl (G-5,
+# ledger-truncation-forensics-2026-08-17.md §4). Both are written whether the run
+# succeeded, failed or was refused. ledger_meta.json is overwritten every run and
+# so records only the last one; the receipts file is append-only and records all
+# of them, which is what makes "what changed between these two runs" answerable
+# at all. See scripts/run_receipt.py.
+#
 # LEDGER_START — the data cutover (build-plan.md §3). Set it in build_ledger.py on
 # Day-0, or override per-run:   LEDGER_START=2026-08-17 scripts/daily.sh
 # With it unset, stage 1 exits non-zero and the whole run stops. That is correct:
@@ -93,6 +101,18 @@ cd "$FLEET_ROOT"
 
 DAY="${1:-}"
 
+# G-5 — read by scripts/run_receipt.py from the exit trap below.
+# FLEET_RUN_STARTED is what lets a receipt tell "the ledger stage rewrote
+# ledger_meta.json" from "the ledger stage refused and this is last run's file";
+# FLEET_PINNED_DAY records whether an export was PINNED, which is the thing that
+# caused the 2026-08-12 truncation in the first place.
+export FLEET_RUN_STARTED="$(date +%s)"
+export FLEET_PINNED_DAY="${1:-}"
+# FLEET_REPO cannot be derived inside run_receipt.py: under G-3 the stages run
+# out of a COPY of scripts/ in the scratch root, so that file's own location is
+# the ROOT, and every scratch run would label itself live.
+export FLEET_REPO="$REPO"
+
 # If no day was supplied, use the newest raw export filename; otherwise fall
 # back to today. Resolving here gives every stage a concrete DAY and lets the
 # heartbeat file be named after the actual trading day processed.
@@ -146,6 +166,12 @@ write_heartbeat() {
   export HB_DAY="$DAY"
   export HB_FINAL_EXIT="$hb_exit"
   python3 "$SCRIPTS/heartbeat.py"
+  # G-5 — the per-run receipt. Written HERE, from the exit trap, so a run that
+  # failed or was refused leaves a trace too; those are the runs most worth
+  # having a record of. Never allowed to change the run's own exit code: a
+  # receipt that breaks the pipeline is worse than no receipt.
+  python3 "$SCRIPTS/run_receipt.py" \
+    || echo "run_receipt.py: FAILED to append a receipt (run itself unaffected)" >&2
 }
 
 trap 'write_heartbeat' EXIT
