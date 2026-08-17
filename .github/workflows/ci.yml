@@ -22,13 +22,30 @@ jobs:
       - name: execution audit validation matrix
         run: python3 scripts/execution_audit.py --validate
 
-      - name: build ledger for 2026-08-10
+      # ---------------------------------------------------------------------
+      # G-3 — FIXTURE / LIVE SEPARATION
+      # (docs/ledger-truncation-forensics-2026-08-17.md §7)
+      # Every step below that RUNS the pipeline runs against a scratch root.
+      # They used to run against data/ — the live working ledger — which is how
+      # the pinned 2026-08-10 determinism run silently deleted 2026-08-11 from
+      # it in 0051b5e6. A determinism proof must not be able to write the thing
+      # it is measuring. The last step in this job asserts exactly that.
+      # ---------------------------------------------------------------------
+      - name: seed the CI scratch root
+        env:
+          FLEET_ROOT: /tmp/fleet-scratch
+        run: scripts/ci/seed_scratch_root.sh "$FLEET_ROOT"
+
+      - name: build ledger for 2026-08-10 (scratch root)
+        env:
+          FLEET_ROOT: /tmp/fleet-scratch
         run: |
-          python3 scripts/build_ledger.py 2026-08-10
+          python3 scripts/build_ledger.py --root "$FLEET_ROOT" 2026-08-10
           python3 - <<'PY'
           import csv, json, os, sys
-          trades = list(csv.DictReader(open('data/trades.csv')))
-          meta = json.load(open('data/ledger_meta.json'))
+          root = os.environ['FLEET_ROOT']
+          trades = list(csv.DictReader(open(os.path.join(root, 'data/trades.csv'))))
+          meta = json.load(open(os.path.join(root, 'data/ledger_meta.json')))
           want = {'post_cutover': 4, 'n_trades_condors': 3, 'n_bots': 3, 'total_pnl': 500.0}
           for k, v in want.items():
             got = (meta.get('counts', {}) if k == 'post_cutover' else meta).get(k)
@@ -40,20 +57,28 @@ jobs:
             sys.exit(1)
           PY
 
-      - name: run daily.sh twice and diff outputs
+      - name: run daily.sh twice against the scratch root and diff outputs
         env:
           TAPE_FIXTURE: '1'
           SOURCE_DATE_EPOCH: '1786320000'
+          FLEET_ROOT: /tmp/fleet-scratch
         run: |
           set -euo pipefail
+          # Both runs use the SAME scratch root and it is NOT re-seeded between
+          # them: run 2 must see run 1's output, or this stops testing the
+          # accumulators (hedge_tournament.csv, lessons.csv) for idempotency and
+          # only tests two independent from-clean builds.
           # First run
           scripts/daily.sh 2026-08-10
           mkdir -p /tmp/run1
-          cp -f data/trades.csv data/bots.csv data/straddlers.csv data/ledger_meta.json \
-                data/execution_audit_findings.csv data/execution_audit_findings_meta.json \
-                data/hedge_tournament.csv data/trade_window.csv \
-                data/lessons.csv data/brief/2026-08-10_brief.json \
-                data/brief/2026-08-10_tape.json STATUS.md dashboard.html /tmp/run1/
+          cp -f "$FLEET_ROOT"/data/trades.csv "$FLEET_ROOT"/data/bots.csv \
+                "$FLEET_ROOT"/data/straddlers.csv "$FLEET_ROOT"/data/ledger_meta.json \
+                "$FLEET_ROOT"/data/execution_audit_findings.csv \
+                "$FLEET_ROOT"/data/execution_audit_findings_meta.json \
+                "$FLEET_ROOT"/data/hedge_tournament.csv "$FLEET_ROOT"/data/trade_window.csv \
+                "$FLEET_ROOT"/data/lessons.csv "$FLEET_ROOT"/data/brief/2026-08-10_brief.json \
+                "$FLEET_ROOT"/data/brief/2026-08-10_tape.json \
+                "$FLEET_ROOT"/STATUS.md "$FLEET_ROOT"/dashboard.html /tmp/run1/
           # Second run
           scripts/daily.sh 2026-08-10
           # Diff the idempotent outputs.
@@ -65,26 +90,33 @@ jobs:
                    data/hedge_tournament.csv data/trade_window.csv \
                    data/lessons.csv data/brief/2026-08-10_brief.json \
                    data/brief/2026-08-10_tape.json STATUS.md dashboard.html; do
-            if ! diff -q "$f" "/tmp/run1/$(basename "$f")" > /dev/null; then
+            if ! diff -q "$FLEET_ROOT/$f" "/tmp/run1/$(basename "$f")" > /dev/null; then
               echo "IDEMPOTENCY FAIL: $f differs between the two daily.sh runs" >&2
-              diff "$f" "/tmp/run1/$(basename "$f")" >&2 || true
+              diff "$FLEET_ROOT/$f" "/tmp/run1/$(basename "$f")" >&2 || true
               exit 1
             fi
           done
           echo "daily.sh outputs are identical between the two runs"
 
+      # Both checks below arrived on master in #13, aimed at data/. Repointed at
+      # the scratch root — unchanged in what they assert, and now unable to
+      # rebuild the live ledger or corrupt a tracked fixture in order to assert it.
       - name: rerun-and-diff is hermetic under disabled network
         env:
           TAPE_FIXTURE: '1'
           SOURCE_DATE_EPOCH: '1786320000'
+          FLEET_ROOT: /tmp/fleet-scratch
         run: |
           set -euo pipefail
           mkdir -p /tmp/run1
-          cp -f data/trades.csv data/bots.csv data/straddlers.csv data/ledger_meta.json \
-                data/execution_audit_findings.csv data/execution_audit_findings_meta.json \
-                data/hedge_tournament.csv data/trade_window.csv \
-                data/lessons.csv data/brief/2026-08-10_brief.json \
-                data/brief/2026-08-10_tape.json STATUS.md dashboard.html /tmp/run1/
+          cp -f "$FLEET_ROOT"/data/trades.csv "$FLEET_ROOT"/data/bots.csv \
+                "$FLEET_ROOT"/data/straddlers.csv "$FLEET_ROOT"/data/ledger_meta.json \
+                "$FLEET_ROOT"/data/execution_audit_findings.csv \
+                "$FLEET_ROOT"/data/execution_audit_findings_meta.json \
+                "$FLEET_ROOT"/data/hedge_tournament.csv "$FLEET_ROOT"/data/trade_window.csv \
+                "$FLEET_ROOT"/data/lessons.csv "$FLEET_ROOT"/data/brief/2026-08-10_brief.json \
+                "$FLEET_ROOT"/data/brief/2026-08-10_tape.json \
+                "$FLEET_ROOT"/STATUS.md "$FLEET_ROOT"/dashboard.html /tmp/run1/
           run_no_net() {
             if command -v unshare >/dev/null 2>&1 && unshare -n true 2>/dev/null; then
               unshare -n bash scripts/daily.sh 2026-08-10
@@ -99,9 +131,9 @@ jobs:
                    data/hedge_tournament.csv data/trade_window.csv \
                    data/lessons.csv data/brief/2026-08-10_brief.json \
                    data/brief/2026-08-10_tape.json STATUS.md dashboard.html; do
-            if ! diff -q "$f" "/tmp/run1/$(basename "$f")" > /dev/null; then
+            if ! diff -q "$FLEET_ROOT/$f" "/tmp/run1/$(basename "$f")" > /dev/null; then
               echo "NETWORK HERMETICITY FAIL: $f differs when network is disabled" >&2
-              diff "$f" "/tmp/run1/$(basename "$f")" >&2 || true
+              diff "$FLEET_ROOT/$f" "/tmp/run1/$(basename "$f")" >&2 || true
               exit 1
             fi
           done
@@ -110,9 +142,14 @@ jobs:
       - name: corrupted tape fixture is rejected
         env:
           TAPE_FIXTURE: '1'
+          FLEET_ROOT: /tmp/fleet-scratch
         run: |
           set -euo pipefail
-          fixture=data/brief/2026-08-10_tape.json
+          # The fixture corrupted here is the SCRATCH root's copy. Deliberately
+          # writing 'not-json' over a tracked file in the working tree, then
+          # restoring it, is a test that can only pass by leaving no trace — and
+          # that is exactly the property nothing was checking on 2026-08-12.
+          fixture="$FLEET_ROOT/data/brief/2026-08-10_tape.json"
           cp -f "$fixture" /tmp/orig-fixture.json
           restore() { cp -f /tmp/orig-fixture.json "$fixture" || true; }
           trap restore EXIT
@@ -122,6 +159,22 @@ jobs:
             exit 1
           fi
           echo "PASS: daily.sh rejected the corrupted tape fixture"
+
+      # THE G-3 ACCEPTANCE TEST. Everything above ran the full pipeline five
+      # times, one of them on a deliberately corrupted fixture. If any of it
+      # reached the repo, this fails.
+      - name: assert the CI runs left the live ledger byte-untouched
+        run: |
+          set -euo pipefail
+          DIRTY="$(git status --porcelain -- data STATUS.md dashboard.html artifacts)"
+          if [ -n "$DIRTY" ]; then
+            echo "FIXTURE/LIVE LEAK (G-3): a CI pipeline run modified the repo." >&2
+            echo "$DIRTY" >&2
+            git diff -- data STATUS.md dashboard.html >&2 || true
+            echo "A determinism run must write ONLY its scratch root." >&2
+            exit 1
+          fi
+          echo "data/, STATUS.md, dashboard.html and artifacts/ are byte-untouched"
 
       - name: check docs vs csv
         run: python3 scripts/check_docs_vs_csv.py

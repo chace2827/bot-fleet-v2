@@ -100,6 +100,22 @@ of the data/trades.csv already on disk. Rewinding is a legitimate operation but
 it is never an accident — ask for it with `--allow-rewind`, and the rewind is
 printed as a banner so it lands in the run log.
 
+-----------------------------------------------------------------------------
+ FIXTURE / LIVE SEPARATION — --root  (G-3, same forensics doc §7)
+-----------------------------------------------------------------------------
+G-2 stops a backwards rebuild. G-3 removes the reason one was ever aimed at the
+live ledger: there was no way to run this script WITHOUT writing data/. The
+command used to prove CI determinism — `scripts/daily.sh 2026-08-10` — wrote to
+exactly the same data/trades.csv that carries the fleet's real numbers.
+TAPE_FIXTURE=1 isolated the tape stage from the network; nothing isolated the
+ledger stage from the ledger.
+
+`--root DIR` (or $FLEET_ROOT) points RAW, OUT and META_PATH at DIR/data instead
+of the repo's. A determinism run against a scratch root cannot touch the live
+ledger no matter which export it is pinned to. `scripts/daily.sh` honours
+$FLEET_ROOT for the whole eight-stage pipeline, and `scripts/ci/seed_scratch_root.sh`
+materialises such a root. This removes the incident class, not just the instance.
+
 CLASSIFICATION COMES FROM data/bots_meta.csv, NOT from bot-name heuristics.
 That file is the single source for pillar / role / underlying / on-off /
 epoch-boundary / strike-fix / superseded / champion, keyed by exact OA bot name.
@@ -120,6 +136,8 @@ Usage:
   python3 scripts/build_ledger.py --ledger-start 2026-08-15
   LEDGER_START=2026-08-15 python3 scripts/build_ledger.py
   python3 scripts/build_ledger.py 2026-08-10 --allow-rewind   # deliberate rewind
+  python3 scripts/build_ledger.py --root /tmp/scratch 2026-08-10   # never touches data/
+  FLEET_ROOT=/tmp/scratch python3 scripts/build_ledger.py
   python3 scripts/build_ledger.py --selftest      # exclusion + rewind-guard tests
 """
 import argparse, csv, glob, json, os, re, sys, collections
@@ -135,6 +153,24 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RAW = os.path.join(ROOT, "data", "raw")
 OUT = os.path.join(ROOT, "data")
 META_PATH = os.path.join(OUT, "bots_meta.csv")
+
+
+def set_root(root):
+    """Repoint every path this script reads or writes at `root` (G-3).
+
+    The default root is the repo, so `data/` means the LIVE ledger. A fixture or
+    determinism run must never resolve to that — see the G-3 block in the module
+    docstring. Resolution order is --root > $FLEET_ROOT > the repo.
+
+    This is also what the selftest uses, so the flag CI depends on is exercised
+    by every selftest case rather than sitting on an untested path.
+    """
+    global ROOT, RAW, OUT, META_PATH
+    ROOT = os.path.abspath(root)
+    RAW = os.path.join(ROOT, "data", "raw")
+    OUT = os.path.join(ROOT, "data")
+    META_PATH = os.path.join(OUT, "bots_meta.csv")
+    return ROOT
 
 # --- E-3 §3.3 — the ops-class (Lab) exclusion axis -------------------------
 OPS_CLASS_COL   = "ops_class"      # the declaring column in data/bots_meta.csv
@@ -201,18 +237,24 @@ def _tid_int(s):
         return 0
 
 
-def max_existing_tid(day, root=ROOT):
+def max_existing_tid(day, out_dir=None):
     """Largest trade_id already assigned to a day other than `day`.
 
     build_ledger.py overwrites data/trades.csv, so the counter must continue from
     the persisted hedge_tournament.csv (and any trades.csv rows from other days)
     rather than resetting.  Re-running the same day ignores that day's own rows
     so trade_ids are deterministic.
+
+    G-3: reads from OUT, not from the repo. Bound to the module-level ROOT as a
+    default argument this resolved at import time, so a --root or selftest run
+    read the LIVE hedge_tournament.csv and trades.csv to seed the counter — a
+    fixture run reaching into live data is exactly the class of leak G-3 closes.
     """
     m = 0
-    for name, date_key in (("data/hedge_tournament.csv", "date"),
-                           ("data/trades.csv", "open_date")):
-        path = os.path.join(root, name)
+    base = out_dir or OUT
+    for name, date_key in (("hedge_tournament.csv", "date"),
+                           ("trades.csv", "open_date")):
+        path = os.path.join(base, name)
         if not os.path.exists(path):
             continue
         with open(path) as f:
@@ -456,10 +498,24 @@ def main():
     ap.add_argument("--allow-rewind", action="store_true",
                     help="permit a rebuild whose max open_date is EARLIER than the "
                          "prior data/trades.csv's (G-2). Never implicit.")
+    ap.add_argument("--root", default=None,
+                    help="read and write DIR/data instead of the repo's, so a "
+                         "fixture run cannot touch the live ledger (G-3). "
+                         "Defaults to $FLEET_ROOT, then the repo.")
     args = ap.parse_args()
 
     if args.selftest:
         sys.exit(selftest())
+
+    # G-3 — before anything resolves a path. --root > $FLEET_ROOT > the repo.
+    root_arg = args.root or os.environ.get("FLEET_ROOT")
+    if root_arg:
+        repo = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        resolved = set_root(root_arg)
+        if resolved != repo:
+            print(f"SCRATCH ROOT: {resolved}   "
+                  f"(from {'--root' if args.root else '$FLEET_ROOT'}) — "
+                  "the live ledger in the repo is NOT being written")
 
     ledger_start, ls_source = resolve_ledger_start(args.ledger_start)
 
@@ -790,10 +846,13 @@ def _st_env(tmp, meta_rows, export_rows, meta_header=None, exports=None,
     ledger is the next case's PRIOR ledger, and the G-2 monotonicity guard reads
     a rewind that the case never meant to set up. N14 is the one case that does
     want the previous run's ledger, and says so.
+
+    G-3: the throwaway tree is a real scratch ROOT (tmp/data/...) driven through
+    set_root(), and every case runs with `--root tmp`. The selftest used to patch
+    the module globals into a flat, bespoke shape that no production run ever
+    took — so the isolation CI now depends on had no test behind it.
     """
-    global RAW, OUT, META_PATH
-    RAW = os.path.join(tmp, "raw"); OUT = tmp
-    META_PATH = os.path.join(tmp, "bots_meta.csv")
+    set_root(tmp)
     os.makedirs(RAW, exist_ok=True)
     for stale in glob.glob(os.path.join(RAW, "*.csv")):
         os.remove(stale)
@@ -825,14 +884,24 @@ def _st_row(bot, day="2099-01-02", qty="1", tags="", pnl="10", typ="shortputspre
             "closeDate": f"{day} 15:50:00", "tags": tags}
 
 
-def _st_run(argv_start="2099-01-01", extra=()):
-    """Run main() against the patched globals, capturing stdout. Returns
+def _st_out(tmp, name):
+    """A path inside the scratch root's data/ dir."""
+    return os.path.join(tmp, "data", name)
+
+
+def _st_run(tmp, argv_start="2099-01-01", extra=()):
+    """Run main() against the scratch root at `tmp`, capturing stdout. Returns
     (exit_code_or_None, stdout, sys_exit_message_or_None). `extra` appends argv
-    (a pinned date, --allow-rewind, ...)."""
+    (a pinned date, --allow-rewind, ...).
+
+    `--root` is passed explicitly rather than leaned on from _st_env's globals:
+    it exercises the flag CI depends on, and it makes the case immune to an
+    ambient $FLEET_ROOT in the environment running the selftest."""
     import io, contextlib
     buf = io.StringIO()
     old_argv = sys.argv
-    sys.argv = ["build_ledger.py", "--ledger-start", argv_start] + list(extra)
+    sys.argv = (["build_ledger.py", "--ledger-start", argv_start, "--root", tmp]
+                + list(extra))
     try:
         with contextlib.redirect_stdout(buf):
             main()
@@ -844,10 +913,23 @@ def _st_run(argv_start="2099-01-01", extra=()):
 
 
 def selftest():
-    import tempfile, shutil
-    global RAW, OUT, META_PATH
-    keep = (RAW, OUT, META_PATH)
+    import tempfile, shutil, hashlib
+    global ROOT, RAW, OUT, META_PATH
+    keep = (ROOT, RAW, OUT, META_PATH)
     fails, results = 0, []
+
+    # G-3 — the selftest asserts on itself: whatever these cases do, the repo's
+    # live working ledger must be byte-identical when they are finished.
+    repo = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+    def live_sha():
+        p = os.path.join(repo, "data", "trades.csv")
+        if not os.path.exists(p):
+            return "absent"
+        with open(p, "rb") as fo:
+            return hashlib.sha256(fo.read()).hexdigest()
+
+    live_before = live_sha()
 
     def check(name, got, want):
         nonlocal fails
@@ -869,10 +951,10 @@ def selftest():
                 [_st_row(NORMBOT), _st_row(NORMBOT, day="2099-01-03"),
                  _st_row(OPSBOT, qty="3", tags="experiment,ops,lab"),
                  _st_row(OPSBOT, day="2099-01-03", qty="3", tags="experiment,ops,lab")])
-        code, out, _ = _st_run()
-        led = list(csv.DictReader(open(os.path.join(tmp, "trades.csv"))))
-        ops = list(csv.DictReader(open(os.path.join(tmp, "ops_rows.csv"))))
-        meta_j = json.load(open(os.path.join(tmp, "ledger_meta.json")))
+        code, out, _ = _st_run(tmp)
+        led = list(csv.DictReader(open(_st_out(tmp, "trades.csv"))))
+        ops = list(csv.DictReader(open(_st_out(tmp, "ops_rows.csv"))))
+        meta_j = json.load(open(_st_out(tmp, "ledger_meta.json")))
         check("N1  run succeeds with an ops bot present", code, None)
         check("N2  ZERO ops rows in the working ledger",
               sorted({r["bot"] for r in led}), [NORMBOT])
@@ -890,11 +972,11 @@ def selftest():
         check("N6b receipt contract names the SECOND axis",
               "LAB-OPS-EXCLUDED" in meta_j["contract"], True)
         check("N6c ops bot is absent from data/bots.csv (no aggregate row)",
-              OPSBOT in open(os.path.join(tmp, "bots.csv")).read(), False)
+              OPSBOT in open(_st_out(tmp, "bots.csv")).read(), False)
 
         # ---- N7: a declared ops bot with NO rows is still reported -------
         _st_env(tmp, [norm_meta, ops_meta], [_st_row(NORMBOT)])
-        code, out, _ = _st_run()
+        code, out, _ = _st_run(tmp)
         check("N7  declared-but-absent ops bot still prints (zero rows, not silent)",
               (code is None) and ("declared; no rows in this export" in out)
               and (OPSBOT in out), True)
@@ -902,34 +984,34 @@ def selftest():
         # ---- N8: the export-tag tripwire (undeclared Lab-tagged row) -----
         _st_env(tmp, [norm_meta],
                 [_st_row(NORMBOT), _st_row("TESTOPS-LAB-DSTOP", tags="lab,ops")])
-        before = open(os.path.join(tmp, "trades.csv")).read()
-        code, out, msg = _st_run()
+        before = open(_st_out(tmp, "trades.csv")).read()
+        code, out, msg = _st_run(tmp)
         check("N8  undeclared `ops`-tagged row REFUSES the build (FATAL)",
               isinstance(code, str) and code.startswith("FATAL:")
               and "TESTOPS-LAB-DSTOP" in code, True)
         check("N8b nothing was written on that refusal",
-              open(os.path.join(tmp, "trades.csv")).read(), before)
+              open(_st_out(tmp, "trades.csv")).read(), before)
 
         # ---- N9-N11: the group/pillar fence, both directions -------------
         _st_env(tmp, [norm_meta, dict(ops_meta, pillar="IC")], [_st_row(NORMBOT)])
-        code, _, _ = _st_run()
+        code, _, _ = _st_run(tmp)
         check("N9  ops_class=lab-ops with pillar != Lab REFUSES",
               isinstance(code, str) and "not in pillar 'Lab'" in code, True)
 
         _st_env(tmp, [norm_meta, dict(ops_meta, **{OPS_CLASS_COL: ""})], [_st_row(NORMBOT)])
-        code, _, _ = _st_run()
+        code, _, _ = _st_run(tmp)
         check("N10 pillar-Lab bot with no ops_class declaration REFUSES",
               isinstance(code, str) and "no `ops_class` declaration" in code, True)
 
         _st_env(tmp, [norm_meta, dict(ops_meta, **{OPS_CLASS_COL: "lab"})], [_st_row(NORMBOT)])
-        code, _, _ = _st_run()
+        code, _, _ = _st_run(tmp)
         check("N11 an unrecognised ops_class value REFUSES (never 'assume not ops')",
               isinstance(code, str) and "unrecognised `ops_class` value" in code, True)
 
         # ---- N12: the schema addition is load-bearing --------------------
         _st_env(tmp, [norm_meta], [_st_row(NORMBOT)],
                 meta_header=["bot", "pillar", "role", "underlying", "status"])
-        code, _, _ = _st_run()
+        code, _, _ = _st_run(tmp)
         check("N12 bots_meta.csv without an ops_class column REFUSES",
               isinstance(code, str) and "has no `ops_class` column" in code, True)
 
@@ -953,18 +1035,18 @@ def selftest():
         # ---- N14: FILTERED-EXPORT GUARD does not shout about an ops bot --
         _st_env(tmp, [norm_meta, ops_meta],
                 [_st_row(NORMBOT), _st_row(OPSBOT, tags="lab,ops")])
-        _st_run()                                   # seed a prior ledger
+        _st_run(tmp)                                   # seed a prior ledger
         _st_env(tmp, [norm_meta, ops_meta], [_st_row(NORMBOT)], keep_prior=True)
         # keep the prior trades.csv written by the seeding run
-        code, out, _ = _st_run()
+        code, out, _ = _st_run(tmp)
         check("N14 an ops bot missing from the export does NOT trip the "
               "FILTERED-EXPORT GUARD", "FILTERED-EXPORT WARNING" in out, False)
 
         # ---- N15: with NOTHING declared, behaviour is untouched ----------
         _st_env(tmp, [norm_meta], [_st_row(NORMBOT), _st_row(NORMBOT, day="2099-01-03")])
-        code, out, _ = _st_run()
-        opsf = list(csv.DictReader(open(os.path.join(tmp, "ops_rows.csv"))))
-        mj = json.load(open(os.path.join(tmp, "ledger_meta.json")))
+        code, out, _ = _st_run(tmp)
+        opsf = list(csv.DictReader(open(_st_out(tmp, "ops_rows.csv"))))
+        mj = json.load(open(_st_out(tmp, "ledger_meta.json")))
         check("N15 no ops bots declared -> no ops block, empty ops_rows.csv, counts 0",
               ("LAB OPS-CLASS" in out, len(opsf), mj["counts"]["ops_rows"], mj["ops_bots"]),
               (False, 0, 0, []))
@@ -978,13 +1060,13 @@ def selftest():
         full  = [_st_row(NORMBOT), _st_row(NORMBOT, day=day2)]  # day1 + day2
         _st_env(tmp, [norm_meta], stale, exports={day2: full})
 
-        code, out, _ = _st_run()                     # newest export -> both days
-        led = list(csv.DictReader(open(os.path.join(tmp, "trades.csv"))))
+        code, out, _ = _st_run(tmp)                     # newest export -> both days
+        led = list(csv.DictReader(open(_st_out(tmp, "trades.csv"))))
         check("G1  baseline — the newest export builds a two-day ledger",
               (code, sorted({r["open_date"][:10] for r in led})), (None, [day1, day2]))
 
-        before = open(os.path.join(tmp, "trades.csv")).read()
-        code, out, _ = _st_run(extra=[day1])
+        before = open(_st_out(tmp, "trades.csv")).read()
+        code, out, _ = _st_run(tmp, extra=[day1])
         check("G2  0051b5e6 scenario — rebuild pinned to the OLDER export REFUSES",
               isinstance(code, str)
               and "REFUSED: this rebuild would walk the working ledger BACKWARDS" in code,
@@ -993,29 +1075,29 @@ def selftest():
               isinstance(code, str) and (f": {day2}" in code) and (f": {day1}" in code)
               and (f"{day1}.csv" in code), True)
         check("G2c nothing was written — trades.csv is byte-identical",
-              open(os.path.join(tmp, "trades.csv")).read(), before)
+              open(_st_out(tmp, "trades.csv")).read(), before)
 
-        code, out, _ = _st_run(extra=[day1, "--allow-rewind"])
-        led = list(csv.DictReader(open(os.path.join(tmp, "trades.csv"))))
+        code, out, _ = _st_run(tmp, extra=[day1, "--allow-rewind"])
+        led = list(csv.DictReader(open(_st_out(tmp, "trades.csv"))))
         check("G3  --allow-rewind permits the rewind, and says so in a banner",
               (code, "LEDGER REWIND" in out,
                sorted({r["open_date"][:10] for r in led})), (None, True, [day1]))
 
-        code, out, _ = _st_run()                     # newest again -> forward
-        led = list(csv.DictReader(open(os.path.join(tmp, "trades.csv"))))
+        code, out, _ = _st_run(tmp)                     # newest again -> forward
+        led = list(csv.DictReader(open(_st_out(tmp, "trades.csv"))))
         check("G4  a FORWARD rebuild is never refused",
               (code, sorted({r["open_date"][:10] for r in led})), (None, [day1, day2]))
 
-        code, out, _ = _st_run()
+        code, out, _ = _st_run(tmp)
         check("G5  an idempotent re-run at the same max open_date is not a rewind",
               (code, "REFUSED" in out), (None, False))
 
-        code, _, _ = _st_run(argv_start="2099-06-01")
+        code, _, _ = _st_run(tmp, argv_start="2099-06-01")
         check("G6  a rebuild that would EMPTY a non-empty ledger refuses too",
               isinstance(code, str) and "the ledger would be emptied" in code, True)
 
-        os.remove(os.path.join(tmp, "trades.csv"))
-        code, _, _ = _st_run(extra=[day1])
+        os.remove(_st_out(tmp, "trades.csv"))
+        code, _, _ = _st_run(tmp, extra=[day1])
         check("G7  no prior ledger -> nothing to rewind, the pinned build runs",
               code, None)
 
@@ -1023,13 +1105,37 @@ def selftest():
               (max_open_date([{"open_date": ""}, {"open_date": f"{day1} 09:46:00"}],
                              "open_date"),
                max_open_date([], "open_date")), (day1, ""))
+
+        # ---- R1-R3: FIXTURE / LIVE SEPARATION (G-3) ----------------------
+        check("R1  set_root points RAW/OUT/META at <root>/data",
+              (RAW, OUT, META_PATH),
+              (os.path.join(tmp, "data", "raw"), os.path.join(tmp, "data"),
+               os.path.join(tmp, "data", "bots_meta.csv")))
+
+        # R2 is the leak that made this selftest non-hermetic in the first place:
+        # max_existing_tid()'s root defaulted to the module ROOT, bound at import
+        # time, so a --root or selftest run seeded its trade_id counter from the
+        # REPO's hedge_tournament.csv and trades.csv. A scratch run must read the
+        # scratch accumulator and nothing outside its root.
+        _st_env(tmp, [norm_meta], [_st_row(NORMBOT)])
+        with open(_st_out(tmp, "hedge_tournament.csv"), "w", newline="") as fo:
+            w = csv.writer(fo); w.writerow(["date", "trade_id"])
+            w.writerow(["2099-01-01", "T00042"])
+        code, _, _ = _st_run(tmp)
+        led = list(csv.DictReader(open(_st_out(tmp, "trades.csv"))))
+        check("R2  trade_id continues from the SCRATCH accumulator, not the repo's",
+              (code, [r["trade_id"] for r in led]), (None, ["T00043"]))
+
+        check("R3  the whole selftest left the repo's data/trades.csv byte-identical",
+              live_sha(), live_before)
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
-        RAW, OUT, META_PATH = keep
+        ROOT, RAW, OUT, META_PATH = keep
 
     print("SELF-TEST — build_ledger.py")
     print("  N* = E-3 §3.3 LAB OPS-CLASS EXCLUSION")
     print("  G* = G-2 MONOTONICITY GUARD (ledger-truncation-forensics-2026-08-17.md §7)")
+    print("  R* = G-3 FIXTURE / LIVE SEPARATION (--root)")
     print("=" * 74)
     for ok, name, got, want in results:
         print(f"  {'PASS' if ok else 'FAIL'}  {name}")

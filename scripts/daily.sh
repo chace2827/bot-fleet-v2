@@ -39,6 +39,7 @@
 # Usage:
 #   scripts/daily.sh                 # newest export / newest ledger date
 #   scripts/daily.sh 2026-08-18      # a specific trading day (for backfill)
+#   FLEET_ROOT=/tmp/scratch scripts/daily.sh 2026-08-10   # never touches data/
 #
 # Prereq: drop the OA positions CSV in data/raw/ named YYYY-MM-DD.csv first.
 # Tape uses Tradier when TRADIER_TOKEN is set (env or ./.env); otherwise it
@@ -47,11 +48,48 @@
 # TAPE_FIXTURE mode (CI / hermetic runs): set TAPE_FIXTURE=1 and the script will
 # use the committed data/brief/<date>_tape.json instead of calling any live API.
 #
+# FLEET_ROOT — the OUTPUT ROOT (G-3, ledger-truncation-forensics-2026-08-17.md §7).
+# Unset, it is the repo, and this is the live daily loop. Set to a directory
+# outside the repo, the ENTIRE eight-stage pipeline reads and writes THAT tree
+# and the repo's data/ is not touched at all:
+#
+#   FLEET_ROOT=/tmp/fleet-scratch scripts/daily.sh 2026-08-10
+#
+# This is the isolation that did not exist on 2026-08-12. TAPE_FIXTURE=1 fenced
+# the tape stage off from the network, but nothing fenced the ledger stage off
+# from the ledger, so `scripts/daily.sh 2026-08-10` — the command used to PROVE
+# CI determinism — rebuilt the fleet's real data/trades.csv from a stale fixture
+# and deleted 2026-08-11 from it. A determinism proof must not be able to write
+# the thing it is measuring.
+#
+# The mechanism: every script here resolves its paths from its own location
+# (ROOT = dirname(dirname(__file__))), so running the stages out of
+# $FLEET_ROOT/scripts repoints all of them at once. The root is materialised by
+# scripts/ci/seed_scratch_root.sh, called below when it is missing.
+#
 # n=0: every stage degrades gracefully on an empty post-cutover ledger. Verified
 # 2026-07-30 by the Phase-3 dry run. An empty stage says so; none of them crash,
 # and none of them render an absent number as a zero.
 set -euo pipefail
-cd "$(dirname "$0")/.."
+
+REPO="$(cd "$(dirname "$0")/.." && pwd)"
+mkdir -p "${FLEET_ROOT:-$REPO}"
+FLEET_ROOT="$(cd "${FLEET_ROOT:-$REPO}" && pwd)"
+export FLEET_ROOT
+
+if [ "$FLEET_ROOT" != "$REPO" ]; then
+  "$REPO/scripts/ci/seed_scratch_root.sh" "$FLEET_ROOT"
+  echo "=================================================================="
+  echo " SCRATCH RUN — output root is $FLEET_ROOT"
+  echo " The live ledger at $REPO/data is NOT being written."
+  echo "=================================================================="
+fi
+
+# Stages are invoked out of the ROOT's own scripts/ dir; that is what makes each
+# one resolve data/ to this root rather than the repo. cd for the few relative
+# paths (heartbeat dir) that are still cwd-based.
+SCRIPTS="$FLEET_ROOT/scripts"
+cd "$FLEET_ROOT"
 
 DAY="${1:-}"
 
@@ -107,7 +145,7 @@ write_heartbeat() {
   done
   export HB_DAY="$DAY"
   export HB_FINAL_EXIT="$hb_exit"
-  python3 scripts/heartbeat.py
+  python3 "$SCRIPTS/heartbeat.py"
 }
 
 trap 'write_heartbeat' EXIT
@@ -130,14 +168,14 @@ run_stage() {
   fi
 }
 
-run_stage "build_ledger" python3 scripts/build_ledger.py "$DAY"
-run_stage "tape" python3 scripts/tape.py "$DAY"
-run_stage "execution_audit" python3 scripts/execution_audit.py
-run_stage "daily_brief" python3 scripts/daily_brief.py "$DAY"
-run_stage "hedge_tournament" python3 scripts/hedge_tournament.py "$DAY"
-run_stage "trade_window" python3 scripts/trade_window.py
-run_stage "lessons" python3 scripts/lessons.py
-run_stage "report" python3 scripts/report.py
+run_stage "build_ledger" python3 "$SCRIPTS/build_ledger.py" --root "$FLEET_ROOT" "$DAY"
+run_stage "tape" python3 "$SCRIPTS/tape.py" "$DAY"
+run_stage "execution_audit" python3 "$SCRIPTS/execution_audit.py"
+run_stage "daily_brief" python3 "$SCRIPTS/daily_brief.py" "$DAY"
+run_stage "hedge_tournament" python3 "$SCRIPTS/hedge_tournament.py" "$DAY"
+run_stage "trade_window" python3 "$SCRIPTS/trade_window.py"
+run_stage "lessons" python3 "$SCRIPTS/lessons.py"
+run_stage "report" python3 "$SCRIPTS/report.py"
 
 echo "== done -> STATUS.md, dashboard.html, data/brief/${DAY}_brief.json,"
 echo "           data/execution_audit_findings.csv =="
