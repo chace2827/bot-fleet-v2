@@ -3,8 +3,13 @@ name: Phase 0 CI
 on:
   push:
     branches: [master, main]
+  # Every pull request, whatever it targets. Restricted to [master, main], a PR
+  # opened against another branch — any stacked PR — got NO checks at all and
+  # reported as such, which reads identically to "nothing to run". Gating is the
+  # point of this workflow; a PR it silently skips is the one failure mode it
+  # cannot have.
   pull_request:
-    branches: [master, main]
+    branches: ['**']
 
 jobs:
   phase0:
