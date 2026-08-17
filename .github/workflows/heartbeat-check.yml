@@ -27,12 +27,38 @@ jobs:
         # daily.sh pipeline.
         run: python3 scripts/check_heartbeat.py --selftest
 
+      - name: hash data/ tree before daily.sh
+        if: github.event_name == 'pull_request'
+        run: |
+          find data -type f -print0 | sort -z | xargs -0 sha256sum | sha256sum > /tmp/data-tree-hash-before
+          echo "data/ tree hash (before): $(cat /tmp/data-tree-hash-before)"
+
       - name: run daily.sh to produce a heartbeat
         if: github.event_name == 'pull_request'
         env:
           TAPE_FIXTURE: '1'
           SOURCE_DATE_EPOCH: '1786320000'
+          FLEET_ROOT: '/tmp/fleet-scratch'
         run: scripts/daily.sh 2026-08-10 --allow-rewind
+
+      - name: copy heartbeat from scratch root to repo artifacts
+        if: github.event_name == 'pull_request'
+        # WORKAROUND: check_heartbeat.py resolves its heartbeat path from the
+        # repo root and does not honour FLEET_ROOT. Copying the artifact is a
+        # workflow-level workaround; fixing the root resolution in
+        # check_heartbeat.py would touch the G-3 guard and needs
+        # pre-authorisation as a guard change per agent-charter §4.
+        run: |
+          mkdir -p artifacts/heartbeat
+          cp /tmp/fleet-scratch/artifacts/heartbeat/2026-08-10.json artifacts/heartbeat/2026-08-10.json
+
+      - name: hash data/ tree after daily.sh and assert unchanged
+        if: github.event_name == 'pull_request'
+        run: |
+          find data -type f -print0 | sort -z | xargs -0 sha256sum | sha256sum > /tmp/data-tree-hash-after
+          echo "data/ tree hash (after):  $(cat /tmp/data-tree-hash-after)"
+          echo "data/ tree hash (before): $(cat /tmp/data-tree-hash-before)"
+          diff -q /tmp/data-tree-hash-before /tmp/data-tree-hash-after
 
       - name: check heartbeat for next trading day
         if: github.event_name == 'pull_request'
@@ -40,4 +66,6 @@ jobs:
 
       - name: check heartbeat (scheduled / manual)
         if: github.event_name != 'pull_request'
+        # This job checks the heartbeat produced by the live daily loop.
+        # It does not commit or push anything.
         run: python3 scripts/check_heartbeat.py
