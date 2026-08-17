@@ -1,0 +1,42 @@
+name: Heartbeat Check
+
+on:
+  # Pre-open the next trading day (08:00 ET = 12:00 UTC)
+  schedule:
+    - cron: '0 12 * * 1-5'
+  workflow_dispatch:
+  pull_request:
+    branches: [master, main]
+
+jobs:
+  heartbeat:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: heartbeat producer and checker selftest
+        if: github.event_name == 'pull_request'
+        # The selftest creates a fake heartbeat for 2026-08-10, confirms the
+        # checker passes for 2026-08-11, deletes the heartbeat, and confirms
+        # the checker turns RED. This keeps the test independent of the real
+        # daily.sh pipeline.
+        run: python3 scripts/check_heartbeat.py --selftest
+
+      - name: run daily.sh to produce a heartbeat
+        if: github.event_name == 'pull_request'
+        env:
+          TAPE_FIXTURE: '1'
+          SOURCE_DATE_EPOCH: '1786320000'
+        run: scripts/daily.sh 2026-08-10
+
+      - name: check heartbeat for next trading day
+        if: github.event_name == 'pull_request'
+        run: python3 scripts/check_heartbeat.py --date 2026-08-11
+
+      - name: check heartbeat (scheduled / manual)
+        if: github.event_name != 'pull_request'
+        run: python3 scripts/check_heartbeat.py

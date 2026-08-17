@@ -55,6 +55,21 @@ cd "$(dirname "$0")/.."
 
 DAY="${1:-}"
 
+# If no day was supplied, use the newest raw export filename; otherwise fall
+# back to today. Resolving here gives every stage a concrete DAY and lets the
+# heartbeat file be named after the actual trading day processed.
+if [ -z "$DAY" ]; then
+  DAY="$(python3 - <<'PY'
+import glob, os, datetime
+files = sorted(glob.glob('data/raw/*.csv'))
+if files:
+    print(os.path.basename(files[-1])[:-4])
+else:
+    print(datetime.date.today().isoformat())
+PY
+  )"
+fi
+
 # Make timestamps deterministic for a given DAY so two runs are byte-identical.
 if [ -n "$DAY" ] && [ -z "${SOURCE_DATE_EPOCH:-}" ]; then
   export SOURCE_DATE_EPOCH="$(python3 - <<PY
@@ -68,31 +83,63 @@ fi
 export TAPE_FIXTURE=${TAPE_FIXTURE:-}
 export PYTHONDONTWRITEBYTECODE=1
 
-echo "== 1/8 build_ledger ${DAY:-} =="
-python3 scripts/build_ledger.py ${DAY:-}
+HEARTBEAT_DIR="artifacts/heartbeat"
+TOTAL_STAGES=8
 
-echo "== 2/8 tape ${DAY} =="
-python3 scripts/tape.py ${DAY}
+declare -a STAGES=()
+declare -a CODES=()
+HEARTBEAT_WRITTEN=""
 
-echo "== 3/8 execution_audit (drift detector) =="
-python3 scripts/execution_audit.py
+write_heartbeat() {
+  [ -n "$HEARTBEAT_WRITTEN" ] && return
+  HEARTBEAT_WRITTEN=1
+  local hb_exit
+  if [ ${#CODES[@]} -gt 0 ]; then
+    hb_exit=${CODES[$((${#CODES[@]}-1))]}
+  else
+    hb_exit=0
+  fi
+  mkdir -p "$HEARTBEAT_DIR"
+  local i
+  for i in "${!STAGES[@]}"; do
+    export "HB_NAME_$i=${STAGES[$i]}"
+    export "HB_CODE_$i=${CODES[$i]}"
+  done
+  export HB_DAY="$DAY"
+  export HB_FINAL_EXIT="$hb_exit"
+  python3 scripts/heartbeat.py
+}
 
-echo "== 4/8 daily_brief ${DAY} =="
-python3 scripts/daily_brief.py ${DAY}
+trap 'write_heartbeat' EXIT
 
-echo "== 5/8 hedge_tournament ${DAY} =="
-python3 scripts/hedge_tournament.py ${DAY}
+run_stage() {
+  local name=$1; shift
+  local rc
+  local n=$(( ${#STAGES[@]} + 1 ))
+  echo "== $n/$TOTAL_STAGES $name $DAY =="
+  if "$@"; then
+    rc=0
+  else
+    rc=$?
+  fi
+  STAGES+=("$name")
+  CODES+=("$rc")
+  if [ $rc -ne 0 ]; then
+    write_heartbeat
+    exit $rc
+  fi
+}
 
-echo "== 6/8 trade_window =="
-python3 scripts/trade_window.py
+run_stage "build_ledger" python3 scripts/build_ledger.py "$DAY"
+run_stage "tape" python3 scripts/tape.py "$DAY"
+run_stage "execution_audit" python3 scripts/execution_audit.py
+run_stage "daily_brief" python3 scripts/daily_brief.py "$DAY"
+run_stage "hedge_tournament" python3 scripts/hedge_tournament.py "$DAY"
+run_stage "trade_window" python3 scripts/trade_window.py
+run_stage "lessons" python3 scripts/lessons.py
+run_stage "report" python3 scripts/report.py
 
-echo "== 7/8 lessons =="
-python3 scripts/lessons.py
-
-echo "== 8/8 report =="
-python3 scripts/report.py
-
-echo "== done -> STATUS.md, dashboard.html, data/brief/${DAY:-<newest>}_brief.json,"
+echo "== done -> STATUS.md, dashboard.html, data/brief/${DAY}_brief.json,"
 echo "           data/execution_audit_findings.csv =="
 
 # Missing/empty stand-alone research / audit tools are intentionally NOT wired
