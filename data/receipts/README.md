@@ -1,5 +1,35 @@
 # Run receipts
 
+Two unrelated things live in this directory. Read the first section for the daily loop;
+everything from "Phase-3 proof receipts" down is a frozen 2026-07-31 artifact set.
+
+## `daily-runs.jsonl` — the per-run log (G-5, added 2026-08-17)
+
+**One JSON object per line, one line per `scripts/daily.sh` run, appended and never
+rewritten.** Written from the exit trap by `scripts/run_receipt.py`, so a run that failed
+or was refused leaves a line too — those are the runs most worth having a record of.
+
+Each line carries the resolved export path, `LEDGER_START` and where it resolved from,
+rows in and out, the **min/max `open_date` actually written**, the sha256 of every output
+file, the per-stage exit codes, and the ROOT it ran against (`scratch_run` marks a G-3
+fixture run so it can never be mistaken for a live one).
+
+`ledger_stale: true` means stage 1 did **not** rewrite the ledger on that run — a refusal
+or a crash — so the ledger fields on that line belong to an earlier run. They are reported
+rather than blanked, and flagged rather than smoothed over.
+
+Why it exists: `data/ledger_meta.json` is overwritten every run, so it records the last run
+and no history. That is why the 2026-08-12 ledger truncation was invisible for five days —
+no run left a trace anything could diff against the run before it
+(`docs/ledger-truncation-forensics-2026-08-17.md` §4). This file is that trace. It is a
+**forensic log, never a reporting input**; numbers still come from `STATUS.md`.
+
+To see what a run changed: `diff <(sed -n 1p …) <(sed -n 2p …)` on two lines' `hashes`.
+
+---
+
+## Phase-3 proof receipts
+
 Proof that the Phase-3 scripts ran **on Andy's machine**, not only in a cloud sandbox.
 Written 2026-07-31. Regenerate any time; nothing here is a reporting input.
 
