@@ -3,8 +3,8 @@
 
 Identifies pre-registration entries by structure, not heading hash count:
 a section is an entry if its first fenced code block contains an
-`ID PR-nn` line.  A bot is listed as unsigned if its SIGNED line is missing,
-blank, or contains "NOT SIGNED".
+`ID PR-nn` or `ID INC-nn` line.  A bot is listed as unsigned if its SIGNED line
+is missing, blank, or contains "NOT SIGNED".
 """
 import os
 import re
@@ -81,11 +81,11 @@ def parse_ledger_text(text):
             continue
 
         id_val = id_m.group(1).strip()
-        # A single PR-nn identifies a pre-registration bot entry.
-        if not re.match(r'^PR-\d+$', id_val):
+        # A single PR-nn or INC-nn identifies a pre-registration bot entry.
+        if not re.match(r'^(PR|INC)-\d+$', id_val):
             warnings.append(
                 f"WARNING: {level} {heading!r} has ID {id_val!r} but is not a single "
-                f"PR-nn entry; skipped")
+                f"PR-nn or INC-nn entry; skipped")
             continue
 
         bot = _bot_name_from_heading(heading)
@@ -149,6 +149,18 @@ SIGNED           2026-08-09 - ANDY - gate cleared at S2b, in-chat.
                  FIRST-TRADING-DAY CAPTURE OWED 2026-08-10.
 ```
 
+### INC-01 — `IC-SPX-Fortress-Unstopped`
+```
+ID               INC-01
+SIGNED           2026-08-17 · ANDY
+```
+
+### INC-02 — `Test-Inc-Unsigned`
+```
+ID               INC-02
+SIGNED           ..............................
+```
+
 ## Some group header (not an entry)
 No code block here — should not warn.
 
@@ -166,9 +178,13 @@ def selftest():
         'IC-SPX-FastPT25-S2-130PM',
         'QQQ-IC-0DTE-Fortress',
         'QQQ-IC-0DTE-Fortress-NoPT50',
+        'Test-Inc-Unsigned',
     }
     if unsigned != expected:
         print(f"FAIL: expected unsigned {expected}, got {unsigned}", file=sys.stderr)
+        return 1
+    if 'IC-SPX-Fortress-Unstopped' in unsigned:
+        print("FAIL: INC-01 is signed and should not be unsigned", file=sys.stderr)
         return 1
     if 'IC-SPX-FastPT25-S2' in unsigned:
         print("FAIL: PR-01 is signed and should not be unsigned", file=sys.stderr)
@@ -179,6 +195,12 @@ def selftest():
         return 1
     if 'QQQ-IC-0DTE-Fortress-NoPT50' not in unsigned:
         print("FAIL: PR-04 (mixed heading) did not render", file=sys.stderr)
+        return 1
+    if 'IC-SPX-Fortress-Unstopped' in unsigned:
+        print("FAIL: INC-01 is signed and should not be unsigned", file=sys.stderr)
+        return 1
+    if 'Test-Inc-Unsigned' not in unsigned:
+        print("FAIL: INC-02 did not render as unsigned", file=sys.stderr)
         return 1
     if not any('Greenfield IC family' in w for w in warnings):
         print("FAIL: expected a WARNING for the unclassifiable family section", file=sys.stderr)
@@ -199,6 +221,9 @@ def selftest():
             if bot not in live_unsigned:
                 print(f"FAIL: live ledger does not flag {bot} as unsigned", file=sys.stderr)
                 return 1
+        if 'IC-SPX-Fortress-Unstopped' in live_unsigned:
+            print("FAIL: live ledger has INC-01 signed; parser must not flag it", file=sys.stderr)
+            return 1
 
     print("pre_registration_ledger.py: selftest OK")
     for w in warnings:
