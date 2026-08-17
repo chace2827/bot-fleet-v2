@@ -11,6 +11,47 @@ import csv, os, re, collections, datetime, json, math, random
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 D = os.path.join(ROOT, "data")
 
+# --- pre-registration ledger parsing (T-13) -------------------------------
+
+def unsigned_from_ledger(path):
+    """Return a set of bot names whose pre-registration ledger entry is not signed.
+
+    A heading is unsigned if its first fenced code block has no SIGNED line,
+    the SIGNED line is blank, or the SIGNED line contains 'NOT SIGNED'.
+    """
+    if not os.path.exists(path):
+        return set()
+    text = open(path).read()
+    unsigned = set()
+    # split on headings; each part starts with the heading text
+    for part in re.split(r'(?m)^### ', text):
+        if not part.strip():
+            continue
+        heading_line = part.splitlines()[0]
+        # extract the first backtick name, which is the OA bot name in this repo
+        m = re.search(r'`([^`]+)`', heading_line)
+        if not m:
+            continue
+        bot = m.group(1).strip()
+        # find the first fenced code block in this section
+        block_m = re.search(r'^```\n(.*?)\n```', part, re.S | re.M)
+        if not block_m:
+            unsigned.add(bot)
+            continue
+        block = block_m.group(1)
+        signed_m = re.search(r'^SIGNED\s+(.+)$', block, re.M)
+        if not signed_m:
+            unsigned.add(bot)
+            continue
+        signed_val = signed_m.group(1).strip()
+        if "NOT SIGNED" in signed_val:
+            unsigned.add(bot)
+            continue
+        if not re.search(r'\d{4}-\d{2}-\d{2}', signed_val):
+            unsigned.add(bot)
+    return unsigned
+
+
 def fl(x):
     try: return float(x)
     except (TypeError, ValueError): return 0.0
@@ -71,6 +112,9 @@ for t in trades:
 
 # champion: resolved from bots_meta.csv (champion=yes), NOT a hardcoded name
 meta = {r["bot"]: r for r in csv.DictReader(open(os.path.join(D, "bots_meta.csv")))}
+_ledger_path = os.path.join(ROOT, "docs", "pre-registration-ledger.md")
+_ledger_unsigned = unsigned_from_ledger(_ledger_path)
+unsigned_bots = sorted(b for b in meta if b in _ledger_unsigned)
 champ = next((b for b, r in meta.items() if (r.get("champion") or "").lower() == "yes"), None)
 champ_t = [t for t in trades if t["bot"] == champ]
 champ_trades = len(set(t["trade_id"] for t in champ_t))
@@ -146,6 +190,16 @@ if not trades:
           "result: an absent number is not a zero, and a blank expectancy is not a "
           "flat one. This page becomes meaningful on the first post-cutover trading "
           "day.", ""]
+
+if unsigned_bots:
+    L += ["", "## ⚠️ UNSIGNED PRE-REGISTRATION BOTS — DO NOT SWITCH ON", "",
+          "> The following bots have a pre-registration ledger entry with a blank, "
+          "missing, or `NOT SIGNED` `SIGNED` line. No bot may be switched ON until "
+          "the entry is signed and dated.", ""]
+    for b in unsigned_bots:
+        L.append(f"- {b}")
+    L.append("")
+
 L += ["## Headline",
      f"- **Total closed P/L:** ${tot:,.0f}  ·  {len(trades)} legs  ·  {len(bots)} bots"]
 for p in sorted(bypillar):
@@ -735,6 +789,7 @@ h2{font-size:15px;margin:30px 0 6px;border-top:1px solid #eee;padding-top:18px}
 code{background:#f0f0f3;padding:1px 4px;border-radius:4px;font-size:12px}
 </style></head><body>
 <h1>Bot Fleet — Status</h1>
+__UNSIGNED__
 <div class="sub">generated __DATE__ · PAPER · source: data/trades.csv + docs/backlog.md</div>
 <div>
 <div class="card"><span>Total P/L</span><b class="__TOTC__">$__TOT__</b></div>
@@ -767,11 +822,24 @@ new Chart(document.getElementById('ch'),{type:'line',
  options:{plugins:{legend:{display:true}},scales:{x:{ticks:{maxTicksLimit:8}}}}});
 </script></body></html>"""
 
+if unsigned_bots:
+    _u = "\n".join(f"<li>{esc(b)}</li>" for b in unsigned_bots)
+    unsigned_html = (
+        '<div style="background:#fff0f0;border:1px solid #c0392b;color:#c0392b;'
+        'padding:12px 16px;margin:12px 0;border-radius:6px;">'
+        '<h2 style="margin:0 0 6px;font-size:14px;">'
+        'UNSIGNED PRE-REGISTRATION BOTS — DO NOT SWITCH ON</h2>'
+        f'<ul style="margin:0;padding-left:18px;">{_u}</ul></div>'
+    )
+else:
+    unsigned_html = ""
+
 repl = {"__DATE__": date, "__TOT__": f"{tot:,.0f}", "__NLEGS__": str(len(trades)),
         "__NBOTS__": str(len(bots)), "__SCALP__": f"{champ_pnl:,.0f}",
         "__TOTC__": "neg" if tot < 0 else "pos",
         "__SCALPC__": "neg" if champ_pnl < 0 else "pos",
         "__ROWS__": rows_json, "__CUM__": json.dumps(cumlist),
+        "__UNSIGNED__": unsigned_html,
         "__BACKLOG__": backlog_html}
 html = TPL
 for k, v in repl.items(): html = html.replace(k, v)
