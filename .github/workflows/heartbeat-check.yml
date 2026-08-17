@@ -5,8 +5,9 @@ on:
   schedule:
     - cron: '0 12 * * 1-5'
   workflow_dispatch:
+  # Every pull request, whatever it targets — see the note in ci.yml.
   pull_request:
-    branches: [master, main]
+    branches: ['**']
 
 jobs:
   heartbeat:
