@@ -9242,3 +9242,16 @@ rows. **Cite line numbers only after the insert, and verify by `sed -n 'Np'`.**
 
 **Consequence:** the Reconciler task (`trig_01MoCzv46JZGah5Bu3v5Cd4C`, fires 07:30 ET) clones to its
 own cloud workspace and is now explicitly in-policy rather than relying on an unwritten reading.
+
+## 2026-08-17 (evening) — tracker eyeball requirement removed
+
+**`R-2026-08-17-TRACKER-NO-EYEBALL`**, at Andy's explicit instruction. `CLAUDE.md` §9.1a's tracker
+clause is amended: the artifact now verifies by **per-row cited evidence** (commit id, file path, or
+sha256 in the row) rather than by Andy's visual confirmation. **The confirmation is no longer a
+close-out gate** — a session that has updated the tracker with citations may close. Andy retains
+rejection at commit review. Original text preserved inline in the amendment banner.
+
+Rationale: the confirmation was blocking close-outs on a human round-trip while adding no check the
+citation does not already provide. The §9.1a failure it was written against (7/29, 7/31 — the
+tracker lagging the folder and reporting finished work as missing) is addressed by the citation
+requirement, which is checkable without Andy.

@@ -2344,6 +2344,26 @@ source: >-
 unclear: false
 ```
 
+```yaml
+ruling_id: R-2026-08-17-TRACKER-NO-EYEBALL
+date: 2026-08-17
+scope: >-
+  Removes Andy's visual confirmation of the bot-fleet-migration tracker artifact as a close-out
+  gate. The tracker now verifies by per-row cited evidence instead.
+verbatim: >-
+  Remove the requirement to eyeball the tracker artifact going forward.
+verbatim_of: andy
+owner: Andy
+status: Active
+applies_to: >-
+  CLAUDE.md section 9.1a (the tracker clause); CLAUDE.md section 9.1 step 2; every session close-out;
+  every dispatch prompt that previously ended by asking Andy to confirm the tracker.
+superseded_by: none
+source: Andy's message to the Cowork session, 2026-08-17, quoted verbatim above.
+unclear: false
+```
+
+
 
 
 ```

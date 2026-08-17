@@ -197,8 +197,15 @@ commit in one command, and say so plainly.
 > **Files** verify by a direct device read or hash of the file itself.
 > **OA edits** verify by the two-layer check in §5 — a fresh screenshot/capture re-observation of
 > the changed value, plus the Trades-list behavioral check. A save confirmation proves nothing.
-> **The tracker artifact** verifies by **Andy's visual confirmation**, and that confirmation is part
-> of the close-out — the close-out is not complete without it.
+> **The tracker artifact** verifies by **per-row cited evidence** — a commit id, a file path, or a
+> sha256 in the row itself. A row asserting "done" with no citation is not done.
+> **[AMENDED 2026-08-17 — `R-2026-08-17-TRACKER-NO-EYEBALL`, at Andy's explicit instruction.
+> Original text: "The tracker artifact verifies by Andy's visual confirmation, and that
+> confirmation is part of the close-out — the close-out is not complete without it."]** Andy's
+> visual confirmation is **no longer required** and is no longer a close-out gate: a session that
+> has updated the tracker with cited evidence may close. Andy may still reject any row at commit
+> review. The reason for the change is throughput — the confirmation step was blocking close-outs
+> on a human round-trip while adding no check the citation does not already provide.
 >
 > Never report a write as landed on the strength of the tool call that made it. State what was
 > attempted, state how it was checked, and if it was not checked, say so.
