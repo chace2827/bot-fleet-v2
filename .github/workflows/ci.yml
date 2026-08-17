@@ -128,3 +128,22 @@ jobs:
 
       - name: pre-registration ledger parser selftest
         run: python3 scripts/pre_registration_ledger.py
+
+  selftests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: build_ledger selftest
+        run: python3 scripts/build_ledger.py --selftest
+
+      - name: a_series selftest
+        run: python3 scripts/a_series.py --selftest
+
+      - name: validation suites vs baseline
+        run: python3 scripts/ci/validate_all.py
+
