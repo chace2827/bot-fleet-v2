@@ -45,7 +45,7 @@ jobs:
         env:
           FLEET_ROOT: /tmp/fleet-scratch
         run: |
-          python3 scripts/build_ledger.py --root "$FLEET_ROOT" 2026-08-10
+          python3 scripts/build_ledger.py --root "$FLEET_ROOT" 2026-08-10 --allow-rewind
           python3 - <<'PY'
           import csv, json, os, sys
           root = os.environ['FLEET_ROOT']
