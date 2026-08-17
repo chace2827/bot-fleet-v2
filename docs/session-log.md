@@ -8648,3 +8648,243 @@ question — the defect is the method, not the number. Leaving it unpursued.
 
 **Hand-off**
 - Andy to review the branch, run `git add -A` and `git commit`, then `git push -f origin` to update PR #4 (or open a new PR). Claude does not commit.
+
+---
+
+## 2026-08-17 — GF-QQQ entry-gate forensics (Cowork, Chrome-direct, reads only)
+
+**Trigger**
+Andy supplied an OA Analyze screenshot (08/01–08/31), the /bots Recent_Activity capture of
+2026-08-16 20:32 ET, and the full closed-position CSV export. First pass answered in raw
+dollars; Andy corrected the framing — allocation is deliberately unequal, the question is what
+is *working*, per `evidence-standards.md` §4 "compare by R, never raw P/L". Second pass was
+re-run normalized. Andy then granted Chrome-direct OA control for this session.
+
+**Read of the export (34 legs = the complete August record, all in 08-10 → 08-14)**
+- Fleet mean R 0.0302/leg, sum R 1.026, stdev 0.0435.
+- Every one of the 5 sessions closed within ±0.5% on the traded underlying — one regime,
+  no adverse path anywhere in the sample. T4/T5; nothing near the n≥100 / 6-month gate.
+- Exit-variant discrimination on the 08-14 shared GF entry (identical strikes, same second)
+  did work: Ride/SL100/SL200/Touch0/Trail/Ride-Delta capture 0.857, PT50 0.571, Canary 0.143.
+  Six of the eight arms are collinear and can only separate on an adverse day; there were none.
+- Binding constraint is fire rate, not allocation: GF arms fired on 1 of 5 sessions.
+
+**OA investigation (no edit attempted, no automation saved)**
+Full findings: `docs/gf-entry-gate-forensics-2026-08-17.md` (sha256
+`d6f0ffff34c113d97bc7996f79539aded3a311f9a1fafa7026c64dca0b39a967`).
+- Entry gate read from the stored model: 1:30–2:00pm ET window, `stockchangepct` within
+  ±0.75% of previous close, put/call-side re-entry tag gate, then Open Short Spread
+  (`series` 0DTE exact, `minPrice` 0.08, short `legpctprice pct=0.4`, long `leggap gap=2`).
+- Strike rule reproduced exactly: QQQ 728.87 × (1−0.4%) → 726 / 724 = the observed fill.
+  **Corrects the prior note recording the GF strike rule as pct=0.75** — 0.75 is the Range
+  filter, the strike offset is 0.4.
+- **Both scanners were last written 2026-08-11 ~21:52–21:57 UTC** (ScannerA v10, ScannerB v3).
+  The current-config sample is 3 sessions (08-12 → 08-14), not 7. Positions before 08-12 came
+  from a different configuration.
+- **Retraction:** the earlier read that the family is structurally put-side-only is wrong.
+  `GF_EXITS_CALL` exists, `GF-ScannerB-CallSpread` is enabled, scans every 1m, and mirrors
+  ScannerA correctly. It has produced no fill; cause not established.
+- Leading hypothesis for the low fire rate: Range075 (needs a quiet day) and `minPrice 0.08`
+  (needs premium a quiet day suppresses) are anti-correlated. The one fill went off at 0.07,
+  below the stated floor, via SmartPricing — i.e. at the boundary. Not established.
+- Unexplained asymmetry: ScannerA stores `price {limit:100, limitType:"pct"}`, ScannerB stores
+  the legacy `price {pct:100}`. Same display text, different schema, different version counts.
+- Config hashes captured and ready to stamp:
+  ScannerA `094f111a703bd392266534774c83f73de6fa18fa6eafa282547f315c49761035`,
+  ScannerB `ffaaa199982c78552069b53572546d406e351b25ea17e985a4bcc21276e13ea4`.
+- `GF-QQQ-IC-Ride` pre-registration card remains `STATUS DRAFT — unsigned`, CONFIG HASH an
+  unfilled placeholder, SIGNED blank — on a live, funded, ON bot.
+
+**NOT EVALUABLE (recorded, not inferred)**
+- Per-day gate evaluation for 08-10 → 08-13: bot Log retains ~25 minutes; only 08-14 survived.
+- QQQ change% at 1:30pm on those days: no market-data source in-session.
+- Whether ScannerB's legacy `price.pct` prices correctly: needs a live market run.
+
+**Verification**
+- All OA values are first-hand model/screenshot reads of 2026-08-17; reads only, nothing saved.
+- `docs/gf-entry-gate-forensics-2026-08-17.md` verified by direct `device_bash` sha256 plus a
+  single-match grep, per §9.1a. 133 lines.
+
+**Gated — nothing applied**
+Signing the arms, any change to `minPrice` / the 0.4% offset / the 1:30–2:00pm window, and
+re-saving ScannerB to migrate its `price` schema are all decisions requiring "amend the plan".
+
+**Hand-off**
+Ready to commit. Changed: `docs/gf-entry-gate-forensics-2026-08-17.md` (new),
+`docs/session-log.md` (this entry). Claude does not commit.
+
+**ADDENDUM — the answer (same session, after cross-checking the 08-11 diagnosis)**
+The 2026-08-11 strike-selection card recommended changing the GF short-strike **method** from
+`legpctprice` to `delta`, and stated explicitly that *tuning the number cannot fix an inability to
+adapt*. OA today holds **`legpctprice pct=0.4`** — the number was tuned 0.75% → 0.4% that same
+evening (scanners written 21:52–21:57 UTC) and the method was never changed. The family went from
+never filling to filling once in three sessions, with that one fill clearing at 0.07, *below* its
+own `minPrice 0.08` floor. First-order cause of the low fire rate is therefore the un-changed
+selection method, not the Range075/minPrice interaction — that is second-order. The `delta`
+recommendation is **still open**, and must be proposed as the method change the number tune
+substituted for. Recorded in `docs/gf-entry-gate-forensics-2026-08-17.md` §8 (sha256
+`16fea243748f357865451936c09a3b348371d72cd9d614501d227c2d53a0fe08`).
+Nothing applied — the strike method is a value change on live arms and is gated.
+
+---
+
+## 2026-08-17 (afternoon) — GF entry-METHOD change APPLIED per R-2026-08-17-GF-ENTRY-METHOD
+
+Authorized by Andy the same day ("Amend the plan. GF entry-method change authorized…"), registered
+as `R-2026-08-17-GF-ENTRY-METHOD` in `docs/RULINGS.md`. Edits made in the **Automation Library**
+(`/bots/automations`), which states on the page: *"These automations are shared by your bots.
+Modifications affect all bots using them."* All three GF automations list **"8 bots"**.
+
+**Applied — both scanners, Layer 1 verified after hard reload from the Library surface**
+
+| | GF-ScannerA-PutSpread | GF-ScannerB-CallSpread |
+|---|---|---|
+| routine id | `RTfw5TkkCRF178605283747821` | `RTfw5TkkCRF178606271659881` |
+| version | 10 -> **12** | 3 -> **4** |
+| updated (UTC) | 2026-08-17T16:38:32.118Z | 2026-08-17T16:45:14.529Z |
+| short strike | `legpctprice pct=0.4` -> **`delta -0.10 mode=closest`** | `legpctprice pct=0.4` -> **`delta 0.10 mode=closest`** |
+| NEW config hash | `1e5eb9936a1adf067af65a4841d42e755592f7c179f3c0cad477502dfdbfcdc8` | `a925d490b8a0d2337566f47307fc52470da129935d3bd83d24389c6dc433dfb5` |
+| payload bytes | 5478 -> 5379 | 5147 -> 5044 |
+
+Put side takes **negative** delta, call side **positive** — matching PR-02's observed `0.1 / -0.1`
+pair. Delta 0.10 is a **declared starting point copied from PR-02 (SPX / $5 wings), NOT derived for
+QQQ / $2 wings**, per the ruling.
+
+**Unchanged and re-read on both after the edit (Layer 1):** `leggap gap=2`; `filter minPrice 0.08`;
+`series {days:0, exact}`; `amount 1 contract`; tags `put side` / `call side`; exits bundles
+`GF_EXITS_PUT` / `GF_EXITS_CALL`. Nothing outside the short-strike field moved.
+
+**Propagation proven, not assumed.** After the ScannerA save, `GF-QQQ-IC-Canary` (a different arm)
+was read independently and returned the SAME routine id, SAME version 12, SAME
+`updated 2026-08-17T16:38:32.118Z`, SAME hash prefix and `SHORT: delta -.10`. The edit is shared,
+not forked.
+
+**ITEM 2 NOT DONE — ScannerB price schema still legacy.** Andy's stated mechanism ("re-save so it
+carries `{limit:100, limitType:'pct'}`") **does not work**: after a full drawer save + automation
+save + hard reload, ScannerB still stores `price {pct:100, smart:"normal"}` while ScannerA stores
+`price {limit:100, limitType:"pct", smart:"normal"}`. Migrating it would require a two-step picker
+change (OA pickers no-op on the already-displayed value, and both display "100% of bid/ask").
+That is a different mechanism from the one authorized, on a live shared automation, so it was NOT
+improvised. Left as-is and escalated. Consequence: **item 4 (signing) is blocked** — stamping a
+CONFIG HASH now would be stale the moment the price schema is touched.
+
+**Traps hit, worth recording**
+1. **There are THREE save layers, not two.** recipe `a.btn.green.save` -> the action drawer's own
+   Save (a `button.btn.green` at the BOTTOM of the drawer's scroll region, off-screen at ~y=1837)
+   -> `a.saveclose`. Only the drawer Save writes the change into `a5.bots.acedit.routine`.
+2. **Closing the action drawer with its X DISCARDS staged recipe edits — and the subsequent
+   `a.saveclose` then commits an UNCHANGED routine with a BUMPED version.** Observed exactly:
+   ScannerA went 10 -> 11 with a byte-identical payload (5478) and an identical config hash. A
+   version increment is NOT evidence of a change. Only the hash is.
+3. `a.saveclose` sits UNDER the action drawer overlay; `document.elementFromPoint` at its centre
+   returns the drawer. Close the drawer first, then re-check what occupies the point.
+4. A bot-side automation edit DID write through to the shared Library object here (verified on a
+   second arm). Andy's caution about per-bot forking did not apply to these three GF automations.
+
+**Verification** — every value above is a post-hard-reload model read from `a5.bots.acedit.routine`,
+not a save confirmation. Layer 2 (first new position's Trades list) is OUTSTANDING and can only
+close on a live fill.
+
+**Hand-off** — ready to commit: `docs/RULINGS.md`, `docs/session-log.md`,
+`docs/gf-entry-gate-forensics-2026-08-17.md`. Claude does not commit.
+
+**SIGNING — same session, 2026-08-17, on Andy's instruction ("Sign now")**
+
+- `docs/pre-registration-ledger.md`: all four GF-family CONFIG HASH placeholders replaced with the
+  stamped pair (ScannerA v12 `1e5eb993…`, ScannerB v4 `a925d490…`) and four SIGNED lines filled
+  `2026-08-17 · ANDY` under `R-2026-08-17-GF-ENTRY-METHOD`. No `<capture> @ <hash>` placeholder
+  remains anywhere after line 1000. Each stamp records that ONE pair of hashes covers all eight arms
+  (the entry surface is two SHARED automations), carries the ScannerB `price {pct:100}` exception as
+  a known gated carry that does NOT block the signature, and repeats the version-is-not-evidence rule.
+- Three rulings registered: `R-2026-08-17-HASH-NOT-VERSION` (Active),
+  `R-2026-08-17-SCANNERB-PRICE-SCHEMA` (Gated), `R-2026-08-17-RULINGS-TAIL-CLEANUP` (Gated).
+- The version-is-not-evidence rule propagated to where future sessions load it:
+  `.agents/skills/option-alpha/SKILL.md` §4 (verification law) and §5 (four new trap rows), plus
+  project memory `oa_chrome_driving` and `gf_entry_gate`. Not left in the session log alone.
+
+**⚠️ NEAR-MISS WORTH RECORDING.** The first write of `R-2026-08-17-RULINGS-TAIL-CLEANUP` quoted
+Andy's instruction verbatim, and that instruction contains a literal ```` ```yaml ```` — which closed
+the record's own fence and truncated it for any parser using ``` r"```yaml\n(.*?)```" ```. That is the
+*same defect class* as the transcript garbage the ruling authorizes cleaning up, nearly reintroduced
+while registering the authorization to remove it. Fixed by rendering the marker as prose ("three
+backticks followed by \"yaml\""). **Rule: never paste a raw triple-backtick fence into a `verbatim`
+field.** All 118 records before the garbage region now parse clean, schema-valid, no duplicates.
+
+**Lines 1958-1986 of RULINGS.md deliberately untouched** per the ruling; cleanup is authorized as its
+own entry and its own commit and must NOT be bundled with this signing commit.
+
+**Commit set (signing) — Claude does not commit:**
+```
+docs/RULINGS.md                              3a6fcea28a313733edb004698362516920144948762698c88f4ab28ebdcb56cc
+docs/pre-registration-ledger.md              65a1597c2bda36e12e3a304bc1a2942b55e73a84cd9e0c13297161334484d8f6
+docs/session-log.md                          (this file, hash after this write)
+docs/gf-entry-gate-forensics-2026-08-17.md   16fea243748f357865451936c09a3b348371d72cd9d614501d227c2d53a0fe08
+.agents/skills/option-alpha/SKILL.md         873bac1af8954b2739aec8f2783d2be4fb9b8263ce70f7ed89db2efe458a78e9
+```
+`.git/index.lock` checked and ABSENT — no mv-sweep needed before this commit.
+
+**⚠️ OPEN CONSEQUENCE FOR PR-23, raised at signing, NOT ruled.** `PR-23 / GF-QQQ-IC-Ride-Delta`'s card
+already specifies `STARTING DELTA 0.10 / -0.10 — PR-02's observed-working value, NOT a derivation`.
+Its whole reason to exist was to be the **delta** arm read against **pct** siblings. Because the two
+scanners are SHARED, all eight arms now run delta 0.10 — so PR-23 no longer differs from PR-14
+(`GF-QQQ-IC-Ride`) on any axis: same shared entry, same exit bundle. The two arms were already
+observed collinear on 2026-08-14 (identical fills, capture 0.857). **PR-23 may now be a duplicate
+arm with no variable.** Andy to rule: retire it, repurpose it as the pct control (which would require
+un-sharing an entry automation), or accept a deliberate duplicate. Its card's instruction
+"⚠️ RECORD WHERE IT ACTUALLY LANDS ON DAY ONE" now applies to the whole family, not one arm.
+
+---
+
+## 2026-08-17 (afternoon, cont.) — Unstopped re-opened: capture → sign → arm, completed in order
+
+Under `R-2026-08-17-UNSTOPPED-REOPEN` + `R-2026-08-17-UNSTOPPED-REOPEN-A1`. Also registered this
+session: `R-2026-08-17-PR23-RETIRE`. RULINGS.md now holds 121 records, all schema-clean, no dups.
+
+**Step 1 — capture.** `data/captures/unstopped-reopen-capture-2026-08-17.txt`, sha256
+`91e2076f94a3f8ee2a03ee8298a6dd67756a4eb092437907d1fe62597b03dd82`. Four automation hashes recorded;
+all four last written 2026-05-14, untouched for three months.
+
+**F1 RESOLVED WITH EVIDENCE, not inference.** `Defang-Mon-S2-StrikeTouch`
+(`RTfw5TkkCRF3317787955826108344`, `sharing:1`) is shared with **`IC-SPX-Fortress-Defang`**,
+identified from that bot's own settings page. Decisive detail: the SAME shared automation reads
+`"Automation is on"` on Defang and `"Automation is off"` on Unstopped. **Sharing couples
+definitions, not execution** — confirmed on a second, independent case beyond the GF scanners.
+Recorded EDIT-FROZEN: future edits via `/bots/automations` only, and any such edit writes into the
+archived Defang's config too.
+
+**F2 — CLOSE MECHANISM ESTABLISHED = HOLD TO EXPIRATION, SAME DAY.** Read from the capture, not
+assumed. Exit Options off at config (`disableExits:1`, open-action exits bundle reads `None`);
+`Fortress-Mon-S2-Cleanup` per-bot **off**; `Defang-Mon-S2-StrikeTouch` per-bot **off**; entry series
+`{days:0, exact}` = 0DTE. With AUTOS on, the only automations that run are the two scanners —
+**nothing closes a position except expiration.** The two close-capable monitors exist but are
+disabled on this bot, and that disabled state is precisely what makes it "Unstopped". Their logic,
+for the record: Cleanup = close an orphan leg after 2 minutes when the bot holds exactly 1 position;
+StrikeTouch = close when the underlying trades through the short strike.
+
+**F3 — ledger entry authored** as `INC-01` in a new §6b, signed `2026-08-17 · ANDY`, with role,
+strategy identity (`disableExits:1` IS the design), close mechanism, the shared-automation
+edit-freeze, sample (interim n=15, review n=30 or 2026-11-30), kill (new-sample P-factor < 1.0 at
+n≥15, or ANY hash drift → AUTOS off immediately, no diagnosis while armed), and the amended Layer 2.
+
+**Step 3 — ARMED, AUTOS ONLY.** Verified after the toggle's own page reload:
+`status: on` · `disableExits: 1` (UNCHANGED) · AUTOMATIONS `onoff on` · EXIT OPTIONS `onoff off`.
+Per-automation after arming: `Fortress-Scan-Put` on, `Fortress-Scan-Call` on,
+`Defang-Mon-S2-StrikeTouch` off, `Fortress-Mon-S2-Cleanup` off. Toggle screenshot delivered.
+No config edit of any kind was made. The AUTOMATIONS switch was scoped by DOM container and an
+x-coordinate guard so the adjacent EXIT OPTIONS switch could not be hit.
+
+**Trap note:** flipping the master toggle NAVIGATES the page, which surfaces as
+`Inspected target navigated or closed` mid-evaluation. Same class as the 45s timeout — **the work
+had committed.** State was re-read, not re-fired.
+
+**⚠️ TENSION LOGGED, NOT ACTED ON.** Unstopped's short leg is `legpctprice pct=0.75` — the method
+ruled unable to adapt for the GF family earlier today — yet it earned 26 closes at P-factor 6.22 on
+SPX pre-lapse, with the same `75%/speedy` pricing and `$5,000 draw` sizing that PR-01 carries while
+reportedly never filling its call side now. Same config, different eras → points at a REGIME or
+market-data change rather than the config, and bears on whether delta was the right fix. Recorded in
+the INC-01 card as a live tension for the delta sample's read. No edit follows; the CONSTRAINT holds.
+
+**LAYER 2 — TWO OUTSTANDING, both top-of-brief:**
+1. GF arms — first fill's Trades list must show delta-selected strikes, not 0.40%.
+2. INC-01 — first position's Trades list must show (a) NO Exit-Option rows and (b) a close BY
+   EXPIRATION with no Cleanup and no StrikeTouch row. 0DTE, so it resolves same session.

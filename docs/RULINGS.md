@@ -1955,6 +1955,214 @@ unclear: false
 ```
 
 <!-- APPEND NEW RECORDS BELOW THIS LINE — never edit or delete an existing record. -->
+
+```yaml
+ruling_id: R-2026-08-17-GF-ENTRY-METHOD
+date: 2026-08-17
+scope: >-
+  Amends the plan: authorizes the GF short-strike selection METHOD change from `legpctprice` to
+  `delta` on the two shared greenfield scanners, scoped to six numbered conditions. Supersedes
+  nothing; it is the method change the 2026-08-11 number tune (pct 0.75 -> 0.4) was a substitute
+  for. Ruled before application; the OA edit is tracked separately in docs/session-log.md.
+verbatim: >-
+  Amend the plan. GF entry-method change authorized, scoped as follows: 1. Edit the two shared
+  scanners only - `GF-ScannerA-PutSpread` and `GF-ScannerB-CallSpread`: short strike `legpctprice
+  pct=0.4` -> `delta 0.10, mode=closest`. Long leg `leggap gap=2` and `filter minPrice 0.08`
+  unchanged. Delta 0.10 is a declared starting point copied from PR-02 (SPX/$5 wings), not derived
+  for QQQ/$2 - record it that way in the pre-registration. 2. Normalize ScannerB's price schema in
+  the same edit - re-save so it carries `{limit:100, limitType:"pct"}` matching ScannerA. Log it as
+  part of this change. 3. Verify per §5 two-layer proof: fresh model re-read of both scanners (not
+  the save confirmation), re-capture both config hashes, then the behavioral check on the first new
+  position's Trades list. 4. Sign immediately after the edit - stamp the new hashes into the
+  pre-registration cards' CONFIG HASH fields. Sample restarts at the edit; nothing before it counts.
+  Target stays 1 condor/day; set review at 10 sessions. 5. Before the next session open, set up the
+  ~2:05pm ET log capture so non-firing days leave a decision record. This is a precondition of the
+  new sample, not a follow-up. 6. Holds stand: PR-01 untouched (signed control), PR-04 signed before
+  anyone touches its entry. No other bots edited. Range075/minPrice gets no separate ruling - the
+  delta change is the test. If fire rate stays low after this, the range filter is the next suspect.
+verbatim_of: andy
+owner: Andy
+status: Active
+applies_to: >-
+  GF-ScannerA-PutSpread and GF-ScannerB-CallSpread (shared, sharing:1, all 8 GF-QQQ-IC arms);
+  the 8 arms' pre-registration cards (CONFIG HASH / SIGNED / review-at-10-sessions);
+  docs/greenfield-family-spec.md; docs/pre-registration-ledger.md;
+  the 2:05pm ET decision-log capture; PR-01 and PR-04 named as explicit holds.
+superseded_by: none
+source: Andy's message to the Cowork session, 2026-08-17, quoted verbatim in full above.
+unclear: false
+```
+
+```yaml
+ruling_id: R-2026-08-17-HASH-NOT-VERSION
+date: 2026-08-17
+scope: >-
+  Verification rule, standing: an OA automation version increment is not evidence of a change.
+  Only the config hash is. Raised to a rule after ScannerA was observed going v10 -> v11 with a
+  byte-identical 5478-byte payload and an identical config hash.
+verbatim: >-
+  The save-layer trap is confirmed as a rule: a version increment is not evidence, only the hash
+  is. Make sure it's recorded where future sessions load it (memory + a line for the oa-driving
+  amendment), not just the session log.
+verbatim_of: andy
+owner: Andy
+status: Active
+applies_to: >-
+  Every OA automation edit in this project; the oa-driving skill (.agents/skills/option-alpha/SKILL.md);
+  project memory; docs/oa-ops-runbook.md verification law.
+superseded_by: none
+source: Andy's message to the Cowork session, 2026-08-17 (signing instruction), quoted above.
+unclear: false
+```
+
+```yaml
+ruling_id: R-2026-08-17-SCANNERB-PRICE-SCHEMA
+date: 2026-08-17
+scope: >-
+  GF-ScannerB-CallSpread keeps its legacy `price {pct:100}` for the delta sample; the migration to
+  `{limit:100, limitType:"pct"}` is GATED with its mechanism named, to be ruled after the sample
+  reports or immediately if the call side never fills under delta, whichever comes first.
+verbatim: >-
+  Item 1 resolved as you recommend: ScannerB keeps `{pct:100}` for this sample. Register the
+  price-schema migration as a gated open item with the mechanism named - two-step picker change on
+  the Library surface - to be ruled after the delta sample reports, or immediately if the call side
+  never fills under delta, whichever comes first.
+verbatim_of: andy
+owner: Andy
+status: Gated
+applies_to: >-
+  GF-ScannerB-CallSpread (RTfw5TkkCRF178606271659881) price object; the GF pre-registration cards'
+  CONFIG HASH carry note; docs/pre-registration-ledger.md.
+superseded_by: none
+source: Andy's message to the Cowork session, 2026-08-17 (signing instruction), quoted above.
+unclear: false
+```
+
+```yaml
+ruling_id: R-2026-08-17-RULINGS-TAIL-CLEANUP
+date: 2026-08-17
+scope: >-
+  Authorizes stripping the committed transcript garbage at docs/RULINGS.md lines 1958-1986 and
+  fixing the literal yaml fence inside it so the register passes its own parser contract. Explicitly
+  NOT to be done in the 2026-08-17 signing session and NOT to be bundled with the signing commit.
+verbatim: >-
+  RULINGS.md: leave lines 1958-1986 untouched this session. Separate cleanup authorized as its own
+  entry and its own commit - strip the transcript garbage and fix the literal yaml fence marker
+  (three backticks followed by "yaml") so the register passes its own parser contract. Do not
+  bundle it with the signing commit.
+verbatim_of: andy
+owner: Andy
+status: Gated
+applies_to: docs/RULINGS.md lines 1958-1986; the register's stated APPEND-ONLY / machine-readable contract.
+superseded_by: none
+source: Andy's message to the Cowork session, 2026-08-17 (signing instruction), quoted above.
+unclear: false
+```
+
+```yaml
+ruling_id: R-2026-08-17-PR23-RETIRE
+date: 2026-08-17
+scope: >-
+  PR-23 / GF-QQQ-IC-Ride-Delta is RETIRED. Under the shared delta scanners it is redundant with
+  PR-14 (GF-QQQ-IC-Ride) on every axis. Ledger history preserved; OA archiving is Andy's hand.
+  Its roster slot is reassigned to R-2026-08-17-UNSTOPPED-REOPEN, making that re-open net zero.
+verbatim: >-
+  Item 2 ruled: PR-23 RETIRED. Register as R-2026-08-17-PR23-RETIRE: redundant with PR-14 on every
+  axis under the shared delta scanners; the pct record in the forensics doc is the surviving control
+  evidence; repurposing via un-sharing is rejected as recreating the forked-config surface.
+  Ride-Delta's ledger history is preserved; archiving the bot in OA is my hand - put it in my queue.
+  Its slot is reassigned to the ruling below.
+verbatim_of: andy
+owner: Andy
+status: Active
+applies_to: >-
+  PR-23 / GF-QQQ-IC-Ride-Delta (BOTfw5TkkCRF1317864858068078811); docs/pre-registration-ledger.md
+  PR-23 card; docs/greenfield-family-spec.md arm count; the family slot accounting.
+superseded_by: none
+source: Andy's message to the Cowork session, 2026-08-17, quoted verbatim above.
+unclear: false
+```
+
+```yaml
+ruling_id: R-2026-08-17-UNSTOPPED-REOPEN
+date: 2026-08-17
+scope: >-
+  IC-SPX-Fortress-Unstopped is re-opened as a live bot, role = signed incumbent benchmark. Amends
+  (does NOT delete) the build-plan §2 Group A "archive directly" row, which is annotated inline with
+  this ruling id. Defang stays archived, deliberately. Order is capture -> sign -> arm, no exceptions.
+  No config edits of any kind during the re-open.
+verbatim: >-
+  New ruling - register and execute: R-2026-08-17-UNSTOPPED-REOPEN. DECISION: IC-SPX-Fortress-Unstopped
+  is re-opened as a live bot, role = signed incumbent benchmark - the only pre-lapse build running,
+  pre-registered as the comparator for whether post-lapse builds beat what already worked. This
+  supersedes its build-plan §2 Group A row ("archive directly"), which is amended, not deleted -
+  record the supersession inline with this ruling ID. SCOPE: Unstopped only. Defang stays archived -
+  its role (experimental arm vs Unstopped) is genuinely superseded by the GF family, and its record
+  (P-factor 1.71) doesn't independently earn a slot. The pair is deliberately split; record that as
+  considered, not overlooked. ORDER - capture -> sign -> arm, no exceptions: (1) full config capture,
+  fresh model read, config hash computed and recorded; check sharing on every automation it carries
+  before touching anything - if any automation is shared, flag before proceeding. (2) Stamp hash +
+  SIGNED into the ledger under this ruling. (3) Only then AUTOS/EXITS on. It does not switch on
+  unsigned - we are not re-creating PR-02. VERIFICATION: it lived through the lapse unverified, and
+  the lapse's failure mode was dead execution behind a correct-looking config. Layer 2 = first fill's
+  Trades list confirming its exits actually fire, top-of-brief alongside the GF check until confirmed.
+  Its stored allocation, posLimit, and toggle states are read and recorded before arming -
+  cloning-reset class traps apply to any drawer you open. CONSTRAINT: no config edits of any kind
+  during re-open - if capture reveals something that looks wrong, it comes back gated, not fixed in
+  place. Its value is the untouched record; an edited incumbent is just another new bot.
+  SLOT ACCOUNTING: net zero - PR-23's slot funds this.
+verbatim_of: andy
+owner: Andy
+status: Active
+applies_to: >-
+  IC-SPX-Fortress-Unstopped (bot + its automations); docs/build-plan.md §2 Group A "SPX Fortress arms"
+  row (amended inline, not deleted); docs/pre-registration-ledger.md (new signed incumbent-benchmark
+  entry); IC-SPX-Fortress-Defang stays archived by the same ruling.
+superseded_by: none
+source: Andy's message to the Cowork session, 2026-08-17, quoted verbatim above.
+unclear: false
+```
+
+```yaml
+ruling_id: R-2026-08-17-UNSTOPPED-REOPEN-A1
+date: 2026-08-17
+scope: >-
+  AMENDMENT 1 to R-2026-08-17-UNSTOPPED-REOPEN. Replaces that ruling's step (3) and its LAYER 2
+  wording, and resolves flags F1/F2/F3 raised by the step-1 capture. The parent ruling is NOT set to
+  Superseded because only two clauses change and this register permits whole-record supersession
+  only; the parent stays Active and this record names the clauses it replaces. Resolution of F2 -
+  disableExits 1 STANDS, the captured config is the strategy, AUTOS on only and the EXITS toggle
+  stays off. Layer 2 becomes an INVERTED plus mechanism-consistency check. F1 - the second bot on
+  the shared monitor is identified as IC-SPX-Fortress-Defang and the monitor is recorded edit-frozen.
+verbatim: >-
+  AMENDMENT 1, register it: F2 resolved: `disableExits: 1` stands. The captured config is the
+  strategy - the 26-close record was earned under it and the constraint protects exactly that. Step
+  (3) is amended to: AUTOS on only; the EXITS toggle stays off, matching capture. My original step
+  (3) was drafting error, superseded. Layer 2 redefined (inverted + mechanism-consistency),
+  replacing the old wording: first position's Trades list must show (a) no Exit-Option rows - same
+  inverted-check class as PR-01's Day-0 verification - and (b) a close consistent with the mechanism
+  the capture documents. State from the capture what its recorded close mechanism actually is
+  (Cleanup, hold-to-expiration, or the StrikeTouch monitor closing positions). If the capture
+  doesn't establish the close mechanism, report before arming - that's a gap in what "the
+  incumbent's behavior" even means, and I want it named before the first live position, not
+  diagnosed after. F1 resolved, one precondition added: before arming, identify the second bot on
+  `Defang-Mon-S2-StrikeTouch` - from the other bot's settings page if the Library won't show a
+  roster; if not determinable, record NOT EVALUABLE and stop for me. If it's Defang as the naming
+  suggests: proceed - sharing couples definitions, not execution (established by the GF scanners
+  running per-bot), and a dark bot executes nothing. Record the monitor as edit-frozen under the
+  shared-automation surface rule: any future edit goes via `/bots/automations` only and writes into
+  the archived bot's config too, so it gets flagged before anyone touches it.
+verbatim_of: andy
+owner: Andy
+status: Active
+applies_to: >-
+  R-2026-08-17-UNSTOPPED-REOPEN steps (3) and VERIFICATION; IC-SPX-Fortress-Unstopped AUTOS/EXITS
+  toggles; Defang-Mon-S2-StrikeTouch (RTfw5TkkCRF3317787955826108344, edit-frozen, Library surface
+  only); the new incumbent-benchmark entry in docs/pre-registration-ledger.md.
+superseded_by: none
+source: Andy's message to the Cowork session, 2026-08-17, quoted verbatim above.
+unclear: false
+```
 ```
 
 

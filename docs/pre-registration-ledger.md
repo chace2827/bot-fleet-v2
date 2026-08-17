@@ -1162,10 +1162,27 @@ SAMPLE TARGET    n = 100 positions per arm, on matched days.
 REVIEW DATE      Day-0 + 6 months, interim at n=60.
 MAX LOSS         1 lot per arm until one clears its interim read; then ≈$5K risk/position.
 SIZING TIER      1 lot — experiment. IDENTICAL across all arms.
-CONFIG HASH      <capture> @ <hash> — one per arm
+CONFIG HASH      ✅ STAMPED 2026-08-17 under `R-2026-08-17-GF-ENTRY-METHOD`. The entry surface is
+                 the two SHARED Library automations (`sharing:1`, "8 bots"), so ONE pair of hashes
+                 covers all eight arms — there is no per-arm entry hash to capture.
+                   GF-ScannerA-PutSpread  v12  1e5eb9936a1adf067af65a4841d42e755592f7c179f3c0cad477502dfdbfcdc8
+                   GF-ScannerB-CallSpread v4   a925d490b8a0d2337566f47307fc52470da129935d3bd83d24389c6dc433dfb5
+                 Formula: sha256(JSON.stringify({name, inputs, root})), computed after opening the
+                 automation fresh. Both re-read after a HARD RELOAD from the Library surface, not
+                 from a save confirmation. ⚠️ A VERSION INCREMENT IS NOT EVIDENCE — ONLY THE HASH IS
+                 (ScannerA once went v10→v11 with a byte-identical payload and an identical hash).
+                 ⛔ CARRIED, GATED: `GF-ScannerB-CallSpread` still stores the legacy
+                 `price {pct:100}` while ScannerA stores `{limit:100, limitType:"pct"}`. Ruled to
+                 STAY as-is for this sample so the delta change is the only variable. Migration
+                 mechanism is named and gated — see the open item in RULINGS.md. It does NOT block
+                 this signature; it is a known, recorded carry.
 VERIFICATION     A CAPTURE-DIFF showing exactly ONE differing line between any two arms. Not a
                  claim, a diff. Plus each arm's first-position Trades list.
-SIGNED           ..............................
+SIGNED           2026-08-17 · ANDY — in-session, verbatim "Sign now", under
+                 `R-2026-08-17-GF-ENTRY-METHOD`. Config hashes as stamped above. Sample restarts at
+                 the 2026-08-17 edit; nothing before it counts. Review at 10 sessions.
+                 ⚠️ LAYER 2 IS OUTSTANDING — the first new position's Trades list must confirm the
+                 strikes are delta-selected, not 0.40%-selected. Signature stands on Layer 1.
 ```
 > ### 📝 D-1 RULED 2026-08-04 — the arm variable is the WHOLE Exit-Options bundle, not PT%.
 > *Applied 2026-08-05 on Andy's explicit release, from `docs/decision-memo-2026-08-04.md`'s draft
@@ -1269,7 +1286,20 @@ SAMPLE TARGET    n = 100 positions per arm.
 REVIEW DATE      Day-0 + 6 months.
 MAX LOSS         1 lot per arm.
 SIZING TIER      1 lot — IDENTICAL across arms.
-CONFIG HASH      <capture> @ <hash> per arm
+CONFIG HASH      ✅ STAMPED 2026-08-17 under `R-2026-08-17-GF-ENTRY-METHOD`. The entry surface is
+                 the two SHARED Library automations (`sharing:1`, "8 bots"), so ONE pair of hashes
+                 covers all eight arms — there is no per-arm entry hash to capture.
+                   GF-ScannerA-PutSpread  v12  1e5eb9936a1adf067af65a4841d42e755592f7c179f3c0cad477502dfdbfcdc8
+                   GF-ScannerB-CallSpread v4   a925d490b8a0d2337566f47307fc52470da129935d3bd83d24389c6dc433dfb5
+                 Formula: sha256(JSON.stringify({name, inputs, root})), computed after opening the
+                 automation fresh. Both re-read after a HARD RELOAD from the Library surface, not
+                 from a save confirmation. ⚠️ A VERSION INCREMENT IS NOT EVIDENCE — ONLY THE HASH IS
+                 (ScannerA once went v10→v11 with a byte-identical payload and an identical hash).
+                 ⛔ CARRIED, GATED: `GF-ScannerB-CallSpread` still stores the legacy
+                 `price {pct:100}` while ScannerA stores `{limit:100, limitType:"pct"}`. Ruled to
+                 STAY as-is for this sample so the delta change is the only variable. Migration
+                 mechanism is named and gated — see the open item in RULINGS.md. It does NOT block
+                 this signature; it is a known, recorded carry.
 NAMING           ✅ GATE A8 RULED BY ANDY 2026-08-08 (decision-card-2026-08-08 slot 5) — PR-18,
                  OPTION C / THE SPLIT. LEDGER / INTERNAL LABEL: "Breakeven" (CF-4 discharged
                  2026-08-06 by the C8 ruling; the untested side is left to decay, so the arm can
@@ -1280,7 +1310,11 @@ NAMING           ✅ GATE A8 RULED BY ANDY 2026-08-08 (decision-card-2026-08-08 
                  THIS FIELD IS NOW RESOLVED — it no longer holds the entry UNSIGNED under §7
                  item 2. PR-19 (`SL200`) follows the same convention by construction.
 VERIFICATION     Capture-diff, one differing input. No ranking published until it passes.
-SIGNED           ..............................
+SIGNED           2026-08-17 · ANDY — in-session, verbatim "Sign now", under
+                 `R-2026-08-17-GF-ENTRY-METHOD`. Config hashes as stamped above. Sample restarts at
+                 the 2026-08-17 edit; nothing before it counts. Review at 10 sessions.
+                 ⚠️ LAYER 2 IS OUTSTANDING — the first new position's Trades list must confirm the
+                 strikes are delta-selected, not 0.40%-selected. Signature stands on Layer 1.
 ```
 > ⚠️ **Do not include a `Conditional` / sustained-touch arm.** OA cannot express time
 > persistence; the only build path is a 10-rung tag ladder that consumes the scan budget and
@@ -1308,9 +1342,26 @@ SAMPLE TARGET    n/a — daily fill/no-fill is the output.
 REVIEW DATE      Day-0 + 3 months: is it still earning its slot?
 MAX LOSS         1 lot, smallest expressible risk.
 SIZING TIER      1 lot.
-CONFIG HASH      <capture> @ <hash>
+CONFIG HASH      ✅ STAMPED 2026-08-17 under `R-2026-08-17-GF-ENTRY-METHOD`. The entry surface is
+                 the two SHARED Library automations (`sharing:1`, "8 bots"), so ONE pair of hashes
+                 covers all eight arms — there is no per-arm entry hash to capture.
+                   GF-ScannerA-PutSpread  v12  1e5eb9936a1adf067af65a4841d42e755592f7c179f3c0cad477502dfdbfcdc8
+                   GF-ScannerB-CallSpread v4   a925d490b8a0d2337566f47307fc52470da129935d3bd83d24389c6dc433dfb5
+                 Formula: sha256(JSON.stringify({name, inputs, root})), computed after opening the
+                 automation fresh. Both re-read after a HARD RELOAD from the Library surface, not
+                 from a save confirmation. ⚠️ A VERSION INCREMENT IS NOT EVIDENCE — ONLY THE HASH IS
+                 (ScannerA once went v10→v11 with a byte-identical payload and an identical hash).
+                 ⛔ CARRIED, GATED: `GF-ScannerB-CallSpread` still stores the legacy
+                 `price {pct:100}` while ScannerA stores `{limit:100, limitType:"pct"}`. Ruled to
+                 STAY as-is for this sample so the delta change is the only variable. Migration
+                 mechanism is named and gated — see the open item in RULINGS.md. It does NOT block
+                 this signature; it is a known, recorded carry.
 VERIFICATION     A PT fill on day 1, read from the Trades list.
-SIGNED           ..............................
+SIGNED           2026-08-17 · ANDY — in-session, verbatim "Sign now", under
+                 `R-2026-08-17-GF-ENTRY-METHOD`. Config hashes as stamped above. Sample restarts at
+                 the 2026-08-17 edit; nothing before it counts. Review at 10 sessions.
+                 ⚠️ LAYER 2 IS OUTSTANDING — the first new position's Trades list must confirm the
+                 strikes are delta-selected, not 0.40%-selected. Signature stands on Layer 1.
 ```
 
 ---
@@ -1450,10 +1501,122 @@ STARTING DELTA   0.10 / -0.10 — PR-02's observed-working value, NOT a derivati
                  it lands far from 0.40%, the pairing is degraded and must be re-tuned before
                  any comparison is read.
 RISK NOTE        PAPER. $2,500 allocation, 1 contract, $2 wings — max risk ~$200/condor.
-SIGNED           ____________________  (date + config-capture hash)
+SIGNED           2026-08-17 · ANDY — in-session, verbatim "Sign now", under
+                 `R-2026-08-17-GF-ENTRY-METHOD`. Config hashes as stamped above. Sample restarts at
+                 the 2026-08-17 edit; nothing before it counts. Review at 10 sessions.
+                 ⚠️ LAYER 2 IS OUTSTANDING — the first new position's Trades list must confirm the
+                 strikes are delta-selected, not 0.40%-selected. Signature stands on Layer 1.
 ```
 
 > **Andy authorised the build and the switch-on verbally, 2026-08-11** ("i give permission to
 > for you to turn the clone on. its just a test."). **That authorisation is recorded, but it is
 > NOT a signature** — §5's `SIGNED` line takes a date and a config-capture hash, and the hash
 > does not exist until the bot is built. Sign it from the build capture.
+
+---
+
+## 6b. Incumbent benchmark — re-opened pre-lapse build (1)
+
+### INC-01 — `IC-SPX-Fortress-Unstopped`   ✅ SIGNED 2026-08-17
+Authored and signed under `R-2026-08-17-UNSTOPPED-REOPEN` + `R-2026-08-17-UNSTOPPED-REOPEN-A1`.
+Slot accounting net zero — funded by PR-23's retired slot (`R-2026-08-17-PR23-RETIRE`).
+
+```
+ID               INC-01
+BOT              IC-SPX-Fortress-Unstopped   BOTfw5TkkCRF3317787955825912621
+DISPOSITION      re-opened pre-lapse build — REMOVED from build-plan §2 Group A by
+                 R-2026-08-17-UNSTOPPED-REOPEN (that row amended inline, not deleted)
+ROLE             SIGNED INCUMBENT BENCHMARK. The only pre-lapse build live. Pre-registered as the
+                 comparator for whether post-lapse builds beat what already worked.
+                 COMPARISON METRIC: per-leg R vs the GF arms and IC-SPX-FastPT25-S2-130PM.
+STRATEGY IDENTITY
+                 `disableExits: 1` IS THE DESIGN — not a defect, not a toggle left off. Any config
+                 edit ends incumbent status and requires a fresh ruling. THERE IS NO "SMALL FIX" ON
+                 THIS BOT. Its value is the untouched record; an edited incumbent is just another
+                 new bot.
+CLOSE MECHANISM  ⭐ HOLD TO EXPIRATION, SAME DAY. Established from the 2026-08-17 capture, not
+                 assumed:
+                   · Exit Options: `disableExits: 1`; the open action's exits bundle reads `None`.
+                   · `Fortress-Mon-S2-Cleanup`  — per-bot state "Automation is off".
+                   · `Defang-Mon-S2-StrikeTouch` — per-bot state "Automation is off".
+                   · Entry series `{days:0, compare:"exact"}` = 0DTE, so expiry is same session.
+                 With AUTOS on, the ONLY automations that run are the two scanners. Nothing closes
+                 a position except expiration. Both close-capable monitors exist but are disabled
+                 on this bot — that disabled state is what makes it "Unstopped".
+ENTRY (recorded, NOT edited)
+                 Scanners `Fortress-Scan-Put` / `Fortress-Scan-Call`, after 1:30pm, Range075
+                 (±0.75% since previous close), an `FOMC Meeting today` gate, and a per-side
+                 "exactly 0 open positions" re-entry gate. Short leg `legpctprice pct=0.75`,
+                 `filter minPrice 0.08`, price `75% of bid/ask` SmartPricing `speedy`,
+                 size `Up to $5,000 risk` (draw), NOT a fixed contract count.
+SHARED-AUTOMATION SURFACE
+                 `Defang-Mon-S2-StrikeTouch` (`RTfw5TkkCRF3317787955826108344`, `sharing:1`) is
+                 shared with **`IC-SPX-Fortress-Defang`** — identified from that bot's own settings
+                 page, not inferred from the name. It is ON there and OFF here: sharing couples
+                 DEFINITIONS, not execution. ⛔ RECORDED EDIT-FROZEN: any future edit goes via
+                 `/bots/automations` only and writes into the archived Defang's config too. Flag
+                 before anyone touches it.
+RECORD AS SIGNED (pre-lapse, earned under the captured config)
+                 closed P/L $2,350 · 26 closes (16W / 7L / 3 scratch) · win rate 69.57%
+                 · profit factor 6.222 · allocation $50,000 · posLimit 2/2 · account sim (paper)
+CONFIG HASH      Capture file `data/captures/unstopped-reopen-capture-2026-08-17.txt`
+                 sha256 91e2076f94a3f8ee2a03ee8298a6dd67756a4eb092437907d1fe62597b03dd82
+                 Four automation hashes, formula sha256(JSON.stringify({name, inputs, root})):
+                   Fortress-Scan-Put         v4 sharing0  01f37cdd96b4b09e2613dab1bc1c5395f78615d914c3b23e6d23b486cd29fe67
+                   Fortress-Scan-Call        v4 sharing0  c0dba2f5dc40f1be48df968f794dc264cd44ee6321e4dc4bcaa6d5f0e7211e02
+                   Defang-Mon-S2-StrikeTouch v5 sharing1  291e05ad09c2f6f801a7dcab0a121d503525fb6c015e27763cca3effa20155b6
+                   Fortress-Mon-S2-Cleanup   v2 sharing0  a3f0ada0180311856db3fdc4c214e1f1f19c1f954910acad8aaa3d65e5522413
+                 All four last written 2026-05-14 — untouched for three months.
+SAMPLE           BENCHMARK, NOT EXPERIMENT. Interim read at n=15 NEW closes.
+REVIEW DATE      n=30 new closes or 2026-11-30, whichever comes FIRST.
+KILL CRITERION   (a) new-sample profit factor < 1.0 at n ≥ 15; OR
+                 (b) ANY hash drift from the signed capture above → AUTOS OFF IMMEDIATELY and
+                     escalate. NO DIAGNOSIS WHILE ARMED.
+LAYER 2          ⚠️ OUTSTANDING — top-of-brief until confirmed. As amended by
+                 R-2026-08-17-UNSTOPPED-REOPEN-A1, the first position's Trades list must show:
+                   (a) NO Exit-Option rows — the inverted-check class used for PR-01's Day-0
+                       verification; and
+                   (b) a close consistent with the documented mechanism = closed BY EXPIRATION,
+                       with no Cleanup and no StrikeTouch close row.
+                 Because entries are 0DTE, both legs of this check resolve the same session.
+SIGNED           2026-08-17 · ANDY — in-session, under R-2026-08-17-UNSTOPPED-REOPEN and its
+                 AMENDMENT 1. Signed BEFORE arming, per the ruling's capture → sign → arm order.
+```
+
+> ⚠️ **Observation recorded at signing, NOT acted on and NOT ruled.** This bot's short leg is
+> `legpctprice pct=0.75` — the very method ruled unable to adapt for the GF family earlier the same
+> day (`R-2026-08-17-GF-ENTRY-METHOD`). Yet it earned 26 closes at profit factor 6.22 on SPX
+> pre-lapse, while PR-01 — same symbol, same `pct=0.75`, same `75%/speedy` pricing, same
+> `$5,000 draw` sizing — reportedly never fills its call side now. Same config, different eras.
+> That points at a REGIME or market-data change rather than the config, and it bears directly on
+> whether delta was the right fix. It is logged here as a live tension for the delta sample's read;
+> **no edit follows from it** — the CONSTRAINT holds absolutely on this bot.
+>
+> ### 🔮 PRE-REGISTERED INTERPRETATION — recorded 2026-08-17, BEFORE any of it resolves
+> Ruled by Andy the same day, under `R-2026-08-17-GF-ENTRY-METHOD` and this card. Written down now
+> precisely so it cannot be fitted to the outcome later.
+>
+> **THE READING.** The method ruling predicts that fixed-% strike placement works only when
+> volatility is high enough that blind placement lands in tradeable premium. **Unstopped pre-lapse,
+> PR-01 now, and GF's 1-in-3 fire rate are ONE CURVE AT DIFFERENT VOL** — not three separate
+> defects. High vol: 0.75% of spot carries real premium, so the pct bots fill (Unstopped, 26 closes,
+> P-factor 6.22). Low vol: the same blind offset lands outside tradeable premium, so they starve
+> (PR-01's call side; GF firing 1 session in 3 even after the tune to 0.4%).
+>
+> **SIDE PREDICTION 1 — falsifiable, logged daily.** In the current quiet regime **INC-01 may rarely
+> fire**. A no-fire day from Unstopped is *evidence FOR* the regime reading, replicated on an
+> INDEPENDENT bot (different symbol scale, different sizing, different era of build). Its
+> fire/no-fire is therefore logged DAILY alongside the GF decision capture — a quiet Unstopped is a
+> result, not a malfunction, and must not be diagnosed as one.
+>
+> **SIDE PREDICTION 2 — the disconfirming test.** If the regime turns per **B3**, the pct bots
+> should RESUME FILLING. **If they do not, the regime explanation weakens and the method-only
+> explanation strengthens.** That is the outcome that would falsify the reading above; it is named
+> here in advance.
+>
+> **THE DELTA RULING STANDS UNDER EITHER OUTCOME** — delta adapts in both regimes, pct in only one.
+> No result from these two predictions reopens `R-2026-08-17-GF-ENTRY-METHOD`.
+>
+> **CONSEQUENCE ACCEPTED, CARD UNCHANGED.** INC-01's n=15 interim may accrue slowly, or very slowly,
+> if prediction 1 holds. **Review dates stay as signed** (n=30 or 2026-11-30, whichever first). Slow
+> accrual is not grounds to retune, resize, or re-scope this bot — see STRATEGY IDENTITY above.

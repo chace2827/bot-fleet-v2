@@ -130,6 +130,12 @@ Never optional. `oa-ops-runbook.md` §4.
 
 - **Layer 1, immediate:** hard reload, re-read the field's `input.value` (not the rendered
   label), confirm the value you intended. Verify **values, not presence** (§4.5).
+- ⭐ **A VERSION INCREMENT IS NOT EVIDENCE — ONLY THE HASH IS** (ruling
+  `R-2026-08-17-HASH-NOT-VERSION`). Verify an automation edit by
+  `sha256(JSON.stringify({name, inputs, root}))` on `a5.bots.acedit.routine` **and** the payload
+  byte count, never by the version number or the save confirmation. Observed 2026-08-17:
+  `GF-ScannerA-PutSpread` advanced **v10 → v11 with a byte-identical 5478-byte payload and an
+  identical hash** — the save "succeeded" and nothing changed.
 - **Layer 2, behavioral:** the **next new position's Trades list** shows the expected order.
   Until Layer 2 runs, an edit is *applied*, not *proven*.
 - **Two control clones** give inverted verification (§4.3); sibling closes give the timestamp
@@ -155,6 +161,12 @@ Full table with evidence: `oa-ops-runbook.md` §5. The ones that cost the most:
 | **A time gate that was never implemented** | Confirm the gate is a real decision node, then check the first five entry timestamps |
 | **Name collision on archive** | Read the *full* name. `Opening Range Breakout 60m` is archived; `60min-ORB-10W-Paper-v1` is live |
 | **Zero-trade ≠ worthless** | See §2. Delete only if zero-trade **and** absent from the disposition table |
+| **THREE save layers, not two** — recipe `a.btn.green.save` → the action drawer's OWN Save (a `button.btn.green` at the BOTTOM of the drawer's scroll region, OFF-SCREEN) → `a.saveclose`. Only the drawer Save writes into `a5.bots.acedit.routine` | `scrollIntoView({block:'center'})` the drawer Save before clicking. Enumerate every `Save` candidate's `{tag,class,x,y,w}` first — a naive text match hits an off-screen button |
+| **Closing the action drawer with its ✕ DISCARDS staged edits** — and the following `a.saveclose` then commits an UNCHANGED routine with a BUMPED VERSION | Never close the drawer to "apply". Compare the config hash before and after; equal hash = nothing changed, whatever the version says |
+| **`a.saveclose` sits UNDER the drawer overlay** — `elementFromPoint` at its centre returns the drawer, so the dispatch silently goes nowhere | Close the drawer first (`i.fa-times`, drawer top-right), then re-check what occupies the point before clicking |
+| **A 45s `Runtime.evaluate` timeout may be a LOGOUT, not a freeze** | Check for `/login` in the URL before re-trying anything. Never re-fire a save on a timeout |
+| **Flipping the AUTOMATIONS / EXIT OPTIONS master toggle NAVIGATES the page** — the call returns `Inspected target navigated or closed` mid-evaluation and looks like a failure | Same class as the 45s timeout: **the work has usually COMMITTED. Re-read state, never re-fire.** Re-firing a toggle silently flips it back. Verify from `a5.bots.bot.status` + the switch's `input-ct onoff on\|off` class after the reload |
+| **The two master switches sit side by side** — a coordinate-based click can hit EXIT OPTIONS instead of AUTOMATIONS | Scope by DOM container (`div.autoswitch.hdbox` whose `innerText` matches `AUTOMATIONS`), then guard on the target's x against the other box's left edge before dispatching |
 
 ## 6. Numbers that get quoted wrong
 

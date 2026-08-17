@@ -1,0 +1,75 @@
+# IC-SPX-Fortress-Unstopped — RE-OPEN CAPTURE (step 1 of R-2026-08-17-UNSTOPPED-REOPEN)
+# captured 2026-08-17 ~13:30 ET · reads only · NO config edit attempted
+# source: hydrated model a5.bots.bot / a5.bots.acedit.routine, app.optionalpha.com
+
+BOT
+  name              IC-SPX-Fortress-Unstopped
+  id                BOTfw5TkkCRF3317787955825912621
+  status            off
+  account           sim  (Paper Trading)
+  bot group         Monitor  (BGfw5TkkCRF3117831133096486382)
+  created           2026-05-14T21:53:02.591Z
+  disableExits      1        <-- EXIT OPTIONS DISABLED AT CONFIG LEVEL, not merely toggled off
+  posLimit          2
+  posLimitDay       2
+  scanrate          1        (Every 1m)
+  exitrate          (absent from model)
+  nopdt             0
+  allocation        $50,000            (Safeguards panel)
+  capital/cash/val  $52,350 / $52,350 / $52,350
+  maintenance       0
+  bot inputs        NONE  (inputs: [])
+  NOTES FIELD       EMPTY — no pre-registration card exists on this bot
+  tags              research, hedge variant, vacation test 2026 05, spx, fortress baseline,
+                    fortress defang, control
+  symbols           Custom · SPX
+  day trading       Allowed
+  activity alerts   open position, close position, automation warning, automation error (all on)
+
+RECORD AS STORED (pre-lapse, untouched)
+  closed P/L        $2,350
+  closed count      26        (16 wins + 7 losses + 3 scratches)
+  win rate          0.69565217
+  profit factor     6.222222222222222
+  streak            2
+
+AUTOMATIONS — config hashes, formula sha256(JSON.stringify({name, inputs, root}))
+  Fortress-Scan-Put
+    id RTfw5TkkCRF3317787955826108303  v4  sharing 0  bytes 4945
+    updated 2026-05-14T22:04:21.443Z
+    hash 01f37cdd96b4b09e2613dab1bc1c5395f78615d914c3b23e6d23b486cd29fe67
+  Fortress-Scan-Call
+    id RTfw5TkkCRF3317787955826108031  v4  sharing 0  bytes 4976
+    updated 2026-05-14T22:03:57.206Z
+    hash c0dba2f5dc40f1be48df968f794dc264cd44ee6321e4dc4bcaa6d5f0e7211e02
+  Defang-Mon-S2-StrikeTouch                       <-- ** SHARED **
+    id RTfw5TkkCRF3317787955826108344  v5  sharing 1  bytes 4529  folder "My Automations"
+    updated 2026-05-14T22:43:24.445Z
+    Automation Library lists it as "2 bots"
+    hash 291e05ad09c2f6f801a7dcab0a121d503525fb6c015e27763cca3effa20155b6
+  Fortress-Mon-S2-Cleanup
+    id RTfw5TkkCRF3317787955826108375  v2  sharing 0  bytes 2585
+    updated 2026-05-14T21:54:47.050Z
+    hash a3f0ada0180311856db3fdc4c214e1f1f19c1f954910acad8aaa3d65e5522413
+
+  All four last written 2026-05-14 — untouched for three months, consistent with
+  "its value is the untouched record".
+
+FLAGS RAISED — step 1 stops here per the ruling's own instruction
+  F1  Defang-Mon-S2-StrikeTouch is SHARED (sharing:1, "2 bots"). Unstopped carries a monitor
+      shared with a second bot — on the naming, that is IC-SPX-Fortress-Defang, the bot this same
+      ruling deliberately leaves ARCHIVED. Arming Unstopped therefore activates an automation
+      coupled to a bot that is staying dark, and any future edit to that monitor touches both.
+      NOT VERIFIED which second bot it is — the Library shows a count, not a roster.
+  F2  disableExits = 1. Exits are OFF in CONFIG, not behind a toggle. The ruling's step (3) says
+      "AUTOS/EXITS on", but flipping EXIT OPTIONS on is a CONFIG CHANGE, which the ruling's own
+      CONSTRAINT forbids ("no config edits of any kind during re-open"). Additionally the ruling's
+      VERIFICATION defines Layer 2 as "first fill's Trades list confirming its exits actually
+      fire" — if disableExits stays 1 there may be no exit to fire, making Layer 2 unsatisfiable
+      as written. These three clauses cannot all hold at once. GATED, not resolved here.
+  F3  The Notes field is EMPTY and there is no pre-registration card on the bot. Step (2)
+      "stamp hash + SIGNED into the ledger" is therefore a NEW ledger entry to be authored, not a
+      placeholder to fill. The card's content (role, sample target, review date, kill criterion)
+      is not derivable from the capture and needs Andy.
+
+NOT DONE, DELIBERATELY: no signing, no arming, no config edit, no toggle touched.

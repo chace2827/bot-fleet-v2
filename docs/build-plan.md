@@ -80,7 +80,7 @@ Nothing is carried forward. History dies with the cutover; the bots remain in OA
 
 | Group | Bots | Why |
 |---|---|---|
-| SPX Fortress arms | `IC-SPX-Fortress-Unstopped`, `IC-SPX-Fortress-Defang` | Roles superseded — the greenfield family supplies the new control and A/B arms, built matched from the start |
+| SPX Fortress arms | ~~`IC-SPX-Fortress-Unstopped`~~, `IC-SPX-Fortress-Defang` | ⚠️ **AMENDED — NOT DELETED — 2026-08-17 by `R-2026-08-17-UNSTOPPED-REOPEN`.** Original text, which stands for Defang: *"Roles superseded — the greenfield family supplies the new control and A/B arms, built matched from the start"*. **`IC-SPX-Fortress-Unstopped` is REMOVED from this group and re-opened as a live bot**, role = **signed incumbent benchmark**: the only pre-lapse build running, pre-registered as the comparator for whether post-lapse builds beat what already worked. **`IC-SPX-Fortress-Defang` STAYS ARCHIVED** — the split is deliberate, not an oversight: its role (experimental arm vs Unstopped) is genuinely superseded by the GF family, and its record (P-factor 1.71) does not independently earn a slot. Slot accounting is net zero — PR-23's retired slot funds the re-open (`R-2026-08-17-PR23-RETIRE`). |
 | QQQ Fortress variants | `QQQ-IC-0DTE-Fortress-NoFilter`, `-Fortress-S2` | Both tagged S2 but UNVERIFIED; never adjudicated |
 | QQQ hedge family | `HedgeA-S1`, `HedgeB-S2`, `HedgeC-S3`, `HedgeD-Conditional`, `HedgeTest` | Tournament invalid as a selector: S1≈D identical on 73/86 days, S3 a different execution class, no arm carries Range075 |
 | QQQ controls | `QQQ-IC-0DTE-Baseline`, `-Raw-HoldToExp`, `-InverseFilter-HoldToExp` | Baseline was never audited and now never will be — see §6 |
