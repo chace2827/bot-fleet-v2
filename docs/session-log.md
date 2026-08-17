@@ -9011,3 +9011,90 @@ at ~13:40 (after its own 13:30 gate), so today is a WEAK data point for side pre
 ## 2026-08-17 — T-13 follow-up: ledger parser false negative and cleanup
 
 Re-examined the pre-registration ledger parser after the merged PR and caught a second false-negative: the SIGNED field extraction stopped at the first line and missed the `SIGNED != VERIFIED` + `FIRST-TRADING-DAY CAPTURE OWED` annotations on PR-02 (`IC-SPX-FastPT25-S2-130PM`) and PR-04 (`QQQ-IC-0DTE-Fortress-NoPT50`). Updated `scripts/pre_registration_ledger.py` to consume the full multi-line SIGNED block and treat that combination as unsigned, regenerated `STATUS.md` and `dashboard.html` so both bots now appear in the UNSIGNED banner, and ran the full Phase 0 validation plus a two-pass `daily.sh` idempotency check. Added live known-positives to the parser selftest — the test now asserts the real ledger flags both PR-02 and PR-04, because synthetic fixtures alone are insufficient. Removed the `devin/t11-*`, `devin/t12-*`, `devin/t13-*`, and `devin/t13-v2-*` worktrees and their local branches; `devin/pr1-*`, `devin/pr2-*`, and `devin/pr3-*` worktrees remain for the open PRs in flight.
+
+---
+
+## 2026-08-17 — OA NOTES PASS COMPLETE, 8 OF 9. RIDE-DELTA HALTED ON A SURPRISE.
+
+Resumed under Andy's Option-1 ruling. Method: pre-flight existence assertions on every target string
+BEFORE any mutation, verbatim splits only, `FIELD GAP` naming absences without inventing values,
+before/after hash pair per card, stop-and-report on surprise.
+
+**BEFORE / AFTER hash pairs** (BEFORE = editor innerText pre-mutation; AFTER = page-view post-reload):
+
+| card | BEFORE | AFTER (view) |
+|---|---|---|
+| IC-SPX-Fortress-Unstopped (INC-01) | (empty Notes) | card authored, round-trip verified |
+| GF-QQQ-IC-Ride (PR-14) | 72e5bf344f55f6ab | verified: status/hashes/signature/display-copy |
+| GF-QQQ-IC-Canary (PR-20) | 28fa53e9ac50f9f6 | 7afe0ec338d443de |
+| GF-QQQ-IC-PT50 | 657c57d1eadc87d2 | 8f7a7260a21aaa83 |
+| GF-QQQ-IC-SL100 | 27ff68db94a3be97 | c84b9a93d7b0f862 |
+| GF-QQQ-IC-SL200 | 0d08788b768bcadd | a7974fee15a711b6 |
+| GF-QQQ-IC-Touch0 | 8a0e4f7c3baa6dce | f1ff1be2482d66d2 |
+| GF-QQQ-IC-Trail   | 9e79a4f7f9caaae0 | d83e92bc088d21e4 |
+
+All eight verified post-hard-reload: `STATUS SIGNED 2026-08-17`, both scanner hashes present,
+`FIELD GAP` present, display-copy line present, no `STATUS DRAFT` remaining, no entity corruption.
+
+**THE CARDS WERE NEVER ONE TEMPLATE — at least three shapes.** Ride carried the full template
+(ID/DISPOSITION/PILLAR/STATUS/.../MAX LOSS/SIZING TIER/CONFIG HASH/VERIFICATION/SIGNED). Every other
+arm carried a reduced shape with STATUS INLINE on the DISPOSITION row and NO CONFIG HASH field at
+all; inline wording even differed (`STATUS  DRAFT` vs `STATUS  DRAFT — unsigned`). Trail was NOT a
+fourth template — 65 lines, same reduced labels; the earlier 60-line read window had simply
+truncated it before its SIGNED line.
+
+**THE PRE-FLIGHT GUARD DID REAL WORK.** On PT50 the first blind pattern would have matched targets
+[0] and [2] — the em-dash STATUS string exists inline, and the dotted SIGNED line exists — while
+silently skipping the CONFIG HASH insert. That is precisely the Canary failure repeated. The guard
+aborted with no mutation and nothing saved. **Lesson: a partial match is more dangerous than no
+match, because it looks like success.**
+
+**⛔ HALTED — GF-QQQ-IC-Ride-Delta (PR-23). NOT TOUCHED, NOT ANNOTATED.**
+Its Notes card is an UNMODIFIED COPY OF GF-QQQ-IC-Ride's card:
+  first line  `### GF-QQQ-IC-Ride`      <-- the WRONG bot name
+  ID line     `ID               PR-14  (proposed)`   <-- Ride's ID, not PR-23
+  34 lines / 2339 chars — the same size as Ride's card before today's edit, and the same full
+  standard template that no other arm carries.
+The bot was cloned and its pre-registration card was never updated; it has always described PR-14.
+This also explains why Ride appeared to be the "template outlier" — there were two copies of one
+card on two bots. Stamping `RETIRED — R-2026-08-17-PR23-RETIRE` onto a card whose ID reads PR-14
+would attach a retirement to the wrong arm's identity, so nothing was written. GATED for Andy.
+
+Independently, this strengthens `R-2026-08-17-PR23-RETIRE`: the arm was never documented as
+distinct from PR-14 in the first place, so there was no separate pre-registration to retire.
+
+**Session hygiene:** one logout occurred mid-pass; the 45s `Runtime.evaluate` timeout was correctly
+diagnosed as a LOGOUT (not a frozen renderer) using the rule added to the skill earlier today, and
+nothing was re-fired. No OA writes were in flight at any point. No git run from this session.
+
+**RIDE-DELTA (PR-23) — FRESH CARD AUTHORED, NOT ANNOTATED. NOTES PASS NOW 9 OF 9.**
+Ruled by Andy: replace rather than annotate, because the existing content identified PR-14 and
+stamping RETIRED on it would mis-attribute the retirement.
+
+  BEFORE  72e5bf344f55f6abad9607934590a4b2337e61c6e041f4cc36ca6fbf0cef5d0c
+  AFTER   5d86d7c5f0714439  (view hash of the new card)
+
+⭐ **THE BEFORE HASH IS PROOF, NOT INFERENCE.** `72e5bf344f55f6ab...` is BYTE-IDENTICAL to the
+BEFORE hash logged for `GF-QQQ-IC-Ride` earlier in this same pass. The two bots carried the same
+card, to the byte. The "unmodified copy" finding is therefore cryptographically established, not
+argued from appearance.
+
+New card content, verified post-hard-reload (no signature, no FIELD GAP, per the ruling):
+  ### GF-QQQ-IC-Ride-Delta
+  ID               PR-23
+  DISPOSITION      RETIRED 2026-08-17 per R-2026-08-17-PR23-RETIRE
+  PROVENANCE       card was an unmodified byte-identical copy of PR-14's card from clone-creation
+                   until 2026-08-17; never documented as a distinct arm
+  NOTE             Display copy - repo ledger governs: docs/pre-registration-ledger.md
+Assertions passed: no `PR-14 (proposed)` remaining, no SIGNED line, ruling id present, no entity
+corruption. A guard required the pre-edit content to still be the known wrong card before replacing;
+nothing was lost — the BEFORE hash plus this log preserve the prior state as evidence.
+
+**CLOSES MOST OF THE OPEN "RIDE-DELTA PROVENANCE READ" ITEM.** The answer: the arm was cloned
+together with its pre-registration card, and the card was never updated. There was no separate
+PR-23 pre-registration at any point. This also dissolves the apparent "template outlier" puzzle —
+Ride was not richer than its siblings; there were simply two copies of one card on two bots.
+
+**FOR THE DEVIN QUEUE:** a card generator, so sibling cards are emitted from ONE template rather
+than hand-copied. Today produced at least three divergent card shapes across eight sibling arms,
+plus one card that described the wrong bot for its whole life. Hand-copying is the root cause.
