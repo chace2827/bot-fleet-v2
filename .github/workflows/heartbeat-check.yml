@@ -32,7 +32,7 @@ jobs:
         env:
           TAPE_FIXTURE: '1'
           SOURCE_DATE_EPOCH: '1786320000'
-        run: scripts/daily.sh 2026-08-10
+        run: scripts/daily.sh 2026-08-10 --allow-rewind
 
       - name: check heartbeat for next trading day
         if: github.event_name == 'pull_request'

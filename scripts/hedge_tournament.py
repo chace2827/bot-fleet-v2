@@ -64,12 +64,16 @@ a fill exactly at the threshold. Real fills slip. This engine is an upper bound,
 NOT a live-achievable estimate — never presented as executable P/L (mirrors the
 "real returns run below backtest" project law).
 
-OUTPUT: appends/upserts data/hedge_tournament.csv, one row per (trade_id, leg
-identity, rule). Columns: date, trade_id, bot, pillar, underlying, structure,
-regime, rule, modeled_pnl, risk, R, approx_flag, basis_note.
+OUTPUT: appends/upserts data/hedge_tournament.csv, one row per
+(bot, open_date, short_put, short_call, rule). Columns: date, open_date,
+trade_id, bot, pillar, underlying, structure, short_put, short_call, regime,
+rule, modeled_pnl, risk, R, approx_flag, basis_note.
 Idempotent per date: re-running a date replaces that date's rows (like
 compliance.csv's upsert pattern in daily_brief.py), so daily.sh can call this
-every day without duplicating history.
+every day without duplicating history. The persistent key is the natural key
+(bot, open_date, short_put, short_call, rule); trade_id is carried for
+convenience but is regenerated every build and must not be used as a cross-run
+key (rules-catalog.md §1.3 guard 2).
 
 Usage:  python3 scripts/hedge_tournament.py [YYYY-MM-DD]
         (date filters which day's LEDGER rows get (re)computed; default = ALL
@@ -89,8 +93,9 @@ OUT_CSV = os.path.join(D, "hedge_tournament.csv")
 PT_LEVELS = (25, 50, 100)
 SL_LEVELS = (50, 75, 100, 130)
 
-COLS = ["date", "trade_id", "bot", "pillar", "underlying", "structure", "regime",
-        "rule", "modeled_pnl", "risk", "R", "approx_flag", "basis_note"]
+COLS = ["date", "open_date", "trade_id", "bot", "pillar", "underlying", "structure",
+        "short_put", "short_call", "regime", "rule", "modeled_pnl", "risk", "R",
+        "approx_flag", "basis_note"]
 
 
 def fl(x):
@@ -288,9 +293,10 @@ def build(day_filter=None):
             continue  # can't book an R without a risk denominator
         tape_u = (tapes_by_date.get(day) or {}).get(t["underlying"])
         regime = regime_label(tape_u)
-        base = dict(date=day, trade_id=t["trade_id"], bot=t["bot"], pillar=t["pillar"],
-                    underlying=t["underlying"], structure=t["structure"], regime=regime,
-                    risk=risk)
+        base = dict(date=day, open_date=t["open_date"], trade_id=t["trade_id"],
+                    bot=t["bot"], pillar=t["pillar"], underlying=t["underlying"],
+                    structure=t["structure"], short_put=t.get("short_put") or "",
+                    short_call=t.get("short_call") or "", regime=regime, risk=risk)
 
         # Arm 1: ride
         pnl, approx = arm_ride(t)
@@ -345,15 +351,31 @@ def build(day_filter=None):
     # --- write / upsert data/hedge_tournament.csv ----------------------------
     # Idempotent per date: keep all existing rows for dates NOT in this run,
     # replace rows for dates that ARE in this run (mirrors compliance.csv's
-    # upsert-by-key pattern in daily_brief.py, keyed here by (date, trade_id,
-    # underlying, structure, rule) since a date can hold many legs/rules).
+    # upsert-by-key pattern in daily_brief.py). Within a day the persistent key
+    # is (bot, open_date, short_put, short_call, rule); trade_id is carried for
+    # display but is not stable across rebuilds.
+    trades_by_tid = {t["trade_id"]: t for t in trades if t.get("trade_id")}
     existing = []
     if os.path.exists(OUT_CSV):
         existing = list(csv.DictReader(open(OUT_CSV)))
+    # Back-fill the natural-key columns for rows written by the old schema.
+    for r in existing:
+        if "open_date" not in r:
+            r["open_date"] = (trades_by_tid.get(r.get("trade_id"), {}).get("open_date")
+                              or r["date"])
+        if "short_put" not in r:
+            r["short_put"] = (trades_by_tid.get(r.get("trade_id"), {}).get("short_put")
+                              or "")
+        if "short_call" not in r:
+            r["short_call"] = (trades_by_tid.get(r.get("trade_id"), {}).get("short_call")
+                               or "")
     touched_days = {r["date"] for r in rows_out}
     kept = [r for r in existing if r["date"] not in touched_days]
     all_rows = kept + rows_out
-    all_rows.sort(key=lambda r: (r["date"], r["trade_id"], r["rule"]))
+    all_rows.sort(key=lambda r: (
+        r["date"], r["bot"], r.get("open_date") or r["date"],
+        r.get("short_put") or "", r.get("short_call") or "",
+        r["rule"], r["trade_id"]))
     with open(OUT_CSV, "w", newline="") as fo:
         w = csv.DictWriter(fo, fieldnames=COLS)
         w.writeheader()
