@@ -2163,6 +2163,31 @@ superseded_by: none
 source: Andy's message to the Cowork session, 2026-08-17, quoted verbatim above.
 unclear: false
 ```
+
+```yaml
+ruling_id: R-2026-08-17-COMMIT-WRITE-FREEZE
+date: 2026-08-17
+scope: >-
+  Standing process rule. A declared commit window is a WRITE FREEZE on tracked files. When Andy says
+  he is committing, Claude stops writing to tracked files, announces "files frozen" with a final
+  hash list, and queues further edits until Andy confirms the commit hash. Prompted by benign drift
+  on 2026-08-17 (the ledger and SKILL.md were rewritten after the commit began); caught by shasum,
+  but the same race during a signing pass would not be benign.
+verbatim: >-
+  Process rule going forward, register it with the trap pile: commit window = write freeze. When I
+  say I'm committing, you stop writing to tracked files until I confirm the hash - announce "files
+  frozen" with a final hash list, and queue any further edits. Today's drift was benign and caught
+  by shasum, but the same race on the ledger during a signing pass would not be.
+verbatim_of: andy
+owner: Andy
+status: Active
+applies_to: >-
+  Every Cowork session writing to the bot-fleet-v2 working tree; docs/session-log.md close-out;
+  the pre-registration ledger during any signing pass; project memory cowork-git-commit-trap.
+superseded_by: none
+source: Andy's message to the Cowork session, 2026-08-17, quoted verbatim above.
+unclear: false
+```
 ```
 
 

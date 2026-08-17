@@ -1,0 +1,159 @@
+# GF-QQQ + INC-01 SALVAGE capture — 2026-08-17
+# captured 15:38-15:42 ET by a live Cowork session, after the 14:05 SCHEDULED run produced no output
+# source: https://app.optionalpha.com/bots/bot/BOTfw5TkkCRF4417860701930934951/log  (GF-QQQ-IC-Ride)
+#         https://app.optionalpha.com/bots/bot/BOTfw5TkkCRF3317787955825912621/positions  (IC-SPX-Fortress-Unstopped)
+# reads only — nothing edited, nothing saved, no toggles touched. No login page appeared.
+# DOES NOT MODIFY data/captures/gf-decision-log-2026-08-17.txt (sha 1b859ad052f1aed4...) — that file
+# stands unchanged as the 13:46/14:09 insurance read.
+
+== (0) THE PREMISE OF THIS SALVAGE RUN WAS WRONG — REPORTED, NOT RECONCILED ==
+
+The task assumed OA's ~25-minute bot-log retention had DISCARDED the 13:30-14:00 rows by 15:38.
+IT HAD NOT. The 25-minute span is a PAGE SIZE, not a retention limit.
+
+  Observed: the /log page renders 50 rows on first paint (2 scanners x 25 minutes), oldest 3:14PM,
+  and carries a "Load more" control at the foot of the list. Seven Load-more activations walked the
+  list back to 12:20PM — 401 rows — with no sign of a floor. The entire 13:30-14:00 entry window,
+  INCLUDING the 13:35 fill row, was still served by OA at 15:40 ET, two hours after the fact.
+
+  NOTHING HAS ROLLED OFF. There is no missing window in this capture and nothing was inferred or
+  reconstructed. Every signature below was read from the live page.
+
+  ⚠️ This falsifies the "~25-minute retention" belief that motivated the 13:46 insurance read and the
+  14:05 scheduled capture. That belief is recorded in gf-decision-log-2026-08-17.txt's header
+  ("at 13:46 the log spanned 13:21 -> 13:45, confirming the ~25-minute retention") and in its
+  14:09 completion read ("the 13:21-13:44 rows ... HAVE ROLLED OFF"). Both observations are correct
+  as far as they go — the DEFAULT VIEW did span 25 minutes and did stop showing the older rows —
+  but the conclusion drawn from them (that the data was gone) does not hold: the rows were one
+  Load-more click away. NOT RULED. Reported for Andy; no doc corrected from this session.
+
+== (1) GF-QQQ-IC-Ride — FULL SESSION LOG, 12:20PM -> 3:39PM ET ==
+Read 15:39-15:40 ET after 7 "Load more" activations. 401 rows. Aggregated by (automation, signature):
+
+  GF-ScannerA-PutSpread
+    "1 decision | 1 loop"                                71 rows   12:20PM -> 1:30PM
+    "5 decisions | 1 filtered position | 1 loop"          4 rows    1:31PM -> 1:34PM
+    "1 open position | 5 decisions | 1 loop"              1 row     1:35PM          <-- THE FILL
+    "5 decisions | 1 loop"                               24 rows    1:36PM -> 1:59PM
+    "2 decisions | 1 loop"                              100 rows    2:00PM -> 3:38PM
+
+  GF-ScannerB-CallSpread
+    "1 decision | 1 loop"                                71 rows   12:20PM -> 1:30PM
+    "5 decisions | 1 filtered position | 1 loop"         29 rows    1:31PM -> 1:59PM
+    "2 decisions | 1 loop"                              100 rows    2:00PM -> 3:38PM
+
+  Row accounting: each scanner has 29 in-window rows (1:31-1:59). ScannerA = 4 filtered + 1 fill + 24
+  clean. ScannerB = 29 filtered, no exceptions. Gates behaved: "1 decision" before 1:30, "2 decisions"
+  after 2:00 — both time bounds fire correctly.
+
+== (2) DISAGREEMENT WITH THE EARLIER CAPTURE — NOT SILENTLY RECONCILED ==
+
+  THE FILL ROW AGREES EXACTLY. Both captures read "1 open position | 5 decisions | 1 loop" at 1:35PM
+  on GF-ScannerA-PutSpread. Both agree ScannerB was filtered on every in-window row. Both agree on the
+  post-2:00PM "2 decisions | 1 loop" drop.
+
+  THE TWO ScannerA NON-FILL SIGNATURES ARE INVERTED BETWEEN THE CAPTURES.
+
+    gf-decision-log-2026-08-17.txt (13:46 insurance read) annotates:
+      "5 decisions | 1 loop"                        -> "(in window, reaches the 5th decision)"  [BEFORE]
+      "5 decisions | 1 filtered position | 1 loop"  -> "(after the fill)"                       [AFTER]
+
+    This salvage read of the same rows, with timestamps:
+      "5 decisions | 1 filtered position | 1 loop"  -> 1:31-1:34, i.e. BEFORE the fill (4 rows)
+      "5 decisions | 1 loop"                        -> 1:36-1:59, i.e. AFTER the fill (24 rows)
+
+  Same signature set, opposite order. REPORTED, NOT RESOLVED. The earlier capture was taken while
+  the window was live and its ordering was annotated by eye; this one is timestamped per row. I have
+  not edited the earlier file and have not ruled which annotation is correct.
+
+  ⚠️ WHY IT MATTERS AND WHY IT IS NOT RULED HERE: the earlier capture's central READING — that
+  ScannerB's block is "a POSITION-CRITERIA FILTER, not a decision node", inferred from the presence
+  of "1 filtered position" — is not disturbed by the inversion, because ScannerB's signature is
+  identical on every one of its 29 in-window rows either way. But the SECONDARY claim that a filled
+  side shows "1 filtered position" AFTER its fill (i.e. that the filter marker is the re-entry
+  tag gate rejecting a second candidate) reads the opposite way in this capture: ScannerA shows the
+  filter marker only BEFORE it filled, and stops showing it once it held a position. Whether that
+  changes the interpretation of ScannerB's filter is a ruling, and rulings are gated. Escalated.
+
+== (3) GF-QQQ-IC-Ride — POSITION AND TRADES ==
+
+  A POSITION DID OPEN TODAY. YES.
+
+  Trades list (Position Details -> Trades; this is the evidence surface, not the Exit Options panel):
+    "Open 1 contract - Aug 17, 2026 1:35PM      0.11 -> 0.10      filled at $0.10"
+    ONE trade row. No exit rows — the position is still open at 15:41.
+    SmartPricing walked the order 0.11 -> 0.10 and filled at the second step.
+
+  Position Details, read 15:41 ET:
+    QQQ Short Put Spread · AUG 17 expiry (0DTE) · short 727 P / long 725 P · QTY 1
+    TRADE PRICE $0.10 · CREDIT TO OPEN $10 · CAPITAL AT RISK $190 · RETURN ON RISK 5.26%
+    PRICE AT OPEN 729.96 · OTM% 0.45% · BREAKEVEN 726.90 · MAX PROFIT $10 · MAX LOSS -$190
+    DELTA .01 · THETA .00 · GAMMA -.02 · VEGA .00 · DIT 0 days
+    LAST 730.31 · TOTAL P/L +$10 · RETURN % 100.00% · BID/ASK $0.00 -> $0.01
+    Tag: "put side"
+
+  ⚠️ OTM% 0.45% IS OA'S OWN FIELD and it is the discriminating number the earlier capture asked for.
+  The earlier capture computed 0.479% from LAST 730.50; OA computes 0.45% from PRICE AT OPEN 729.96.
+  Either way it sits within a few hundredths of a percent of the superseded `legpctprice pct=0.4`
+  rule's line. THE DAY-ONE READ STANDS AS RECORDED: delta and pct coincide on QQQ in today's vol,
+  and this fill does NOT discriminate between the two selection methods. Layer 2 stays OPEN.
+
+  Exit Options panel as displayed (RECORDED FOR COMPLETENESS ONLY — the panel is NEVER evidence,
+  CLAUDE.md §3.3 / oa-platform-reference §0.3): PROFIT % None · PROFIT $ None · STOP LOSS % None ·
+  STOP LOSS $ None · EXPIRATION 10 minutes. Header toggles: AUTOMATIONS ON, EXIT OPTIONS ON.
+
+  Closed Positions on this bot show one prior row: QQQ 726/724 Short Put Spread, Aug 14, closed
+  Aug 14, trade 0.07 -> close 0.01, P/L +$6, premium +$7, risk $193, tag "put side". No Aug 17 close.
+
+== (4) IC-SPX-Fortress-Unstopped — 2026-08-17 ==
+
+  DID IT OPEN A POSITION TODAY?  NO.
+
+  Positions page, read 15:41 ET: "No open positions". Newest Closed Position is dated Jul 2, 2026
+  (SPX 7,385/7,380 Short Put Spread, Expired Jul 2). Nothing on the page is dated Aug 17.
+
+  Model read, same page load:
+    status "on" · disableExits 1 · rdata.pos 0 · rdata.ndate 20260817
+    rdata.autos 272 · rdata.scans 272 · rdata.autoerrs 0 · rdata.autowarns 0
+    closedCount 26 · closedPnl $2,350
+  Header toggles: AUTOMATIONS ON · EXIT OPTIONS OFF · Bot Group "Monitor". This is its design
+  (CLAUDE.md §5 standing exception; monitors disabled by design), not a defect.
+
+  closedCount 26 / closedPnl $2,350 are UNCHANGED from both the signing capture and the 14:08 read.
+  rdata.autos advanced 86 -> 272 since 14:08: the bot kept scanning for another ~3.1 hours, threw
+  zero errors and zero warnings, and opened nothing.
+
+  A NO-FIRE DAY IS A RESULT, NOT A MALFUNCTION (INC-01, docs/pre-registration-ledger.md §6b).
+  No diagnosis offered, no edit made, no cause investigated.
+
+  STATUS OF THIS READING: near-final but still technically provisional. The 14:08 read flagged that
+  this bot has NO upper time bound, so its window runs to the close. This read is at 15:41, 19
+  minutes before the 16:00 close. The 13:30-15:41 span — 272 scans — is now covered with no fire.
+  The bot armed at ~13:40, after its own 13:30 gate had opened, so today remains a WEAK data point
+  for INC-01 side prediction 1 and must be labelled as such in the sample.
+
+  LAYER 2: not applicable today. It did not fire, so there is no Trades list to check for
+  Exit-Option rows.
+
+== (5) COVERAGE LEDGER — WHAT IS VISIBLE VS ROLLED OFF VS EARLIER-CAPTURE-ONLY ==
+
+  STILL VISIBLE IN OA AT 15:40, RE-READ THIS SESSION:
+    - the complete GF scanner log, 12:20PM -> 3:39PM, both scanners, all 401 rows
+    - the 1:35PM fill row, verbatim
+    - the open position and its full Trades list
+    - the Unstopped bot's positions, model state and counters
+  ALREADY ROLLED OFF / UNRECOVERABLE:
+    - NOTHING. No window was lost. See §0.
+  COVERED ONLY BY THE EARLIER CAPTURE (gf-decision-log-2026-08-17.txt):
+    - the 13:47 ET intraday mark on the open position (LAST 730.50, P/L +$5, ROR +2.6%) — a
+      point-in-time quote that OA does not retain and this session cannot re-observe
+    - the 14:08 ET Unstopped counter snapshot (rdata.autos 86 / scans 86), superseded but not
+      contradicted by the 272/272 read above
+    - the config hash 1e5eb993... Layer-1 re-read, not repeated this session (no config was read)
+  DISAGREEMENT BETWEEN THE TWO CAPTURES: one, recorded in full at §2. Not reconciled.
+
+== (6) THE 14:05 SCHEDULED RUN ==
+  Confirmed produced no output: no data/captures/gf-decision-log-2026-08-17-1405.txt on disk and no
+  14:05 append to docs/session-log.md. The stated cause is that cloud-scheduled sessions have no
+  device bridge and no browser, so they cannot reach OA at all. Recorded as observed; the fix is a
+  decision and is not made here.

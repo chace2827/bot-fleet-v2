@@ -8888,3 +8888,126 @@ the INC-01 card as a live tension for the delta sample's read. No edit follows; 
 1. GF arms — first fill's Trades list must show delta-selected strikes, not 0.40%.
 2. INC-01 — first position's Trades list must show (a) NO Exit-Option rows and (b) a close BY
    EXPIRATION with no Cleanup and no StrikeTouch row. 0DTE, so it resolves same session.
+
+**COMMIT LANDED — 2026-08-17 `456fd5c6b00fb5ccf4c96cc5c678e8cf05cf20bb`, 7 files, 882 insertions.**
+Andy ran it. Verified by him against `git show HEAD`:
+`docs/pre-registration-ledger.md` = `7748954086fc…` (the INC-01 pre-registered-interpretation
+rewrite made it in, current) and `.agents/skills/option-alpha/SKILL.md` = `12227d90…` (the
+master-toggle navigation trap rows landed in the same commit). Recorded against today's rulings:
+`R-2026-08-17-GF-ENTRY-METHOD`, `-HASH-NOT-VERSION`, `-SCANNERB-PRICE-SCHEMA`,
+`-RULINGS-TAIL-CLEANUP`, `-PR23-RETIRE`, `-UNSTOPPED-REOPEN`, `-UNSTOPPED-REOPEN-A1`.
+NOT in this commit, by ruling: the RULINGS.md tail cleanup (lines 1958-1986) — its own entry, its
+own commit, per `R-2026-08-17-RULINGS-TAIL-CLEANUP`.
+
+**NEW STANDING PROCESS RULE — `R-2026-08-17-COMMIT-WRITE-FREEZE`.**
+A declared commit window is a WRITE FREEZE on tracked files. When Andy says he is committing:
+announce **"files frozen"**, post a final hash list, queue all further edits, and resume only on his
+confirmed hash. Cause: this session kept writing after "Running the commit now" — the INC-01 tension
+note and two SKILL.md trap rows. **The drift was benign and shasum caught it**, but the same race
+during a signing pass could stamp a CONFIG HASH that does not correspond to the committed text,
+which is the exact provenance failure the signing ritual exists to prevent. Propagated to project
+memory `cowork-git-commit-trap` (promoted to the top of that file) alongside the older
+silent-no-op-commit trap.
+
+---
+
+## 2026-08-17 — OA NOTES PASS: HALTED AFTER 3 OF 9, ONE CARD LEFT INCONSISTENT
+
+**Halted deliberately** under Andy's instruction "if any card fails, stop and report; don't iterate
+on a live surface."
+
+**Root cause — my error.** I read ONE card (`GF-QQQ-IC-Ride`), inferred the template was uniform
+across all eight GF arms, and applied a blanket three-string find/replace. **The templates are not
+uniform.** `GF-QQQ-IC-Canary` (PR-20) uses a different card layout:
+  labels present: ID · DISPOSITION · HYPOTHESIS · MECHANISM · KILL CRITERION · SAMPLE TARGET ·
+                  REVIEW DATE · GATE EVAL DATE · VERIFICATION · SIGNED
+  - NO standalone `STATUS` line — status is INLINE on the DISPOSITION row:
+    `DISPOSITION      fresh build      PILLAR/ROLE  IC · control (instrument)     STATUS  DRAFT`
+  - NO `CONFIG HASH` line at all.
+Only the dotted `SIGNED` line matched, so a PARTIAL edit was applied and saved.
+
+**STATE OF CANARY NOW — inconsistent, needs a ruling:**
+  SIGNED  2026-08-17 ANDY  [display copy; repo ledger governs: ...]   <-- STAMPED
+  STATUS  DRAFT (inline on DISPOSITION)                               <-- NOT updated
+  CONFIG HASH                                                          <-- field does not exist
+A signature with no config hash on the same card is precisely the provenance defect the signing
+ritual exists to prevent. The SUBSTANTIVE record is unaffected — `docs/pre-registration-ledger.md`
+is correct and governs, and these cards are display copies — but the display copy is now misleading.
+
+**PASS STATE**
+  DONE + verified after hard reload:
+    1. IC-SPX-Fortress-Unstopped (INC-01) — new card authored, round-trip verified
+    2. GF-QQQ-IC-Ride (PR-14) — status, both hashes, signature, display-copy line; alignment
+       preserved; KILL CRITERION `< 0 ... ≥ 60` intact; no entity corruption
+  DAMAGED / INCONSISTENT:
+    3. GF-QQQ-IC-Canary (PR-20) — partial edit as described above
+  UNTOUCHED (6): PT50, Ride-Delta, SL100, SL200, Touch0, Trail
+
+**WHAT THE PROBE DID AND DID NOT COVER.** Writing INC-01 into Unstopped's empty Notes first was a
+good call — it proved the sanitizer round-trips `< 1.0` and `≥ 15` intact, which is why Ride's
+KILL CRITERION survived. But the probe tested the SANITIZER, not the TEMPLATE. A passing round-trip
+says nothing about whether the find-strings exist on the next card. Two different failure modes;
+I verified one and assumed the other.
+
+**RULE FOR THE RESUMED PASS (proposed, not applied):** read and assert every target string EXISTS
+on a card BEFORE mutating anything, and abort that card if any is missing — never save a partial
+match. Per-card structure check, not a per-family template assumption.
+
+**GATED — for Andy:** (a) how to repair Canary (its card has no CONFIG HASH field to fill, so the
+fix is a card-shape decision, not a text edit); (b) whether the remaining 6 are stamped only after
+each one's structure is read first. Nothing further will be written to any OA Notes field until ruled.
+
+**NOTE — Ride-Delta (PR-23) was already going to need separate handling**: it is RETIRED by
+`R-2026-08-17-PR23-RETIRE`, so stamping it "SIGNED" would be wrong; it needs a RETIRED annotation
+instead. That was true before this halt and remains open.
+
+---
+
+## 2026-08-17 15:38-15:45 ET — SALVAGE CAPTURE (reads only, no edits, no git)
+
+**Why:** the 14:05 ET scheduled capture produced NO output — no `data/captures/*-1405.txt`, no
+session-log append. Stated cause: cloud-scheduled sessions have no device bridge and no browser, so
+they cannot reach OA. A live session ran the salvage instead.
+
+**Written:** `data/captures/gf-decision-log-2026-08-17-salvage.txt`
+sha256 `fe2aad60a51db870ef3269eff2e48fc8b8aa0e6b710d94e9b0a2afd091686919` (10,229 bytes), verified by
+direct `device_bash` sha256 + single-match greps. The earlier `gf-decision-log-2026-08-17.txt` was
+READ ONLY and is byte-unchanged — sha `1b859ad052f1aed4f4c594f7465f347f29bda700e81977e3ba76aeacf6f9c951`
+re-confirmed after the write.
+
+**⚠️ THE SALVAGE PREMISE WAS FALSIFIED — the ~25-minute bot-log retention does not exist.** The
+25-minute span is a PAGE SIZE (50 rows = 2 scanners x 25 min), not a retention limit. The /log list
+carries a "Load more" control; seven activations walked it back to 12:20PM (401 rows) with no floor.
+The entire 13:30-14:00 window, including the 13:35 fill row, was still served by OA at 15:40 —
+two hours later. **Nothing had rolled off; nothing was inferred or reconstructed.** This falsifies
+the belief that motivated both the 13:46 insurance read and the 14:05 scheduled run. NOT RULED —
+reported for Andy, no doc corrected from this session.
+
+**GF-QQQ-IC-Ride — ENTERED.** GF-ScannerA-PutSpread opened at 1:35PM ET. Trades list: `Open 1
+contract - Aug 17, 2026 1:35PM · 0.11 -> 0.10 · filled at $0.10` — one row, no exit rows, position
+still open. QQQ 727P/725P, AUG 17 (0DTE), QTY 1, credit $10, risk $190, ROR 5.26%, PRICE AT OPEN
+729.96, **OA's own OTM% field = 0.45%**. GF-ScannerB-CallSpread: 0 fills, `1 filtered position` on
+all 29 in-window rows. Layer 2 stays OPEN — 0.45% does not discriminate delta from the superseded
+`pct=0.4` rule, as PR-23's card predicted.
+
+**⚠️ ONE DISAGREEMENT WITH THE EARLIER CAPTURE, reported not reconciled.** The 1:35PM fill row agrees
+verbatim in both. But ScannerA's two non-fill signatures are INVERTED: the earlier capture annotates
+`5 decisions | 1 loop` as before the fill and `5 decisions | 1 filtered position | 1 loop` as after;
+the timestamped salvage read has the filter marker at 1:31-1:34 (BEFORE) and the clean signature at
+1:36-1:59 (AFTER). ScannerB's reading is undisturbed either way. Which annotation is correct is a
+ruling and is gated. Full detail in the salvage file §2.
+
+**IC-SPX-Fortress-Unstopped — NO FIRE.** "No open positions"; newest closed row is Jul 2. Model:
+`status on · disableExits 1 · rdata.pos 0 · ndate 20260817 · autos 272 · scans 272 · autoerrs 0 ·
+autowarns 0 · closedCount 26 · closedPnl $2,350` — counters unchanged from the signing capture;
+autos advanced 86 -> 272 since the 14:08 read, i.e. it scanned ~3.1 more hours and opened nothing.
+Per INC-01 (`pre-registration-ledger.md` §6b) a no-fire day is a RESULT — no diagnosis, no edit.
+AUTOMATIONS ON / EXIT OPTIONS OFF / Bot Group "Monitor" is its design. Near-final but still
+provisional: read at 15:41, 19 min before the close, and the bot has no upper time bound. It armed
+at ~13:40 (after its own 13:30 gate), so today is a WEAK data point for side prediction 1.
+
+**No OA edits, no saves, no toggles, no git. No login page appeared.**
+
+## 2026-08-17 — T-13 follow-up: ledger parser false negative and cleanup
+
+Re-examined the pre-registration ledger parser after the merged PR and caught a second false-negative: the SIGNED field extraction stopped at the first line and missed the `SIGNED != VERIFIED` + `FIRST-TRADING-DAY CAPTURE OWED` annotations on PR-02 (`IC-SPX-FastPT25-S2-130PM`) and PR-04 (`QQQ-IC-0DTE-Fortress-NoPT50`). Updated `scripts/pre_registration_ledger.py` to consume the full multi-line SIGNED block and treat that combination as unsigned, regenerated `STATUS.md` and `dashboard.html` so both bots now appear in the UNSIGNED banner, and ran the full Phase 0 validation plus a two-pass `daily.sh` idempotency check. Added live known-positives to the parser selftest — the test now asserts the real ledger flags both PR-02 and PR-04, because synthetic fixtures alone are insufficient. Removed the `devin/t11-*`, `devin/t12-*`, `devin/t13-*`, and `devin/t13-v2-*` worktrees and their local branches; `devin/pr1-*`, `devin/pr2-*`, and `devin/pr3-*` worktrees remain for the open PRs in flight.

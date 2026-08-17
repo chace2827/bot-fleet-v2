@@ -1,0 +1,109 @@
+# GF-QQQ + INC-01 decision capture — 2026-08-17
+# captured 13:46-13:48 ET by the live Cowork session (INSURANCE READ, ahead of the 14:05 scheduled run)
+# source: https://app.optionalpha.com/bots/bot/BOTfw5TkkCRF4417860701930934951/log  (GF-QQQ-IC-Ride)
+# reads only — nothing edited
+#
+# ⚠️ WHY THIS WAS TAKEN EARLY: at 13:46 the log spanned 13:21 -> 13:45 (25 distinct minutes,
+# confirming the ~25-minute retention). At 14:05 the 13:21-13:39 rows — INCLUDING THE 13:35 FILL —
+# would have ROLLED OFF and the scheduled capture would have recorded a fill it could not see.
+# Retention is shorter than the gap between the entry window opening and the scheduled capture.
+
+== (A) GF-QQQ FAMILY — FIRST SESSION UNDER THE DELTA CONFIG ==
+
+RESULT: ENTERED. GF-ScannerA-PutSpread opened a position at 1:35PM ET.
+
+Log row signatures, 13:21 -> 13:45, 25 rows per scanner:
+  GF-ScannerA-PutSpread
+    "1 decision | 1 loop"                                  (before 13:30 — time gate stops it at decision 1)
+    "5 decisions | 1 loop"                                 (in window, reaches the 5th decision)
+    "1 open position | 5 decisions | 1 loop"   13:35PM     <-- THE FILL
+    "5 decisions | 1 filtered position | 1 loop"           (after the fill)
+  GF-ScannerB-CallSpread
+    "5 decisions | 1 filtered position | 1 loop"           <-- EVERY ROW IN WINDOW, ALL 25
+    "1 decision | 1 loop"                                  (before 13:30)
+
+READING — the call side's failure mode is now VISIBLE and is NOT the entry gates:
+  ScannerB reaches "5 decisions" every minute, i.e. it passes the 1:30pm gate, the 2:00pm gate,
+  BOTH Range075 bounds, and the re-entry tag gate. It then produces a candidate and the candidate is
+  FILTERED. The block is a POSITION-CRITERIA FILTER, not a decision node. The only position filter
+  on that action is `minPrice 0.08`.
+  Range075 PASSED today on both sides — so Range075 is NOT what suppressed the call side.
+  ⚠️ This is the trigger condition named in R-2026-08-17-SCANNERB-PRICE-SCHEMA ("or immediately if
+  the call side never fills under delta"). Day 1 under delta: put filled, call filtered every minute.
+  NOT YET RULED. Reported, not acted on.
+
+OPEN POSITION as read at 13:47 ET (Open Positions tab):
+  QQQ Short Put Spread   short 727 P / long 725 P
+  LAST 730.50 · DTE 0d · QTY 1 · P/L +$5 · ROR +2.6% · PREMIUM $10 · RISK $190 · DIT 0d
+
+  Premium $0.10 on a $2-wide spread — clears the 0.08 floor by 2 cents.
+  (For contrast, the 2026-08-14 fill under pct=0.4 went off at $0.07, BELOW the floor, via
+  SmartPricing.)
+
+⚠️ LAYER 2 IS NOT YET DISCHARGEABLE FROM STRIKE DISTANCE ALONE — stated plainly, not glossed:
+  short put 727 against LAST 730.50 = 0.479% below spot. The SUPERSEDED rule (`legpctprice pct=0.4`)
+  would have placed the short at 730.50 x 0.996 = 727.58 -> the SAME 727/728 strike. On QQQ at
+  today's volatility, delta -0.10 and pct 0.4% COINCIDE to within about one strike, so this fill is
+  CONSISTENT WITH delta selection but does NOT DISCRIMINATE between the two methods.
+  This is exactly the risk PR-23's card flagged: "On QQQ a given delta sits further out in percent
+  terms than on SPX, so this may land near the 0.40% the pct arms will run. RECORD WHERE IT ACTUALLY
+  LANDS ON DAY ONE." PR-23 is retired (R-2026-08-17-PR23-RETIRE), so the observation lands on the
+  family instead. RECORDED: day one, it landed at 0.479%.
+  Layer 1 (config hash 1e5eb993... re-read after hard reload) already proves delta is STORED.
+  Layer 2 as worded asks the Trades list to prove it is USED, and today's tape cannot separate the
+  two hypotheses. A discriminating read needs a session where vol moves the delta strike away from
+  the 0.4% line. Carried, not closed.
+
+  NOTE — this REINFORCES the pre-registered interpretation recorded in the INC-01 card the same day:
+  if delta and pct coincide in quiet vol and diverge in moving vol, then the delta change should
+  look like a no-op in exactly the regime we are in, and should only start to matter when vol turns.
+
+== (B) IC-SPX-Fortress-Unstopped ==
+  NOT CAPTURED IN THIS INSURANCE READ — armed at ~13:40 ET, after this bot's own 1:30pm entry gate
+  had already opened. Its fire/no-fire for 2026-08-17 is delegated to the 14:05 scheduled run.
+  Reminder: a no-fire day is a RESULT, pre-registered evidence for the low-vol reading, NOT a fault.
+
+== COMPLETION READ, 14:09 ET (window now closed) ==
+
+Log at 14:09 spans 13:45 -> 14:09. The 13:21-13:44 rows — INCLUDING THE 13:35 FILL — HAVE ROLLED
+OFF, exactly as predicted at 13:46. The insurance capture above is now the ONLY record of the fill
+and of the pre-13:45 decision rows. The 14:05 scheduled run could not have seen them.
+
+Full-session signatures, 13:45 -> 14:00 (the remainder of the window):
+  GF-ScannerA-PutSpread   "5 decisions | 1 loop"                        (no further open)
+  GF-ScannerB-CallSpread  "5 decisions | 1 filtered position | 1 loop"  (every row)
+After 14:00 both scanners drop to "2 decisions | 1 loop" — stopped by the before-2:00pm gate,
+which confirms that gate fires correctly.
+
+SESSION TOTAL FOR 2026-08-17 (first session under delta):
+  PUT  side: 1 fill at 13:35, 727P/725P, $0.10 credit, $190 risk.
+  CALL side: 0 fills. "1 filtered position" on EVERY row of the entire 13:30-14:00 window.
+  The call side reached the final decision every single minute and had its candidate rejected by a
+  position-criteria filter each time. Confirmed across the full window, not a sample.
+
+== (B) IC-SPX-Fortress-Unstopped — 2026-08-17 ==
+  RESULT AS OF 14:08 ET: GATE EVALUATED, NO FIRE.
+    status on · disableExits 1 (unchanged) · No open positions · rdata.pos 0
+    rdata.autos 86 · rdata.scans 86 · rdata.autoerrs 0 · rdata.autowarns 0 · ndate 20260817
+    closedCount 26 and closedPnl $2,350 — UNCHANGED from the signing capture, so no new closes.
+  The bot ran, scanned, threw no errors and no warnings, and opened nothing.
+
+  ⚠️ PROVISIONAL, NOT FINAL FOR THE DAY. Its scanner has NO upper time bound — the decision chain
+  reads: after 1:30pm, change% > -0.75, change% < 0.75, "FOMC Meeting today", and exactly 0 open
+  positions on that side. There is no "before 2:00pm" gate as the GF scanners have. So its entry
+  window runs 13:30 -> close and it can still fire this session. Today's no-fire is recorded as of
+  14:08 and must be re-checked at/after the close before being counted.
+
+  Per the pre-registered reading (INC-01 card, side prediction 1): a no-fire day here is EVIDENCE
+  FOR the low-volatility interpretation, replicated on an independent bot. It is a result, not a
+  malfunction. No diagnosis, no edit.
+
+  Note it armed at ~13:40, i.e. AFTER its 13:30 gate had already opened, so part of today's window
+  was missed for reasons unrelated to the strategy. Today is therefore a WEAK data point for
+  side prediction 1 and should be labelled as such in the sample.
+
+== SCHEDULED 14:05 RUN ==
+  As of 14:08 the scheduled session had produced NO output: no
+  data/captures/gf-decision-log-2026-08-17-1405.txt and no append to docs/session-log.md.
+  Recorded as NOT RUN / NO OUTPUT — not inferred, not reconstructed. This capture was taken by the
+  live session instead. Cause not established (fresh session may lack the browser/device bridge).
