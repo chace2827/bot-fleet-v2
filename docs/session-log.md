@@ -9255,3 +9255,167 @@ Rationale: the confirmation was blocking close-outs on a human round-trip while 
 citation does not already provide. The §9.1a failure it was written against (7/29, 7/31 — the
 tracker lagging the folder and reporting finished work as missing) is addressed by the citation
 requirement, which is checkable without Andy.
+
+## 2026-08-17 (evening) — PHASE 4a: export verified and placed; lessons v1 archived
+
+**Export placed.** `data/raw/2026-08-17.csv`, sha256
+`b05cb852f8ceffb204312f5c924a1a4fcc8dd91540151becddf879b9470062c6`, verified on device after the
+write — byte-identical to the uploaded file. **Verified BEFORE placing, four checks:**
+
+| check | result |
+|---|---|
+| header identical to `data/raw/2026-08-14.csv` | ✅ all 26 columns, exact |
+| row count | **1,431 data rows** (08-14 export had 1,420) |
+| filtered-export guard | **42 distinct `botName`s — identical to the 08-14 export.** No bot dropped |
+| pre-cutover rows preserved | **1,386 in both files.** Nothing lost; the delta is entirely new post-cutover rows |
+| post-cutover days | 08-10 (6) · 08-11 (6) · 08-12 (5) · 08-13 (4) · 08-14 (13) · **08-17 (11)** = 45 rows. 08-15/08-16 correctly absent (weekend). The 08-10→08-14 counts are **identical to the committed ledger's 34 legs** |
+
+**Two findings from the export, carried into the Roll Call — both live-account, not reporting:**
+
+1. ⚠️ **THE GF ARMS ARE NOT OPENING CONDORS. THEY ARE OPENING PUT SPREADS ONLY.** All nine GF rows
+   on 08-17 are `-727 put, +725 put`; all nine on 08-14 are `-726 put, +724 put`. **Zero call
+   spreads on either day.** The call side has produced no fills at all since the family went live.
+   Every GF "condor" in the ledger is one-sided. This confirms the standing "call side still
+   filters every row" note as a live defect, and the delta method change did not touch it.
+2. ⚠️ **`GF-QQQ-IC-Ride-Delta` traded on 08-17 — twice — after being retired that same day**
+   (`R-2026-08-17-PR23-RETIRE`). It also double-filled on 08-14 (2 rows) while every sibling filled
+   once. The retirement was documentation-only; the bot is still ON in OA, and it is the one arm
+   with an unexplained structural difference.
+
+**Layer-2 note (not yet an answer).** The 08-17 GF short put is 727 against a QQQ open of 729.96 —
+**0.406% below spot**. The pre-change pct gate was tuned to 0.4%, and QQQ strikes are 1-point, so
+delta 0.10 and pct 0.40 both round to 727. **The fill still does not discriminate delta from pct.**
+
+**Lessons v1 archived** — `R-2026-08-17-LESSONS-V1-ARCHIVE`. `data/lessons.csv` held 33 rows all
+dated 2026-06-23 → 2026-07-02, entirely v1-era. Moved to `data/archive/lessons-v1.csv`.
+
+⚠️ **Process note — a near-miss worth the entry.** `data/archive/lessons-v1.csv` **already existed
+and was already committed**, and the `mv` overwrote it. It was recoverable and, as it turned out,
+identical: the committed blob's sha256 is `2d1fe118898badb832185bda18b5565931be2e4a3268af5b8e5c0626dbfa73aa`,
+exactly the hash of the file that replaced it. Both paths were tracked; they were duplicates, not a
+live file and a distinct history. **The destination was listed in the same command as the move
+rather than before it** — the listing and the `mv` raced in one breath. List the destination, read
+the result, then move. Recovery was by zlib-reading the HEAD tree and blob directly from
+`.git/objects` — no git, per `R-2026-08-17-GIT-RULE-SCOPE`.
+
+## 2026-08-17 (evening) — PHASE 4b + PHASE 5: daily loop run, and THE ROLL CALL
+
+**Loop ran clean.** `LESSONS_ALLOW_TRUNCATE=1 scripts/daily.sh`, no date argument (G-1). All five
+gates pass: G-2 forward walk (`open_date 2026-08-10..2026-08-17`, no rewind banner) · legs **45**
+(> 34) · receipt appended (`rows_in 1431 -> rows_out 45, exit 0`) · heartbeat
+`artifacts/heartbeat/2026-08-17.json` · tape **all-tradier** (QQQ, SPX, VIX). Total P/L
+**$3,167 -> $3,777**; the +$610 reconciles exactly to PR-02's $550 plus the nine GF spreads' $60.
+
+### ⚠️ FINDING 1 — THE FLEET IS NOT TRADING CONDORS, AND THE PIPELINE SAYS IT IS
+
+`data/trades.csv`, counted by `trade_id` pairing: **39 positions = 6 two-sided condors + 33
+one-sided spreads.** All six condors belong to **PR-02**. `single_sided` is `True` on 31 of 45 rows.
+
+- **PR-01 `IC-SPX-FastPT25-S2` — the champion — has 5 positions and ZERO condors.** Every one is a
+  short put spread alone.
+- **All eight GF arms: zero condors.** 08-14 all nine rows `-726 put, +724 put`; 08-17 all nine
+  `-727 put, +725 put`. **The call side has produced no fill on any day since the family went live.**
+- Mirrors and `DIR-SPX-CallVIXdrop` are legitimately one-sided; PR-01 and the GF family are not.
+
+**The reporting defect this exposes:** `report.py` printed *"champion IC-SPX-FastPT25-S2: 5
+condors"* for a bot that opened **no condors**, and `build_ledger` labels all 39 positions
+"Trades(condors)". These are row counts wearing the word "condor" — exactly the unit failure
+`CLAUDE.md` §4 forbids. The ledger already carries a correct `single_sided` column; neither
+reporting surface reads it. **Minor sub-finding:** 14 rows are `single_sided=False` but only 12 sit
+in 2-row `trade_id` groups, so 2 rows claim two-sidedness with no partner — unexplained.
+
+### ⚠️ FINDING 2 — INC-01 IS INVISIBLE TO THE AUDIT
+
+`data/bots_meta.csv:3` carries `status=OFF` for `IC-SPX-Fortress-Unstopped`, from a note dated
+2026-08-11. It was re-armed 2026-08-17 at 13:40. The execution audit therefore never asks about it:
+it is **absent from the SILENT_BOT list** while PR-04 (`status=ON`) is correctly flagged. Its
+pre-registered regime evidence is not being recorded at all.
+
+### ⚠️ FINDING 3 — A RETIRED ARM IS STILL TRADING, AND DOUBLE-FILLING
+
+`GF-QQQ-IC-Ride-Delta` (PR-23, retired 2026-08-17 per `R-2026-08-17-PR23-RETIRE`) filled **twice on
+08-17 and twice on 08-14** — 4 of the ledger's 45 rows, more than any other GF arm, every sibling
+filling once. The retirement was documentation-only; the bot is ON in OA.
+
+### THE ROLL CALL — 2026-08-17
+
+**Tape:** SPX **Chop**, -0.59%, inside the ±0.75% GO band. QQQ **Chop**, -0.42%, inside band.
+VIX open 14.98 / close 15.19, **+6.6%**. A textbook IC day.
+**No 2:05 decision-log capture exists for today** — OA retains ~25 minutes and none was taken, so
+every silent-bot verdict below rests on position data plus the tape, never on scanner logs.
+**Compared by R throughout (`pnl / risk`), never raw dollars.**
+
+| Bot | PR | Verdict | Evidence · R (unit labelled) |
+|---|---|---|---|
+| `IC-SPX-FastPT25-S2-130PM` | PR-02 | **FIRED CORRECTLY** | The fleet's only two-sided fill. 7775/7780 call + 7730/7725 put, both expired worthless. **mean R +0.0582 per leg, n=2 legs = 1 condor** |
+| `GF-QQQ-IC-Ride` | PR-14 | **FIRED WRONG** (structure) | 1 put spread, no call side. R +0.0474 per leg, n=1 |
+| `GF-QQQ-IC-Touch0` | PR-17 | **FIRED WRONG** | R +0.0474 per leg, n=1 |
+| `GF-QQQ-IC-SL100` | PR-18 | **FIRED WRONG** | R +0.0474 per leg, n=1 |
+| `GF-QQQ-IC-SL200` | PR-19 | **FIRED WRONG** | R +0.0474 per leg, n=1 |
+| `GF-QQQ-IC-PT50` | PR-15 | **FIRED WRONG** | R +0.0263 per leg, n=1 |
+| `GF-QQQ-IC-Trail` | PR-16 | **FIRED WRONG** | R +0.0053 per leg, n=1 |
+| `GF-QQQ-IC-Canary` | PR-20 | **FIRED WRONG** | R +0.0053 per leg, n=1 |
+| `GF-QQQ-IC-Ride-Delta` | PR-23 | **FIRED WRONG ×2 — SHOULD NOT HAVE FIRED AT ALL** | Retired today; 2 fills. mean R +0.0446 per leg, n=2 |
+| `DIR-SPX-PutVIX22-SL75` | PR-05 | **SILENT — JUSTIFIED** | Gate VIX ≥ 22. VIX ranged **14.89–15.47** all session; never within 6 points. Closes the auditor's AMBER **from the tape** |
+| `DIR-SPX-CallVIXdrop` | PR-06 | **SILENT — JUSTIFIED** | Gate VIX change ≤ −2. VIX **+6.6%** — wrong direction entirely |
+| `Friday 14 DTE Broken Wing IB` | PR-10 | **SILENT — JUSTIFIED BY DESIGN** (unproven) | A Friday-entry bot; 2026-08-17 is a Monday. No config row exists to prove the entry-day rule, so this is design inference, not evidence |
+| `QQQ-IC-0DTE-Fortress-NoPT50` | PR-04 | **SILENT — UNVERIFIABLE** | AMBER. The $0.08 mid-price floor is the standing hypothesis and remains unverified. $100K allocation, unsigned |
+| `3DTE $140-$350` | PR-07 | **SILENT — UNVERIFIABLE** | Mirror, watch-only. Last fill 08-10 |
+| `Nigiri-Paper-v1` | PR-08 | **SILENT — UNVERIFIABLE** | Mirror. Fired 08-10..08-13 then stopped |
+| `Trendy-Paper-v1` | PR-11 | **SILENT — UNVERIFIABLE** | Mirror. One fill, 08-11 |
+| `60min-ORB-10W-Paper-v1` | PR-12 | **SILENT — UNVERIFIABLE** | Mirror. **The only net-negative bot post-cutover: mean R −0.0184 per leg, n=3** |
+| `IC-SPX-FastPT25-S2` | PR-01 | **SILENT — SUSPECT** | Fired 1 row every day 08-10→08-14, then **nothing on 08-17** — its first miss in six trading days, on an IC day inside the GO band. Its five prior fills were all one-sided |
+| `IC-SPX-Fortress-Unstopped` | INC-01 | **SILENT — SUSPECT / NOT MEASURABLE** | Zero fills. Invisible to the audit (Finding 2) |
+
+### The three questions asked of this Roll Call
+
+**1. The GF family's first days under delta entry.** Two trading days: **08-14 and 08-17**. Each arm
+n=**2 positions**; 16 positions across 8 arms.
+- **Fire rate: 1.0 position/arm/day — but 0 condors/day against a pre-registered target of 1
+  condor/day. 0% on target.** The count is right and the structure is wrong.
+- **Does any fill discriminate delta from pct? NO — and today's is the clearest negative yet.**
+  08-17's short put is **727** against an entry spot of **729.96** = **0.406%**. The pre-change pct
+  gate was tuned to **0.40%**, and QQQ strikes are 1-point, so delta 0.10 and pct 0.40 **both round
+  to 727**. The two methods are not separable at this vol on this underlying. Layer 2 stays open, and
+  will stay open until a day when the two methods imply different strikes.
+- **Tier: below anything. n=2 days.** Nothing here licenses an inference about arm ranking, and the
+  R-spread across arms (+0.0053 to +0.0474) is one day of exit-timing noise on a $190 risk base, not
+  a signal about PT50 vs Trail vs SL100.
+
+**2. INC-01's no-fire as pre-registered regime evidence — IT DOES NOT COUNT, and this is the
+important part.** A no-fire day is a result, not a malfunction — but only when the bot was
+demonstrably armed and demonstrably gated. Today we cannot show either. Two live explanations:
+(a) armed at **13:40**, possibly after its entry window, making the no-fire an artifact of arming
+time rather than of regime; (b) not actually ON — `bots_meta.csv` still says `OFF`. **The
+discriminator is the OA bot log** — a scanner run with no entry closes it GREEN, zero log entries
+closes it RED — **and OA's ~25-minute retention means today's log is already gone.** Today's INC-01
+observation is unusable. It is not a data point for or against the regime prediction.
+
+**3. PR-02's day.** One condor, both sides, both legs expired worthless, **+$550**, **mean R +0.0582
+per leg (n=2 legs)**. Across the post-cutover ledger: **12 legs / 6 condors over 6 of 6 trading
+days — a perfect 1-condor-per-day fire rate**, **mean R +0.0593 per leg (n=12 legs)**, **$3,350 =
+89% of the fleet's $3,777.** It is the only bot in the fleet reliably opening the structure it was
+designed to open. **It is also still UNSIGNED** (§5: "No entry in the ledger, no restart"). n=6
+condors is nowhere near the n≥100 / 6-month / regime-change gate; **no live-capital or sizing
+inference is licensed by this record**, however clean it looks. The cleanliness is the temptation
+the gate exists to resist.
+
+### Tomorrow's watch list
+1. **Does any GF arm ever open a call spread?** Three consecutive one-sided days would move this
+   from "defect suspected" to "the call side is dead".
+2. **PR-01** — does it fire 08-18? Two consecutive misses changes it from anomaly to failure.
+3. **INC-01** — does it appear in the SILENT_BOT list once `bots_meta.csv` is corrected?
+4. **Ride-Delta** — does it fill again after being retired, and does it double-fill again?
+5. **A GF day where delta and pct imply different strikes** — the only thing that closes Layer 2.
+6. **PR-04** — still floored, or does it enter?
+
+### Needs a ruling from Andy
+- **R-1 · The call side.** Is the one-sided entry a defect to fix, or is the GF family now
+  knowingly running a put-spread program? Two days of data are one-sided either way; the arms'
+  pre-registrations describe condors.
+- **R-2 · Ride-Delta.** Switch the bot OFF in OA, or un-retire it? It is trading on a retired
+  pre-registration right now.
+- **R-3 · `bots_meta.csv` INC-01 status.** Correct `OFF` → `ON` by fresh capture (§3 rule 2 forbids
+  editing the cell directly). Until then INC-01 generates no evidence at all.
+- **R-4 · The condor/position vocabulary defect** in `report.py` and `build_ledger.py`. A guard-
+  adjacent reporting change — needs naming as such under the charter's new Class C line.

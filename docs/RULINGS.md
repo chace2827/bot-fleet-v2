@@ -2363,6 +2363,38 @@ source: Andy's message to the Cowork session, 2026-08-17, quoted verbatim above.
 unclear: false
 ```
 
+```yaml
+ruling_id: R-2026-08-17-LESSONS-V1-ARCHIVE
+date: 2026-08-17
+scope: >-
+  Archives the v1 lessons index and authorises exactly one truncating rebuild so the post-cutover
+  lessons index starts clean.
+verbatim: >-
+  Move data/lessons.csv (33 v1-era rows, 06-23 to 07-02) to data/archive/lessons-v1.csv, then run
+  lessons.py once with LESSONS_ALLOW_TRUNCATE=1 set INLINE for that single command - never
+  exported, never added to daily.sh. Post-cutover index starts clean and empty; the guard stays
+  armed for every future run.
+verbatim_of: ruling_text
+owner: Andy
+status: Active
+applies_to: >-
+  data/lessons.csv (removed); data/archive/lessons-v1.csv (retained, unchanged); scripts/lessons.py
+  SHRINK GUARD at lines 156-169; the single 2026-08-17 daily.sh run carrying
+  LESSONS_ALLOW_TRUNCATE=1 inline. The flag is authorised for that one run only and must never be
+  exported into a shell or written into scripts/daily.sh.
+superseded_by: none
+source: >-
+  Andy's ruling in the 2026-08-17 Cowork signing session, Phase 4
+  ("Archive + one inline rerun").
+unclear: >-
+  [UNCLEAR] Nothing about the ruling. Recorded for provenance: data/archive/lessons-v1.csv ALREADY
+  existed and was already committed at HEAD with blob sha256
+  2d1fe118898badb832185bda18b5565931be2e4a3268af5b8e5c0626dbfa73aa, byte-identical to
+  data/lessons.csv. The move overwrote the archive copy with its own twin; nothing was lost, and
+  the two files were duplicates rather than a live file and a distinct history.
+```
+
+
 
 
 
