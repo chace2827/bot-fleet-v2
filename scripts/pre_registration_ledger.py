@@ -37,10 +37,16 @@ def _bot_name_from_heading(heading):
 
 
 def _is_signed(signed_val):
-    """A SIGNED value is signed iff it contains a YYYY-MM-DD and not NOT SIGNED."""
+    """A SIGNED value is signed iff it contains a YYYY-MM-DD and no negation.
+
+    Negation includes an explicit "NOT SIGNED" or a signed-but-unverified
+    S2b signature that carries an owed first-trading-day capture.
+    """
     if not signed_val:
         return False
     if 'NOT SIGNED' in signed_val:
+        return False
+    if 'SIGNED != VERIFIED' in signed_val and 'FIRST-TRADING-DAY CAPTURE OWED' in signed_val:
         return False
     return bool(re.search(r'\d{4}-\d{2}-\d{2}', signed_val))
 
@@ -88,7 +94,7 @@ def parse_ledger_text(text):
                 f"WARNING: {level} {heading!r} (ID {id_val}) has no usable bot name; skipped")
             continue
 
-        signed_m = re.search(r'^SIGNED\s+(.*)$', block, re.M)
+        signed_m = re.search(r'^SIGNED\s+(.*?)(?=^\S|\Z)', block, re.S | re.M)
         signed_val = signed_m.group(1).strip() if signed_m else ''
         if not _is_signed(signed_val):
             unsigned.add(bot)
@@ -124,7 +130,9 @@ SIGNED           2026-08-09 · ANDY
 ### PR-02 — `IC-SPX-FastPT25-S2-130PM`
 ```
 ID               PR-02
-SIGNED           ..............................
+SIGNED           2026-08-09 - ANDY - gate cleared at S2b, in-chat.
+                 SIGNED != VERIFIED. The INVERTED Step-6 check is DEFERRED to 2026-08-10.
+                 FIRST-TRADING-DAY CAPTURE OWED 2026-08-10.
 ```
 
 ### `QQQ-IC-0DTE-Fortress`
@@ -136,7 +144,9 @@ SIGNED           ..............................
 #### `QQQ-IC-0DTE-Fortress-NoPT50`
 ```
 ID               PR-04
-SIGNED           NOT SIGNED — 2026-08-09
+SIGNED           2026-08-09 - ANDY - gate cleared at S2b, in-chat.
+                 SIGNED != VERIFIED. Step 6 is DEFERRED to 2026-08-10.
+                 FIRST-TRADING-DAY CAPTURE OWED 2026-08-10.
 ```
 
 ## Some group header (not an entry)
@@ -176,6 +186,20 @@ def selftest():
     if any('Some group header' in w for w in warnings):
         print("FAIL: should not warn about a heading with no code block", file=sys.stderr)
         return 1
+
+    # Live known-positive check: the real ledger must mark PR-02 and PR-04
+    # as unsigned because their SIGNED blocks carry SIGNED != VERIFIED +
+    # FIRST-TRADING-DAY CAPTURE OWED. Synthetic fixtures are not enough.
+    _live_path = os.path.join(
+        os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+        'docs', 'pre-registration-ledger.md')
+    if os.path.exists(_live_path):
+        live_unsigned, _ = parse_ledger_text(open(_live_path).read())
+        for bot in ('IC-SPX-FastPT25-S2-130PM', 'QQQ-IC-0DTE-Fortress-NoPT50'):
+            if bot not in live_unsigned:
+                print(f"FAIL: live ledger does not flag {bot} as unsigned", file=sys.stderr)
+                return 1
+
     print("pre_registration_ledger.py: selftest OK")
     for w in warnings:
         print(w)
