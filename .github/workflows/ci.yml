@@ -75,3 +75,6 @@ jobs:
 
       - name: check docs vs csv
         run: python3 scripts/check_docs_vs_csv.py
+
+      - name: pre-registration ledger parser selftest
+        run: python3 scripts/pre_registration_ledger.py

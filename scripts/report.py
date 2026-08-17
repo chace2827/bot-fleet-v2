@@ -12,44 +12,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 D = os.path.join(ROOT, "data")
 
 # --- pre-registration ledger parsing (T-13) -------------------------------
-
-def unsigned_from_ledger(path):
-    """Return a set of bot names whose pre-registration ledger entry is not signed.
-
-    A heading is unsigned if its first fenced code block has no SIGNED line,
-    the SIGNED line is blank, or the SIGNED line contains 'NOT SIGNED'.
-    """
-    if not os.path.exists(path):
-        return set()
-    text = open(path).read()
-    unsigned = set()
-    # split on headings; each part starts with the heading text
-    for part in re.split(r'(?m)^### ', text):
-        if not part.strip():
-            continue
-        heading_line = part.splitlines()[0]
-        # extract the first backtick name, which is the OA bot name in this repo
-        m = re.search(r'`([^`]+)`', heading_line)
-        if not m:
-            continue
-        bot = m.group(1).strip()
-        # find the first fenced code block in this section
-        block_m = re.search(r'^```\n(.*?)\n```', part, re.S | re.M)
-        if not block_m:
-            unsigned.add(bot)
-            continue
-        block = block_m.group(1)
-        signed_m = re.search(r'^SIGNED\s+(.+)$', block, re.M)
-        if not signed_m:
-            unsigned.add(bot)
-            continue
-        signed_val = signed_m.group(1).strip()
-        if "NOT SIGNED" in signed_val:
-            unsigned.add(bot)
-            continue
-        if not re.search(r'\d{4}-\d{2}-\d{2}', signed_val):
-            unsigned.add(bot)
-    return unsigned
+import pre_registration_ledger
 
 
 def fl(x):
@@ -113,7 +76,7 @@ for t in trades:
 # champion: resolved from bots_meta.csv (champion=yes), NOT a hardcoded name
 meta = {r["bot"]: r for r in csv.DictReader(open(os.path.join(D, "bots_meta.csv")))}
 _ledger_path = os.path.join(ROOT, "docs", "pre-registration-ledger.md")
-_ledger_unsigned = unsigned_from_ledger(_ledger_path)
+_ledger_unsigned = pre_registration_ledger.unsigned_from_ledger(_ledger_path)
 unsigned_bots = sorted(b for b in meta if b in _ledger_unsigned)
 champ = next((b for b, r in meta.items() if (r.get("champion") or "").lower() == "yes"), None)
 champ_t = [t for t in trades if t["bot"] == champ]
