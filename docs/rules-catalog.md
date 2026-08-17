@@ -17,6 +17,26 @@ This audit was run by dispatching parallel sub-agents per document (or small doc
 
 ---
 
+> ### ⛔ SCOPE AMENDMENT — 2026-08-17 · `R-2026-08-17-GIT-RULE-SCOPE`
+>
+> **Read before any row in this catalog that states the git prohibition.** Every such row is left
+> standing verbatim, and every quote is left untouched — this banner scopes them, it does not
+> rewrite them.
+>
+> The prohibition binds **bridge sessions operating on the mounted tree**. There it remains
+> **total, including read-only git commands** — `.git/logs/HEAD` and loose-object reads answer
+> every question git would ask, with no lock taken. It does **not** bind git inside an agent's own
+> cloud container or clone: no mount, no unlink restriction, nothing to strand. That is how cloud
+> agents open PRs.
+>
+> `CLAUDE.md` §9.1 step 3 — **Andy runs every commit to the main tree** — is **unchanged**.
+>
+> Rows scoped by this banner — line numbers **as they stand in this file after this banner was
+> inserted**, re-verified 2026-08-17: **253** (git prohibition, restated), **1273**, **1488**,
+> **1774** (§0.1 standing fact 1), **1793** (§0.3 gate A11).
+> Row **122** (§9.1 step 3) is untouched by the amendment. Rows **2040** and **2046** are
+> historical method statements about an audit that already ran — records, not standing rules.
+
 
 ## Root
 

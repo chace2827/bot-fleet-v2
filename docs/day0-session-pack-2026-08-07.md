@@ -15,6 +15,23 @@ attempted (impossible — the account is disabled). No git command in any form.
 
 ---
 
+> ### ⛔ SCOPE AMENDMENT — 2026-08-17 · `R-2026-08-17-GIT-RULE-SCOPE`
+>
+> **This document is a record of prompts that were executed. Nothing below is rewritten; the
+> original text stands everywhere it appears.** This banner scopes one standing fact.
+>
+> **"NEVER RUN GIT, in any form, INCLUDING `git status`"** — §0.1 standing fact 1, repeated at
+> lines **861, 1173, 1590, 1892, 2604**, plus **gate A11** (line 989) and line **2694** — line
+> numbers **as they stand in this file after this banner was inserted**, re-verified 2026-08-17.
+> It binds **bridge sessions operating on the mounted tree**.
+> There it is **still total, read-only commands included**: `.git/logs/HEAD` and loose-object reads
+> answer every question git would, with no lock taken.
+>
+> It does **not** bind git inside an agent's own cloud container or clone — no mount, no unlink
+> restriction, no lock to strand.
+>
+> Andy still runs every commit to the main tree (`CLAUDE.md` §9.1 step 3, unchanged).
+
 # §0.0 · ⛔ AMENDMENTS — ADDED 2026-08-07 (evening), AFTER AN ADVERSARIAL REVIEW. READ BEFORE §0.
 
 > **How to read this section.** The body of this pack below is **left standing exactly as written**

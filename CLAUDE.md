@@ -177,6 +177,13 @@ piece, before starting the next.
 3. **Hand off for commit** — say "ready to commit" with a one-line summary of the changed files.
    **Andy runs the commit and confirms it. Claude does not commit** (the device bridge cannot unlink
    files; git operations from this side strand lock files in `.git/` — established 2026-07-31).
+   **SCOPE, amended 2026-08-17 (`R-2026-08-17-GIT-RULE-SCOPE`):** this rule and the stricter
+   "never run git in any form" standing rule bind **bridge sessions operating on the mounted
+   tree**. Git inside an agent's own cloud container or clone is **unrestricted** — no mount, no
+   unlink restriction, no lock to strand; that is how Devin and any cloud agent open PRs. On the
+   mounted tree the prohibition remains **total, including read-only commands**: `.git/logs/HEAD`
+   and loose-object reads already answer every question git would ask, with no lock. Andy still
+   runs every commit to the main tree — that half is unchanged.
 
 **Uncommitted work at session end is unfinished work.** The folder is the only memory this project
 has; an untracked folder cannot be diffed, reverted, or trusted. Leave the tree in a state Andy can

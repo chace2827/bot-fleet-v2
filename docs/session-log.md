@@ -9195,3 +9195,50 @@ weekdays, push notification on. First run 2026-08-18.
    laptop is shut.
 2. **DST.** `30 11` UTC is 07:30 ET only while ET is UTC-4. When ET returns to UTC-5 in November
    the job fires at 06:30 ET until the cron is moved to `30 12`.
+
+## 2026-08-17 (evening) — GIT-RULE SCOPE AMENDMENT + five-file propagation sweep
+
+**`R-2026-08-17-GIT-RULE-SCOPE`.** The prohibition binds **bridge sessions operating on the mounted
+tree**, where it stays **total — read-only commands included**. It does **not** bind git inside an
+agent's own cloud container or clone. **`CLAUDE.md` §9.1 step 3 — Andy runs every commit — is
+unchanged.** The two halves of the rule were being conflated; only the scope moved.
+
+**Why the read-only half was NOT loosened**, against a well-argued proposal to permit
+`rev-parse`/`log`/`show`/`cat-file`/`ls-files` on the mount:
+
+1. **The benefit is already available lock-free.** "Did the commit land?" was answered this session
+   by reading `.git/logs/HEAD` — a plain text file whose last line carries the new HEAD and the
+   commit subject. `.git/objects/pack/` is **empty** with **1,368 loose objects** (read on device
+   2026-08-17), so the zlib method still recovers any file at any commit. This also dissolves the
+   claimed internal inconsistency with the verification protocol: it never needed `git rev-parse`.
+2. **"Read-only" is a property of an invocation, not a command.** `git diff HEAD~1 HEAD` is safe;
+   bare `git diff` refreshes the index. `git stash list` is safe; `git stash` is banned outright.
+   `git describe --dirty` refreshes the index; `git describe` does not. The proposed rule requires
+   correct per-call classification, with a **silent** failure as the penalty for one mistake.
+3. **First-hand evidence from this session.** Claude ran `git status --porcelain` from the bridge
+   and stranded `.git/index.lock` — in hour one, knowing the rule, because it was bundled into a
+   compound call with `git log`. Not fatigue at hour six: convenience at hour one. A rule requiring
+   classification would have made that more likely, not less. Cleared by mv-sweep.
+
+**What did hold:** `_locktrash/sweep-5-6414` sat untracked in the tree across two commits and
+entered neither, because commits are staged **file-by-file, never `git add -A`.**
+
+**The sweep — 4 repo files. The other chat's list named 5 locations; a `grep` across the repo found
+the rule stated or referenced in 9 files. Classified before touching anything:**
+
+| file | treatment |
+|---|---|
+| `CLAUDE.md` §9.1 step 3 | **Scope clause added.** The authority was already half-scoped ("git operations *from this side*"); the clause makes it explicit and states that cloud clones are unrestricted |
+| `docs/state.md` | Dated amendment note appended to the standing-lesson row; **original text left standing** |
+| `docs/rules-catalog.md` | **One dated banner** above `## Root` rather than five row edits, so every `verbatim` quote stays untouched and independently checkable. Scopes rows **253, 1273, 1488, 1774, 1793**; row **122** (§9.1 step 3) untouched; rows **2040, 2046** identified as historical audit-method records, not standing rules |
+| `docs/day0-session-pack-2026-08-07.md` | Dated banner at the head, **original text standing everywhere** — this doc is a record of prompts that were executed (§5.2). Scopes §0.1 fact 1 at **861, 1173, 1590, 1892, 2604**, gate **A11** at **989**, and line **2694** |
+| `decision-card-2026-08-08.md`, `devin-queue.md`, `ledger-truncation-forensics-2026-08-17.md`, `r-edit-authorization-2026-08-05.md`, `sprint-2026-08-04.md` | **Not amended.** Each is a record of an executed session or a historical dispatch prompt stating what that session did. Amending them would rewrite history, not propagate a rule |
+
+⚠️ **Method note worth keeping: inserting a banner shifts every line number cited below it.** The
+first pass cited pre-insert line numbers and was wrong by exactly the banner's height — twice, since
+the correction itself changed the banner's height. Fixed by a final **pure in-line number
+substitution that preserves line count**, then spot-checking all 15 cited lines resolve to the right
+rows. **Cite line numbers only after the insert, and verify by `sed -n 'Np'`.**
+
+**Consequence:** the Reconciler task (`trig_01MoCzv46JZGah5Bu3v5Cd4C`, fires 07:30 ET) clones to its
+own cloud workspace and is now explicitly in-policy rather than relying on an unwritten reading.

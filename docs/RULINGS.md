@@ -2315,6 +2315,36 @@ source: >-
 unclear: false
 ```
 
+```yaml
+ruling_id: R-2026-08-17-GIT-RULE-SCOPE
+date: 2026-08-17
+scope: >-
+  Amends the scope of the git prohibition. It binds bridge sessions operating on the mounted tree,
+  where it stays total including read-only commands. It does not bind git inside an agent's own
+  cloud container or clone. CLAUDE.md section 9.1 step 3 (Andy runs every commit) is unchanged.
+verbatim: >-
+  Amend the plan: the prohibition applies to bridge sessions on mounted device paths. Git in a
+  cloud container/clone is unrestricted. Read-only plumbing on the mount stays prohibited -
+  .git/logs/HEAD and loose-object reads already cover it. Section 9.1 step 3 (Andy runs every
+  commit) untouched.
+verbatim_of: ruling_text
+owner: Andy
+status: Active
+applies_to: >-
+  CLAUDE.md section 9.1 step 3 (scope clause added; the rule itself unchanged); docs/state.md the
+  standing-lesson row; docs/rules-catalog.md rows 253, 1273, 1488, 1774, 1793 (banner, quotes left
+  verbatim); docs/day0-session-pack-2026-08-07.md section 0.1 standing fact 1 at lines 861, 1173,
+  1590, 1892, 2604, gate A11 at 989 and line 2694 (dated banner, original text standing); project
+  memory cowork-git-commit-trap; the Reconciler scheduled task, which clones to its own cloud
+  workspace and was created under this reading.
+superseded_by: none
+source: >-
+  Andy's ruling in the 2026-08-17 Cowork signing session
+  ("Scope to mounted paths only"), following a pros-and-cons review raised in a parallel chat.
+unclear: false
+```
+
+
 
 ```
 

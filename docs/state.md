@@ -1785,6 +1785,12 @@ grep. **No `git` run.**
   .git · .gitignore · .tmp.driveupload · CLAUDE.md · README.md · STATUS.md · dashboard.html ·
   data · docs · scripts`. ⚠️ **Standing lesson unchanged and still binding: do not run `git` from
   this side** — the bridge cannot unlink, so a stranded lock file needs Andy's hand to clear.
+  **[SCOPE AMENDED 2026-08-17 — `R-2026-08-17-GIT-RULE-SCOPE`. Original text above left standing.]**
+  The lesson binds **bridge sessions on the mounted tree**, where it remains total — read-only git
+  commands included. It does **not** bind git inside an agent's own cloud container or clone, which
+  has no mount and no lock to strand. Reconfirmed the hard way on 2026-08-17: a session ran
+  `git status` from the bridge and stranded `.git/index.lock` again, in its first hour, knowing the
+  rule. Cleared by mv-sweep.
   *(This row was itself a propagation miss: the cleanup happened and the state page was never
   told. Same class as everything else this sweep fixed — found only by looking at the filesystem
   rather than at the document describing it.)*
