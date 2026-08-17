@@ -26,12 +26,12 @@ code{background:#f0f0f3;padding:1px 4px;border-radius:4px;font-size:12px}
 <li>QQQ-IC-0DTE-Fortress</li>
 <li>QQQ-IC-0DTE-Fortress-NoPT50</li>
 <li>Tasty Condor</li></ul></div>
-<div class="sub">generated 2026-08-10 · PAPER · source: data/trades.csv + docs/backlog.md</div>
+<div class="sub">generated 2026-08-14 · PAPER · source: data/trades.csv + docs/backlog.md</div>
 <div>
-<div class="card"><span>Total P/L</span><b class="pos">$500</b></div>
-<div class="card"><span>Legs</span><b>4</b></div>
-<div class="card"><span>Bots</span><b>3</b></div>
-<div class="card"><span>Scalp P/L</span><b class="pos">$50</b></div>
+<div class="card"><span>Total P/L</span><b class="pos">$3,167</b></div>
+<div class="card"><span>Legs</span><b>34</b></div>
+<div class="card"><span>Bots</span><b>15</b></div>
+<div class="card"><span>Scalp P/L</span><b class="pos">$100</b></div>
 </div>
 <canvas id="ch"></canvas>
 <h2>Per-bot</h2>
@@ -40,7 +40,7 @@ code{background:#f0f0f3;padding:1px 4px;border-radius:4px;font-size:12px}
 <div class="sub" style="margin-top:6px">Trades = condors · Legs = OA position rows (≈2× trades for legged bots) · WR is per-condor</div>
 <h2>Backlog</h2><div id="bl"></div>
 <script>
-const rows=[{"bot": "60min-ORB-10W-Paper-v1", "proj": "OA-Mirror", "status": "ON", "trades": 1, "legs": 1, "pnl": -150, "wr": "0%", "fix": ""}, {"bot": "IC-SPX-FastPT25-S2", "proj": "IC", "status": "ON", "trades": 1, "legs": 1, "pnl": 50, "wr": "100%", "fix": ""}, {"bot": "IC-SPX-FastPT25-S2-130PM", "proj": "IC", "status": "ON", "trades": 1, "legs": 2, "pnl": 600, "wr": "100%", "fix": ""}], cum=[{"d": "2026-08-10", "c": 50}];
+const rows=[{"bot": "60min-ORB-10W-Paper-v1", "proj": "OA-Mirror", "status": "ON", "trades": 3, "legs": 3, "pnl": -50, "wr": "67%", "fix": ""}, {"bot": "GF-QQQ-IC-Canary", "proj": "IC", "status": "ON", "trades": 1, "legs": 1, "pnl": 1, "wr": "100%", "fix": ""}, {"bot": "GF-QQQ-IC-PT50", "proj": "IC", "status": "ON", "trades": 1, "legs": 1, "pnl": 4, "wr": "100%", "fix": ""}, {"bot": "GF-QQQ-IC-Trail", "proj": "IC", "status": "ON", "trades": 1, "legs": 1, "pnl": 6, "wr": "100%", "fix": ""}, {"bot": "GF-QQQ-IC-Touch0", "proj": "IC", "status": "ON", "trades": 1, "legs": 1, "pnl": 6, "wr": "100%", "fix": ""}, {"bot": "GF-QQQ-IC-SL100", "proj": "IC", "status": "ON", "trades": 1, "legs": 1, "pnl": 6, "wr": "100%", "fix": ""}, {"bot": "GF-QQQ-IC-SL200", "proj": "IC", "status": "ON", "trades": 1, "legs": 1, "pnl": 6, "wr": "100%", "fix": ""}, {"bot": "GF-QQQ-IC-Ride", "proj": "IC", "status": "ON", "trades": 1, "legs": 1, "pnl": 6, "wr": "100%", "fix": ""}, {"bot": "GF-QQQ-IC-Ride-Delta", "proj": "IC", "status": "ON", "trades": 2, "legs": 2, "pnl": 12, "wr": "100%", "fix": ""}, {"bot": "Trendy-Paper-v1", "proj": "OA-Mirror", "status": "ON", "trades": 1, "legs": 1, "pnl": 40, "wr": "100%", "fix": ""}, {"bot": "3DTE $140-$350", "proj": "OA-Mirror", "status": "ON", "trades": 1, "legs": 1, "pnl": 45, "wr": "100%", "fix": ""}, {"bot": "DIR-SPX-CallVIXdrop", "proj": "Directional", "status": "ON", "trades": 1, "legs": 1, "pnl": 65, "wr": "100%", "fix": ""}, {"bot": "IC-SPX-FastPT25-S2", "proj": "IC", "status": "ON", "trades": 5, "legs": 5, "pnl": 100, "wr": "40%", "fix": ""}, {"bot": "Nigiri-Paper-v1", "proj": "OA-Mirror", "status": "ON", "trades": 4, "legs": 4, "pnl": 120, "wr": "75%", "fix": ""}, {"bot": "IC-SPX-FastPT25-S2-130PM", "proj": "IC", "status": "ON", "trades": 5, "legs": 10, "pnl": 2800, "wr": "100%", "fix": ""}], cum=[{"d": "2026-08-10", "c": 50}, {"d": "2026-08-11", "c": 100}, {"d": "2026-08-12", "c": 100}, {"d": "2026-08-13", "c": 100}, {"d": "2026-08-14", "c": 100}];
 const tb=document.querySelector('#t tbody');
 rows.sort((a,b)=>a.pnl-b.pnl).forEach(r=>{
  const tr=document.createElement('tr');
