@@ -41,6 +41,14 @@ def fl(x):
         return None
 
 
+class TradierError(Exception):
+    """Raised by _get() so build() can choose the right failure path."""
+    def __init__(self, mode, detail=None):
+        self.mode = mode
+        self.detail = detail or ""
+        super().__init__(f"{mode}: {self.detail}")
+
+
 # ----------------------------------------------------------------------------
 # token / env
 # ----------------------------------------------------------------------------
@@ -83,34 +91,52 @@ def today_iso():
 
 
 def _get(base, path, params, token):
+    """Call the Tradier v1 endpoint. Never returns None for a failure.
+
+    Raises TradierError with one of four modes:
+      - token-absent     : no token was supplied
+      - token-rejected   : HTTP 401/403 (present credentials not accepted)
+      - feed-down        : other HTTP status, network error, or empty response
+      - parse-error      : response was not valid JSON
+    """
+    if not token:
+        raise TradierError("token-absent", "TRADIER_TOKEN not set")
     url = f"{base.rstrip('/')}/v1/{path}?{urllib.parse.urlencode(params)}"
     req = urllib.request.Request(url, headers={
         "Authorization": f"Bearer {token}", "Accept": "application/json"})
     try:
         with urllib.request.urlopen(req, timeout=15) as r:
-            return json.loads(r.read().decode())
-    except (urllib.error.URLError, urllib.error.HTTPError, ValueError, OSError):
-        return None
+            body = r.read().decode()
+    except urllib.error.HTTPError as e:
+        if e.code in (401, 403):
+            raise TradierError("token-rejected", f"HTTP {e.code}") from e
+        raise TradierError("feed-down", f"HTTP {e.code}") from e
+    except (urllib.error.URLError, OSError) as e:
+        raise TradierError("feed-down", str(e)) from e
+    try:
+        return json.loads(body)
+    except ValueError as e:
+        raise TradierError("parse-error", str(e)) from e
 
 
 def tradier_history(symbol, day, token, base):
     """Daily OHLC for `day` + the PRIOR session's close, in one call.
-    Returns {open,high,low,close,prior_close} or None."""
+    Returns {open,high,low,close,prior_close} or raises TradierError."""
     start = (datetime.date.fromisoformat(day) - datetime.timedelta(days=10)).isoformat()
     data = _get(base, "markets/history",
                 {"symbol": symbol, "interval": "daily", "start": start, "end": day}, token)
-    h = (data or {}).get("history")
+    h = data.get("history")
     if not h or h in ("null", None):
-        return None
+        raise TradierError("feed-down", "history returned no data")
     days = h.get("day")
     days = days if isinstance(days, list) else [days] if isinstance(days, dict) else []
     days = [d for d in days if isinstance(d, dict) and d.get("date")]
     if not days:
-        return None
+        raise TradierError("feed-down", "history returned no days")
     days.sort(key=lambda d: d["date"])
     today = next((d for d in days if d["date"] == day), None)
     if not today:
-        return None
+        raise TradierError("feed-down", f"history missing {day}")
     priors = [d for d in days if d["date"] < day]
     out = {k: fl(today.get(k)) for k in ("open", "high", "low", "close")}
     out["prior_close"] = fl(priors[-1].get("close")) if priors else None
@@ -118,13 +144,13 @@ def tradier_history(symbol, day, token, base):
 
 
 def tradier_timesales(symbol, day, token, base, interval="5min"):
-    """Intraday session path for `day`. Returns [{t:'HH:MM', p, h, l}, ...] or []."""
+    """Intraday session path for `day`. Returns [{t:'HH:MM', p, h, l}, ...] or raises TradierError."""
     data = _get(base, "markets/timesales",
                 {"symbol": symbol, "interval": interval,
                  "start": f"{day} 09:30", "end": f"{day} 16:00"}, token)
-    s = (data or {}).get("series")
+    s = data.get("series")
     if not s or s in ("null", None):
-        return []
+        raise TradierError("feed-down", "timesales returned no data")
     bars = s.get("data")
     bars = bars if isinstance(bars, list) else [bars] if isinstance(bars, dict) else []
     out = []
@@ -319,15 +345,26 @@ def build(day):
         src = None
         o = h = l = c = pc = None
         series = []
+        rec_reason = None
         tsym = TRADIER_SYMBOL.get(sym, sym)
         if token:
-            rec = tradier_history(tsym, day, token, base)
-            if rec and rec.get("close") is not None:
-                o, h, l, c = rec["open"], rec["high"], rec["low"], rec["close"]
-                pc = rec.get("prior_close")
-                src = "tradier"
-                if sym != "VIX":
-                    series = tradier_timesales(tsym, day, token, base)
+            try:
+                rec = tradier_history(tsym, day, token, base)
+                if rec and rec.get("close") is not None:
+                    o, h, l, c = rec["open"], rec["high"], rec["low"], rec["close"]
+                    pc = rec.get("prior_close")
+                    src = "tradier"
+                    if sym != "VIX":
+                        series = tradier_timesales(tsym, day, token, base)
+            except TradierError as e:
+                if e.mode == "token-rejected":
+                    print(f"tape.py: 🔴 TRADIER TOKEN REJECTED ({e.detail}). "
+                          "Do not re-issue or rotate the token; resolve the credentials before re-running.",
+                          file=sys.stderr)
+                    sys.exit(3)
+                rec_reason = e.mode
+        else:
+            rec_reason = "token-absent"
         if src is None and sym != "VIX":
             o, c = prints_for(trades, sym, day)
             bl, bh = breach_lows_highs(trades, sym, day)
@@ -345,6 +382,8 @@ def build(day):
         rec = {"symbol": sym, "source": src, "prior_close": pc,
                "open": o, "high": h, "low": l, "close": c,
                "series": series, "series_interval": "5min" if series else None}
+        if src == "reconstructed":
+            rec["reconstructed_reason"] = rec_reason or "unknown"
         if sym != "VIX":
             reg = regime(o, h, l, c, pc, has_path=has_path)
             if has_path:                          # real path → true directionality
@@ -365,15 +404,19 @@ def build(day):
         if a is not None and b is not None:
             div = {"spx_full_pct": a, "qqq_full_pct": b, "spread_pct": round(a - b, 2)}
 
+    recon_reasons = sorted({t.get("reconstructed_reason")
+                            for t in tapes.values() if t.get("source") == "reconstructed"})
     out = {"date": day, "generated": now_iso(),
            "any_reconstructed": any(t["source"] == "reconstructed" for t in tapes.values()),
+           "reconstructed_reasons": recon_reasons,
            "underlyings": tapes, "divergence": div}
     os.makedirs(BRIEF, exist_ok=True)
     path = os.path.join(BRIEF, f"{day}_tape.json")
     json.dump(out, open(path, "w"), indent=2)
 
     srcs = ", ".join(f"{s}:{t['source']}" for s, t in tapes.items())
-    note = "  ⚠ some tapes RECONSTRUCTED (no Tradier token / feed down)" if out["any_reconstructed"] else ""
+    note = (f"  ⚠ some tapes RECONSTRUCTED ({', '.join(recon_reasons)})"
+            if recon_reasons else "")
     print(f"tape.py: wrote {os.path.relpath(path, ROOT)} | {srcs}{note}")
     return out
 
