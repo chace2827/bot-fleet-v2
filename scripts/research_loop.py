@@ -795,6 +795,35 @@ def _write_log(path, cfg_status, records, unknown_bots, nightly, suppressed,
 EXPORT = os.path.join(DATA, "captures", "oa_export_positions_2026-07-30.csv")
 LEDGER = os.path.join(DATA, "archive", "trades.csv")
 
+# The only non-comment lines in scripts/daily.sh that may contain the literal
+# string "research_loop" are the skip-list block. They must match the file text
+# exactly. Any other occurrence is a wiring violation.
+DAILY_SH_SKIP_LIST_LINES = {
+    'echo "== SKIPPED (not wired to daily loop) ==',
+    'for s in research_loop comparative_machinery a_series intraday_read; do',
+    '  echo "  $s: SKIPPED — standalone tooling, see scripts/$s.py"',
+    'done',
+}
+
+
+def _daily_sh_wired(daily_path):
+    """Return True if daily_path contains a non-comment, non-skip-list line with
+    the literal substring "research_loop"."""
+    if not os.path.exists(daily_path):
+        return False
+    with open(daily_path, encoding="utf-8") as f:
+        for line in f:
+            text = line.rstrip("\n")
+            stripped = text.strip()
+            if not stripped or stripped.startswith("#"):
+                continue
+            if text in DAILY_SH_SKIP_LIST_LINES:
+                continue
+            if "research_loop" in text:
+                return True
+    return False
+
+
 def _load_norm(path):
     with open(path, newline="") as f:
         rd = csv.DictReader(f)
@@ -1166,13 +1195,7 @@ def validate():
 
     # ---------- the DO-NOT-WIRE mechanical guard (§4.2 item 6, Gate A) ----------
     daily = os.path.join(ROOT, "scripts", "daily.sh")
-    content = open(daily).read()
-    wired = os.path.exists(daily) and any(
-        "research_loop" in line and "python3" in line
-        for line in content.splitlines()
-        if not line.strip().startswith("#") and not line.strip().startswith("echo")
-    )
-    check("DO-NOT-WIRE: research_loop.py is absent from scripts/daily.sh", wired, False)
+    check("DO-NOT-WIRE: research_loop.py is absent from scripts/daily.sh", _daily_sh_wired(daily), False)
 
     # ---------- fixture self-audit: verdict-string-only share < 15% (§7 Gate A) ----------
     pct = round(100 * string_only / total, 1)
@@ -1266,6 +1289,40 @@ def _e_tests(check):
     check("E-2 29 closed positions -> suppressed, emits nothing", emits(29, 0), False)
     check("E-3 30 closed positions -> emits", emits(30, 0), True)
     check("E-4 29 closed + 5 expired -> suppressed (expired don't count)", emits(29, 5), False)
+
+    # E-5: DO-NOT-WIRE guard must flag any non-comment line containing "research_loop"
+    # except the exact skip-list lines in scripts/daily.sh.
+    def tmp_daily(content):
+        fd, p = tempfile.mkstemp(suffix=".sh"); os.close(fd)
+        with open(p, "w", encoding="utf-8") as f:
+            f.write(content)
+        return p
+
+    skip_block = '\n'.join([
+        'echo "== SKIPPED (not wired to daily loop) ==',
+        'for s in research_loop comparative_machinery a_series intraday_read; do',
+        '  echo "  $s: SKIPPED — standalone tooling, see scripts/$s.py"',
+        'done',
+    ]) + '\n'
+
+    p = tmp_daily(skip_block)
+    check("E-5 DO-NOT-WIRE: skip-list block is not wired", _daily_sh_wired(p), False)
+    os.remove(p)
+
+    # bypass: echo prefix does not hide a real invocation
+    p = tmp_daily(skip_block + 'echo "x" && python3 scripts/research_loop.py\n')
+    check("E-5a DO-NOT-WIRE: echo ... && python3 research_loop.py is wired", _daily_sh_wired(p), True)
+    os.remove(p)
+
+    # bypass: any python interpreter, not just python3
+    p = tmp_daily(skip_block + 'python scripts/research_loop.py\n')
+    check("E-5b DO-NOT-WIRE: python research_loop.py is wired", _daily_sh_wired(p), True)
+    os.remove(p)
+
+    # bypass: uv run python
+    p = tmp_daily(skip_block + 'uv run python scripts/research_loop.py\n')
+    check("E-5c DO-NOT-WIRE: uv run python research_loop.py is wired", _daily_sh_wired(p), True)
+    os.remove(p)
 
 
 if __name__ == "__main__":
