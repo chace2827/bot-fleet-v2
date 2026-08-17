@@ -2188,6 +2188,107 @@ superseded_by: none
 source: Andy's message to the Cowork session, 2026-08-17, quoted verbatim above.
 unclear: false
 ```
+
+```yaml
+ruling_id: R-2026-08-17-CHARTER-SIGN
+date: 2026-08-17
+scope: >-
+  Signs docs/agent-charter.md at Version 2 (tracker T-19), with one amendment made at signature:
+  guard, detector-predicate and refusal-contract changes are moved into Class C.
+verbatim: >-
+  Sign the charter as written, plus one added Class C line: any change to a guard, detector
+  predicate, or refusal contract must be named as a guard change in the PR description and
+  pre-authorized by Andy - in any file, including otherwise-Class-A files. Closes the gap that let
+  three unilateral guard changes through today.
+verbatim_of: ruling_text
+owner: Andy
+status: Active
+applies_to: >-
+  docs/agent-charter.md (header Version 2, section 2 Class A first bullet, section 4 Class C,
+  section 8 enforcement table); every agent dispatch prompt; scripts/build_ledger.py and
+  scripts/execution_audit.py as guard-bearing files.
+superseded_by: none
+source: >-
+  Andy's signature in the 2026-08-17 Cowork signing session, question 1 of 4
+  ("Sign + guard amendment"), recorded in docs/agent-charter.md section 0 header.
+unclear: false
+```
+
+```yaml
+ruling_id: R-2026-08-17-CHARTER-IRREVERSIBLES
+date: 2026-08-17
+scope: >-
+  Rules the two flagged sub-classes in agent-charter section 3 (tracker T-20) into Class C:
+  deleting a bot or automation, and increasing capital allocation. Allocation decreases stay
+  Class B.
+verbatim: >-
+  Amend section 3: deleting a bot or automation, and increasing capital allocation, move to
+  Class C - Andy's signature required. Allocation decreases stay Class B (open, read-back
+  verified), since cutting size is the safety direction.
+verbatim_of: ruling_text
+owner: Andy
+status: Active
+applies_to: >-
+  docs/agent-charter.md sections 3 and 4; every OA-writing session; the OA account roster including
+  the three -ARCHIVED- renamed bots still present in /bots.
+superseded_by: none
+source: >-
+  Andy's signature in the 2026-08-17 Cowork signing session, question 2 of 4
+  ("Both signature-only, decreases open").
+unclear: false
+```
+
+```yaml
+ruling_id: R-2026-08-17-MECHANICS-CONTRACT
+date: 2026-08-17
+scope: >-
+  Signs docs/roster-mechanics-ruling.md section 2 as the mechanics contract (tracker T-02) with two
+  conditional clauses. Sections 1, 3, 4 and 5 are not signed.
+verbatim: >-
+  Sign section 2.1-2.3, 2.6-2.8 now - wakes the 5 Tier-C rules and config grading. Section 2.4
+  fixed-panel and 2.5 roster-authority signed CONDITIONAL: they take force only after a
+  reconciliation PR re-records the real execution_audit.py/build_ledger.py hashes and a fresh /bots
+  capture. Section 3's 8 decisions plus the oa_id map stay unsigned follow-ups.
+verbatim_of: ruling_text
+owner: Andy
+status: Active
+applies_to: >-
+  docs/roster-mechanics-ruling.md section 2 (2.4 and 2.5 conditional); scripts/execution_audit.py
+  TIERC_RULE_COLUMNS; scripts/daily_brief.py config grading; data/bots_config_v2.csv;
+  docs/daily-loop-spec.md lines 36 and 152 (stale frozen hash).
+superseded_by: none
+source: >-
+  Andy's signature in the 2026-08-17 Cowork signing session, question 3 of 4
+  ("Sign section 2 with carve-outs"), recorded in docs/roster-mechanics-ruling.md section 0.
+unclear: >-
+  [UNCLEAR] The reconciliation PR that unblocks 2.4 and 2.5 is owed but unscheduled; until it lands,
+  the fixed-panel freeze and the named roster authority are signed but NOT in force.
+```
+
+```yaml
+ruling_id: R-2026-08-17-REPO-ADMIN
+date: 2026-08-17
+scope: >-
+  GitHub admin on the bot-fleet-v2 repository is held by Andy alone. No agent token ever carries
+  admin. Retires the gh pr merge --admin bypass.
+verbatim: >-
+  No agent token ever gets admin. Agent tokens get write: push branches, open PRs, merge via
+  auto-merge when phase0 is green. --admin bypasses are retired - an agent that needs one has hit a
+  real gate and must surface it to you.
+verbatim_of: ruling_text
+owner: Andy
+status: Active
+applies_to: >-
+  GitHub repo settings for bot-fleet-v2 (branch protection on master, required approvals, required
+  check phase0, no-force-push, auto-merge); every agent dispatch prompt's merge instruction;
+  docs/agent-charter.md section 8.
+superseded_by: none
+source: >-
+  Andy's signature in the 2026-08-17 Cowork signing session, question 4 of 4
+  ("Andy alone, agents capped at write").
+unclear: false
+```
+
 ```
 
 

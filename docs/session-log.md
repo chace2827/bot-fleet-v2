@@ -9098,3 +9098,54 @@ Ride was not richer than its siblings; there were simply two copies of one card 
 **FOR THE DEVIN QUEUE:** a card generator, so sibling cards are emitted from ONE template rather
 than hand-copied. Today produced at least three divergent card shapes across eight sibling arms,
 plus one card that described the wrong bot for its whole life. Hand-copying is the root cause.
+
+## 2026-08-17 (evening) — SIGNING PASS: charter T-19, irreversibles T-20, mechanics T-02, repo admin
+
+Orchestrated Cowork session. Phase 1 of five. Four signatures taken one at a time, each with the
+failure modes stated before the question. Nothing else was written.
+
+**Signed, all four:**
+
+1. **`R-2026-08-17-CHARTER-SIGN` (T-19)** — `docs/agent-charter.md` signed at **Version 2** with one
+   amendment made at signature: **guard, detector-predicate and refusal-contract changes move to
+   Class C** in any file, including otherwise-Class-A files, must be **named as a guard change in
+   the PR description**, and must be pre-authorized. The charter as drafted put guards squarely in
+   Class A (`build_ledger.py` is a "loader", `execution_audit.py` an "engine"), which contradicted
+   the dispatch's own standing rule. Three unilateral guard changes on 2026-08-17 are the evidence;
+   each was plausibly correct, which is the whole danger. §2's Class A bullet now carries the
+   carve-out inline so §2 cannot be read alone and mislead.
+2. **`R-2026-08-17-CHARTER-IRREVERSIBLES` (T-20)** — §3's flagged sub-classes ruled **into Class C**:
+   deleting a bot or automation, and **increasing** capital allocation. **Allocation decreases stay
+   Class B** — cutting size is the safety direction and does not wait on a signature.
+3. **`R-2026-08-17-MECHANICS-CONTRACT` (T-02)** — `docs/roster-mechanics-ruling.md` §2 signed with
+   two **conditional** clauses, recorded in a new §0 signature block. §2.1–2.3, §2.6–2.8 in force.
+   **§2.4 (fixed panel) and §2.5 (roster authority) signed but NOT in force** until a reconciliation
+   PR lands. §1, §3, §4, §5 unsigned.
+4. **`R-2026-08-17-REPO-ADMIN`** — GitHub admin held by Andy alone; no agent token ever carries it;
+   `gh pr merge --admin` bypasses retired in favour of required-approvals 0 + required `phase0` +
+   auto-merge.
+
+**Two claims checked against the files rather than repeated:**
+
+- The brief's "~20 skipped execution-audit rules" is not what the code says.
+  `scripts/execution_audit.py` defines **five** config-keyed Tier-C rules (`TIERC_RULE_COLUMNS`,
+  lines 678–685): `PT_DECLARED_NOT_TAKEN`, `PT_NEVER_FIRES`, `TIME_EXIT_MISSED`,
+  `REMOVED_EXIT_FIRED`, `BACKSTOP_CAUGHT_IT`. They are SKIPPED BY NAME **per bot**, so ~20 is a
+  plausible count of skip lines across bots, not of distinct rules. Five is the number that matters.
+- **Two recorded hashes in the mechanics contract are stale, read on device 2026-08-17.**
+  `docs/daily-loop-spec.md` lines 36 and 152 declare `scripts/execution_audit.py` frozen at v1.0.0
+  sha `67a537977c5d0896`; the file hashes
+  `fdc43d0dcb7275560069048e62d897f528d9620b5a6be87de7a410fae1851e2d`. §2.1 records
+  `scripts/build_ledger.py` at `9ec21da9…`; it now hashes
+  `e12c9ef18969dd32183a2c3c06bd1b11c01be3b36471fd51a544c59c94d40c20` after the G-2/G-3 guards
+  landed. **A freeze rule cannot take force against a hash that does not match the file it
+  freezes** — hence the conditional signature on §2.4, not a refusal and not a rubber stamp.
+
+**`docs/RULINGS.md` tail deliberately untouched.** `R-2026-08-17-RULINGS-TAIL-CLEANUP` forbids the
+cleanup in the signing session and forbids bundling it with the signing commit. The four new records
+were **inserted above** the garbage region, which is byte-identical (verified). Register re-parsed
+after the write: **126 blocks, 126 unique ids, 0 field mismatches, 0 YAML failures.**
+
+**Owed, named and unsigned:** a signed `oa_id` map (§2.1 joins on exact `botName`, which breaks on
+rename — and three `-ARCHIVED-` renamed bots are in `/bots` now); the reconciliation PR that
+unblocks §2.4/§2.5; §3's eight open decisions.

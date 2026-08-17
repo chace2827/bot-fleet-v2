@@ -4,6 +4,38 @@
 
 ---
 
+## 0. SIGNATURE — 2026-08-17
+
+**Signed:** Andy — 2026-08-17. Ruling `R-2026-08-17-MECHANICS-CONTRACT` in `docs/RULINGS.md`.
+**Scope of the signature — §2 with two conditional clauses. §1, §3, §4 and §5 are NOT signed.**
+
+| section | state on signature |
+|---|---|
+| §2.1 join keys and data lineage | **SIGNED and in force** — with the recorded file hashes acknowledged stale (see below) |
+| §2.2 current `bots_config_v2.csv` schema | **SIGNED and in force** |
+| §2.3 intended template schema + three-state `value` / `none` / `(blank)` semantics | **SIGNED and in force.** This is the protection against a `(blank)` being graded as `none`; a rule missing its column is SKIPPED BY NAME, never passed and never failed |
+| §2.4 versioned fixed-panel rule | **SIGNED CONDITIONAL — not yet in force.** Takes force only when a reconciliation PR re-records the real frozen hashes. `docs/daily-loop-spec.md` (lines 36, 152) declares `scripts/execution_audit.py` frozen at v1.0.0 sha `67a537977c5d0896`; the file on disk hashes `fdc43d0dcb7275560069048e62d897f528d9620b5a6be87de7a410fae1851e2d` (read on device 2026-08-17). §2.1's `scripts/build_ledger.py` hash `9ec21da9…` is likewise stale — the file now hashes `e12c9ef18969dd32183a2c3c06bd1b11c01be3b36471fd51a544c59c94d40c20` after the G-2/G-3 guards landed. A freeze rule cannot take force against a hash that does not match the file it freezes |
+| §2.5 roster authority rule | **SIGNED CONDITIONAL — not yet in force.** The rule (roster is proven by an OA `/bots` capture, never by `data/bots_meta.csv`) is signed; the *named* authority — `data/captures/2026-08-09-s2b/partB-…` — is stale, predating INC-01's reopen, PR-23's retirement and the 2026-08-17 GF delta work. Takes force on the next fresh `/bots` capture, which becomes the authority |
+| §2.6 pre-registration IDs and OA tags | **SIGNED and in force** |
+| §2.7 data flow contract | **SIGNED and in force** — with the standing note that its pipeline description predates the G-2 monotonicity guard and G-3 fixture/live root separation |
+| §2.8 mirror funding baseline | **SIGNED and in force** |
+
+**Named follow-up builds, unsigned and owed:**
+
+1. **A signed `oa_id` map.** §2.1 joins the export to the ledger on exact `botName` string. That join
+   breaks on any rename, and three `-ARCHIVED-`-renamed bots are in `/bots` now (§1.3).
+2. The reconciliation PR that unblocks §2.4 and §2.5.
+3. §3's eight open decisions and §4's missing evidence — untouched by this signature.
+
+**What the signature turns on:** the five config-keyed Tier-C rules in `scripts/execution_audit.py`
+(`TIERC_RULE_COLUMNS`, lines 678–685: `PT_DECLARED_NOT_TAKEN`, `PT_NEVER_FIRES`,
+`TIME_EXIT_MISSED`, `REMOVED_EXIT_FIRED`, `BACKSTOP_CAUGHT_IT`) stop being blocked on the schema,
+and `daily_brief` may grade config instead of reporting CONFIG-BLIND. They will still SKIP BY NAME
+for every bot with no row in `data/bots_config_v2.csv` — which is currently every bot except the 7
+greenfield arms. A skip is a reported blind spot, not a pass.
+
+---
+
 ## 1. Roster Facts
 
 ### 1.1 Roster authority

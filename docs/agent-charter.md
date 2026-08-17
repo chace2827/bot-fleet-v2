@@ -1,6 +1,10 @@
 # Agent Charter
 
-**Signed:** _______________ (Andy)  ·  **Amended by:** signature only  ·  **Version:** 1
+**Signed:** Andy — 2026-08-17  ·  **Amended by:** signature only  ·  **Version:** 2
+
+*Signed at v2 with two amendments made at signature: §3's flagged sub-classes are ruled into Class C,
+and §4 gains the guard-change line. Rulings `R-2026-08-17-CHARTER-SIGN` and
+`R-2026-08-17-CHARTER-IRREVERSIBLES` in `docs/RULINGS.md`.*
 
 This file is the single answer to *who may do what*. It carries no figures and no dates.
 Status cells point at sources; they never quote numbers.
@@ -35,7 +39,8 @@ protection aren't protected by who holds the keyboard.
 
 Any agent — Cowork, Devin, subagents — may do these directly and merge them:
 
-- Parsers, loaders, engines, tests, fixtures, migrations, CI, schedulers
+- Parsers, loaders, engines, tests, fixtures, migrations, CI, schedulers — **except any change to a
+  guard, detector predicate or refusal contract, which is Class C (§4)**
 - Any doc edit, including specs, `CLAUDE.md`, and the pre-registration ledger's **non-evidence**
   fields (typos, wording, structure, cross-references, archive moves)
 - **Applying a signed ruling everywhere it lands.** Once Andy signs, propagation is mechanical and
@@ -66,10 +71,11 @@ and no other system will tell you the edit missed.
 An unverified write is not a faster write. It is an account in an unknown state, which is the
 condition that ended v1.
 
-⚠️ **Two sub-classes are flagged for Andy to include or strike on signature.** Both are the only
-OA actions another write cannot reverse: **(a) deleting a bot or automation**, and **(b) increasing
-capital allocation.** Default in v1 of this charter: *agents may do both under Class B rules.*
-Strike this paragraph to leave them open, or amend to require signature.
+**RULED AT SIGNATURE, 2026-08-17 — these two are Class C, not Class B.** The only OA actions another
+write cannot reverse are **(a) deleting a bot or automation** and **(b) increasing capital
+allocation.** Both require Andy's signature; they are listed in §4. **Allocation *decreases* remain
+Class B** — cutting size is the safety direction and does not wait on a signature.
+Ruling `R-2026-08-17-CHARTER-IRREVERSIBLES`.
 
 ## 4. Class C — Signed. The short list.
 
@@ -80,6 +86,13 @@ Only these need Andy's signature, and the reason is comparability, not safety:
 - **Kill criteria and thresholds**, including any change to what counts as evidence
 - **Go-live and sizing**
 - **Force-push or history rewrite** — the record's value is that it is verifiable back to Day-0
+- **Irreversible OA actions**: deleting a bot or automation, and **increasing** capital allocation.
+  Allocation decreases stay Class B. *(Ruled at signature 2026-08-17 — see §3.)*
+- **Any change to a guard, detector predicate, or refusal contract** — in any file, including files
+  that are otherwise Class A (`scripts/build_ledger.py`, `scripts/execution_audit.py`, CI checks).
+  It must be **named as a guard change in the PR description** and pre-authorized by Andy.
+  Plausible correctness is not authorization: three unilateral guard changes on 2026-08-17 were each
+  plausibly correct. *(Ruled at signature 2026-08-17.)*
 
 Everything not on this list is Class A or B. If something is unclear, it is Class A.
 
@@ -141,6 +154,8 @@ Roles per `AI Agent Stack.md` §6. Status points at its source; no figures here.
 | Green CI before merge | **Mechanical** — branch protection, required check |
 | No force-push to master | **Mechanical** |
 | Class C needs a signature | **Honor system.** No CI can detect intent. Deliberate. |
+| Guard changes named in the PR | **Honor system + the PR description.** A guard change merged without being named is a charter violation on its face, reviewable after the fact in the diff |
+| Repo admin held by Andy alone | **Mechanical** — no agent token carries admin; `--admin` merge bypasses are retired (`R-2026-08-17-REPO-ADMIN`) |
 | OA write verification | **Honor system + the artifact.** A write with no recorded read-back is invalid on its face |
 | Routing | **Honor system.** It's a tiebreaker, not a wall |
 
