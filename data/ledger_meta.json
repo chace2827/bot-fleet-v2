@@ -1,17 +1,17 @@
 {
   "ledger_start": "2026-08-10",
   "ledger_start_source": "the LEDGER_START constant in build_ledger.py",
-  "source_export": "2026-08-14.csv",
+  "source_export": "2026-08-17.csv",
   "counts": {
-    "export_rows": 1420,
-    "post_cutover": 34,
+    "export_rows": 1431,
+    "post_cutover": 45,
     "straddler": 0,
     "pre_cutover": 1386,
     "ops_rows": 0
   },
-  "n_trades_condors": 29,
+  "n_trades_condors": 39,
   "n_bots": 15,
-  "total_pnl": 3167.0,
+  "total_pnl": 3777.0,
   "ops_bots": [],
   "ops_rows": 0,
   "note": "",
