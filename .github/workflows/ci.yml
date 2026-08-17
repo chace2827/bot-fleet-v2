@@ -56,7 +56,10 @@ jobs:
                 data/brief/2026-08-10_tape.json STATUS.md dashboard.html /tmp/run1/
           # Second run
           scripts/daily.sh 2026-08-10
-          # Diff the idempotent outputs
+          # Diff the idempotent outputs.
+          # Heartbeat artifacts (artifacts/heartbeat/) are intentionally
+          # EXCLUDED from this comparison — they record the run, not the
+          # reproducible outputs, and are regenerated fresh each run.
           for f in data/trades.csv data/bots.csv data/straddlers.csv data/ledger_meta.json \
                    data/execution_audit_findings.csv data/execution_audit_findings_meta.json \
                    data/hedge_tournament.csv data/trade_window.csv \
