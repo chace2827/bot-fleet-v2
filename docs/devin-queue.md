@@ -75,9 +75,25 @@ decision-class one).
       evaluate. Owner: Devin.
 - [ ] **P2-4 — OA reads for missing fields.** Read-only, provenance recorded per cell, blank ≠ none.
       Owner: Devin, under §5 two-layer verification.
-- [ ] **P2-5 — unsigned-bot banner in `report.py`.** Ruling 1 of 2026-08-11 requires every report
-      stating the headline to say it comes from an unsigned bot. `grep -i unsigned scripts/report.py`
-      returns nothing. Owner: Devin.
+- [x] **P2-5 — unsigned-bot banner in `report.py`. DONE — verified 2026-08-17 on `f4f07e2`.**
+      Ruling `R-2026-08-11-PR-02-PR-04-STAY-ON` requires every report stating the headline to say it
+      comes from an unsigned bot. **It already did.** The banner renders at `scripts/report.py:436`
+      immediately before `## Headline`, and into the HTML dashboard at line 1086 — both surfaces.
+      Built by PR #12 (`ed53b53`), hardened by #16 (`108da28`). This item's own premise was stale:
+      `grep -ci unsigned scripts/report.py` returns **12**, not zero. A dispatch built on that premise
+      was written and refused in pre-flight; it would have added a second banner.
+      **Two real tasks remain, carried forward as P2-5a and P2-5b below.** Owner: Devin.
+- [ ] **P2-5a — the banner is a guard with no test.** `validate()` (`report.py:184`) builds fixtures for
+      `bots_meta.csv`, `bots.csv`, `trades.csv` and `ledger_meta.json` — **and no pre-registration
+      ledger** — so `_ledger_unsigned` is empty and the `if unsigned_bots:` branch is never exercised
+      by the self-test. Same shape as P1-4. Class A. Owner: Devin.
+- [ ] **P2-5b — 🔒 the banner can under-report silently.** `report.py:351` is an intersection:
+      `unsigned_bots = sorted(b for b in meta if b in _ledger_unsigned)`. A bot unsigned in the ledger
+      but absent from `data/bots_meta.csv` is dropped with **no warning** — and P1-1 records that roster
+      as the pre-cutover one, carrying none of the GF arms and none of the `PR-NN` registrations.
+      Verify with `python3 -c "import scripts.pre_registration_ledger as p; print(sorted(p.unsigned_from_ledger('docs/pre-registration-ledger.md')))"`
+      against the `bot` column of `data/bots_meta.csv`. A fix changes a detector predicate → **Class C**,
+      pre-authorisation required per charter §4. Owner: Andy rules, Devin applies.
 - [ ] **P2-6 — the eleven dangling citations.** `python3 scripts/check_refs.py`. Each needs a
       source-of-truth call (rewrite vs. drop the citation), so none are fixed unilaterally.
       Owner: Andy rules, Devin applies.

@@ -1866,7 +1866,7 @@ verbatim: >-
 verbatim_of: ruling_text
 owner: Andy
 status: Active
-applies_to: PR-02 and PR-04 (ON, unsigned); scripts/report.py (banner, queued); STATUS.md (generated); CLAUDE.md §5
+applies_to: PR-02 and PR-04 (ON, unsigned); scripts/report.py (banner APPLIED 2026-08-17 — md line 436, html line 1086; built PR #12 ed53b53, hardened #16 108da28); STATUS.md (generated); CLAUDE.md §5
 superseded_by: none
 source: docs/session-log.md — "2026-08-11 — ANDY'S RULINGS (6 items put, 6 ruled)", 1
 unclear: false
