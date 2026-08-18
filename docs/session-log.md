@@ -9554,3 +9554,51 @@ SAMPLE TARGET, REVIEW DATE, GATE EVAL DATE, MAX LOSS, SIZING TIER, CONFIG HASH, 
 **Verification:** `python3 -m py_compile scripts/*.py` clean;
 `python3 scripts/gen_notes_cards.py --selftest` clean; `python3 scripts/check_refs.py` invariants
 clean; `python3 scripts/pre_registration_ledger.py --selftest` clean.
+
+---
+
+## 2026-08-19 — Class A correction batch (freshness audit run #1 + run #2)
+
+**What this is.** Doc-wording corrections of premises falsified by the repository itself, plus one
+ruling registration. Class A per `agent-charter.md` §2 (doc edits, stale figures, applying a signed
+ruling). Changes no decision. Base `02ee43c`, Phase 0 CI green 3/3 (`phase0`, `selftests`,
+`oa-reader`) before branching. Every row re-verified at `02ee43c` — the `78b3195` audit pin was
+stale for `report.py` and `check_refs.py`.
+
+**Source.** Two fan-out freshness audits of the routing records, 2026-08-18. Run #1: 7 agents,
+425 deduped claims, 81 STALE. Run #2: 21 agents (3 blind replicates × 7 slices), union-of-claims
+recall, 856 distinct claims, 151 verified STALE, 22 verdict-splits. Only rows carrying unanimous
+(3/3) agreement, or first-hand re-verification at `02ee43c`, are applied here.
+
+**Applied — 11 corrections across 4 files:**
+- `docs/agent-charter.md` §7 — OA-Reader `Not built` → step (0) built (`scripts/oa_reader_parse.py`
+  724 lines + `.github/workflows/oa-reader.yml`, PR #32); Pipeline-Runner `no heartbeat` → heartbeat
+  built (`artifacts/heartbeat/2026-08-14.json`, `2026-08-17.json`; `heartbeat-check.yml`).
+- `docs/roles-and-ingredients.md` — header `PR #2, unmerged` → merged `c9de1e3`; row 1 blanket
+  `Not built.` → step (0) built with steps (a)-(c) still open, and `14 dated capture dirs, newest
+  2026-08-09-a12` → `13 … newest 2026-08-17-r3`; row 6 `check_refs.py itself is unmerged (PR #1)`
+  → merged `fdc0d3f`, runs in CI; row 7 `0.1.0-DRAFT` / `3 fatal defects` → `0.2.0-DRAFT`, D-6/D-7/D-8
+  fixed, `--validate` 66/66, and its Blocked-By cell brought into agreement with the corrected status.
+- `docs/devin-queue.md` — P0-1 → `[x] DONE` under `R-2026-08-19-P0-1-ACCEPTANCE`; P2-6
+  `the eleven dangling citations` → `the 24 dangling citations`, with the checker's own selftest
+  fixture named so the printed 25 and the real 24 stop disagreeing.
+- `docs/RULINGS.md` — registered `R-2026-08-19-P0-1-ACCEPTANCE` (Andy, Reading 1, 2026-08-19).
+
+**Settled by re-verification:** the P2-5 verdict-split (`grep -ci unsigned scripts/report.py`) is
+**12** at `02ee43c`; the run #2 agent that observed 15 was wrong.
+
+**Found while verifying, NOT fixed here.** `python3 scripts/check_refs.py` prints **25** dangling
+references at `02ee43c`, up from 24 at `f602866`. The 25th is
+`scripts/check_refs.py:263 -> docs/fixture.md` — the `--selftest` harness added by PR #34 writes a
+temp `docs/fixture.md`, and the path scanner reads that string literal out of its own source. A
+checker reporting its own test fixture as a dangling repo citation is a defect in the scanner, and
+fixing it touches a CI predicate → Class C. Named here, left for Andy.
+
+**Excluded by scope:** all 13 `docs/RULINGS.md` `applies_to` rows from audit slice 7 — that slice
+returned only 1 of 3 replicates (agents 7a and 7b both reported emitting rows and emitted none), so
+the findings are 1-deep and unconfirmed. Also excluded: the 22 verdict-splits, and the 3/3 rows not
+named in the batch scope (Propagator `Not built as a check`, row 10 Reconciler ×4, row 13 gate ×8).
+
+**Verification:** `python3 scripts/check_refs.py` invariants clean; `check_refs.py --selftest` 4/4;
+`python3 scripts/pre_registration_ledger.py --selftest` clean; `python3 -m py_compile scripts/*.py`
+clean. No code changed in this batch — docs only.

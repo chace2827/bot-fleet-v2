@@ -2501,3 +2501,29 @@ source: >-
   8d9c59b71858c97f43357595dd252d5bd4594a8ab20887da5cda120f64ccdf89, committed 0007d3e.
 unclear: false
 ```
+
+```yaml
+ruling_id: R-2026-08-19-P0-1-ACCEPTANCE
+date: 2026-08-19
+scope: >-
+  docs/devin-queue.md P0-1 (CI gate) — whether the merge gate as built satisfies the item's own
+  acceptance test, given that the item's wording named a "generated-timestamp normalizer" that the
+  delivered implementation does not use. Reading 1 of two put to Andy.
+verbatim: >-
+  Reading 1. ci.yml:65 and ci.yml:133 satisfy the P0-1 acceptance. The normalizer wording described
+  one possible implementation, not the requirement. P0-1 is DONE.
+verbatim_of: andy
+owner: Andy
+status: Active
+applies_to: >-
+  docs/devin-queue.md P0-1 (checkbox and body). The named surfaces are
+  .github/workflows/ci.yml:65 ("run daily.sh twice against the scratch root and diff outputs") and
+  .github/workflows/ci.yml:133 ("rerun-and-diff is hermetic under disabled network"). No CI file
+  changes under this ruling — it rules on what the existing gate already satisfies.
+superseded_by: none
+source: >-
+  Andy's ruling, 2026-08-19, on the P0-1 acceptance reading put during the Class A batch review.
+  Evidence: origin/master 02ee43c849e8743d80b3a3a2965e71bd5a77f250, Phase 0 CI green (phase0,
+  selftests, oa-reader all success); the two named steps read first-hand at that commit.
+unclear: false
+```
