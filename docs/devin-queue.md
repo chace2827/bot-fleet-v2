@@ -132,6 +132,9 @@ decision-class one).
       every banked day becomes uncomparable). Thursday backtest batch as parallel child sessions.
 - [ ] **P6 — Propagator as CI, not an agent.** Extend `check_refs.py` to assert that a figure stated
       in a doc matches the ledger. Depends on the lessons-archive ruling below.
+- [ ] **P7 — §2.4 freeze-hash phase0 check.** The §2.4 version-bump procedure is not CI-enforced —
+      a phase0 check comparing recorded freeze hashes to the files would have caught PR #44's miss;
+      designing that check is a new guard needing its own pre-auth. Owner: Devin.
 
 ## Blocked on a ruling
 
