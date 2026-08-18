@@ -311,6 +311,7 @@ SIGNED           2026-08-09 - ANDY - gate cleared at S2b, in-chat. Runbook Step 
                  A/B NOTE: PR-01, this entry's 11:00 partner, went ON at S2b the same sitting,
                  so the 11:00-vs-13:00 comparison starts with BOTH arms live - the one-armed
                  start flagged in PR-01's signature on 2026-08-09 no longer applies.
+                 RIDER DISCHARGED BY SUBSTITUTE 2026-08-18 per R-2026-08-18-PR02-DISCHARGE-PR04-REANCHOR; capture data/captures/2026-08-18-pr02pr04/01-PR-02-closed-positions-2026-08-18-042142.txt sha256 61c9fdae944b6569f5d7126f02973f21a47001e07fbe625cf1b7900fedae17d5; evidence 2026-08-10..2026-08-17 remains SIGNED != VERIFIED.
 ```
 
 ### `QQQ-IC-0DTE-Fortress` (clone; original archived) — the pilot bot
