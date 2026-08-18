@@ -207,6 +207,7 @@ run_stage "execution_audit" python3 "$SCRIPTS/execution_audit.py"
 run_stage "daily_brief" python3 "$SCRIPTS/daily_brief.py" "$DAY"
 run_stage "should_have_fired" python3 "$SCRIPTS/should_have_fired.py" \
   --data-dir "$FLEET_ROOT" \
+  --day "$DAY" \
   --output "$FLEET_ROOT/data/brief/${DAY}_p3_verdicts.tsv"
 run_stage "hedge_tournament" python3 "$SCRIPTS/hedge_tournament.py" "$DAY"
 run_stage "trade_window" python3 "$SCRIPTS/trade_window.py"

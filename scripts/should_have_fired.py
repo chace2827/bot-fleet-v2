@@ -75,18 +75,38 @@ def write_tsv(rows, path):
             w.writerow([r["date"], r["bot"], r["pr_id"], r["verdict"], r["reason"]])
 
 
-def build_report(data_dir, output_path, quiet=False):
-    """Core report builder.  data_dir is the repo/scratch root."""
+def build_report(data_dir, output_path, day=None, quiet=False):
+    """Core report builder.  data_dir is the repo/scratch root.
+
+    If day is set, only that date's tape is evaluated and the output file
+    contains that day only.  A missing tape is a loud non-zero exit.
+    If day is None, every tape is evaluated and the full-history path
+    produces exactly the same output it did before.
+    """
     brief_dir = os.path.join(data_dir, DATA_BRIEF)
     meta = load_on_bots(os.path.join(data_dir, DATA_META))
     gates = gp.load_bot_gates(os.path.join(data_dir, DATA_GATES))
     gates_by_bot = {r["bot"]: r for r in gates}
     fills = load_fills(os.path.join(data_dir, DATA_TRADES))
-    tapes = find_tapes(brief_dir)
+    all_tapes = find_tapes(brief_dir)
+
+    if day is not None:
+        tape_path = None
+        for d, p in all_tapes:
+            if d == day:
+                tape_path = p
+                break
+        if tape_path is None:
+            searched = os.path.join(brief_dir, f"{day}_tape.json")
+            print(f"F-5: missing tape for day {day}: {searched}", file=sys.stderr)
+            raise SystemExit(2)
+        selected_tapes = [(day, tape_path)]
+    else:
+        selected_tapes = all_tapes
 
     rows = []
     filled = []
-    for date, tape_path in tapes:
+    for date, tape_path in selected_tapes:
         tape = load_tape(tape_path)
         for bot in sorted(meta):
             if (bot, date) in fills:
@@ -287,6 +307,25 @@ def _run_selftest():
         output = os.path.join(scratch, "verdicts.tsv")
         rows = build_report(scratch, output, quiet=True)
 
+        ok = True
+
+        # Known-positive: full-history path must contain every fixture date.
+        all_dates = {r["date"] for r in rows}
+        if all_dates != {"2026-08-08", "2026-08-10", "2026-08-14"}:
+            print(f"SELFTEST FAIL: full-history path produced dates {all_dates}", file=sys.stderr)
+            ok = False
+
+        # Known-positive: --day must evaluate only that date and row count.
+        per_day_output = os.path.join(scratch, "verdicts_day.tsv")
+        per_day_rows = build_report(scratch, per_day_output, day="2026-08-14", quiet=True)
+        per_day_dates = {r["date"] for r in per_day_rows}
+        if per_day_dates != {"2026-08-14"}:
+            print(f"SELFTEST FAIL: --day 2026-08-14 produced dates {per_day_dates}", file=sys.stderr)
+            ok = False
+        if len(per_day_rows) != 19:
+            print(f"SELFTEST FAIL: --day 2026-08-14 expected 19 rows, got {len(per_day_rows)}", file=sys.stderr)
+            ok = False
+
         # Build lookup and assert one example per verdict class.
         by_key = {(r["date"], r["bot"]): r["verdict"] for r in rows}
 
@@ -297,7 +336,6 @@ def _run_selftest():
                 return False
             return True
 
-        ok = True
         ok &= check("2026-08-14", "BandJust", "JUSTIFIED")
         ok &= check("2026-08-14", "BandSus", "SUSPECT")
         ok &= check("2026-08-14", "BandStrictSus", "SUSPECT")
@@ -339,12 +377,14 @@ def main():
                         help="root containing data/ (defaults to repo root)")
     parser.add_argument("--output", default=os.path.join(ROOT, OUTPUT_FILE),
                         help="output TSV path")
+    parser.add_argument("--day", default=None,
+                        help="evaluate only this YYYY-MM-DD tape (full history if unset)")
     args = parser.parse_args()
 
     if args.selftest:
         return _run_selftest()
 
-    build_report(args.data_dir, args.output, quiet=False)
+    build_report(args.data_dir, args.output, day=args.day, quiet=False)
     return 0
 
 
