@@ -1259,6 +1259,155 @@ SIGNED           2026-08-17 · ANDY — in-session, verbatim "Sign now", under
 > > **Automation** Input. `oa-platform-reference.md` §5.2's `[DOCS-SILENT]` tag on the Bot-Input
 > > tier is deliberately unstruck. **C0a can stop Architecture E outright.**
 
+> ✅ Individual PR-14…PR-17 entries below: `GF-QQQ-IC-Ride`, `GF-QQQ-IC-PT50`,
+> `GF-QQQ-IC-Trail` and `GF-QQQ-IC-Touch0`.
+
+### PR-14 — `GF-QQQ-IC-Ride`
+```
+ID               PR-14
+BOT              GF-QQQ-IC-Ride   BOTfw5TkkCRF4417860701930934951
+DISPOSITION      fresh build          PILLAR/ROLE  IC · control        STATUS  SIGNED
+BUILD AUTHORIZATION `R-2026-08-06-SLOT-04-GREENFIELD-BUILD` (greenfield family build, 7 bots).
+HYPOTHESIS       QQQ 0DTE iron condor with no active management and a 15:50 time exit has
+                 Exp(R) per condor >= 0 over n>=100 condors; control arm for the family.
+MECHANISM        Short-premium VRP on 0DTE QQQ; shared Library entry automations + two
+                 bundle-typed Bot Inputs (`GF_EXITS_PUT` and `GF_EXITS_CALL`) + 15:52
+                 flat-close backstop. Sibling-close is NOT built (C8 ruling).
+                 SIZING STAMP 2026-08-06: primitive observed FIRST-HAND as the FIXED
+                 CONTRACT COUNT (1), not the `Up to $250 risk` fallback (spec §5.4/C4) —
+                 `GF-ScannerA-PutSpread`, Phase A build, `amount:{"type":"quantity",
+                 "quantity":1}`. Applies to all eight greenfield-family arms, PR-14…PR-23
+                 (`greenfield-family-spec.md` C4, memory row).
+KILL CRITERION   Exp(R) per condor < 0 with CI entirely below 0 at n >= 60, as an always-valid
+                 confidence sequence (G-8); plus family-level, liveness and sentinel criteria.
+SAMPLE TARGET    n = 100 condors.
+REVIEW DATE      2027-02-10; interim at n = 60.
+GATE EVAL DATE   2027-02-10; interim at n = 60.
+MAX LOSS         ~$185 net risk per condor; 1 condor/day.
+SIZING TIER      1 lot — IDENTICAL across arms.
+CONFIG HASH      STAMPED 2026-08-17 under `R-2026-08-17-GF-ENTRY-METHOD`. Shared Library
+                 automations (`sharing:1`, `8 bots`):
+                   GF-ScannerA-PutSpread  v12  1e5eb9936a1adf067af65a4841d42e755592f7c179f3c0cad477502dfdbfcdc8
+                   GF-ScannerB-CallSpread v4   a925d490b8a0d2337566f47307fc52470da129935d3bd83d24389c6dc433dfb5
+VERIFICATION     INVERTED Trades-list check: no PT / trail / touch / stop row, and a ~15:50
+                 SmartPricing close row. Plus pairwise capture-diff.
+SIGNED           2026-08-09 per `R-2026-08-09-S2-GATE-A7-SIGN-ALL-SEVEN`, re-signed 2026-08-17 per
+                 `R-2026-08-17-GF-ENTRY-METHOD`.
+                 ⚠️ LAYER 2 IS OUTSTANDING — the first new position's Trades list must confirm the
+                 strikes are delta-selected, not 0.40%-selected. Signature stands on Layer 1.
+GO-LIVE ORDERING `R-2026-08-09-S2-R5-LIMITS` — condor-aware: arms stay 2/2.
+TRACE CARRIER    `R-2026-08-18-P1-1A-ROSTER-FACTS` (per-arm roster facts ratified).
+```
+
+### PR-15 — `GF-QQQ-IC-PT50`
+```
+ID               PR-15
+BOT              GF-QQQ-IC-PT50   BOTfw5TkkCRF4417860738688735152
+DISPOSITION      fresh build          PILLAR/ROLE  IC · experiment      STATUS  SIGNED
+BUILD AUTHORIZATION `R-2026-08-06-SLOT-04-GREENFIELD-BUILD` (greenfield family build, 7 bots).
+HYPOTHESIS       Taking profit at 50% of credit raises Exp(R) per condor above the Ride control
+                 over n>=100 matched condors.
+MECHANISM        Short-premium VRP on 0DTE QQQ; Ride base bundle plus ONE field — Exit Options
+                 `profits` = 0.5, `smprofits` = speedy.
+                 SIZING STAMP 2026-08-06: primitive observed FIRST-HAND as the FIXED
+                 CONTRACT COUNT (1), not the `Up to $250 risk` fallback (spec §5.4/C4) —
+                 `GF-ScannerA-PutSpread`, Phase A build, `amount:{"type":"quantity",
+                 "quantity":1}`. Applies to all eight greenfield-family arms, PR-14…PR-23
+                 (`greenfield-family-spec.md` C4, memory row).
+KILL CRITERION   Exp(R) per condor < 0 with CI entirely below 0 at n >= 60, as an always-valid
+                 confidence sequence (G-8); plus family-level, liveness and sentinel criteria.
+SAMPLE TARGET    n = 100 condors.
+REVIEW DATE      2027-02-10; interim at n = 60.
+GATE EVAL DATE   2027-02-10; interim at n = 60.
+MAX LOSS         ~$185 net risk per condor; 1 condor/day.
+SIZING TIER      1 lot — IDENTICAL across arms.
+CONFIG HASH      STAMPED 2026-08-17 under `R-2026-08-17-GF-ENTRY-METHOD`. Shared Library
+                 automations (`sharing:1`, `8 bots`):
+                   GF-ScannerA-PutSpread  v12  1e5eb9936a1adf067af65a4841d42e755592f7c179f3c0cad477502dfdbfcdc8
+                   GF-ScannerB-CallSpread v4   a925d490b8a0d2337566f47307fc52470da129935d3bd83d24389c6dc433dfb5
+VERIFICATION     A 50% profit-taking row in the first new position's Trades list.
+SIGNED           2026-08-09 per `R-2026-08-09-S2-GATE-A7-SIGN-ALL-SEVEN`, re-signed 2026-08-17 per
+                 `R-2026-08-17-GF-ENTRY-METHOD`.
+                 ⚠️ LAYER 2 IS OUTSTANDING — the first new position's Trades list must confirm the
+                 strikes are delta-selected, not 0.40%-selected. Signature stands on Layer 1.
+GO-LIVE ORDERING `R-2026-08-09-S2-R5-LIMITS` — condor-aware: arms stay 2/2.
+TRACE CARRIER    `R-2026-08-18-P1-1A-ROSTER-FACTS` (per-arm roster facts ratified).
+```
+
+### PR-16 — `GF-QQQ-IC-Trail`
+```
+ID               PR-16
+BOT              GF-QQQ-IC-Trail   BOTfw5TkkCRF4417860754672239833
+DISPOSITION      fresh build          PILLAR/ROLE  IC · experiment      STATUS  SIGNED
+BUILD AUTHORIZATION `R-2026-08-06-SLOT-04-GREENFIELD-BUILD` (greenfield family build, 7 bots).
+HYPOTHESIS       An armed trailing stop (target 40% of credit, trail 15% pullback) raises
+                 Exp(R) per condor above the Ride control and PT50, by letting winners keep
+                 decaying while holding a floor.
+MECHANISM        Short-premium VRP on 0DTE QQQ; Ride base bundle plus ONE native Exit Options
+                 `tstop` with `target` = 40 and `trail` = 15 (units confirmed by C2, 2026-08-06).
+                 SIZING STAMP 2026-08-06: primitive observed FIRST-HAND as the FIXED
+                 CONTRACT COUNT (1), not the `Up to $250 risk` fallback (spec §5.4/C4) —
+                 `GF-ScannerA-PutSpread`, Phase A build, `amount:{"type":"quantity",
+                 "quantity":1}`. Applies to all eight greenfield-family arms, PR-14…PR-23
+                 (`greenfield-family-spec.md` C4, memory row).
+KILL CRITERION   Exp(R) per condor < 0 with CI entirely below 0 at n >= 60, as an always-valid
+                 confidence sequence (G-8); plus the PR-16-specific tail retirement criterion
+                 (G-12b, recorded in the Greenfield IC family section above), family-level,
+                 liveness and sentinel criteria.
+SAMPLE TARGET    n = 100 condors.
+REVIEW DATE      2027-02-10; interim at n = 60.
+GATE EVAL DATE   2027-02-10; interim at n = 60.
+MAX LOSS         ~$185 net risk per condor; 1 condor/day.
+SIZING TIER      1 lot — IDENTICAL across arms.
+CONFIG HASH      STAMPED 2026-08-17 under `R-2026-08-17-GF-ENTRY-METHOD`. Shared Library
+                 automations (`sharing:1`, `8 bots`):
+                   GF-ScannerA-PutSpread  v12  1e5eb9936a1adf067af65a4841d42e755592f7c179f3c0cad477502dfdbfcdc8
+                   GF-ScannerB-CallSpread v4   a925d490b8a0d2337566f47307fc52470da129935d3bd83d24389c6dc433dfb5
+VERIFICATION     A trailing-stop row in the first new position's Trades list.
+SIGNED           2026-08-09 per `R-2026-08-09-S2-GATE-A7-SIGN-ALL-SEVEN`, re-signed 2026-08-17 per
+                 `R-2026-08-17-GF-ENTRY-METHOD`.
+                 ⚠️ LAYER 2 IS OUTSTANDING — the first new position's Trades list must confirm the
+                 strikes are delta-selected, not 0.40%-selected. Signature stands on Layer 1.
+GO-LIVE ORDERING `R-2026-08-09-S2-R5-LIMITS` — condor-aware: arms stay 2/2.
+TRACE CARRIER    `R-2026-08-18-P1-1A-ROSTER-FACTS` (per-arm roster facts ratified).
+```
+
+### PR-17 — `GF-QQQ-IC-Touch0`
+```
+ID               PR-17
+BOT              GF-QQQ-IC-Touch0   BOTfw5TkkCRF4417860760818962144
+DISPOSITION      fresh build          PILLAR/ROLE  IC · experiment      STATUS  SIGNED
+BUILD AUTHORIZATION `R-2026-08-06-SLOT-04-GREENFIELD-BUILD` (greenfield family build, 7 bots).
+HYPOTHESIS       Closing the condor on the first 1-minute evaluation at which either short
+                 strike is ITM (Touch $0) raises Exp(R) per condor above the Ride control.
+MECHANISM        Short-premium VRP on 0DTE QQQ; Ride base bundle plus ONE field — Exit Options
+                 `touch` = $0. This arm is S1, not S2: a touch closes the touched spread; the
+                 other spread runs to its own 15:50 Expiration exit or the 15:52 backstop.
+                 SIZING STAMP 2026-08-06: primitive observed FIRST-HAND as the FIXED
+                 CONTRACT COUNT (1), not the `Up to $250 risk` fallback (spec §5.4/C4) —
+                 `GF-ScannerA-PutSpread`, Phase A build, `amount:{"type":"quantity",
+                 "quantity":1}`. Applies to all eight greenfield-family arms, PR-14…PR-23
+                 (`greenfield-family-spec.md` C4, memory row).
+KILL CRITERION   Exp(R) per condor < 0 with CI entirely below 0 at n >= 60, as an always-valid
+                 confidence sequence (G-8); plus family-level, liveness and sentinel criteria.
+SAMPLE TARGET    n = 100 condors.
+REVIEW DATE      2027-02-10; interim at n = 60.
+GATE EVAL DATE   2027-02-10; interim at n = 60.
+MAX LOSS         ~$185 net risk per condor; 1 condor/day.
+SIZING TIER      1 lot — IDENTICAL across arms.
+CONFIG HASH      STAMPED 2026-08-17 under `R-2026-08-17-GF-ENTRY-METHOD`. Shared Library
+                 automations (`sharing:1`, `8 bots`):
+                   GF-ScannerA-PutSpread  v12  1e5eb9936a1adf067af65a4841d42e755592f7c179f3c0cad477502dfdbfcdc8
+                   GF-ScannerB-CallSpread v4   a925d490b8a0d2337566f47307fc52470da129935d3bd83d24389c6dc433dfb5
+VERIFICATION     A touch row at/after the underlying crosses the short strike.
+SIGNED           2026-08-09 per `R-2026-08-09-S2-GATE-A7-SIGN-ALL-SEVEN`, re-signed 2026-08-17 per
+                 `R-2026-08-17-GF-ENTRY-METHOD`.
+                 ⚠️ LAYER 2 IS OUTSTANDING — the first new position's Trades list must confirm the
+                 strikes are delta-selected, not 0.40%-selected. Signature stands on Layer 1.
+GO-LIVE ORDERING `R-2026-08-09-S2-R5-LIMITS` — condor-aware: arms stay 2/2.
+TRACE CARRIER    `R-2026-08-18-P1-1A-ROSTER-FACTS` (per-arm roster facts ratified).
+```
+
 ### Rebuilt hedge tournament arms (count TBD)
 ```
 ID               PR-18 onward     one per arm, in creation order. Count is TBD, so the literals
@@ -1317,6 +1466,88 @@ SIGNED           2026-08-17 · ANDY — in-session, verbatim "Sign now", under
                  ⚠️ LAYER 2 IS OUTSTANDING — the first new position's Trades list must confirm the
                  strikes are delta-selected, not 0.40%-selected. Signature stands on Layer 1.
 ```
+> ✅ Individual PR-18 and PR-19 entries below: `GF-QQQ-IC-SL100` and `GF-QQQ-IC-SL200`.
+
+### PR-18 — `GF-QQQ-IC-SL100`
+```
+ID               PR-18
+BOT              GF-QQQ-IC-SL100   BOTfw5TkkCRF4417860767788927225
+DISPOSITION      fresh build          PILLAR/ROLE  IC · experiment (hedge arm)   STATUS  SIGNED
+BUILD AUTHORIZATION `R-2026-08-06-SLOT-04-GREENFIELD-BUILD` (greenfield family build, 7 bots).
+NAMING           `R-2026-08-08-GATE-A8-PR-18-NAME` — OPTION C / THE SPLIT. LEDGER / INTERNAL
+                 label: `Breakeven`. PUBLISHED OR COMPARED EXTERNALLY: the MECHANICAL name
+                 `SL100` / `stop at 100% of credit`, with the CF-1 caveat attached.
+HYPOTHESIS       A stop at 100% of credit, applied per-spread (not close-both, C8 ruling),
+                 raises Exp(R) per condor above the Ride control.
+MECHANISM        Short-premium VRP on 0DTE QQQ; Ride base bundle plus ONE field — Exit Options
+                 `stoploss` = 1 (% of credit, C1 answered 2026-08-06). The untested side is left
+                 to decay exactly as the anchor assumes.
+                 SIZING STAMP 2026-08-06: primitive observed FIRST-HAND as the FIXED
+                 CONTRACT COUNT (1), not the `Up to $250 risk` fallback (spec §5.4/C4) —
+                 `GF-ScannerA-PutSpread`, Phase A build, `amount:{"type":"quantity",
+                 "quantity":1}`. Applies to all eight greenfield-family arms, PR-14…PR-23
+                 (`greenfield-family-spec.md` C4, memory row).
+KILL CRITERION   Exp(R) per condor < 0 with CI entirely below 0 at n >= 60, as an always-valid
+                 confidence sequence (G-8); plus family-level, liveness and sentinel criteria.
+SAMPLE TARGET    n = 100 condors.
+REVIEW DATE      2027-02-10; interim at n = 60.
+GATE EVAL DATE   2027-02-10; interim at n = 60.
+MAX LOSS         ~$185 net risk per condor; 1 condor/day.
+SIZING TIER      1 lot — IDENTICAL across arms.
+CONFIG HASH      STAMPED 2026-08-17 under `R-2026-08-17-GF-ENTRY-METHOD`. Shared Library
+                 automations (`sharing:1`, `8 bots`):
+                   GF-ScannerA-PutSpread  v12  1e5eb9936a1adf067af65a4841d42e755592f7c179f3c0cad477502dfdbfcdc8
+                   GF-ScannerB-CallSpread v4   a925d490b8a0d2337566f47307fc52470da129935d3bd83d24389c6dc433dfb5
+VERIFICATION     A stop-loss row in the first new position's Trades list.
+SIGNED           2026-08-09 per `R-2026-08-09-S2-GATE-A7-SIGN-ALL-SEVEN`, re-signed 2026-08-17 per
+                 `R-2026-08-17-GF-ENTRY-METHOD`.
+                 ⚠️ LAYER 2 IS OUTSTANDING — the first new position's Trades list must confirm the
+                 strikes are delta-selected, not 0.40%-selected. Signature stands on Layer 1.
+GO-LIVE ORDERING `R-2026-08-09-S2-R5-LIMITS` — condor-aware: arms stay 2/2.
+TRACE CARRIER    `R-2026-08-18-P1-1A-ROSTER-FACTS` (per-arm roster facts ratified).
+```
+
+### PR-19 — `GF-QQQ-IC-SL200`
+```
+ID               PR-19
+BOT              GF-QQQ-IC-SL200   BOTfw5TkkCRF4417860785000861357
+DISPOSITION      fresh build          PILLAR/ROLE  IC · experiment (hedge arm)   STATUS  SIGNED
+BUILD AUTHORIZATION `R-2026-08-06-SLOT-04-GREENFIELD-BUILD` (greenfield family build, 7 bots).
+NAMING           `R-2026-08-08-GATE-A8-PR-18-NAME` — PR-19 follows the same split convention by
+                 construction: LEDGER / INTERNAL label is `SL200`; PUBLISHED / EXTERNALLY
+                 COMPARED name is `SL200` / `stop at 200% of credit`.
+HYPOTHESIS       A stop at 200% of credit, applied per-spread (not close-both, C8 ruling),
+                 raises Exp(R) per condor above the Ride control and does not collapse to it.
+MECHANISM        Short-premium VRP on 0DTE QQQ; Ride base bundle plus ONE field — Exit Options
+                 `stoploss` = 2 (% of credit, C1 answered 2026-08-06).
+                 SIZING STAMP 2026-08-06: primitive observed FIRST-HAND as the FIXED
+                 CONTRACT COUNT (1), not the `Up to $250 risk` fallback (spec §5.4/C4) —
+                 `GF-ScannerA-PutSpread`, Phase A build, `amount:{"type":"quantity",
+                 "quantity":1}`. Applies to all eight greenfield-family arms, PR-14…PR-23
+                 (`greenfield-family-spec.md` C4, memory row).
+KILL CRITERION   Exp(R) per condor < 0 with CI entirely below 0 at n >= 60 matched days, as an
+                 always-valid confidence sequence (G-8); plus family-level and sentinel. Liveness
+                 and the CM-8 conjunct are deliberately disapplied (G-5 / G-13, 2026-08-06); the
+                 degeneracy check is a TOST equivalence test on mean paired ΔR vs Ride, band
+                 ±0.015R, evaluated at the GATE EVAL DATE.
+SAMPLE TARGET    n = 100 condors.
+REVIEW DATE      2027-02-10; interim at n = 60.
+GATE EVAL DATE   2027-02-10; interim at n = 60.
+MAX LOSS         ~$185 net risk per condor; 1 condor/day.
+SIZING TIER      1 lot — IDENTICAL across arms.
+CONFIG HASH      STAMPED 2026-08-17 under `R-2026-08-17-GF-ENTRY-METHOD`. Shared Library
+                 automations (`sharing:1`, `8 bots`):
+                   GF-ScannerA-PutSpread  v12  1e5eb9936a1adf067af65a4841d42e755592f7c179f3c0cad477502dfdbfcdc8
+                   GF-ScannerB-CallSpread v4   a925d490b8a0d2337566f47307fc52470da129935d3bd83d24389c6dc433dfb5
+VERIFICATION     A stop-loss row in the first new position's Trades list.
+SIGNED           2026-08-09 per `R-2026-08-09-S2-GATE-A7-SIGN-ALL-SEVEN`, re-signed 2026-08-17 per
+                 `R-2026-08-17-GF-ENTRY-METHOD`.
+                 ⚠️ LAYER 2 IS OUTSTANDING — the first new position's Trades list must confirm the
+                 strikes are delta-selected, not 0.40%-selected. Signature stands on Layer 1.
+GO-LIVE ORDERING `R-2026-08-09-S2-R5-LIMITS` — condor-aware: arms stay 2/2.
+TRACE CARRIER    `R-2026-08-18-P1-1A-ROSTER-FACTS` (per-arm roster facts ratified).
+```
+
 > ⚠️ **Do not include a `Conditional` / sustained-touch arm.** OA cannot express time
 > persistence; the only build path is a 10-rung tag ladder that consumes the scan budget and
 > fails safe-looking at every rung. `hedge-research.md` §7.1 recommends against it. Building it
@@ -1363,6 +1594,46 @@ SIGNED           2026-08-17 · ANDY — in-session, verbatim "Sign now", under
                  the 2026-08-17 edit; nothing before it counts. Review at 10 sessions.
                  ⚠️ LAYER 2 IS OUTSTANDING — the first new position's Trades list must confirm the
                  strikes are delta-selected, not 0.40%-selected. Signature stands on Layer 1.
+```
+
+> ✅ Individual PR-20 entry below: `GF-QQQ-IC-Canary`.
+
+### PR-20 — `GF-QQQ-IC-Canary`
+```
+ID               PR-20
+BOT              GF-QQQ-IC-Canary   BOTfw5TkkCRF4417860774419022836
+DISPOSITION      fresh build          PILLAR/ROLE  IC · control (instrument)   STATUS  SIGNED
+BUILD AUTHORIZATION `R-2026-08-06-SLOT-04-GREENFIELD-BUILD` (greenfield family build, 7 bots).
+HYPOTHESIS       Instrument hypothesis: a bot whose 5% profit target should fill every single
+                 day will stop filling the day the exit engine dies, giving same-day detection
+                 of the failure that ran six invisible sessions in v1.
+MECHANISM        n/a — this bot is NOT run for edge. Its P/L is expected to be ~flat and is not
+                 evidence about anything. Ride base bundle plus Exit Options `profits` = 0.05,
+                 `smprofits` = speedy.
+                 SIZING STAMP 2026-08-06: primitive observed FIRST-HAND as the FIXED
+                 CONTRACT COUNT (1), not the `Up to $250 risk` fallback (spec §5.4/C4) —
+                 `GF-ScannerA-PutSpread`, Phase A build, `amount:{"type":"quantity",
+                 "quantity":1}`. Applies to all eight greenfield-family arms, PR-14…PR-23
+                 (`greenfield-family-spec.md` C4, memory row).
+KILL CRITERION   NONE ON P/L — exempt by design. Carries a code-fireable alert: no profit-taking
+                 fill on >= 2 consecutive days on which it held a position -> RED, escalated as a
+                 candidate exit-engine failure. Plus family-level and sentinel criteria.
+SAMPLE TARGET    n/a — daily fill/no-fill is the output.
+REVIEW DATE      2026-11-10 (= LEDGER_START + 3 months).
+GATE EVAL DATE   2027-02-10; interim at n = 60.
+MAX LOSS         1 lot, smallest expressible risk.
+SIZING TIER      1 lot.
+CONFIG HASH      STAMPED 2026-08-17 under `R-2026-08-17-GF-ENTRY-METHOD`. Shared Library
+                 automations (`sharing:1`, `8 bots`):
+                   GF-ScannerA-PutSpread  v12  1e5eb9936a1adf067af65a4841d42e755592f7c179f3c0cad477502dfdbfcdc8
+                   GF-ScannerB-CallSpread v4   a925d490b8a0d2337566f47307fc52470da129935d3bd83d24389c6dc433dfb5
+VERIFICATION     A profit-taking fill on DAY 1, read from the Trades list.
+SIGNED           2026-08-09 per `R-2026-08-09-S2-GATE-A7-SIGN-ALL-SEVEN`, re-signed 2026-08-17 per
+                 `R-2026-08-17-GF-ENTRY-METHOD`.
+                 ⚠️ LAYER 2 IS OUTSTANDING — the first new position's Trades list must confirm the
+                 strikes are delta-selected, not 0.40%-selected. Signature stands on Layer 1.
+GO-LIVE ORDERING `R-2026-08-09-S2-R5-LIMITS` — condor-aware: arms stay 2/2.
+TRACE CARRIER    `R-2026-08-18-P1-1A-ROSTER-FACTS` (per-arm roster facts ratified).
 ```
 
 ---

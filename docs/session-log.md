@@ -9602,3 +9602,32 @@ named in the batch scope (Propagator `Not built as a check`, row 10 Reconciler �
 **Verification:** `python3 scripts/check_refs.py` invariants clean; `check_refs.py --selftest` 4/4;
 `python3 scripts/pre_registration_ledger.py --selftest` clean; `python3 -m py_compile scripts/*.py`
 clean. No code changed in this batch — docs only.
+
+---
+
+## 2026-08-19 — Roster facts PR (d5)
+
+**What this is.** Implement R-2026-08-18-P1-1A-ROSTER-FACTS: seven individual pre-registration
+ledger rows for the greenfield IC arms (PR-14…PR-20), update `docs/devin-queue.md` P1-1/P1-1a and
+record PR #26 disposition, add `scripts/report.py` unsigned-minus-meta warning and extend its
+self-test with a ledger fixture.
+
+**Changed files:** `docs/pre-registration-ledger.md`, `docs/devin-queue.md`, `scripts/report.py`.
+
+**Authority:** `R-2026-08-18-P1-1A-ROSTER-FACTS` (Active); `R-2026-08-09-S2-GATE-A7-SIGN-ALL-SEVEN`;
+`R-2026-08-17-GF-ENTRY-METHOD`; `R-2026-08-09-S2-R5-LIMITS`; `R-2026-08-08-GATE-A8-PR-18-NAME`;
+`R-2026-08-06-SLOT-04-GREENFIELD-BUILD`.
+
+**Verification:** `python3 -m py_compile scripts/*.py` clean; `python3 scripts/report.py --validate`
+clean; `python3 scripts/pre_registration_ledger.py` selftest clean; `python3 scripts/build_ledger.py --selftest`
+32/32; `python3 scripts/run_receipt.py --selftest` 13/13; `python3 scripts/check_heartbeat.py --selftest`
+clean; `python3 scripts/check_refs.py` invariants clean; parser check `sorted(p.unsigned_from_ledger(...))`
+contains no `GF-QQQ-IC-*` names.
+
+---
+
+## 2026-08-19 — d5 queue fixup
+
+**Fixup.** `docs/devin-queue.md` P1-1 said "all seven GF arms"; corrected to "all eight GF arms
+(PR-14…PR-20 plus the previously signed PR-23)" to match `data/bots_meta.csv`.
+`docs/state.md` top block also updated. `scripts/check_docs_vs_csv.py` now reports no contradictions.
