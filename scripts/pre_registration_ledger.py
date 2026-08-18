@@ -209,15 +209,18 @@ def selftest():
         print("FAIL: should not warn about a heading with no code block", file=sys.stderr)
         return 1
 
-    # Live known-positive check: the real ledger must mark PR-02 and PR-04
-    # as unsigned because their SIGNED blocks carry SIGNED != VERIFIED +
-    # FIRST-TRADING-DAY CAPTURE OWED. Synthetic fixtures are not enough.
+    # Live known-positive check: the real ledger must flag
+    # QQQ-IC-0DTE-Fortress-NoPT50 (PR-04) as unsigned because its SIGNED block
+    # carries SIGNED != VERIFIED + FIRST-TRADING-DAY CAPTURE OWED.
+    # IC-SPX-FastPT25-S2-130PM was removed because PR-02's rider was discharged
+    # by R-2026-08-18-RIDER-ANNOTATION-PROCEDURE. This tuple is a ruled fact;
+    # the only permitted change is R-2026-08-18-SELFTEST-KNOWN-POSITIVE-PREAUTH.
     _live_path = os.path.join(
         os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
         'docs', 'pre-registration-ledger.md')
     if os.path.exists(_live_path):
         live_unsigned, _ = parse_ledger_text(open(_live_path).read())
-        for bot in ('IC-SPX-FastPT25-S2-130PM', 'QQQ-IC-0DTE-Fortress-NoPT50'):
+        for bot in ('QQQ-IC-0DTE-Fortress-NoPT50',):
             if bot not in live_unsigned:
                 print(f"FAIL: live ledger does not flag {bot} as unsigned", file=sys.stderr)
                 return 1
