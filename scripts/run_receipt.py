@@ -9,9 +9,9 @@ working ledger. It stayed deleted, on master, for five days. The forensic §4
 finding is one line long:
 
     "There are none for August. data/receipts/ stops at mirror-baseline.txt,
-     2026-08-04. Nothing in the nine-stage pipeline writes a per-run receipt;
+     2026-08-04. Nothing in the eight-stage pipeline writes a per-run receipt;
      data/ledger_meta.json is the only per-run artifact and it is OVERWRITTEN
-     by each run, so it records the last run and no history."
+     by each run, so it records the last run and no history." [the pipeline is nine-stage as of PR #44]
 
 A single overwritten file cannot show that anything changed. The truncation was
 invisible not because it was subtle but because no run left a trace that could
