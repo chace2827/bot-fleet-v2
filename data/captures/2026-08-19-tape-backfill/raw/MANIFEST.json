@@ -1,0 +1,512 @@
+{
+  "authorization": "R-2026-08-19-TAPE-BACKFILL-AND-VIX-SERIES (Andy, 2026-08-19)",
+  "calls": [
+    {
+      "auth": "Bearer <TRADIER_TOKEN from .env \u2014 not recorded>",
+      "bytes": 670,
+      "endpoint": "https://api.tradier.com/v1/markets/history",
+      "file": "SPX_2026-08-10_daily.json",
+      "http_status": 200,
+      "params": {
+        "end": "2026-08-10",
+        "interval": "daily",
+        "start": "2026-07-31",
+        "symbol": "SPX"
+      },
+      "sha256": "7c906e56b4f99a5ca8c05c6cfc4cf96b7a0eb1a12757a7ecba211fca7d6de229"
+    },
+    {
+      "auth": "Bearer <TRADIER_TOKEN from .env \u2014 not recorded>",
+      "bytes": 11349,
+      "endpoint": "https://api.tradier.com/v1/markets/timesales",
+      "file": "SPX_2026-08-10_5min.json",
+      "http_status": 200,
+      "params": {
+        "end": "2026-08-10 16:00",
+        "interval": "5min",
+        "start": "2026-08-10 09:30",
+        "symbol": "SPX"
+      },
+      "sha256": "62c1bda8713ef736e3f7e7f7cc107ff0e1960a402c1ac8e2f3674f47f818ffb1"
+    },
+    {
+      "auth": "Bearer <TRADIER_TOKEN from .env \u2014 not recorded>",
+      "bytes": 692,
+      "endpoint": "https://api.tradier.com/v1/markets/history",
+      "file": "QQQ_2026-08-10_daily.json",
+      "http_status": 200,
+      "params": {
+        "end": "2026-08-10",
+        "interval": "daily",
+        "start": "2026-07-31",
+        "symbol": "QQQ"
+      },
+      "sha256": "6e3dc2ec9af832e368a46afd6dc1445f49a423b0cf0e094d956bccbfe9305bc3"
+    },
+    {
+      "auth": "Bearer <TRADIER_TOKEN from .env \u2014 not recorded>",
+      "bytes": 12858,
+      "endpoint": "https://api.tradier.com/v1/markets/timesales",
+      "file": "QQQ_2026-08-10_5min.json",
+      "http_status": 200,
+      "params": {
+        "end": "2026-08-10 16:00",
+        "interval": "5min",
+        "start": "2026-08-10 09:30",
+        "symbol": "QQQ"
+      },
+      "sha256": "43bf39f660910a1aacc813d144b98e6af658efe96e1cde1b640fd8072557799f"
+    },
+    {
+      "auth": "Bearer <TRADIER_TOKEN from .env \u2014 not recorded>",
+      "bytes": 609,
+      "endpoint": "https://api.tradier.com/v1/markets/history",
+      "file": "VIX_2026-08-10_daily.json",
+      "http_status": 200,
+      "params": {
+        "end": "2026-08-10",
+        "interval": "daily",
+        "start": "2026-07-31",
+        "symbol": "VIX"
+      },
+      "sha256": "e74a4100db8de1354661228435f01f067c8a360e499e5f88be6112f8abb7a8d8"
+    },
+    {
+      "auth": "Bearer <TRADIER_TOKEN from .env \u2014 not recorded>",
+      "bytes": 10592,
+      "endpoint": "https://api.tradier.com/v1/markets/timesales",
+      "file": "VIX_2026-08-10_5min.json",
+      "http_status": 200,
+      "params": {
+        "end": "2026-08-10 16:00",
+        "interval": "5min",
+        "start": "2026-08-10 09:30",
+        "symbol": "VIX"
+      },
+      "sha256": "4279a23d07a75ec12b9ca548cf91a132d67812bed8fca424076e91cb16076180"
+    },
+    {
+      "auth": "Bearer <TRADIER_TOKEN from .env \u2014 not recorded>",
+      "bytes": 669,
+      "endpoint": "https://api.tradier.com/v1/markets/history",
+      "file": "SPX_2026-08-11_daily.json",
+      "http_status": 200,
+      "params": {
+        "end": "2026-08-11",
+        "interval": "daily",
+        "start": "2026-08-01",
+        "symbol": "SPX"
+      },
+      "sha256": "7449ee9b4b98a45f403a2b18a8cbda612b2311088bc1c5d6e5a6800a240ece8d"
+    },
+    {
+      "auth": "Bearer <TRADIER_TOKEN from .env \u2014 not recorded>",
+      "bytes": 11353,
+      "endpoint": "https://api.tradier.com/v1/markets/timesales",
+      "file": "SPX_2026-08-11_5min.json",
+      "http_status": 200,
+      "params": {
+        "end": "2026-08-11 16:00",
+        "interval": "5min",
+        "start": "2026-08-11 09:30",
+        "symbol": "SPX"
+      },
+      "sha256": "13d18ca8ad2835f583a02e9523c8aac2039522acd9ea161ef645428b206d9ae9"
+    },
+    {
+      "auth": "Bearer <TRADIER_TOKEN from .env \u2014 not recorded>",
+      "bytes": 689,
+      "endpoint": "https://api.tradier.com/v1/markets/history",
+      "file": "QQQ_2026-08-11_daily.json",
+      "http_status": 200,
+      "params": {
+        "end": "2026-08-11",
+        "interval": "daily",
+        "start": "2026-08-01",
+        "symbol": "QQQ"
+      },
+      "sha256": "669d4375f08d68bbfacdb4122ef799a9284c5ec1b981b8f7b37012573aa4906f"
+    },
+    {
+      "auth": "Bearer <TRADIER_TOKEN from .env \u2014 not recorded>",
+      "bytes": 12717,
+      "endpoint": "https://api.tradier.com/v1/markets/timesales",
+      "file": "QQQ_2026-08-11_5min.json",
+      "http_status": 200,
+      "params": {
+        "end": "2026-08-11 16:00",
+        "interval": "5min",
+        "start": "2026-08-11 09:30",
+        "symbol": "QQQ"
+      },
+      "sha256": "ef417da4031422ecfad1ac68746723e94310e5845969554ef00ccebb0ec08481"
+    },
+    {
+      "auth": "Bearer <TRADIER_TOKEN from .env \u2014 not recorded>",
+      "bytes": 610,
+      "endpoint": "https://api.tradier.com/v1/markets/history",
+      "file": "VIX_2026-08-11_daily.json",
+      "http_status": 200,
+      "params": {
+        "end": "2026-08-11",
+        "interval": "daily",
+        "start": "2026-08-01",
+        "symbol": "VIX"
+      },
+      "sha256": "8e208bf2403f559ccff6cfd1d62a1fb2514b683ac9d549e38ae15ccc5deaeb84"
+    },
+    {
+      "auth": "Bearer <TRADIER_TOKEN from .env \u2014 not recorded>",
+      "bytes": 10558,
+      "endpoint": "https://api.tradier.com/v1/markets/timesales",
+      "file": "VIX_2026-08-11_5min.json",
+      "http_status": 200,
+      "params": {
+        "end": "2026-08-11 16:00",
+        "interval": "5min",
+        "start": "2026-08-11 09:30",
+        "symbol": "VIX"
+      },
+      "sha256": "b3a03910c915c9c1f92bda2e5ed49741770dad7c67acaf665a407752d2d787f0"
+    },
+    {
+      "auth": "Bearer <TRADIER_TOKEN from .env \u2014 not recorded>",
+      "bytes": 761,
+      "endpoint": "https://api.tradier.com/v1/markets/history",
+      "file": "SPX_2026-08-12_daily.json",
+      "http_status": 200,
+      "params": {
+        "end": "2026-08-12",
+        "interval": "daily",
+        "start": "2026-08-02",
+        "symbol": "SPX"
+      },
+      "sha256": "16a8d803e208c31c523b834dd708060a78fc2e29b35cabfdac0edffb4343676e"
+    },
+    {
+      "auth": "Bearer <TRADIER_TOKEN from .env \u2014 not recorded>",
+      "bytes": 11319,
+      "endpoint": "https://api.tradier.com/v1/markets/timesales",
+      "file": "SPX_2026-08-12_5min.json",
+      "http_status": 200,
+      "params": {
+        "end": "2026-08-12 16:00",
+        "interval": "5min",
+        "start": "2026-08-12 09:30",
+        "symbol": "SPX"
+      },
+      "sha256": "4b9840cf42063fd3b699fe3a71f185c14e894a6e233a685478f86cffd8f95395"
+    },
+    {
+      "auth": "Bearer <TRADIER_TOKEN from .env \u2014 not recorded>",
+      "bytes": 784,
+      "endpoint": "https://api.tradier.com/v1/markets/history",
+      "file": "QQQ_2026-08-12_daily.json",
+      "http_status": 200,
+      "params": {
+        "end": "2026-08-12",
+        "interval": "daily",
+        "start": "2026-08-02",
+        "symbol": "QQQ"
+      },
+      "sha256": "361b74f06d4852a41fd753ab1d4dc8c45189f21f221b35eb69dbbf6f6dd4e9c6"
+    },
+    {
+      "auth": "Bearer <TRADIER_TOKEN from .env \u2014 not recorded>",
+      "bytes": 12786,
+      "endpoint": "https://api.tradier.com/v1/markets/timesales",
+      "file": "QQQ_2026-08-12_5min.json",
+      "http_status": 200,
+      "params": {
+        "end": "2026-08-12 16:00",
+        "interval": "5min",
+        "start": "2026-08-12 09:30",
+        "symbol": "QQQ"
+      },
+      "sha256": "c3623d6e67f4cf7689708b1d21e2e33b8601f1399d1c4c3f00e9b53e792946f2"
+    },
+    {
+      "auth": "Bearer <TRADIER_TOKEN from .env \u2014 not recorded>",
+      "bytes": 695,
+      "endpoint": "https://api.tradier.com/v1/markets/history",
+      "file": "VIX_2026-08-12_daily.json",
+      "http_status": 200,
+      "params": {
+        "end": "2026-08-12",
+        "interval": "daily",
+        "start": "2026-08-02",
+        "symbol": "VIX"
+      },
+      "sha256": "f602ba2bd29f7eb21025f2565bed048728229ae573b1207d313c15565d27a608"
+    },
+    {
+      "auth": "Bearer <TRADIER_TOKEN from .env \u2014 not recorded>",
+      "bytes": 10488,
+      "endpoint": "https://api.tradier.com/v1/markets/timesales",
+      "file": "VIX_2026-08-12_5min.json",
+      "http_status": 200,
+      "params": {
+        "end": "2026-08-12 16:00",
+        "interval": "5min",
+        "start": "2026-08-12 09:30",
+        "symbol": "VIX"
+      },
+      "sha256": "1565a45ff86fcaaf08ee08b2820bf75cc29c42136b0c892276c960b05cc4392d"
+    },
+    {
+      "auth": "Bearer <TRADIER_TOKEN from .env \u2014 not recorded>",
+      "bytes": 853,
+      "endpoint": "https://api.tradier.com/v1/markets/history",
+      "file": "SPX_2026-08-13_daily.json",
+      "http_status": 200,
+      "params": {
+        "end": "2026-08-13",
+        "interval": "daily",
+        "start": "2026-08-03",
+        "symbol": "SPX"
+      },
+      "sha256": "64fc4d3147a8b8c37cabe50c298d10a821f0a3bd647785720c72cb76df25de25"
+    },
+    {
+      "auth": "Bearer <TRADIER_TOKEN from .env \u2014 not recorded>",
+      "bytes": 11396,
+      "endpoint": "https://api.tradier.com/v1/markets/timesales",
+      "file": "SPX_2026-08-13_5min.json",
+      "http_status": 200,
+      "params": {
+        "end": "2026-08-13 16:00",
+        "interval": "5min",
+        "start": "2026-08-13 09:30",
+        "symbol": "SPX"
+      },
+      "sha256": "981a602eb0fbba245a77be01b62295d250e6de3d40516b5b482722622a91b9ee"
+    },
+    {
+      "auth": "Bearer <TRADIER_TOKEN from .env \u2014 not recorded>",
+      "bytes": 880,
+      "endpoint": "https://api.tradier.com/v1/markets/history",
+      "file": "QQQ_2026-08-13_daily.json",
+      "http_status": 200,
+      "params": {
+        "end": "2026-08-13",
+        "interval": "daily",
+        "start": "2026-08-03",
+        "symbol": "QQQ"
+      },
+      "sha256": "bffe80e3f4a3a835daa3912d4f29a576a26a87b86e5b61bdf4aad45cc1127ada"
+    },
+    {
+      "auth": "Bearer <TRADIER_TOKEN from .env \u2014 not recorded>",
+      "bytes": 12806,
+      "endpoint": "https://api.tradier.com/v1/markets/timesales",
+      "file": "QQQ_2026-08-13_5min.json",
+      "http_status": 200,
+      "params": {
+        "end": "2026-08-13 16:00",
+        "interval": "5min",
+        "start": "2026-08-13 09:30",
+        "symbol": "QQQ"
+      },
+      "sha256": "8a86c17ba349613d39f017781aaa0475963ebef8ecd78badf3070d45997eadab"
+    },
+    {
+      "auth": "Bearer <TRADIER_TOKEN from .env \u2014 not recorded>",
+      "bytes": 779,
+      "endpoint": "https://api.tradier.com/v1/markets/history",
+      "file": "VIX_2026-08-13_daily.json",
+      "http_status": 200,
+      "params": {
+        "end": "2026-08-13",
+        "interval": "daily",
+        "start": "2026-08-03",
+        "symbol": "VIX"
+      },
+      "sha256": "96bdd3c978c6f5117d5deb0fc54459d0448fc5cf0bf59d8ba0bedba105f325cd"
+    },
+    {
+      "auth": "Bearer <TRADIER_TOKEN from .env \u2014 not recorded>",
+      "bytes": 10627,
+      "endpoint": "https://api.tradier.com/v1/markets/timesales",
+      "file": "VIX_2026-08-13_5min.json",
+      "http_status": 200,
+      "params": {
+        "end": "2026-08-13 16:00",
+        "interval": "5min",
+        "start": "2026-08-13 09:30",
+        "symbol": "VIX"
+      },
+      "sha256": "ad980032891a18a94a84d9bcec740f186be27e26ad27381db2fb844eb4aaacb3"
+    },
+    {
+      "auth": "Bearer <TRADIER_TOKEN from .env \u2014 not recorded>",
+      "bytes": 853,
+      "endpoint": "https://api.tradier.com/v1/markets/history",
+      "file": "SPX_2026-08-14_daily.json",
+      "http_status": 200,
+      "params": {
+        "end": "2026-08-14",
+        "interval": "daily",
+        "start": "2026-08-04",
+        "symbol": "SPX"
+      },
+      "sha256": "48ff4e037f915c2c3b44ceb6330e384e2548400001f1b4f62d1d3f4dbbf7dbe5"
+    },
+    {
+      "auth": "Bearer <TRADIER_TOKEN from .env \u2014 not recorded>",
+      "bytes": 11311,
+      "endpoint": "https://api.tradier.com/v1/markets/timesales",
+      "file": "SPX_2026-08-14_5min.json",
+      "http_status": 200,
+      "params": {
+        "end": "2026-08-14 16:00",
+        "interval": "5min",
+        "start": "2026-08-14 09:30",
+        "symbol": "SPX"
+      },
+      "sha256": "4d1b68bdc798524006f17796cec59847586b349a1e6cd552758103943a67f0c4"
+    },
+    {
+      "auth": "Bearer <TRADIER_TOKEN from .env \u2014 not recorded>",
+      "bytes": 881,
+      "endpoint": "https://api.tradier.com/v1/markets/history",
+      "file": "QQQ_2026-08-14_daily.json",
+      "http_status": 200,
+      "params": {
+        "end": "2026-08-14",
+        "interval": "daily",
+        "start": "2026-08-04",
+        "symbol": "QQQ"
+      },
+      "sha256": "12b15d7b174fa9cbfbe577e5273b4e4286e0f7c5fc8b96732a0806c3b717c448"
+    },
+    {
+      "auth": "Bearer <TRADIER_TOKEN from .env \u2014 not recorded>",
+      "bytes": 12777,
+      "endpoint": "https://api.tradier.com/v1/markets/timesales",
+      "file": "QQQ_2026-08-14_5min.json",
+      "http_status": 200,
+      "params": {
+        "end": "2026-08-14 16:00",
+        "interval": "5min",
+        "start": "2026-08-14 09:30",
+        "symbol": "QQQ"
+      },
+      "sha256": "dfc226fd45a08a270e98c2f999621bd5b248bf348b1b8007b73db8b8d3a73b9b"
+    },
+    {
+      "auth": "Bearer <TRADIER_TOKEN from .env \u2014 not recorded>",
+      "bytes": 780,
+      "endpoint": "https://api.tradier.com/v1/markets/history",
+      "file": "VIX_2026-08-14_daily.json",
+      "http_status": 200,
+      "params": {
+        "end": "2026-08-14",
+        "interval": "daily",
+        "start": "2026-08-04",
+        "symbol": "VIX"
+      },
+      "sha256": "d9a2f5a68556ddec4138e504ad50e6df2859f53bb17579a2803021c6755686f7"
+    },
+    {
+      "auth": "Bearer <TRADIER_TOKEN from .env \u2014 not recorded>",
+      "bytes": 10717,
+      "endpoint": "https://api.tradier.com/v1/markets/timesales",
+      "file": "VIX_2026-08-14_5min.json",
+      "http_status": 200,
+      "params": {
+        "end": "2026-08-14 16:00",
+        "interval": "5min",
+        "start": "2026-08-14 09:30",
+        "symbol": "VIX"
+      },
+      "sha256": "3c8d34bfa60b11ad5f669713c1d90d955c0235732d0d1a15d22ec21023a0954c"
+    },
+    {
+      "auth": "Bearer <TRADIER_TOKEN from .env \u2014 not recorded>",
+      "bytes": 668,
+      "endpoint": "https://api.tradier.com/v1/markets/history",
+      "file": "SPX_2026-08-17_daily.json",
+      "http_status": 200,
+      "params": {
+        "end": "2026-08-17",
+        "interval": "daily",
+        "start": "2026-08-07",
+        "symbol": "SPX"
+      },
+      "sha256": "7e104160ce33f6dc570c6e5dcd587088c4ebb3e537da45f7fc9c232a844b44ff"
+    },
+    {
+      "auth": "Bearer <TRADIER_TOKEN from .env \u2014 not recorded>",
+      "bytes": 11411,
+      "endpoint": "https://api.tradier.com/v1/markets/timesales",
+      "file": "SPX_2026-08-17_5min.json",
+      "http_status": 200,
+      "params": {
+        "end": "2026-08-17 16:00",
+        "interval": "5min",
+        "start": "2026-08-17 09:30",
+        "symbol": "SPX"
+      },
+      "sha256": "8d111fc1f31207aba92ece657f8e16d4b0231159ac2442bb5623ace8ab5c5eaa"
+    },
+    {
+      "auth": "Bearer <TRADIER_TOKEN from .env \u2014 not recorded>",
+      "bytes": 691,
+      "endpoint": "https://api.tradier.com/v1/markets/history",
+      "file": "QQQ_2026-08-17_daily.json",
+      "http_status": 200,
+      "params": {
+        "end": "2026-08-17",
+        "interval": "daily",
+        "start": "2026-08-07",
+        "symbol": "QQQ"
+      },
+      "sha256": "28540cf62f0877c8624c161b3b6a31d28571ac53579d6f69c64e97f42a190959"
+    },
+    {
+      "auth": "Bearer <TRADIER_TOKEN from .env \u2014 not recorded>",
+      "bytes": 12816,
+      "endpoint": "https://api.tradier.com/v1/markets/timesales",
+      "file": "QQQ_2026-08-17_5min.json",
+      "http_status": 200,
+      "params": {
+        "end": "2026-08-17 16:00",
+        "interval": "5min",
+        "start": "2026-08-17 09:30",
+        "symbol": "QQQ"
+      },
+      "sha256": "659e1d45c4d345729ae8d23308b0ea4a43e0f5b15b947c53ef03f38d051c90f4"
+    },
+    {
+      "auth": "Bearer <TRADIER_TOKEN from .env \u2014 not recorded>",
+      "bytes": 611,
+      "endpoint": "https://api.tradier.com/v1/markets/history",
+      "file": "VIX_2026-08-17_daily.json",
+      "http_status": 200,
+      "params": {
+        "end": "2026-08-17",
+        "interval": "daily",
+        "start": "2026-08-07",
+        "symbol": "VIX"
+      },
+      "sha256": "02944e565dab9b4b35e2e5165e256b2baf319f4027e02ae6f2abd60fd0373fa3"
+    },
+    {
+      "auth": "Bearer <TRADIER_TOKEN from .env \u2014 not recorded>",
+      "bytes": 10606,
+      "endpoint": "https://api.tradier.com/v1/markets/timesales",
+      "file": "VIX_2026-08-17_5min.json",
+      "http_status": 200,
+      "params": {
+        "end": "2026-08-17 16:00",
+        "interval": "5min",
+        "start": "2026-08-17 09:30",
+        "symbol": "VIX"
+      },
+      "sha256": "6494d2afc3d807eec0c73afab62cd172a8cd2a640f6e0082277c4bb9190a9bf5"
+    }
+  ],
+  "captured_at": "2026-08-18T17:51:28+00:00",
+  "note": "Raw response bodies, written verbatim. Credential never recorded.",
+  "provider": "Tradier v1 production"
+}
