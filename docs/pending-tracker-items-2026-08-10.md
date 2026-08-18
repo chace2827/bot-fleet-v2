@@ -363,7 +363,9 @@ market** — not evidence its zone is safe.
 
 ## ANDY'S RULINGS 2026-08-11 (6/6) — all recorded in session-log
 1. **PR-02 + PR-04 STAY ON** while unsigned — knowing exception to §5. ⇒ needs an unsigned-bot
-   banner in `scripts/report.py` (STATUS.md is machine-generated, no hand edits).
+   banner in `scripts/report.py` (STATUS.md is machine-generated, no hand edits). — **done**
+   2026-08-17: `report.py:436` (markdown) + dashboard line 1086. Built PR #12 `ed53b53`,
+   hardened #16 `108da28`; records corrected in `78b3195`.
 2. GF/PR-04 QQQ log read AUTHORIZED — **done**, cause established.
 3. **Split (ii) join key = `oa_id`**, not bot name.
 4. **Store `pt_pct` only**, format for the brief.
