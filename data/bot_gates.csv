@@ -1,17 +1,23 @@
 # data/bot_gates.csv — SIGNED per R-2026-08-18-BOT-GATES-TABLE (signed as drafted 2026-08-18).
+# Header amended by R-2026-08-19-GATES-SEMANTICS-Q1-Q3 (clerical fix; data rows untouched).
 # One row per ON bot: the PRE-REGISTERED entry gate, its tape mapping, evaluability class.
 # Judges bots against SIGNED gates; live-OA divergence is a separate future detector.
 # Gate changes require a ruling (charter §4); clerical fixes ride normal PRs.
 # Evaluation rules (adopted by the ruling, package §2):
-#   band_prior_close      -> |underlying Δ% vs prior_close| < abs_lt at the 5-min bar(s) in the window
+#   band_prior_close       -> |underlying Δ% vs prior_close| < abs_lt at the 5-min bar(s) in the window
 #   band_prior_close_strict-> Δ% > gt AND Δ% < lt (strict), per side: side not opened today
-#   vix_min (ASYM)        -> JUSTIFIED only if VIX.high < threshold all day; straddle = UNEVALUABLE_INTRADAY
-#   vix_change_max (ASYM) -> JUSTIFIED only if (VIX.low - prior_close)/prior_close*100 > threshold_pct all day
-#   weekday               -> gate met iff weekday(date) == day
-#   orb_60min             -> entry gated on price breaking the 09:30-10:30 range after 10:30 (5-min series)
-#   none                  -> no market gate; silence is SUSPECT unless a fill_precondition is declared
-#   unknown               -> UNEVALUABLE_BY_DESIGN, printed loudly, names the missing gate
-#   tape source != tradier -> whole day UNEVALUABLE (standing)
+#   VIX gates (vix_min, vix_change_max) (ASYM)
+#     -> JUSTIFIED only if the gate condition was unreachable all day; a straddling day is UNEVALUABLE_INTRADAY, never SUSPECT on a guess
+#   vix_min                -> VIX.high < threshold all day
+#   vix_change_max         -> (VIX.low - prior_close)/prior_close*100 > threshold_pct all day
+#   weekday                -> gate met iff weekday(date) == day
+#   orb_60min              -> entry gated on price breaking the 09:30-10:30 range after 10:30 (5-min series)
+#   none                   -> no market gate; silence is SUSPECT unless a fill_precondition is declared
+#   unknown                -> UNEVALUABLE_BY_DESIGN, printed loudly, names the missing gate
+# UNEVALUABLE classes (name the missing thing):
+#   UNEVALUABLE_MISSING    -> the underlying this gate needs is ABSENT from that day's tape; names the underlying and the date
+#   UNEVALUABLE_SOURCE     -> the underlying is PRESENT on the tape but its source != tradier; names the source and the date
+# A gate that consumes no tape field (e.g. weekday) evaluates regardless of tape state or source.
 bot,pr_id,underlying,entry_window_et,gate_type,gate_params,eval_class,fill_precondition,source
 IC-SPX-FastPT25-S2,PR-01,SPX,11:00,band_prior_close,abs_lt=0.75,EVALUABLE,,Range075 shared entry (build-plan §2D as amended; Roll Call 08-17 verdict basis)
 IC-SPX-FastPT25-S2-130PM,PR-02,SPX,13:30,band_prior_close,abs_lt=0.75,EVALUABLE,,clone of champion; only change = entry time (bots_meta notes)
