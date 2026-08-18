@@ -89,7 +89,7 @@ decision-class one).
       by the self-test. Same shape as P1-4. Class A. Owner: Devin.
 - [ ] **P2-5b — 🔒 the banner can under-report silently.** `report.py:351` is an intersection:
       `unsigned_bots = sorted(b for b in meta if b in _ledger_unsigned)`. A bot unsigned in the ledger
-      but absent from `data/bots_meta.csv` is dropped with **no warning** — and P1-1 records that roster
+      but absent from `data/bots_meta.csv` is dropped with **no warning** — and item P1-1 documents that roster
       as the pre-cutover one, carrying none of the GF arms and none of the `PR-NN` registrations.
       Verify with `python3 -c "import scripts.pre_registration_ledger as p; print(sorted(p.unsigned_from_ledger('docs/pre-registration-ledger.md')))"`
       against the `bot` column of `data/bots_meta.csv`. A fix changes a detector predicate → **Class C**,
