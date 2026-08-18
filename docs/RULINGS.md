@@ -2475,6 +2475,33 @@ unclear: >-
   comparability; that is not a change to the frozen counting.
 ```
 
+```yaml
+ruling_id: R-2026-08-17-INC01-META-STATUS
+date: 2026-08-17
+scope: >-
+  data/bots_meta.csv row 3 (IC-SPX-Fortress-Unstopped, INC-01) status OFF -> ON, corrected from a
+  fresh first-hand /bots capture per CLAUDE.md S3 rule 2, which forbids fixing a config fact by
+  editing the cell. The stale provenance sentence in the same row's notes field is replaced in the
+  same edit. No other row of bots_meta.csv changes. This is a correction of a falsified fact, not a
+  decision about what the bot does.
+verbatim: >-
+  correct INC-01's bots_meta status to ON from the 08-17 capture
+verbatim_of: andy
+owner: Andy
+status: Active
+applies_to: >-
+  data/bots_meta.csv line 3 (IC-SPX-Fortress-Unstopped / BOTfw5TkkCRF3317787955825912621): the
+  status cell and the notes cell. Downstream, unedited but changed in behaviour:
+  scripts/execution_audit.py rule_S8_silent_bot (line 393), scripts/report.py
+  decidability_countdown armed list (line 117) and bot-group mapping (line 455).
+superseded_by: none
+source: >-
+  Andy's ruling on the 2026-08-17 R-3 Roll Call item, Cowork session 2026-08-18 ET. Evidence:
+  data/captures/2026-08-17-r3/01-oa-bots-capture-2026-08-17-195713.txt sha256
+  8d9c59b71858c97f43357595dd252d5bd4594a8ab20887da5cda120f64ccdf89, committed 0007d3e.
+unclear: false
+```
+
 
 
 
