@@ -108,6 +108,11 @@ decision-class one).
 - [ ] **P2-6 — the 24 dangling citations.** `python3 scripts/check_refs.py` (prints **25**; one of them, `scripts/check_refs.py:263 -> docs/fixture.md`, is the checker's own `--selftest` temp fixture, not a citation — 24 real citations remain). Each needs a
       source-of-truth call (rewrite vs. drop the citation), so none are fixed unilaterally.
       Owner: Andy rules, Devin applies.
+- [ ] **P2-7 — selftest known-positive tuple pins mutable ruled facts.** The live
+      known-positive tuple in `scripts/pre_registration_ledger.py` pins a ruled fact
+      that has already changed once. Future known-positives must either read from a
+      fixture or carry a comment naming the ruling that can change them. Recorded, not
+      fixed here; see `R-2026-08-18-SELFTEST-KNOWN-POSITIVE-PREAUTH`. Owner: Devin.
 
 ## Later
 
