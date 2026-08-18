@@ -135,8 +135,8 @@ Roles per `AI Agent Stack.md` §6. Status points at its source; no figures here.
 | Role | Class | Owner | State | Blocked by |
 |---|---|---|---|---|
 | Orchestrator | A | Cowork | Live; hub — dispatches at start, applies ruled changes at end | — |
-| OA-Reader | B | Devin | Not built | OA reactivation |
-| Pipeline-Runner | A | Devin | Exists; no trigger, no heartbeat | — |
+| OA-Reader | B | Devin | Step (0) built — `scripts/oa_reader_parse.py` (724 lines) + `.github/workflows/oa-reader.yml`; steps (a)-(c) not built | OA reactivation |
+| Pipeline-Runner | A | Devin | Exists; no trigger. Heartbeat built — `daily.sh` writes `artifacts/heartbeat/<date>.json`, checked by `heartbeat-check.yml` | — |
 | Execution-Auditor | A | Devin | Exists; rules skip for want of the mechanics schema | mechanics contract |
 | Statistician | A | Devin | Exists; unwired. Layer 2 correctly `BLOCKED` | see G-1′ — not a gap |
 | Researcher | A | Cowork frames · Devin runs | Script is draft; defects on record | do not wire in |

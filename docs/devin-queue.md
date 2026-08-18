@@ -17,10 +17,14 @@ decision-class one).
 
 ## Now
 
-- [ ] **P0-1 — CI gate.** GitHub Actions on every PR: the four `--validate` suites, `check_refs.py`,
-      and a rerun-and-diff (re-run `daily.sh` on committed inputs through a `generated`-timestamp
-      normalizer; fail on any other diff). *Acceptance:* a PR reintroducing a stale accumulator
-      fails. Owner: Devin.
+- [x] **P0-1 — CI gate. DONE — ruled 2026-08-19 (`R-2026-08-19-P0-1-ACCEPTANCE`, Reading 1).**
+      GitHub Actions runs on every PR: the four `--validate` suites, `check_refs.py`, and a
+      rerun-and-diff. Andy ruled that `.github/workflows/ci.yml:65` ("run daily.sh twice against
+      the scratch root and diff outputs") and `.github/workflows/ci.yml:133` ("rerun-and-diff is
+      hermetic under disabled network") together satisfy the acceptance test; the item's own
+      `generated`-timestamp-normalizer wording described one possible implementation, not the
+      requirement. Delivered by PR #7 (`0051b5e`), which superseded the closed PR #3; hardened by
+      #13, #20 and #27. Owner: Devin.
 - [ ] **P0-2 — CODEOWNERS + branch protection.** Mechanically lock the Devin lane out of
       `docs/build-plan.md`, `docs/pre-registration-ledger.md`, `CLAUDE.md` and every spec. Nothing
       merges red. Owner: Devin. *Andy must enable branch protection in repo settings.*
@@ -94,7 +98,7 @@ decision-class one).
       Verify with `python3 -c "import scripts.pre_registration_ledger as p; print(sorted(p.unsigned_from_ledger('docs/pre-registration-ledger.md')))"`
       against the `bot` column of `data/bots_meta.csv`. A fix changes a detector predicate → **Class C**,
       pre-authorisation required per charter §4. Owner: Andy rules, Devin applies.
-- [ ] **P2-6 — the eleven dangling citations.** `python3 scripts/check_refs.py`. Each needs a
+- [ ] **P2-6 — the 24 dangling citations.** `python3 scripts/check_refs.py` (prints **25**; one of them, `scripts/check_refs.py:263 -> docs/fixture.md`, is the checker's own `--selftest` temp fixture, not a citation — 24 real citations remain). Each needs a
       source-of-truth call (rewrite vs. drop the citation), so none are fixed unilaterally.
       Owner: Andy rules, Devin applies.
 
