@@ -2527,3 +2527,203 @@ source: >-
   selftests, oa-reader all success); the two named steps read first-hand at that commit.
 unclear: false
 ```
+
+```yaml
+ruling_id: R-2026-08-18-HEARTBEAT-FLEET-ROOT-PREAUTH
+date: 2026-08-18
+scope: >-
+  Pre-authorization of a named guard change per agent-charter §4: scripts/check_heartbeat.py
+  (lines 14-15) may be changed to honour the FLEET_ROOT environment variable when set, falling
+  back to the repo root when unset. The change is confined to path resolution; the checker's
+  verdict logic (missing/red detection, previous-trading-day computation, loud failure) must not
+  change. On landing, the copy-step workaround in .github/workflows/heartbeat-check.yml
+  (lines 46-50) is removed in the same PR.
+verbatim: >-
+  I pre-authorize, as a named guard change, making check_heartbeat.py honour FLEET_ROOT for path
+  resolution only, with repo root as the unset fallback, verdict logic untouched, and the
+  heartbeat-check.yml copy workaround removed in the same PR.
+verbatim_of: andy
+owner: Andy
+status: Active
+applies_to: >-
+  scripts/check_heartbeat.py lines 14-15 (ROOT/HEARTBEAT_DIR resolution);
+  .github/workflows/heartbeat-check.yml lines 46-50 (workaround removal). The PR description
+  must name this as a guard change and cite this ruling_id.
+superseded_by: none
+source: >-
+  Follow-up from PR #27 (2026-08-17 close, open item); workaround comment at
+  heartbeat-check.yml:46-50 names the pre-auth requirement. Signed in the 2026-08-18 Cowork
+  expedite session.
+unclear: false
+```
+
+```yaml
+ruling_id: R-2026-08-18-MECHANICS-IN-FORCE
+date: 2026-08-18
+scope: >-
+  Resolves the two SIGNED CONDITIONAL sections of R-2026-08-17-MECHANICS-CONTRACT.
+  §2.5 IS IN FORCE and has been since commit 0007d3e, per its own signed
+  trigger: the roster authority is the 2026-08-17-r3 /bots capture
+  (data/captures/2026-08-17-r3/01-oa-bots-capture-2026-08-17-195713.txt,
+  sha256 8d9c59b71858c97f43357595dd252d5bd4594a8ab20887da5cda120f64ccdf89, with its derived
+  02-roster-toggles TSV), which supersedes the stale 08-09-s2b authority. A corrections-class
+  PR records this in docs/roster-mechanics-ruling.md (§2.5 row + authority line); the record
+  edit is declaratory, not constitutive. §2.4 REMAINS CONDITIONAL by choice: the freeze is
+  deferred until the condor-label fix (R-2026-08-17-CONDOR-LABEL-CLASS-A) and the PR #26
+  corrections have merged; the freeze PR that follows re-records the panel at full sha256 as of
+  its base commit, retires the 16-hex short form in daily-loop-spec.md lines 36/152, appends a
+  lineage trace citing the merged PR behind each hash movement since the original declaration
+  (67a53797… → fdc43d0d…; 9ec21da9… → e12c9ef1… → 314d449a… → the post-fix value), and records
+  the version-bump procedure (a new version re-records its hash with a changelog line; counting
+  or detector-predicate changes remain Class C; display-only changes remain Class A). §2.4
+  takes force when that freeze PR merges — this ruling names the trigger so the condition is
+  decidable, not open-ended.
+verbatim: >-
+  §2.5 is in force since 0007d3e with the 08-17-r3 capture as authority;
+  §2.4 waits for the condor-label and PR #26 queue to drain, then freezes at
+  full hash with lineage and the bump procedure.
+verbatim_of: andy
+owner: Andy
+status: Active
+applies_to: >-
+  docs/roster-mechanics-ruling.md (§2.5 row IN FORCE + authority line; §2.4 row
+  gains its named trigger); docs/daily-loop-spec.md lines 36/152 (edited by the
+  later freeze PR, not now); scripts/execution_audit.py and
+  scripts/build_ledger.py (hashes recorded then, files never edited by
+  either PR). The mechanics-parser dual-build remains gated on §2.4's freeze
+  PR and is dispatched the day it merges.
+superseded_by: none
+source: >-
+  Cowork expedite session 2026-08-18; §2.4/§2.5 decision package
+  (mechanics-inforce-package-2026-08-18.md); hashes and capture verification
+  read from the tree at c0e24b4 that session.
+unclear: >-
+  [UNCLEAR] Deliberately recorded: build_ledger.py moved between the doc's
+  08-17 read and 08-18 (e12c9ef1… → 314d449a…) with the responsible commit not
+  yet traced; the freeze PR's lineage trace must name it before recording.
+```
+
+```yaml
+ruling_id: R-2026-08-18-PR02-PR04-SUBSTITUTE-VERIFY
+date: 2026-08-18
+scope: >-
+  Discharges the FIRST-TRADING-DAY-CAPTURE-OWED riders on PR-02 and PR-04 by
+  SUBSTITUTE verification, the 2026-08-10 originals being unsatisfiable (day
+  gone, OA log retention ~25 min). The substitute, per rider intent (verify
+  against a real trading day): a fresh capture of each bot's Trades list,
+  taken by Andy, committed with sha256 under data/captures/2026-08-18-pr02pr04/.
+  Checks, verbatim from the riders — PR-02 (INVERTED Step-6): NO PT row, NO
+  exit-trigger row; PR-04 (Step-6): a TIME-EXIT row present, NO PT row, and
+  BACKSTOP_CAUGHT_IT NEGATIVE. If ALL checks pass, both SIGNED blocks gain an
+  amendment line citing this ruling + the capture (rider DISCHARGED BY
+  SUBSTITUTE 2026-08-18); the banner then clears both bots with no code
+  change. If ANY check fails, nothing is discharged, the failure is reported
+  to Andy verbatim, and both bots' disposition returns to him as a fresh
+  decision. Evidence accrued 2026-08-10 through the capture date remains
+  marked SIGNED != VERIFIED in the ledger rows; this ruling does not
+  retroactively verify it. R-2026-08-11-PR-02-PR-04-STAY-ON is unaffected
+  either way.
+verbatim: >-
+  Discharge the PR-02/PR-04 capture riders by substitute verification as
+  specified; pass = amend and clear, fail = back to me; the pre-capture
+  window stays marked unverified.
+verbatim_of: andy
+owner: Andy
+status: Active
+applies_to: >-
+  docs/pre-registration-ledger.md PR-02 and PR-04 SIGNED blocks (amendment
+  lines only; verbatim signature text untouched); data/captures/2026-08-18-pr02pr04/
+  (new); scripts/report.py unsigned banner (behaviour changes via data, not code).
+superseded_by: none
+source: >-
+  Cowork expedite session 2026-08-18, item 5 (option 5a); rider text read from
+  the ledger at c0e24b4.
+unclear: false
+```
+
+```yaml
+ruling_id: R-2026-08-18-P1-1A-ROSTER-FACTS
+date: 2026-08-18
+scope: >-
+  Ratifies the roster facts of data/bots_meta.csv at c0e24b4 for the 19 ON bots
+  (pillar, role, underlying, champion) as verified name-for-name against the
+  2026-08-17-r3 /bots capture (sha 8d9c59b7…, committed 0007d3e). Rules PER ARM
+  that all seven GF arms (PR-14…PR-20) are A1 — registered and signed — each
+  tracing to R-2026-08-06-SLOT-04-GREENFIELD-BUILD (build), the 2026-08-06
+  SIZING STAMP, R-2026-08-08-GATE-A8-PR-18-NAME (PR-18/19 naming),
+  R-2026-08-09-S2-GATE-A7-SIGN-ALL-SEVEN (pre-reg signature),
+  R-2026-08-09-S2-STEP-6-7-ORDERING as amended by S2-R5-LIMITS (go-live), and
+  the family-section SIGNED lines of 2026-08-17 under R-2026-08-17-GF-ENTRY-METHOD.
+  No violation occurred. Orders SEVEN CLERICAL ledger rows — one individual
+  entry per arm, citing those signatures, stamping the ID literals (PR-20
+  included) — proposed by an agent lane, corrected and signed by Andy; the
+  entries create no new authority and change no arm's status. PR-23
+  (Ride-Delta) is excluded: individually signed 2026-08-17, retired-but-ON per
+  R-2026-08-17-RIDE-DELTA-STAYS-ON, handled separately. Pre-authorizes, as a
+  named guard change per charter §4, the B1-scope fix ONLY: report.py:351's
+  intersection becomes a predicate that warns loudly on any ledger-unsigned
+  bot absent from bots_meta.csv, plus the P2-5a validate() fixture so the
+  banner path is exercised by the self-test. No parser change is authorized.
+  ops_class assignment is deferred to its own item. Unblocks devin-queue P1-1;
+  P1-1's premise text is stale and is corrected in the same PR.
+verbatim: >-
+  All seven GF arms are A1 per the trace table; add the seven clerical rows
+  citing the signatures; I pre-authorize the banner guard change at B1 scope
+  only, with the P2-5a fixture.
+verbatim_of: andy
+owner: Andy
+status: Active
+applies_to: >-
+  data/bots_meta.csv (ratified, not edited); docs/pre-registration-ledger.md
+  (7 clerical entries to be proposed); scripts/report.py:351 and its
+  validate() fixtures (guard change, B1); docs/devin-queue.md P1-1/P1-1a
+  (premise correction + closure); scripts/execution_audit.py rule_S8_silent_bot
+  (consumes the ratified roster unchanged).
+superseded_by: none
+source: >-
+  Cowork expedite session 2026-08-18; P1-1a decision package + per-arm trace
+  table (p1-1a-decision-package-2026-08-18.md); rulings and ledger lines cited
+  in scope, each read from the tree at c0e24b4. Hold released 2026-08-18 after
+  the audit re-run (run #2) landed without contradicting the measured count.
+unclear: >-
+  [UNCLEAR] Deliberately recorded: (1) the 08-18 audit run #1's "4 ON bots
+  absent from the ledger" did not reproduce — measured 7; run #2's verified
+  table should be reconciled against this when its roster rows are read.
+  (2) The 08-17 family re-signature stands on Layer 1; Layer 2 (delta-vs-pct
+  strike confirmation) remains outstanding and is NOT closed by this ruling.
+```
+
+```yaml
+ruling_id: R-2026-08-18-REPORT-BUILD-AUTH
+date: 2026-08-18
+scope: >-
+  Pre-authorizes, per charter §4, the construction of the SHOULD-HAVE-FIRED
+  report as a NEW detector surface: a mechanics parser bound to the in-force
+  contract (§2.2 schema, §2.3 three-state semantics honored exactly) and a
+  verdict engine emitting JUSTIFIED / SUSPECT / UNEVALUABLE per ON bot per
+  day, built under the dual-build protocol and acceptance gate of the
+  2026-08-18 foreman runbook (two blind builds; verdict diffs return to Andy
+  as contract-ambiguity findings before merge; the Aug-17 Roll Call verdicts
+  are the acceptance fixture: PR-05 and PR-06 JUSTIFIED with tape values
+  cited, PR-10 JUSTIFIED by design, PR-01 SUSPECT). As a NEW surface it
+  defines its own counting at birth per the R-2026-08-17-CONDOR-LABEL-CLASS-A
+  boundary note; it consumes single_sided, bots_meta as ratified, and the
+  tape; it changes NO existing guard, counter, or banked figure. Gated on:
+  the §2.4 freeze PR merged.
+verbatim: >-
+  I authorize the SHOULD-HAVE-FIRED report build as a new detector under the
+  runbook's dual-build protocol and acceptance gate; verdict disagreements
+  come back to me before merge.
+verbatim_of: andy
+owner: Andy
+status: Active
+applies_to: >-
+  scripts/should_have_fired.py + mechanics parser (new files); scripts/daily.sh
+  (wiring phase); CI fixtures for the new self-test. Existing detectors and
+  counters untouched.
+superseded_by: none
+source: >-
+  Cowork expedite session 2026-08-18; foreman runbook
+  _foreman-runbook-2026-08-18.md (on-disk copy is authoritative for lanes).
+unclear: false
+```
