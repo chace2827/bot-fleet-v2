@@ -300,7 +300,7 @@ SIGNED           2026-08-09 - ANDY - gate cleared at S2b, in-chat. Runbook Step 
                  2026-08-10 - the market was closed on the day this was signed - and it stays
                  ADVISORY until D4 is answered, exactly as on PR-01. READ THE LABEL FIRST,
                  FIRE THE RULE SECOND.
-                 FIRST-TRADING-DAY CAPTURE OWED 2026-08-10.
+                 FIRST-TRADING-DAY CAPTURE — OWED 2026-08-10, DISCHARGED BY SUBSTITUTE 2026-08-18 (see amendment below).
                  CONFIG NOTE: limits read 10/10 at signing and were set to 2/2 in the same
                  sitting on Andy's in-chat ruling - "2 per day / 2 at once", condor-aware: an IC
                  is TWO positions, so 2/2 IS one condor per day, one at a time. Per slot-2
