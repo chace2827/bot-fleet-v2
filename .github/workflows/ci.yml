@@ -214,6 +214,9 @@ jobs:
       - name: pre-registration ledger parser selftest
         run: python3 scripts/pre_registration_ledger.py
 
+      - name: check_refs row-count invariant selftest
+        run: python3 scripts/check_refs.py --selftest
+
       - name: check refs (ruling IDs + bots_meta row count)
         run: python3 scripts/check_refs.py
 
