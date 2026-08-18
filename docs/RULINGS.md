@@ -2908,3 +2908,50 @@ unclear: >-
   gates. Each carve-out narrows by its own future ruling; none blocks the
   build.
 ```
+
+```yaml
+ruling_id: R-2026-08-19-GATES-SEMANTICS-Q1-Q3
+date: 2026-08-19
+scope: >-
+  Resolves the three semantic disagreements surfaced by the Phase-3 blind
+  dual-build (builds A commit 71e2336 / B commit ec6e786, verdict diffs held
+  unpushed), each ruled to build B's reading. Q1 (label taxonomy, 34 rows):
+  unevaluable rows name the actual defect — an underlying ABSENT from the
+  tape is UNEVALUABLE_MISSING naming the underlying and date; an underlying
+  PRESENT with source != tradier is UNEVALUABLE_SOURCE; both are loud.
+  Q2 (tape-free gates, 3 rows): a gate that consumes NO tape field (e.g.
+  weekday) evaluates regardless of tape state — the whole-day
+  non-tradier rule scopes to tape-dependent gates only; the zero-fill join
+  runs off the ledger, which is unaffected by tape quality. PR-10 is
+  therefore JUSTIFIED on non-Friday days whatever the tape says.
+  Q3 (straddle scope, 1 row, PR-06 2026-08-14): the asymmetric VIX rule —
+  JUSTIFIED only if the gate was unreachable all day; a straddling day is
+  UNEVALUABLE_INTRADAY, never SUSPECT on a guess — applies to EVERY VIX gate
+  type (vix_min AND vix_change_max). The gates CSV header note that attached
+  the straddle clause only to vix_min was a drafting compression, corrected
+  as a clerical fix riding the Phase-3 PR per R-2026-08-18-BOT-GATES-TABLE's
+  own clerical-fix provision. Consequence: build B matches the ruled
+  semantics on all three questions, so B becomes the Phase-3 PR and A is
+  archived as the witness; the PR re-runs the full verdict set and the
+  acceptance gate after the header fix and records both builds' verdict
+  sha256s.
+verbatim: >-
+  All three questions ruled to reading B: name the missing thing, tape-free
+  gates always evaluate, and no VIX gate ever returns SUSPECT on a straddle.
+  B is the PR, A the witness.
+verbatim_of: andy
+owner: Andy
+status: Active
+applies_to: >-
+  data/bot_gates.csv header comments (clerical: straddle clause generalized
+  to all VIX gate types; UNEVALUABLE_MISSING added to the class list);
+  scripts/should_have_fired.py + mechanics parser as landed by the Phase-3
+  PR (build B, witness A archived in the PR); R-2026-08-18-BOT-GATES-TABLE
+  (amended in interpretation, not superseded).
+superseded_by: none
+source: >-
+  Phase-3 blind dual-build verdict diff (foreman lane report 2026-08-19:
+  38 differing rows collapsing to Q1/Q2/Q3; acceptance gate passed
+  identically in both builds); Andy's rulings in the Cowork session.
+unclear: false
+```
