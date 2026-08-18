@@ -113,6 +113,10 @@ decision-class one).
       that has already changed once. Future known-positives must either read from a
       fixture or carry a comment naming the ruling that can change them. Recorded, not
       fixed here; see `R-2026-08-18-SELFTEST-KNOWN-POSITIVE-PREAUTH`. Owner: Devin.
+- [x] **P2-8 — gate source.** CLOSED by `R-2026-08-18-BOT-GATES-TABLE`. The Phase-3
+      verdict engine's sole gate source is `data/bot_gates.csv`; `data/bots_config_v2.csv`
+      is explicitly NOT the gate source (it records Bot Inputs, not gates) and is
+      unchanged. Owner: Devin.
 
 ## Later
 

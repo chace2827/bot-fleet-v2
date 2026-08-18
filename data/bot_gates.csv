@@ -1,0 +1,34 @@
+# data/bot_gates.csv — SIGNED per R-2026-08-18-BOT-GATES-TABLE (signed as drafted 2026-08-18).
+# One row per ON bot: the PRE-REGISTERED entry gate, its tape mapping, evaluability class.
+# Judges bots against SIGNED gates; live-OA divergence is a separate future detector.
+# Gate changes require a ruling (charter §4); clerical fixes ride normal PRs.
+# Evaluation rules (adopted by the ruling, package §2):
+#   band_prior_close      -> |underlying Δ% vs prior_close| < abs_lt at the 5-min bar(s) in the window
+#   band_prior_close_strict-> Δ% > gt AND Δ% < lt (strict), per side: side not opened today
+#   vix_min (ASYM)        -> JUSTIFIED only if VIX.high < threshold all day; straddle = UNEVALUABLE_INTRADAY
+#   vix_change_max (ASYM) -> JUSTIFIED only if (VIX.low - prior_close)/prior_close*100 > threshold_pct all day
+#   weekday               -> gate met iff weekday(date) == day
+#   orb_60min             -> entry gated on price breaking the 09:30-10:30 range after 10:30 (5-min series)
+#   none                  -> no market gate; silence is SUSPECT unless a fill_precondition is declared
+#   unknown               -> UNEVALUABLE_BY_DESIGN, printed loudly, names the missing gate
+#   tape source != tradier -> whole day UNEVALUABLE (standing)
+bot,pr_id,underlying,entry_window_et,gate_type,gate_params,eval_class,fill_precondition,source
+IC-SPX-FastPT25-S2,PR-01,SPX,11:00,band_prior_close,abs_lt=0.75,EVALUABLE,,Range075 shared entry (build-plan §2D as amended; Roll Call 08-17 verdict basis)
+IC-SPX-FastPT25-S2-130PM,PR-02,SPX,13:30,band_prior_close,abs_lt=0.75,EVALUABLE,,clone of champion; only change = entry time (bots_meta notes)
+IC-SPX-Fortress-Unstopped,INC-01,SPX,11:00,none,,SUSPECT_WHEN_SILENT,,DRAFTED not config-verified (bots_meta notes state no gate); covered by ruling unclear
+QQQ-IC-0DTE-Fortress-NoPT50,PR-04,QQQ,daily,none,,UNEVALUABLE_FLOOR,declared credit floor (exact value unrecorded; bot has never filled — capture 02 2026-08-18),bots_meta notes + zero-fill history; covered by ruling unclear
+DIR-SPX-PutVIX22-SL75,PR-05,VIX,11:00,vix_min,threshold=22,EVALUABLE_ASYM,,bots_meta notes (config-verified: VIX22 gate in Passes-market-conditions)
+DIR-SPX-CallVIXdrop,PR-06,VIX,11:00,vix_change_max,threshold_pct=-2,EVALUABLE_ASYM,,bots_meta notes (config-verified)
+3DTE $140-$350,PR-07,,,unknown,,UNEVALUABLE_BY_DESIGN,,mirror-watch; gate not owned
+Nigiri-Paper-v1,PR-08,,,unknown,,UNEVALUABLE_BY_DESIGN,,mirror-watch; gate not owned
+Friday 14 DTE Broken Wing IB (B-70),PR-10,,Friday,weekday,day=Fri,EVALUABLE,,bots_meta (Friday bot; Roll Call 08-17 verdict basis)
+Trendy-Paper-v1,PR-11,,,unknown,,UNEVALUABLE_BY_DESIGN,,mirror-watch; gate not owned
+60min-ORB-10W-Paper-v1,PR-12,SPX,after 10:30,orb_60min,range=09:30-10:30,EVALUABLE,,DRAFTED from name not config-verified; covered by ruling unclear
+GF-QQQ-IC-Ride,PR-14,QQQ,13:30-14:00,band_prior_close_strict,"gt=-0.75,lt=0.75,per_side_not_opened=true",EVALUABLE,,gf-entry-gate-forensics-2026-08-17 (loop verbatim); R-2026-08-17-GF-ENTRY-METHOD
+GF-QQQ-IC-PT50,PR-15,QQQ,13:30-14:00,band_prior_close_strict,"gt=-0.75,lt=0.75,per_side_not_opened=true",EVALUABLE,,same shared scanners
+GF-QQQ-IC-Trail,PR-16,QQQ,13:30-14:00,band_prior_close_strict,"gt=-0.75,lt=0.75,per_side_not_opened=true",EVALUABLE,,same shared scanners
+GF-QQQ-IC-Touch0,PR-17,QQQ,13:30-14:00,band_prior_close_strict,"gt=-0.75,lt=0.75,per_side_not_opened=true",EVALUABLE,,same shared scanners
+GF-QQQ-IC-SL100,PR-18,QQQ,13:30-14:00,band_prior_close_strict,"gt=-0.75,lt=0.75,per_side_not_opened=true",EVALUABLE,,same shared scanners
+GF-QQQ-IC-SL200,PR-19,QQQ,13:30-14:00,band_prior_close_strict,"gt=-0.75,lt=0.75,per_side_not_opened=true",EVALUABLE,,same shared scanners
+GF-QQQ-IC-Canary,PR-20,QQQ,13:30-14:00,band_prior_close_strict,"gt=-0.75,lt=0.75,per_side_not_opened=true",EVALUABLE,,same shared scanners
+GF-QQQ-IC-Ride-Delta,PR-23,QQQ,13:30-14:00,band_prior_close_strict,"gt=-0.75,lt=0.75,per_side_not_opened=true",EVALUABLE,,same shared scanners; retired-but-ON per R-2026-08-17-RIDE-DELTA-STAYS-ON
