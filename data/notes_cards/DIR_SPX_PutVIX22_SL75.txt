@@ -1,0 +1,40 @@
+BOT                        DIR-SPX-PutVIX22-SL75
+ID                         PR-05
+DISPOSITION                untouched
+PILLAR/ROLE                Directional · experiment
+STATUS                     DRAFT
+HYPOTHESIS                 A VIX≥22-gated long put debit spread has positive RoR out-of-sample. Backtest
+                           +6.4% RoR OOS, params frozen. The open question is not the edge — it is
+                           whether the bot is ALIVE.
+MECHANISM                  Directional convexity in high-vol selloffs; defined risk by construction (the
+                           debit). Primitive: VIX gate in a Passes-market-conditions node.
+ARM VARIABLE               [NO SOURCE]
+KILL CRITERION             Exp(R) per position < −0.10 with CI below 0 at n≥50. SEPARATELY, a LIVENESS
+                           kill: zero bot-log entries across any 10-session window = presumed OFF or
+                           failsafe-tripped → RED, and the bot is switched off pending investigation.
+SAMPLE TARGET              n = 50 positions (the gate is selective — 0 fired in 22 days).
+REVIEW DATE                Day-0 + 6 months. Liveness reviewed WEEKLY from day 1.
+GATE EVAL DATE             📝 STAMPED 2026-08-07 (item 7 above; Andy's ruling: stamp both). Day-0 + 6
+                           months (relational; resolves to calendar at Day-0) — matches REVIEW DATE. This
+                           is a standalone R kill (Exp(R) < −0.10, CI below 0, n≥50), not a comparative
+                           gate under research-loop-spec.md §10a — no interim look at n=60 applies.
+MAX LOSS                   1 lot, ≈$500/position (the debit).
+SIZING TIER                1 lot — experiment.
+CONFIG HASH                <capture> @ <hash>
+                           ⛔ A-27c RULING 2026-08-08 (decision-card-2026-08-08 slot 6, OPTION 2):
+                           ⬜ NOT EVALUABLE — no pre-restore baseline exists for this bot, so A-07's
+                           ESTABLISHED-hash precondition does NOT apply and does NOT block this signature.
+                           A capture is taken ON THE FIRST DAY THIS BOT TRADES; forward drift detection
+                           starts from that capture. ⛔ It establishes nothing about the pre-restore past.
+                           Opening this bot for that capture is a PURE READ (6a) and does not spend Step 2c.
+VERIFICATION               ⚠️ CANNOT be verified from position data. A correctly-gated bot and a dead bot
+                           are indistinguishable. **The bot LOG is the only proof**: a scanner run with no
+                           entry = healthy. Both toggles ON and screenshotted.
+SIGNED                     2026-08-09 · ANDY — in-chat at the S2 Day-0 sitting. Ruling recorded
+                           verbatim: "Sign the seven that can trade (ledger reading)". The A-27c
+                           carry in the CONFIG HASH field above does NOT block this signature
+                           (decision-card-2026-08-08 slot 6, OPTION 2). Signed for Day-0
+                           2026-08-10; LEDGER_START = 2026-08-10.
+                           SIGNED != VERIFIED — runbook §4 Step 6's order-level Trades-list check is
+                           still required before this bot may trade, and rider 2's first-trading-day
+                           capture is still owed. [PR-05]

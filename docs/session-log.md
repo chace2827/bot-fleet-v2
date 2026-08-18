@@ -9515,3 +9515,42 @@ and Task B's OA-Reader spec citations first-hand before acting on either.
   window may be recoverable by Load-more paging — OA-Reader spec Q-1.
 - Owed next: toggle screenshots into `data/captures/2026-08-17-r3/` (completes §2.5's capture
   definition), then the reconciliation PR that puts mechanics §2.4/§2.5 in force.
+
+---
+
+## 2026-08-18 — Devin: canonical OA Notes card generator
+
+Implemented `scripts/gen_notes_cards.py` to stop the hand-copy drift observed in the 2026-08-17
+Notes pass. It reads only committed repo files (`data/bots_meta.csv`,
+`docs/pre-registration-ledger.md`, `docs/greenfield-family-spec.md`), emits one card per
+`status=ON` bot under `data/notes_cards/<slug>.txt`, and writes `data/notes_cards/index.csv` with a
+sha256 per card. Includes `--selftest`.
+
+**Canonical template (fixed field order):**
+BOT, ID, DISPOSITION, PILLAR/ROLE, STATUS, HYPOTHESIS, MECHANISM, ARM VARIABLE, KILL CRITERION,
+SAMPLE TARGET, REVIEW DATE, GATE EVAL DATE, MAX LOSS, SIZING TIER, CONFIG HASH, VERIFICATION, SIGNED.
+
+**Field sources:**
+- `BOT` from `data/bots_meta.csv`; `ID` from the ledger (or greenfield roster table for GF bots).
+- `DISPOSITION`, `STATUS`, `HYPOTHESIS`, `MECHANISM`/`CLOSE MECHANISM`, `KILL CRITERION`,
+  `SAMPLE TARGET`/`SAMPLE`, `REVIEW DATE`, `GATE EVAL DATE`, `MAX LOSS`, `SIZING TIER`,
+  `CONFIG HASH`, `VERIFICATION`/`LAYER 2`, and `SIGNED` from `docs/pre-registration-ledger.md`.
+- `PILLAR/ROLE` from the ledger (`PILLAR/ROLE` or `ROLE` line), overridden by the greenfield
+  roster table for GF bots.
+- `ARM VARIABLE` from `docs/greenfield-family-spec.md` §3 (GF bots only).
+
+**Divergences resolved / surfaced:**
+- Pre-17 cards used at least three shapes: the full pre-registration template on Ride, a reduced
+  shape with inline `STATUS` and no `CONFIG HASH` on the other GF arms, and a wrong-card copy on
+  Ride-Delta. The generator unifies on the ledger template.
+- GF group blocks are shared across multiple PRs; the generator substitutes per-bot `ID`, `BOT`,
+  `PILLAR/ROLE`, and appends the arm-specific variable from the spec table.
+- `GATE EVAL DATE` is absent from the GF family group blocks and from the pre-`GATE EVAL DATE` era
+  entries (PR-01, PR-02, PR-04, INC-01), so those cards carry `[NO SOURCE]`.
+- `GF-QQQ-IC-Ride-Delta` (PR-23) source is `DISPOSITION: 8th greenfield arm` / `SIGNED`, which
+  differs from the 2026-08-17 OA Notes pass that wrote a `RETIRED` display card under
+  `R-2026-08-17-PR23-RETIRE`; the generator emits the ledger state and flags the conflict.
+
+**Verification:** `python3 -m py_compile scripts/*.py` clean;
+`python3 scripts/gen_notes_cards.py --selftest` clean; `python3 scripts/check_refs.py` invariants
+clean; `python3 scripts/pre_registration_ledger.py --selftest` clean.

@@ -1,0 +1,53 @@
+BOT                        Nigiri-Paper-v1
+ID                         PR-08
+DISPOSITION                untouched
+PILLAR/ROLE                OA-Mirror · mirror-watch
+STATUS                     DRAFT
+HYPOTHESIS                 FUNDING question, not a strategy one: does this mirror reproduce its source's
+                           claimed edge closely enough to justify live capital? Pre-lapse anchor: n=38,
+                           mean R +0.0102, median R +0.0102, **sd 0.0065 — the tightest distribution in
+                           the fleet**, worst R 0.0000, maxDD 0.0000R, win 94.7%. DRAFT verdict: **WATCH —
+                           priority 2** (memo §6).
+MECHANISM                  Short-premium collection on a 0.05-delta, $5-wide short put spread, one at a
+                           time, with day-of-week DTE routing to the nearest Friday (Mon 4 / Tue 3 / Wed 2
+                           / Thu 8 / Fri 7 — min 2, max 8 DTE, avoiding 0–1 DTE gamma). Exits: a 7-Day
+                           Accelerated Profit monitor (close if return% > 10 × days-in-trade), a 0-Day ITM
+                           check at 3pm on expiry day, and a 75% default profit target. **No stop by
+                           design** — the author's stop is position sizing and spread width
+                           (`oa-mirror-reference.md` §5.2).
+ARM VARIABLE               [NO SOURCE]
+KILL CRITERION             The shared funding bar, all five conjuncts (§2.6). Failing any after ≥20
+                           completed post-cutover positions = DEFUND, switch OFF. ⚠️ Two things this bar
+                           cannot see and a signer must: (a) **the loss tail is UNOBSERVED — zero losing
+                           positions in n=38**, so `maxDD 0.0000R` is an absence of evidence, not a risk
+                           statement; (b) **the per-position magnitude is tiny** (median +0.0102R), so the
+                           edge must be shown to survive real fills before it is ever sized.
+SAMPLE TARGET              n = 20 completed post-cutover positions for funding; n = 100 over ≥6 months
+                           including a B3 regime change for an edge claim. Observed cadence 0.458/day →
+                           n=100 ≈4.4 months from a resumed clock (memo §7).
+REVIEW DATE                Day-0 + 3 months (funding), Day-0 + 6 months (edge).
+GATE EVAL DATE             Day-0 + 6 months (relational; resolves to calendar at Day-0); interim look at
+                           n=60. ✅ REACHABLE: 0.458/day × ~180 days ≈ 82 positions; n=60 lands ≈131 days
+                           after Day-0.
+MAX LOSS                   Paper allocation **$10K**; bounded **$500 max loss per trade** by the $5 width.
+                           A single position consumes ~49% of allocation by design (2–4 concurrent
+                           intended) — validated as normal, not a sizing error. Concentration: all SPY;
+                           the named kill shape is a gap-down.
+SIZING TIER                Unchanged from current. Do not resize a watch-only bot.
+CONFIG HASH                PENDING DAY-0 CAPTURE — does not exist yet; do not invent one.
+                           ⛔ A-27c RULING 2026-08-08 (decision-card-2026-08-08 slot 6, OPTION 2):
+                           ⬜ NOT EVALUABLE — no pre-restore baseline exists for this bot, so A-07's
+                           ESTABLISHED-hash precondition does NOT apply and does NOT block this signature.
+                           A capture is taken ON THE FIRST DAY THIS BOT TRADES; forward drift detection
+                           starts from that capture. ⛔ It establishes nothing about the pre-restore past.
+                           Opening this bot for that capture is a PURE READ (6a) and does not spend Step 2c.
+VERIFICATION               Both toggles ON and screenshotted (Day-0 re-arm sweep), plus the first
+                           post-cutover position's Trades list.
+SIGNED                     2026-08-09 · ANDY — in-chat at the S2 Day-0 sitting. Ruling recorded
+                           verbatim: "Sign the seven that can trade (ledger reading)". The A-27c
+                           carry in the CONFIG HASH field above does NOT block this signature
+                           (decision-card-2026-08-08 slot 6, OPTION 2). Signed for Day-0
+                           2026-08-10; LEDGER_START = 2026-08-10.
+                           SIGNED != VERIFIED — runbook §4 Step 6's order-level Trades-list check is
+                           still required before this bot may trade, and rider 2's first-trading-day
+                           capture is still owed. [PR-08]
