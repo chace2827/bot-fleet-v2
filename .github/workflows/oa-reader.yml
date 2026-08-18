@@ -1,0 +1,20 @@
+name: OA-Reader step-0 selftest
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+    branches: ['**']
+
+jobs:
+  oa-reader:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: oa_reader_parse fixture selftest
+        run: python3 scripts/oa_reader_parse.py --selftest
