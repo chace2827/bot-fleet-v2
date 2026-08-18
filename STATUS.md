@@ -22,7 +22,7 @@
   - OA-Mirror: $155  (SPX $-5)
 
 ## Champion — IC-SPX-FastPT25-S2
-- P/L **$100**  ·  5 condors (5 legs)  ·  5 trading days (2 green / 0 red)
+- P/L **$100**  ·  5 positions (0 condors, 5 single-sided) · 5 legs  ·  5 trading days (2 green / 0 red)
 - Max drawdown (daily cumulative): $0
 
 ## Focus roster — the bots you're actively perfecting  (OA: `*-Focus` groups)
@@ -201,9 +201,36 @@
 - **Size live capital** — among graduates, weight by Tot R + low maxDD-R (consistency); never size on raw P/L.
 - **Exp(R)** = avg return per $1 risked. **Tot R** = size-free analog of total P/L. **maxDD-R** = worst cumulative-R drawdown (risk shape). **t** = evidence the edge is real.
 
+---
+
+## Decidability countdown — per armed arm (PROJECTION, not evidence)
+> **This is a forward projection, not a result.** It extrapolates the recent fire rate and assumes that rate holds. Calendar projection skips weekends and does **not** model market holidays, so the date is approximate. The unit of account is the **POSITION** (a two-sided condor = two spread rows paired by `trade_id`); *n* = 100 means **100 condors**, not 100 legs. One-sided spreads are listed separately and do **not** count toward the 100-condor target. The recent window is the last **20 trading days**; the post-cutover ledger currently contributes **6 trading days** to this window.
+
+| Arm | Pillar | Current condors, positions | One-sided positions, spreads | Closes in 20-trading-day window | Fire rate (closes/trading-day, condors) | Projected 100-condor date |
+|---|---|--:|--:|--:|--:|---|
+| 3DTE $140-$350 | OA-Mirror | 1 | 0 | 1 | insufficient data | insufficient data |
+| 60min-ORB-10W-Paper-v1 | OA-Mirror | 0 | 3 | 0 | insufficient data | insufficient data |
+| DIR-SPX-CallVIXdrop | Directional | 1 | 0 | 1 | insufficient data | insufficient data |
+| DIR-SPX-PutVIX22-SL75 | Directional | 0 | 0 | 0 | insufficient data | insufficient data |
+| Friday 14 DTE Broken Wing IB (B-70) | OA-Mirror | 0 | 0 | 0 | insufficient data | insufficient data |
+| GF-QQQ-IC-Canary | IC | 0 | 2 | 0 | insufficient data | insufficient data |
+| GF-QQQ-IC-PT50 | IC | 0 | 2 | 0 | insufficient data | insufficient data |
+| GF-QQQ-IC-Ride | IC | 0 | 2 | 0 | insufficient data | insufficient data |
+| GF-QQQ-IC-Ride-Delta | IC | 0 | 4 | 0 | insufficient data | insufficient data |
+| GF-QQQ-IC-SL100 | IC | 0 | 2 | 0 | insufficient data | insufficient data |
+| GF-QQQ-IC-SL200 | IC | 0 | 2 | 0 | insufficient data | insufficient data |
+| GF-QQQ-IC-Touch0 | IC | 0 | 2 | 0 | insufficient data | insufficient data |
+| GF-QQQ-IC-Trail | IC | 0 | 2 | 0 | insufficient data | insufficient data |
+| IC-SPX-FastPT25-S2 | IC | 0 | 5 | 0 | insufficient data | insufficient data |
+| IC-SPX-FastPT25-S2-130PM | IC | 6 | 0 | 6 | 1.00 | 2026-12-25 |
+| Nigiri-Paper-v1 | OA-Mirror | 0 | 4 | 0 | insufficient data | insufficient data |
+| QQQ-IC-0DTE-Fortress-NoPT50 | IC | 0 | 0 | 0 | insufficient data | insufficient data |
+| Trendy-Paper-v1 | OA-Mirror | 0 | 1 | 0 | insufficient data | insufficient data |
+
 ## Caveats
-- **Trades = condors** (the two legs of one entry paired); **Legs = OA position rows** (matches OA's "Positions" count). Win rate shown is per-condor.
-- A combined-`ironcondor` bot logs 1 leg per condor; a legged bot logs 2 — so Legs ≈ 2× Trades only for legged bots. That's why they were confusing before.
+- **Positions:** 39 total (6 condors, 33 single-sided)  ·  45 legs.
+- A condor has two spread rows paired by `trade_id` with `single_sided=False`; a single-sided position is any position that is not a condor (one spread row or `single_sided=True`). **Legs = OA position rows** (matches OA's "Positions" count). Win rate shown is per-position.
+- A combined-`ironcondor` bot logs 1 leg per condor; a legged bot logs 2 — so Legs ≈ 2× condors only for legged bots. That's why they were confusing before.
 - `Fix? = Y`: QQQ-IC bot carrying the call-side strike-resolution bug; data contaminated until fixed.
-- Single-sided condors (only one leg opened): 31 legs flagged.
+- Single-sided positions (not condors): 33 positions.
 - Tiny-N bots are tracked but **not** evidence; read Trades before P/L.

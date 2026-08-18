@@ -766,8 +766,11 @@ def main():
 
     trade_pnl = collections.defaultdict(float)
     trade_bot = {}
+    trade_ss = set()
     for i, r in enumerate(rows):
         k = trade_of[i]; trade_pnl[k] += fl(r["pnl"]); trade_bot[k] = r["botName"]
+        if single_sided(i):
+            trade_ss.add(k)
     tr = collections.defaultdict(lambda: {"n": 0, "wins": 0})
     for k, bot in trade_bot.items():
         tr[bot]["n"] += 1
@@ -786,6 +789,11 @@ def main():
 
     tot = sum(a["pnl"] for a in legs.values())
     ntr = len(trade_bot)
+    # A condor is two spread rows paired by trade_id with single_sided=False.
+    n_cond = sum(1 for k in trade_size
+                 if trade_size[k] == 2 and k not in trade_ss)
+    n_one_sided = ntr - n_cond
+    condor_word = "condor" if n_cond == 1 else "condors"
 
     write_receipt(os.path.join(OUT, "ledger_meta.json"),
                   ledger_start=ledger_start, ledger_start_source=ls_source,
@@ -798,7 +806,8 @@ def main():
     print(f"Source: {os.path.basename(src)}")
     print(f"Export rows: {counts['export_rows']}  ->  post-cutover {counts['post_cutover']}"
           f" | straddlers {counts['straddler']} | pre-cutover discarded {counts['pre_cutover']}")
-    print(f"WORKING LEDGER  Legs: {len(rows)}  Trades(condors): {ntr}  "
+    print(f"WORKING LEDGER  Legs: {len(rows)}  Positions: {ntr} "
+          f"({n_cond} {condor_word}, {n_one_sided} single-sided)  "
           f"Bots: {len(legs)}  Total P/L: {tot:,.0f}")
     if not rows:
         print("NOTE: working ledger is EMPTY (n=0). Expected before the first "
