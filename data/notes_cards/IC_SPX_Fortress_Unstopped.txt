@@ -1,0 +1,63 @@
+BOT                        IC-SPX-Fortress-Unstopped
+ID                         INC-01
+DISPOSITION                re-opened pre-lapse build — REMOVED from build-plan §2 Group A by
+                           R-2026-08-17-UNSTOPPED-REOPEN (that row amended inline, not deleted)
+PILLAR/ROLE                SIGNED INCUMBENT BENCHMARK. The only pre-lapse build live. Pre-registered as the
+                           comparator for whether post-lapse builds beat what already worked.
+                           COMPARISON METRIC: per-leg R vs the GF arms and IC-SPX-FastPT25-S2-130PM.
+STATUS                     [NO SOURCE]
+HYPOTHESIS                 [NO SOURCE]
+MECHANISM                  ⭐ HOLD TO EXPIRATION, SAME DAY. Established from the 2026-08-17 capture, not
+                           assumed:
+                             · Exit Options: `disableExits: 1`; the open action's exits bundle reads `None`.
+                             · `Fortress-Mon-S2-Cleanup`  — per-bot state "Automation is off".
+                             · `Defang-Mon-S2-StrikeTouch` — per-bot state "Automation is off".
+                             · Entry series `{days:0, compare:"exact"}` = 0DTE, so expiry is same session.
+                           With AUTOS on, the ONLY automations that run are the two scanners. Nothing closes
+                           a position except expiration. Both close-capable monitors exist but are disabled
+                           on this bot — that disabled state is what makes it "Unstopped".
+ARM VARIABLE               [NO SOURCE]
+KILL CRITERION             (a) new-sample profit factor < 1.0 at n ≥ 15; OR
+                           (b) ANY hash drift from the signed capture above → AUTOS OFF IMMEDIATELY and
+                               escalate. NO DIAGNOSIS WHILE ARMED.
+SAMPLE TARGET              BENCHMARK, NOT EXPERIMENT. Interim read at n=15 NEW closes.
+REVIEW DATE                n=30 new closes or 2026-11-30, whichever comes FIRST.
+GATE EVAL DATE             [NO SOURCE]
+MAX LOSS                   [NO SOURCE]
+SIZING TIER                [NO SOURCE]
+CONFIG HASH                Capture file `data/captures/unstopped-reopen-capture-2026-08-17.txt`
+                           sha256 91e2076f94a3f8ee2a03ee8298a6dd67756a4eb092437907d1fe62597b03dd82
+                           Four automation hashes, formula sha256(JSON.stringify({name, inputs, root})):
+                             Fortress-Scan-Put         v4 sharing0  01f37cdd96b4b09e2613dab1bc1c5395f78615d914c3b23e6d23b486cd29fe67
+                             Fortress-Scan-Call        v4 sharing0  c0dba2f5dc40f1be48df968f794dc264cd44ee6321e4dc4bcaa6d5f0e7211e02
+                             Defang-Mon-S2-StrikeTouch v5 sharing1  291e05ad09c2f6f801a7dcab0a121d503525fb6c015e27763cca3effa20155b6
+                             Fortress-Mon-S2-Cleanup   v2 sharing0  a3f0ada0180311856db3fdc4c214e1f1f19c1f954910acad8aaa3d65e5522413
+                           All four last written 2026-05-14 — untouched for three months.
+VERIFICATION               ⚠️ OUTSTANDING — top-of-brief until confirmed. As amended by
+                           R-2026-08-17-UNSTOPPED-REOPEN-A1, the first position's Trades list must show:
+                             (a) NO Exit-Option rows — the inverted-check class used for PR-01's Day-0
+                                 verification; and
+                             (b) a close consistent with the documented mechanism = closed BY EXPIRATION,
+                                 with no Cleanup and no StrikeTouch close row.
+                           Because entries are 0DTE, both legs of this check resolve the same session.
+SIGNED                     2026-08-17 · ANDY — in-session, under R-2026-08-17-UNSTOPPED-REOPEN and its
+                           AMENDMENT 1. Signed BEFORE arming, per the ruling's capture → sign → arm order.
+STRATEGY IDENTITY          `disableExits: 1` IS THE DESIGN — not a defect, not a toggle left off. Any config
+                           edit ends incumbent status and requires a fresh ruling. THERE IS NO "SMALL FIX" ON
+                           THIS BOT. Its value is the untouched record; an edited incumbent is just another
+                           new bot.
+ENTRY                      (recorded, NOT edited)
+                           Scanners `Fortress-Scan-Put` / `Fortress-Scan-Call`, after 1:30pm, Range075
+                           (±0.75% since previous close), an `FOMC Meeting today` gate, and a per-side
+                           "exactly 0 open positions" re-entry gate. Short leg `legpctprice pct=0.75`,
+                           `filter minPrice 0.08`, price `75% of bid/ask` SmartPricing `speedy`,
+                           size `Up to $5,000 risk` (draw), NOT a fixed contract count.
+SHARED-AUTOMATION SURFACE  `Defang-Mon-S2-StrikeTouch` (`RTfw5TkkCRF3317787955826108344`, `sharing:1`) is
+                           shared with **`IC-SPX-Fortress-Defang`** — identified from that bot's own settings
+                           page, not inferred from the name. It is ON there and OFF here: sharing couples
+                           DEFINITIONS, not execution. ⛔ RECORDED EDIT-FROZEN: any future edit goes via
+                           `/bots/automations` only and writes into the archived Defang's config too. Flag
+                           before anyone touches it.
+RECORD AS SIGNED           (pre-lapse, earned under the captured config)
+                           closed P/L $2,350 · 26 closes (16W / 7L / 3 scratch) · win rate 69.57%
+                           · profit factor 6.222 · allocation $50,000 · posLimit 2/2 · account sim (paper)

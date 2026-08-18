@@ -1,0 +1,55 @@
+BOT                        60min-ORB-10W-Paper-v1
+ID                         PR-12
+DISPOSITION                untouched
+PILLAR/ROLE                OA-Mirror · mirror-watch
+STATUS                     DRAFT
+HYPOTHESIS                 FUNDING question. Pre-lapse anchor: n=12, mean R **−0.0328** but median R
+                           **+0.0786**, sd 0.3885, worst R −1.0000, maxDD 1.0000R, win 83.3%. DRAFT
+                           verdict: **WATCH — tail undetermined**, the same shape as `Trendy-Paper-v1`
+                           (memo §4, §6).
+MECHANISM                  Fading a failed 60-minute opening-range breakout: an SPX 0DTE **10-wide** short
+                           put OR call credit spread with the short strike at the ORB level ($0.01
+                           buffer), a **built-in $140 stop and $50 profit target**, min credit $0.70,
+                           Mon/Tue/Wed/Fri only, FOMC excluded, entries before 2pm. The narrow wing
+                           pre-commits the loss cap at entry rather than relying on stop execution
+                           (`oa-mirror-reference.md` §5.2).
+ARM VARIABLE               [NO SOURCE]
+KILL CRITERION             The shared funding bar, all five conjuncts (§2.6), after ≥20 completed
+                           post-cutover positions. ⚠️ **Conjunct 3 has a weak referent here**: the source
+                           is tagged *"Backtest: None"* and is community-validated only, so "win rate
+                           within ~10% of the source's claim" is measured against a leaderboard figure and
+                           not against a disclosed backtest. State which number is being used when the
+                           conjunct is evaluated, or the conjunct is unfalsifiable.
+SAMPLE TARGET              n = 20 completed post-cutover positions for funding; n = 100 over ≥6 months
+                           including a B3 regime change for an edge claim. ⚠️ Cadence 0.250/day →
+                           **n=100 ≈11.6 months** (memo §7). Tier M is DRAFT, not in force — and the memo
+                           explicitly doubts the Tier-M defined-risk carve-out applies to a **stop-managed**
+                           strategy, because a stop is an execution promise and this fleet has already paid
+                           for the difference between a promised exit and an executed one (§7a Q3).
+REVIEW DATE                Day-0 + 3 months (funding), Day-0 + 6 months (edge).
+GATE EVAL DATE             Day-0 + 6 months (relational; resolves to calendar at Day-0); interim look at
+                           n=60. ⚠️ **NOT REACHABLE**: 0.250/day × ~180 days ≈ 45 positions.
+MAX LOSS                   Paper allocation **$10K**; 10-wide SPX 0DTE credit spread with a built-in $140
+                           stop; source avg loss −$326 against −$650 for the wide-wing sibling. Worst
+                           realised in the baseline −1.0000R, so the stop is not a guarantee.
+SIZING TIER                Unchanged from current. Do not resize a watch-only bot.
+CONFIG HASH                PENDING DAY-0 CAPTURE — does not exist yet; do not invent one.
+                           ⛔ A-27c RULING 2026-08-08 (decision-card-2026-08-08 slot 6, OPTION 2):
+                           ⬜ NOT EVALUABLE — no pre-restore baseline exists for this bot, so A-07's
+                           ESTABLISHED-hash precondition does NOT apply and does NOT block this signature.
+                           A capture is taken ON THE FIRST DAY THIS BOT TRADES; forward drift detection
+                           starts from that capture. ⛔ It establishes nothing about the pre-restore past.
+                           Opening this bot for that capture is a PURE READ (6a) and does not spend Step 2c.
+VERIFICATION               ⚠️ **NAME-COLLISION GUARD — read the bot name character by character before
+                           arming.** `60min-ORB-10W-Paper-v1` **stays live**; `Opening Range Breakout 60m`
+                           is a DIFFERENT bot, is OFF, and is **being archived** (`build-plan.md` §2A;
+                           memo §1). Arming the wrong one re-arms a bot with a draft KILL against it. Then
+                           both toggles ON and screenshotted, plus the first post-cutover Trades list.
+SIGNED                     2026-08-09 · ANDY — in-chat at the S2 Day-0 sitting. Ruling recorded
+                           verbatim: "Sign the seven that can trade (ledger reading)". The A-27c
+                           carry in the CONFIG HASH field above does NOT block this signature
+                           (decision-card-2026-08-08 slot 6, OPTION 2). Signed for Day-0
+                           2026-08-10; LEDGER_START = 2026-08-10.
+                           SIGNED != VERIFIED — runbook §4 Step 6's order-level Trades-list check is
+                           still required before this bot may trade, and rider 2's first-trading-day
+                           capture is still owed. [PR-12]

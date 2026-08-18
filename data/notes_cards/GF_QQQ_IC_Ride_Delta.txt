@@ -1,0 +1,48 @@
+BOT                        GF-QQQ-IC-Ride-Delta
+ID                         PR-23
+DISPOSITION                8th greenfield arm
+PILLAR/ROLE                IC · experiment
+STATUS                     DRAFT
+HYPOTHESIS                 Short-strike selection by DELTA adapts to volatility and time-to-expiry;
+                           selection by FIXED PERCENT OF LAST does not. Paired against Ride — identical
+                           symbol, wings, window, regime gates, sizing, pricing, floor and exit policy
+                           (ride to expiry) — the two differ in EXACTLY ONE input: the short-strike
+                           selection method. Any divergence in entry FREQUENCY or in realised OTM% over
+                           time is therefore attributable to that method alone.
+MECHANISM                  Established 2026-08-11, first-hand: PR-01 and the eight GF arms use
+                           `legpctprice pct=0.75`; PR-02 uses `delta 0.1` and is the only bot in the
+                           fleet filling daily. PR-01 vs PR-02 are byte-identical in wings, price,
+                           sizing and filter — the selection method is the sole differing field.
+                           Supporting: credit at >=0.70% OTM on SPX 0DTE fell ~60% Apr->Aug 2026
+                           (0.320 / 0.291 / 0.343 / 0.153 / 0.125), i.e. the fixed-% spec aged out of
+                           its regime rather than breaking.
+ARM VARIABLE               short-strike selection by delta (0.10/-0.10) vs fixed percent
+KILL CRITERION             Exp(R) per condor < 0 with CI entirely below 0 at n>=60, emitted as an
+                           always-valid confidence sequence (per G-8), and not before GATE EVAL DATE.
+                           ⚠️ P/L IS NOT THE POINT AND MUST NOT RETIRE IT EARLY. If at n>=20 the bot has
+                           taken ZERO entries, the delta value is wrong, not the method — re-tune, do not
+                           kill.
+SAMPLE TARGET              [NO SOURCE]
+REVIEW DATE                [NO SOURCE]
+GATE EVAL DATE             2026-11-11 (3 months from authoring).
+MAX LOSS                   [NO SOURCE]
+SIZING TIER                [NO SOURCE]
+CONFIG HASH                [NO SOURCE]
+VERIFICATION               [NO SOURCE]
+SIGNED                     2026-08-17 · ANDY — in-session, verbatim "Sign now", under
+                           `R-2026-08-17-GF-ENTRY-METHOD`. Config hashes as stamped above. Sample restarts at
+                           the 2026-08-17 edit; nothing before it counts. Review at 10 sessions.
+                           ⚠️ LAYER 2 IS OUTSTANDING — the first new position's Trades list must confirm the
+                           strikes are delta-selected, not 0.40%-selected. Signature stands on Layer 1.
+SOURCE                     GF-QQQ-IC-Ride  BOTfw5TkkCRF4417860701930934951
+PRIMARY READ               ENTRY FREQUENCY and REALISED OTM% — not P/L. This bot is run to answer a
+                           mechanical question, and n will be far too small for an R read for months.
+ALLOCATION                 $2,500 — matched to the GF arms. Sizing `amount:{"type":"quantity",
+                           "quantity":1}`, fixed 1 contract, per the PR-14…PR-23 SIZING STAMP 2026-08-06.
+                           Position limit 2/2.
+STARTING DELTA             0.10 / -0.10 — PR-02's observed-working value, NOT a derivation. On QQQ a given
+                           delta sits further out in percent terms than on SPX, so this may land near the
+                           0.40% the pct arms will run. ⚠️ RECORD WHERE IT ACTUALLY LANDS ON DAY ONE. If
+                           it lands far from 0.40%, the pairing is degraded and must be re-tuned before
+                           any comparison is read.
+RISK NOTE                  PAPER. $2,500 allocation, 1 contract, $2 wings — max risk ~$200/condor.

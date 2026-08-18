@@ -1,0 +1,57 @@
+BOT                        Friday 14 DTE Broken Wing IB (B-70)
+ID                         PR-10
+DISPOSITION                untouched
+PILLAR/ROLE                OA-Mirror · mirror-watch
+STATUS                     DRAFT
+HYPOTHESIS                 FUNDING question. Pre-lapse anchor: n=7, mean R +0.0893, median R +0.0773, sd
+                           0.0337, worst R **+0.0634 (no losing position)**, maxDD 0.0000R, win 100%.
+                           DRAFT verdict: **WATCH — no verdict possible. A perfect record at n=7 is not
+                           evidence** (memo §6).
+MECHANISM                  Positive theta from a **60/40 broken-wing iron butterfly placed 70 points below
+                           the money** — both shorts on one strike, long put 60 below (wider, because that
+                           is the direction it moves against), long call 40 above. Fixed-dollar offset
+                           distance logic; exact-DTE match on Fridays (14 default; skips the week if the
+                           exact DTE is unavailable), 10:30–11:05am, tag-gated by a 9:31am event. Three
+                           exit layers: $105/contract PT, a **$1,105/contract stop that is a switch and is
+                           deliberately OFF**, and a dynamic PT reduction near expiry. **The structure is
+                           the hedge** (`oa-mirror-reference.md` §5.2).
+ARM VARIABLE               [NO SOURCE]
+KILL CRITERION             The shared funding bar, all five conjuncts (§2.6), after ≥20 completed
+                           post-cutover positions. ⚠️ Two things the bar cannot see: (a) the loss tail is
+                           **unobserved** here (0 losers in n=7); (b) **live operational cost is absent
+                           from the record** — ITM call legs have wide bid/ask, closes fail repeatedly,
+                           one operator paid $150 to close manually, and paper DIT runs ≈1/5 of live DIT,
+                           so paper overstates. ⛔ **Do not "fix" the OFF stop.** Enabling it costs $1,792
+                           of P/L to save ≈$290 of drawdown — 6.2× net edge destruction on the author's
+                           own 96-trade disclosure. That is a source design choice; changing it makes this
+                           no longer a mirror.
+SAMPLE TARGET              n = 20 completed post-cutover positions for funding; n = 100 over ≥6 months
+                           including a B3 regime change for an edge claim. ⚠️ Cadence 0.111/day →
+                           **n=100 ≈27.5 months** (memo §7); un-fundable on a useful horizon under the bar
+                           as written. Tier M is DRAFT, not in force.
+REVIEW DATE                Day-0 + 3 months (funding), Day-0 + 6 months (edge).
+GATE EVAL DATE             Day-0 + 6 months (relational; resolves to calendar at Day-0); interim look at
+                           n=60. ⚠️ **NOT REACHABLE**: 0.111/day × ~180 days ≈ 20 positions.
+MAX LOSS                   Paper allocation **$10K**; structural max ≈**$2,000/contract** — the wings, not
+                           a stop, are the bound. Named kill shape: a fast bear gap-down >70 points inside
+                           14 days (the one ≈$1,900 loss in the author's set was the Feb-2025 tariff
+                           shock). Weekend gap risk is unavoidable by construction.
+SIZING TIER                Unchanged from current. Do not resize a watch-only bot.
+CONFIG HASH                PENDING DAY-0 CAPTURE — does not exist yet; do not invent one.
+                           ⛔ A-27c RULING 2026-08-08 (decision-card-2026-08-08 slot 6, OPTION 2):
+                           ⬜ NOT EVALUABLE — no pre-restore baseline exists for this bot, so A-07's
+                           ESTABLISHED-hash precondition does NOT apply and does NOT block this signature.
+                           A capture is taken ON THE FIRST DAY THIS BOT TRADES; forward drift detection
+                           starts from that capture. ⛔ It establishes nothing about the pre-restore past.
+                           Opening this bot for that capture is a PURE READ (6a) and does not spend Step 2c.
+VERIFICATION               Both toggles ON and screenshotted, **plus an explicit read that the stop switch
+                           is still OFF** — its state is the mirror's fidelity to the source. Then the
+                           first post-cutover position's Trades list, confirming the 60/40 structure.
+SIGNED                     2026-08-09 · ANDY — in-chat at the S2 Day-0 sitting. Ruling recorded
+                           verbatim: "Sign the seven that can trade (ledger reading)". The A-27c
+                           carry in the CONFIG HASH field above does NOT block this signature
+                           (decision-card-2026-08-08 slot 6, OPTION 2). Signed for Day-0
+                           2026-08-10; LEDGER_START = 2026-08-10.
+                           SIGNED != VERIFIED — runbook §4 Step 6's order-level Trades-list check is
+                           still required before this bot may trade, and rider 2's first-trading-day
+                           capture is still owed. [PR-10]

@@ -1,0 +1,56 @@
+BOT                        QQQ-IC-0DTE-Fortress-NoPT50
+ID                         PR-04
+DISPOSITION                clone-to-spec
+PILLAR/ROLE                IC · experiment
+STATUS                     DRAFT — unsigned
+HYPOTHESIS                 Removing the profit target improves Exp(R) per condor versus the PT50 arm —
+                           i.e. PT50 caps winners more than it protects. The genuine A/B: PT50 vs none,
+                           everything else matched.
+MECHANISM                  Same VRP source. The difference is exit policy only. Primitives: 15:50 time
+                           exit + flat-close Scheduled Event backstop. NO PT50 — removed from the action,
+                           not toggled off.
+ARM VARIABLE               [NO SOURCE]
+KILL CRITERION             Exp(R) per condor < 0 with the CI entirely below 0 at n≥60. OR any
+                           REMOVED_EXIT_FIRED finding at the PT50 rung — a PT firing here voids the A/B.
+SAMPLE TARGET              n = 100 positions, matched days with the Fortress arm.
+REVIEW DATE                Day-0 + 6 months, interim at n=60.
+GATE EVAL DATE             [NO SOURCE]
+MAX LOSS                   ≈$5K risk/position, inside the same $10K QQQ IC daily aggregate.
+SIZING TIER                ≈$5K risk/position — IDENTICAL to the Fortress arm.
+CONFIG HASH                FILLED AT S2b SIGNING 2026-08-09, same convention as PR-01 and the greenfield
+                           arms (Andy's ruling 4 at the S2 sitting: capture path @ file sha256, plus the
+                           recorded per-automation hashes).
+                           CAPTURE  data/captures/2026-08-08-clones/PR-04-clone-final-2026-08-08.txt
+                           SHA256   e58db65fff3f0c69141eeb80a0db01791bfdf6b4dfbe8045d08493e06667bdc0
+                           PER-AUTOMATION HASHES (from data/bots_config_v2.csv). PR04-R1 governs the
+                           count: this family has TWO scanners plus the built backstop, so THREE is the
+                           COMPLETE set, not a partial capture.
+                             FortNoPT-Scan-Put                 2eab2d95541b44536c452fcb4b7acd005ae45dd712ce07675d4d66d95db211e2  (v9, 4682B, UNEDITED)
+                             FortNoPT-Scan-Call                7dd2df800d47d4c4f4ba97cfd5fc83d588fcc4c20d9fd12ef9928b4e607bc6be  (v9, 4649B, UNEDITED)
+                             FortNoPT-Backstop-1552-FlatClose  6794b56b672e7e625ee731ac949ddeffddf5e325522b38a8f73d6d0cb34f7e04  (v1, 1447B, BUILT 2026-08-08)
+                           TEMPLATE V1  Tfw5TkkCRF1717862960769161432 ("Template V1 - pre-reg PR-04 -
+                           saved 2026-08-09"), by Andy's hand 2026-08-09. The clone's own `tid` resolves
+                           to it, so the link is proven BOT-SIDE, not only in the templates list.
+VERIFICATION               Trades list contains a time-exit row and NO PT row. Same backstop check.
+SIGNED                     2026-08-09 - ANDY - gate cleared at S2b, in-chat. Runbook Step 4's
+                           precondition (Template V1) is MET as of this sitting, and it was this entry's
+                           only block: there is no allocation gate here, unlike PR02-R1 - both readings
+                           agree at $100,000.
+                           SIGNED != VERIFIED. Step 6 (the Trades list carries a TIME-EXIT row and NO PT
+                           row, plus BACKSTOP_CAUGHT_IT NEGATIVE) is DEFERRED to 2026-08-10.
+                           FIRST-TRADING-DAY CAPTURE OWED 2026-08-10.
+                           CONFIG NOTE: limits read 2/2 at signing - ALREADY the value Andy ruled for this
+                           bot in-chat at S2b ("2 per day / 2 at once", condor-aware). NO EDIT WAS MADE,
+                           so nothing forked and there is nothing to revert. Allocation $100,000 untouched.
+                           CARRIED, NOT BLOCKING: PR04-R3 / S2-R4 - `rdata.next` = 1786369500000 (09:45 ET
+                           Monday) against a rendered "Every week on Mon-Fri, 3:52pm EST". It reproduces to
+                           the millisecond on `GF-QQQ-IC-Ride`, a different bot with a different backstop
+                           object, which is consistent with a bot-level next-scan stamp - but that is an
+                           INFERENCE and it discharges nothing. Not re-timed. Monday's first 15:52 fire
+                           disambiguates it.
+                           SIGNED WITH AN OPEN GATE NAMED: finding S2b-R3 - this bot's EXIT OPTIONS read
+                           OFF (`disableExits` 1) at signing, while the VERIFICATION line above requires a
+                           TIME-EXIT row and a NEGATIVE BACKSTOP_CAUGHT_IT. With Exit Options off the
+                           inherited 15:50 exit cannot fire and the 15:52 backstop becomes the closing
+                           mechanism by construction. THIS SIGNATURE DOES NOT AUTHORIZE SWITCH-ON. The bot
+                           stays OFF until that finding is ruled. See the S2b session-log entry.

@@ -1,0 +1,56 @@
+BOT                        3DTE $140-$350
+ID                         PR-07
+DISPOSITION                untouched
+PILLAR/ROLE                OA-Mirror · mirror-watch
+STATUS                     DRAFT
+HYPOTHESIS                 Not a strategy hypothesis — a FUNDING question: does this mirror reproduce its
+                           source's claimed edge closely enough to justify live capital? Watch-only until
+                           that is answered; never refactored. Pre-lapse anchor (`mirror_baseline.csv`):
+                           n=46, mean R +0.0156, median R +0.0423, sd 0.1545, worst R −1.0000, maxDD
+                           1.0000R, win 95.7%. DRAFT verdict today: **WATCH — priority 1, nearest to
+                           fundable; fails on SAMPLE alone** (`mirror-funding-memo-2026-08-05.md` §6).
+MECHANISM                  Short-DTE SPX premium decay, auto-tuned to whatever premium the day offers.
+                           Symmetric $10-wide iron condor at 3 DTE; 22-tier waterfall short-strike ladder
+                           ($140→$350 in $10 steps, first tier clearing the Return% threshold fires);
+                           10:00–10:10am entry window. Profit-take only — 90% decay on 0DTE behind a 1pm
+                           gate, 70% after day 1, trade price ≥$0.50; NO stop, removed at v8 by the author
+                           (`oa-mirror-reference.md` §5.2). Primitive: one entry scanner + Exit Options
+                           profit gates. Mirrored as captured — the mechanism is the SOURCE's, not ours.
+ARM VARIABLE               [NO SOURCE]
+KILL CRITERION             The shared funding bar, all five conjuncts (frame above; `oa-mirror-reference.md`
+                           §2.6). Failing any after ≥20 completed post-cutover positions = DEFUND, switch
+                           OFF. ⚠️ The binding conjunct here is **instance profitability, not win rate**:
+                           the source runs 91.3% trade WR against **46.0% instance profitability**, and
+                           §2.6 names this bot as the trap that conjunct exists for. Avg loss ≈10× avg win
+                           with no stop, so one sustained multi-day breach erases 30+ wins.
+SAMPLE TARGET              n = 20 completed post-cutover positions for the funding decision; n = 100 over
+                           ≥6 months **including a B3 regime change** for any edge claim. At its observed
+                           cadence (0.561 positions/day, memo §7) n=100 arrives ≈3.2 months from a resumed
+                           clock — the only mirror that gets there quickly.
+REVIEW DATE                Day-0 + 3 months (funding), Day-0 + 6 months (edge).
+GATE EVAL DATE             Day-0 + 6 months (relational; resolves to calendar at Day-0); interim look at
+                           n=60. ✅ REACHABLE: 0.561/day × ~180 days ≈ 101 positions, so n=60 lands
+                           ≈107 days after Day-0, inside the window.
+MAX LOSS                   Paper allocation **$5K**, deliberately small — one bad position is 20%+ of it.
+                           Source avg win / avg loss $173 / −$1,665 (`oa-mirror-reference.md` §5.2); worst
+                           realised in the baseline −1.0000R. No stop by construction.
+SIZING TIER                Unchanged from current. Do not resize a watch-only bot.
+CONFIG HASH                PENDING DAY-0 CAPTURE — the per-bot config capture does not exist yet. Do not
+                           fill from `bots_meta.csv`, from the 2026-07-30 export, or from memory.
+                           ⛔ A-27c RULING 2026-08-08 (decision-card-2026-08-08 slot 6, OPTION 2):
+                           ⬜ NOT EVALUABLE — no pre-restore baseline exists for this bot, so A-07's
+                           ESTABLISHED-hash precondition does NOT apply and does NOT block this signature.
+                           A capture is taken ON THE FIRST DAY THIS BOT TRADES; forward drift detection
+                           starts from that capture. ⛔ It establishes nothing about the pre-restore past.
+                           Opening this bot for that capture is a PURE READ (6a) and does not spend Step 2c.
+VERIFICATION               Both toggles ON and screenshotted (1 of the 7 mirrors in the Day-0 re-arm
+                           sweep), plus the FIRST post-cutover position's **Trades list** read. The Exit
+                           Options panel is never evidence (`oa-platform-reference.md` §0.3).
+SIGNED                     2026-08-09 · ANDY — in-chat at the S2 Day-0 sitting. Ruling recorded
+                           verbatim: "Sign the seven that can trade (ledger reading)". The A-27c
+                           carry in the CONFIG HASH field above does NOT block this signature
+                           (decision-card-2026-08-08 slot 6, OPTION 2). Signed for Day-0
+                           2026-08-10; LEDGER_START = 2026-08-10.
+                           SIGNED != VERIFIED — runbook §4 Step 6's order-level Trades-list check is
+                           still required before this bot may trade, and rider 2's first-trading-day
+                           capture is still owed. [PR-07]

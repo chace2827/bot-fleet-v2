@@ -1,0 +1,59 @@
+BOT                        GF-QQQ-IC-SL100
+ID                         PR-18
+DISPOSITION                fresh build
+PILLAR/ROLE                IC · experiment (hedge arm)
+STATUS                     DRAFT
+HYPOTHESIS                 With matched arms in a single execution class, the hedge tournament can rank
+                           mechanics. The v1 tournament could not, and this is the rebuild that makes the
+                           question askable again — not an answer to it.
+MECHANISM                  Per arm, one hedge mechanic from the library. Shared automation, shared inputs,
+                           Range075 carried as a preset on every arm.
+                           📝 SIZING STAMP 2026-08-06: primitive observed FIRST-HAND as the FIXED
+                           CONTRACT COUNT (1), not the `Up to $250 risk` fallback (spec §5.4/C4) —
+                           `GF-ScannerA-PutSpread`, Phase A build, `amount:{"type":"quantity",
+                           "quantity":1}`. Applies to all eight greenfield-family arms, PR-14…PR-23
+                           (`greenfield-family-spec.md` C4, memory row).
+ARM VARIABLE               time exit + Stop Loss 100
+KILL CRITERION             The tournament is VOID (not the bots) if any of hedge-research.md §5.2's five
+                           conditions fails: shared automation · one differing input proven by
+                           capture-diff · same execution class · Range075 on every arm · a proof-of-fire
+                           artifact identified in advance. Per arm: Exp(R) < 0, CI below 0, n≥60.
+                           📝 AMENDED 2026-08-06 (G-8, SEQUENCE+CS, ruled by Andy) — the n≥60 read
+                           above is emitted as an always-valid confidence sequence, not a fixed-n CI, and
+                           the absolute kill cannot retire an arm before its own stamped GATE EVAL DATE
+                           (§2 template). The tournament-VOID and sentinel criteria (execution-integrity
+                           rules) are unaffected.
+SAMPLE TARGET              n = 100 positions per arm.
+REVIEW DATE                Day-0 + 6 months.
+GATE EVAL DATE             [NO SOURCE]
+MAX LOSS                   1 lot per arm.
+SIZING TIER                1 lot — IDENTICAL across arms.
+CONFIG HASH                ✅ STAMPED 2026-08-17 under `R-2026-08-17-GF-ENTRY-METHOD`. The entry surface is
+                           the two SHARED Library automations (`sharing:1`, "8 bots"), so ONE pair of hashes
+                           covers all eight arms — there is no per-arm entry hash to capture.
+                             GF-ScannerA-PutSpread  v12  1e5eb9936a1adf067af65a4841d42e755592f7c179f3c0cad477502dfdbfcdc8
+                             GF-ScannerB-CallSpread v4   a925d490b8a0d2337566f47307fc52470da129935d3bd83d24389c6dc433dfb5
+                           Formula: sha256(JSON.stringify({name, inputs, root})), computed after opening the
+                           automation fresh. Both re-read after a HARD RELOAD from the Library surface, not
+                           from a save confirmation. ⚠️ A VERSION INCREMENT IS NOT EVIDENCE — ONLY THE HASH IS
+                           (ScannerA once went v10→v11 with a byte-identical payload and an identical hash).
+                           ⛔ CARRIED, GATED: `GF-ScannerB-CallSpread` still stores the legacy
+                           `price {pct:100}` while ScannerA stores `{limit:100, limitType:"pct"}`. Ruled to
+                           STAY as-is for this sample so the delta change is the only variable. Migration
+                           mechanism is named and gated — see the open item in RULINGS.md. It does NOT block
+                           this signature; it is a known, recorded carry.
+VERIFICATION               Capture-diff, one differing input. No ranking published until it passes.
+SIGNED                     2026-08-17 · ANDY — in-session, verbatim "Sign now", under
+                           `R-2026-08-17-GF-ENTRY-METHOD`. Config hashes as stamped above. Sample restarts at
+                           the 2026-08-17 edit; nothing before it counts. Review at 10 sessions.
+                           ⚠️ LAYER 2 IS OUTSTANDING — the first new position's Trades list must confirm the
+                           strikes are delta-selected, not 0.40%-selected. Signature stands on Layer 1.
+NAMING                     ✅ GATE A8 RULED BY ANDY 2026-08-08 (decision-card-2026-08-08 slot 5) — PR-18,
+                           OPTION C / THE SPLIT. LEDGER / INTERNAL LABEL: "Breakeven" (CF-4 discharged
+                           2026-08-06 by the C8 ruling; the untested side is left to decay, so the arm can
+                           reach the shape its anchor describes). PUBLISHED OR EXTERNALLY COMPARED: the
+                           MECHANICAL name only — `SL100` / "stop at 100% of credit" — with the CF-1 caveat
+                           attached at that surface. ⛔ CF-1 IS NOT DISCHARGED and bounds what this family
+                           may conclude against Sandvand's rung. OA bot name `GF-QQQ-IC-SL100` unchanged.
+                           THIS FIELD IS NOW RESOLVED — it no longer holds the entry UNSIGNED under §7
+                           item 2. PR-19 (`SL200`) follows the same convention by construction.
