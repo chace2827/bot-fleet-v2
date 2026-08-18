@@ -1,9 +1,9 @@
 {
   "date": "2026-08-17",
-  "generated": "2026-08-18T15:04:45",
+  "generated": "2026-08-17T00:00:00",
   "tape": {
     "date": "2026-08-17",
-    "generated": "2026-08-18T14:24:56",
+    "generated": "2026-08-17T00:00:00",
     "any_reconstructed": false,
     "reconstructed_reasons": [],
     "underlyings": {
@@ -1490,9 +1490,7 @@
       "spx_full_pct": -0.52,
       "qqq_full_pct": -0.16,
       "spread_pct": -0.36
-    },
-    "backfilled_at": "2026-08-18T14:24:56",
-    "backfill_evidence": "Backfilled from committed raw Tradier response bodies in data/captures/2026-08-19-tape-backfill/raw/ (SPX, QQQ, VIX daily + 5min). No Tradier API call was made and no credential was read. Authorized by R-2026-08-19-TAPE-BACKFILL-AND-VIX-SERIES and R-2026-08-19-TAPE-SYMBOLS-FROM-GATES."
+    }
   },
   "cards": [],
   "hedge_clinic": [],

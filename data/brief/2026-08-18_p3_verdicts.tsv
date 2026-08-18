@@ -1,0 +1,113 @@
+date	bot	pr_id	verdict	reason
+2026-08-08	3DTE $140-$350	PR-07	UNEVALUABLE_BY_DESIGN	gate_type=unknown for 3DTE $140-$350; no signed entry condition
+2026-08-08	60min-ORB-10W-Paper-v1	PR-12	UNEVALUABLE_MISSING	SPX missing from 2026-08-08 tape
+2026-08-08	DIR-SPX-CallVIXdrop	PR-06	UNEVALUABLE_MISSING	VIX missing from 2026-08-08 tape
+2026-08-08	DIR-SPX-PutVIX22-SL75	PR-05	UNEVALUABLE_MISSING	VIX missing from 2026-08-08 tape
+2026-08-08	Friday 14 DTE Broken Wing IB (B-70)	PR-10	JUSTIFIED	date is Sat, gate requires Fri
+2026-08-08	GF-QQQ-IC-Canary	PR-20	UNEVALUABLE_MISSING	QQQ missing from 2026-08-08 tape
+2026-08-08	GF-QQQ-IC-PT50	PR-15	UNEVALUABLE_MISSING	QQQ missing from 2026-08-08 tape
+2026-08-08	GF-QQQ-IC-Ride	PR-14	UNEVALUABLE_MISSING	QQQ missing from 2026-08-08 tape
+2026-08-08	GF-QQQ-IC-Ride-Delta	PR-23	UNEVALUABLE_MISSING	QQQ missing from 2026-08-08 tape
+2026-08-08	GF-QQQ-IC-SL100	PR-18	UNEVALUABLE_MISSING	QQQ missing from 2026-08-08 tape
+2026-08-08	GF-QQQ-IC-SL200	PR-19	UNEVALUABLE_MISSING	QQQ missing from 2026-08-08 tape
+2026-08-08	GF-QQQ-IC-Touch0	PR-17	UNEVALUABLE_MISSING	QQQ missing from 2026-08-08 tape
+2026-08-08	GF-QQQ-IC-Trail	PR-16	UNEVALUABLE_MISSING	QQQ missing from 2026-08-08 tape
+2026-08-08	IC-SPX-FastPT25-S2	PR-01	UNEVALUABLE_MISSING	SPX missing from 2026-08-08 tape
+2026-08-08	IC-SPX-FastPT25-S2-130PM	PR-02	UNEVALUABLE_MISSING	SPX missing from 2026-08-08 tape
+2026-08-08	IC-SPX-Fortress-Unstopped	INC-01	UNEVALUABLE_MISSING	SPX missing from 2026-08-08 tape
+2026-08-08	Nigiri-Paper-v1	PR-08	UNEVALUABLE_BY_DESIGN	gate_type=unknown for Nigiri-Paper-v1; no signed entry condition
+2026-08-08	QQQ-IC-0DTE-Fortress-NoPT50	PR-04	UNEVALUABLE_FLOOR	fill_precondition credit floor value unrecorded
+2026-08-08	Trendy-Paper-v1	PR-11	UNEVALUABLE_BY_DESIGN	gate_type=unknown for Trendy-Paper-v1; no signed entry condition
+2026-08-10	DIR-SPX-CallVIXdrop	PR-06	JUSTIFIED	VIX low=15.2 vs prior=14.9 gives 2.01% change, threshold <=-2.0%; never reached in window 11:00 (1 bars)
+2026-08-10	DIR-SPX-PutVIX22-SL75	PR-05	JUSTIFIED	VIX high=15.22, low=15.2, prior_close=14.9; threshold >=22.0; high < threshold in window 11:00 (1 bars)
+2026-08-10	Friday 14 DTE Broken Wing IB (B-70)	PR-10	JUSTIFIED	date is Mon, gate requires Fri
+2026-08-10	GF-QQQ-IC-Canary	PR-20	SUSPECT	QQQ p=721.97 at 13:30, Δ%=-0.15, within -0.75<Δ%<0.75
+2026-08-10	GF-QQQ-IC-PT50	PR-15	SUSPECT	QQQ p=721.97 at 13:30, Δ%=-0.15, within -0.75<Δ%<0.75
+2026-08-10	GF-QQQ-IC-Ride	PR-14	SUSPECT	QQQ p=721.97 at 13:30, Δ%=-0.15, within -0.75<Δ%<0.75
+2026-08-10	GF-QQQ-IC-Ride-Delta	PR-23	SUSPECT	QQQ p=721.97 at 13:30, Δ%=-0.15, within -0.75<Δ%<0.75
+2026-08-10	GF-QQQ-IC-SL100	PR-18	SUSPECT	QQQ p=721.97 at 13:30, Δ%=-0.15, within -0.75<Δ%<0.75
+2026-08-10	GF-QQQ-IC-SL200	PR-19	SUSPECT	QQQ p=721.97 at 13:30, Δ%=-0.15, within -0.75<Δ%<0.75
+2026-08-10	GF-QQQ-IC-Touch0	PR-17	SUSPECT	QQQ p=721.97 at 13:30, Δ%=-0.15, within -0.75<Δ%<0.75
+2026-08-10	GF-QQQ-IC-Trail	PR-16	SUSPECT	QQQ p=721.97 at 13:30, Δ%=-0.15, within -0.75<Δ%<0.75
+2026-08-10	IC-SPX-Fortress-Unstopped	INC-01	SUSPECT	no market gate and no fill_precondition declared; silence is suspect
+2026-08-10	QQQ-IC-0DTE-Fortress-NoPT50	PR-04	UNEVALUABLE_FLOOR	fill_precondition credit floor value unrecorded
+2026-08-10	Trendy-Paper-v1	PR-11	UNEVALUABLE_BY_DESIGN	gate_type=unknown for Trendy-Paper-v1; no signed entry condition
+2026-08-11	3DTE $140-$350	PR-07	UNEVALUABLE_BY_DESIGN	gate_type=unknown for 3DTE $140-$350; no signed entry condition
+2026-08-11	DIR-SPX-CallVIXdrop	PR-06	JUSTIFIED	VIX low=15.24 vs prior=15.46 gives -1.42% change, threshold <=-2.0%; never reached in window 11:00 (1 bars)
+2026-08-11	DIR-SPX-PutVIX22-SL75	PR-05	JUSTIFIED	VIX high=15.26, low=15.24, prior_close=15.46; threshold >=22.0; high < threshold in window 11:00 (1 bars)
+2026-08-11	Friday 14 DTE Broken Wing IB (B-70)	PR-10	JUSTIFIED	date is Tue, gate requires Fri
+2026-08-11	GF-QQQ-IC-Canary	PR-20	SUSPECT	QQQ p=717.85 at 13:30, Δ%=-0.42, within -0.75<Δ%<0.75
+2026-08-11	GF-QQQ-IC-PT50	PR-15	SUSPECT	QQQ p=717.85 at 13:30, Δ%=-0.42, within -0.75<Δ%<0.75
+2026-08-11	GF-QQQ-IC-Ride	PR-14	SUSPECT	QQQ p=717.85 at 13:30, Δ%=-0.42, within -0.75<Δ%<0.75
+2026-08-11	GF-QQQ-IC-Ride-Delta	PR-23	SUSPECT	QQQ p=717.85 at 13:30, Δ%=-0.42, within -0.75<Δ%<0.75
+2026-08-11	GF-QQQ-IC-SL100	PR-18	SUSPECT	QQQ p=717.85 at 13:30, Δ%=-0.42, within -0.75<Δ%<0.75
+2026-08-11	GF-QQQ-IC-SL200	PR-19	SUSPECT	QQQ p=717.85 at 13:30, Δ%=-0.42, within -0.75<Δ%<0.75
+2026-08-11	GF-QQQ-IC-Touch0	PR-17	SUSPECT	QQQ p=717.85 at 13:30, Δ%=-0.42, within -0.75<Δ%<0.75
+2026-08-11	GF-QQQ-IC-Trail	PR-16	SUSPECT	QQQ p=717.85 at 13:30, Δ%=-0.42, within -0.75<Δ%<0.75
+2026-08-11	IC-SPX-Fortress-Unstopped	INC-01	SUSPECT	no market gate and no fill_precondition declared; silence is suspect
+2026-08-11	QQQ-IC-0DTE-Fortress-NoPT50	PR-04	UNEVALUABLE_FLOOR	fill_precondition credit floor value unrecorded
+2026-08-12	3DTE $140-$350	PR-07	UNEVALUABLE_BY_DESIGN	gate_type=unknown for 3DTE $140-$350; no signed entry condition
+2026-08-12	60min-ORB-10W-Paper-v1	PR-12	SUSPECT	SPX p=7741.18 at 11:00 breaks ORB range 7741.72-7766.01 (prior_close 7728.2)
+2026-08-12	DIR-SPX-PutVIX22-SL75	PR-05	JUSTIFIED	VIX high=14.89, low=14.87, prior_close=15.28; threshold >=22.0; high < threshold in window 11:00 (1 bars)
+2026-08-12	Friday 14 DTE Broken Wing IB (B-70)	PR-10	JUSTIFIED	date is Wed, gate requires Fri
+2026-08-12	GF-QQQ-IC-Canary	PR-20	JUSTIFIED	QQQ p=725.09 at 13:30, Δ%=0.92, outside -0.75<Δ%<0.75
+2026-08-12	GF-QQQ-IC-PT50	PR-15	JUSTIFIED	QQQ p=725.09 at 13:30, Δ%=0.92, outside -0.75<Δ%<0.75
+2026-08-12	GF-QQQ-IC-Ride	PR-14	JUSTIFIED	QQQ p=725.09 at 13:30, Δ%=0.92, outside -0.75<Δ%<0.75
+2026-08-12	GF-QQQ-IC-Ride-Delta	PR-23	JUSTIFIED	QQQ p=725.09 at 13:30, Δ%=0.92, outside -0.75<Δ%<0.75
+2026-08-12	GF-QQQ-IC-SL100	PR-18	JUSTIFIED	QQQ p=725.09 at 13:30, Δ%=0.92, outside -0.75<Δ%<0.75
+2026-08-12	GF-QQQ-IC-SL200	PR-19	JUSTIFIED	QQQ p=725.09 at 13:30, Δ%=0.92, outside -0.75<Δ%<0.75
+2026-08-12	GF-QQQ-IC-Touch0	PR-17	JUSTIFIED	QQQ p=725.09 at 13:30, Δ%=0.92, outside -0.75<Δ%<0.75
+2026-08-12	GF-QQQ-IC-Trail	PR-16	JUSTIFIED	QQQ p=725.09 at 13:30, Δ%=0.92, outside -0.75<Δ%<0.75
+2026-08-12	IC-SPX-Fortress-Unstopped	INC-01	SUSPECT	no market gate and no fill_precondition declared; silence is suspect
+2026-08-12	QQQ-IC-0DTE-Fortress-NoPT50	PR-04	UNEVALUABLE_FLOOR	fill_precondition credit floor value unrecorded
+2026-08-12	Trendy-Paper-v1	PR-11	UNEVALUABLE_BY_DESIGN	gate_type=unknown for Trendy-Paper-v1; no signed entry condition
+2026-08-13	3DTE $140-$350	PR-07	UNEVALUABLE_BY_DESIGN	gate_type=unknown for 3DTE $140-$350; no signed entry condition
+2026-08-13	60min-ORB-10W-Paper-v1	PR-12	JUSTIFIED	SPX held inside ORB range 7763.18-7815.54 after after 10:30 (prior_close 7748.5)
+2026-08-13	DIR-SPX-CallVIXdrop	PR-06	JUSTIFIED	VIX low=14.43 vs prior=14.55 gives -0.82% change, threshold <=-2.0%; never reached in window 11:00 (1 bars)
+2026-08-13	DIR-SPX-PutVIX22-SL75	PR-05	JUSTIFIED	VIX high=14.58, low=14.43, prior_close=14.55; threshold >=22.0; high < threshold in window 11:00 (1 bars)
+2026-08-13	Friday 14 DTE Broken Wing IB (B-70)	PR-10	JUSTIFIED	date is Thu, gate requires Fri
+2026-08-13	GF-QQQ-IC-Canary	PR-20	JUSTIFIED	QQQ p=732.97 at 13:30, Δ%=1.28, outside -0.75<Δ%<0.75
+2026-08-13	GF-QQQ-IC-PT50	PR-15	JUSTIFIED	QQQ p=732.97 at 13:30, Δ%=1.28, outside -0.75<Δ%<0.75
+2026-08-13	GF-QQQ-IC-Ride	PR-14	JUSTIFIED	QQQ p=732.97 at 13:30, Δ%=1.28, outside -0.75<Δ%<0.75
+2026-08-13	GF-QQQ-IC-Ride-Delta	PR-23	JUSTIFIED	QQQ p=732.97 at 13:30, Δ%=1.28, outside -0.75<Δ%<0.75
+2026-08-13	GF-QQQ-IC-SL100	PR-18	JUSTIFIED	QQQ p=732.97 at 13:30, Δ%=1.28, outside -0.75<Δ%<0.75
+2026-08-13	GF-QQQ-IC-SL200	PR-19	JUSTIFIED	QQQ p=732.97 at 13:30, Δ%=1.28, outside -0.75<Δ%<0.75
+2026-08-13	GF-QQQ-IC-Touch0	PR-17	JUSTIFIED	QQQ p=732.97 at 13:30, Δ%=1.28, outside -0.75<Δ%<0.75
+2026-08-13	GF-QQQ-IC-Trail	PR-16	JUSTIFIED	QQQ p=732.97 at 13:30, Δ%=1.28, outside -0.75<Δ%<0.75
+2026-08-13	IC-SPX-Fortress-Unstopped	INC-01	SUSPECT	no market gate and no fill_precondition declared; silence is suspect
+2026-08-13	QQQ-IC-0DTE-Fortress-NoPT50	PR-04	UNEVALUABLE_FLOOR	fill_precondition credit floor value unrecorded
+2026-08-13	Trendy-Paper-v1	PR-11	UNEVALUABLE_BY_DESIGN	gate_type=unknown for Trendy-Paper-v1; no signed entry condition
+2026-08-14	3DTE $140-$350	PR-07	UNEVALUABLE_BY_DESIGN	gate_type=unknown for 3DTE $140-$350; no signed entry condition
+2026-08-14	DIR-SPX-CallVIXdrop	PR-06	JUSTIFIED	VIX low=14.48 vs prior=14.63 gives -1.03% change, threshold <=-2.0%; never reached in window 11:00 (1 bars)
+2026-08-14	DIR-SPX-PutVIX22-SL75	PR-05	JUSTIFIED	VIX high=14.5, low=14.48, prior_close=14.63; threshold >=22.0; high < threshold in window 11:00 (1 bars)
+2026-08-14	Friday 14 DTE Broken Wing IB (B-70)	PR-10	SUSPECT	date is Fri, gate requires Fri
+2026-08-14	IC-SPX-Fortress-Unstopped	INC-01	SUSPECT	no market gate and no fill_precondition declared; silence is suspect
+2026-08-14	Nigiri-Paper-v1	PR-08	UNEVALUABLE_BY_DESIGN	gate_type=unknown for Nigiri-Paper-v1; no signed entry condition
+2026-08-14	QQQ-IC-0DTE-Fortress-NoPT50	PR-04	UNEVALUABLE_FLOOR	fill_precondition credit floor value unrecorded
+2026-08-14	Trendy-Paper-v1	PR-11	UNEVALUABLE_BY_DESIGN	gate_type=unknown for Trendy-Paper-v1; no signed entry condition
+2026-08-17	3DTE $140-$350	PR-07	UNEVALUABLE_BY_DESIGN	gate_type=unknown for 3DTE $140-$350; no signed entry condition
+2026-08-17	60min-ORB-10W-Paper-v1	PR-12	SUSPECT	SPX p=7770.19 at 10:50 breaks ORB range 7771.01-7790.68 (prior_close 7785.76)
+2026-08-17	DIR-SPX-CallVIXdrop	PR-06	JUSTIFIED	VIX low=14.96 vs prior=14.25 gives 4.98% change, threshold <=-2.0%; never reached in window 11:00 (1 bars)
+2026-08-17	DIR-SPX-PutVIX22-SL75	PR-05	JUSTIFIED	VIX high=14.97, low=14.96, prior_close=14.25; threshold >=22.0; high < threshold in window 11:00 (1 bars)
+2026-08-17	Friday 14 DTE Broken Wing IB (B-70)	PR-10	JUSTIFIED	date is Mon, gate requires Fri
+2026-08-17	IC-SPX-FastPT25-S2	PR-01	SUSPECT	SPX p=7775.69 at 11:00, Δ%=-0.13, |Δ%|=0.13 < threshold 0.75
+2026-08-17	IC-SPX-Fortress-Unstopped	INC-01	SUSPECT	no market gate and no fill_precondition declared; silence is suspect
+2026-08-17	Nigiri-Paper-v1	PR-08	UNEVALUABLE_BY_DESIGN	gate_type=unknown for Nigiri-Paper-v1; no signed entry condition
+2026-08-17	QQQ-IC-0DTE-Fortress-NoPT50	PR-04	UNEVALUABLE_FLOOR	fill_precondition credit floor value unrecorded
+2026-08-17	Trendy-Paper-v1	PR-11	UNEVALUABLE_BY_DESIGN	gate_type=unknown for Trendy-Paper-v1; no signed entry condition
+2026-08-18	3DTE $140-$350	PR-07	UNEVALUABLE_BY_DESIGN	gate_type=unknown for 3DTE $140-$350; no signed entry condition
+2026-08-18	DIR-SPX-CallVIXdrop	PR-06	JUSTIFIED	VIX low=15.77 vs prior=15.19 gives 3.82% change, threshold <=-2.0%; never reached in window 11:00 (1 bars)
+2026-08-18	DIR-SPX-PutVIX22-SL75	PR-05	JUSTIFIED	VIX high=15.88, low=15.77, prior_close=15.19; threshold >=22.0; high < threshold in window 11:00 (1 bars)
+2026-08-18	Friday 14 DTE Broken Wing IB (B-70)	PR-10	JUSTIFIED	date is Tue, gate requires Fri
+2026-08-18	GF-QQQ-IC-Canary	PR-20	JUSTIFIED	QQQ p=718.18 at 13:30, Δ%=-1.6, outside -0.75<Δ%<0.75
+2026-08-18	GF-QQQ-IC-PT50	PR-15	JUSTIFIED	QQQ p=718.18 at 13:30, Δ%=-1.6, outside -0.75<Δ%<0.75
+2026-08-18	GF-QQQ-IC-Ride	PR-14	JUSTIFIED	QQQ p=718.18 at 13:30, Δ%=-1.6, outside -0.75<Δ%<0.75
+2026-08-18	GF-QQQ-IC-Ride-Delta	PR-23	JUSTIFIED	QQQ p=718.18 at 13:30, Δ%=-1.6, outside -0.75<Δ%<0.75
+2026-08-18	GF-QQQ-IC-SL100	PR-18	JUSTIFIED	QQQ p=718.18 at 13:30, Δ%=-1.6, outside -0.75<Δ%<0.75
+2026-08-18	GF-QQQ-IC-SL200	PR-19	JUSTIFIED	QQQ p=718.18 at 13:30, Δ%=-1.6, outside -0.75<Δ%<0.75
+2026-08-18	GF-QQQ-IC-Touch0	PR-17	JUSTIFIED	QQQ p=718.18 at 13:30, Δ%=-1.6, outside -0.75<Δ%<0.75
+2026-08-18	GF-QQQ-IC-Trail	PR-16	JUSTIFIED	QQQ p=718.18 at 13:30, Δ%=-1.6, outside -0.75<Δ%<0.75
+2026-08-18	IC-SPX-Fortress-Unstopped	INC-01	SUSPECT	no market gate and no fill_precondition declared; silence is suspect
+2026-08-18	Nigiri-Paper-v1	PR-08	UNEVALUABLE_BY_DESIGN	gate_type=unknown for Nigiri-Paper-v1; no signed entry condition
+2026-08-18	QQQ-IC-0DTE-Fortress-NoPT50	PR-04	UNEVALUABLE_FLOOR	fill_precondition credit floor value unrecorded
+2026-08-18	Trendy-Paper-v1	PR-11	UNEVALUABLE_BY_DESIGN	gate_type=unknown for Trendy-Paper-v1; no signed entry condition

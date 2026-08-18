@@ -4,10 +4,10 @@
   "detector_sha256_16": "fdc43d0dcb727556",
   "mode": "REDUCED",
   "window_start": "2026-08-10",
-  "window_end": "2026-08-17",
-  "n_position_rows": 45,
+  "window_end": "2026-08-18",
+  "n_position_rows": 49,
   "counts": {
-    "AMBER": 3,
+    "AMBER": 4,
     "INFO": 1,
     "SKIPPED": 20
   },
