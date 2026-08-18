@@ -2772,3 +2772,48 @@ source: >-
   R-2026-08-18-PR02-PR04-SUBSTITUTE-VERIFY (amended, not superseded).
 unclear: false
 ```
+
+```yaml
+ruling_id: R-2026-08-18-RIDER-ANNOTATION-PROCEDURE
+date: 2026-08-18
+scope: >-
+  Corrects an error in R-2026-08-18-PR02-DISCHARGE-PR04-REANCHOR (and its
+  parent), which asserted the unsigned banner would clear PR-02 "with no code
+  change": false — pre_registration_ledger.py's _is_signed negation keys on
+  the literal substrings "SIGNED != VERIFIED" and "FIRST-TRADING-DAY CAPTURE
+  OWED" both being present in the SIGNED block, and the append-only amendment
+  left both standing, so PR-02 still banners as unsigned despite the
+  discharged rider. Remedy, chosen over a parser change: RIDER-LINE
+  ANNOTATION. PR-02's rider line "FIRST-TRADING-DAY CAPTURE OWED 2026-08-10."
+  is edited in place to "FIRST-TRADING-DAY CAPTURE — OWED 2026-08-10,
+  DISCHARGED BY SUBSTITUTE 2026-08-18 (see amendment below)." — breaking the
+  exact OWED substring so the parser reads the block as signed, while the
+  history stays legible on the same line. This is declared the STANDING
+  DISCHARGE PROCEDURE: any future rider discharge (PR-04's re-anchored rider
+  included) appends its amendment line AND annotates its rider line the same
+  way, in the same PR. Bounds: only rider STATUS text may be annotated,
+  always with a dated annotation preserving the original words in place;
+  Andy's verbatim signature text is never edited; no other line changes; the
+  parser (pre_registration_ledger.py) and report.py remain untouched — no
+  guard change is authorized by this ruling. PR-04's block is NOT touched now
+  (it is correctly unsigned until its first passing position).
+verbatim: >-
+  Annotate the rider line, option (a): break the OWED substring in place with
+  a dated discharge annotation; that is the standing procedure for every
+  future rider discharge; no parser change.
+verbatim_of: andy
+owner: Andy
+status: Active
+applies_to: >-
+  docs/pre-registration-ledger.md PR-02 SIGNED block rider line (the one
+  in-place annotation); the same procedure for PR-04's future discharge;
+  scripts/pre_registration_ledger.py and scripts/report.py (explicitly NOT
+  changed). Amends the stated banner effect of
+  R-2026-08-18-PR02-DISCHARGE-PR04-REANCHOR; both rulings otherwise stand.
+superseded_by: none
+source: >-
+  Cowork expedite session 2026-08-18; contradiction surfaced by the foreman
+  lane post-merge of PR #37/#40 and verified against the tree at 7596bb6
+  (ledger lines 298/303/314).
+unclear: false
+```
