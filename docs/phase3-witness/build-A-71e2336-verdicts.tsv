@@ -1,0 +1,66 @@
+date	bot	pr_id	verdict	reason
+2026-08-08	3DTE $140-$350	PR-07	UNEVALUABLE_BY_DESIGN	no registered entry gate; empty tape: no underlyings
+2026-08-08	60min-ORB-10W-Paper-v1	PR-12	UNEVALUABLE_SOURCE	empty tape: no underlyings
+2026-08-08	DIR-SPX-CallVIXdrop	PR-06	UNEVALUABLE_SOURCE	empty tape: no underlyings
+2026-08-08	DIR-SPX-PutVIX22-SL75	PR-05	UNEVALUABLE_SOURCE	empty tape: no underlyings
+2026-08-08	Friday 14 DTE Broken Wing IB (B-70)	PR-10	UNEVALUABLE_SOURCE	empty tape: no underlyings
+2026-08-08	GF-QQQ-IC-Canary	PR-20	UNEVALUABLE_SOURCE	empty tape: no underlyings
+2026-08-08	GF-QQQ-IC-PT50	PR-15	UNEVALUABLE_SOURCE	empty tape: no underlyings
+2026-08-08	GF-QQQ-IC-Ride	PR-14	UNEVALUABLE_SOURCE	empty tape: no underlyings
+2026-08-08	GF-QQQ-IC-Ride-Delta	PR-23	UNEVALUABLE_SOURCE	empty tape: no underlyings
+2026-08-08	GF-QQQ-IC-SL100	PR-18	UNEVALUABLE_SOURCE	empty tape: no underlyings
+2026-08-08	GF-QQQ-IC-SL200	PR-19	UNEVALUABLE_SOURCE	empty tape: no underlyings
+2026-08-08	GF-QQQ-IC-Touch0	PR-17	UNEVALUABLE_SOURCE	empty tape: no underlyings
+2026-08-08	GF-QQQ-IC-Trail	PR-16	UNEVALUABLE_SOURCE	empty tape: no underlyings
+2026-08-08	IC-SPX-FastPT25-S2	PR-01	UNEVALUABLE_SOURCE	empty tape: no underlyings
+2026-08-08	IC-SPX-FastPT25-S2-130PM	PR-02	UNEVALUABLE_SOURCE	empty tape: no underlyings
+2026-08-08	IC-SPX-Fortress-Unstopped	INC-01	UNEVALUABLE_SOURCE	empty tape: no underlyings
+2026-08-08	Nigiri-Paper-v1	PR-08	UNEVALUABLE_BY_DESIGN	no registered entry gate; empty tape: no underlyings
+2026-08-08	QQQ-IC-0DTE-Fortress-NoPT50	PR-04	UNEVALUABLE_FLOOR	credit floor value unrecorded; empty tape: no underlyings
+2026-08-08	Trendy-Paper-v1	PR-11	UNEVALUABLE_BY_DESIGN	no registered entry gate; empty tape: no underlyings
+2026-08-10	DIR-SPX-CallVIXdrop	PR-06	UNEVALUABLE_SOURCE	SPX source=reconstructed, not tradier; whole day UNEVALUABLE
+2026-08-10	DIR-SPX-PutVIX22-SL75	PR-05	UNEVALUABLE_SOURCE	SPX source=reconstructed, not tradier; whole day UNEVALUABLE
+2026-08-10	Friday 14 DTE Broken Wing IB (B-70)	PR-10	UNEVALUABLE_SOURCE	SPX source=reconstructed, not tradier; whole day UNEVALUABLE
+2026-08-10	GF-QQQ-IC-Canary	PR-20	UNEVALUABLE_SOURCE	SPX source=reconstructed, not tradier; whole day UNEVALUABLE
+2026-08-10	GF-QQQ-IC-PT50	PR-15	UNEVALUABLE_SOURCE	SPX source=reconstructed, not tradier; whole day UNEVALUABLE
+2026-08-10	GF-QQQ-IC-Ride	PR-14	UNEVALUABLE_SOURCE	SPX source=reconstructed, not tradier; whole day UNEVALUABLE
+2026-08-10	GF-QQQ-IC-Ride-Delta	PR-23	UNEVALUABLE_SOURCE	SPX source=reconstructed, not tradier; whole day UNEVALUABLE
+2026-08-10	GF-QQQ-IC-SL100	PR-18	UNEVALUABLE_SOURCE	SPX source=reconstructed, not tradier; whole day UNEVALUABLE
+2026-08-10	GF-QQQ-IC-SL200	PR-19	UNEVALUABLE_SOURCE	SPX source=reconstructed, not tradier; whole day UNEVALUABLE
+2026-08-10	GF-QQQ-IC-Touch0	PR-17	UNEVALUABLE_SOURCE	SPX source=reconstructed, not tradier; whole day UNEVALUABLE
+2026-08-10	GF-QQQ-IC-Trail	PR-16	UNEVALUABLE_SOURCE	SPX source=reconstructed, not tradier; whole day UNEVALUABLE
+2026-08-10	IC-SPX-Fortress-Unstopped	INC-01	UNEVALUABLE_SOURCE	SPX source=reconstructed, not tradier; whole day UNEVALUABLE
+2026-08-10	QQQ-IC-0DTE-Fortress-NoPT50	PR-04	UNEVALUABLE_FLOOR	credit floor value unrecorded; SPX source=reconstructed, not tradier; whole day UNEVALUABLE
+2026-08-10	Trendy-Paper-v1	PR-11	UNEVALUABLE_BY_DESIGN	no registered entry gate; SPX source=reconstructed, not tradier; whole day UNEVALUABLE
+2026-08-11	3DTE $140-$350	PR-07	UNEVALUABLE_BY_DESIGN	no registered entry gate; SPX source=reconstructed, not tradier; whole day UNEVALUABLE
+2026-08-11	DIR-SPX-CallVIXdrop	PR-06	UNEVALUABLE_SOURCE	SPX source=reconstructed, not tradier; whole day UNEVALUABLE
+2026-08-11	DIR-SPX-PutVIX22-SL75	PR-05	UNEVALUABLE_SOURCE	SPX source=reconstructed, not tradier; whole day UNEVALUABLE
+2026-08-11	Friday 14 DTE Broken Wing IB (B-70)	PR-10	UNEVALUABLE_SOURCE	SPX source=reconstructed, not tradier; whole day UNEVALUABLE
+2026-08-11	GF-QQQ-IC-Canary	PR-20	UNEVALUABLE_SOURCE	SPX source=reconstructed, not tradier; whole day UNEVALUABLE
+2026-08-11	GF-QQQ-IC-PT50	PR-15	UNEVALUABLE_SOURCE	SPX source=reconstructed, not tradier; whole day UNEVALUABLE
+2026-08-11	GF-QQQ-IC-Ride	PR-14	UNEVALUABLE_SOURCE	SPX source=reconstructed, not tradier; whole day UNEVALUABLE
+2026-08-11	GF-QQQ-IC-Ride-Delta	PR-23	UNEVALUABLE_SOURCE	SPX source=reconstructed, not tradier; whole day UNEVALUABLE
+2026-08-11	GF-QQQ-IC-SL100	PR-18	UNEVALUABLE_SOURCE	SPX source=reconstructed, not tradier; whole day UNEVALUABLE
+2026-08-11	GF-QQQ-IC-SL200	PR-19	UNEVALUABLE_SOURCE	SPX source=reconstructed, not tradier; whole day UNEVALUABLE
+2026-08-11	GF-QQQ-IC-Touch0	PR-17	UNEVALUABLE_SOURCE	SPX source=reconstructed, not tradier; whole day UNEVALUABLE
+2026-08-11	GF-QQQ-IC-Trail	PR-16	UNEVALUABLE_SOURCE	SPX source=reconstructed, not tradier; whole day UNEVALUABLE
+2026-08-11	IC-SPX-Fortress-Unstopped	INC-01	UNEVALUABLE_SOURCE	SPX source=reconstructed, not tradier; whole day UNEVALUABLE
+2026-08-11	QQQ-IC-0DTE-Fortress-NoPT50	PR-04	UNEVALUABLE_FLOOR	credit floor value unrecorded; SPX source=reconstructed, not tradier; whole day UNEVALUABLE
+2026-08-14	3DTE $140-$350	PR-07	UNEVALUABLE_BY_DESIGN	no registered entry gate (gate_type=unknown) for 3DTE $140-$350
+2026-08-14	DIR-SPX-CallVIXdrop	PR-06	SUSPECT	VIX low=14.18, prior=14.63, low-prior move=-3.076%; threshold <=-2.0% met
+2026-08-14	DIR-SPX-PutVIX22-SL75	PR-05	JUSTIFIED	VIX high=14.72, low=14.18, prior=14.63; threshold VIX>=22.0 not met
+2026-08-14	Friday 14 DTE Broken Wing IB (B-70)	PR-10	SUSPECT	2026-08-14 is Friday, required weekday Friday, gate met
+2026-08-14	IC-SPX-Fortress-Unstopped	INC-01	SUSPECT	no market gate and no declared fill-precondition for IC-SPX-Fortress-Unstopped; silence is suspect
+2026-08-14	Nigiri-Paper-v1	PR-08	UNEVALUABLE_BY_DESIGN	no registered entry gate (gate_type=unknown) for Nigiri-Paper-v1
+2026-08-14	QQQ-IC-0DTE-Fortress-NoPT50	PR-04	UNEVALUABLE_FLOOR	credit floor / fill-precondition value unrecorded
+2026-08-14	Trendy-Paper-v1	PR-11	UNEVALUABLE_BY_DESIGN	no registered entry gate (gate_type=unknown) for Trendy-Paper-v1
+2026-08-17	3DTE $140-$350	PR-07	UNEVALUABLE_BY_DESIGN	no registered entry gate (gate_type=unknown) for 3DTE $140-$350
+2026-08-17	60min-ORB-10W-Paper-v1	PR-12	SUSPECT	SPX ORB range 09:30-10:30 = 7773.12..7780.61; 10:35 low=7770.22 breaks low, gate met
+2026-08-17	DIR-SPX-CallVIXdrop	PR-06	JUSTIFIED	VIX low=14.89, prior=14.25, low-prior move=4.491%; threshold <=-2.0% not met
+2026-08-17	DIR-SPX-PutVIX22-SL75	PR-05	JUSTIFIED	VIX high=15.47, low=14.89, prior=14.25; threshold VIX>=22.0 not met
+2026-08-17	Friday 14 DTE Broken Wing IB (B-70)	PR-10	JUSTIFIED	2026-08-17 is Monday, required Friday, gate not met
+2026-08-17	IC-SPX-FastPT25-S2	PR-01	SUSPECT	SPX 11:00 change=-0.129% vs prior, |Δ%|<0.75 threshold met
+2026-08-17	IC-SPX-Fortress-Unstopped	INC-01	SUSPECT	no market gate and no declared fill-precondition for IC-SPX-Fortress-Unstopped; silence is suspect
+2026-08-17	Nigiri-Paper-v1	PR-08	UNEVALUABLE_BY_DESIGN	no registered entry gate (gate_type=unknown) for Nigiri-Paper-v1
+2026-08-17	QQQ-IC-0DTE-Fortress-NoPT50	PR-04	UNEVALUABLE_FLOOR	credit floor / fill-precondition value unrecorded
+2026-08-17	Trendy-Paper-v1	PR-11	UNEVALUABLE_BY_DESIGN	no registered entry gate (gate_type=unknown) for Trendy-Paper-v1
