@@ -1,0 +1,63 @@
+# PR-04 (QQQ-IC-0DTE-Fortress-NoPT50) — Closed Positions / Trades evidence
+# URL: https://app.optionalpha.com/bots/bot/BOTfw5TkkCRF3017862038322323202/positions?closed=true
+# captured: Tue Aug 18 2026 04:22:10 GMT-0400 (Eastern Daylight Time)
+# method: document.body.innerText via Claude-in-Chrome page script, at Andy's direction
+#   (substitute capture per R-2026-08-18-PR02-PR04-SUBSTITUTE-VERIFY; ruling names Andy as
+#   capturer — delegation was explicit and live, in-chat, 2026-08-18)
+# model facts read from a5.bots.bot at capture: status=on, disableExits=0 (EXIT OPTIONS ON,
+#   consistent with R-2026-08-09-S2B-R3-ARM-THEN-ON and the 08-17-r3 capture), posLimit=2,
+#   posLimitDay=2, closedCount=0
+# CHECK RESULT (Step-6): UNEVALUABLE-EMPTY — the bot has ZERO positions, open or closed,
+#   since creation. The rider's "TIME-EXIT row present / no PT row / BACKSTOP_CAUGHT_IT
+#   negative" cannot be evaluated on an empty Trades list. This is NOT a check failure in
+#   the fired-wrong sense: the original rider deferred verification to the bot's FIRST
+#   trading session, which has never occurred. Disposition returns to Andy per the ruling.
+
+4:22AM
+QQQ-IC-0DTE-Fortress-NoPT50
+ACCOUNT
+Paper Trading
+BOT GROUP
+Monitor
+AUTOMATIONS
+ON
+OFF
+EXIT OPTIONS
+ON
+OFF
+Dashboard
+Positions
+Log
+Settings
+Open Positions
+Show tags
+New Position
+DESCRIPTION
+LEGS
+LAST
+DTE
+QTY
+P/L
+ROR
+NET LIQ
+PREMIUM
+RISK
+DIT
+No open positions
+Show tags
+Analyze Results
+DESCRIPTION
+LEGS
+EXP
+STATUS
+QTY
+TRADE PRICE
+CLOSE PRICE
+P/L
+ROR
+PREMIUM
+RISK
+DIT
+PRICE AT OPEN
+PRICE AT CLOSE
+No closed positions

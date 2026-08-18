@@ -2727,3 +2727,48 @@ source: >-
   _foreman-runbook-2026-08-18.md (on-disk copy is authoritative for lanes).
 unclear: false
 ```
+
+```yaml
+ruling_id: R-2026-08-18-PR02-DISCHARGE-PR04-REANCHOR
+date: 2026-08-18
+scope: >-
+  Amends R-2026-08-18-PR02-PR04-SUBSTITUTE-VERIFY for the case it did not
+  anticipate: PR-04's Trades list is EMPTY — the bot has zero positions, open
+  or closed, since creation (capture 02, model closedCount=0), so its check is
+  UNEVALUABLE, not failed; its original rider deferred verification to the
+  bot's first trading session, which has never occurred. SPLIT DISPOSITION:
+  (1) PR-02's rider IS DISCHARGED — its substitute check PASSED on the
+  2026-08-18 capture (12/12 closed positions Expired, no PT row, no
+  exit-trigger row, disableExits=1): capture
+  data/captures/2026-08-18-pr02pr04/01-PR-02-closed-positions-2026-08-18-042142.txt
+  sha256 61c9fdae944b6569f5d7126f02973f21a47001e07fbe625cf1b7900fedae17d5.
+  PR-02's SIGNED block gains the amendment line; the banner clears PR-02;
+  evidence 2026-08-10..2026-08-17 remains SIGNED != VERIFIED. (2) PR-04's
+  rider REMAINS, re-anchored to its original intent: it discharges
+  automatically when PR-04's FIRST position's Trades list shows a TIME-EXIT
+  row, no PT row, and BACKSTOP_CAUGHT_IT negative — evidenced by a fresh
+  capture committed with sha256, no further ruling needed on a pass; a fail
+  returns to Andy. PR-04 stays in the unsigned banner until then (correct:
+  still unverified). Evidence capture 02:
+  data/captures/2026-08-18-pr02pr04/02-PR-04-closed-positions-2026-08-18-042210.txt
+  sha256 1a03683aca71718d895277327b03e4cefc86ddf1811097df03c16ee067f45ce0.
+  Capture provenance: taken via Claude-in-Chrome page scripts at Andy's
+  explicit in-chat direction 2026-08-18, delegating the parent ruling's
+  "taken by Andy"; recorded in both capture headers.
+verbatim: >-
+  Split: discharge PR-02 on the passing capture; PR-04's rider stays and
+  re-anchors to its first-ever position's Trades list.
+verbatim_of: andy
+owner: Andy
+status: Active
+applies_to: >-
+  docs/pre-registration-ledger.md PR-02 SIGNED block (amendment line via the
+  D6 lane PR); PR-04 SIGNED block (untouched now; self-discharging trigger
+  recorded here); data/captures/2026-08-18-pr02pr04/ (evidence, both files);
+  scripts/report.py unsigned banner (PR-02 clears via data; PR-04 remains).
+superseded_by: none
+source: >-
+  Cowork expedite session 2026-08-18; live captures taken in-session;
+  R-2026-08-18-PR02-PR04-SUBSTITUTE-VERIFY (amended, not superseded).
+unclear: false
+```

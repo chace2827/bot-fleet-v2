@@ -1,0 +1,298 @@
+# PR-02 (IC-SPX-FastPT25-S2-130PM) — Closed Positions / Trades evidence
+# URL: https://app.optionalpha.com/bots/bot/BOTfw5TkkCRF3017861977616287731/positions?closed=true
+# captured: Tue Aug 18 2026 04:21:42 GMT-0400 (Eastern Daylight Time)
+# method: document.body.innerText via Claude-in-Chrome page script, at Andy's direction
+#   (substitute capture per R-2026-08-18-PR02-PR04-SUBSTITUTE-VERIFY; ruling names Andy as
+#   capturer — delegation was explicit and live, in-chat, 2026-08-18)
+# model facts read from a5.bots.bot at capture: status=on, disableExits=1, posLimit=2,
+#   posLimitDay=2, closedCount=12, wins=12, losses=0
+# CHECK RESULT (INVERTED Step-6): PASS — all 12 closed positions STATUS=Expired;
+#   zero PT rows, zero exit-trigger rows anywhere on the page.
+
+4:21AM
+IC-SPX-FastPT25-S2-130PM
+ACCOUNT
+Paper Trading
+BOT GROUP
+IC-Focus
+AUTOMATIONS
+ON
+OFF
+EXIT OPTIONS
+ON
+OFF
+Dashboard
+Positions
+Log
+Settings
+Open Positions
+Show tags
+New Position
+DESCRIPTION
+LEGS
+LAST
+DTE
+QTY
+P/L
+ROR
+NET LIQ
+PREMIUM
+RISK
+DIT
+No open positions
+Show tags
+Analyze Results
+DESCRIPTION
+LEGS
+EXP
+STATUS
+QTY
+TRADE PRICE
+CLOSE PRICE
+P/L
+ROR
+PREMIUM
+RISK
+DIT
+PRICE AT OPEN
+PRICE AT CLOSE
+SPX
+Short Call Spread
+7,780
+C
+7,775
+C
+Aug 17
+Expired
+Aug 17
+10
+0.30
+--
+$300
+6.4%
++$300
+$4,700
+0d
+7,756.54
+7,745.06
+call side
+SPX
+Short Put Spread
+7,730
+P
+7,725
+P
+Aug 17
+Expired
+Aug 17
+10
+0.25
+--
+$250
+5.3%
++$250
+$4,750
+0d
+7,756.31
+7,745.06
+put side
+SPX
+Short Put Spread
+7,760
+P
+7,755
+P
+Aug 14
+Expired
+Aug 14
+10
+0.25
+--
+$250
+5.3%
++$250
+$4,750
+0d
+7,779.61
+7,785.76
+put side
+SPX
+Short Call Spread
+7,800
+C
+7,795
+C
+Aug 14
+Expired
+Aug 14
+10
+0.30
+--
+$300
+6.4%
++$300
+$4,700
+0d
+7,779.79
+7,785.76
+call side
+SPX
+Short Call Spread
+7,815
+C
+7,810
+C
+Aug 13
+Expired
+Aug 13
+10
+0.30
+--
+$300
+6.4%
++$300
+$4,700
+0d
+7,794.95
+7,798.99
+call side
+SPX
+Short Put Spread
+7,775
+P
+7,770
+P
+Aug 13
+Expired
+Aug 13
+10
+0.25
+--
+$250
+5.3%
++$250
+$4,750
+0d
+7,795.05
+7,798.99
+put side
+SPX
+Short Put Spread
+7,730
+P
+7,725
+P
+Aug 12
+Expired
+Aug 12
+10
+0.25
+--
+$250
+5.3%
++$250
+$4,750
+0d
+7,750.71
+7,748.50
+put side
+SPX
+Short Call Spread
+7,775
+C
+7,770
+C
+Aug 12
+Expired
+Aug 12
+10
+0.25
+--
+$250
+5.3%
++$250
+$4,750
+0d
+7,750.84
+7,748.50
+call side
+SPX
+Short Put Spread
+7,705
+P
+7,700
+P
+Aug 11
+Expired
+Aug 11
+10
+0.25
+--
+$250
+5.3%
++$250
+$4,750
+0d
+7,730.88
+7,728.20
+put side
+SPX
+Short Call Spread
+7,755
+C
+7,750
+C
+Aug 11
+Expired
+Aug 11
+10
+0.35
+--
+$350
+7.5%
++$350
+$4,650
+0d
+7,730.92
+7,728.20
+call side
+SPX
+Short Put Spread
+7,730
+P
+7,725
+P
+Aug 10
+Expired
+Aug 10
+10
+0.20
+--
+$200
+4.2%
++$200
+$4,800
+0d
+7,755.09
+7,753.11
+put side
+SPX
+Short Call Spread
+7,775
+C
+7,770
+C
+Aug 10
+Expired
+Aug 10
+10
+0.40
+--
+$400
+8.7%
++$400
+$4,600
+0d
+7,755.11
+7,753.11
+call side
