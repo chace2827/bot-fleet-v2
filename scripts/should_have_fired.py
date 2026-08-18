@@ -114,6 +114,7 @@ def build_report(data_dir, output_path, quiet=False):
     write_tsv(rows, output_path)
     if not quiet:
         print_summary(rows, filled)
+        print(f"\nWrote {output_path}: {os.path.abspath(output_path)}")
     return rows
 
 
@@ -132,7 +133,6 @@ def print_summary(rows, filled):
     print(f"\nExcluded {len(filled)} filled (date,bot) pairs from report.")
     for d, b in sorted(filled):
         print(f"  filled: {d} {b}")
-    print(f"\nWrote {OUTPUT_FILE}: {os.path.abspath(OUTPUT_FILE)}")
 
 
 # -----------------------------------------------------------------------------
