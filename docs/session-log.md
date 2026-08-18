@@ -9623,3 +9623,11 @@ clean; `python3 scripts/pre_registration_ledger.py` selftest clean; `python3 scr
 32/32; `python3 scripts/run_receipt.py --selftest` 13/13; `python3 scripts/check_heartbeat.py --selftest`
 clean; `python3 scripts/check_refs.py` invariants clean; parser check `sorted(p.unsigned_from_ledger(...))`
 contains no `GF-QQQ-IC-*` names.
+
+---
+
+## 2026-08-19 — d5 queue fixup
+
+**Fixup.** `docs/devin-queue.md` P1-1 said "all seven GF arms"; corrected to "all eight GF arms
+(PR-14…PR-20 plus the previously signed PR-23)" to match `data/bots_meta.csv`.
+`docs/state.md` top block also updated. `scripts/check_docs_vs_csv.py` now reports no contradictions.

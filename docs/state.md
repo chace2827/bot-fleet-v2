@@ -3,7 +3,8 @@
 ## 2026-08-19 — P1-1A roster facts applied
 
 - `R-2026-08-18-P1-1A-ROSTER-FACTS` ratified; `docs/pre-registration-ledger.md` now has seven
-  individual signed entries for the greenfield IC arms (`PR-14`…`PR-20`). Each entry stamps the
+  individual signed entries for the greenfield IC arms (`PR-14`…`PR-20`). `data/bots_meta.csv`
+  lists **eight** greenfield arms (PR-14…PR-20 plus the already-individually-signed `PR-23`). Each entry stamps the
   literal bot ID from `data/captures/2026-08-17-r3/02-roster-toggles-44-2026-08-17.tsv`, cites the
   build/sizing/naming/signature/go-live/entry-method rulings, and carries `R-2026-08-18-P1-1A-ROSTER-FACTS`
   as the trace-carrier. The collective `Greenfield IC family`, `Rebuilt hedge tournament arms` and

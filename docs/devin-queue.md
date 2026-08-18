@@ -42,9 +42,10 @@ decision-class one).
 ## Next — identity and roster seams
 
 - [x] **P1-1 — `data/bots_meta.csv` roster facts verified.** R-2026-08-18-P1-1A-ROSTER-FACTS
-      ratifies the 19 ON bots — including all seven GF arms and their `PR-NN` registrations —
-      against the 2026-08-17-r3 capture. The pre-cutover-roster premise was false. The seven
-      individual pre-registration ledger entries are added in the same PR. **Done.**
+      ratifies the 19 ON bots — including all eight GF arms (PR-14…PR-20 and the previously
+      signed PR-23) and their `PR-NN` registrations — against the 2026-08-17-r3 capture. The
+      pre-cutover-roster premise was false. Seven individual pre-registration ledger entries for
+      PR-14…PR-20 are added in the same PR (PR-23 already had its own signed row). **Done.**
 - [x] **P1-1a — RULING: roster facts applied.** Andy ruled R-2026-08-18-P1-1A-ROSTER-FACTS,
       ordering seven individual pre-registration ledger entries for the GF arms. The entries
       cite the active build, sizing, naming, signature, go-live and entry-method rulings. Owner: Devin.
