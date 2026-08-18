@@ -11,7 +11,7 @@ import json
 import os
 import sys
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ROOT = os.environ.get("FLEET_ROOT") or os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 HEARTBEAT_DIR = os.path.join(ROOT, "artifacts", "heartbeat")
 
 
