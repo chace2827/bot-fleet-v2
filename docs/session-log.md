@@ -9487,3 +9487,31 @@ position would break everything. New surface: define it right. Existing surface:
 confirm it had inferred the ref from the dispatch prompt; it answered a different question (that
 the branches are based on `65c3f75` — correct, and verified). The unanswered one matters: an agent
 that reports a premise as observed will do it again somewhere unverifiable.
+
+---
+
+## 2026-08-18 (early AM) — Orchestrator: R-3 closed, INC-01 visible to the audit
+
+**Session:** Cowork bridge (orchestrator continuation of 08-17). Verified Task A's capture bundle
+and Task B's OA-Reader spec citations first-hand before acting on either.
+
+- **R-3 CLOSED — `R-2026-08-17-INC01-META-STATUS` signed and applied.** `data/bots_meta.csv` row 3
+  (IC-SPX-Fortress-Unstopped / INC-01) status OFF→ON, stale provenance sentence replaced with the
+  capture citation (`data/captures/2026-08-17-r3/01-oa-bots-capture-2026-08-17-195713.txt` sha256
+  `8d9c59b71858c97f43357595dd252d5bd4594a8ab20887da5cda120f64ccdf89`). RULINGS.md record 134
+  inserted above the garbage tail; tail byte-identical; re-parse clean (134 blocks, 11 fields each,
+  unique ids). Commits `0007d3e` (capture bundle) and `02c781e` (signing), both pushed, both
+  verified by reading `.git/logs/HEAD`.
+- Post-edit hashes, direct device_bash: `bots_meta.csv` `e03b13d3de02b544b7c2431661abb8c154f3b2c6
+  a51c71d97c3886ac9d15828d`, `RULINGS.md` `65fe282c9b8ec6de8909f60f8a3371b44020a28253b34c6cfc96b
+  824b72ef842`.
+- ⚠️ **Disclosed deviation:** the bots_meta.csv rewrite normalized CRLF→LF across the file. CSV
+  content identical except row 3 (verified field-level); diffstat read 72/45 because of it. Andy
+  notified; standing unless he orders CRLF restored.
+- Effect from 08-18: INC-01 enters SILENT_BOT (`execution_audit.py:393`), the decidability
+  countdown (`report.py:117`), and flips Archive→Monitor in the bot-group map (`report.py:455`).
+- Cross-lane correction: Task A's caveat that INC-01's 08-17 log is "gone" under ~25-min retention
+  is falsified by the salvage capture (page size, not retention; stored data ≥141 days). The 08-17
+  window may be recoverable by Load-more paging — OA-Reader spec Q-1.
+- Owed next: toggle screenshots into `data/captures/2026-08-17-r3/` (completes §2.5's capture
+  definition), then the reconciliation PR that puts mechanics §2.4/§2.5 in force.
