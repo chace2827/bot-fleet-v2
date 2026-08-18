@@ -24,6 +24,7 @@ import os
 import re
 import subprocess
 import sys
+import tempfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ALLOW_FILE = os.path.join(ROOT, "scripts", "check_refs_allow.txt")
@@ -181,7 +182,7 @@ def check_row_count_invariant(files, actual_count):
     pat = re.compile(
         r"\b(?:data/)?bots_meta\.csv\b"
         r".{0,60}?"
-        r"\b(?:([0-9,]+)|(" + "|".join(WORD2NUM.keys()) + r"))\b"
+        r"(?<![\w-])(?:([0-9,]+)|(" + "|".join(WORD2NUM.keys()) + r"))\b"
         r"\s*(?:rows?|bots?|records?|entries)",
         re.I | re.S,
     )
@@ -204,6 +205,83 @@ def check_row_count_invariant(files, actual_count):
     return errors
 
 
+# ---------------------------------------------------------------------------
+# Regression fixtures for the row-count invariant.
+#
+# The first case is the verbatim text that was `docs/devin-queue.md:92` between
+# 78b3195 and f602866. It reddened master push CI for two commits: `-` is a word
+# boundary, so the old `\b`-anchored number group read the "1" out of "P1-1
+# records" as a row count for bots_meta.csv. The `(?<![\w-])` lookbehind is what
+# makes it a non-match. The true-positive cases below exist so that lookbehind
+# cannot be widened into "the invariant never fires".
+# ---------------------------------------------------------------------------
+ROW_COUNT_CASES = [
+    (
+        "false positive: 'P1-1 records' is an item id, not a row count",
+        "      but absent from `data/bots_meta.csv` is dropped with **no warning**"
+        " \u2014 and P1-1 records that roster\n",
+        44,
+        False,
+    ),
+    (
+        "true positive: a stale digit row count still fails",
+        "The roster in `data/bots_meta.csv` has 43 rows.\n",
+        44,
+        True,
+    ),
+    (
+        "true positive: a stale word row count still fails",
+        "`data/bots_meta.csv` carries twelve bots.\n",
+        44,
+        True,
+    ),
+    (
+        "true negative: the correct count passes",
+        "`data/bots_meta.csv` has 44 rows.\n",
+        44,
+        False,
+    ),
+]
+
+
+def selftest():
+    """Exercise check_row_count_invariant against the fixtures above.
+
+    Runs entirely inside a temp dir: this test must not be able to write the
+    repo it is checking.
+    """
+    global ROOT
+    original_root = ROOT
+    failures = []
+    try:
+        for name, text, actual, expect_error in ROW_COUNT_CASES:
+            with tempfile.TemporaryDirectory() as td:
+                ROOT = td
+                os.makedirs(os.path.join(td, "docs"))
+                with open(os.path.join(td, "docs", "fixture.md"), "w", encoding="utf-8") as fh:
+                    fh.write(text)
+                errors = check_row_count_invariant(["docs/fixture.md"], actual)
+            got_error = bool(errors)
+            if got_error != expect_error:
+                failures.append(
+                    f"  {name}\n"
+                    f"    expected {'an error' if expect_error else 'no error'}, "
+                    f"got {errors if errors else 'no error'}"
+                )
+            else:
+                print(f"  ok: {name}")
+    finally:
+        ROOT = original_root
+
+    if failures:
+        print("check_refs --selftest: FAIL", file=sys.stderr)
+        for f in failures:
+            print(f, file=sys.stderr)
+        return 1
+    print(f"check_refs --selftest: {len(ROW_COUNT_CASES)} row-count cases pass")
+    return 0
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--all", action="store_true", help="print every classification")
@@ -212,7 +290,15 @@ def main():
         action="store_true",
         help="exit 1 on dangling refs too (after the first week)",
     )
+    ap.add_argument(
+        "--selftest",
+        action="store_true",
+        help="run the row-count invariant regression fixtures and exit",
+    )
     args = ap.parse_args()
+
+    if args.selftest:
+        return selftest()
 
     allowed = load_allow()
     history = load_history_index()
