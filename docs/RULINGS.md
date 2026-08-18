@@ -2856,3 +2856,55 @@ source: >-
   (parser lines 211-224 read first-hand).
 unclear: false
 ```
+
+```yaml
+ruling_id: R-2026-08-18-BOT-GATES-TABLE
+date: 2026-08-18
+scope: >-
+  Creates data/bot_gates.csv as a NEW signed surface: one row per ON bot
+  recording the PRE-REGISTERED entry gate (window, market condition, declared
+  fill-preconditions), its tape-field mapping, and its evaluability class,
+  per the 2026-08-18 gates decision package, SIGNED AS DRAFTED — the signed
+  table is the file _bot_gates_signed-2026-08-18.csv delivered in the Cowork
+  session, landed verbatim by a foreman PR citing this ruling. Adopts the
+  package's §2 evaluation rules: time-window gates evaluate on the tape's
+  5-min bars vs prior_close; the ASYMMETRIC VIX rule (no intraday VIX:
+  JUSTIFIED only if the gate was unreachable all day; a straddling day is
+  UNEVALUABLE-INTRADAY, never SUSPECT on a guess); UNEVALUABLE-BY-DESIGN and
+  UNEVALUABLE-FLOOR classes print loudly, naming the missing thing; a bot
+  with no market gate and no declared fill-precondition is SUSPECT when
+  silent; tape source != tradier makes the whole day UNEVALUABLE. The table
+  judges bots against SIGNED gates; signed-vs-live-OA divergence is a
+  separate future detector, out of scope. The file is corrections-class
+  thereafter: gate changes require a ruling (a gate is a threshold under
+  charter §4); clerical fixes ride normal PRs. The Phase-3 verdict engine
+  consumes this file as its SOLE gate source; a bot without a row is
+  UNEVALUABLE, loudly.
+verbatim: >-
+  Sign as drafted. The evaluation rules in the package's section 2 are
+  adopted; gate changes henceforth need a ruling.
+verbatim_of: andy
+owner: Andy
+status: Active
+applies_to: >-
+  data/bot_gates.csv (new, from _bot_gates_signed-2026-08-18.csv verbatim);
+  the Phase-3 parser and scripts/should_have_fired.py (consume it);
+  docs/devin-queue.md (gate-source item recorded closed).
+  data/bots_config_v2.csv is explicitly NOT the gate source and is unchanged.
+superseded_by: none
+source: >-
+  Cowork gates decision package (bot-gates-decision-package-2026-08-18.md);
+  per-row sources in the table; tape schema read from
+  data/brief/2026-08-17_tape.json; GF gate from
+  docs/gf-entry-gate-forensics-2026-08-17.md and R-2026-08-17-GF-ENTRY-METHOD.
+unclear: >-
+  [UNCLEAR] Deliberately recorded, signed-as-drafted carve-outs: (1) INC-01's
+  none-gate and 11:00 window are drafted from bots_meta notes, not
+  config-verified — a fresh config read may correct the row by ruling;
+  (2) PR-04's credit-floor VALUE is unrecorded — the row stays
+  UNEVALUABLE-FLOOR until the floor is captured and recorded by ruling;
+  (3) the 60min-ORB rule is drafted from the bot's name, not config-verified;
+  (4) the three mirror rows are UNEVALUABLE-BY-DESIGN until Andy supplies
+  gates. Each carve-out narrows by its own future ruling; none blocks the
+  build.
+```
