@@ -6,7 +6,7 @@ dashboard.html (numbers + backlog). Never edit STATUS.md by hand.
 N reporting: 'Trades' = condors (legs paired into one entry); 'Legs' = OA position
 rows (matches OA's "Positions" count). Win rate shown is trade-level (per condor).
 """
-import argparse, collections, csv, datetime, json, math, os, random, re, shutil, subprocess, sys, tempfile
+import argparse, collections, csv, datetime, glob, json, math, os, random, re, shutil, subprocess, sys, tempfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 D = os.path.join(ROOT, "data")
@@ -232,6 +232,25 @@ def validate():
         with open(os.path.join(root, "data", "ledger_meta.json"), "w") as f:
             json.dump({"ledger_start": ledger_start}, f)
 
+        # P5 verdict-surfacing fixtures: signed bot_gates.csv, a verdict TSV, and a
+        # same-day tape so the report is not stale.
+        os.makedirs(os.path.join(root, "data", "brief"), exist_ok=True)
+        with open(os.path.join(root, "data", "bot_gates.csv"), "w") as f:
+            f.write("# bot_gates.csv fixture\n")
+            f.write("bot,pr_id,underlying,entry_window_et,gate_type,gate_params,eval_class,fill_precondition,source\n")
+            f.write("TestArm,PR-Test,SPX,11:00,band_prior_close,abs_lt=0.5,EVALUABLE,,\n")
+            f.write("NoneArm,PR-None,SPX,11:00,none,,SUSPECT_WHEN_SILENT,,\n")
+            f.write("UnknownArm,PR-Unknown,,,unknown,,UNEVALUABLE_BY_DESIGN,,\n")
+
+        with open(os.path.join(root, "data", "brief", "2026-08-14_p3_verdicts.tsv"), "w") as f:
+            f.write("date\tbot\tpr_id\tverdict\treason\n")
+            f.write("2026-08-14\tTestArm\tPR-Test\tSUSPECT\ttape: SPX moved 1.2%, outside 0.5% band\n")
+            f.write("2026-08-14\tNoneArm\tPR-None\tSUSPECT\tno market gate declared\n")
+            f.write("2026-08-14\tUnknownArm\tPR-Unknown\tSUSPECT\tgate type unknown\n")
+
+        with open(os.path.join(root, "data", "brief", "2026-08-14_tape.json"), "w") as f:
+            json.dump({"date": "2026-08-14", "underlyings": {}}, f)
+
         # Run report.py against the scratch root, pinned today.
         proc = subprocess.run(
             [sys.executable, __file__, "--root", root, "--today", today.isoformat()],
@@ -277,6 +296,39 @@ def validate():
             print(status, file=sys.stderr)
             return 1
 
+        # P5: the should-have-fired verdict banner must render and split
+        # SUSPECT into structural (no/unknown gate) and evidenced (signed gate).
+        if "2 structural" not in status:
+            print("FAIL: expected 2 structural SUSPECT rows in verdict banner", file=sys.stderr)
+            print(status, file=sys.stderr)
+            return 1
+        if "1 evidenced" not in status:
+            print("FAIL: expected 1 evidenced SUSPECT row in verdict banner", file=sys.stderr)
+            print(status, file=sys.stderr)
+            return 1
+        for arm in ("TestArm", "NoneArm", "UnknownArm"):
+            if arm not in status:
+                print(f"FAIL: expected {arm} in verdict banner", file=sys.stderr)
+                print(status, file=sys.stderr)
+                return 1
+
+        # MISSING path: delete the verdict file and re-run; the report must say so.
+        os.remove(os.path.join(root, "data", "brief", "2026-08-14_p3_verdicts.tsv"))
+        proc = subprocess.run(
+            [sys.executable, __file__, "--root", root, "--today", today.isoformat()],
+            capture_output=True, text=True,
+        )
+        if proc.returncode != 0:
+            print("report.py selftest (missing path) subprocess failed:", file=sys.stderr)
+            print(proc.stdout, file=sys.stderr)
+            print(proc.stderr, file=sys.stderr)
+            return 1
+        status_missing = open(status_path).read()
+        if "NO SHOULD-HAVE-FIRED VERDICT FILE" not in status_missing:
+            print("FAIL: expected missing-verdict-file notice", file=sys.stderr)
+            print(status_missing, file=sys.stderr)
+            return 1
+
         print("report.py selftest OK")
         return 0
     finally:
@@ -308,6 +360,188 @@ def today_iso():
         return datetime.datetime.fromtimestamp(
             int(epoch), tz=datetime.timezone.utc).date().isoformat()
     return datetime.date.today().isoformat()
+
+
+def _newest_p3_verdict(root):
+    """Return (path, date) of the newest data/brief/<DAY>_p3_verdicts.tsv under root."""
+    brief_dir = os.path.join(root, "data", "brief")
+    paths = glob.glob(os.path.join(brief_dir, "*_p3_verdicts.tsv"))
+    paths = [p for p in paths
+             if re.match(r"^(\d{4}-\d{2}-\d{2})_p3_verdicts\.tsv$", os.path.basename(p))]
+    if not paths:
+        return None, None
+    def _key(p):
+        m = re.match(r"^(\d{4}-\d{2}-\d{2})_p3_verdicts\.tsv$", os.path.basename(p))
+        return (m.group(1), os.path.getmtime(p))
+    paths.sort(key=_key, reverse=True)
+    return paths[0], _key(paths[0])[0]
+
+
+def _newest_tape(root):
+    """Return the date string of the newest data/brief/<DAY>_tape.json under root."""
+    brief_dir = os.path.join(root, "data", "brief")
+    paths = glob.glob(os.path.join(brief_dir, "*_tape.json"))
+    paths = [p for p in paths
+             if re.match(r"^(\d{4}-\d{2}-\d{2})_tape\.json$", os.path.basename(p))]
+    if not paths:
+        return None
+    def _key(p):
+        m = re.match(r"^(\d{4}-\d{2}-\d{2})_tape\.json$", os.path.basename(p))
+        return (m.group(1), os.path.getmtime(p))
+    paths.sort(key=_key, reverse=True)
+    return _key(paths[0])[0]
+
+
+def _load_p3_verdicts(path):
+    try:
+        with open(path, newline="") as f:
+            return list(csv.DictReader(f, delimiter="\t"))
+    except Exception:
+        return None
+
+
+def _load_bot_gates(root):
+    path = os.path.join(root, "data", "bot_gates.csv")
+    if not os.path.exists(path):
+        return {}
+    try:
+        with open(path, newline="") as f:
+            lines = [ln for ln in f if not ln.startswith("#")]
+        if not lines:
+            return {}
+        return {r["bot"]: r for r in csv.DictReader(lines) if r.get("bot")}
+    except Exception:
+        return {}
+
+
+def _split_suspect(rows, gate_by_bot):
+    struct, evid = [], []
+    for r in rows:
+        if r.get("verdict") != "SUSPECT":
+            continue
+        gt = (gate_by_bot.get(r.get("bot", "")) or {}).get("gate_type", "").strip().lower()
+        if not gt or gt in ("none", "unknown"):
+            struct.append(r)
+        else:
+            evid.append(r)
+    return struct, evid
+
+
+def _html_escape(s):
+    return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+
+
+def _verdict_surfaces(root):
+    """Return (STATUS.md markdown lines, dashboard.html banner) for the should-have-fired verdict."""
+    path, vdate = _newest_p3_verdict(root)
+    tdate = _newest_tape(root)
+    rows = None
+    if path is not None:
+        rows = _load_p3_verdicts(path)
+    if rows is not None:
+        # The daily file may carry prior dates for the record; surface only the day
+        # named in the filename (the newest date the detector ran for).
+        rows = [r for r in rows if r.get("date") == vdate]
+    gate_by_bot = _load_bot_gates(root)
+    missing = (path is None) or (rows is None)
+    stale = (not missing and vdate and tdate and vdate < tdate)
+
+    md = [""]
+    if missing:
+        md += [
+            "## ⛔ NO SHOULD-HAVE-FIRED VERDICT FILE",
+            "",
+            "> The per-day verdict file `data/brief/<DAY>_p3_verdicts.tsv` is **missing or unreadable**. "
+            "The detector has not written a file that `report.py` can read. "
+            "**A missing detector output is not the same as 'no findings'** — do not read this as a clean day.",
+            "",
+        ]
+    elif stale:
+        md += [
+            f"## ⚠️ STALE SHOULD-HAVE-FIRED VERDICT ({vdate})",
+            "",
+            f"> The newest verdict file is **{vdate}**, but the newest tape is **{tdate}**. "
+            "The rows below are **NOT current** and must not be read as today's output.",
+            "",
+        ]
+    else:
+        md += [f"## Should-have-fired verdict — {vdate}", ""]
+
+    if not missing:
+        struct, evid = _split_suspect(rows, gate_by_bot)
+        n_struct, n_evid = len(struct), len(evid)
+
+        if not stale:
+            if n_struct + n_evid == 0:
+                md += [
+                    f"> **{n_struct} structural** · **{n_evid} evidenced** — no SUSPECT verdicts.",
+                    "",
+                ]
+            else:
+                md += [
+                    "> SUSPECT rows split by `data/bot_gates.csv` `gate_type`. "
+                    f"**{n_struct} structural** (no declared market gate) · "
+                    f"**{n_evid} evidenced** (signed gate evaluated against tape). "
+                    "The split keeps the evidenced count meaningful without hiding anything.",
+                    "",
+                ]
+
+        if n_struct + n_evid > 0:
+            md += ["| Bot | PR | Class | Verdict | Reason |",
+                   "|---|---|---|---|---|"]
+            for r in struct + evid:
+                cls = "STRUCTURAL" if r in struct else "EVIDENCED"
+                reason = r.get("reason", "").replace("|", "\\|")
+                md.append(f'| {r["bot"]} | {r.get("pr_id") or ""} | {cls} | {r["verdict"]} | {reason} |')
+            md.append("")
+
+    if missing:
+        html = (
+            '<div style="background:#fff0f0;border:1px solid #c0392b;color:#c0392b;'
+            'padding:12px 16px;margin:12px 0;border-radius:6px;">'
+            '<h2 style="margin:0 0 6px;font-size:14px;">'
+            'NO SHOULD-HAVE-FIRED VERDICT FILE</h2>'
+            '<p style="margin:0;font-size:13px;">'
+            'The per-day verdict file <code>data/brief/&lt;DAY&gt;_p3_verdicts.tsv</code> '
+            'is <b>missing or unreadable</b>. A missing detector output is <b>not</b> the same as '
+            '&quot;no findings&quot;.</p></div>'
+        )
+    else:
+        struct, evid = _split_suspect(rows or [], gate_by_bot)
+        n_struct, n_evid = len(struct), len(evid)
+        any_sus = n_struct + n_evid > 0
+        if stale:
+            bg, border, color = "#fffbe6", "#f0ad4e", "#8a6d3b"
+            title = f"STALE SHOULD-HAVE-FIRED VERDICT ({vdate})"
+            subtitle = f"Newest tape is {tdate}. These rows are <b>not current</b>."
+        elif any_sus:
+            bg, border, color = "#fff0f0", "#c0392b", "#c0392b"
+            title = f"SHOULD-HAVE-FIRED VERDICT — {vdate}"
+            subtitle = (f"<b>{n_struct} structural</b> (no declared market gate) · "
+                        f"<b>{n_evid} evidenced</b> (signed gate evaluated against tape)")
+        else:
+            bg, border, color = "#f0fff0", "#1e7e34", "#1e7e34"
+            title = f"SHOULD-HAVE-FIRED VERDICT — {vdate}"
+            subtitle = f"<b>{n_struct} structural · {n_evid} evidenced</b> — no SUSPECT verdicts."
+
+        html = (
+            f'<div style="background:{bg};border:1px solid {border};color:{color};'
+            'padding:12px 16px;margin:12px 0;border-radius:6px;">'
+            f'<h2 style="margin:0 0 6px;font-size:14px;">{_html_escape(title)}</h2>'
+            f'<p style="margin:0 0 8px;font-size:13px;">{subtitle}</p>'
+        )
+        if any_sus:
+            rows_html = "".join(
+                f'<li><code>{_html_escape(r["bot"])}</code> · '
+                f'{_html_escape(r.get("pr_id") or "")} · '
+                f'{"STRUCTURAL" if r in struct else "EVIDENCED"} · '
+                f'{_html_escape(r["verdict"])} · {_html_escape(r["reason"])}</li>'
+                for r in struct + evid
+            )
+            html += f'<ul style="margin:0;padding-left:18px;font-size:13px;">{rows_html}</ul>'
+        html += '</div>'
+
+    return md, html
 
 
 if __name__ == "__main__":
@@ -460,6 +694,9 @@ if unsigned_bots:
     for b in unsigned_bots:
         L.append(f"- {b}")
     L.append("")
+
+_verdict_md, _verdict_html = _verdict_surfaces(ROOT)
+L += _verdict_md
 
 L += ["## Headline",
      f"- **Total closed P/L:** ${tot:,.0f}  ·  {len(trades)} legs  ·  {len(bots)} bots"]
@@ -1070,6 +1307,7 @@ code{background:#f0f0f3;padding:1px 4px;border-radius:4px;font-size:12px}
 </style></head><body>
 <h1>Bot Fleet — Status</h1>
 __UNSIGNED__
+__VERDICT__
 <div class="sub">generated __DATE__ · PAPER · source: data/trades.csv + docs/backlog.md</div>
 <div>
 <div class="card"><span>Total P/L</span><b class="__TOTC__">$__TOT__</b></div>
@@ -1120,6 +1358,7 @@ repl = {"__DATE__": date, "__TOT__": f"{tot:,.0f}", "__NLEGS__": str(len(trades)
         "__SCALPC__": "neg" if champ_pnl < 0 else "pos",
         "__ROWS__": rows_json, "__CUM__": json.dumps(cumlist),
         "__UNSIGNED__": unsigned_html,
+        "__VERDICT__": _verdict_html,
         "__BACKLOG__": backlog_html}
 html = TPL
 for k, v in repl.items(): html = html.replace(k, v)
