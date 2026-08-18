@@ -174,6 +174,7 @@ def _run_selftest():
             "VixChangeJust,Directional,test,VIX,ON,,,,,,,,",
             "VixChangeSus,Directional,test,VIX,ON,,,,,,,,",
             "VixChangeStraddle,Directional,test,VIX,ON,,,,,,,,",
+            "VixMissingBar,Directional,test,VIX,ON,,,,,,,,",
             "WeekdayJust,OA-Mirror,test,,ON,,,,,,,,",
             "WeekdaySus,OA-Mirror,test,,ON,,,,,,,,",
             "OrbSus,OA-Mirror,test,SPX,ON,,,,,,,,",
@@ -199,6 +200,7 @@ def _run_selftest():
             "VixChangeJust,PR-VixChangeJust,VIX,11:00,vix_change_max,threshold_pct=-35,EVALUABLE_ASYM,,",
             "VixChangeSus,PR-VixChangeSus,VIX,11:00,vix_change_max,threshold_pct=-2,EVALUABLE_ASYM,,",
             "VixChangeStraddle,PR-VixChangeStraddle,VIX,11:00,vix_change_max,threshold_pct=-27,EVALUABLE_ASYM,,",
+            "VixMissingBar,PR-VixMissingBar,VIX,12:00,vix_min,threshold=100,EVALUABLE_ASYM,,",
             "WeekdayJust,PR-WeekdayJust,,Friday,weekday,day=Mon,EVALUABLE,,",
             "WeekdaySus,PR-WeekdaySus,,Friday,weekday,day=Fri,EVALUABLE,,",
             "OrbSus,PR-OrbSus,SPX,after 10:30,orb_60min,range=09:30-10:30,EVALUABLE,,",
@@ -249,7 +251,8 @@ def _run_selftest():
             "VIX": {
                 "symbol": "VIX", "source": "tradier", "prior_close": 20.0,
                 "open": 20.0, "high": 15.0, "low": 14.0, "close": 14.5,
-                "series": [], "series_interval": None,
+                "series": [{"t": "11:00", "p": 14.5, "h": 15.0, "l": 14.0}],
+                "series_interval": "5min",
                 "vix_close": 14.5, "vix_change_pct": -27.5,
             },
         })
@@ -268,7 +271,8 @@ def _run_selftest():
             "VIX": {
                 "symbol": "VIX", "source": "tradier", "prior_close": 20.0,
                 "open": 20.0, "high": 21.0, "low": 18.0, "close": 19.0,
-                "series": [], "series_interval": None,
+                "series": [{"t": "11:00", "p": 19.0, "h": 21.0, "l": 18.0}],
+                "series_interval": "5min",
                 "vix_close": 19.0, "vix_change_pct": -5.0,
             },
         }, any_reconstructed=True, reconstructed_reasons=["token-absent"])
@@ -303,6 +307,7 @@ def _run_selftest():
         ok &= check("2026-08-14", "VixChangeJust", "JUSTIFIED")
         ok &= check("2026-08-14", "VixChangeSus", "SUSPECT")
         ok &= check("2026-08-14", "VixChangeStraddle", "UNEVALUABLE_INTRADAY")
+        ok &= check("2026-08-14", "VixMissingBar", "UNEVALUABLE_MISSING_BAR")
         ok &= check("2026-08-14", "WeekdayJust", "JUSTIFIED")
         # WeekdaySus excluded because it filled.
         ok &= check("2026-08-14", "OrbSus", "SUSPECT")
