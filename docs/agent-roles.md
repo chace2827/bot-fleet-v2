@@ -86,7 +86,7 @@ ended v1. It is *not* the unblocker for the statistical layer — see Statistici
 ## Pipeline-Runner
 *Devin builds. Class A.*
 
-**Job.** Execute the eight-stage `daily.sh` and halt on config-blind stages.
+**Job.** Execute the nine-stage `daily.sh` and halt on config-blind stages.
 
 **Runs.** Daily, after OA-Reader.
 

@@ -9,7 +9,7 @@ working ledger. It stayed deleted, on master, for five days. The forensic §4
 finding is one line long:
 
     "There are none for August. data/receipts/ stops at mirror-baseline.txt,
-     2026-08-04. Nothing in the eight-stage pipeline writes a per-run receipt;
+     2026-08-04. Nothing in the nine-stage pipeline writes a per-run receipt;
      data/ledger_meta.json is the only per-run artifact and it is OVERWRITTEN
      by each run, so it records the last run and no history."
 

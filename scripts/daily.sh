@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # Fleet Brief — one-command daily pipeline.
 #
-# Runs eight stages IN ORDER (order matters). Stage order follows CLAUDE.md §2:
-# ledger -> tape -> DRIFT AUDIT -> three-verdict brief -> accumulators -> report.
+# Runs nine stages IN ORDER (order matters). Stage order follows CLAUDE.md §2:
+# ledger -> tape -> DRIFT AUDIT -> three-verdict brief -> gate report -> accumulators -> report.
 #
 #   1. build_ledger.py     — rebuild the POST-CUTOVER working ledger (data/trades.csv +
 #                            bots.csv + straddlers.csv + ledger_meta.json) from the newest
@@ -12,26 +12,29 @@
 #                            declared-config rules only with data/bots_config_v2.csv,
 #                            otherwise reported SKIPPED (never a silent pass)
 #                            -> data/execution_audit_findings.csv
-#   4. daily_brief.py      — config-vs-actual cards, breach flags, hedge counterfactual,
-#                            compliance scoring -> data/brief/<date>_brief.json + compliance.csv
-#   5. hedge_tournament.py — Free Hedge Tournament: replays that day's settled legs through
-#                            the v1 hedge library (Ride/PT/SL/S2/Defang-deferred), R-scored
-#                            -> upserts data/hedge_tournament.csv (per-date, idempotent)
-#   6. trade_window.py     — Trade-window heat map: buckets every position's MAE timestamp
-#                            by hour x tape-regime + a tape-covered short-strike touch rate
-#                            -> rebuilds data/trade_window.csv (full rebuild, idempotent)
-#   7. lessons.py          — Lessons index: tags each graded bot-day's brief "day's lesson"
-#                            (entry-timing/hedge/filter/regime/sizing/other)
-#                            -> upserts data/lessons.csv (per date+bot, idempotent)
-#   8. report.py           — STATUS.md + dashboard.html (G5 reads compliance.csv; Hedge
-#                            tournament / Trade-window heat map / Lessons index sections read
-#                            hedge_tournament.csv / trade_window.csv / lessons.csv — all must
-#                            be fresh before this step)
+#   4. daily_brief.py       — config-vs-actual cards, breach flags, hedge counterfactual,
+#                             compliance scoring -> data/brief/<date>_brief.json + compliance.csv
+#   5. should_have_fired.py — per-ON-bot gate evaluation: reads each tape day, the signed
+#                             gate from data/bot_gates.csv, and emits JUSTIFIED / SUSPECT /
+#                             UNEVALUABLE_<class> -> data/brief/<date>_p3_verdicts.tsv
+#   6. hedge_tournament.py  — Free Hedge Tournament: replays that day's settled legs through
+#                             the v1 hedge library (Ride/PT/SL/S2/Defang-deferred), R-scored
+#                             -> upserts data/hedge_tournament.csv (per-date, idempotent)
+#   7. trade_window.py      — Trade-window heat map: buckets every position's MAE timestamp
+#                             by hour x tape-regime + a tape-covered short-strike touch rate
+#                             -> rebuilds data/trade_window.csv (full rebuild, idempotent)
+#   8. lessons.py           — Lessons index: tags each graded bot-day's brief "day's lesson"
+#                             (entry-timing/hedge/filter/regime/sizing/other)
+#                             -> upserts data/lessons.csv (per date+bot, idempotent)
+#   9. report.py            — STATUS.md + dashboard.html (G5 reads compliance.csv; Hedge
+#                             tournament / Trade-window heat map / Lessons index sections read
+#                             hedge_tournament.csv / trade_window.csv / lessons.csv — all must
+#                             be fresh before this step)
 #
 # The brief JSON is the pack Claude renders (charts + instruction-mirror cards +
 # hedge clinic). Everything numeric is regenerated from the ledger.
 #
-# Then, from the EXIT trap and outside the eight stages: the heartbeat, and a
+# Then, from the EXIT trap and outside the nine stages: the heartbeat, and a
 # per-run RECEIPT appended to data/receipts/daily-runs.jsonl (G-5,
 # ledger-truncation-forensics-2026-08-17.md §4). Both are written whether the run
 # succeeded, failed or was refused. ledger_meta.json is overwritten every run and
@@ -58,7 +61,7 @@
 #
 # FLEET_ROOT — the OUTPUT ROOT (G-3, ledger-truncation-forensics-2026-08-17.md §7).
 # Unset, it is the repo, and this is the live daily loop. Set to a directory
-# outside the repo, the ENTIRE eight-stage pipeline reads and writes THAT tree
+# outside the repo, the ENTIRE nine-stage pipeline reads and writes THAT tree
 # and the repo's data/ is not touched at all:
 #
 #   FLEET_ROOT=/tmp/fleet-scratch scripts/daily.sh 2026-08-10
@@ -146,7 +149,7 @@ export TAPE_FIXTURE=${TAPE_FIXTURE:-}
 export PYTHONDONTWRITEBYTECODE=1
 
 HEARTBEAT_DIR="artifacts/heartbeat"
-TOTAL_STAGES=8
+TOTAL_STAGES=9
 
 declare -a STAGES=()
 declare -a CODES=()
@@ -202,13 +205,16 @@ run_stage "build_ledger" python3 "$SCRIPTS/build_ledger.py" --root "$FLEET_ROOT"
 run_stage "tape" python3 "$SCRIPTS/tape.py" "$DAY"
 run_stage "execution_audit" python3 "$SCRIPTS/execution_audit.py"
 run_stage "daily_brief" python3 "$SCRIPTS/daily_brief.py" "$DAY"
+run_stage "should_have_fired" python3 "$SCRIPTS/should_have_fired.py" \
+  --data-dir "$FLEET_ROOT" \
+  --output "$FLEET_ROOT/data/brief/${DAY}_p3_verdicts.tsv"
 run_stage "hedge_tournament" python3 "$SCRIPTS/hedge_tournament.py" "$DAY"
 run_stage "trade_window" python3 "$SCRIPTS/trade_window.py"
 run_stage "lessons" python3 "$SCRIPTS/lessons.py"
 run_stage "report" python3 "$SCRIPTS/report.py"
 
 echo "== done -> STATUS.md, dashboard.html, data/brief/${DAY}_brief.json,"
-echo "           data/execution_audit_findings.csv =="
+echo "           data/brief/${DAY}_p3_verdicts.tsv, data/execution_audit_findings.csv =="
 
 # Missing/empty stand-alone research / audit tools are intentionally NOT wired
 # into the daily loop (their own docstrings forbid it).  List them so they do

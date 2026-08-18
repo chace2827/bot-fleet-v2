@@ -57,7 +57,7 @@ Andy provides two things and one line of context:
 > carries a filtered-export guard that compares against the prior ledger and warns loudly — but
 > the guard only catches bots that already existed. **Select all groups.**
 
-Then `scripts/daily.sh` runs the eight stages (§4), and Claude renders §6 from the brief JSON.
+Then `scripts/daily.sh` runs the nine stages (§4), and Claude renders §6 from the brief JSON.
 
 ### 1.2 CONFIG-DRIFT mode — weekly, while the account is inactive
 
@@ -119,7 +119,7 @@ Practical consequences to state in the brief rather than let a reader discover:
 
 ---
 
-## 4. The pipeline — eight stages, order matters
+## 4. The pipeline — nine stages, order matters
 
 `scripts/daily.sh [YYYY-MM-DD]`
 
@@ -129,10 +129,11 @@ Practical consequences to state in the brief rather than let a reader discover:
 | 2 | `tape.py` | `data/brief/<date>_tape.json` |
 | 3 | **`execution_audit.py`** | `data/execution_audit_findings.csv` + `_meta.json` |
 | 4 | `daily_brief.py` | `data/brief/<date>_brief.json` · `compliance.csv` |
-| 5 | `hedge_tournament.py` | `data/hedge_tournament.csv` |
-| 6 | `trade_window.py` | `data/trade_window.csv` |
-| 7 | `lessons.py` | `data/lessons.csv` |
-| 8 | `report.py` | `STATUS.md` · `dashboard.html` |
+| 5 | `should_have_fired.py` | `data/brief/<date>_p3_verdicts.tsv` |
+| 6 | `hedge_tournament.py` | `data/hedge_tournament.csv` |
+| 7 | `trade_window.py` | `data/trade_window.csv` |
+| 8 | `lessons.py` | `data/lessons.csv` |
+| 9 | `report.py` | `STATUS.md` · `dashboard.html` |
 
 **The drift audit runs at stage 3 — before the brief, not after.** The brief's job is to render
 verdicts; the detector's job is to find the facts those verdicts rest on. Reversed, the brief

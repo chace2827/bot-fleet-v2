@@ -113,7 +113,7 @@ ledger stage from the ledger.
 `--root DIR` (or $FLEET_ROOT) points RAW, OUT and META_PATH at DIR/data instead
 of the repo's. A determinism run against a scratch root cannot touch the live
 ledger no matter which export it is pinned to. `scripts/daily.sh` honours
-$FLEET_ROOT for the whole eight-stage pipeline, and `scripts/ci/seed_scratch_root.sh`
+$FLEET_ROOT for the whole nine-stage pipeline, and `scripts/ci/seed_scratch_root.sh`
 materialises such a root. This removes the incident class, not just the instance.
 
 CLASSIFICATION COMES FROM data/bots_meta.csv, NOT from bot-name heuristics.
