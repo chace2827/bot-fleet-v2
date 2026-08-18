@@ -2817,3 +2817,42 @@ source: >-
   (ledger lines 298/303/314).
 unclear: false
 ```
+
+```yaml
+ruling_id: R-2026-08-18-SELFTEST-KNOWN-POSITIVE-PREAUTH
+date: 2026-08-18
+scope: >-
+  Pre-authorizes, as a named guard change per charter §4, ONE edit to the
+  live known-positive check in scripts/pre_registration_ledger.py (selftest,
+  lines ~211-224): the literal 'IC-SPX-FastPT25-S2-130PM' is removed from
+  the hard-coded live tuple, because the fact it pinned was changed by
+  ruling (R-2026-08-18-RIDER-ANNOTATION-PROCEDURE discharged PR-02's rider,
+  so the live ledger correctly no longer flags it). Everything else stays:
+  'QQQ-IC-0DTE-Fortress-NoPT50' remains in the tuple (PR-04 is correctly
+  unsigned until its first passing position), the INC-01 negative check
+  remains, _is_signed and parse_ledger_text are untouched, all fixture
+  assertions are untouched. This unblocks PR #41 (D7). Recorded as a queue
+  item, NOT fixed here: the design flaw that a selftest pinned a mutable
+  ruled fact as a permanent invariant — future known-positive checks must
+  either read from a fixture or carry a comment naming the ruling that can
+  change them.
+verbatim: >-
+  I pre-authorize, as a named guard change, removing only the 130PM literal
+  from the parser selftest's live known-positive tuple; PR-04 and the INC-01
+  check stay; no predicate changes; the pin-a-mutable-fact design flaw goes
+  to the queue.
+verbatim_of: andy
+owner: Andy
+status: Active
+applies_to: >-
+  scripts/pre_registration_ledger.py selftest live known-positive tuple (one
+  literal removed); PR #41 / branch devin/d7-rider-annotation (rebased or
+  amended to include this edit so phase0 passes); docs/devin-queue.md (new
+  item: selftest known-positive design flaw).
+superseded_by: none
+source: >-
+  Cowork expedite session 2026-08-18; deadlock surfaced by the foreman lane
+  (PR #41 phase0 RED), reproduced and verified against the tree at 7596bb6+
+  (parser lines 211-224 read first-hand).
+unclear: false
+```
