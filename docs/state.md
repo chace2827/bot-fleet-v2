@@ -1,5 +1,18 @@
 # State — Bot Fleet v2
 
+## 2026-08-19 — P1-1A roster facts applied
+
+- `R-2026-08-18-P1-1A-ROSTER-FACTS` ratified; `docs/pre-registration-ledger.md` now has seven
+  individual signed entries for the greenfield IC arms (`PR-14`…`PR-20`). Each entry stamps the
+  literal bot ID from `data/captures/2026-08-17-r3/02-roster-toggles-44-2026-08-17.tsv`, cites the
+  build/sizing/naming/signature/go-live/entry-method rulings, and carries `R-2026-08-18-P1-1A-ROSTER-FACTS`
+  as the trace-carrier. The collective `Greenfield IC family`, `Rebuilt hedge tournament arms` and
+  `Optional 1-lot canary` sections are left standing with pointers to the individual entries.
+- `scripts/report.py` now warns for any ledger-unsigned bot not present in `data/bots_meta.csv`
+  (the `unsigned − meta` roster gap) and its `--validate` self-test exercises the unsigned-bot
+  banner branch.
+- `docs/devin-queue.md` P1-1/P1-1a corrected and marked done; PR #26 disposition recorded.
+
 ## 2026-08-17 — PR-02 and PR-04 shown as UNSIGNED
 
 - `scripts/pre_registration_ledger.py` now parses the full multi-line `SIGNED` block and treats a
@@ -10,7 +23,7 @@
 
 *The live facts. Updated whenever a stated fact changes (CLAUDE.md §9.1). Numbers live in
 `STATUS.md`; the plan in `docs/build-plan.md`; progress in the `bot-fleet-migration` tracker.
-Last updated 2026-08-12 DAY 1 (⭐ THE FIRST TRACKING DAY — the ledger is LIVE at n=3 positions / +$500; the eight zero-entry bots are ADJUDICATED to one root cause; PR-01 Step-6 inverted check CLOSED: see the NEW top block, which supersedes every "EMPTY LEDGER / n=0" statement beneath it). Earlier 2026-08-09 S2b (⭐ THE SWITCH-ON SITTING — **17 of 43 AUTOMATIONS ON**; PR-02 and
+Last updated 2026-08-19 P1-1A roster facts (⭐ see the NEW top block). Earlier 2026-08-12 DAY 1 (⭐ THE FIRST TRACKING DAY — the ledger is LIVE at n=3 positions / +$500; the eight zero-entry bots are ADJUDICATED to one root cause; PR-01 Step-6 inverted check CLOSED: see the NEW top block, which supersedes every "EMPTY LEDGER / n=0" statement beneath it). Earlier 2026-08-09 S2b (⭐ THE SWITCH-ON SITTING — **17 of 43 AUTOMATIONS ON**; PR-02 and
 PR-04 SIGNED and LIVE; findings S2b-R1…R4; gate A12 bannered, sweep still owed: see the NEW top
 block, which supersedes the S2 block's "7 of 43" ON-count. Earlier 2026-08-08 NIGHT (⭐ THE TEN-SLOT RULING SITTING — all ten slots RULED and APPLIED;
 both S2 preconditions CLEARED; LEDGER_START = 2026-08-10; gate A8 CLOSED: see the NEW top block).

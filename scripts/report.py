@@ -186,6 +186,12 @@ def validate():
     root = tempfile.mkdtemp(prefix="report-validate-")
     try:
         os.makedirs(os.path.join(root, "data"), exist_ok=True)
+        os.makedirs(os.path.join(root, "docs"), exist_ok=True)
+
+        # pre-registration ledger fixture: one UNSIGNED bot in bots_meta.csv to
+        # exercise the unsigned-bot banner branch (P2-5a).
+        with open(os.path.join(root, "docs", "pre-registration-ledger.md"), "w") as f:
+            f.write("### TestArm\n```\nID PR-99\nSIGNED           ..............................\n```\n")
 
         today = datetime.date(2026, 8, 14)
         # The 20-trading-day window ends at today.  Ledger starts on the first day of
@@ -257,6 +263,17 @@ def validate():
         # SparseArm has only 1 close in window -> insufficient data.
         if "insufficient data" not in status.lower():
             print("FAIL: expected 'insufficient data' state not found", file=sys.stderr)
+            print(status, file=sys.stderr)
+            return 1
+
+        # P2-5a: the unsigned-bot banner must render because TestArm is in meta and
+        # its pre-registration ledger entry is unsigned.
+        if "## ⚠️ UNSIGNED PRE-REGISTRATION BOTS" not in status:
+            print("FAIL: expected unsigned pre-registration bot banner not found", file=sys.stderr)
+            print(status, file=sys.stderr)
+            return 1
+        if "- TestArm" not in status:
+            print("FAIL: expected TestArm in unsigned bot banner", file=sys.stderr)
             print(status, file=sys.stderr)
             return 1
 
@@ -349,6 +366,8 @@ meta = {r["bot"]: r for r in csv.DictReader(open(os.path.join(D, "bots_meta.csv"
 _ledger_path = os.path.join(ROOT, "docs", "pre-registration-ledger.md")
 _ledger_unsigned = pre_registration_ledger.unsigned_from_ledger(_ledger_path)
 unsigned_bots = sorted(b for b in meta if b in _ledger_unsigned)
+for b in sorted(_ledger_unsigned - set(meta)):
+    print(f"WARNING: ledger-unsigned bot not in bots_meta.csv: {b} — roster gap", file=sys.stderr)
 champ = next((b for b, r in meta.items() if (r.get("champion") or "").lower() == "yes"), None)
 champ_t = [t for t in trades if t["bot"] == champ]
 champ_trades = len(set(t["trade_id"] for t in champ_t))

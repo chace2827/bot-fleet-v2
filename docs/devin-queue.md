@@ -30,18 +30,24 @@ decision-class one).
       merges red. Owner: Devin. *Andy must enable branch protection in repo settings.*
 - [ ] **P0-3 — `.env.example`.** Currently swallowed by `.gitignore`'s `.env.*`. Un-ignore and list
       the vars a fresh clone needs, `TRADIER_TOKEN` first. Owner: Devin.
+- [x] **PR #26 — disposition recorded: merged at 424d57b, no rework.** The original "still open
+      with changes requested" premise was falsified. `gh pr view 26` reads `state: MERGED`
+      (`Add decidability countdown to report.py`); `git log -S _condor_close_dates -- scripts/report.py`
+      and `git log -S 'n_window / 20' -- scripts/report.py` return no matches; `master`'s countdown
+      already uses `_position_close_dates` (which consumes `single_sided`) and
+      `fire_rate = n_window / trading_days_present`. The two named defects were therefore never
+      merged and there is nothing to rework. Do not manually close or re-open the PR from this
+      session — its queue disposition is Andy's.
 
 ## Next — identity and roster seams
 
-- [ ] **P1-1 — `data/bots_meta.csv` is the pre-cutover roster.** It contains none of the GF arms and
-      none of the `PR-NN` registrations, and still marks archived bots `ON`. Three consequences:
-      `SILENT_BOT` fires on archived bots (the detector's whole AMBER budget), it structurally
-      cannot fire on the GF arms, and a first GF fill lands `UNCLASSIFIED` in the ledger while being
-      reported `OFF`. Verify with `python3 scripts/build_ledger.py` and
-      `python3 scripts/execution_audit.py`. **Blocked on P1-1a.**
-- [ ] **P1-1a — 🔒 RULING: roster facts.** pillar / role / underlying / champion / ops_class for
-      every currently-ON bot. Devin will propose rows from `docs/pre-registration-ledger.md`;
-      Andy corrects and signs. Owner: Andy.
+- [x] **P1-1 — `data/bots_meta.csv` roster facts verified.** R-2026-08-18-P1-1A-ROSTER-FACTS
+      ratifies the 19 ON bots — including all seven GF arms and their `PR-NN` registrations —
+      against the 2026-08-17-r3 capture. The pre-cutover-roster premise was false. The seven
+      individual pre-registration ledger entries are added in the same PR. **Done.**
+- [x] **P1-1a — RULING: roster facts applied.** Andy ruled R-2026-08-18-P1-1A-ROSTER-FACTS,
+      ordering seven individual pre-registration ledger entries for the GF arms. The entries
+      cite the active build, sizing, naming, signature, go-live and entry-method rulings. Owner: Devin.
 - [ ] **P1-2 — promote the UNCLASSIFIED warning to a refusal.** `build_ledger.py` prints a warning
       to stdout for export bots absent from `bots_meta.csv` and exits 0. A warning is not a gate,
       and stdout is unread in a scheduled run. Same shape as the existing ops-class fence.
