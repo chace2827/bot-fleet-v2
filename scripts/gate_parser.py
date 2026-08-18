@@ -272,29 +272,42 @@ def eval_vix_min(row, tape, date):
     u = needed_underlyings(row)[0]
     rec = get_underlying(tape, u)
     prior = rec.get("prior_close")
-    high = rec.get("high")
-    low = rec.get("low")
-    if high is None or low is None or prior is None:
-        return Verdict("UNEVALUABLE_MISSING", "VIX high/low/prior_close missing")
+    if prior is None:
+        return Verdict("UNEVALUABLE_MISSING", "VIX prior_close missing")
+    if rec.get("series") is None:
+        return Verdict("UNEVALUABLE_MISSING", "VIX 5-min series missing")
     params = parse_gate_params(row.get("gate_params", ""))
     try:
         threshold = float(params["threshold"])
     except Exception:
         return Verdict("UNEVALUABLE", "threshold missing or malformed")
 
+    window = row.get("entry_window_et", "")
+    start, end, mode = parse_window(window)
+    bars = select_bars(rec["series"], start, end, mode)
+    if not bars:
+        return Verdict("UNEVALUABLE_MISSING_BAR", f"no VIX 5-min bars in window {window}")
+
+    highs = [b.get("h") for b in bars if b.get("h") is not None]
+    lows = [b.get("l") for b in bars if b.get("l") is not None]
+    if not highs or not lows:
+        return Verdict("UNEVALUABLE_MISSING", "no usable VIX high/low in window")
+    high, low = max(highs), min(lows)
+    n = len(bars)
+
     if high < threshold:
         return Verdict(
             "JUSTIFIED",
-            f"VIX high={high}, low={low}, prior_close={prior}; threshold >={threshold}; high < threshold all day",
+            f"VIX high={high}, low={low}, prior_close={prior}; threshold >={threshold}; high < threshold in window {window} ({n} bars)",
         )
     if low >= threshold:
         return Verdict(
             "SUSPECT",
-            f"VIX high={high}, low={low}, prior_close={prior}; threshold >={threshold}; low >= threshold all day",
+            f"VIX high={high}, low={low}, prior_close={prior}; threshold >={threshold}; low >= threshold in window {window} ({n} bars)",
         )
     return Verdict(
         "UNEVALUABLE_INTRADAY",
-        f"VIX high={high} >= {threshold} but low={low} < {threshold}; straddles threshold; no intraday VIX series",
+        f"VIX high={high} >= {threshold} but low={low} < {threshold}; straddles threshold in window {window} ({n} bars)",
     )
 
 
@@ -302,32 +315,47 @@ def eval_vix_change_max(row, tape, date):
     u = needed_underlyings(row)[0]
     rec = get_underlying(tape, u)
     prior = rec.get("prior_close")
-    high = rec.get("high")
-    low = rec.get("low")
-    if high is None or low is None or prior is None:
-        return Verdict("UNEVALUABLE_MISSING", "VIX high/low/prior_close missing")
+    if prior is None:
+        return Verdict("UNEVALUABLE_MISSING", "VIX prior_close missing")
+    if rec.get("series") is None:
+        return Verdict("UNEVALUABLE_MISSING", "VIX 5-min series missing")
     params = parse_gate_params(row.get("gate_params", ""))
     try:
         threshold = float(params["threshold_pct"])
     except Exception:
         return Verdict("UNEVALUABLE", "threshold_pct missing or malformed")
 
+    window = row.get("entry_window_et", "")
+    start, end, mode = parse_window(window)
+    bars = select_bars(rec["series"], start, end, mode)
+    if not bars:
+        return Verdict("UNEVALUABLE_MISSING_BAR", f"no VIX 5-min bars in window {window}")
+
+    highs = [b.get("h") for b in bars if b.get("h") is not None]
+    lows = [b.get("l") for b in bars if b.get("l") is not None]
+    if not highs or not lows:
+        return Verdict("UNEVALUABLE_MISSING", "no usable VIX high/low in window")
+    high, low = max(highs), min(lows)
+    n = len(bars)
+
     low_change = pct_change(low, prior)
     high_change = pct_change(high, prior)
+    if low_change is None or high_change is None:
+        return Verdict("UNEVALUABLE_MISSING", "VIX high/low/prior_close missing")
 
     if low_change > threshold:
         return Verdict(
             "JUSTIFIED",
-            f"VIX low={low} vs prior={prior} gives {low_change}% change, threshold <={threshold}%; never reached",
+            f"VIX low={low} vs prior={prior} gives {low_change}% change, threshold <={threshold}%; never reached in window {window} ({n} bars)",
         )
     if high_change <= threshold:
         return Verdict(
             "SUSPECT",
-            f"VIX high={high} vs prior={prior} gives {high_change}% change, threshold <={threshold}%; met all day",
+            f"VIX high={high} vs prior={prior} gives {high_change}% change, threshold <={threshold}%; met all day in window {window} ({n} bars)",
         )
     return Verdict(
         "UNEVALUABLE_INTRADAY",
-        f"VIX low={low} -> {low_change}% <= {threshold}% but high={high} -> {high_change}% > {threshold}%; straddles; no intraday VIX series",
+        f"VIX low={low} -> {low_change}% <= {threshold}% but high={high} -> {high_change}% > {threshold}%; straddles in window {window} ({n} bars)",
     )
 
 
