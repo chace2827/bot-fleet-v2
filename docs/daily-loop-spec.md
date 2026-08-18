@@ -33,7 +33,7 @@ Three consequences, all load-bearing:
 - **The fixed panel never changes.** Counterfactual policies, detector rules and their
   thresholds are frozen inputs. Change one and the accumulated ledger becomes uncomparable —
   which silently destroys every day already banked. Version and re-baseline instead
-  (`execution_audit.py` is frozen at v1.0.0, sha `67a537977c5d0896`, precisely for this).
+  (`execution_audit.py` is frozen at v1.0.0, sha `fdc43d0dcb7275560069048e62d897f528d9620b5a6be87de7a410fae1851e2d`, precisely for this).
 - **NO FINDINGS is the goal, not a failure.** If every review surfaces something interesting it
   is generating false positives and will stop being read inside two weeks.
 - **The loop is worthless if the fleet is off.** Its entire value is making the next stretch
@@ -149,7 +149,7 @@ is a contaminated ledger, and the whole run stops rather than produce one.
 
 ## 5. The drift detector — what stage 3 contributes
 
-`execution_audit.py` v1.0.0 (frozen; sha `67a537977c5d0896`). It is a **detector, not a judge**:
+`execution_audit.py` v1.0.0 (frozen; sha `fdc43d0dcb7275560069048e62d897f528d9620b5a6be87de7a410fae1851e2d`). It is a **detector, not a judge**:
 it never assigns a cause, and every finding carries a **`verify_by`** field naming the artifact
 that closes it.
 
