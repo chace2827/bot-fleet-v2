@@ -3,9 +3,9 @@
 quantified regime read — and write it to data/brief/<date>_tape.json.
 
 DATA SOURCE (two tiers, in order):
-  1. TRADIER (preferred): exact daily OHLC for each underlying with ON 0DTE bots
-     (SPX index served directly → reliable high/low → reliable breach flags) plus
-     VIX. Needs a token: env TRADIER_TOKEN, or a TRADIER_TOKEN=... line in ./.env
+  1. TRADIER (preferred): exact daily OHLC for each underlying declared by
+     data/bot_gates.csv (currently SPX, QQQ, VIX; SPX index served directly
+     → reliable high/low → reliable breach flags). Needs a token: env TRADIER_TOKEN, or a TRADIER_TOKEN=... line in ./.env
      (repo root; .env is git-ignored and NOT backed up — see memory). Endpoint is
      configurable via TRADIER_BASE (default the production host).
   2. RECONSTRUCTION (fallback, spec-endorsed): if there is no token / the feed is
@@ -22,13 +22,14 @@ numbers are only exact with Tradier intraday; in fallback they're marked approx.
 Usage:  python3 scripts/tape.py [YYYY-MM-DD]
         (date defaults to the newest open_date in data/trades.csv)
 """
-import csv, os, sys, json, datetime, urllib.request, urllib.parse, urllib.error
+import argparse, csv, os, sys, json, datetime, urllib.request, urllib.parse, urllib.error
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 D = os.path.join(ROOT, "data")
 BRIEF = os.path.join(D, "brief")
 
-# Underlyings that get a tape = those with ON 0DTE bots. Map ledger symbol ->
+# Underlyings that get a tape = the union of `underlying` values referenced by
+# the signed rows of data/bot_gates.csv (empty cells ignored). Map symbol ->
 # the Tradier symbol. VERIFIED on sandbox 2026-07-03: cash indices are PLAIN
 # tickers ("SPX", "VIX") — the "$SPX.X"/"$VIX.X" forms return history:null.
 TRADIER_SYMBOL = {"SPX": "SPX", "QQQ": "QQQ", "SPY": "SPY", "VIX": "VIX"}
@@ -47,6 +48,14 @@ class TradierError(Exception):
         self.mode = mode
         self.detail = detail or ""
         super().__init__(f"{mode}: {self.detail}")
+
+
+class GateSymbolError(Exception):
+    """Raised by underlyings_on() when the gates table cannot supply the
+    symbol set. build() turns this into a loud, non-zero exit so a missing
+    data/bot_gates.csv never silently reverts to fill-based selection.
+    """
+
 
 
 # ----------------------------------------------------------------------------
@@ -195,17 +204,36 @@ def load_trades():
     return list(csv.DictReader(open(p)))
 
 
-def underlyings_on(trades, day):
-    """Symbols with 0DTE (dte=0-style) ON bots that traded `day`, from bots_meta."""
-    meta = {r["bot"]: r for r in csv.DictReader(open(os.path.join(D, "bots_meta.csv")))}
+def _load_gate_symbols(gates_path):
+    """Return the set of non-empty `underlying` values from data/bot_gates.csv.
+    Skip '#' comment lines and empty underlying cells."""
     syms = set()
-    for t in trades:
-        if t["open_date"][:10] != day:
-            continue
-        m = meta.get(t["bot"], {})
-        if (m.get("status", "OFF").upper() == "ON") and t["underlying"]:
-            syms.add(t["underlying"])
-    return sorted(syms)
+    with open(gates_path, newline="") as f:
+        reader = csv.DictReader(line for line in f if not line.startswith("#"))
+        for r in reader:
+            u = (r.get("underlying") or "").strip()
+            if u:
+                syms.add(u)
+    return syms
+
+
+def underlyings_on(trades, day, gates_path=None):
+    """Symbols for the day's tape = the union of `underlying` values in the
+    signed data/bot_gates.csv table, not that day's fills.
+
+    The `trades` and `day` arguments are retained for call-site compatibility
+    but are no longer used; the symbol set is a static function of the gates
+    table (R-2026-08-19-TAPE-SYMBOLS-FROM-GATES).
+    """
+    if gates_path is None:
+        gates_path = os.path.join(D, "bot_gates.csv")
+    if not os.path.exists(gates_path):
+        raise GateSymbolError(
+            f"missing {gates_path} — cannot select tape symbols; "
+            "refusing to fall back to fill-based selection "
+            "(R-2026-08-19-TAPE-SYMBOLS-FROM-GATES)"
+        )
+    return sorted(_load_gate_symbols(gates_path))
 
 
 def prints_for(trades, symbol, day):
@@ -330,18 +358,20 @@ def build(day):
         return out
 
     trades = load_trades()
-    syms = underlyings_on(trades, day)
+    try:
+        syms = underlyings_on(trades, day)
+    except GateSymbolError as e:
+        print(f"tape.py: ERROR: {e}", file=sys.stderr)
+        sys.exit(2)
     if not syms:
-        print(f"tape.py: no ON 0DTE underlyings traded {day} — nothing to chart.")
+        print(f"tape.py: no underlyings declared in data/bot_gates.csv — nothing to chart.")
     load_env()
     token = load_token()
     base = os.environ.get("TRADIER_BASE", "https://api.tradier.com")
 
     tapes = {}
-    # always try to include VIX for the regime gate context
-    for sym in syms + ["VIX"]:
-        if sym in tapes:
-            continue
+    # VIX is part of the gates union, but keep it explicit and deduplicate.
+    for sym in sorted(set(syms + ["VIX"])):
         src = None
         o = h = l = c = pc = None
         series = []
@@ -425,6 +455,58 @@ def newest_date():
     return max((t["open_date"][:10] for t in trades), default=today_iso())
 
 
+def _run_selftest():
+    """Hermetic self-test for the new gates-union symbol selection.
+
+    Verifies:
+      - non-empty underlying cells become the sorted symbol set
+      - empty underlying cells and '#' comment lines are ignored
+      - a missing gates file raises GateSymbolError (the loud failure path)
+    """
+    import tempfile
+    import shutil
+
+    td = tempfile.mkdtemp(prefix="tape-selftest-")
+    try:
+        good = os.path.join(td, "bot_gates.csv")
+        with open(good, "w", newline="") as f:
+            f.write("# data/bot_gates.csv — comment line\n")
+            f.write("bot,pr_id,underlying,entry_window_et,gate_type,gate_params,eval_class,fill_precondition,source\n")
+            f.write("A,PR-A,SPX,11:00,band_prior_close,abs_lt=0.75,EVALUABLE,,\n")
+            f.write("B,PR-B,QQQ,13:30-14:00,band_prior_close_strict,gt=-0.75;lt=0.75,EVALUABLE,,\n")
+            f.write("C,PR-C,,,,unknown,,,\n")  # empty underlying
+            f.write("D,PR-D,VIX,11:00,vix_min,threshold=22,EVALUABLE,,\n")
+
+        got = underlyings_on([], "2026-08-10", good)
+        want = ["QQQ", "SPX", "VIX"]
+        if got != want:
+            print(f"SELFTEST FAIL: expected {want}, got {got}", file=sys.stderr)
+            return 1
+
+        missing = os.path.join(td, "missing_bot_gates.csv")
+        try:
+            underlyings_on([], "2026-08-10", missing)
+            print("SELFTEST FAIL: missing gates file did not raise GateSymbolError",
+                  file=sys.stderr)
+            return 1
+        except GateSymbolError as e:
+            msg = str(e)
+            if "missing" not in msg.lower() or "refusing to fall back" not in msg.lower():
+                print(f"SELFTEST FAIL: unexpected error message: {msg}", file=sys.stderr)
+                return 1
+
+        print("tape.py selftest OK")
+        return 0
+    finally:
+        shutil.rmtree(td, ignore_errors=True)
+
+
 if __name__ == "__main__":
-    day = sys.argv[1] if len(sys.argv) > 1 else newest_date()
+    ap = argparse.ArgumentParser(description="Build the daily TAPE")
+    ap.add_argument("day", nargs="?", help="YYYY-MM-DD (defaults to newest open_date)")
+    ap.add_argument("--selftest", action="store_true", help="run hermetic self-test")
+    args = ap.parse_args()
+    if args.selftest:
+        sys.exit(_run_selftest())
+    day = args.day or newest_date()
     build(day)
