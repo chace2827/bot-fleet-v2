@@ -354,8 +354,7 @@ def build(day):
                     o, h, l, c = rec["open"], rec["high"], rec["low"], rec["close"]
                     pc = rec.get("prior_close")
                     src = "tradier"
-                    if sym != "VIX":
-                        series = tradier_timesales(tsym, day, token, base)
+                    series = tradier_timesales(tsym, day, token, base)
             except TradierError as e:
                 if e.mode == "token-rejected":
                     print(f"tape.py: 🔴 TRADIER TOKEN REJECTED ({e.detail}). "
