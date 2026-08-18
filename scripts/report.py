@@ -352,6 +352,14 @@ unsigned_bots = sorted(b for b in meta if b in _ledger_unsigned)
 champ = next((b for b, r in meta.items() if (r.get("champion") or "").lower() == "yes"), None)
 champ_t = [t for t in trades if t["bot"] == champ]
 champ_trades = len(set(t["trade_id"] for t in champ_t))
+champ_by_id = collections.defaultdict(list)
+for t in champ_t:
+    champ_by_id[t["trade_id"]].append(t)
+champ_positions = len(champ_by_id)
+champ_condors = sum(1 for legs in champ_by_id.values()
+                    if len(legs) == 2 and not any(l.get("single_sided") == "True" for l in legs))
+champ_onesided = champ_positions - champ_condors
+champ_condor_word = "condor" if champ_condors == 1 else "condors"
 sd = collections.defaultdict(float)
 for t in champ_t: sd[t["open_date"][:10]] += fl(t["pnl"])
 green = sum(1 for v in sd.values() if v > 0)
@@ -441,7 +449,8 @@ for p in sorted(bypillar):
                         for (pp, u) in sorted(byunder) if pp == p and u != "—")
     L.append(f"  - {p}: ${bypillar[p]:,.0f}" + (f"  ({subs})" if subs else ""))
 L += ["", f"## Champion — {champ or '(none flagged in bots_meta.csv)'}",
-      f"- P/L **${champ_pnl:,.0f}**  ·  {champ_trades} condors ({len(champ_t)} legs)  ·  "
+      f"- P/L **${champ_pnl:,.0f}**  ·  {champ_positions} positions "
+      f"({champ_condors} {champ_condor_word}, {champ_onesided} single-sided) · {len(champ_t)} legs  ·  "
       f"{len(sd)} trading days ({green} green / {red} red)",
       f"- Max drawdown (daily cumulative): ${dd:,.0f}", ""]
 
@@ -803,6 +812,13 @@ for t in trades:
     if t["single_sided"] == "True": c["ss"] = True
     cond_bot[k] = t["bot"]
 
+tid_nlegs = collections.Counter(t["trade_id"] for t in trades)
+n_positions = len(cond)
+# A condor is two spread rows paired by trade_id with single_sided=False.
+n_condors = sum(1 for k, c in cond.items() if tid_nlegs[k] == 2 and not c["ss"])
+n_onesided = n_positions - n_condors
+condor_word = "condor" if n_condors == 1 else "condors"
+
 # clean per-bot condor-R series (post-fix/baseline epoch, risk>0).
 # Single-sided handling: the ledger flags an unpaired call/put spread as
 # `single_sided`. For an IC bot that's an anomaly day (drop it); but for a
@@ -967,13 +983,17 @@ L += decidability_countdown(
     _ledger_start)
 
 L += ["", "## Caveats",
-      "- **Trades = condors** (the two legs of one entry paired); **Legs = OA position "
-      "rows** (matches OA's \"Positions\" count). Win rate shown is per-condor.",
+      f"- **Positions:** {n_positions} total ({n_condors} {condor_word}, {n_onesided} single-sided)  ·  "
+      f"{len(trades)} legs.",
+      "- A condor has two spread rows paired by `trade_id` with `single_sided=False`; "
+      "a single-sided position is any position that is not a condor (one spread row or "
+      "`single_sided=True`). **Legs = OA position rows** (matches OA's \"Positions\" count). "
+      "Win rate shown is per-position.",
       "- A combined-`ironcondor` bot logs 1 leg per condor; a legged bot logs 2 — so Legs "
-      "≈ 2× Trades only for legged bots. That's why they were confusing before.",
+      "≈ 2× condors only for legged bots. That's why they were confusing before.",
       "- `Fix? = Y`: QQQ-IC bot carrying the call-side strike-resolution bug; data "
       "contaminated until fixed.",
-      f"- Single-sided condors (only one leg opened): {ss} legs flagged.",
+      f"- Single-sided positions (not condors): {n_onesided} positions.",
       "- Tiny-N bots are tracked but **not** evidence; read Trades before P/L."]
 open(os.path.join(ROOT, "STATUS.md"), "w").write("\n".join(L) + "\n")
 
@@ -1042,7 +1062,7 @@ __UNSIGNED__
 <h2>Per-bot</h2>
 <table id="t"><thead><tr><th>Bot</th><th>Proj</th><th>Status</th><th>Trades</th><th>Legs</th>
 <th>P/L</th><th>WR</th><th>Fix?</th></tr></thead><tbody></tbody></table>
-<div class="sub" style="margin-top:6px">Trades = condors · Legs = OA position rows (≈2× trades for legged bots) · WR is per-condor</div>
+<div class="sub" style="margin-top:6px">Positions = condors + single-sided · Legs = OA position rows (≈2× condors for legged bots) · WR is per-position</div>
 <h2>Backlog</h2><div id="bl">__BACKLOG__</div>
 <script>
 const rows=__ROWS__, cum=__CUM__;
@@ -1086,4 +1106,6 @@ html = TPL
 for k, v in repl.items(): html = html.replace(k, v)
 open(os.path.join(ROOT, "dashboard.html"), "w").write(html)
 
-print(f"Wrote STATUS.md + dashboard.html | total ${tot:,.0f} | champion {champ}: {champ_trades} condors")
+print(f"Wrote STATUS.md + dashboard.html | total ${tot:,.0f} | champion {champ}: "
+      f"{champ_positions} positions ({champ_condors} {champ_condor_word}, "
+      f"{champ_onesided} single-sided)")
