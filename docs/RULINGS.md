@@ -2501,39 +2501,3 @@ source: >-
   8d9c59b71858c97f43357595dd252d5bd4594a8ab20887da5cda120f64ccdf89, committed 0007d3e.
 unclear: false
 ```
-
-
-
-
-
-
-```
-
-
-<invoke name="exec">
-<parameter name="command">cd /home/ubuntu/repos/bot-fleet-v2 && python3 - <<'EOF'
-import re,yaml
-t=open('docs/RULINGS.md').read()
-blocks=re.findall(r"```yaml\n(.*?)```",t,re.S)
-print("blocks",len(blocks))
-ids=[]
-unclear=0
-for b in blocks:
-    d=yaml.safe_load(b)
-    keys=set(d)
-    req={'ruling_id','date','scope','verbatim','verbatim_of','owner','status','applies_to','superseded_by','source','unclear'}
-    assert keys==req, (d.get('ruling_id'), req^keys)
-    assert d['status'] in ('Active','Superseded','Gated'), d
-    assert d['owner']=='Andy'
-    ids.append(d['ruling_id'])
-    if d['unclear'] is not False: unclear+=1
-    if d['status']=='Superseded': assert d['superseded_by']!='none', d['ruling_id']
-dups=[i for i in ids if ids.count(i)>1]
-print("dups",set(dups))
-# superseded_by targets exist
-for b in blocks:
-    d=yaml.safe_load(b)
-    s=d['superseded_by']
-    if s!='none' and s not in ids: print("missing target",d['ruling_id'],s)
-print("count",len(ids),"unclear",unclear)
-EOF
