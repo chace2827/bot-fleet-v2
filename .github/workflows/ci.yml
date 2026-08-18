@@ -89,6 +89,7 @@ jobs:
                 "$FLEET_ROOT"/data/hedge_tournament.csv "$FLEET_ROOT"/data/trade_window.csv \
                 "$FLEET_ROOT"/data/lessons.csv "$FLEET_ROOT"/data/brief/2026-08-10_brief.json \
                 "$FLEET_ROOT"/data/brief/2026-08-10_tape.json \
+                "$FLEET_ROOT"/data/brief/2026-08-10_p3_verdicts.tsv \
                 "$FLEET_ROOT"/STATUS.md "$FLEET_ROOT"/dashboard.html /tmp/run1/
           # Second run
           scripts/daily.sh 2026-08-10
@@ -100,7 +101,8 @@ jobs:
                    data/execution_audit_findings.csv data/execution_audit_findings_meta.json \
                    data/hedge_tournament.csv data/trade_window.csv \
                    data/lessons.csv data/brief/2026-08-10_brief.json \
-                   data/brief/2026-08-10_tape.json STATUS.md dashboard.html; do
+                   data/brief/2026-08-10_tape.json \
+                   data/brief/2026-08-10_p3_verdicts.tsv STATUS.md dashboard.html; do
             if ! diff -q "$FLEET_ROOT/$f" "/tmp/run1/$(basename "$f")" > /dev/null; then
               echo "IDEMPOTENCY FAIL: $f differs between the two daily.sh runs" >&2
               diff "$FLEET_ROOT/$f" "/tmp/run1/$(basename "$f")" >&2 || true
@@ -145,6 +147,7 @@ jobs:
                 "$FLEET_ROOT"/data/hedge_tournament.csv "$FLEET_ROOT"/data/trade_window.csv \
                 "$FLEET_ROOT"/data/lessons.csv "$FLEET_ROOT"/data/brief/2026-08-10_brief.json \
                 "$FLEET_ROOT"/data/brief/2026-08-10_tape.json \
+                "$FLEET_ROOT"/data/brief/2026-08-10_p3_verdicts.tsv \
                 "$FLEET_ROOT"/STATUS.md "$FLEET_ROOT"/dashboard.html /tmp/run1/
           run_no_net() {
             if command -v unshare >/dev/null 2>&1 && unshare -n true 2>/dev/null; then
@@ -159,7 +162,8 @@ jobs:
                    data/execution_audit_findings.csv data/execution_audit_findings_meta.json \
                    data/hedge_tournament.csv data/trade_window.csv \
                    data/lessons.csv data/brief/2026-08-10_brief.json \
-                   data/brief/2026-08-10_tape.json STATUS.md dashboard.html; do
+                   data/brief/2026-08-10_tape.json \
+                   data/brief/2026-08-10_p3_verdicts.tsv STATUS.md dashboard.html; do
             if ! diff -q "$FLEET_ROOT/$f" "/tmp/run1/$(basename "$f")" > /dev/null; then
               echo "NETWORK HERMETICITY FAIL: $f differs when network is disabled" >&2
               diff "$FLEET_ROOT/$f" "/tmp/run1/$(basename "$f")" >&2 || true
