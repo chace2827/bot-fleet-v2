@@ -149,6 +149,15 @@ CLONE'S TEMPORARY NAME: ______________________________
 **CAPTURE →** clone's automation list (bookmarklet on the Automations page)
 → `data/captures/2026-08-03-pilot/02-clone-automations-forked.txt`
 
+> **[BANNER 2026-08-19 — THIS CAPTURE WAS NEVER SAVED.** The step ran, but the file does not
+> exist. `data/captures/2026-08-03-pilot/` holds `00-original/`, `06-clone-final/` and
+> `FINISH-capture-diff-2026-08-04.md`; there is no `02-` artifact. This card is a record of
+> something executed, so per `CLAUDE.md` §5 the instruction above is **left standing as written**
+> and is not rewritten to match what was kept. Treat the `02-` fork state as **unevidenced**: any
+> later claim resting on it must be re-derived from `00-original/` and `06-clone-final/`, which
+> bracket it, or from the FINISH diff. Every clone after this one reuses this card's shape — save
+> the `02-` capture.**]**
+
 > ### ✅ CONFIRM BEFORE PROCEEDING — do this test, do not skip it
 > - [ ] The clone's automation list has the **same number** of automations as Step 0.
 > - [ ] **Each name is visibly distinct from the original's** (a copy suffix, or you renamed it).
