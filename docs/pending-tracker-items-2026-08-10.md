@@ -42,6 +42,12 @@ how much more aggressive, and against which control.
    (● entry · ◆ defensive exit · ▪ profit target · no mark = rode to expiry), descriptive
    legend, quantified regime read, expected-vs-actual. **As a persisted HTML artifact.**
    Render for all accumulated days, not just Thursday.
+   **[CORRECTED 2026-08-19 — "Re-sync" is wrong; nothing is unsynced. Dated first-hand read of
+   `~/bot-fleet-v2/.env`: `TRADIER_BASE=https://api.tradier.com` (line 4 — the PRODUCTION host,
+   not the sandbox) and a non-empty `TRADIER_TOKEN`. `scripts/tape.py:370` defaults to that same
+   production host. The credential is present and the base is production, so there is no re-sync
+   and no token to issue. The real defect is downstream, in how `scripts/tape.py` `_get()`'s
+   failure modes are TESTED — see T-11. Original text left standing.]**
 4. **Backtests** — `docs/ic-trailing-stop-backtest.md` is already spec'd with 5 pre-registered
    arms. Add a strike-selection batch: **delta vs %-OTM**, **$2 vs $5 width**, at the 1:30pm
    entry. Plus the chop-day item above.

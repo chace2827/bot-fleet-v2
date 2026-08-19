@@ -2048,6 +2048,17 @@ recorded as dated line-items in `day0-session-pack-2026-08-07.md`'s S2 close-out
 CF-1 publication-cap acknowledgment is part of this ruling: no option here makes CF-1's
 precondition meetable.
 
+> **⛔ ANTI-REDISCOVERY — do not re-propose `exit_rows.csv` under the degraded schema.**
+> As of 2026-08-19 this option has been independently re-proposed by **two** separate reviewers
+> who each reached it without knowing it was already on the table. It was DECLINED above, and
+> refusal R-9 stands; re-proposing it is not new analysis and does not reopen it. The two
+> ruling-reopeners named above (D3 export timezone, and the Automation Log link's target for an
+> Exit-Option close) are the ONLY paths back to this decision — an argument that does not turn
+> on one of those two observations is the declined option again under a new name. If you are
+> about to propose it a third time, read this block first and stop.
+
+
+
 **`M_bot_$` calibration — RULED (fix-spec OPEN-1/OPEN-2).** ONE-TIME, not rolling; median over
 POSITIONS, computed at the stamp date over the trailing 90 days as of that date; SKIPPED (never a
 zero, never a proxy) before 90 days of history exist. Answers `research-loop-spec.md` §5a item
