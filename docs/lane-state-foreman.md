@@ -21,17 +21,24 @@ output, merges on Andy's authorization). Created per `R-2026-08-19-LANE-STATE-OW
 
 | | |
 |---|---|
-| base sha believed | `65799e04c563b3ffe0a76e1c994c66ce50f94850` |
-| last verified against `origin/master` | 2026-08-19T00:53:19Z |
-| how | `git fetch origin && git rev-parse origin/master` — matched; local `master` in sync |
+| base sha believed | `d3dce33ef67b2bd0c763b9aa421d24839b756caf` |
+| last verified against `origin/master` | 2026-08-19T21:47:02Z |
+| how | `git fetch origin && git rev-parse origin/master` in a fresh `/tmp` clone — matched |
 | ruling count at that sha | 155 (`git show origin/master:docs/RULINGS.md \| grep -c '^ruling_id:'`) |
 
-That sha is the merge of PR #56, `build_ledger: G-2/G-2b/G-2c ledger guards + bots_meta
-duplicate-key FATAL`.
+That sha is `roster board: 44 bots, 12 derived families, inventory + scoreboard`. It supersedes the
+previously recorded base `65799e04` (PR #56) — **3 commits of drift** between sessions, caught in
+pre-flight exactly as §3 requires.
 
 ## Open PRs owned by this lane
 
-**None.** (`gh pr list --state open --json number -q '. | length'` → 0 at the timestamp above.)
+**None open on the remote.** Two branches are committed locally in the wave-1 clone
+(`/tmp/w1/base`) and not yet pushed, pending Andy's word:
+
+| branch | contents | acceptance |
+|---|---|---|
+| `foreman/a6-doc-edits` | wave-1 **A6** — T-04, T-06, T-23 | single-match grep of each new string, 4/4 |
+| `foreman/a3-tape-failure-mode-test` | wave-1 **A3 residue** — adds `scripts/test_tape_failure_modes.py`, `tape.py` byte-identical | 12/12 green; `--show-red` flips all 12 and exits 1 |
 
 ## Findings this lane raised that are NOT yet ruled
 
@@ -48,17 +55,72 @@ design, not a defect) · **F-3** (log honesty, merged as PR #53) · **F-5** (mer
 
 ## What this lane is holding for
 
-1. **F-7's `build_ledger.py` work.** Queued **deliberately behind PR #56's merge** — same file, and
+1. **⛔ THE DEVIN PERMISSION RULING — this lane cannot dispatch at all without it.** `devin -p` is
+   refused by the Claude Code session's own auto-mode classifier at the invocation itself, before
+   the binary runs. Verified 2026-08-19 both with and without `--respect-workspace-trust false`;
+   this is *broader* than the earlier workspace-trust block, where the binary at least started. It
+   is per-session, not per-machine. Andy will grant a **narrow** rule himself — see the flag-order
+   trap in the operating notes below. Wave 1 dispatched **0** of 6 agents because of it.
+2. **F-7's `build_ledger.py` work.** Queued **deliberately behind PR #56's merge** — same file, and
    Andy will not have two changes to it in flight at once. PR #56 is now merged, so this is the next
    dispatch when its prompt arrives.
-2. Rulings/dispatches for F-1, F-4, F-6 and stage-5 fatality. None are this lane's to resolve.
+3. Rulings/dispatches for F-1, F-4, F-6 and stage-5 fatality. None are this lane's to resolve.
+4. **Andy's `check_refs` ruling** (wave-1 escalation 3) and the dangling-ref burn-down that depends
+   on it. Wave-1 **A5** is HELD pending it and must not be rewritten meanwhile.
+
+## Wave-1 pre-flight findings, 2026-08-19 (base `d3dce33`)
+
+Five of six wave-1 cards failed premise verification — the cards were cut from
+`todo-2026-08-16.csv` and the tree moved under them. Recorded so they are not re-cut:
+
+- **A1 / T-03** — CANCELLED. `hedge_tournament.csv` carries 8 distinct `trade_id`s, **7 absent**
+  from `trades.csv`; but `R-2026-08-19-TRADE-ID-STABILITY` §5 already names those same 7 orphans and
+  rules them decorative and left as committed. The card's second conjunct is false outright: both
+  files span the **same 7 dates**, not fewer. No rows are dropped — ids churn.
+- **A2 / T-13** — CANCELLED. Already executed: `report.py:601-602` derives the unsigned set,
+  `:689` / `:1343` render it, empty set renders no banner, and `portfolio.py:56-61` derives the
+  count off the same `STATUS.md` heading. Both derive 4.
+- **A3 / T-11** — premise FALSE (`_get()` swallows nothing; the split is built, `tape.py:389` exits
+  3 on `token-rejected`), but the acceptance clause was genuinely missing. Test now written.
+- **A4 / T-12** — CANCELLED. Artifact dir is **`artifacts/heartbeat/`**, not `data/heartbeat/` as
+  the card said; dispatching as written would have created a second parallel tree. Already
+  distinguishes no-run from failed-run by file state alone.
+- **A5 / T-14** — HELD. `docs/archive/` does not exist; scope unnamed across 25 dated docs, several
+  load-bearing in `CLAUDE.md`; and its acceptance predicate is blind — see below.
+- **A6** — the only card that passed, with T-23 retargeted from `agent-charter.md` (which already
+  cites `docs/RULINGS.md` at :7) to **`agent-roles.md:48` and `:53`**, where the dangling prose was.
+
+**⛔ `python3 scripts/check_refs.py` IS GREEN WHILE 30 REFERENCES DANGLE.** Measured at `d3dce33`:
+plain → rc=0 reporting `30 DANGLING REFERENCE(S)`; `--strict` → rc=1. `ci.yml:225` runs the plain
+form. Any acceptance predicate written as "check_refs is green" is satisfied before the work starts
+and cannot detect its own failure. Dangling-ref count with its window, since a delta without one is
+not checkable: **28 @ `4fa1949` (2026-08-18) → 30 @ `d3dce33` (2026-08-19)**, +2, both the `..`
+date-range notation the scanner misreads as a path. `devin-queue.md:108` states **25**, which
+reconciles with neither and is itself a stale figure.
 
 ## Operating notes that cost real time to learn
 
 - **Devin invocation**: `-p --model swe-1-7 --permission-mode dangerous`, **no `--sandbox`**.
-  `smart` does not exist on this install; `dangerous + --sandbox` fails, because sandbox forces
-  autonomous mode which still gates some tools on confirmation, and in `-p` those are rejected —
-  it produces zero commits.
+  `dangerous + --sandbox` fails, because sandbox forces autonomous mode which still gates some
+  tools on confirmation, and in `-p` those are rejected — it produces zero commits.
+  **[CORRECTED 2026-08-19 — "`smart` does not exist on this install" is FALSE.** Probed directly on
+  `devin 3000.4.25 (7e8e528a)`: `--permission-mode` documents all four of `auto` (default),
+  `accept-edits`, `smart`, `dangerous`. The mode list drifts between updates, so it is **probed
+  every wave and never assumed** — which is why wave-1 pre-flight §1.1 requires it. Original note
+  left standing.**]**
+- **⛔ FLAG ORDER IS LOAD-BEARING UNDER A NARROW PERMISSION RULE.** The planned grant is
+  `Bash(/Applications/.../devin/bin/devin -p --model swe-1-7:*)`, which is a **prefix** match on the
+  command text as literally written. Two consequences, both of which look like "the block never
+  lifted" when hit: (1) the binary path must be **spelled out in full** — a `"$DEVIN"` variable
+  makes the rule inert; (2) `-p --model swe-1-7` must come **first**, before
+  `--permission-mode`/`--`, or the prefix does not match. A permission that has not been seen to
+  DENY something is not yet a verified permission: before trusting the grant, attempt one
+  invocation with `--model swe-1-7-lightning` (a **paid** name collision — $2.5/$12.5 per MTok) and
+  confirm it is refused.
+- **Free vs paid models, re-verified 2026-08-19 via `devin models list`**: only `swe-1-7` (SWE-1.7
+  Max) and `swe-1-7-medium` are `Free`. `swe-1-7-lightning` and `-lightning-medium` are
+  **$2.5 / MTok in, $12.5 / MTok out**. `-p` defaults to `swe-1-7-medium`, so the model is always
+  passed explicitly.
 - **Retry logic must key on a per-attempt marker, never a tail scan** of a cumulative log. A tail
   scan re-ran an already-SUCCEEDED dispatch and nearly opened a duplicate PR.
 - **Trusted workspaces**: Devin refuses untrusted directories, and
