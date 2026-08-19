@@ -100,6 +100,14 @@ of the data/trades.csv already on disk. Rewinding is a legitimate operation but
 it is never an accident — ask for it with `--allow-rewind`, and the rewind is
 printed as a banner so it lands in the run log.
 
+The same FULL rebuild can also walk the ledger forward from the front: a
+day-only export, or a window too narrow to reach the earliest banked day,
+moves the minimum `open_date` LATER and deletes every day before it. G-2 sees
+no rewind and would pass it. The G-2b front guard (R-2026-08-19-LEDGER-FRONT-
+GUARD) refuses that too, before any byte is written, with `--allow-front-truncate`
+as the explicit override. When both axes trip, the rear (rewind) refusal fires
+first.
+
 -----------------------------------------------------------------------------
  FIXTURE / LIVE SEPARATION — --root  (G-3, same forensics doc §7)
 -----------------------------------------------------------------------------
@@ -136,9 +144,10 @@ Usage:
   python3 scripts/build_ledger.py --ledger-start 2026-08-15
   LEDGER_START=2026-08-15 python3 scripts/build_ledger.py
   python3 scripts/build_ledger.py 2026-08-10 --allow-rewind   # deliberate rewind
+  python3 scripts/build_ledger.py 2026-08-10 --allow-front-truncate  # deliberate truncate
   python3 scripts/build_ledger.py --root /tmp/scratch 2026-08-10   # never touches data/
   FLEET_ROOT=/tmp/scratch python3 scripts/build_ledger.py
-  python3 scripts/build_ledger.py --selftest      # exclusion + rewind-guard tests
+  python3 scripts/build_ledger.py --selftest      # exclusion + monotonicity-guard tests
 """
 import argparse, csv, glob, json, os, re, sys, collections
 
@@ -279,6 +288,20 @@ def max_open_date(rows, key):
     return max(days) if days else ""
 
 
+def min_open_date(rows, key):
+    """Smallest YYYY-MM-DD open date across `rows`, or "" when there are none.
+
+    `key` differs by side of the comparison: export rows carry `openDate`, ledger
+    rows carry `open_date`. Blank/absent dates are ignored because `max()` on an
+    empty list would raise, but the deeper reason is the opposite of G-2's:
+    a blank would sort to the FRONT and produce a spurious earliest day, making
+    a truncating export look like it still holds the front of the ledger when it
+    does not. So a malformed row must not be allowed to fake a PASS.
+    """
+    days = [d for d in ((r.get(key) or "")[:10] for r in rows) if d]
+    return min(days) if days else ""
+
+
 def rewind_refusal(prior_max, new_max, prior_legs, new_legs, src, ledger_start):
     """The G-2 refusal text. Names BOTH dates, the export that caused it, and the
     one flag that overrides it. Returned (not raised) so the selftest can read it."""
@@ -311,6 +334,45 @@ def rewind_refusal(prior_max, new_max, prior_legs, new_legs, src, ledger_start):
         "  root rather than a pinned rebuild of data/ (G-3).\n"
         "  If you genuinely intend to rewind the ledger, say so explicitly:\n"
         f"      python3 scripts/build_ledger.py {os.path.basename(src)[:10]} --allow-rewind\n"
+        + bar
+    )
+
+
+def truncation_refusal(prior_min, new_min, prior_legs, new_legs, src, ledger_start):
+    """The G-2b refusal text. Names BOTH dates, the export that caused it, the
+    LEDGER_START, the 0051b5e6 precedent, the words 'NOTHING WAS WRITTEN', and the
+    one flag that overrides it. Returned (not raised) so the selftest can read it."""
+    bar = "!" * 72
+    return (
+        "\n" + bar + "\n"
+        "REFUSED: this rebuild would TRUNCATE the working ledger from the FRONT.\n"
+        "\n"
+        f"  prior data/trades.csv  min open_date : {prior_min}"
+        f"   ({prior_legs} leg(s))\n"
+        f"  this rebuild would write min open_date: "
+        f"{new_min or '(none — the ledger would be emptied)'}   ({new_legs} leg(s))\n"
+        f"  source export                        : {os.path.basename(src)}\n"
+        f"  LEDGER_START                         : {ledger_start}\n"
+        "\n"
+        "  build_ledger.py is a FULL rebuild from ONE export: it truncates\n"
+        "  data/trades.csv and rewrites it from the source named above. Every\n"
+        f"  trading day before {new_min or 'the cutover'} would therefore be DELETED from the\n"
+        "  working ledger — and from every reporting surface derived from it.\n"
+        "\n"
+        "  This is the exact shape of the 2026-08-12 truncation (commit 0051b5e6):\n"
+        "  a run that did not reach the earliest banked day erased the front of the\n"
+        "  ledger and the loss was committed to master. See\n"
+        "  docs/ledger-truncation-forensics-2026-08-17.md.\n"
+        "\n"
+        "  NOTHING WAS WRITTEN.\n"
+        "\n"
+        "  To rebuild from the FULL newest export, re-export with a window that\n"
+        "  reaches the earliest open date shown above.\n"
+        "  To prove determinism without touching the live ledger, use a scratch\n"
+        "  root rather than a pinned rebuild of data/ (G-3).\n"
+        "  If you genuinely intend to truncate the front of the ledger, say so\n"
+        "  explicitly:\n"
+        f"      python3 scripts/build_ledger.py {os.path.basename(src)[:10]} --allow-front-truncate\n"
         + bar
     )
 
@@ -498,6 +560,10 @@ def main():
     ap.add_argument("--allow-rewind", action="store_true",
                     help="permit a rebuild whose max open_date is EARLIER than the "
                          "prior data/trades.csv's (G-2). Never implicit.")
+    ap.add_argument("--allow-front-truncate", action="store_true",
+                    help="permit a rebuild whose min open_date is LATER than the "
+                         "prior data/trades.csv's (G-2b). Never implicit — a distinct "
+                         "axis from --allow-rewind.")
     ap.add_argument("--root", default=None,
                     help="read and write DIR/data instead of the repo's, so a "
                          "fixture run cannot touch the live ledger (G-3). "
@@ -604,6 +670,29 @@ def main():
         print(f"!!   source export  {os.path.basename(src)}")
         print("!! Every trading day after "
               f"{new_max or 'the cutover'} is being removed from data/trades.csv.")
+        print("!" * 72)
+
+    # --- THE FRONT MONOTONICITY GUARD (G-2b) -------------------------------
+    # Mirrors G-2 on the opposite end. A day-only export, or any export whose
+    # date window stops short of the earliest banked day, moves the minimum
+    # open_date FORWARD while deleting every day behind it. G-2 sees no rewind,
+    # so it would pass and the FULL rebuild would write a truncated ledger.
+    # Like G-2, this runs BEFORE the first byte is written, against the same
+    # new_working set (ops rows already subtracted), and is returned (not raised)
+    # so the selftest can read the text.
+    new_min   = min_open_date(new_working, "openDate")
+    prior_min = min_open_date(prior_rows, "open_date")
+    if prior_min and new_min > prior_min:
+        if not args.allow_front_truncate:
+            sys.exit(truncation_refusal(prior_min, new_min, len(prior_rows),
+                                        len(new_working), src, ledger_start))
+        print("\n" + "!" * 72)
+        print("!! LEDGER FRONT TRUNCATE — explicitly authorised with --allow-front-truncate.")
+        print(f"!!   min open_date  {prior_min}  ->  {new_min or '(empty ledger)'}")
+        print(f"!!   legs           {len(prior_rows)}  ->  {len(new_working)}")
+        print(f"!!   source export  {os.path.basename(src)}")
+        print("!! Every trading day before "
+              f"{new_min or 'the cutover'} is being removed from data/trades.csv.")
         print("!" * 72)
 
     # --- straddlers: visible, separate, never a working-ledger input ------
@@ -1115,6 +1204,42 @@ def selftest():
                              "open_date"),
                max_open_date([], "open_date")), (day1, ""))
 
+        # ---- G9-G11: THE FRONT MONOTONICITY GUARD (G-2b) -----------------
+        # Mirror of G-2 on the opposite end: an export that drops the EARLIEST
+        # banked day (or never reaches it) moves the min open_date forward.
+        # G-2 sees no rewind, so it passes; G-2b must refuse.
+        front = [_st_row(NORMBOT, day=day2)]                     # day2 only
+        _st_env(tmp, [norm_meta], stale, exports={day2: full})
+
+        code, out, _ = _st_run(tmp)                    # newest -> both days
+        led = list(csv.DictReader(open(_st_out(tmp, "trades.csv"))))
+        check("G9  baseline — newest export builds a two-day ledger",
+              (code, sorted({r["open_date"][:10] for r in led})), (None, [day1, day2]))
+
+        _st_env(tmp, [norm_meta], full, exports={day2: front}, keep_prior=True)
+        before = open(_st_out(tmp, "trades.csv")).read()
+        code, out, _ = _st_run(tmp, extra=[day2])
+        check("G10 front-truncate — export that drops the earliest day REFUSES",
+              isinstance(code, str)
+              and "REFUSED: this rebuild would TRUNCATE the working ledger from the FRONT" in code,
+              True)
+        check("G10b the refusal names BOTH min open_dates and the source export",
+              isinstance(code, str) and (f": {day1}" in code) and (f": {day2}" in code)
+              and (f"{day2}.csv" in code), True)
+        check("G10c nothing was written — trades.csv is byte-identical",
+              open(_st_out(tmp, "trades.csv")).read(), before)
+
+        code, out, _ = _st_run(tmp, extra=[day2, "--allow-front-truncate"])
+        led = list(csv.DictReader(open(_st_out(tmp, "trades.csv"))))
+        check("G11 --allow-front-truncate permits the front-truncate, and says so in a banner",
+              (code, "LEDGER FRONT TRUNCATE" in out,
+               sorted({r["open_date"][:10] for r in led})), (None, True, [day2]))
+
+        check("G12 min_open_date ignores blanks rather than sorting them first",
+              (min_open_date([{"open_date": ""}, {"open_date": f"{day1} 09:46:00"}],
+                             "open_date"),
+               min_open_date([], "open_date")), (day1, ""))
+
         # ---- R1-R3: FIXTURE / LIVE SEPARATION (G-3) ----------------------
         check("R1  set_root points RAW/OUT/META at <root>/data",
               (RAW, OUT, META_PATH),
@@ -1143,7 +1268,9 @@ def selftest():
 
     print("SELF-TEST — build_ledger.py")
     print("  N* = E-3 §3.3 LAB OPS-CLASS EXCLUSION")
-    print("  G* = G-2 MONOTONICITY GUARD (ledger-truncation-forensics-2026-08-17.md §7)")
+    print("  G* = G-2 + G-2b MONOTONICITY GUARD")
+    print("       (ledger-truncation-forensics-2026-08-17.md §7;")
+    print("        R-2026-08-19-LEDGER-FRONT-GUARD)")
     print("  R* = G-3 FIXTURE / LIVE SEPARATION (--root)")
     print("=" * 74)
     for ok, name, got, want in results:
