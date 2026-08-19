@@ -45,12 +45,13 @@ difference is a choice on record rather than a misreading.
 ## Orchestrator
 *Cowork. Class A — open.*
 
-**Job.** Hold the plan and the canonical rulings, dispatch the other agents, and apply only changes
-that have been ruled.
+**Job.** Hold the plan and the canonical rulings (`docs/RULINGS.md`), dispatch the other agents,
+and apply only changes that have been ruled.
 
 **Runs.** Daily, pre-open and post-close.
 
-**Reads.** The canonical rulings file, `STATUS.md`, the prior day's briefs.
+**Reads.** The canonical rulings file — `docs/RULINGS.md`, consolidated 2026-08-12 and the single
+canonical register — plus `STATUS.md` and the prior day's briefs.
 **Uses.** Its own tooling, memory, and task dispatch to the others.
 **Produces.** The daily plan, a dispatch log, and the commits that apply ruled changes.
 
