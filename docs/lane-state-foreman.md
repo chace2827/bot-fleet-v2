@@ -101,13 +101,18 @@ design, not a defect) · **F-3** (log honesty, merged as PR #53) · **F-5** (mer
         both copies sha256 `a6dded833ffc0e24a8189867e558f445c4cb88d0dee183fac565d5a81145a309`.
      4. **Andy grants ONLY `Bash(/Users/andrewchace/bin/devin-free:*)`. The raw devin path is NOT
         re-granted.**
-     5. **TWO deny tests, both must be SEEN RED before any dispatch. NOT YET RUN** — they require
-        the post-restart grant, and running them beforehand proves nothing:
-        - the raw binary directly → must be **DENIED by the classifier**
-        - `devin-free --model swe-1-7-lightning` → must **exit 2 from the wrapper**, no invocation
-     6. Only after step 5 passes is workspace trust revisited. `/tmp` clones are untrusted and
-        Devin refuses them; the two documented fixes are interactive trust or
-        `respect_workspace_trust: false` in config. **Neither has been attempted.**
+     5. ~~**TWO deny tests, both must be SEEN RED before any dispatch.**~~ — **BOTH SEEN RED,
+        2026-08-19 post-restart.** Evidence in the probe section at the end of this file:
+        - ~~the raw binary directly → **DENIED by the classifier**~~ — SEEN RED, after Andy moved
+          the raw path from `allow` to `deny`.
+        - ~~`devin-free --model swe-1-7-lightning` → **exit 2 from the wrapper**, no invocation~~ —
+          SEEN RED. **Step 5 is complete.**
+     6. Only after step 5 passes is workspace trust revisited — **step 5 now passes, so this is
+        the open step.** `/tmp` clones are untrusted and Devin refuses them; the two documented
+        fixes are interactive trust or `respect_workspace_trust: false` in config. **Neither has
+        been attempted.** ⛔ **The FIRST check to run after any `respect_workspace_trust` change is
+        the deferred exec-reach test** — see "Deferred to step 6" in the probe section. A guard
+        proven under the old configuration is stale.
    - **Pre-wave assertion, every wave:** `~/bin/devin-free --selfhash` must equal
      `shasum -a 256 scripts/devin_free.sh`. The installed copy is outside the repo on purpose —
      fleet agents edit `/tmp` clones and cannot reach `~/bin`, so an agent cannot edit the thing
@@ -221,3 +226,81 @@ reconciles with neither and is itself a stale figure.
   agreed on `None` where the real predicate returns `False`; both shared one blind spot. What caught
   it was checking against a *different surface* — the banked table's `touch_rate 0.0`, which is only
   reachable if `touch_n >= 1`.
+
+## Permission probe — 2026-08-19, post-restart (three checks, $0)
+
+Andy moved the raw devin path from `allow` to `deny` in `.claude/settings.local.json` (**moved, not
+duplicated** — it is no longer in `allow`) and restarted Claude Code so the file was freshly loaded.
+Three checks below. **Workspace trust was not touched**: `trusted_workspaces.json` still reads
+2026-08-18 20:54, 2616 bytes.
+
+- **A — raw probe: DENIED.**
+  `/Applications/Devin.app/.../devin/bin/devin -p --model swe-1-7 "noop"`, typed verbatim so it
+  prefix-matches the deny rule, returned a permission denial. The instrument is the log directory
+  `~/Library/Application Support/Devin/logs`, and the test is the **absence of a new entry**:
+  4 entries before — `20260811T222018`, `20260812T231551`, `20260816T200401`, `20260817T224514`,
+  parent mtime Aug 17 22:45 — and the identical 4 after, same parent mtime. **A denial writes
+  nothing. Step 5 test 1 is SEEN RED.**
+- **B — wrapper positive control: CANCELLED as shaped (Andy, 2026-08-19).** The intended form
+  `~/bin/devin-free -- "noop"` had to run in an untrusted cwd, i.e. `/tmp/untrusted-probe`, or it
+  was not a trust test. The allow rule `Bash(/Users/andrewchace/bin/devin-free:*)` is a **prefix**
+  match, so any `cd … && ` in front of it falls through to the auto-mode classifier, which blocked
+  it; the Bash tool resets cwd to the project directory every call, so no allowed form lands in the
+  probe directory. **The fix was NOT to add a `cd` allow rule — widening permission surface to run
+  a test is backwards.** It must also never be run from the default cwd:
+  `/Users/andrewchace/bot-fleet-v2` is IN `trusted_paths` (file read 2026-08-19;
+  `/tmp/untrusted-probe` is not, `grep -c` = 0), so that invocation would start a **real Devin
+  session in the live tree** rather than stopping at trust. B's one irreplaceable half — that the
+  deny rule does not over-match onto the wrapper — is now carried by D below.
+- **D — deny test 2, and B's replacement. Both halves SEEN, one command, from the default cwd.**
+  `~/bin/devin-free --model swe-1-7-lightning -- "noop"` is safe anywhere: the refusal loop runs
+  above `exec`, so no working directory is ever entered.
+  1. **The classifier PERMITTED the invocation.** The deny rule on the raw binary path does not
+     over-match onto `~/bin/devin-free`. This is what cancelled test B was for.
+  2. **The wrapper exited 2, no invocation.** stderr was the `REFUSED: --model is not yours to set`
+     block naming `swe-1-7-lightning` at $2.5/$12.5 per MTok; `exit=2`. **Deny test 2, SEEN RED.**
+  Corroboration that `exec` was never reached: **the provenance line did not print.** The
+  `devin-free: sha256 … | model swe-1-7 (free)` printf sits below the refusal loop and above the
+  `exec`, so its absence places the exit ahead of any invocation. The log directory was the same 4
+  entries before and after, parent mtime Aug 17 22:45.
+- **C — `--selfhash` unchanged.** `~/bin/devin-free --selfhash` →
+  `a6dded833ffc0e24a8189867e558f445c4cb88d0dee183fac565d5a81145a309`, exit 0 — byte-equal to
+  `shasum -a 256 scripts/devin_free.sh` and to the value recorded at line 101 of this file.
+
+**$0 asserted three ways, and re-asserted the same three ways after D.**
+(1) **Nothing reached the binary** — A was a permission denial before exec, D exited in the argv
+loop above exec, C returns above exec; B never started a process at all.
+(2) **The log directory never changed** — the same 4 entries with the same parent mtime
+(Aug 17 22:45) before A, after A, before D and after D.
+(3) **No provenance line was ever emitted.** `devin-free` prints
+`sha256 … | model swe-1-7 (free)` to stderr immediately before `exec`, so its absence across every
+check is a per-run marker that no invocation occurred. No Devin session was created, and
+`trusted_workspaces.json` is untouched at 2026-08-18 20:54, 2616 bytes.
+
+### Carry-forward — binding on every dispatch prompt
+
+1. **Dispatch prompts must never pass `-p`.** The wrapper supplies it:
+   `exec "$DEVIN_BIN" -p --model swe-1-7 "$@"`. A prompt that adds its own sends it twice — the
+   manager's earlier `devin-free -p "…"` was malformed for exactly this reason. The call shape is
+   `devin-free [flags] -- "prompt"`.
+2. **Dispatch prompts must never reintroduce a `$DEVIN` variable.** The wrapper owns the binary
+   path (`DEVIN_BIN=` in `scripts/devin_free.sh`). A dispatch-side path variable is precisely how
+   the raw binary gets invoked again under a string the deny rule does not match.
+
+   The wrapper owns **both the flag and the path**. A dispatch prompt owns neither.
+
+### Deferred to step 6 — the one thing these probes cannot show
+
+**That the wrapper reaches `exec` at all has NOT been demonstrated.** Every check so far exits
+above the `exec` line — A never reached the binary, D refused in the argv loop, `--selfhash`
+returns before it. The only way to see `exec` fire and be stopped by nothing but Devin's own
+workspace-trust check is to run the wrapper in an untrusted directory, and **step 6 changes what
+untrusted means.**
+
+⛔ **Therefore: after ANY change to `respect_workspace_trust` (or to `trusted_workspaces.json`),
+the FIRST check to run — before any dispatch, before any wave — is the exec-reach test:**
+`~/bin/devin-free -- "noop"` in a directory that is untrusted *under the new configuration*,
+expecting the provenance line `devin-free: sha256 a6dded83… | model swe-1-7 (free)` on stderr
+followed by Devin's trust refusal. The provenance line is the assertion; the trust refusal is the
+stop. **A guard proven under the old configuration is stale** — the whole point of step 6 is to
+move the line these probes were measured against.
