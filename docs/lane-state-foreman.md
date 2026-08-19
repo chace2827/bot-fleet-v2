@@ -32,13 +32,21 @@ pre-flight exactly as §3 requires.
 
 ## Open PRs owned by this lane
 
-**None open on the remote.** Two branches are committed locally in the wave-1 clone
-(`/tmp/w1/base`) and not yet pushed, pending Andy's word:
+Wave-1 clone: `/tmp/w1/base`, every branch based on `d3dce33`.
 
-| branch | contents | acceptance |
-|---|---|---|
-| `foreman/a6-doc-edits` | wave-1 **A6** — T-04, T-06, T-23 | single-match grep of each new string, 4/4 |
-| `foreman/a3-tape-failure-mode-test` | wave-1 **A3 residue** — adds `scripts/test_tape_failure_modes.py`, `tape.py` byte-identical | 12/12 green; `--show-red` flips all 12 and exits 1 |
+| PR / branch | contents | acceptance | state |
+|---|---|---|---|
+| **#58** `foreman/a6-doc-edits` | wave-1 **A6** — T-04, T-06, T-23 + the G-1′ cross-reference | single-match grep, **5/5** | OPEN |
+| **#59** `foreman/a3-tape-failure-mode-test` | wave-1 **A3 residue** — adds `scripts/test_tape_failure_modes.py`; `tape.py` byte-identical | **12/12** green; `--show-red` flips all 12, exits 1 | OPEN |
+| **#60** `foreman/lane-state-2026-08-19` | this file | — | OPEN |
+| `foreman/citation-dispositions` | burn-down **B/E/F** — 9 refs reclassified into `check_refs_allow.txt` | dangling **30 → 21**, DECLARED **61 → 70**, set-diff verified both directions | committed local, **HELD** pending Andy |
+| `foreman/devin-free-wrapper` | `scripts/devin_free.sh` | refusal matrix **8/8** rc=2, none reached exec | committed local, not pushed |
+
+⛔ **`foreman/citation-dispositions` was rewritten once.** Its first version absorbed group E by
+adding a `history-index.md` entry. That mechanism is **withdrawn**: `check_refs.py:110` is
+`os.path.basename(ref) in history` tested against the **entire text** of `history-index.md`, so it
+silences by side effect and would mute any future ref sharing that basename. The allowlist is the
+ruled mechanism — explicit, one path and one reason per line, reviewable in a diff.
 
 ## Findings this lane raised that are NOT yet ruled
 
@@ -55,18 +63,80 @@ design, not a defect) · **F-3** (log honesty, merged as PR #53) · **F-5** (mer
 
 ## What this lane is holding for
 
-1. **⛔ THE DEVIN PERMISSION RULING — this lane cannot dispatch at all without it.** `devin -p` is
-   refused by the Claude Code session's own auto-mode classifier at the invocation itself, before
-   the binary runs. Verified 2026-08-19 both with and without `--respect-workspace-trust false`;
-   this is *broader* than the earlier workspace-trust block, where the binary at least started. It
-   is per-session, not per-machine. Andy will grant a **narrow** rule himself — see the flag-order
-   trap in the operating notes below. Wave 1 dispatched **0** of 6 agents because of it.
+1. **⛔ THE DEVIN PERMISSION — RESUME HERE AFTER THE RESTART. Read this before dispatching anything.**
+   Wave 1 dispatched **0 of 6** agents. The history, because each step's result changes what the
+   next one means:
+   - The classifier first refused `devin -p` outright, before the binary ran — broader than the
+     older workspace-trust block, and per-session, not per-machine.
+   - A narrow rule `Bash(/Applications/.../devin/bin/devin -p --model swe-1-7:*)` was granted. It
+     lifted the classifier block **and failed to deny**, twice, both SEEN:
+     `--model swe-1-7-lightning` ($2.5/$12.5 per MTok) and `--model claude-opus-5` ($5/$25, banned
+     outright by dispatch §2) **both reached the binary**. The first slips a prefix match because
+     `swe-1-7-lightning` begins with `swe-1-7`; the second shares no prefix and passed anyway, so
+     the matcher does not bind the `--model` argument at all. Nothing was spent only because
+     Devin's unrelated workspace-trust check stopped both. That is not a cost control.
+     Option 2 (wide grant + post-hoc `acu` assertion) was considered and **DECLINED** — detection
+     after spend, against a negative balance, is not a guard.
+   - **RULED: Option 1, the wrapper.** Remaining sequence, in order:
+     1. ~~Do not touch workspace trust~~ — still holds, until step 4 passes.
+     2. ~~Andy restarts Claude Code~~ (the grant was session-scoped, never on disk, so it clears).
+     3. ~~Write the wrapper~~ — **DONE.** `scripts/devin_free.sh`, installed at `~/bin/devin-free`,
+        both copies sha256 `a6dded833ffc0e24a8189867e558f445c4cb88d0dee183fac565d5a81145a309`.
+     4. **Andy grants ONLY `Bash(/Users/andrewchace/bin/devin-free:*)`. The raw devin path is NOT
+        re-granted.**
+     5. **TWO deny tests, both must be SEEN RED before any dispatch. NOT YET RUN** — they require
+        the post-restart grant, and running them beforehand proves nothing:
+        - the raw binary directly → must be **DENIED by the classifier**
+        - `devin-free --model swe-1-7-lightning` → must **exit 2 from the wrapper**, no invocation
+     6. Only after step 5 passes is workspace trust revisited. `/tmp` clones are untrusted and
+        Devin refuses them; the two documented fixes are interactive trust or
+        `respect_workspace_trust: false` in config. **Neither has been attempted.**
+   - **Pre-wave assertion, every wave:** `~/bin/devin-free --selfhash` must equal
+     `shasum -a 256 scripts/devin_free.sh`. The installed copy is outside the repo on purpose —
+     fleet agents edit `/tmp` clones and cannot reach `~/bin`, so an agent cannot edit the thing
+     that constrains it.
 2. **F-7's `build_ledger.py` work.** Queued **deliberately behind PR #56's merge** — same file, and
    Andy will not have two changes to it in flight at once. PR #56 is now merged, so this is the next
    dispatch when its prompt arrives.
 3. Rulings/dispatches for F-1, F-4, F-6 and stage-5 fatality. None are this lane's to resolve.
 4. **Andy's `check_refs` ruling** (wave-1 escalation 3) and the dangling-ref burn-down that depends
    on it. Wave-1 **A5** is HELD pending it and must not be rewritten meanwhile.
+
+## Queued, NOT started
+
+**WAVE-2 CARD — fix the `check_refs` path extractor. TWO defects, one card.**
+This is the first real Devin card once the permission sequence above completes.
+
+- **Defect 1 — the extractor reads prose and placeholders as paths.** 10 of the 30 dangling refs
+  at `d3dce33` are false positives: `..` date-range notation (`data/brief/2026-08-10..13`), the
+  literal `DATE` placeholder in an argparse help string, a deliberate `2099-01-02` sentinel, a
+  "path" spanning a sentence (`data/receipts/ stops at mirror-baseline.txt`), two words glued
+  across a line, and `docs/fixture.md` ×4 — one of which is the scanner reading its **own**
+  selftest's temp filename out of its own source, the other three being docs that merely *quote*
+  that bug report and get flagged for quoting it. **Closing these by editing docs would corrupt
+  correct text to satisfy a broken parser.**
+- **Defect 2 — `check_refs.py:110` silences by side effect.** `os.path.basename(ref) in history`
+  where `history` is the entire text of `history-index.md`. Any ref whose basename appears
+  **anywhere** in that file — deliberately or by coincidence — is muted.
+
+**Acceptance has THREE halves, all mandatory:**
+1. the 10 named group-A refs are no longer reported;
+2. a deliberately broken citation is **STILL** reported — without this you have only widened the
+   parser until it reports nothing;
+3. a ref whose basename **coincidentally** appears in `history-index.md` is **STILL** reported.
+
+**⛔ Ordering, corrected — the earlier "burn down 30 then flip `--strict`" was wrong.**
+Fix extractor → re-measure → **reclassify** survivors into `check_refs_allow.txt` → *only then*
+flip `ci.yml:225` to `--strict`. Step 3 means reclassify, **not** mark: a marked-but-still-dangling
+ref keeps `--strict` red forever. **If any survivor is left merely marked, leave CI non-strict
+rather than widen anything.** Do not touch `ci.yml` until step 3 is done.
+
+**Also queued:** `docs/agent-roles.md:100-101` is HALF FALSE — it claims the Pipeline-Runner lacks
+"a trigger and a heartbeat — so a run that never happened is currently indistinguishable from a run
+with nothing to report." The heartbeat conjunct is disproved (`artifacts/heartbeat/`,
+`scripts/check_heartbeat.py`), so the consequence clause is false. The **trigger** conjunct may
+still hold — S-01 reads zero of four engines wired. Correct the first; verify the second before
+touching it.
 
 ## Wave-1 pre-flight findings, 2026-08-19 (base `d3dce33`)
 
