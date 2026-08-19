@@ -3449,3 +3449,138 @@ source: >-
   Cowork session.
 unclear: false
 ```
+
+```yaml
+ruling_id: R-2026-08-19-ROSTER-KEY-AND-OPS-RECLASS-GUARD
+date: 2026-08-19
+scope: >-
+  data/bots_meta.csv has no uniqueness constraint anywhere, and
+  build_ledger.load_meta() at :333 ends `return {r["bot"]: r for r in rows}`
+  — a last-wins dict. A duplicate row therefore does not duplicate a bot; it
+  REPLACES that bot's entire classification. Append one row copying an
+  existing bot with pillar=Lab and ops_class=lab-ops and ops_set_from_meta
+  raises no FATAL, because the pillar and the declaring column reconcile with
+  each other — the fence only ever refuses on DISAGREEMENT, and a careless
+  PR or an agent supplies agreement. The bot enters ops_bots, every one of
+  its legs is routed to data/ops_rows.csv, and build_ledger exits 0 printing
+  the loss as correctness: "LAB OPS-CLASS -> data/ops_rows.csv (2 rows, 1
+  declared bot(s)) — EXCLUDED from the working ledger by declaration (E-3
+  §3.3)". MEASURED at 6d5f1e8, export 2026-08-10, target
+  IC-SPX-FastPT25-S2-130PM: the working ledger goes from 4 legs / +$500.00 to
+  2 legs / -$100.00. A $600 swing in realized P&L from two data-file lines.
+  THE CHAIN, stated honestly: on the duplicate ALONE, check_refs fires
+  (rc=1, "says 44 … actual is 45") and is the only guard that does. Deleting
+  the one clause it binds to — docs/state.md:55, a CLASS A doc edit — takes
+  the whole chain to 11/11 guards green, because check_row_count_invariant
+  scans markdown for a number near the literal "bots_meta.csv" and reports
+  "invariants clean" when it finds no site to compare. The count guard is
+  real defence-in-depth; it is defeated by the lowest-authority change class
+  we have.
+  ⚠️ THE THREAT MODEL IS NOT AN OUTSIDER. It is our own write-fleet. An agent
+  editing a data file to make something pass is the scope-creep already
+  observed twice on this repo (the unilateral guard-widening incidents,
+  2026-08-17 and 2026-08-18/19). This is reachable today.
+  ⚠️ RELATIONSHIP TO R-2026-08-19-LEDGER-FRONT-GUARD: that ruling is
+  registered but NOT implemented (177fdb0 is RULINGS.md +85 lines, no code).
+  G-2 guards the ledger's rear date; G-2b guards its front date. Both guard
+  EDGES. This defect removes INTERIOR rows — reroute a mid-range bot and
+  neither boundary moves and neither guard fires. It is the same family and
+  it lands in the same PR.
+  Ruled: (1) DUPLICATE-KEY REFUSAL IN load_meta. A named guard change per
+  charter §4 is PRE-AUTHORIZED at this scope. load_meta() raises FATAL,
+  nothing written, on any repeated `bot` value, naming every repeated key.
+  The natural key is `bot` and there is no design question to settle:
+  bots_meta.csv has no oa_id column — its header is bot, pillar, role,
+  underlying, status, champion, epoch_boundary, hedge, strike_fix,
+  superseded, focus, notes, ops_class — every consumer already keys on
+  `bot`, and `bot` is unique 44/44 at 177fdb0, so the assertion passes on
+  the day it lands with ZERO migration.
+  (2) G-2c — THE OPS-RECLASSIFICATION GUARD, the interior mirror. Refuse
+  when a bot that has banked rows in the prior data/trades.csv newly enters
+  ops_bots. The terms already exist at the guard's call site:
+  build_ledger.py:538 computes `prior_bots = {r["bot"] for r in prior_rows}`
+  and :526 computes `ops_bots`, so the predicate is the set intersection
+  `ops_bots & prior_bots` evaluated at the SAME pre-write call site as G-2
+  (:593-599), BEFORE the first byte is written. Mirror G-2b's construction
+  exactly: the refusal text is RETURNED by a helper, not raised, so the
+  self-test can read it. The escape hatch is an explicit
+  `--allow-ops-reclass`, distinct from `--allow-rewind` and
+  `--allow-front-truncate` because it is a third axis and a third intent;
+  when passed it prints the same shape of loud banner, naming each
+  reclassified bot and the leg count moving out of the working ledger.
+  (3) ORDER, extending clause (2) of R-2026-08-19-LEDGER-FRONT-GUARD: REAR
+  (G-2) fires first, then FRONT (G-2b), then INTERIOR (G-2c). Most severe
+  loss named first; the interior guard is last because it is the newest and
+  the least precedented.
+  (4) ⛔ DO NOT IMPLEMENT THIS AS A PARTITION-CONSERVATION COUNT, and this
+  clause exists because that was the first proposal and it was WRONG. At
+  :627-628 ops_src and rows are complementary comprehensions over the same
+  list with the same predicate, so `len(ops_src) + len(rows) == len(post)`
+  is TRUE BY CONSTRUCTION. An assertion on it is a tautology: it would pass
+  on the attack, pass on every mutation of the predicate, and read in the
+  report as coverage we do not have. It is the M4/M5 shape from
+  docs/research-loop-fix-spec-2026-08-07.md §3.4 — a check that cannot fail.
+  The guard must compare against the PRIOR BANKED LEDGER, which is state
+  outside the rebuild, exactly as G-2 and G-2b do.
+  (5) ⛔ THE ON-COUNT INVARIANT IS NOT AUTHORIZED HERE. That
+  check_refs.load_bots_meta_count() counts ALL rows and never ON rows — so
+  arming or disarming a bot is a substitution that no guard in the repo
+  observes, with zero doc edits — is a real and separate finding. It needs
+  its own ruling and a decision about where the armed roster's authority
+  lives. Nothing in this ruling closes it.
+  (6) ⛔ THE PROSE-BINDING GAP IS NOT AUTHORIZED HERE EITHER. That
+  check_row_count_invariant enforces nothing when no doc states a count, and
+  that its only binding site repo-wide is docs/state.md:55 while
+  docs/build-plan.md:44 sits in ROW_COUNT_SKIP and is stale by 11, is filed
+  and not fixed by this ruling.
+  (7) KNOWN-POSITIVE REQUIRED, mirroring the rewind- and front-guard tests.
+  Three cases, so no branch regresses silently: (a) a fixture whose
+  bots_meta.csv repeats a `bot` value REFUSES in load_meta with nothing
+  written; (b) a fixture that reclassifies a bot with banked rows into
+  ops_class=lab-ops REFUSES at G-2c with nothing written; (c) the same
+  fixture with --allow-ops-reclass proceeds and emits the banner. Case (b)
+  is the regression test for the measured $600 reroute and its fixture
+  should say so in a comment.
+  (8) ⛔ NOTHING ELSE MOVES. No change to LEDGER_START, the cutover
+  partition, the ops exclusion's semantics, ops_set_from_meta's existing
+  FATALs, the FILTERED-EXPORT warning, G-2, G-2b, or a single byte the
+  rebuild writes when it is not refusing. This ruling adds two refusal paths
+  and nothing else.
+  (9) ANTICIPATED CORRECT FIRING — do not "fix" it. A DELIBERATE
+  reclassification of a bot that has already traded will trip G-2c. That
+  refusal is correct: moving banked P&L out of the working ledger is exactly
+  the event that should require a human sentence. Pass --allow-ops-reclass
+  and say why in the commit. It is not a false alarm and it is not to be
+  silenced by widening the guard — a blocked rebuild returns to Andy, as
+  always.
+  The G-2c label is clerical; if the G-series has a canonical allocator the
+  number may be reassigned without a further ruling.
+verbatim: >-
+  A duplicate row in bots_meta silently rewrites a bot's classification and
+  can move six hundred dollars of realized P&L out of the working ledger
+  with CI green. Refuse duplicate bot keys outright, and refuse when a bot
+  that already has banked rows gets reclassified into the ops set — explicit
+  flag to override, interior guard fires after the two edge guards. Do not
+  build it as a count that adds up to itself. The ON-count question and the
+  prose-binding question stay open for their own rulings.
+verbatim_of: ruling_text
+owner: Andy
+status: Active
+applies_to: >-
+  scripts/build_ledger.py — load_meta() duplicate-key FATAL, a new
+  ops_reclass_refusal() helper beside truncation_refusal(), the G-2c guard
+  at the existing pre-write call site (:593-599) using prior_bots (:538) and
+  ops_bots (:526), the --allow-ops-reclass argument, and three self-test
+  cases (named change, cites this ruling). No other file. Lands in the same
+  PR as R-2026-08-19-LEDGER-FRONT-GUARD's G-2b implementation and extends
+  the same guard family. Does NOT alter G-2, G-2b, ops_set_from_meta, or
+  data/ops_rows.csv's format.
+superseded_by: none
+source: >-
+  Adversarial guard fleet, 2026-08-18, Finding 1; audited at c28fc34 and
+  re-verified at 177fdb0. Report and evidence rows at
+  ~/Documents/fleet-runs/2026-08-18/guard-adversarial/. The $600 reroute was
+  measured directly against export 2026-08-10 in a pinned clone. Andy's
+  ruling in the Cowork session, 2026-08-19.
+unclear: false
+```

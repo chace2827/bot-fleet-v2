@@ -52,7 +52,7 @@ explicit authorization; earlier the same day: R-edit package applied + edit-poli
 
 - **Ruling:** `GF-QQQ-IC-Ride-Delta` is the 8th greenfield arm, `PR-23`. The family definition is
   widened from "one Exit-Options bundle" to "one input value (exit or entry)".
-- `data/bots_meta.csv` now has **44 bots, 18 ON** (8 GF arms + 10 other ON bots).
+- `data/bots_meta.csv` now has **44 bots, 19 ON** (8 GF arms + 11 other ON bots).
 - `docs/build-plan.md` §2D, `docs/greenfield-family-spec.md`, `docs/track-b-arms-spec.md`,
   `docs/pre-registration-ledger.md` amended.
 
