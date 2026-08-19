@@ -140,7 +140,9 @@ above threshold.
 **Today.** Validated code, not wired into the daily loop. Its Layer 2 reports `BLOCKED` — **this is
 correct output, not a gap.** Exit attribution needs a mechanic label that the platform does not
 expose anywhere; G-1′ was declined on that basis and the ruling stands. Do not re-propose building
-the input. **No language model belongs anywhere near this** — a model cannot perform the resampling
+the input — the declined option, the two ruling-reopeners that are the only paths back to it, and
+the anti-rediscovery note are in the **G-1′ — DECLINED** block of `docs/state.md`.
+**No language model belongs anywhere near this** — a model cannot perform the resampling
 and would narrate a result instead, and the whole value of this layer is its willingness to say no.
 
 ---
