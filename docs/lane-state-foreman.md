@@ -1,5 +1,22 @@
 # Lane state — FOREMAN
 
+> ### 📄 IF YOU ARE READING A STALE COPY — retrieve the current one
+>
+> As of 2026-08-19 this file's latest content lives on an **unmerged branch** (PR #60), so a fresh
+> session sitting at `master` sees an older version. Retrieve the current one without checking
+> anything out, and without needing the wave-1 `/tmp` clone to still exist:
+>
+> ```
+> git fetch origin
+> git show origin/foreman/lane-state-2026-08-19:docs/lane-state-foreman.md
+> ```
+>
+> If that branch no longer exists, it merged — `master` is then authoritative and this box is
+> spent. Confirm with `git log --oneline origin/master -- docs/lane-state-foreman.md`.
+>
+> ⛔ Run this from a clone, never against `~/bot-fleet-v2` — git on the mounted tree is prohibited
+> for bridge sessions (`R-2026-08-17-GIT-RULE-SCOPE`), read-only commands included.
+
 Owned by the **foreman lane** (dispatches Devin build agents from `/tmp` clones, verifies their
 output, merges on Andy's authorization). Created per `R-2026-08-19-LANE-STATE-OWNERSHIP` §2.
 
