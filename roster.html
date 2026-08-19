@@ -1,0 +1,1323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bot Fleet — Roster</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--blue:#0073ea;--canvas:#f6f7fb;--ink:#323338;--ink2:#676879;--ink3:#9699a6;
+ --line:#e6e9ef;--done:#00c875;--work:#fdab3d;--stuck:#e2445c;--none:#c4c4c4;--ready:#579bfc;
+ --g1:#037f4c;--g2:#00c875;--g3:#579bfc;--g4:#a25ddc;--g5:#fdab3d;--g6:#e2445c;--g7:#ff642e;
+ --g8:#784bd1;--g9:#0086c0;--g10:#ff158a;--g11:#225091;--g12:#7f5347}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Figtree,Roboto,-apple-system,"Segoe UI",sans-serif;background:var(--canvas);
+ color:var(--ink);font-size:14px;padding:22px 24px 70px;max-width:1500px;margin:0 auto}
+h1{font-size:24px;font-weight:700;letter-spacing:-.02em}
+.sub{color:var(--ink3);font-size:12.5px;margin:4px 0 16px}
+.mono{font-family:ui-monospace,Menlo,monospace;font-size:11.5px}
+.wgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(158px,1fr));gap:11px;margin-bottom:16px}
+.w{background:#fff;border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,.05);padding:12px 14px}
+.w .wt{font-size:11.5px;color:var(--ink2);margin-bottom:5px}
+.w .wn{font-size:26px;font-weight:700;line-height:1}
+.w .ws{font-size:11px;color:var(--ink3);margin-top:4px}
+.note{background:#eef4fd;border:1px solid #cfe0f7;border-left:4px solid var(--blue);
+ border-radius:8px;padding:13px 16px;margin-bottom:16px;font-size:13px;color:#2b4a72;line-height:1.55}
+.note b{color:#14365f}
+.warn{background:#fff4e5;border-color:#ffd6a0;border-left-color:var(--work);color:#7a5320}
+.warn b{color:#8a5200}
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--line);margin-bottom:16px}
+.tab{padding:8px 15px;font-size:14px;color:var(--ink2);cursor:pointer;border-bottom:2px solid transparent;font-weight:500}
+.tab:hover{background:#f0f1f5;border-radius:5px 5px 0 0}
+.tab.on{color:var(--blue);border-bottom-color:var(--blue);font-weight:600}
+.view{display:none}.view.on{display:block}
+.fam{background:#fff;border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,.05);margin-bottom:14px;overflow:hidden}
+.fhead{display:flex;align-items:center;gap:9px;padding:11px 15px;cursor:pointer;user-select:none}
+.fchev{font-size:11px;transition:transform .15s}
+.fam.cl .fchev{transform:rotate(-90deg)}
+.fname{font-weight:700;font-size:14.5px}
+.fcount{color:var(--ink3);font-size:12.5px;font-weight:400}
+.fwrap{overflow-x:auto}.fam.cl .fwrap{display:none}
+table{border-collapse:collapse;width:100%}
+th{font-size:11.5px;font-weight:400;color:var(--ink2);text-align:left;padding:6px 9px;
+ border-bottom:1px solid var(--line);border-right:1px solid var(--line);white-space:nowrap}
+td{padding:7px 9px;border-bottom:1px solid var(--line);border-right:1px solid var(--line);
+ font-size:12.8px;vertical-align:top}
+tr:hover td{background:#f5f6f8}
+.cbar{width:5px;padding:0!important;border-right:none!important}
+.bn{font-weight:600;font-size:13px}
+.pill{display:inline-block;padding:2px 8px;border-radius:12px;font-size:10.5px;font-weight:700;
+ color:#fff;white-space:nowrap}
+.tag{display:inline-block;padding:1px 6px;border-radius:4px;font-size:10px;background:#eef0f5;
+ color:var(--ink2);border:1px solid var(--line);margin-right:3px;white-space:nowrap}
+.hyp{font-size:12px;color:var(--ink2);line-height:1.45;max-width:520px}
+.kill{font-size:11.5px;color:#8a4b4b;line-height:1.4;max-width:330px}
+.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.samp{min-width:112px}
+.sbar{height:7px;border-radius:4px;background:#eaecf2;overflow:hidden;margin-top:3px}
+.sbar span{display:block;height:100%;background:var(--blue)}
+.foot{margin-top:22px;font-size:11.5px;color:var(--ink3);border-top:1px solid var(--line);padding-top:13px;line-height:1.6}
+</style>
+</head>
+<body>
+<h1>Bot Fleet — Roster</h1>
+<div class="sub" id="sub"></div>
+<div id="kpis" class="wgrid"></div>
+<div id="notes"></div>
+<div class="tabs">
+  <div class="tab on" data-v="inv">▦ Inventory — what each bot IS</div>
+  <div class="tab" data-v="score">◎ Scoreboard — goal vs actual</div>
+</div>
+<div class="view on" id="v-inv"></div>
+<div class="view" id="v-score"></div>
+<div class="foot" id="foot"></div>
+
+<script>
+/* ==== DATA START ==== */
+const DATA = {
+ "bots": [
+  {
+   "bot": "IC-SPX-FastPT25-S2",
+   "champion": true,
+   "family": "SPX FastPT25 line",
+   "focus": true,
+   "hedge": "S2",
+   "hypothesis": "The legacy configuration, run as ride+S2 with no Exit Options at all, has non-negative Exp(R) per condor over ≥100 post-cutover positions. This is the RIDE BENCHMARK the greenfield PT variants are measured against — it is not expected to win, it is expected to be a clean baseline.",
+   "kill": "Exp(R) per condor < −0.02 with the bootstrap 95% CI entirely below 0, at n≥60. OR: any REMOVED_EXIT_FIRED finding — a PT firing on a bot whose PT was deleted means it is no longer the ride benchmark and the comparison is void.",
+   "max_loss": "≈$5K risk/position. Daily aggregate ≤ $10K across the SPX IC sleeve.",
+   "mechanism": "Short-premium variance risk premium on SPX 0DTE, with S2 strike-touch close capping the tail. Primitive: S2 is a MONITOR (automations side); PT25 is REMOVED from the Open Position action, not toggled off.",
+   "n": 6,
+   "pillar": "IC",
+   "pnl": 100.0,
+   "pr": "PR-01",
+   "role": "live-candidate",
+   "sample_raw": "n = 100 positions (condors), T2 paper.",
+   "sample_target": 100,
+   "signed": "2026-08-09 · ANDY — gate A7, in-chat at the S2 Day-0 sitting. Ruling recorded verbatim: \"Fill its CONFIG HASH and sign it\". SIGNED != VERIFIED. The INVERTED Step-6 check is deferred to the first trading session (2026-08-10) — the market was closed on the day this was signed — and it stays ADVISORY until D4 is answered (whether the account-level ITM action appears in a Trades list, and under what label, is UNOBSERVED; a mislabelled ITM close reads as a PT row and would kill a ride control on day one). READ THE LABEL FIRST, FIRE THE RULE SECOND. FLAGGED at signing, not a blocker: PR-02, this entry's 13:00 A/B partner, has no Template V1 and therefore cannot trade, so the 11:00-vs-13:00 comparison starts with one arm. PR-01 stands alone as the RIDE BENCHMARK and is unaffected; the cost falls on PR-02's matched-day count. CONFIG NOTE: limits are 10/10 on this bot. Per decision-card-2026-08-08 slot 2, posLimitDay/posLimit are set to 1 for the first-position read and REVERTED immediately after, with the revert HASH-PROVEN.",
+   "status": "ON",
+   "strike_fix": "",
+   "superseded": "",
+   "underlying": "SPX",
+   "unsigned": false,
+   "verdict": "Below sample"
+  },
+  {
+   "bot": "IC-SPX-Fortress-Unstopped",
+   "champion": false,
+   "family": "SPX Fortress",
+   "focus": false,
+   "hedge": "Unstopped",
+   "hypothesis": "",
+   "kill": "(a) new-sample profit factor < 1.0 at n ≥ 15; OR (b) ANY hash drift from the signed capture above → AUTOS OFF IMMEDIATELY and escalate. NO DIAGNOSIS WHILE ARMED. LAYER 2          ⚠️ OUTSTANDING — top-of-brief until confirmed. As amended by R-2026-08-17-UNSTOPPED-REOPEN-A1, the first position's Trades list must show: (a) NO Exit-Option rows — the inverted-check class used for PR-01's Day-0 verification; and (b) a close consistent with the documented mechanism = closed BY EXPIRATION, with no Cleanup and no StrikeTouch close row. Because entries are 0DTE, both legs of this check resolve the same session.",
+   "max_loss": "",
+   "mechanism": "",
+   "n": 0,
+   "pillar": "IC",
+   "pnl": 0.0,
+   "pr": "INC-01",
+   "role": "control",
+   "sample_raw": "",
+   "sample_target": null,
+   "signed": "2026-08-17 · ANDY — in-session, under R-2026-08-17-UNSTOPPED-REOPEN and its AMENDMENT 1. Signed BEFORE arming, per the ruling's capture → sign → arm order.",
+   "status": "ON",
+   "strike_fix": "",
+   "superseded": "",
+   "underlying": "SPX",
+   "unsigned": false,
+   "verdict": "Silent"
+  },
+  {
+   "bot": "IC-SPX-Fortress-Defang",
+   "champion": false,
+   "family": "SPX Fortress",
+   "focus": false,
+   "hedge": "Defang",
+   "hypothesis": "",
+   "kill": "",
+   "max_loss": "",
+   "mechanism": "",
+   "n": 0,
+   "pillar": "IC",
+   "pnl": 0.0,
+   "pr": "",
+   "role": "experiment",
+   "sample_raw": "",
+   "sample_target": null,
+   "signed": "",
+   "status": "OFF",
+   "strike_fix": "",
+   "superseded": "",
+   "underlying": "SPX",
+   "unsigned": false,
+   "verdict": "No pre-registration"
+  },
+  {
+   "bot": "QQQ-IC-0DTE-Fortress",
+   "champion": false,
+   "family": "QQQ Fortress line",
+   "focus": false,
+   "hedge": "Unstopped",
+   "hypothesis": "With PT50 and the time exit actually attached and firing, this structure has positive Exp(R) per condor. The pre-regression window (+2.9% Exp(R), 21 condors) suggested it does; that window is archive-only context and this starts at n=0.",
+   "kill": "Exp(R) per condor < 0 with the bootstrap 95% CI entirely below 0, at n≥60. OR: any EXPIRY_RATIO_FLIP finding — positions expiring instead of closing is the exact 6/12 signature, and it is a mechanics kill, not a strategy kill.",
+   "max_loss": "≈$5K risk/position. Daily aggregate ≤ $10K across the QQQ IC sleeve.",
+   "mechanism": "Short-premium VRP on QQQ 0DTE with profit-taking before the late-day gamma window. Primitives: PT50 + 15:50 time exit as a NAMED EXIT OPTION PRESET in the Open Position action, plus a flat-close Scheduled Event backstop in the AUTOMATIONS execution class.",
+   "n": 0,
+   "pillar": "IC",
+   "pnl": 0.0,
+   "pr": "PR-03",
+   "role": "experiment",
+   "sample_raw": "n = 100 positions.",
+   "sample_target": 100,
+   "signed": "..............................",
+   "status": "OFF",
+   "strike_fix": "Y",
+   "superseded": "",
+   "underlying": "QQQ",
+   "unsigned": true,
+   "verdict": "UNSIGNED"
+  },
+  {
+   "bot": "QQQ-IC-0DTE-Fortress-NoPT50",
+   "champion": false,
+   "family": "QQQ Fortress line",
+   "focus": false,
+   "hedge": "Unstopped",
+   "hypothesis": "Removing the profit target improves Exp(R) per condor versus the PT50 arm — i.e. PT50 caps winners more than it protects. The genuine A/B: PT50 vs none, everything else matched.",
+   "kill": "Exp(R) per condor < 0 with the CI entirely below 0 at n≥60. OR any REMOVED_EXIT_FIRED finding at the PT50 rung — a PT firing here voids the A/B.",
+   "max_loss": "≈$5K risk/position, inside the same $10K QQQ IC daily aggregate.",
+   "mechanism": "Same VRP source. The difference is exit policy only. Primitives: 15:50 time exit + flat-close Scheduled Event backstop. NO PT50 — removed from the action, not toggled off.",
+   "n": 0,
+   "pillar": "IC",
+   "pnl": 0.0,
+   "pr": "PR-04",
+   "role": "experiment",
+   "sample_raw": "n = 100 positions, matched days with the Fortress arm.",
+   "sample_target": 100,
+   "signed": "2026-08-09 - ANDY - gate cleared at S2b, in-chat. Runbook Step 4's precondition (Template V1) is MET as of this sitting, and it was this entry's only block: there is no allocation gate here, unlike PR02-R1 - both readings agree at $100,000. SIGNED != VERIFIED. Step 6 (the Trades list carries a TIME-EXIT row and NO PT row, plus BACKSTOP_CAUGHT_IT NEGATIVE) is DEFERRED to 2026-08-10. FIRST-TRADING-DAY CAPTURE OWED 2026-08-10. CONFIG NOTE: limits read 2/2 at signing - ALREADY the value Andy ruled for this bot in-chat at S2b (\"2 per day / 2 at once\", condor-aware). NO EDIT WAS MADE, so nothing forked and there is nothing to revert. Allocation $100,000 untouched. CARRIED, NOT BLOCKING: PR04-R3 / S2-R4 - `rdata.next` = 1786369500000 (09:45 ET Monday) against a rendered \"Every week on Mon-Fri, 3:52pm EST\". It reproduces to the millisecond on `GF-QQQ-IC-Ride`, a different bot with a different backstop object, which is consistent with a bot-level next-scan stamp - but that is an INFERENCE and it discharges nothing. Not re-timed. Monday's first 15:52 fire disambiguates it. SIGNED WITH AN OPEN GATE NAMED: finding S2b-R3 - this bot's EXIT OPTIONS read OFF (`disableExits` 1) at signing, while the VERIFICATION line above requires a TIME-EXIT row and a NEGATIVE BACKSTOP_CAUGHT_IT. With Exit Options off the inherited 15:50 exit cannot fire and the 15:52 backstop becomes the closing mechanism by construction. THIS SIGNATURE DOES NOT AUTHORIZE SWITCH-ON. The bot stays OFF until that finding is ruled. See the S2b session-log entry.",
+   "status": "ON",
+   "strike_fix": "Y",
+   "superseded": "",
+   "underlying": "QQQ",
+   "unsigned": true,
+   "verdict": "UNSIGNED"
+  },
+  {
+   "bot": "QQQ-IC-0DTE-Fortress-NoFilter",
+   "champion": false,
+   "family": "QQQ Fortress line",
+   "focus": false,
+   "hedge": "S2",
+   "hypothesis": "",
+   "kill": "",
+   "max_loss": "",
+   "mechanism": "",
+   "n": 0,
+   "pillar": "IC",
+   "pnl": 0.0,
+   "pr": "",
+   "role": "experiment",
+   "sample_raw": "",
+   "sample_target": null,
+   "signed": "",
+   "status": "OFF",
+   "strike_fix": "Y",
+   "superseded": "",
+   "underlying": "QQQ",
+   "unsigned": false,
+   "verdict": "No pre-registration"
+  },
+  {
+   "bot": "QQQ-IC-0DTE-Fortress-S2",
+   "champion": false,
+   "family": "QQQ Fortress line",
+   "focus": false,
+   "hedge": "S2",
+   "hypothesis": "",
+   "kill": "",
+   "max_loss": "",
+   "mechanism": "",
+   "n": 0,
+   "pillar": "IC",
+   "pnl": 0.0,
+   "pr": "",
+   "role": "experiment",
+   "sample_raw": "",
+   "sample_target": null,
+   "signed": "",
+   "status": "OFF",
+   "strike_fix": "Y",
+   "superseded": "",
+   "underlying": "QQQ",
+   "unsigned": false,
+   "verdict": "No pre-registration"
+  },
+  {
+   "bot": "QQQ-IC-0DTE-HedgeA-S1",
+   "champion": false,
+   "family": "QQQ hedge tournament",
+   "focus": false,
+   "hedge": "S1",
+   "hypothesis": "",
+   "kill": "",
+   "max_loss": "",
+   "mechanism": "",
+   "n": 0,
+   "pillar": "IC",
+   "pnl": 0.0,
+   "pr": "",
+   "role": "experiment",
+   "sample_raw": "",
+   "sample_target": null,
+   "signed": "",
+   "status": "OFF",
+   "strike_fix": "Y",
+   "superseded": "yes",
+   "underlying": "QQQ",
+   "unsigned": false,
+   "verdict": "No pre-registration"
+  },
+  {
+   "bot": "QQQ-IC-0DTE-HedgeB-S2",
+   "champion": false,
+   "family": "QQQ hedge tournament",
+   "focus": false,
+   "hedge": "S2",
+   "hypothesis": "",
+   "kill": "",
+   "max_loss": "",
+   "mechanism": "",
+   "n": 0,
+   "pillar": "IC",
+   "pnl": 0.0,
+   "pr": "",
+   "role": "experiment",
+   "sample_raw": "",
+   "sample_target": null,
+   "signed": "",
+   "status": "OFF",
+   "strike_fix": "Y",
+   "superseded": "yes",
+   "underlying": "QQQ",
+   "unsigned": false,
+   "verdict": "No pre-registration"
+  },
+  {
+   "bot": "QQQ-IC-0DTE-HedgeC-S3",
+   "champion": false,
+   "family": "QQQ hedge tournament",
+   "focus": false,
+   "hedge": "S3",
+   "hypothesis": "",
+   "kill": "",
+   "max_loss": "",
+   "mechanism": "",
+   "n": 0,
+   "pillar": "IC",
+   "pnl": 0.0,
+   "pr": "",
+   "role": "experiment",
+   "sample_raw": "",
+   "sample_target": null,
+   "signed": "",
+   "status": "OFF",
+   "strike_fix": "Y",
+   "superseded": "yes",
+   "underlying": "QQQ",
+   "unsigned": false,
+   "verdict": "No pre-registration"
+  },
+  {
+   "bot": "QQQ-IC-0DTE-HedgeD-Conditional",
+   "champion": false,
+   "family": "QQQ hedge tournament",
+   "focus": false,
+   "hedge": "Conditional",
+   "hypothesis": "",
+   "kill": "",
+   "max_loss": "",
+   "mechanism": "",
+   "n": 0,
+   "pillar": "IC",
+   "pnl": 0.0,
+   "pr": "",
+   "role": "experiment",
+   "sample_raw": "",
+   "sample_target": null,
+   "signed": "",
+   "status": "OFF",
+   "strike_fix": "",
+   "superseded": "yes",
+   "underlying": "QQQ",
+   "unsigned": false,
+   "verdict": "No pre-registration"
+  },
+  {
+   "bot": "QQQ-IC-0DTE-HedgeTest",
+   "champion": false,
+   "family": "QQQ hedge tournament",
+   "focus": false,
+   "hedge": "Conditional",
+   "hypothesis": "",
+   "kill": "",
+   "max_loss": "",
+   "mechanism": "",
+   "n": 0,
+   "pillar": "IC",
+   "pnl": 0.0,
+   "pr": "",
+   "role": "experiment",
+   "sample_raw": "",
+   "sample_target": null,
+   "signed": "",
+   "status": "OFF",
+   "strike_fix": "Y",
+   "superseded": "yes",
+   "underlying": "QQQ",
+   "unsigned": false,
+   "verdict": "No pre-registration"
+  },
+  {
+   "bot": "QQQ-IC-0DTE-Baseline",
+   "champion": false,
+   "family": "QQQ controls / baseline",
+   "focus": false,
+   "hedge": "Unstopped",
+   "hypothesis": "",
+   "kill": "",
+   "max_loss": "",
+   "mechanism": "",
+   "n": 0,
+   "pillar": "IC",
+   "pnl": 0.0,
+   "pr": "",
+   "role": "control",
+   "sample_raw": "",
+   "sample_target": null,
+   "signed": "",
+   "status": "OFF",
+   "strike_fix": "Y",
+   "superseded": "yes",
+   "underlying": "QQQ",
+   "unsigned": false,
+   "verdict": "No pre-registration"
+  },
+  {
+   "bot": "QQQ-IC-0DTE-Raw-HoldToExp",
+   "champion": false,
+   "family": "QQQ controls / baseline",
+   "focus": false,
+   "hedge": "Unstopped",
+   "hypothesis": "",
+   "kill": "",
+   "max_loss": "",
+   "mechanism": "",
+   "n": 0,
+   "pillar": "IC",
+   "pnl": 0.0,
+   "pr": "",
+   "role": "control",
+   "sample_raw": "",
+   "sample_target": null,
+   "signed": "",
+   "status": "OFF",
+   "strike_fix": "Y",
+   "superseded": "",
+   "underlying": "QQQ",
+   "unsigned": false,
+   "verdict": "No pre-registration"
+  },
+  {
+   "bot": "QQQ-IC-0DTE-InverseFilter-HoldToExp",
+   "champion": false,
+   "family": "QQQ controls / baseline",
+   "focus": false,
+   "hedge": "Unstopped",
+   "hypothesis": "",
+   "kill": "",
+   "max_loss": "",
+   "mechanism": "",
+   "n": 0,
+   "pillar": "IC",
+   "pnl": 0.0,
+   "pr": "",
+   "role": "experiment",
+   "sample_raw": "",
+   "sample_target": null,
+   "signed": "",
+   "status": "OFF",
+   "strike_fix": "Y",
+   "superseded": "",
+   "underlying": "QQQ",
+   "unsigned": false,
+   "verdict": "No pre-registration"
+  },
+  {
+   "bot": "QQQ-IC-0DTE-VIX25-Range075-PT50",
+   "champion": false,
+   "family": "Range075 experiments",
+   "focus": false,
+   "hedge": "PT50",
+   "hypothesis": "",
+   "kill": "",
+   "max_loss": "",
+   "mechanism": "",
+   "n": 0,
+   "pillar": "IC",
+   "pnl": 0.0,
+   "pr": "",
+   "role": "experiment",
+   "sample_raw": "",
+   "sample_target": null,
+   "signed": "",
+   "status": "OFF",
+   "strike_fix": "Y",
+   "superseded": "",
+   "underlying": "QQQ",
+   "unsigned": false,
+   "verdict": "No pre-registration"
+  },
+  {
+   "bot": "QQQ-IC-0DTE-Range075-PT50",
+   "champion": false,
+   "family": "Range075 experiments",
+   "focus": false,
+   "hedge": "PT50",
+   "hypothesis": "",
+   "kill": "",
+   "max_loss": "",
+   "mechanism": "",
+   "n": 0,
+   "pillar": "IC",
+   "pnl": 0.0,
+   "pr": "",
+   "role": "experiment",
+   "sample_raw": "",
+   "sample_target": null,
+   "signed": "",
+   "status": "OFF",
+   "strike_fix": "Y",
+   "superseded": "",
+   "underlying": "QQQ",
+   "unsigned": false,
+   "verdict": "No pre-registration"
+  },
+  {
+   "bot": "QQQ-IC-0DTE-Range075-PT50-Wide2-155PM",
+   "champion": false,
+   "family": "Range075 experiments",
+   "focus": false,
+   "hedge": "PT50",
+   "hypothesis": "",
+   "kill": "",
+   "max_loss": "",
+   "mechanism": "",
+   "n": 0,
+   "pillar": "IC",
+   "pnl": 0.0,
+   "pr": "",
+   "role": "experiment",
+   "sample_raw": "",
+   "sample_target": null,
+   "signed": "",
+   "status": "OFF",
+   "strike_fix": "Y",
+   "superseded": "",
+   "underlying": "QQQ",
+   "unsigned": false,
+   "verdict": "No pre-registration"
+  },
+  {
+   "bot": "QQQ-IC-0DTE-Range075-PT50-Wide2-1230PM",
+   "champion": false,
+   "family": "Range075 experiments",
+   "focus": false,
+   "hedge": "PT50",
+   "hypothesis": "",
+   "kill": "",
+   "max_loss": "",
+   "mechanism": "",
+   "n": 0,
+   "pillar": "IC",
+   "pnl": 0.0,
+   "pr": "",
+   "role": "experiment",
+   "sample_raw": "",
+   "sample_target": null,
+   "signed": "",
+   "status": "OFF",
+   "strike_fix": "Y",
+   "superseded": "",
+   "underlying": "QQQ",
+   "unsigned": false,
+   "verdict": "No pre-registration"
+  },
+  {
+   "bot": "3DTE $140-$350",
+   "champion": false,
+   "family": "Live mirrors",
+   "focus": true,
+   "hedge": "",
+   "hypothesis": "Not a strategy hypothesis — a FUNDING question: does this mirror reproduce its source's claimed edge closely enough to justify live capital? Watch-only until that is answered; never refactored. Pre-lapse anchor (`mirror_baseline.csv`): n=46, mean R +0.0156, median R +0.0423, sd 0.1545, worst R −1.0000, maxDD 1.0000R, win 95.7%. DRAFT verdict today: **WATCH — priority 1, nearest to fundable; fails on SAMPLE alone** (`mirror-funding-memo-2026-08-05.md` §6).",
+   "kill": "The shared funding bar, all five conjuncts (frame above; `oa-mirror-reference.md` §2.6). Failing any after ≥20 completed post-cutover positions = DEFUND, switch OFF. ⚠️ The binding conjunct here is **instance profitability, not win rate**: the source runs 91.3% trade WR against **46.0% instance profitability**, and §2.6 names this bot as the trap that conjunct exists for. Avg loss ≈10× avg win with no stop, so one sustained multi-day breach erases 30+ wins.",
+   "max_loss": "Paper allocation **$5K**, deliberately small — one bad position is 20%+ of it. Source avg win / avg loss $173 / −$1,665 (`oa-mirror-reference.md` §5.2); worst realised in the baseline −1.0000R. No stop by construction.",
+   "mechanism": "Short-DTE SPX premium decay, auto-tuned to whatever premium the day offers. Symmetric $10-wide iron condor at 3 DTE; 22-tier waterfall short-strike ladder ($140→$350 in $10 steps, first tier clearing the Return% threshold fires); 10:00–10:10am entry window. Profit-take only — 90% decay on 0DTE behind a 1pm gate, 70% after day 1, trade price ≥$0.50; NO stop, removed at v8 by the author (`oa-mirror-reference.md` §5.2). Primitive: one entry scanner + Exit Options profit gates. Mirrored as captured — the mechanism is the SOURCE's, not ours.",
+   "n": 1,
+   "pillar": "OA-Mirror",
+   "pnl": 45.0,
+   "pr": "PR-07",
+   "role": "mirror-watch",
+   "sample_raw": "n = 20 completed post-cutover positions for the funding decision; n = 100 over ≥6 months **including a B3 regime change** for any edge claim. At its observed cadence (0.561 positions/day, memo §7) n=100 arrives ≈3.2 months from a resumed clock — the only mirror that gets there quickly.",
+   "sample_target": 20,
+   "signed": "2026-08-09 · ANDY — in-chat at the S2 Day-0 sitting. Ruling recorded verbatim: \"Sign the seven that can trade (ledger reading)\". The A-27c carry in the CONFIG HASH field above does NOT block this signature (decision-card-2026-08-08 slot 6, OPTION 2). Signed for Day-0 2026-08-10; LEDGER_START = 2026-08-10. SIGNED != VERIFIED — runbook §4 Step 6's order-level Trades-list check is still required before this bot may trade, and rider 2's first-trading-day capture is still owed. [PR-07]",
+   "status": "ON",
+   "strike_fix": "",
+   "superseded": "",
+   "underlying": "SPX",
+   "unsigned": false,
+   "verdict": "Below sample"
+  },
+  {
+   "bot": "Nigiri-Paper-v1",
+   "champion": false,
+   "family": "Live mirrors",
+   "focus": true,
+   "hedge": "",
+   "hypothesis": "FUNDING question, not a strategy one: does this mirror reproduce its source's claimed edge closely enough to justify live capital? Pre-lapse anchor: n=38, mean R +0.0102, median R +0.0102, **sd 0.0065 — the tightest distribution in the fleet**, worst R 0.0000, maxDD 0.0000R, win 94.7%. DRAFT verdict: **WATCH — priority 2** (memo §6).",
+   "kill": "The shared funding bar, all five conjuncts (§2.6). Failing any after ≥20 completed post-cutover positions = DEFUND, switch OFF. ⚠️ Two things this bar cannot see and a signer must: (a) **the loss tail is UNOBSERVED — zero losing positions in n=38**, so `maxDD 0.0000R` is an absence of evidence, not a risk statement; (b) **the per-position magnitude is tiny** (median +0.0102R), so the edge must be shown to survive real fills before it is ever sized.",
+   "max_loss": "Paper allocation **$10K**; bounded **$500 max loss per trade** by the $5 width. A single position consumes ~49% of allocation by design (2–4 concurrent intended) — validated as normal, not a sizing error. Concentration: all SPY; the named kill shape is a gap-down.",
+   "mechanism": "Short-premium collection on a 0.05-delta, $5-wide short put spread, one at a time, with day-of-week DTE routing to the nearest Friday (Mon 4 / Tue 3 / Wed 2 / Thu 8 / Fri 7 — min 2, max 8 DTE, avoiding 0–1 DTE gamma). Exits: a 7-Day Accelerated Profit monitor (close if return% > 10 × days-in-trade), a 0-Day ITM check at 3pm on expiry day, and a 75% default profit target. **No stop by design** — the author's stop is position sizing and spread width (`oa-mirror-reference.md` §5.2).",
+   "n": 4,
+   "pillar": "OA-Mirror",
+   "pnl": 120.0,
+   "pr": "PR-08",
+   "role": "mirror-watch",
+   "sample_raw": "n = 20 completed post-cutover positions for funding; n = 100 over ≥6 months including a B3 regime change for an edge claim. Observed cadence 0.458/day → n=100 ≈4.4 months from a resumed clock (memo §7).",
+   "sample_target": 20,
+   "signed": "2026-08-09 · ANDY — in-chat at the S2 Day-0 sitting. Ruling recorded verbatim: \"Sign the seven that can trade (ledger reading)\". The A-27c carry in the CONFIG HASH field above does NOT block this signature (decision-card-2026-08-08 slot 6, OPTION 2). Signed for Day-0 2026-08-10; LEDGER_START = 2026-08-10. SIGNED != VERIFIED — runbook §4 Step 6's order-level Trades-list check is still required before this bot may trade, and rider 2's first-trading-day capture is still owed. [PR-08]",
+   "status": "ON",
+   "strike_fix": "",
+   "superseded": "",
+   "underlying": "",
+   "unsigned": false,
+   "verdict": "Below sample"
+  },
+  {
+   "bot": "QQQ long call",
+   "champion": false,
+   "family": "Straddler mirrors",
+   "focus": true,
+   "hedge": "",
+   "hypothesis": "FUNDING question — and it is currently **unanswerable**, which is this entry's whole content. Pre-lapse anchor: n=6, mean R +0.3401, median R +0.3045, worst R +0.2521, maxDD 0.0000R, sum R +2.040, win 100%. ⛔ **DO NOT READ THE +0.3401.** The baseline is a closed-position anchor and this bot's **4 open positions (≈$13K risk, ≈−$10.8K unrealized at the 2026-07-30 capture) were never in the source.** On those figures the lifetime record is near −1.3R over 10 positions, i.e. **the sign flips and 6-of-6 becomes 6-of-10** (memo §3 — labelled an ESTIMATE there, and it stays one here). DRAFT verdict: **WATCH — RECORD INCOMPLETE; verdict BLOCKED until Andy's ride-or-close is executed.**",
+   "kill": "The shared funding bar, all five conjuncts (§2.6), after ≥20 completed post-cutover positions. ⛔ **PRIOR CONDITION — no funding verdict may be taken, in either direction, until the ride-or-close call on the 4 open positions is made AND executed**, because that call determines whether the −$10.8K becomes a realised part of the record (memo §3; `build-plan.md` §3). A verdict taken before it is a verdict on a record that does not exist.",
+   "max_loss": "Paper allocation **$30K** (10%-NL × 10 positions default). ≈$1,128 average loss, ≈$2,000–$2,500 max per contract; a documented real drawdown of **$6,500+ on $30K paper** in the March-2025 correction (`oa-mirror-reference.md` §5.2). ⛔ Plus the ≈$13K of legacy open risk above, which is **live exposure, not a modelled figure**.",
+   "mechanism": "Not long-premium asymmetry, whatever the shape suggests: a **long call debit spread** (0.5Δ long / 0.1Δ short, 90 DTE, QQQ) with a **low 25% profit target** that is easy to hit on small rallies inside 60 days, plus the 2023–2026 tech tailwind. Zero inputs, entirely hard-coded; a pure binary scanner. Redundant dual exit: 25% PT (Exit Options) + a 30-market-day time exit. **No stop, no regime filter.** The author's own words: *\"about as bullish as it gets, will get destroyed in a bear market\"* (`oa-mirror-reference.md` §5.2).",
+   "n": 0,
+   "pillar": "OA-Mirror",
+   "pnl": 0.0,
+   "pr": "PR-09",
+   "role": "mirror-watch",
+   "sample_raw": "n = 20 completed post-cutover positions for funding; n = 100 over ≥6 months including a B3 regime change for an edge claim. ⚠️ Observed cadence 0.102/day → **n=100 is ≈30.4 months away** (memo §7). Under the bar as written this bot is not fundable on any useful horizon; Tier M would change that and is **DRAFT, not in force**.",
+   "sample_target": 20,
+   "signed": "NOT SIGNED — 2026-08-09. Andy's gate-A6 ruling at the S2 Day-0 sitting: RIDE on all five open mirror positions. Runbook §4 Step 2 item 3 therefore keeps this bot's EXIT OPTIONS OFF so the ride survives Step 3, and an unsigned bot never reaches Step 7. **BOT STAYS OFF for the whole of Day-0.** FORCING OBSERVATION (finding S2-R1, first-hand 2026-08-09, capture data/captures/2026-08-09-s2/step2-five-positions-2026-08-09.txt): this bot's 4 open QQQ long call spreads ALREADY satisfy the per-position EXPIRATION rung read off their own Exit Options screen, so arming EXIT OPTIONS would close them at Monday's first Exit-Options scan — a capital disposition executed by a re-arm sweep. Recorded, not acted on. REOPEN: when the ride ends (closed or expired), or on Andy's ruling. [PR-09]",
+   "status": "OFF",
+   "strike_fix": "",
+   "superseded": "",
+   "underlying": "QQQ",
+   "unsigned": true,
+   "verdict": "UNSIGNED"
+  },
+  {
+   "bot": "Friday 14 DTE Broken Wing IB (B-70)",
+   "champion": false,
+   "family": "Live mirrors",
+   "focus": true,
+   "hedge": "",
+   "hypothesis": "FUNDING question. Pre-lapse anchor: n=7, mean R +0.0893, median R +0.0773, sd 0.0337, worst R **+0.0634 (no losing position)**, maxDD 0.0000R, win 100%. DRAFT verdict: **WATCH — no verdict possible. A perfect record at n=7 is not evidence** (memo §6).",
+   "kill": "The shared funding bar, all five conjuncts (§2.6), after ≥20 completed post-cutover positions. ⚠️ Two things the bar cannot see: (a) the loss tail is **unobserved** here (0 losers in n=7); (b) **live operational cost is absent from the record** — ITM call legs have wide bid/ask, closes fail repeatedly, one operator paid $150 to close manually, and paper DIT runs ≈1/5 of live DIT, so paper overstates. ⛔ **Do not \"fix\" the OFF stop.** Enabling it costs $1,792 of P/L to save ≈$290 of drawdown — 6.2× net edge destruction on the author's own 96-trade disclosure. That is a source design choice; changing it makes this no longer a mirror.",
+   "max_loss": "Paper allocation **$10K**; structural max ≈**$2,000/contract** — the wings, not a stop, are the bound. Named kill shape: a fast bear gap-down >70 points inside 14 days (the one ≈$1,900 loss in the author's set was the Feb-2025 tariff shock). Weekend gap risk is unavoidable by construction.",
+   "mechanism": "Positive theta from a **60/40 broken-wing iron butterfly placed 70 points below the money** — both shorts on one strike, long put 60 below (wider, because that is the direction it moves against), long call 40 above. Fixed-dollar offset distance logic; exact-DTE match on Fridays (14 default; skips the week if the exact DTE is unavailable), 10:30–11:05am, tag-gated by a 9:31am event. Three exit layers: $105/contract PT, a **$1,105/contract stop that is a switch and is deliberately OFF**, and a dynamic PT reduction near expiry. **The structure is the hedge** (`oa-mirror-reference.md` §5.2).",
+   "n": 0,
+   "pillar": "OA-Mirror",
+   "pnl": 0.0,
+   "pr": "PR-10",
+   "role": "mirror-watch",
+   "sample_raw": "n = 20 completed post-cutover positions for funding; n = 100 over ≥6 months including a B3 regime change for an edge claim. ⚠️ Cadence 0.111/day → **n=100 ≈27.5 months** (memo §7); un-fundable on a useful horizon under the bar as written. Tier M is DRAFT, not in force.",
+   "sample_target": 20,
+   "signed": "2026-08-09 · ANDY — in-chat at the S2 Day-0 sitting. Ruling recorded verbatim: \"Sign the seven that can trade (ledger reading)\". The A-27c carry in the CONFIG HASH field above does NOT block this signature (decision-card-2026-08-08 slot 6, OPTION 2). Signed for Day-0 2026-08-10; LEDGER_START = 2026-08-10. SIGNED != VERIFIED — runbook §4 Step 6's order-level Trades-list check is still required before this bot may trade, and rider 2's first-trading-day capture is still owed. [PR-10]",
+   "status": "ON",
+   "strike_fix": "",
+   "superseded": "",
+   "underlying": "",
+   "unsigned": false,
+   "verdict": "Silent"
+  },
+  {
+   "bot": "Trendy-Paper-v1",
+   "champion": false,
+   "family": "Live mirrors",
+   "focus": false,
+   "hedge": "",
+   "hypothesis": "FUNDING question. Pre-lapse anchor: n=15, mean R **−0.0365** but median R **+0.0405**, sd 0.2822, worst R −0.9842, maxDD 1.2877R, win 80.0%. DRAFT verdict: **WATCH — tail undetermined.** The negative mean is **one max-loss event**; remove it and the sign flips. n=15 cannot separate \"an unlucky draw from a positive process\" from \"a process whose tail eats it\", and saying which is which is exactly what this entry refuses to do in advance (memo §4, §6).",
+   "kill": "The shared funding bar, all five conjuncts (§2.6), after ≥20 completed post-cutover positions. ⚠️ Two structural facts a signer must hold: (a) the **hedge can INCREASE the tail** — the documented failure mode is a V-shaped reversal after breach in which both legs lose, ≈200% of intended loss; (b) the **breakeven win-rate buffer is ~5 points** — at ≈83% WR expectancy flips negative, against 87.9% at source and 80.0% in the baseline. That is the thinnest buffer of the seven and it is already inside its own margin.",
+   "max_loss": "Paper allocation **$10–15K**; unhedged max ≈**$1,000/contract** at $10 width — but see the V-reversal shape above, where the realised loss exceeds the unhedged bound. Not live-ready below a $5K account.",
+   "mechanism": "Short-premium collection on a trend-gated 0.15-delta, $10-wide short put spread at 10 DTE, which **dynamically hedges into an asymmetric iron condor on breach**. Entry gates: not already hedging; VIX < 40 AND price > 200-day SMA; short-put OI > 500; exactly 0 SPS open. Exits: 90% absolute PT + SmartStops + an Exit Options preset. Hedge manager closes the call spread <1 DTE if the underlying is above the short call (`oa-mirror-reference.md` §5.2).",
+   "n": 1,
+   "pillar": "OA-Mirror",
+   "pnl": 40.0,
+   "pr": "PR-11",
+   "role": "mirror-watch",
+   "sample_raw": "n = 20 completed post-cutover positions for funding; n = 100 over ≥6 months including a B3 regime change for an edge claim. ⚠️ Cadence 0.197/day → **n=100 ≈14.1 months** (memo §7). Tier M is DRAFT, not in force.",
+   "sample_target": 20,
+   "signed": "2026-08-09 · ANDY — in-chat at the S2 Day-0 sitting. Ruling recorded verbatim: \"Sign the seven that can trade (ledger reading)\". The A-27c carry in the CONFIG HASH field above does NOT block this signature (decision-card-2026-08-08 slot 6, OPTION 2). Signed for Day-0 2026-08-10; LEDGER_START = 2026-08-10. SIGNED != VERIFIED — runbook §4 Step 6's order-level Trades-list check is still required before this bot may trade, and rider 2's first-trading-day capture is still owed. [PR-11]",
+   "status": "ON",
+   "strike_fix": "",
+   "superseded": "",
+   "underlying": "",
+   "unsigned": false,
+   "verdict": "Below sample"
+  },
+  {
+   "bot": "60min-ORB-10W-Paper-v1",
+   "champion": false,
+   "family": "Live mirrors",
+   "focus": false,
+   "hedge": "",
+   "hypothesis": "FUNDING question. Pre-lapse anchor: n=12, mean R **−0.0328** but median R **+0.0786**, sd 0.3885, worst R −1.0000, maxDD 1.0000R, win 83.3%. DRAFT verdict: **WATCH — tail undetermined**, the same shape as `Trendy-Paper-v1` (memo §4, §6).",
+   "kill": "The shared funding bar, all five conjuncts (§2.6), after ≥20 completed post-cutover positions. ⚠️ **Conjunct 3 has a weak referent here**: the source is tagged *\"Backtest: None\"* and is community-validated only, so \"win rate within ~10% of the source's claim\" is measured against a leaderboard figure and not against a disclosed backtest. State which number is being used when the conjunct is evaluated, or the conjunct is unfalsifiable.",
+   "max_loss": "Paper allocation **$10K**; 10-wide SPX 0DTE credit spread with a built-in $140 stop; source avg loss −$326 against −$650 for the wide-wing sibling. Worst realised in the baseline −1.0000R, so the stop is not a guarantee.",
+   "mechanism": "Fading a failed 60-minute opening-range breakout: an SPX 0DTE **10-wide** short put OR call credit spread with the short strike at the ORB level ($0.01 buffer), a **built-in $140 stop and $50 profit target**, min credit $0.70, Mon/Tue/Wed/Fri only, FOMC excluded, entries before 2pm. The narrow wing pre-commits the loss cap at entry rather than relying on stop execution (`oa-mirror-reference.md` §5.2).",
+   "n": 4,
+   "pillar": "OA-Mirror",
+   "pnl": 0.0,
+   "pr": "PR-12",
+   "role": "mirror-watch",
+   "sample_raw": "n = 20 completed post-cutover positions for funding; n = 100 over ≥6 months including a B3 regime change for an edge claim. ⚠️ Cadence 0.250/day → **n=100 ≈11.6 months** (memo §7). Tier M is DRAFT, not in force — and the memo explicitly doubts the Tier-M defined-risk carve-out applies to a **stop-managed** strategy, because a stop is an execution promise and this fleet has already paid for the difference between a promised exit and an executed one (§7a Q3).",
+   "sample_target": 20,
+   "signed": "2026-08-09 · ANDY — in-chat at the S2 Day-0 sitting. Ruling recorded verbatim: \"Sign the seven that can trade (ledger reading)\". The A-27c carry in the CONFIG HASH field above does NOT block this signature (decision-card-2026-08-08 slot 6, OPTION 2). Signed for Day-0 2026-08-10; LEDGER_START = 2026-08-10. SIGNED != VERIFIED — runbook §4 Step 6's order-level Trades-list check is still required before this bot may trade, and rider 2's first-trading-day capture is still owed. [PR-12]",
+   "status": "ON",
+   "strike_fix": "",
+   "superseded": "",
+   "underlying": "SPX",
+   "unsigned": false,
+   "verdict": "Below sample"
+  },
+  {
+   "bot": "Weekly-IB-SPY-Paper-v1",
+   "champion": false,
+   "family": "Killed mirrors",
+   "focus": false,
+   "hedge": "",
+   "hypothesis": "",
+   "kill": "",
+   "max_loss": "",
+   "mechanism": "",
+   "n": 0,
+   "pillar": "OA-Mirror",
+   "pnl": 0.0,
+   "pr": "",
+   "role": "mirror-watch",
+   "sample_raw": "",
+   "sample_target": null,
+   "signed": "",
+   "status": "OFF",
+   "strike_fix": "",
+   "superseded": "kill",
+   "underlying": "SPY",
+   "unsigned": false,
+   "verdict": "No pre-registration"
+  },
+  {
+   "bot": "1-45pm-Sandwich-Paper-v1",
+   "champion": false,
+   "family": "Killed mirrors",
+   "focus": false,
+   "hedge": "",
+   "hypothesis": "",
+   "kill": "",
+   "max_loss": "",
+   "mechanism": "",
+   "n": 0,
+   "pillar": "OA-Mirror",
+   "pnl": 0.0,
+   "pr": "",
+   "role": "mirror-watch",
+   "sample_raw": "",
+   "sample_target": null,
+   "signed": "",
+   "status": "OFF",
+   "strike_fix": "",
+   "superseded": "kill",
+   "underlying": "",
+   "unsigned": false,
+   "verdict": "No pre-registration"
+  },
+  {
+   "bot": "Opening Range Breakout 60m",
+   "champion": false,
+   "family": "Killed mirrors",
+   "focus": false,
+   "hedge": "",
+   "hypothesis": "",
+   "kill": "",
+   "max_loss": "",
+   "mechanism": "",
+   "n": 0,
+   "pillar": "OA-Mirror",
+   "pnl": 0.0,
+   "pr": "",
+   "role": "mirror-watch",
+   "sample_raw": "",
+   "sample_target": null,
+   "signed": "",
+   "status": "OFF",
+   "strike_fix": "",
+   "superseded": "kill",
+   "underlying": "",
+   "unsigned": false,
+   "verdict": "No pre-registration"
+  },
+  {
+   "bot": "Tasty Condor",
+   "champion": false,
+   "family": "Straddler mirrors",
+   "focus": false,
+   "hedge": "",
+   "hypothesis": "",
+   "kill": "",
+   "max_loss": "",
+   "mechanism": "",
+   "n": 0,
+   "pillar": "OA-Mirror",
+   "pnl": 0.0,
+   "pr": "PR-RC-01   (ride-or-close, not a bot)",
+   "role": "mirror-watch",
+   "sample_raw": "",
+   "sample_target": null,
+   "signed": "2026-08-09 · ANDY — in-chat at the S2 Day-0 sitting, gate A6, ruling recorded verbatim: \"Ride: leave both bots' EXIT OPTIONS OFF\".",
+   "status": "OFF",
+   "strike_fix": "",
+   "superseded": "",
+   "underlying": "",
+   "unsigned": true,
+   "verdict": "UNSIGNED"
+  },
+  {
+   "bot": "IC-SPX-FastPT25-S2-130PM",
+   "champion": false,
+   "family": "SPX FastPT25 line",
+   "focus": false,
+   "hedge": "S2",
+   "hypothesis": "A 1:30 PM entry produces a materially lower short-strike touch rate than the 11:00 entry, and that difference shows up as higher Exp(R) per condor. The A/B partner above; ONLY entry time differs.",
+   "kill": "Exp(R) per condor is not better than the 11:00 arm's by ≥0.01 at n≥60 with non-overlapping bootstrap CIs. A null result kills the ENTRY-TIME question, not the bot.",
+   "max_loss": "≈$5K risk/position, inside the same $10K SPX IC daily aggregate.",
+   "mechanism": "Less time to expiry = less path for the underlying to reach the short strike. The v1 S2 diagnostic located the bleed at touch FREQUENCY (~40% of legs), not at the hedge — this tests the cheapest lever on that. Primitive: a General time-of-day decision node, verified present, not assumed.",
+   "n": 14,
+   "pillar": "IC",
+   "pnl": 3850.0,
+   "pr": "PR-02",
+   "role": "experiment",
+   "sample_raw": "n = 100 positions, matched days with the 11:00 arm.",
+   "sample_target": 100,
+   "signed": "2026-08-09 - ANDY - gate cleared at S2b, in-chat. Runbook Step 4's precondition (Template V1) is MET as of this sitting; PR02-R1 (allocation $50,000 STANDS) was ruled 2026-08-08 and is DISCHARGED, and it was the only other block on this entry. SIGNED != VERIFIED. The INVERTED Step-6 check (NO PT row, NO exit-trigger row, and the S2 monitor observed firing) is DEFERRED to the first trading session, 2026-08-10 - the market was closed on the day this was signed - and it stays ADVISORY until D4 is answered, exactly as on PR-01. READ THE LABEL FIRST, FIRE THE RULE SECOND. FIRST-TRADING-DAY CAPTURE — OWED 2026-08-10, DISCHARGED BY SUBSTITUTE 2026-08-18 (see amendment below). CONFIG NOTE: limits read 10/10 at signing and were set to 2/2 in the same sitting on Andy's in-chat ruling - \"2 per day / 2 at once\", condor-aware: an IC is TWO positions, so 2/2 IS one condor per day, one at a time. Per slot-2 ruling 2a a position-limit edit does NOT fork this signature. Allocation untouched at $50,000. EXIT OPTIONS stays OFF by design - this is the -130PM Exit-Option-free control (oa-ops-runbook.md 4.3, build-plan.md 4). Do not \"fix\" it. A/B NOTE: PR-01, this entry's 11:00 partner, went ON at S2b the same sitting, so the 11:00-vs-13:00 comparison starts with BOTH arms live - the one-armed start flagged in PR-01's signature on 2026-08-09 no longer applies. RIDER DISCHARGED BY SUBSTITUTE 2026-08-18 per R-2026-08-18-PR02-DISCHARGE-PR04-REANCHOR; capture data/captures/2026-08-18-pr02pr04/01-PR-02-closed-positions-2026-08-18-042142.txt sha256 61c9fdae944b6569f5d7126f02973f21a47001e07fbe625cf1b7900fedae17d5; evidence 2026-08-10..2026-08-17 remains SIGNED != VERIFIED.",
+   "status": "ON",
+   "strike_fix": "",
+   "superseded": "",
+   "underlying": "SPX",
+   "unsigned": false,
+   "verdict": "Below sample"
+  },
+  {
+   "bot": "DIR-SPX-PutVIX22-SL75",
+   "champion": false,
+   "family": "SPX directional",
+   "focus": true,
+   "hedge": "SL75",
+   "hypothesis": "A VIX≥22-gated long put debit spread has positive RoR out-of-sample. Backtest +6.4% RoR OOS, params frozen. The open question is not the edge — it is whether the bot is ALIVE.",
+   "kill": "Exp(R) per position < −0.10 with CI below 0 at n≥50. SEPARATELY, a LIVENESS kill: zero bot-log entries across any 10-session window = presumed OFF or failsafe-tripped → RED, and the bot is switched off pending investigation.",
+   "max_loss": "1 lot, ≈$500/position (the debit).",
+   "mechanism": "Directional convexity in high-vol selloffs; defined risk by construction (the debit). Primitive: VIX gate in a Passes-market-conditions node.",
+   "n": 0,
+   "pillar": "Directional",
+   "pnl": 0.0,
+   "pr": "PR-05",
+   "role": "experiment",
+   "sample_raw": "n = 50 positions (the gate is selective — 0 fired in 22 days).",
+   "sample_target": 50,
+   "signed": "2026-08-09 · ANDY — in-chat at the S2 Day-0 sitting. Ruling recorded verbatim: \"Sign the seven that can trade (ledger reading)\". The A-27c carry in the CONFIG HASH field above does NOT block this signature (decision-card-2026-08-08 slot 6, OPTION 2). Signed for Day-0 2026-08-10; LEDGER_START = 2026-08-10. SIGNED != VERIFIED — runbook §4 Step 6's order-level Trades-list check is still required before this bot may trade, and rider 2's first-trading-day capture is still owed. [PR-05]",
+   "status": "ON",
+   "strike_fix": "",
+   "superseded": "",
+   "underlying": "SPX",
+   "unsigned": false,
+   "verdict": "Silent"
+  },
+  {
+   "bot": "DIR-SPX-Put-Control",
+   "champion": false,
+   "family": "SPX directional",
+   "focus": false,
+   "hedge": "SL75",
+   "hypothesis": "",
+   "kill": "",
+   "max_loss": "",
+   "mechanism": "",
+   "n": 0,
+   "pillar": "Directional",
+   "pnl": 0.0,
+   "pr": "",
+   "role": "control",
+   "sample_raw": "",
+   "sample_target": null,
+   "signed": "",
+   "status": "OFF",
+   "strike_fix": "",
+   "superseded": "",
+   "underlying": "SPX",
+   "unsigned": false,
+   "verdict": "No pre-registration"
+  },
+  {
+   "bot": "DIR-SPX-CallVIXdrop",
+   "champion": false,
+   "family": "SPX directional",
+   "focus": true,
+   "hedge": "SL50",
+   "hypothesis": "A VIX-drop-gated long call debit spread, ridden to settlement with SL50 and no PT, has positive RoR out-of-sample. Backtest +21.9% RoR, IS +24.8% / OOS +19.1%, positive every year 2021–26. The regime COMPLEMENT to the put bot.",
+   "kill": "Exp(R) per position < −0.10 with CI below 0 at n≥50. Plus the same liveness kill.",
+   "max_loss": "1 lot, ≈$700/position.",
+   "mechanism": "Directional convexity in low-vol melt-ups; defined risk (the debit). Primitive: VIX Change% gate; SL50 only, no PT, 100%-bid-ask exits, no Market pricing.",
+   "n": 1,
+   "pillar": "Directional",
+   "pnl": 65.0,
+   "pr": "PR-06",
+   "role": "experiment",
+   "sample_raw": "n = 50 positions.",
+   "sample_target": 50,
+   "signed": "2026-08-09 · ANDY — in-chat at the S2 Day-0 sitting. Ruling recorded verbatim: \"Sign the seven that can trade (ledger reading)\". The A-27c carry in the CONFIG HASH field above does NOT block this signature (decision-card-2026-08-08 slot 6, OPTION 2). Signed for Day-0 2026-08-10; LEDGER_START = 2026-08-10. SIGNED != VERIFIED — runbook §4 Step 6's order-level Trades-list check is still required before this bot may trade, and rider 2's first-trading-day capture is still owed. [PR-06]",
+   "status": "ON",
+   "strike_fix": "",
+   "superseded": "",
+   "underlying": "SPX",
+   "unsigned": false,
+   "verdict": "Below sample"
+  },
+  {
+   "bot": "GF-QQQ-IC-Ride",
+   "champion": false,
+   "family": "Greenfield QQQ IC",
+   "focus": false,
+   "hedge": "",
+   "hypothesis": "QQQ 0DTE iron condor with no active management and a 15:50 time exit has Exp(R) per condor >= 0 over n>=100 condors; control arm for the family.",
+   "kill": "Exp(R) per condor < 0 with CI entirely below 0 at n >= 60, as an always-valid confidence sequence (G-8); plus family-level, liveness and sentinel criteria.",
+   "max_loss": "~$185 net risk per condor; 1 condor/day.",
+   "mechanism": "Short-premium VRP on 0DTE QQQ; shared Library entry automations + two bundle-typed Bot Inputs (`GF_EXITS_PUT` and `GF_EXITS_CALL`) + 15:52 flat-close backstop. Sibling-close is NOT built (C8 ruling). SIZING STAMP 2026-08-06: primitive observed FIRST-HAND as the FIXED CONTRACT COUNT (1), not the `Up to $250 risk` fallback (spec §5.4/C4) — `GF-ScannerA-PutSpread`, Phase A build, `amount:{\"type\":\"quantity\", \"quantity\":1}`. Applies to all eight greenfield-family arms, PR-14…PR-23 (`greenfield-family-spec.md` C4, memory row).",
+   "n": 2,
+   "pillar": "IC",
+   "pnl": 15.0,
+   "pr": "PR-14",
+   "role": "control",
+   "sample_raw": "n = 100 condors.",
+   "sample_target": 100,
+   "signed": "2026-08-09 per `R-2026-08-09-S2-GATE-A7-SIGN-ALL-SEVEN`, re-signed 2026-08-17 per `R-2026-08-17-GF-ENTRY-METHOD`. ⚠️ LAYER 2 IS OUTSTANDING — the first new position's Trades list must confirm the strikes are delta-selected, not 0.40%-selected. Signature stands on Layer 1. GO-LIVE ORDERING `R-2026-08-09-S2-R5-LIMITS` — condor-aware: arms stay 2/2.",
+   "status": "ON",
+   "strike_fix": "",
+   "superseded": "",
+   "underlying": "QQQ",
+   "unsigned": false,
+   "verdict": "Below sample"
+  },
+  {
+   "bot": "GF-QQQ-IC-PT50",
+   "champion": false,
+   "family": "Greenfield QQQ IC",
+   "focus": false,
+   "hedge": "",
+   "hypothesis": "Taking profit at 50% of credit raises Exp(R) per condor above the Ride control over n>=100 matched condors.",
+   "kill": "Exp(R) per condor < 0 with CI entirely below 0 at n >= 60, as an always-valid confidence sequence (G-8); plus family-level, liveness and sentinel criteria.",
+   "max_loss": "~$185 net risk per condor; 1 condor/day.",
+   "mechanism": "Short-premium VRP on 0DTE QQQ; Ride base bundle plus ONE field — Exit Options `profits` = 0.5, `smprofits` = speedy. SIZING STAMP 2026-08-06: primitive observed FIRST-HAND as the FIXED CONTRACT COUNT (1), not the `Up to $250 risk` fallback (spec §5.4/C4) — `GF-ScannerA-PutSpread`, Phase A build, `amount:{\"type\":\"quantity\", \"quantity\":1}`. Applies to all eight greenfield-family arms, PR-14…PR-23 (`greenfield-family-spec.md` C4, memory row).",
+   "n": 2,
+   "pillar": "IC",
+   "pnl": 9.0,
+   "pr": "PR-15",
+   "role": "experiment",
+   "sample_raw": "n = 100 condors.",
+   "sample_target": 100,
+   "signed": "2026-08-09 per `R-2026-08-09-S2-GATE-A7-SIGN-ALL-SEVEN`, re-signed 2026-08-17 per `R-2026-08-17-GF-ENTRY-METHOD`. ⚠️ LAYER 2 IS OUTSTANDING — the first new position's Trades list must confirm the strikes are delta-selected, not 0.40%-selected. Signature stands on Layer 1. GO-LIVE ORDERING `R-2026-08-09-S2-R5-LIMITS` — condor-aware: arms stay 2/2.",
+   "status": "ON",
+   "strike_fix": "",
+   "superseded": "",
+   "underlying": "QQQ",
+   "unsigned": false,
+   "verdict": "Below sample"
+  },
+  {
+   "bot": "GF-QQQ-IC-Trail",
+   "champion": false,
+   "family": "Greenfield QQQ IC",
+   "focus": false,
+   "hedge": "",
+   "hypothesis": "An armed trailing stop (target 40% of credit, trail 15% pullback) raises Exp(R) per condor above the Ride control and PT50, by letting winners keep decaying while holding a floor.",
+   "kill": "Exp(R) per condor < 0 with CI entirely below 0 at n >= 60, as an always-valid confidence sequence (G-8); plus the PR-16-specific tail retirement criterion (G-12b, recorded in the Greenfield IC family section above), family-level, liveness and sentinel criteria.",
+   "max_loss": "~$185 net risk per condor; 1 condor/day.",
+   "mechanism": "Short-premium VRP on 0DTE QQQ; Ride base bundle plus ONE native Exit Options `tstop` with `target` = 40 and `trail` = 15 (units confirmed by C2, 2026-08-06). SIZING STAMP 2026-08-06: primitive observed FIRST-HAND as the FIXED CONTRACT COUNT (1), not the `Up to $250 risk` fallback (spec §5.4/C4) — `GF-ScannerA-PutSpread`, Phase A build, `amount:{\"type\":\"quantity\", \"quantity\":1}`. Applies to all eight greenfield-family arms, PR-14…PR-23 (`greenfield-family-spec.md` C4, memory row).",
+   "n": 2,
+   "pillar": "IC",
+   "pnl": 7.0,
+   "pr": "PR-16",
+   "role": "experiment",
+   "sample_raw": "n = 100 condors.",
+   "sample_target": 100,
+   "signed": "2026-08-09 per `R-2026-08-09-S2-GATE-A7-SIGN-ALL-SEVEN`, re-signed 2026-08-17 per `R-2026-08-17-GF-ENTRY-METHOD`. ⚠️ LAYER 2 IS OUTSTANDING — the first new position's Trades list must confirm the strikes are delta-selected, not 0.40%-selected. Signature stands on Layer 1. GO-LIVE ORDERING `R-2026-08-09-S2-R5-LIMITS` — condor-aware: arms stay 2/2.",
+   "status": "ON",
+   "strike_fix": "",
+   "superseded": "",
+   "underlying": "QQQ",
+   "unsigned": false,
+   "verdict": "Below sample"
+  },
+  {
+   "bot": "GF-QQQ-IC-Touch0",
+   "champion": false,
+   "family": "Greenfield QQQ IC",
+   "focus": false,
+   "hedge": "",
+   "hypothesis": "Closing the condor on the first 1-minute evaluation at which either short strike is ITM (Touch $0) raises Exp(R) per condor above the Ride control.",
+   "kill": "Exp(R) per condor < 0 with CI entirely below 0 at n >= 60, as an always-valid confidence sequence (G-8); plus family-level, liveness and sentinel criteria.",
+   "max_loss": "~$185 net risk per condor; 1 condor/day.",
+   "mechanism": "Short-premium VRP on 0DTE QQQ; Ride base bundle plus ONE field — Exit Options `touch` = $0. This arm is S1, not S2: a touch closes the touched spread; the other spread runs to its own 15:50 Expiration exit or the 15:52 backstop. SIZING STAMP 2026-08-06: primitive observed FIRST-HAND as the FIXED CONTRACT COUNT (1), not the `Up to $250 risk` fallback (spec §5.4/C4) — `GF-ScannerA-PutSpread`, Phase A build, `amount:{\"type\":\"quantity\", \"quantity\":1}`. Applies to all eight greenfield-family arms, PR-14…PR-23 (`greenfield-family-spec.md` C4, memory row).",
+   "n": 2,
+   "pillar": "IC",
+   "pnl": 15.0,
+   "pr": "PR-17",
+   "role": "experiment",
+   "sample_raw": "n = 100 condors.",
+   "sample_target": 100,
+   "signed": "2026-08-09 per `R-2026-08-09-S2-GATE-A7-SIGN-ALL-SEVEN`, re-signed 2026-08-17 per `R-2026-08-17-GF-ENTRY-METHOD`. ⚠️ LAYER 2 IS OUTSTANDING — the first new position's Trades list must confirm the strikes are delta-selected, not 0.40%-selected. Signature stands on Layer 1. GO-LIVE ORDERING `R-2026-08-09-S2-R5-LIMITS` — condor-aware: arms stay 2/2.",
+   "status": "ON",
+   "strike_fix": "",
+   "superseded": "",
+   "underlying": "QQQ",
+   "unsigned": false,
+   "verdict": "Below sample"
+  },
+  {
+   "bot": "GF-QQQ-IC-SL100",
+   "champion": false,
+   "family": "Greenfield QQQ IC",
+   "focus": false,
+   "hedge": "",
+   "hypothesis": "A stop at 100% of credit, applied per-spread (not close-both, C8 ruling), raises Exp(R) per condor above the Ride control.",
+   "kill": "Exp(R) per condor < 0 with CI entirely below 0 at n >= 60, as an always-valid confidence sequence (G-8); plus family-level, liveness and sentinel criteria.",
+   "max_loss": "~$185 net risk per condor; 1 condor/day.",
+   "mechanism": "Short-premium VRP on 0DTE QQQ; Ride base bundle plus ONE field — Exit Options `stoploss` = 1 (% of credit, C1 answered 2026-08-06). The untested side is left to decay exactly as the anchor assumes. SIZING STAMP 2026-08-06: primitive observed FIRST-HAND as the FIXED CONTRACT COUNT (1), not the `Up to $250 risk` fallback (spec §5.4/C4) — `GF-ScannerA-PutSpread`, Phase A build, `amount:{\"type\":\"quantity\", \"quantity\":1}`. Applies to all eight greenfield-family arms, PR-14…PR-23 (`greenfield-family-spec.md` C4, memory row).",
+   "n": 2,
+   "pillar": "IC",
+   "pnl": 15.0,
+   "pr": "PR-18",
+   "role": "experiment",
+   "sample_raw": "n = 100 condors.",
+   "sample_target": 100,
+   "signed": "2026-08-09 per `R-2026-08-09-S2-GATE-A7-SIGN-ALL-SEVEN`, re-signed 2026-08-17 per `R-2026-08-17-GF-ENTRY-METHOD`. ⚠️ LAYER 2 IS OUTSTANDING — the first new position's Trades list must confirm the strikes are delta-selected, not 0.40%-selected. Signature stands on Layer 1. GO-LIVE ORDERING `R-2026-08-09-S2-R5-LIMITS` — condor-aware: arms stay 2/2.",
+   "status": "ON",
+   "strike_fix": "",
+   "superseded": "",
+   "underlying": "QQQ",
+   "unsigned": false,
+   "verdict": "Below sample"
+  },
+  {
+   "bot": "GF-QQQ-IC-SL200",
+   "champion": false,
+   "family": "Greenfield QQQ IC",
+   "focus": false,
+   "hedge": "",
+   "hypothesis": "A stop at 200% of credit, applied per-spread (not close-both, C8 ruling), raises Exp(R) per condor above the Ride control and does not collapse to it.",
+   "kill": "Exp(R) per condor < 0 with CI entirely below 0 at n >= 60 matched days, as an always-valid confidence sequence (G-8); plus family-level and sentinel. Liveness and the CM-8 conjunct are deliberately disapplied (G-5 / G-13, 2026-08-06); the degeneracy check is a TOST equivalence test on mean paired ΔR vs Ride, band ±0.015R, evaluated at the GATE EVAL DATE.",
+   "max_loss": "~$185 net risk per condor; 1 condor/day.",
+   "mechanism": "Short-premium VRP on 0DTE QQQ; Ride base bundle plus ONE field — Exit Options `stoploss` = 2 (% of credit, C1 answered 2026-08-06). SIZING STAMP 2026-08-06: primitive observed FIRST-HAND as the FIXED CONTRACT COUNT (1), not the `Up to $250 risk` fallback (spec §5.4/C4) — `GF-ScannerA-PutSpread`, Phase A build, `amount:{\"type\":\"quantity\", \"quantity\":1}`. Applies to all eight greenfield-family arms, PR-14…PR-23 (`greenfield-family-spec.md` C4, memory row).",
+   "n": 2,
+   "pillar": "IC",
+   "pnl": 15.0,
+   "pr": "PR-19",
+   "role": "experiment",
+   "sample_raw": "n = 100 condors.",
+   "sample_target": 100,
+   "signed": "2026-08-09 per `R-2026-08-09-S2-GATE-A7-SIGN-ALL-SEVEN`, re-signed 2026-08-17 per `R-2026-08-17-GF-ENTRY-METHOD`. ⚠️ LAYER 2 IS OUTSTANDING — the first new position's Trades list must confirm the strikes are delta-selected, not 0.40%-selected. Signature stands on Layer 1. GO-LIVE ORDERING `R-2026-08-09-S2-R5-LIMITS` — condor-aware: arms stay 2/2.",
+   "status": "ON",
+   "strike_fix": "",
+   "superseded": "",
+   "underlying": "QQQ",
+   "unsigned": false,
+   "verdict": "Below sample"
+  },
+  {
+   "bot": "GF-QQQ-IC-Canary",
+   "champion": false,
+   "family": "Greenfield QQQ IC",
+   "focus": false,
+   "hedge": "",
+   "hypothesis": "Instrument hypothesis: a bot whose 5% profit target should fill every single day will stop filling the day the exit engine dies, giving same-day detection of the failure that ran six invisible sessions in v1.",
+   "kill": "NONE ON P/L — exempt by design. Carries a code-fireable alert: no profit-taking fill on >= 2 consecutive days on which it held a position -> RED, escalated as a candidate exit-engine failure. Plus family-level and sentinel criteria.",
+   "max_loss": "1 lot, smallest expressible risk.",
+   "mechanism": "n/a — this bot is NOT run for edge. Its P/L is expected to be ~flat and is not evidence about anything. Ride base bundle plus Exit Options `profits` = 0.05, `smprofits` = speedy. SIZING STAMP 2026-08-06: primitive observed FIRST-HAND as the FIXED CONTRACT COUNT (1), not the `Up to $250 risk` fallback (spec §5.4/C4) — `GF-ScannerA-PutSpread`, Phase A build, `amount:{\"type\":\"quantity\", \"quantity\":1}`. Applies to all eight greenfield-family arms, PR-14…PR-23 (`greenfield-family-spec.md` C4, memory row).",
+   "n": 2,
+   "pillar": "IC",
+   "pnl": 2.0,
+   "pr": "PR-20",
+   "role": "instrument",
+   "sample_raw": "n/a — daily fill/no-fill is the output.",
+   "sample_target": null,
+   "signed": "2026-08-09 per `R-2026-08-09-S2-GATE-A7-SIGN-ALL-SEVEN`, re-signed 2026-08-17 per `R-2026-08-17-GF-ENTRY-METHOD`. ⚠️ LAYER 2 IS OUTSTANDING — the first new position's Trades list must confirm the strikes are delta-selected, not 0.40%-selected. Signature stands on Layer 1. GO-LIVE ORDERING `R-2026-08-09-S2-R5-LIMITS` — condor-aware: arms stay 2/2.",
+   "status": "ON",
+   "strike_fix": "",
+   "superseded": "",
+   "underlying": "QQQ",
+   "unsigned": false,
+   "verdict": "No target stated"
+  },
+  {
+   "bot": "GF-QQQ-IC-Ride-Delta",
+   "champion": false,
+   "family": "Greenfield QQQ IC",
+   "focus": false,
+   "hedge": "",
+   "hypothesis": "Short-strike selection by DELTA adapts to volatility and time-to-expiry; selection by FIXED PERCENT OF LAST does not. Paired against Ride — identical symbol, wings, window, regime gates, sizing, pricing, floor and exit policy (ride to expiry) — the two differ in EXACTLY ONE input: the short-strike selection method. Any divergence in entry FREQUENCY or in realised OTM% over time is therefore attributable to that method alone.",
+   "kill": "Exp(R) per condor < 0 with CI entirely below 0 at n>=60, emitted as an always-valid confidence sequence (per G-8), and not before GATE EVAL DATE. ⚠️ P/L IS NOT THE POINT AND MUST NOT RETIRE IT EARLY. If at n>=20 the bot has taken ZERO entries, the delta value is wrong, not the method — re-tune, do not kill.",
+   "max_loss": "",
+   "mechanism": "Established 2026-08-11, first-hand: PR-01 and the eight GF arms use `legpctprice pct=0.75`; PR-02 uses `delta 0.1` and is the only bot in the fleet filling daily. PR-01 vs PR-02 are byte-identical in wings, price, sizing and filter — the selection method is the sole differing field. Supporting: credit at >=0.70% OTM on SPX 0DTE fell ~60% Apr->Aug 2026 (0.320 / 0.291 / 0.343 / 0.153 / 0.125), i.e. the fixed-% spec aged out of its regime rather than breaking.",
+   "n": 4,
+   "pillar": "IC",
+   "pnl": 29.0,
+   "pr": "PR-23",
+   "role": "experiment",
+   "sample_raw": "",
+   "sample_target": null,
+   "signed": "2026-08-17 · ANDY — in-session, verbatim \"Sign now\", under `R-2026-08-17-GF-ENTRY-METHOD`. Config hashes as stamped above. Sample restarts at the 2026-08-17 edit; nothing before it counts. Review at 10 sessions. ⚠️ LAYER 2 IS OUTSTANDING — the first new position's Trades list must confirm the strikes are delta-selected, not 0.40%-selected. Signature stands on Layer 1.",
+   "status": "ON",
+   "strike_fix": "",
+   "superseded": "",
+   "underlying": "QQQ",
+   "unsigned": false,
+   "verdict": "No target stated"
+  },
+  {
+   "bot": "IC-SPX-FastPT25-S2-ARCHIVED-2026-08-07",
+   "champion": false,
+   "family": "Archived clones",
+   "focus": false,
+   "hedge": "",
+   "hypothesis": "",
+   "kill": "",
+   "max_loss": "",
+   "mechanism": "",
+   "n": 0,
+   "pillar": "IC",
+   "pnl": 0.0,
+   "pr": "",
+   "role": "experiment",
+   "sample_raw": "",
+   "sample_target": null,
+   "signed": "",
+   "status": "OFF",
+   "strike_fix": "",
+   "superseded": "",
+   "underlying": "SPX",
+   "unsigned": false,
+   "verdict": "No pre-registration"
+  },
+  {
+   "bot": "IC-SPX-FastPT25-S2-130PM-ARCHIVED-2026-08-08",
+   "champion": false,
+   "family": "Archived clones",
+   "focus": false,
+   "hedge": "",
+   "hypothesis": "",
+   "kill": "",
+   "max_loss": "",
+   "mechanism": "",
+   "n": 0,
+   "pillar": "IC",
+   "pnl": 0.0,
+   "pr": "",
+   "role": "experiment",
+   "sample_raw": "",
+   "sample_target": null,
+   "signed": "",
+   "status": "OFF",
+   "strike_fix": "",
+   "superseded": "",
+   "underlying": "SPX",
+   "unsigned": false,
+   "verdict": "No pre-registration"
+  },
+  {
+   "bot": "QQQ-IC-0DTE-Fortress-NoPT50-ARCHIVED-2026-08-08",
+   "champion": false,
+   "family": "Archived clones",
+   "focus": false,
+   "hedge": "",
+   "hypothesis": "",
+   "kill": "",
+   "max_loss": "",
+   "mechanism": "",
+   "n": 0,
+   "pillar": "IC",
+   "pnl": 0.0,
+   "pr": "",
+   "role": "experiment",
+   "sample_raw": "",
+   "sample_target": null,
+   "signed": "",
+   "status": "OFF",
+   "strike_fix": "",
+   "superseded": "",
+   "underlying": "QQQ",
+   "unsigned": false,
+   "verdict": "No pre-registration"
+  }
+ ],
+ "families": [
+  "Archived clones",
+  "Greenfield QQQ IC",
+  "SPX FastPT25 line",
+  "SPX Fortress",
+  "QQQ hedge tournament",
+  "Range075 experiments",
+  "QQQ Fortress line",
+  "QQQ controls / baseline",
+  "SPX directional",
+  "Killed mirrors",
+  "Straddler mirrors",
+  "Live mirrors"
+ ],
+ "generated_from": {
+  "bots_meta_rows": 44,
+  "ledger_entries": 26,
+  "trade_rows": 49,
+  "unsigned_known": true
+ }
+};
+/* ==== DATA END ==== */
+
+const B=DATA.bots, FAM=DATA.families, GF=DATA.generated_from;
+const PAL=["--g1","--g2","--g3","--g4","--g5","--g6","--g7","--g8","--g9","--g10","--g11","--g12"];
+const fcol=f=>`var(${PAL[FAM.indexOf(f)%PAL.length]})`;
+const VC={"UNSIGNED":"var(--stuck)","No pre-registration":"var(--none)","Silent":"var(--work)",
+          "No target stated":"var(--g4)","Below sample":"var(--ready)","At sample":"var(--done)"};
+const money=v=>(v<0?"−$":"$")+Math.abs(v).toLocaleString(undefined,{maximumFractionDigits:0});
+const esc=s=>(s||"").replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+const of=f=>B.filter(b=>b.family===f);
+
+/* ---- header + KPIs ---- */
+const on=B.filter(b=>b.status==="ON"), traded=B.filter(b=>b.n>0), silent=B.filter(b=>b.n===0);
+const withPR=B.filter(b=>b.pr), onWithPR=on.filter(b=>b.pr);
+const atSample=B.filter(b=>b.verdict==="At sample");
+const unsigned=B.filter(b=>b.unsigned===true);
+const totalPnl=B.reduce((s,b)=>s+b.pnl,0);
+document.getElementById("sub").innerHTML =
+ `${B.length} bots · ${FAM.length} families · generated from `
+ +`<span class="mono">bots_meta.csv</span> (${GF.bots_meta_rows} rows) · `
+ +`<span class="mono">pre-registration-ledger.md</span> (${GF.ledger_entries} entries) · `
+ +`<span class="mono">trades.csv</span> (${GF.trade_rows===null?"absent":GF.trade_rows+" rows"}) · `
+ +`<span class="mono">STATUS.md</span>`;
+
+document.getElementById("kpis").innerHTML=[
+ ["Bots on the roster",B.length,`${on.length} ON · ${B.length-on.length} OFF`,""],
+ ["ON bots with a pre-reg entry",`${onWithPR.length} / ${on.length}`,
+   onWithPR.length===on.length?"complete where it counts":"gap",
+   onWithPR.length===on.length?"var(--done)":"var(--stuck)"],
+ ["Bots that have traded",traded.length,`${silent.length} have never opened a position`,
+   traded.length?"":"var(--stuck)"],
+ ["At their sample target",atSample.length,
+   `of ${withPR.filter(b=>b.sample_target).length} with a stated target`,
+   atSample.length?"var(--done)":"var(--stuck)"],
+ ["Unsigned & contributing",GF.unsigned_known?unsigned.length:"—",
+   GF.unsigned_known?"DO-NOT-SWITCH-ON list":"STATUS.md absent",
+   GF.unsigned_known&&unsigned.length?"var(--stuck)":""],
+ ["Closed P&L on the roster",money(totalPnl),"post-cutover ledger",""],
+].map(([t,n,s,c])=>`<div class="w"><div class="wt">${t}</div>
+ <div class="wn"${c?` style="color:${c}"`:""}>${n}</div><div class="ws">${s}</div></div>`).join("");
+
+/* ---- the two readings that matter ---- */
+const notes=[];
+if(onWithPR.length===on.length && on.length)
+ notes.push(`<div class="note"><b>Coverage is not a gap.</b> Every one of the ${on.length} ON bots
+ carries a pre-registration entry. The ${B.length-withPR.length} without one are pre-cutover
+ experiments that predate the pre-registration regime — they are archived, superseded or killed,
+ and their absence is correct rather than missing.</div>`);
+const belowInterim=withPR.filter(b=>b.sample_target&&b.n<b.sample_target);
+if(belowInterim.length)
+ notes.push(`<div class="note warn"><b>${belowInterim.length} of the ${withPR.filter(b=>b.sample_target).length}
+ bots with a stated sample target are below it — none has reached one — and
+ ${withPR.filter(b=>b.n===0).length} of the ${withPR.length} pre-registered bots have never traded.</b>
+ The largest single P&L figure on the fleet comes from a bot at
+ n=${(B.slice().sort((x,y)=>y.pnl-x.pnl)[0]||{}).n} against a target stated in the hundreds. Every
+ P&L number on this page is therefore a sample too small to separate edge from noise — including
+ the ones that look good. Sample targets are stated in <i>condors</i>; the n column counts
+ <i>positions</i>, most of which are currently single-sided, so progress shown here is an upper
+ bound.</div>`);
+document.getElementById("notes").innerHTML=notes.join("");
+
+/* ---- INVENTORY ---- */
+document.getElementById("v-inv").innerHTML=FAM.map(f=>{const r=of(f);
+ return `<div class="fam"><div class="fhead" onclick="this.parentNode.classList.toggle('cl')">
+ <span class="fchev" style="color:${fcol(f)}">▼</span>
+ <span class="fname" style="color:${fcol(f)}">${f}</span>
+ <span class="fcount">${r.length} bot${r.length===1?"":"s"} ·
+   ${r.filter(b=>b.status==="ON").length} ON</span></div>
+ <div class="fwrap"><table>
+ <tr><th class="cbar"></th><th>Bot</th><th style="width:62px">Status</th><th style="width:120px">Role</th>
+ <th style="width:80px">Underlying</th><th style="width:105px">Hedge</th><th style="width:170px">Flags</th>
+ <th style="width:78px">Positions</th><th style="width:88px">P&L</th></tr>
+ ${r.map(b=>`<tr>
+  <td class="cbar" style="background:${fcol(f)}"></td>
+  <td><span class="bn">${esc(b.bot)}</span>${b.pr?` <span class="tag">${b.pr}</span>`:""}</td>
+  <td><span class="pill" style="background:${b.status==="ON"?"var(--done)":"var(--none)"}">${b.status}</span></td>
+  <td>${esc(b.role)}</td><td>${esc(b.underlying)||"—"}</td><td>${esc(b.hedge)||"—"}</td>
+  <td>${[b.champion?"champion":"",b.focus?"focus":"",b.superseded?b.superseded:"",
+        b.strike_fix?"strike-fix":""].filter(Boolean).map(t=>`<span class="tag">${t}</span>`).join("")||"—"}</td>
+  <td class="num">${b.n||"—"}</td><td class="num">${b.n?money(b.pnl):"—"}</td></tr>`).join("")}
+ </table></div></div>`}).join("");
+
+/* ---- SCOREBOARD ---- */
+const order={"UNSIGNED":0,"Silent":1,"No target stated":2,"Below sample":3,"At sample":4,"No pre-registration":5};
+const scored=B.slice().sort((a,b)=>(order[a.verdict]-order[b.verdict])||(b.pnl-a.pnl));
+document.getElementById("v-score").innerHTML=`<div class="fam"><div class="fwrap"><table>
+<tr><th class="cbar"></th><th style="width:210px">Bot</th><th style="width:120px">Verdict</th>
+<th>Goal — the pre-registered hypothesis</th><th style="width:300px">What would kill it</th>
+<th class="samp" style="width:118px">Sample</th><th style="width:86px">P&L</th></tr>
+${scored.map(b=>`<tr>
+ <td class="cbar" style="background:${fcol(b.family)}"></td>
+ <td><span class="bn">${esc(b.bot)}</span><br>
+   <span class="tag">${esc(b.family)}</span>${b.pr?`<span class="tag">${b.pr}</span>`:""}</td>
+ <td><span class="pill" style="background:${VC[b.verdict]||"var(--none)"}">${b.verdict}</span></td>
+ <td class="hyp">${b.hypothesis?esc(b.hypothesis):
+    `<i style="color:var(--ink3)">no pre-registration entry — predates the regime</i>`}</td>
+ <td class="kill">${b.kill?esc(b.kill):"—"}</td>
+ <td class="samp num">${b.sample_target
+    ? `${b.n} / ${b.sample_target}
+       <div class="sbar"><span style="width:${Math.min(100,100*b.n/b.sample_target)}%"></span></div>`
+    : (b.n||"—")}</td>
+ <td class="num">${b.n?money(b.pnl):"—"}</td></tr>`).join("")}
+</table></div></div>`;
+
+document.getElementById("foot").innerHTML =
+ `<b>Family is derived, not stored.</b> <span class="mono">bots_meta.csv</span> has no family
+ column — it is roster authority, and adding one is a data decision rather than a rendering one.
+ The taxonomy lives in <span class="mono">FAMILY_RULES</span> in
+ <span class="mono">scripts/roster.py</span>; a bot matching no rule is a hard failure, never
+ silently bucketed.<br>
+ <b>Verdicts are derived</b> from signature state, entry presence, position count and the stated
+ sample target — in that order. Regenerate with
+ <span class="mono">python3 scripts/roster.py</span>; <span class="mono">--check</span> exits 1 on drift.`;
+
+document.querySelectorAll(".tab").forEach(t=>t.onclick=()=>{
+ document.querySelectorAll(".tab").forEach(x=>x.classList.remove("on"));
+ document.querySelectorAll(".view").forEach(x=>x.classList.remove("on"));
+ t.classList.add("on"); document.getElementById("v-"+t.dataset.v).classList.add("on");});
+</script>
+</body>
+</html>

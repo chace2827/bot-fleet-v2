@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bot Fleet — Roster</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--blue:#0073ea;--canvas:#f6f7fb;--ink:#323338;--ink2:#676879;--ink3:#9699a6;
+ --line:#e6e9ef;--done:#00c875;--work:#fdab3d;--stuck:#e2445c;--none:#c4c4c4;--ready:#579bfc;
+ --g1:#037f4c;--g2:#00c875;--g3:#579bfc;--g4:#a25ddc;--g5:#fdab3d;--g6:#e2445c;--g7:#ff642e;
+ --g8:#784bd1;--g9:#0086c0;--g10:#ff158a;--g11:#225091;--g12:#7f5347}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Figtree,Roboto,-apple-system,"Segoe UI",sans-serif;background:var(--canvas);
+ color:var(--ink);font-size:14px;padding:22px 24px 70px;max-width:1500px;margin:0 auto}
+h1{font-size:24px;font-weight:700;letter-spacing:-.02em}
+.sub{color:var(--ink3);font-size:12.5px;margin:4px 0 16px}
+.mono{font-family:ui-monospace,Menlo,monospace;font-size:11.5px}
+.wgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(158px,1fr));gap:11px;margin-bottom:16px}
+.w{background:#fff;border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,.05);padding:12px 14px}
+.w .wt{font-size:11.5px;color:var(--ink2);margin-bottom:5px}
+.w .wn{font-size:26px;font-weight:700;line-height:1}
+.w .ws{font-size:11px;color:var(--ink3);margin-top:4px}
+.note{background:#eef4fd;border:1px solid #cfe0f7;border-left:4px solid var(--blue);
+ border-radius:8px;padding:13px 16px;margin-bottom:16px;font-size:13px;color:#2b4a72;line-height:1.55}
+.note b{color:#14365f}
+.warn{background:#fff4e5;border-color:#ffd6a0;border-left-color:var(--work);color:#7a5320}
+.warn b{color:#8a5200}
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--line);margin-bottom:16px}
+.tab{padding:8px 15px;font-size:14px;color:var(--ink2);cursor:pointer;border-bottom:2px solid transparent;font-weight:500}
+.tab:hover{background:#f0f1f5;border-radius:5px 5px 0 0}
+.tab.on{color:var(--blue);border-bottom-color:var(--blue);font-weight:600}
+.view{display:none}.view.on{display:block}
+.fam{background:#fff;border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,.05);margin-bottom:14px;overflow:hidden}
+.fhead{display:flex;align-items:center;gap:9px;padding:11px 15px;cursor:pointer;user-select:none}
+.fchev{font-size:11px;transition:transform .15s}
+.fam.cl .fchev{transform:rotate(-90deg)}
+.fname{font-weight:700;font-size:14.5px}
+.fcount{color:var(--ink3);font-size:12.5px;font-weight:400}
+.fwrap{overflow-x:auto}.fam.cl .fwrap{display:none}
+table{border-collapse:collapse;width:100%}
+th{font-size:11.5px;font-weight:400;color:var(--ink2);text-align:left;padding:6px 9px;
+ border-bottom:1px solid var(--line);border-right:1px solid var(--line);white-space:nowrap}
+td{padding:7px 9px;border-bottom:1px solid var(--line);border-right:1px solid var(--line);
+ font-size:12.8px;vertical-align:top}
+tr:hover td{background:#f5f6f8}
+.cbar{width:5px;padding:0!important;border-right:none!important}
+.bn{font-weight:600;font-size:13px}
+.pill{display:inline-block;padding:2px 8px;border-radius:12px;font-size:10.5px;font-weight:700;
+ color:#fff;white-space:nowrap}
+.tag{display:inline-block;padding:1px 6px;border-radius:4px;font-size:10px;background:#eef0f5;
+ color:var(--ink2);border:1px solid var(--line);margin-right:3px;white-space:nowrap}
+.hyp{font-size:12px;color:var(--ink2);line-height:1.45;max-width:520px}
+.kill{font-size:11.5px;color:#8a4b4b;line-height:1.4;max-width:330px}
+.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.samp{min-width:112px}
+.sbar{height:7px;border-radius:4px;background:#eaecf2;overflow:hidden;margin-top:3px}
+.sbar span{display:block;height:100%;background:var(--blue)}
+.foot{margin-top:22px;font-size:11.5px;color:var(--ink3);border-top:1px solid var(--line);padding-top:13px;line-height:1.6}
+</style>
+</head>
+<body>
+<h1>Bot Fleet — Roster</h1>
+<div class="sub" id="sub"></div>
+<div id="kpis" class="wgrid"></div>
+<div id="notes"></div>
+<div class="tabs">
+  <div class="tab on" data-v="inv">▦ Inventory — what each bot IS</div>
+  <div class="tab" data-v="score">◎ Scoreboard — goal vs actual</div>
+</div>
+<div class="view on" id="v-inv"></div>
+<div class="view" id="v-score"></div>
+<div class="foot" id="foot"></div>
+
+<script>
+/* ==== DATA START ==== */
+/* Replaced wholesale by scripts/roster.py. Do not hand-edit.
+   Shape: {generated_from:{...}, families:[str], bots:[{bot,family,pillar,role,underlying,
+   status,hedge,focus,champion,superseded,strike_fix,pr,hypothesis,mechanism,kill,
+   sample_target,sample_raw,max_loss,signed,n,pnl,unsigned,verdict}]} */
+const DATA = {"generated_from":{"bots_meta_rows":1,"ledger_entries":0,"trade_rows":0,"unsigned_known":false},
+ "families":["Greenfield QQQ IC"],
+ "bots":[{"bot":"SAMPLE","family":"Greenfield QQQ IC","pillar":"IC","role":"control","underlying":"QQQ",
+  "status":"ON","hedge":"","focus":false,"champion":false,"superseded":"","strike_fix":"","pr":"",
+  "hypothesis":"","mechanism":"","kill":"","sample_target":null,"sample_raw":"","max_loss":"",
+  "signed":"","n":0,"pnl":0,"unsigned":null,"verdict":"No pre-registration"}]};
+/* ==== DATA END ==== */
+
+const B=DATA.bots, FAM=DATA.families, GF=DATA.generated_from;
+const PAL=["--g1","--g2","--g3","--g4","--g5","--g6","--g7","--g8","--g9","--g10","--g11","--g12"];
+const fcol=f=>`var(${PAL[FAM.indexOf(f)%PAL.length]})`;
+const VC={"UNSIGNED":"var(--stuck)","No pre-registration":"var(--none)","Silent":"var(--work)",
+          "No target stated":"var(--g4)","Below sample":"var(--ready)","At sample":"var(--done)"};
+const money=v=>(v<0?"−$":"$")+Math.abs(v).toLocaleString(undefined,{maximumFractionDigits:0});
+const esc=s=>(s||"").replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+const of=f=>B.filter(b=>b.family===f);
+
+/* ---- header + KPIs ---- */
+const on=B.filter(b=>b.status==="ON"), traded=B.filter(b=>b.n>0), silent=B.filter(b=>b.n===0);
+const withPR=B.filter(b=>b.pr), onWithPR=on.filter(b=>b.pr);
+const atSample=B.filter(b=>b.verdict==="At sample");
+const unsigned=B.filter(b=>b.unsigned===true);
+const totalPnl=B.reduce((s,b)=>s+b.pnl,0);
+document.getElementById("sub").innerHTML =
+ `${B.length} bots · ${FAM.length} families · generated from `
+ +`<span class="mono">bots_meta.csv</span> (${GF.bots_meta_rows} rows) · `
+ +`<span class="mono">pre-registration-ledger.md</span> (${GF.ledger_entries} entries) · `
+ +`<span class="mono">trades.csv</span> (${GF.trade_rows===null?"absent":GF.trade_rows+" rows"}) · `
+ +`<span class="mono">STATUS.md</span>`;
+
+document.getElementById("kpis").innerHTML=[
+ ["Bots on the roster",B.length,`${on.length} ON · ${B.length-on.length} OFF`,""],
+ ["ON bots with a pre-reg entry",`${onWithPR.length} / ${on.length}`,
+   onWithPR.length===on.length?"complete where it counts":"gap",
+   onWithPR.length===on.length?"var(--done)":"var(--stuck)"],
+ ["Bots that have traded",traded.length,`${silent.length} have never opened a position`,
+   traded.length?"":"var(--stuck)"],
+ ["At their sample target",atSample.length,
+   `of ${withPR.filter(b=>b.sample_target).length} with a stated target`,
+   atSample.length?"var(--done)":"var(--stuck)"],
+ ["Unsigned & contributing",GF.unsigned_known?unsigned.length:"—",
+   GF.unsigned_known?"DO-NOT-SWITCH-ON list":"STATUS.md absent",
+   GF.unsigned_known&&unsigned.length?"var(--stuck)":""],
+ ["Closed P&L on the roster",money(totalPnl),"post-cutover ledger",""],
+].map(([t,n,s,c])=>`<div class="w"><div class="wt">${t}</div>
+ <div class="wn"${c?` style="color:${c}"`:""}>${n}</div><div class="ws">${s}</div></div>`).join("");
+
+/* ---- the two readings that matter ---- */
+const notes=[];
+if(onWithPR.length===on.length && on.length)
+ notes.push(`<div class="note"><b>Coverage is not a gap.</b> Every one of the ${on.length} ON bots
+ carries a pre-registration entry. The ${B.length-withPR.length} without one are pre-cutover
+ experiments that predate the pre-registration regime — they are archived, superseded or killed,
+ and their absence is correct rather than missing.</div>`);
+const belowInterim=withPR.filter(b=>b.sample_target&&b.n<b.sample_target);
+if(belowInterim.length)
+ notes.push(`<div class="note warn"><b>${belowInterim.length} of the ${withPR.filter(b=>b.sample_target).length}
+ bots with a stated sample target are below it — none has reached one — and
+ ${withPR.filter(b=>b.n===0).length} of the ${withPR.length} pre-registered bots have never traded.</b>
+ The largest single P&L figure on the fleet comes from a bot at
+ n=${(B.slice().sort((x,y)=>y.pnl-x.pnl)[0]||{}).n} against a target stated in the hundreds. Every
+ P&L number on this page is therefore a sample too small to separate edge from noise — including
+ the ones that look good. Sample targets are stated in <i>condors</i>; the n column counts
+ <i>positions</i>, most of which are currently single-sided, so progress shown here is an upper
+ bound.</div>`);
+document.getElementById("notes").innerHTML=notes.join("");
+
+/* ---- INVENTORY ---- */
+document.getElementById("v-inv").innerHTML=FAM.map(f=>{const r=of(f);
+ return `<div class="fam"><div class="fhead" onclick="this.parentNode.classList.toggle('cl')">
+ <span class="fchev" style="color:${fcol(f)}">▼</span>
+ <span class="fname" style="color:${fcol(f)}">${f}</span>
+ <span class="fcount">${r.length} bot${r.length===1?"":"s"} ·
+   ${r.filter(b=>b.status==="ON").length} ON</span></div>
+ <div class="fwrap"><table>
+ <tr><th class="cbar"></th><th>Bot</th><th style="width:62px">Status</th><th style="width:120px">Role</th>
+ <th style="width:80px">Underlying</th><th style="width:105px">Hedge</th><th style="width:170px">Flags</th>
+ <th style="width:78px">Positions</th><th style="width:88px">P&L</th></tr>
+ ${r.map(b=>`<tr>
+  <td class="cbar" style="background:${fcol(f)}"></td>
+  <td><span class="bn">${esc(b.bot)}</span>${b.pr?` <span class="tag">${b.pr}</span>`:""}</td>
+  <td><span class="pill" style="background:${b.status==="ON"?"var(--done)":"var(--none)"}">${b.status}</span></td>
+  <td>${esc(b.role)}</td><td>${esc(b.underlying)||"—"}</td><td>${esc(b.hedge)||"—"}</td>
+  <td>${[b.champion?"champion":"",b.focus?"focus":"",b.superseded?b.superseded:"",
+        b.strike_fix?"strike-fix":""].filter(Boolean).map(t=>`<span class="tag">${t}</span>`).join("")||"—"}</td>
+  <td class="num">${b.n||"—"}</td><td class="num">${b.n?money(b.pnl):"—"}</td></tr>`).join("")}
+ </table></div></div>`}).join("");
+
+/* ---- SCOREBOARD ---- */
+const order={"UNSIGNED":0,"Silent":1,"No target stated":2,"Below sample":3,"At sample":4,"No pre-registration":5};
+const scored=B.slice().sort((a,b)=>(order[a.verdict]-order[b.verdict])||(b.pnl-a.pnl));
+document.getElementById("v-score").innerHTML=`<div class="fam"><div class="fwrap"><table>
+<tr><th class="cbar"></th><th style="width:210px">Bot</th><th style="width:120px">Verdict</th>
+<th>Goal — the pre-registered hypothesis</th><th style="width:300px">What would kill it</th>
+<th class="samp" style="width:118px">Sample</th><th style="width:86px">P&L</th></tr>
+${scored.map(b=>`<tr>
+ <td class="cbar" style="background:${fcol(b.family)}"></td>
+ <td><span class="bn">${esc(b.bot)}</span><br>
+   <span class="tag">${esc(b.family)}</span>${b.pr?`<span class="tag">${b.pr}</span>`:""}</td>
+ <td><span class="pill" style="background:${VC[b.verdict]||"var(--none)"}">${b.verdict}</span></td>
+ <td class="hyp">${b.hypothesis?esc(b.hypothesis):
+    `<i style="color:var(--ink3)">no pre-registration entry — predates the regime</i>`}</td>
+ <td class="kill">${b.kill?esc(b.kill):"—"}</td>
+ <td class="samp num">${b.sample_target
+    ? `${b.n} / ${b.sample_target}
+       <div class="sbar"><span style="width:${Math.min(100,100*b.n/b.sample_target)}%"></span></div>`
+    : (b.n||"—")}</td>
+ <td class="num">${b.n?money(b.pnl):"—"}</td></tr>`).join("")}
+</table></div></div>`;
+
+document.getElementById("foot").innerHTML =
+ `<b>Family is derived, not stored.</b> <span class="mono">bots_meta.csv</span> has no family
+ column — it is roster authority, and adding one is a data decision rather than a rendering one.
+ The taxonomy lives in <span class="mono">FAMILY_RULES</span> in
+ <span class="mono">scripts/roster.py</span>; a bot matching no rule is a hard failure, never
+ silently bucketed.<br>
+ <b>Verdicts are derived</b> from signature state, entry presence, position count and the stated
+ sample target — in that order. Regenerate with
+ <span class="mono">python3 scripts/roster.py</span>; <span class="mono">--check</span> exits 1 on drift.`;
+
+document.querySelectorAll(".tab").forEach(t=>t.onclick=()=>{
+ document.querySelectorAll(".tab").forEach(x=>x.classList.remove("on"));
+ document.querySelectorAll(".view").forEach(x=>x.classList.remove("on"));
+ t.classList.add("on"); document.getElementById("v-"+t.dataset.v).classList.add("on");});
+</script>
+</body>
+</html>
