@@ -377,6 +377,44 @@ def truncation_refusal(prior_min, new_min, prior_legs, new_legs, src, ledger_sta
     )
 
 
+def ops_reclass_refusal(reclassified, leaving_legs, prior_legs, new_legs, src, ledger_start):
+    """The G-2c refusal text. Names EVERY reclassified bot, the leg count leaving
+    the working ledger, the source export, LEDGER_START, the 0051b5e6 precedent,
+    the words 'NOTHING WAS WRITTEN', and the one flag that overrides it.
+    Returned (not raised) so the selftest can read it."""
+    bar = "!" * 72
+    bot_list = "\n".join(f"    - {b}   ({n} leg(s) leaving the working ledger)"
+                         for b, n in sorted(leaving_legs.items()))
+    total = sum(leaving_legs.values())
+    return (
+        "\n" + bar + "\n"
+        "REFUSED: this rebuild would RECLASSIFY one or more banked bots into the ops set.\n"
+        "\n"
+        f"  reclassified bot(s)                  : {', '.join(sorted(reclassified))}\n"
+        f"  legs leaving the working ledger      : {total}\n"
+        + bot_list + "\n"
+        f"  prior data/trades.csv                : {prior_legs} leg(s)\n"
+        f"  this rebuild would write             : {new_legs} leg(s)\n"
+        f"  source export                        : {os.path.basename(src)}\n"
+        f"  LEDGER_START                         : {ledger_start}\n"
+        "\n"
+        "  build_ledger.py is a FULL rebuild from ONE export. Reclassifying a bot\n"
+        "  with banked rows into ops_class=lab-ops moves those rows out of\n"
+        "  data/trades.csv. The working ledger loses that P/L without the rear\n"
+        "  or front dates changing, so neither G-2 nor G-2b would see it.\n"
+        "\n"
+        "  This is the same family as the 2026-08-12 truncation (commit 0051b5e6):\n"
+        "  rows were silently deleted from the working ledger and the loss was\n"
+        "  committed to master. See docs/ledger-truncation-forensics-2026-08-17.md.\n"
+        "\n"
+        "  NOTHING WAS WRITTEN.\n"
+        "\n"
+        "  If you genuinely intend to reclassify this bot, say so explicitly:\n"
+        f"      python3 scripts/build_ledger.py {os.path.basename(src)[:10]} --allow-ops-reclass\n"
+        + bar
+    )
+
+
 def load_meta():
     if not os.path.exists(META_PATH):
         sys.exit(f"ERROR: missing {META_PATH} (the bot classification source)")
@@ -392,7 +430,34 @@ def load_meta():
             "  silently, which is the contamination the exclusion exists to prevent.\n"
             f"  Add a `{OPS_CLASS_COL}` column (empty | {OPS_CLASS_VALUE!r}). Nothing was written."
         )
-    return {r["bot"]: r for r in rows}
+
+    # --- DUPLICATE-KEY FATAL (R-2026-08-19-ROSTER-KEY-AND-OPS-RECLASS-GUARD clause 1)
+    # `bot` is the natural key of this file; a repeated value makes the dict
+    # comprehension silently last-wins, replacing the bot's entire classification.
+    # A copied row with pillar=Lab + ops_class=lab-ops can then reroute that bot's
+    # banked history out of the working ledger while every exit code stays green.
+    seen, repeated = {}, []
+    for r in rows:
+        b = r["bot"]
+        if b in seen:
+            if b not in repeated:
+                repeated.append(b)
+        else:
+            seen[b] = r
+    if repeated:
+        sys.exit(
+            f"FATAL: {META_PATH} has duplicate `bot` value(s).\n"
+            "\n"
+            "  The `bot` column is the natural key of this file: every consumer keys\n"
+            "  on it, and a duplicate row silently REPLACES the previous classification\n"
+            "  instead of duplicating it. A copied row with pillar=Lab and\n"
+            f"  {OPS_CLASS_COL}={OPS_CLASS_VALUE!r} can reroute a bot's entire banked\n"
+            "  history to data/ops_rows.csv while the exit code stays 0.\n"
+            f"  Repeated key(s): {', '.join(sorted(repeated))}\n"
+            "\n"
+            "  Remove or merge the duplicate rows before rebuilding. Nothing was written."
+        )
+    return seen
 
 
 def _tag_tokens(s):
@@ -564,6 +629,11 @@ def main():
                     help="permit a rebuild whose min open_date is LATER than the "
                          "prior data/trades.csv's (G-2b). Never implicit — a distinct "
                          "axis from --allow-rewind.")
+    ap.add_argument("--allow-ops-reclass", action="store_true",
+                    help="permit a rebuild in which a bot with banked rows in the "
+                         "prior data/trades.csv has newly entered the ops set (G-2c). "
+                         "Never implicit — a third axis, distinct from --allow-rewind "
+                         "and --allow-front-truncate.")
     ap.add_argument("--root", default=None,
                     help="read and write DIR/data instead of the repo's, so a "
                          "fixture run cannot touch the live ledger (G-3). "
@@ -693,6 +763,28 @@ def main():
         print(f"!!   source export  {os.path.basename(src)}")
         print("!! Every trading day before "
               f"{new_min or 'the cutover'} is being removed from data/trades.csv.")
+        print("!" * 72)
+
+    # --- THE OPS-RECLASSIFICATION GUARD (G-2c) ---------------------------
+    # The interior mirror: a bot with banked rows in data/trades.csv that has
+    # NEWLY been declared ops_class=lab-ops would have those rows silently moved
+    # to data/ops_rows.csv. The rear (G-2) and front (G-2b) dates do not move,
+    # so neither edge guard would see the loss. Evaluated at the same pre-write
+    # call site, with the same new_working set (ops rows already subtracted).
+    reclassified = ops_bots & prior_bots
+    if reclassified:
+        leaving = collections.Counter(r["bot"] for r in prior_rows
+                                      if r["bot"] in reclassified)
+        if not args.allow_ops_reclass:
+            sys.exit(ops_reclass_refusal(reclassified, leaving, len(prior_rows),
+                                         len(new_working), src, ledger_start))
+        print("\n" + "!" * 72)
+        print("!! OPS-RECLASSIFICATION — explicitly authorised with --allow-ops-reclass.")
+        for b in sorted(leaving):
+            print(f"!!   {b:<48} {leaving[b]} leg(s) leaving the working ledger")
+        print(f"!!   prior data/trades.csv  : {len(prior_rows)} leg(s)")
+        print(f"!!   this rebuild writes    : {len(new_working)} leg(s)")
+        print(f"!!   source export          : {os.path.basename(src)}")
         print("!" * 72)
 
     # --- straddlers: visible, separate, never a working-ledger input ------
@@ -1240,6 +1332,121 @@ def selftest():
                              "open_date"),
                min_open_date([], "open_date")), (day1, ""))
 
+        # ---- M1: DUPLICATE `bot` KEY IN bots_meta.csv --------------------
+        # R-2026-08-19-ROSTER-KEY-AND-OPS-RECLASS-GUARD clause (1). A repeated
+        # `bot` value makes load_meta() silently last-wins; a copied ops row can
+        # then reroute a bot's banked history out of the working ledger.
+        _st_env(tmp, [norm_meta, dict(norm_meta, bot=NORMBOT)],
+                [_st_row(NORMBOT)])
+        before = open(_st_out(tmp, "trades.csv")).read()
+        code, out, _ = _st_run(tmp)
+        check("M1  duplicate `bot` key in bots_meta.csv REFUSES",
+              isinstance(code, str) and "duplicate `bot`" in code and NORMBOT in code,
+              True)
+        check("M1b nothing was written on the duplicate-key refusal",
+              open(_st_out(tmp, "trades.csv")).read(), before)
+
+        # ---- G13-G15: THE OPS-RECLASSIFICATION GUARD (G-2c) --------------
+        # R-2026-08-19-ROSTER-KEY-AND-OPS-RECLASS-GUARD clauses (2)-(3).
+        # A bot with banked rows that is newly declared lab-ops would have those
+        # rows silently moved to data/ops_rows.csv. The rear and front dates do
+        # not move, so G-2 and G-2b do not see it.
+        NORMBOT2 = "GF-QQQ-IC-Ride2"
+        norm2_meta = dict(norm_meta, bot=NORMBOT2)
+        ops_norm_meta = dict(norm_meta, pillar=OPS_PILLAR,
+                             **{OPS_CLASS_COL: OPS_CLASS_VALUE})
+        g13_d1, g13_d2 = "2099-01-02", "2099-01-03"
+        g13_src = "2099-01-04"
+
+        # Seed a two-day, two-bot prior ledger.
+        seed = ([_st_row(NORMBOT), _st_row(NORMBOT2),
+                 _st_row(NORMBOT, day=g13_d2), _st_row(NORMBOT2, day=g13_d2)])
+        _st_env(tmp, [norm_meta, norm2_meta], [_st_row(NORMBOT)],
+                exports={g13_src: seed})
+        code, out, _ = _st_run(tmp, extra=[g13_src])
+        led = list(csv.DictReader(open(_st_out(tmp, "trades.csv"))))
+        check("G13a baseline — seed two-day, two-bot ledger for G-2c tests",
+              (code, sorted({r["open_date"][:10] for r in led}), len(led)),
+              (None, [g13_d1, g13_d2], 4))
+
+        # Now reclassify NORMBOT to lab-ops; the next build should REFUSE.
+        reclass = ([_st_row(NORMBOT), _st_row(NORMBOT2),
+                    _st_row(NORMBOT, day=g13_d2), _st_row(NORMBOT2, day=g13_d2)])
+        _st_env(tmp, [ops_norm_meta, norm2_meta], [_st_row(NORMBOT)],
+                exports={"2099-01-05": reclass}, keep_prior=True)
+        before = open(_st_out(tmp, "trades.csv")).read()
+        code, out, _ = _st_run(tmp, extra=["2099-01-05"])
+        check("G13 ops-reclass — a banked bot newly declared lab-ops REFUSES",
+              isinstance(code, str)
+              and "REFUSED: this rebuild would RECLASSIFY" in code
+              and NORMBOT in code,
+              True)
+        check("G13b the refusal names the leg count, source export and LEDGER_START",
+              isinstance(code, str) and "legs leaving the working ledger" in code
+              and "2099-01-05.csv" in code,
+              True)
+        check("G13c nothing was written on the ops-reclass refusal",
+              open(_st_out(tmp, "trades.csv")).read(), before)
+
+        # Same fixture with the explicit escape hatch: proceeds and emits the banner.
+        code, out, _ = _st_run(tmp, extra=["2099-01-05", "--allow-ops-reclass"])
+        led = list(csv.DictReader(open(_st_out(tmp, "trades.csv"))))
+        opsf = list(csv.DictReader(open(_st_out(tmp, "ops_rows.csv"))))
+        check("G14 --allow-ops-reclass permits the reclass and emits a banner",
+              (code, "OPS-RECLASSIFICATION" in out,
+               sorted({r["bot"] for r in led}),
+               sorted({r["bot"] for r in opsf})),
+              (None, True, [NORMBOT2], [NORMBOT]))
+
+        # ---- G15: REAR / FRONT / INTERIOR ORDER --------------------------
+        # A single fixture trips all three guards. The refusal must come out in
+        # the required order: REAR first, then FRONT, then INTERIOR.
+        ord1, ord2, ord3 = "2099-01-02", "2099-01-03", "2099-01-04"
+        ord_src_seed = "2099-01-05"
+        ord_src_new = "2099-01-06"
+        ord_seed = [_st_row(NORMBOT, day=ord1), _st_row(NORMBOT2, day=ord3)]
+        ord_new = [_st_row(NORMBOT2, day=ord2)]
+
+        _st_env(tmp, [norm_meta, norm2_meta], [_st_row(NORMBOT, day=ord1)],
+                exports={ord_src_seed: ord_seed})
+        code, out, _ = _st_run(tmp, extra=[ord_src_seed])
+        led = list(csv.DictReader(open(_st_out(tmp, "trades.csv"))))
+        check("G15a baseline — seed day1 + day3 for ordering test",
+              (code, sorted({r["open_date"][:10] for r in led}), len(led)),
+              (None, [ord1, ord3], 2))
+
+        _st_env(tmp, [ops_norm_meta, norm2_meta], ord_new,
+                exports={ord_src_new: ord_new}, keep_prior=True)
+
+        # No override: the REAR guard fires first (new max day2 < prior max day3).
+        code, out, _ = _st_run(tmp, extra=[ord_src_new])
+        check("G15b no flags -> REAR (rewind) refusal wins over front + interior",
+              isinstance(code, str)
+              and "REFUSED: this rebuild would walk the working ledger BACKWARDS" in code
+              and "RECLASSIFY" not in code
+              and "TRUNCATE the working ledger from the FRONT" not in code,
+              True)
+
+        # --allow-rewind: the FRONT guard fires next (new min day2 > prior min day1).
+        code, out, _ = _st_run(tmp, extra=[ord_src_new, "--allow-rewind"])
+        check("G15c --allow-rewind -> FRONT (front-truncate) refusal wins over interior",
+              isinstance(code, str)
+              and "REFUSED: this rebuild would TRUNCATE the working ledger from the FRONT" in code
+              and "RECLASSIFY" not in code
+              and "walk the working ledger BACKWARDS" not in code,
+              True)
+
+        # --allow-rewind --allow-front-truncate: the INTERIOR guard fires last.
+        code, out, _ = _st_run(tmp,
+                               extra=[ord_src_new, "--allow-rewind", "--allow-front-truncate"])
+        check("G15d both edge overrides -> INTERIOR (ops-reclass) refusal fires",
+              isinstance(code, str)
+              and "REFUSED: this rebuild would RECLASSIFY" in code
+              and NORMBOT in code
+              and "walk the working ledger BACKWARDS" not in code
+              and "TRUNCATE the working ledger from the FRONT" not in code,
+              True)
+
         # ---- R1-R3: FIXTURE / LIVE SEPARATION (G-3) ----------------------
         check("R1  set_root points RAW/OUT/META at <root>/data",
               (RAW, OUT, META_PATH),
@@ -1268,9 +1475,11 @@ def selftest():
 
     print("SELF-TEST — build_ledger.py")
     print("  N* = E-3 §3.3 LAB OPS-CLASS EXCLUSION")
-    print("  G* = G-2 + G-2b MONOTONICITY GUARD")
+    print("  G* = G-2 + G-2b + G-2c MONOTONICITY & OPS-RECLASS GUARD")
     print("       (ledger-truncation-forensics-2026-08-17.md §7;")
-    print("        R-2026-08-19-LEDGER-FRONT-GUARD)")
+    print("        R-2026-08-19-LEDGER-FRONT-GUARD;")
+    print("        R-2026-08-19-ROSTER-KEY-AND-OPS-RECLASS-GUARD)")
+    print("  M* = DUPLICATE-KEY FATAL (bots_meta.csv `bot` column)")
     print("  R* = G-3 FIXTURE / LIVE SEPARATION (--root)")
     print("=" * 74)
     for ok, name, got, want in results:
