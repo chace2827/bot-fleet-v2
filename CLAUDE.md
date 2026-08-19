@@ -26,7 +26,8 @@ Contract: `docs/daily-loop-spec.md`.
    positions, 10 mirrors, zero excluded; `pre-registration-ledger.md` item 9; sha
    `cdceb0a8d444e570…`]**): a one-time frozen
    pre-lapse snapshot for the 7 live mirrors, read **only** by funding decisions.
-2. **Config**: capture files → `data/bots_config_v2.csv` (not yet written — Phase 2). **Never
+2. **Config**: capture files → `data/bots_config_v2.csv` (not yet written — Phase 2)
+   **[CORRECTED 2026-08-19 — WRITTEN. 246 data rows; line 1 reads verbatim `# bots_config_v2.csv — POST-CUTOVER config record. Built ONLY from capture, never hand-written`; sha `e54ee4ea9f3bfa7d…`. Dated first-hand device read 2026-08-19. Original text left standing.]**. **Never
    hand-written, never memory-derived.** `data/archive/bots_config.csv` is the OLD hand-written record —
    proven wrong on 3 of 4 audited bots. Retained for diffing only. Do not read a config fact from it.
 3. **What a bot actually did**: the position's **Trades list**. The Exit Options panel is NEVER
@@ -142,8 +143,11 @@ platform change): `docs/evidence-standards.md` §1, §9.2. The audit itself: `do
 **Data:** `data/archive/` — frozen v1 ledger, never a reporting input (`README-v1-ledger.md` first).
 `data/`: `bots_meta.csv` · `execution_audit.csv` — the **frozen 35-row detector validation fixture**
 (a test asset that survives the cutover) · `lessons.csv` · `captures/` · `receipts/` · `raw/` and
-`brief/` (post-cutover working dirs, currently empty). Not written yet: `bots_config_v2.csv`,
-`mirror_baseline.csv` — Phase 2–4 deliverables tracked in the `bot-fleet-migration` tracker.
+`brief/` (post-cutover working dirs, currently empty). ~~Not written yet: `bots_config_v2.csv`,
+`mirror_baseline.csv`~~ **[CORRECTED 2026-08-19 — BOTH WRITTEN. `bots_config_v2.csv` 246 data rows, sha
+`e54ee4ea9f3bfa7d…`; `mirror_baseline.csv` 10 data rows, sha `cdceb0a8d444e570…` (matches the §3 banner).
+Dated first-hand device read 2026-08-19. Original text struck, not removed.]** — Phase 2–4 deliverables
+tracked in the `bot-fleet-migration` tracker.
 
 ## 7. Build lanes
 Cowork = strategy, ops, decisions, docs, **and OA edits — Claude executes directly, self-verified

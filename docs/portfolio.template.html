@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bot Fleet — Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blue:#0073ea; --blue-h:#0060b9; --canvas:#f6f7fb; --white:#fff;
+  --ink:#323338; --ink2:#676879; --ink3:#9699a6; --line:#e6e9ef; --line2:#d0d4e4;
+  --done:#00c875; --work:#fdab3d; --stuck:#e2445c; --none:#c4c4c4; --ready:#579bfc;
+  --g1:#037f4c; --g2:#00c875; --g3:#579bfc; --g4:#a25ddc; --g5:#fdab3d; --g6:#e2445c; --g7:#ff642e; --g8:#784bd1;
+  --crit:#401694; --high:#5559df; --med:#579bfc; --low:#9d99b9;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Figtree,Roboto,-apple-system,"Segoe UI",sans-serif;background:var(--canvas);color:var(--ink);font-size:14px;display:flex;min-height:100vh}
+::-webkit-scrollbar{width:9px;height:9px}::-webkit-scrollbar-thumb{background:#c5c7d0;border-radius:5px}
+
+/* ---------- sidebar ---------- */
+.sb{width:222px;flex:none;background:var(--white);border-right:1px solid var(--line);padding:16px 0;position:sticky;top:0;height:100vh;overflow:auto}
+.sb .wk{display:flex;align-items:center;gap:9px;padding:0 16px 14px;border-bottom:1px solid var(--line);margin-bottom:10px}
+.sb .wkico{width:30px;height:30px;border-radius:7px;background:linear-gradient(135deg,#0073ea,#a25ddc);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex:none}
+.sb .wkname{font-weight:600;font-size:13.5px;line-height:1.2}
+.sb .wksub{font-size:11px;color:var(--ink3)}
+.sb h4{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink3);padding:10px 16px 5px;font-weight:600}
+.sb a{display:flex;align-items:center;gap:9px;padding:7px 16px;color:var(--ink);text-decoration:none;font-size:13.5px;border-radius:0}
+.sb a:hover{background:#f0f1f5}
+.sb a.on{background:#cce5ff;font-weight:600}
+.dot{width:9px;height:9px;border-radius:50%;flex:none}
+
+/* ---------- main ---------- */
+.main{flex:1;min-width:0;padding:20px 26px 70px}
+.bhead{margin-bottom:14px}
+.bhead h1{font-size:25px;font-weight:700;letter-spacing:-.02em;display:flex;align-items:center;gap:9px}
+.star{color:var(--ink3);font-size:17px}
+.bdesc{color:var(--ink2);font-size:13.5px;margin-top:4px}
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--line);margin:16px 0 18px}
+.tab{padding:8px 15px;font-size:14px;color:var(--ink2);cursor:pointer;border-bottom:2px solid transparent;font-weight:500;display:flex;align-items:center;gap:6px;white-space:nowrap}
+.tab:hover{background:#f0f1f5;border-radius:5px 5px 0 0}
+.tab.on{color:var(--blue);border-bottom-color:var(--blue);font-weight:600}
+.view{display:none}.view.on{display:block}
+
+/* ---------- table ---------- */
+.grp{margin-bottom:22px;background:var(--white);border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,.05);overflow:hidden}
+.ghead{display:flex;align-items:center;gap:8px;padding:10px 14px;cursor:pointer;user-select:none}
+.gchev{font-size:11px;transition:transform .15s;flex:none}
+.grp.cl .gchev{transform:rotate(-90deg)}
+.gname{font-weight:700;font-size:15px}
+.gcount{color:var(--ink3);font-size:12.5px;font-weight:400}
+.gq{color:var(--ink3);font-size:12.5px;font-style:italic;margin-left:4px}
+.gwrap{overflow-x:auto}
+.grp.cl .gwrap{display:none}
+table{border-collapse:collapse;width:100%;min-width:960px}
+th{font-size:12px;font-weight:400;color:var(--ink2);text-align:left;padding:6px 10px;border-bottom:1px solid var(--line);border-right:1px solid var(--line);white-space:nowrap;background:var(--white)}
+td{padding:0;border-bottom:1px solid var(--line);border-right:1px solid var(--line);height:37px;font-size:13.5px}
+tr:hover td{background:#f5f6f8}
+.cbar{width:6px;padding:0;border-right:none}
+.cname{padding:0 10px;min-width:330px}
+.tid{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--ink3);margin-right:8px}
+.pill{display:block;height:37px;line-height:37px;text-align:center;color:#fff;font-size:12.5px;font-weight:500;white-space:nowrap;padding:0 6px}
+.prio{display:block;height:37px;line-height:37px;text-align:center;color:#fff;font-size:12.5px;font-weight:500}
+.av{width:26px;height:26px;border-radius:50%;color:#fff;font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;margin:0 auto}
+.ctr{text-align:center;color:var(--ink2);font-size:12.5px}
+.prow-main{cursor:pointer}
+.pexp{display:none}
+.pexp.open{display:table-row}
+.pexp-chev{display:inline-block;color:var(--ink3);font-size:14px;margin-right:5px;transition:transform .15s}
+.pexp-chev.open{transform:rotate(90deg)}
+.addrow{padding:8px 14px;color:var(--ink3);font-size:13.5px}
+.mono{font-family:ui-monospace,Menlo,monospace;font-size:11.5px;color:var(--ink2)}
+
+/* battery */
+.bat{display:flex;height:18px;border-radius:4px;overflow:hidden;margin:0 10px;min-width:110px}
+.bat span{height:100%}
+.batlbl{font-size:11px;color:#fff;font-weight:600;text-align:center;line-height:18px}
+
+/* ---------- dashboard ---------- */
+.wgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:14px;margin-bottom:20px}
+.w{background:var(--white);border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,.05);padding:15px 17px}
+.w .wt{font-size:12px;color:var(--ink2);font-weight:500;margin-bottom:7px}
+.w .wn{font-size:33px;font-weight:700;line-height:1;letter-spacing:-.02em}
+.w .ws{font-size:11.5px;color:var(--ink3);margin-top:6px}
+.wide{background:var(--white);border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,.05);padding:17px 19px;margin-bottom:16px}
+.wide h3{font-size:15px;font-weight:600;margin-bottom:3px}
+.wide .h3s{font-size:12.5px;color:var(--ink3);margin-bottom:15px}
+.prow{display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid var(--line)}
+.prow:last-child{border-bottom:none}
+.pnm{width:210px;flex:none;font-size:13.5px;font-weight:500;display:flex;align-items:center;gap:8px}
+.pmet{flex:1;font-size:12.5px;color:var(--ink2);min-width:150px}
+.chip{display:inline-block;padding:2px 9px;border-radius:14px;font-size:11px;font-weight:700;color:#fff;white-space:nowrap}
+.barwrap{width:150px;flex:none;height:19px;border-radius:4px;overflow:hidden;display:flex;background:#eaecf2}
+
+/* kanban */
+.kb{display:flex;gap:13px;overflow-x:auto;padding-bottom:14px}
+.kcol{min-width:262px;flex:none;background:#eef0f5;border-radius:8px;padding:10px}
+.kh{display:flex;align-items:center;gap:7px;font-weight:600;font-size:13.5px;margin-bottom:9px;padding:0 3px}
+.kcard{background:var(--white);border-radius:6px;padding:10px 11px;margin-bottom:8px;box-shadow:0 1px 2px rgba(0,0,0,.07);border-left:3px solid}
+.kcard .kt{font-size:13px;line-height:1.35;margin-bottom:7px}
+.kfoot{display:flex;justify-content:space-between;align-items:center}
+.ktag{font-size:10.5px;color:var(--ink3)}
+
+.banner{background:#fff4e5;border:1px solid #ffd6a0;border-left:4px solid var(--work);border-radius:8px;padding:14px 17px;margin-bottom:18px}
+.banner b{color:#8a5200}
+.banner p{font-size:13px;color:#7a5320;margin-top:5px;line-height:1.55}
+.obj{background:var(--white);border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,.05);padding:15px 18px;margin-bottom:16px;border-left:4px solid var(--blue)}
+.obj .ol{font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink3);font-weight:600;margin-bottom:5px}
+.obj .ov{font-size:16px;color:#b26b00;font-weight:500}
+@media(max-width:820px){.sb{display:none}.main{padding:16px}}
+</style>
+</head>
+<body>
+
+<nav class="sb">
+  <div class="wk"><div class="wkico">BF</div><div><div class="wkname">Bot Fleet v2</div><div class="wksub">Portfolio workspace</div></div></div>
+  <h4>Boards</h4>
+  <a class="on" href="#"><span class="dot" style="background:var(--blue)"></span>Portfolio</a>
+  <a href="#"><span class="dot" style="background:var(--g1)"></span>Tasks</a>
+  <a href="#"><span class="dot" style="background:var(--g4)"></span>Rulings register</a>
+  <a href="#"><span class="dot" style="background:var(--g5)"></span>Daily loop</a>
+  <h4>Programs</h4>
+  <div id="sbprog"></div>
+</nav>
+
+<div class="main">
+  <div class="bhead">
+    <h1>Bot Fleet — Portfolio <span class="star">☆</span></h1>
+    <div class="bdesc" id="bdesc"></div>
+  </div>
+
+  <div class="factstrip" id="factstrip"></div>
+
+  <div class="tabs">
+    <div class="tab on" data-v="portfolio">▦ Portfolio</div>
+    <div class="tab" data-v="table">☰ Main Table</div>
+    <div class="tab" data-v="dash">◔ Dashboard</div>
+    <div class="tab" data-v="kanban">▤ Kanban</div>
+  </div>
+
+  <div class="view on" id="v-portfolio"></div>
+  <div class="view" id="v-table"></div>
+  <div class="view" id="v-dash"></div>
+  <div class="view" id="v-kanban"></div>
+</div>
+
+<script>
+/* ==== DATA START ==== */
+/* Everything between the DATA START / DATA END sentinels is REPLACED WHOLESALE by
+   scripts/portfolio.py. Do not hand-edit it and do not put styling in it — colours
+   live in PALETTE below, keyed by program order, so data/portfolio.csv never carries
+   presentation. Shape contract:
+     objective : string
+     programs  : [{n,name,q,metric,state,note,owner,wip}]        n = "P1".."P9"
+     tasks     : [[id, programId, title, owner, status, priority, est, blockedBy]]
+   status must be one of the SC keys below; priority is 1-4.
+   The sample row below exists so the template opens standalone. */
+const DATA = {
+objective:"[ unset ]",
+programs:[{n:"P1",name:"Sample program",q:"sample question",metric:"sample metric",
+           state:"Not started",note:"replaced at generation time",owner:"Andy",wip:"Idle"}],
+tasks:[["X-00","P1","Sample item","Andy","Not started",2,"","" ]]};
+/* ==== DATA END ==== */
+
+const SC={"Done":"var(--done)","Working on it":"var(--work)","Stuck":"var(--stuck)",
+          "Not started":"var(--none)","Ready":"var(--ready)","Needs sign-off":"var(--work)"};
+const PC=[0,"var(--crit)","var(--high)","var(--med)","var(--low)"];
+const PL=[0,"Critical","High","Medium","Low"];
+const AV={"Andy":"#0073ea","Devin":"#a25ddc","Cowork":"#00c875","Any agent":"#9699a6","—":"#c4c4c4"};
+const PALETTE=["var(--g1)","var(--g2)","var(--g3)","var(--g4)","var(--g5)",
+               "var(--g6)","var(--g7)","var(--g8)","var(--g3)"];
+const P=DATA.programs.map((p,i)=>({...p,color:p.color||PALETTE[i%PALETTE.length]}));
+const T=DATA.tasks;
+const of=id=>T.filter(t=>t[1]===id);
+const av=o=>`<div class="av" style="background:${AV[o]||'#9699a6'}" title="${o}">${o==="Any agent"?"?":(o==="—"?"–":o[0])}</div>`;
+const prog=id=>{const t=of(id);if(!t.length)return null;
+  const c={};t.forEach(x=>c[x[4]]=(c[x[4]]||0)+1);
+  return {n:t.length,c,pct:Math.round(100*(c["Done"]||0)/t.length)};};
+
+/* live-derived facts strip — these three come from surfaces the board does not author */
+(function(){const f=(DATA.facts)||{},d=v=>(v===null||v===undefined)?"—":v;
+ document.getElementById("factstrip").innerHTML =
+  `<span class="lbl">derived live —</span>`
+ +`<span><span class="lbl">roster rows</span> <b>${d(f.roster_rows)}</b></span>`
+ +`<span><span class="lbl">bots ON</span> <b>${d(f.roster_on)}</b></span>`
+ +`<span><span class="lbl">unsigned bots</span> <b>${d(f.unsigned)}</b></span>`
+ +`<span class="lbl">bots_meta.csv · STATUS.md</span>`;})();
+
+/* header line */
+document.getElementById("bdesc").innerHTML =
+  `${P.length} programs · ${T.length} items · one objective · 3 active slots — generated from `
+  +`<span class="mono">data/portfolio.csv</span> + <span class="mono">STATUS.md</span>`;
+
+/* sidebar */
+document.getElementById("sbprog").innerHTML=P.map(p=>
+ `<a href="#"><span class="dot" style="background:${p.color}"></span>${p.name}</a>`).join("");
+
+/* ---------- VIEW 1 · PORTFOLIO ---------- */
+const EMPTY=P.filter(p=>!of(p.n).length);
+const BANNER = EMPTY.length ? `<div class="banner"><b>⚠ ${EMPTY.length} of ${P.length} program${P.length===1?"":"s"} ${EMPTY.length===1?"has":"have"} zero items.</b>
+<p>${EMPTY.map(p=>p.name).join(", ")} — a program with a metric and no work behind it is either not really a program,
+or it is the one being avoided. An empty program is not a finished one.</p></div>` : "";
+document.getElementById("v-portfolio").innerHTML=`
+<div class="obj"><div class="ol">Objective</div><div class="ov">${DATA.objective}</div></div>
+${BANNER}
+<div class="grp"><div class="ghead" onclick="this.parentNode.classList.toggle('cl')">
+  <span class="gchev" style="color:var(--blue)">▼</span><span class="gname" style="color:var(--blue)">Programs</span>
+  <span class="gcount">${P.length} items · ${P.filter(p=>p.wip==="Active").length} of 3 active slots filled</span></div>
+<div class="gwrap"><table>
+<tr><th class="cbar"></th><th>Program</th><th style="width:130px">WIP</th><th style="width:150px">Metric state</th>
+<th style="width:60px">Owner</th><th style="width:290px">Headline metric</th><th style="width:170px">Progress</th><th style="width:80px">Items</th></tr>
+${P.map(p=>{const g=prog(p.n);
+ return `<tr class="prow-main" onclick="toggleProg('${p.n}')" title="click to show this program's items">
+ <td class="cbar" style="background:${p.color}"></td>
+ <td class="cname"><span class="pexp-chev" id="chev-${p.n}">›</span><span class="tid">${p.n}</span><b>${p.name}</b><br><span style="font-size:11.5px;color:var(--ink3);font-style:italic">${p.q} — ${p.note}</span></td>
+ <td><span class="pill" style="background:${p.wip==="Active"?"var(--done)":"var(--none)"}">${p.wip}</span></td>
+ <td><span class="pill" style="background:${SC[p.state]}">${p.state}</span></td>
+ <td>${av(p.owner)}</td>
+ <td style="padding:0 10px;color:var(--ink2);font-size:12.5px">${p.metric}</td>
+ <td>${g?`<div class="bat">${Object.entries(g.c).map(([s,n])=>
+     `<span style="background:${SC[s]};width:${100*n/g.n}%" title="${s}: ${n}"></span>`).join("")}</div>
+     <div style="text-align:center;font-size:10.5px;color:var(--ink3);margin-top:1px">${g.pct}% done</div>`
+   :`<div style="text-align:center;color:var(--stuck);font-size:12px;font-weight:600">no items</div>`}</td>
+ <td class="ctr">${g?g.n:0}</td></tr>
+ <tr><td class="cbar" style="background:${p.color}"></td>
+ <td class="cname" colspan="7" style="padding:5px 10px;font-size:12px;color:${p.wip==="Active"?"#1f7a4d":"var(--ink3)"}">
+   ${p.wip==="Active"
+     ? `<b>BET:</b> ${p.bet||"— not set —"} &nbsp;·&nbsp; <b>kill date</b> ${p.kill||"—"}`
+     : `<b>restart trigger:</b> ${p.restart||"— none named —"}`}</td></tr>
+ <tr class="pexp" id="exp-${p.n}"><td class="cbar" style="background:${p.color}"></td>
+ <td colspan="7" style="padding:0">${
+   of(p.n).length
+   ? of(p.n).map(x=>`<div class="t"><span class="tid">${x[0]}</span><span class="ttxt">${x[2]}</span>`
+       +`<span class="town">${x[3]}</span>`
+       +`<span class="tst" style="background:${SC[x[4]]};color:#fff;border-color:${SC[x[4]]}">${x[4]}</span>`
+       +`<span class="tst">${PL[x[5]]}</span></div>`).join("")
+   : `<div class="empty">Zero items. This program has a metric and no work behind it.</div>`
+ }</td></tr>`}).join("")}
+</table></div><div class="addrow">+ Add program</div></div>
+
+<div class="wide"><h3>Right now — 3 slots</h3>
+<div class="h3s">One bet per program, max three programs at a time. Everything else is idle on purpose.</div>
+${(()=>{const A=P.filter(p=>p.wip==="Active");
+ return [0,1,2].map(i=>{const p=A[i];
+  return p ? `<div class="prow"><div class="pnm"><span class="dot" style="background:${p.color}"></span>${p.name}</div>
+   <div class="pmet"><b>${p.bet||"— bet not set —"}</b></div>
+   <div style="width:130px;flex:none;text-align:right;font-size:12px;color:var(--ink2)">kill ${p.kill||"—"}</div></div>`
+   : `<div class="slot"><span class="sn">SLOT ${i+1}</span><span>empty</span></div>`;}).join("");})()}
+</div>`;
+
+/* ---------- VIEW 2 · MAIN TABLE ---------- */
+document.getElementById("v-table").innerHTML=P.map(p=>{const t=of(p.n);
+ return `<div class="grp${t.length?"":" cl"}"><div class="ghead" onclick="this.parentNode.classList.toggle('cl')">
+ <span class="gchev" style="color:${p.color}">▼</span><span class="gname" style="color:${p.color}">${p.name}</span>
+ <span class="gcount">${t.length} item${t.length===1?"":"s"}</span><span class="gq">${p.q}</span></div>
+ <div class="gwrap"><table>
+ <tr><th class="cbar"></th><th>Item</th><th style="width:60px">Owner</th><th style="width:135px">Status</th>
+ <th style="width:105px">Priority</th><th style="width:100px">Est</th><th style="width:110px">Blocked by</th></tr>
+ ${t.length?t.map(x=>`<tr>
+  <td class="cbar" style="background:${p.color}"></td>
+  <td class="cname"><span class="tid">${x[0]}</span>${x[2]}</td>
+  <td>${av(x[3])}</td>
+  <td><span class="pill" style="background:${SC[x[4]]}">${x[4]}</span></td>
+  <td><span class="prio" style="background:${PC[x[5]]}">${PL[x[5]]}</span></td>
+  <td class="ctr">${x[6]||"—"}</td>
+  <td class="ctr mono">${x[7]||"—"}</td></tr>`).join("")
+ :`<tr><td class="cbar" style="background:${p.color}"></td><td colspan="6" style="padding:11px 14px;color:var(--stuck);font-size:13px">
+   Zero items. This program has a metric and no work behind it — either it isn't really a program, or it's the one you've been avoiding.</td></tr>`}
+ </table></div><div class="addrow">+ Add item</div></div>`}).join("");
+
+/* ---------- VIEW 3 · DASHBOARD ---------- */
+const all=T.length, done=T.filter(t=>t[4]==="Done").length, stuck=T.filter(t=>t[4]==="Stuck").length,
+      sign=T.filter(t=>t[4]==="Needs sign-off").length, empty=EMPTY.length;
+document.getElementById("v-dash").innerHTML=`
+<div class="wgrid">
+ <div class="w"><div class="wt">Programs</div><div class="wn">${P.length}</div><div class="ws">1 objective · 3 active slots</div></div>
+ <div class="w"><div class="wt">Active bets</div><div class="wn" style="color:${P.filter(p=>p.wip==="Active").length?"var(--done)":"var(--work)"}">${P.filter(p=>p.wip==="Active").length} / 3</div><div class="ws">${P.filter(p=>p.wip==="Active").map(p=>p.n).join(" · ")||"none picked yet"}</div></div>
+ <div class="w"><div class="wt">Items mapped</div><div class="wn">${all}</div><div class="ws" style="color:var(--done)">${T.filter(t=>!P.some(p=>p.n===t[1])).length} orphans</div></div>
+ <div class="w"><div class="wt">Done</div><div class="wn" style="color:var(--done)">${done}</div><div class="ws">${Math.round(100*done/all)}% of all items</div></div>
+ <div class="w"><div class="wt">Awaiting Andy</div><div class="wn" style="color:var(--work)">${sign}</div><div class="ws">signatures blocking downstream</div></div>
+ <div class="w"><div class="wt">Empty programs</div><div class="wn" style="color:var(--stuck)">${empty}</div><div class="ws">${EMPTY.map(p=>p.n).join(" · ")||"none"}</div></div>
+</div>
+<div class="wide"><h3>Program health</h3>
+<div class="h3s">One metric each. Never a % complete — a metric must come from a surface you didn't author.</div>
+${P.map(p=>{const g=prog(p.n);return `<div class="prow">
+ <div class="pnm"><span class="dot" style="background:${p.color}"></span>${p.name}</div>
+ <div><span class="chip" style="background:${SC[p.state]}">${p.state}</span></div>
+ <div class="pmet">${p.metric}</div>
+ <div class="barwrap">${g?Object.entries(g.c).map(([s,n])=>
+   `<span style="background:${SC[s]};width:${100*n/g.n}%" title="${s}: ${n}"></span>`).join(""):""}</div>
+ <div style="width:62px;text-align:right;font-size:12.5px;color:var(--ink2)">${g?g.n+" items":"—"}</div>
+</div>`}).join("")}</div>
+<div class="wide"><h3>Where the work actually is</h3>
+<div class="h3s">Open items by program. The shape of this chart is the finding.</div>
+${P.map(p=>{const n=of(p.n).filter(t=>t[4]!=="Done").length,mx=Math.max(...P.map(q=>of(q.n).filter(t=>t[4]!=="Done").length));
+ return `<div class="prow"><div class="pnm"><span class="dot" style="background:${p.color}"></span>${p.name}</div>
+ <div style="flex:1"><div style="height:21px;border-radius:4px;background:${n?p.color:'#eaecf2'};width:${n?Math.max(4,100*n/mx):3}%;min-width:26px;
+ color:#fff;font-size:11.5px;font-weight:700;line-height:21px;text-align:right;padding-right:7px">${n||"0"}</div></div></div>`}).join("")}
+</div>`;
+
+/* ---------- VIEW 4 · KANBAN ---------- */
+const cols=["Stuck","Needs sign-off","Ready","Working on it","Not started","Done"];
+document.getElementById("v-kanban").innerHTML=`<div class="kb">${cols.map(c=>{
+ const t=T.filter(x=>x[4]===c);
+ return `<div class="kcol"><div class="kh"><span class="dot" style="background:${SC[c]}"></span>${c}
+ <span style="color:var(--ink3);font-weight:400">${t.length}</span></div>
+ ${t.map(x=>{const p=P.find(q=>q.n===x[1]);return `<div class="kcard" style="border-left-color:${p.color}">
+  <div class="kt"><span class="tid">${x[0]}</span>${x[2]}</div>
+  <div class="kfoot"><span class="ktag">${p.name}</span>${av(x[3])}</div></div>`}).join("")||
+  `<div style="font-size:12px;color:var(--ink3);padding:7px 3px">—</div>`}
+ </div>`}).join("")}</div>`;
+
+/* expand a program row into its items */
+function toggleProg(id){
+  const r=document.getElementById("exp-"+id), c=document.getElementById("chev-"+id);
+  if(!r) return;
+  r.classList.toggle("open"); if(c) c.classList.toggle("open");
+}
+window.toggleProg=toggleProg;
+
+/* tabs */
+document.querySelectorAll(".tab").forEach(t=>t.onclick=()=>{
+ document.querySelectorAll(".tab").forEach(x=>x.classList.remove("on"));
+ document.querySelectorAll(".view").forEach(x=>x.classList.remove("on"));
+ t.classList.add("on"); document.getElementById("v-"+t.dataset.v).classList.add("on");
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,1315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bot Fleet — Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blue:#0073ea; --blue-h:#0060b9; --canvas:#f6f7fb; --white:#fff;
+  --ink:#323338; --ink2:#676879; --ink3:#9699a6; --line:#e6e9ef; --line2:#d0d4e4;
+  --done:#00c875; --work:#fdab3d; --stuck:#e2445c; --none:#c4c4c4; --ready:#579bfc;
+  --g1:#037f4c; --g2:#00c875; --g3:#579bfc; --g4:#a25ddc; --g5:#fdab3d; --g6:#e2445c; --g7:#ff642e; --g8:#784bd1;
+  --crit:#401694; --high:#5559df; --med:#579bfc; --low:#9d99b9;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Figtree,Roboto,-apple-system,"Segoe UI",sans-serif;background:var(--canvas);color:var(--ink);font-size:14px;display:flex;min-height:100vh}
+::-webkit-scrollbar{width:9px;height:9px}::-webkit-scrollbar-thumb{background:#c5c7d0;border-radius:5px}
+
+/* ---------- sidebar ---------- */
+.sb{width:222px;flex:none;background:var(--white);border-right:1px solid var(--line);padding:16px 0;position:sticky;top:0;height:100vh;overflow:auto}
+.sb .wk{display:flex;align-items:center;gap:9px;padding:0 16px 14px;border-bottom:1px solid var(--line);margin-bottom:10px}
+.sb .wkico{width:30px;height:30px;border-radius:7px;background:linear-gradient(135deg,#0073ea,#a25ddc);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex:none}
+.sb .wkname{font-weight:600;font-size:13.5px;line-height:1.2}
+.sb .wksub{font-size:11px;color:var(--ink3)}
+.sb h4{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink3);padding:10px 16px 5px;font-weight:600}
+.sb a{display:flex;align-items:center;gap:9px;padding:7px 16px;color:var(--ink);text-decoration:none;font-size:13.5px;border-radius:0}
+.sb a:hover{background:#f0f1f5}
+.sb a.on{background:#cce5ff;font-weight:600}
+.dot{width:9px;height:9px;border-radius:50%;flex:none}
+
+/* ---------- main ---------- */
+.main{flex:1;min-width:0;padding:20px 26px 70px}
+.bhead{margin-bottom:14px}
+.bhead h1{font-size:25px;font-weight:700;letter-spacing:-.02em;display:flex;align-items:center;gap:9px}
+.star{color:var(--ink3);font-size:17px}
+.bdesc{color:var(--ink2);font-size:13.5px;margin-top:4px}
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--line);margin:16px 0 18px}
+.tab{padding:8px 15px;font-size:14px;color:var(--ink2);cursor:pointer;border-bottom:2px solid transparent;font-weight:500;display:flex;align-items:center;gap:6px;white-space:nowrap}
+.tab:hover{background:#f0f1f5;border-radius:5px 5px 0 0}
+.tab.on{color:var(--blue);border-bottom-color:var(--blue);font-weight:600}
+.view{display:none}.view.on{display:block}
+
+/* ---------- table ---------- */
+.grp{margin-bottom:22px;background:var(--white);border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,.05);overflow:hidden}
+.ghead{display:flex;align-items:center;gap:8px;padding:10px 14px;cursor:pointer;user-select:none}
+.gchev{font-size:11px;transition:transform .15s;flex:none}
+.grp.cl .gchev{transform:rotate(-90deg)}
+.gname{font-weight:700;font-size:15px}
+.gcount{color:var(--ink3);font-size:12.5px;font-weight:400}
+.gq{color:var(--ink3);font-size:12.5px;font-style:italic;margin-left:4px}
+.gwrap{overflow-x:auto}
+.grp.cl .gwrap{display:none}
+table{border-collapse:collapse;width:100%;min-width:960px}
+th{font-size:12px;font-weight:400;color:var(--ink2);text-align:left;padding:6px 10px;border-bottom:1px solid var(--line);border-right:1px solid var(--line);white-space:nowrap;background:var(--white)}
+td{padding:0;border-bottom:1px solid var(--line);border-right:1px solid var(--line);height:37px;font-size:13.5px}
+tr:hover td{background:#f5f6f8}
+.cbar{width:6px;padding:0;border-right:none}
+.cname{padding:0 10px;min-width:330px}
+.tid{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--ink3);margin-right:8px}
+.pill{display:block;height:37px;line-height:37px;text-align:center;color:#fff;font-size:12.5px;font-weight:500;white-space:nowrap;padding:0 6px}
+.prio{display:block;height:37px;line-height:37px;text-align:center;color:#fff;font-size:12.5px;font-weight:500}
+.av{width:26px;height:26px;border-radius:50%;color:#fff;font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;margin:0 auto}
+.ctr{text-align:center;color:var(--ink2);font-size:12.5px}
+.prow-main{cursor:pointer}
+.pexp{display:none}
+.pexp.open{display:table-row}
+.pexp-chev{display:inline-block;color:var(--ink3);font-size:14px;margin-right:5px;transition:transform .15s}
+.pexp-chev.open{transform:rotate(90deg)}
+.addrow{padding:8px 14px;color:var(--ink3);font-size:13.5px}
+.mono{font-family:ui-monospace,Menlo,monospace;font-size:11.5px;color:var(--ink2)}
+
+/* battery */
+.bat{display:flex;height:18px;border-radius:4px;overflow:hidden;margin:0 10px;min-width:110px}
+.bat span{height:100%}
+.batlbl{font-size:11px;color:#fff;font-weight:600;text-align:center;line-height:18px}
+
+/* ---------- dashboard ---------- */
+.wgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:14px;margin-bottom:20px}
+.w{background:var(--white);border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,.05);padding:15px 17px}
+.w .wt{font-size:12px;color:var(--ink2);font-weight:500;margin-bottom:7px}
+.w .wn{font-size:33px;font-weight:700;line-height:1;letter-spacing:-.02em}
+.w .ws{font-size:11.5px;color:var(--ink3);margin-top:6px}
+.wide{background:var(--white);border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,.05);padding:17px 19px;margin-bottom:16px}
+.wide h3{font-size:15px;font-weight:600;margin-bottom:3px}
+.wide .h3s{font-size:12.5px;color:var(--ink3);margin-bottom:15px}
+.prow{display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid var(--line)}
+.prow:last-child{border-bottom:none}
+.pnm{width:210px;flex:none;font-size:13.5px;font-weight:500;display:flex;align-items:center;gap:8px}
+.pmet{flex:1;font-size:12.5px;color:var(--ink2);min-width:150px}
+.chip{display:inline-block;padding:2px 9px;border-radius:14px;font-size:11px;font-weight:700;color:#fff;white-space:nowrap}
+.barwrap{width:150px;flex:none;height:19px;border-radius:4px;overflow:hidden;display:flex;background:#eaecf2}
+
+/* kanban */
+.kb{display:flex;gap:13px;overflow-x:auto;padding-bottom:14px}
+.kcol{min-width:262px;flex:none;background:#eef0f5;border-radius:8px;padding:10px}
+.kh{display:flex;align-items:center;gap:7px;font-weight:600;font-size:13.5px;margin-bottom:9px;padding:0 3px}
+.kcard{background:var(--white);border-radius:6px;padding:10px 11px;margin-bottom:8px;box-shadow:0 1px 2px rgba(0,0,0,.07);border-left:3px solid}
+.kcard .kt{font-size:13px;line-height:1.35;margin-bottom:7px}
+.kfoot{display:flex;justify-content:space-between;align-items:center}
+.ktag{font-size:10.5px;color:var(--ink3)}
+
+.banner{background:#fff4e5;border:1px solid #ffd6a0;border-left:4px solid var(--work);border-radius:8px;padding:14px 17px;margin-bottom:18px}
+.banner b{color:#8a5200}
+.banner p{font-size:13px;color:#7a5320;margin-top:5px;line-height:1.55}
+.obj{background:var(--white);border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,.05);padding:15px 18px;margin-bottom:16px;border-left:4px solid var(--blue)}
+.obj .ol{font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink3);font-weight:600;margin-bottom:5px}
+.obj .ov{font-size:16px;color:#b26b00;font-weight:500}
+@media(max-width:820px){.sb{display:none}.main{padding:16px}}
+</style>
+</head>
+<body>
+
+<nav class="sb">
+  <div class="wk"><div class="wkico">BF</div><div><div class="wkname">Bot Fleet v2</div><div class="wksub">Portfolio workspace</div></div></div>
+  <h4>Boards</h4>
+  <a class="on" href="#"><span class="dot" style="background:var(--blue)"></span>Portfolio</a>
+  <a href="#"><span class="dot" style="background:var(--g1)"></span>Tasks</a>
+  <a href="#"><span class="dot" style="background:var(--g4)"></span>Rulings register</a>
+  <a href="#"><span class="dot" style="background:var(--g5)"></span>Daily loop</a>
+  <h4>Programs</h4>
+  <div id="sbprog"></div>
+</nav>
+
+<div class="main">
+  <div class="bhead">
+    <h1>Bot Fleet — Portfolio <span class="star">☆</span></h1>
+    <div class="bdesc" id="bdesc"></div>
+  </div>
+
+  <div class="factstrip" id="factstrip"></div>
+
+  <div class="tabs">
+    <div class="tab on" data-v="portfolio">▦ Portfolio</div>
+    <div class="tab" data-v="table">☰ Main Table</div>
+    <div class="tab" data-v="dash">◔ Dashboard</div>
+    <div class="tab" data-v="kanban">▤ Kanban</div>
+  </div>
+
+  <div class="view on" id="v-portfolio"></div>
+  <div class="view" id="v-table"></div>
+  <div class="view" id="v-dash"></div>
+  <div class="view" id="v-kanban"></div>
+</div>
+
+<script>
+/* ==== DATA START ==== */
+const DATA = {
+ "facts": {
+  "roster_on": 19,
+  "roster_rows": 44,
+  "unsigned": 4
+ },
+ "objective": "A bot fleet whose P&L I can prove, that runs unattended, and that a competent stranger could take over from the docs alone.",
+ "programs": [
+  {
+   "bet": "Close the unsigned-P&L clause: every bot contributing to headline P&L is signed or switched off",
+   "kill": "2026-09-02",
+   "metric": "Consecutive trading days all-guards-green AND $0 headline P&L from an unsigned bot",
+   "n": "P1",
+   "name": "Ledger & Capture Truth",
+   "note": "~88% of Aug P&L from one unsigned bot; 4 bots on DO-NOT-SWITCH-ON",
+   "owner": "Andy",
+   "q": "are the numbers real",
+   "restart": "",
+   "state": "Stuck",
+   "wip": "Active"
+  },
+  {
+   "bet": "Make the signed-bot P&L figure exist and appear in STATUS.md",
+   "kill": "2026-08-26",
+   "metric": "Closed P&L attributable to signed, gated bots only",
+   "n": "P2",
+   "name": "Edge Discovery",
+   "note": "29 of 44 bots traded zero times; headline concentrated in one variant",
+   "owner": "Andy",
+   "q": "does it actually make money",
+   "restart": "",
+   "state": "Stuck",
+   "wip": "Active"
+  },
+  {
+   "bet": "",
+   "kill": "",
+   "metric": "Slippage-adjusted P&L as a % of paper P&L",
+   "n": "P3",
+   "name": "Execution Realism",
+   "note": "unmeasured; 1-lot bots flagged fill-untested at scale",
+   "owner": "Andy",
+   "q": "does it survive real money",
+   "restart": "when P2's signed-bot P&L figure exists and is positive",
+   "state": "Not started",
+   "wip": "Idle"
+  },
+  {
+   "bet": "",
+   "kill": "",
+   "metric": "Count of valid arms (hedge-research.md 5.2) then delta-R vs the unhedged Ride control",
+   "n": "P4",
+   "name": "Hedging & Breach Response",
+   "note": "0 valid arms; section 5 invalidated the tournament and every ranking",
+   "owner": "Andy",
+   "q": "what do you do when it goes against you",
+   "restart": "when G-4 lands (hedge_tournament.csv re-keyed on the natural key)",
+   "state": "Stuck",
+   "wip": "Idle"
+  },
+  {
+   "bet": "",
+   "kill": "",
+   "metric": "Backtest-to-paper agreement rate",
+   "n": "P5",
+   "name": "Research Engine",
+   "note": "4 engines built, 0 wired into daily.sh",
+   "owner": "Andy",
+   "q": "is the edge-finding machine worth running",
+   "restart": "when T-16 is ruled — the four engine triggers decided",
+   "state": "Not started",
+   "wip": "Idle"
+  },
+  {
+   "bet": "",
+   "kill": "",
+   "metric": "PRs merged per week with zero post-merge defects",
+   "n": "P6",
+   "name": "Agent Harness",
+   "note": "merging steadily; 2 defects passed CI green",
+   "owner": "Andy",
+   "q": "how fast can I build",
+   "restart": "when an active program's bet is blocked on build capacity",
+   "state": "Working on it",
+   "wip": "Idle"
+  },
+  {
+   "bet": "Sign the agent charter and the mechanics contract",
+   "kill": "2026-08-26",
+   "metric": "Open rulings unexecuted plus known propagation gaps; target 0",
+   "n": "P7",
+   "name": "Governance & Evidence",
+   "note": "2310 rules never triaged; charter and mechanics contract unsigned",
+   "owner": "Andy",
+   "q": "is it true, and does it stick",
+   "restart": "",
+   "state": "Stuck",
+   "wip": "Active"
+  },
+  {
+   "bet": "",
+   "kill": "",
+   "metric": "Months of funded runway plus handoff score 0-100",
+   "n": "P8",
+   "name": "The Business",
+   "note": "LLC migration; Tradier funding; the business-partner question",
+   "owner": "Andy",
+   "q": "can it be a business, and can I hand it over",
+   "restart": "when P2's signed-bot P&L is positive for 4 consecutive weeks",
+   "state": "Not started",
+   "wip": "Idle"
+  },
+  {
+   "bet": "",
+   "kill": "",
+   "metric": "/bots capture agrees with bots_meta.csv row for row; days since an unexplained platform state change",
+   "n": "P9",
+   "name": "OA Platform & Account",
+   "note": "08-07: 41 active bots went to 0 and moved no other program's metric",
+   "owner": "Andy",
+   "q": "is the venue still what we think it is",
+   "restart": "on any unexplained /bots state change, or when the roster sweep is scheduled",
+   "state": "Not started",
+   "wip": "Idle"
+  }
+ ],
+ "tasks": [
+  [
+   "T-03",
+   "P1",
+   "Investigate the ledger regression",
+   "Any agent",
+   "Not started",
+   1,
+   "10 min",
+   ""
+  ],
+  [
+   "T-05",
+   "P1",
+   "Add the stable trade_id tracker item",
+   "Any agent",
+   "Not started",
+   2,
+   "5 min",
+   "T-03"
+  ],
+  [
+   "T-10",
+   "P1",
+   "Stable trade_id from the natural key and migrate the accumulator",
+   "Devin",
+   "Working on it",
+   2,
+   "1 session",
+   "T-03"
+  ],
+  [
+   "T-12",
+   "P1",
+   "Heartbeat artifact per trading day",
+   "Devin",
+   "Not started",
+   2,
+   "1 session",
+   ""
+  ],
+  [
+   "T-13",
+   "P1",
+   "Unsigned banner in report.py",
+   "Devin",
+   "Not started",
+   3,
+   "30 min",
+   ""
+  ],
+  [
+   "D-02",
+   "P1",
+   "F1 roster - bots_meta rebuilt with the greenfield arms",
+   "Devin",
+   "Done",
+   2,
+   "",
+   ""
+  ],
+  [
+   "T-04",
+   "P3",
+   "Fix the Tradier tracker line",
+   "Any agent",
+   "Working on it",
+   2,
+   "10 min",
+   ""
+  ],
+  [
+   "T-11",
+   "P3",
+   "Split the Tradier failure modes then re-issue the token",
+   "Devin",
+   "Not started",
+   2,
+   "1 session",
+   "T-04"
+  ],
+  [
+   "T-16",
+   "P5",
+   "Decide whether the four unwired engines get triggers and in what order",
+   "Andy",
+   "Not started",
+   3,
+   "Thursday",
+   "T-02"
+  ],
+  [
+   "S-01",
+   "P5",
+   "SCOREBOARD - engines wired into daily.sh",
+   "-",
+   "Stuck",
+   1,
+   "",
+   ""
+  ],
+  [
+   "T-01",
+   "P6",
+   "Commit the five untracked files",
+   "Any agent",
+   "Working on it",
+   1,
+   "5 min",
+   ""
+  ],
+  [
+   "T-09",
+   "P6",
+   "Adopt branch discipline in practice",
+   "Cowork",
+   "Working on it",
+   1,
+   "now",
+   ""
+  ],
+  [
+   "T-15",
+   "P6",
+   "Fixture-isolate the non-hermetic tests and add TAPE_FIXTURE mode",
+   "Devin",
+   "Not started",
+   3,
+   "1 session",
+   ""
+  ],
+  [
+   "T-18",
+   "P6",
+   "Devin API key into the Cowork connector",
+   "Andy",
+   "Not started",
+   3,
+   "5 min",
+   ""
+  ],
+  [
+   "T-24",
+   "P6",
+   "Read AI Agent Stack section 9 before any Surface-Explorer work",
+   "Cowork",
+   "Not started",
+   4,
+   "20 min",
+   ""
+  ],
+  [
+   "T-25",
+   "P6",
+   "Refresh AI Agent Stack section 0 assumptions",
+   "Any agent",
+   "Not started",
+   3,
+   "20 min",
+   ""
+  ],
+  [
+   "T-26",
+   "P6",
+   "Answer the three questions in the recap",
+   "Devin",
+   "Not started",
+   2,
+   "",
+   "T-27"
+  ],
+  [
+   "T-27",
+   "P6",
+   "Send the recap to Devin",
+   "Andy",
+   "Ready",
+   2,
+   "5 min",
+   ""
+  ],
+  [
+   "T-22",
+   "P6",
+   "Write the printable role descriptions",
+   "Cowork",
+   "Done",
+   2,
+   "",
+   ""
+  ],
+  [
+   "D-01",
+   "P6",
+   "Phase 0 gate - CI, CODEOWNERS and .env.example tracked",
+   "Devin",
+   "Done",
+   1,
+   "",
+   ""
+  ],
+  [
+   "D-05",
+   "P6",
+   "Devin work queue established as cross-session memory",
+   "Devin",
+   "Done",
+   2,
+   "",
+   ""
+  ],
+  [
+   "D-06",
+   "P6",
+   "Roles and ingredients build map",
+   "Devin",
+   "Done",
+   2,
+   "",
+   ""
+  ],
+  [
+   "T-02",
+   "P7",
+   "Sign the mechanics contract",
+   "Andy",
+   "Needs sign-off",
+   1,
+   "30 min",
+   "T-01"
+  ],
+  [
+   "T-06",
+   "P7",
+   "Apply the exit_rows anti-rediscovery note",
+   "Any agent",
+   "Not started",
+   2,
+   "10 min",
+   ""
+  ],
+  [
+   "T-14",
+   "P7",
+   "Archive sweep - git mv plus citation rewrite in ONE commit",
+   "Devin",
+   "Not started",
+   3,
+   "1 session",
+   ""
+  ],
+  [
+   "T-17",
+   "P7",
+   "Automation Log target observation",
+   "Cowork",
+   "Stuck",
+   4,
+   "5 min once reachable",
+   "OA reactivation"
+  ],
+  [
+   "T-19",
+   "P7",
+   "Sign the agent charter",
+   "Andy",
+   "Needs sign-off",
+   1,
+   "15 min",
+   "T-01"
+  ],
+  [
+   "T-20",
+   "P7",
+   "Strike or amend charter section 3 flag",
+   "Andy",
+   "Needs sign-off",
+   1,
+   "2 min",
+   "T-19"
+  ],
+  [
+   "T-21",
+   "P7",
+   "De-duplicate the two role-state docs",
+   "Cowork",
+   "Working on it",
+   2,
+   "10 min",
+   ""
+  ],
+  [
+   "T-23",
+   "P7",
+   "Confirm RULINGS.md is the canonical rulings file the charter names",
+   "Cowork",
+   "Not started",
+   2,
+   "10 min",
+   ""
+  ],
+  [
+   "T-28",
+   "P7",
+   "Triage the rules catalog - what still applies",
+   "Cowork",
+   "Not started",
+   2,
+   "1 session",
+   ""
+  ],
+  [
+   "T-07",
+   "P7",
+   "Carry the two operating rules into the charter",
+   "Cowork",
+   "Done",
+   2,
+   "",
+   ""
+  ],
+  [
+   "T-08",
+   "P7",
+   "Turn the build map into docs/agent-charter.md",
+   "Cowork",
+   "Done",
+   1,
+   "",
+   ""
+  ],
+  [
+   "D-03",
+   "P7",
+   "Rules catalog generated",
+   "Devin",
+   "Done",
+   2,
+   "",
+   ""
+  ],
+  [
+   "D-04",
+   "P7",
+   "Canonical rulings register consolidated",
+   "Devin",
+   "Done",
+   2,
+   "",
+   ""
+  ],
+  [
+   "T-29",
+   "P6",
+   "Merge the gate - PR #3 plus branch protection",
+   "Andy",
+   "Not started",
+   1,
+   "",
+   ""
+  ],
+  [
+   "T-30",
+   "P7",
+   "Rule the Reconciler IN (roles-and-ingredients row 10)",
+   "Andy",
+   "Not started",
+   2,
+   "",
+   ""
+  ],
+  [
+   "T-31",
+   "P7",
+   "Build the Reconciler - daily read-only contradiction report",
+   "Cowork",
+   "Not started",
+   2,
+   "",
+   "T-30"
+  ],
+  [
+   "G-4",
+   "P4",
+   "Re-key hedge_tournament.csv on the natural key",
+   "Devin",
+   "Working on it",
+   2,
+   "",
+   ""
+  ],
+  [
+   "E3-1",
+   "P7",
+   "E-3 section 3.3 - THREE ITEMS GATED, nothing decided by that session",
+   "Andy",
+   "Stuck",
+   2,
+   "",
+   ""
+  ],
+  [
+   "M-01",
+   "P6",
+   "T11 Tracker refresh and retag",
+   "Cowork",
+   "Working on it",
+   3,
+   "",
+   ""
+  ],
+  [
+   "M-02",
+   "P2",
+   "T12 Baseline forensic (optional capacity burn)",
+   "Cowork",
+   "Not started",
+   4,
+   "",
+   ""
+  ],
+  [
+   "M-03",
+   "P5",
+   "research_loop.py fix spec for Claude Code implementation",
+   "Cowork",
+   "Working on it",
+   2,
+   "",
+   ""
+  ],
+  [
+   "M-04",
+   "P7",
+   "Review the consolidated plan and runbook",
+   "Andy",
+   "Not started",
+   2,
+   "",
+   ""
+  ],
+  [
+   "M-05",
+   "P6",
+   "git init v2 plus new private repo; re-point the launchd backup agent",
+   "Andy",
+   "Working on it",
+   2,
+   "",
+   ""
+  ],
+  [
+   "M-07",
+   "P1",
+   "Toggle-state screenshots - both AUTOMATIONS and EXIT OPTIONS, per bot",
+   "Cowork",
+   "Not started",
+   2,
+   "",
+   ""
+  ],
+  [
+   "M-09",
+   "P1",
+   "Log every inactive-era edit",
+   "Cowork",
+   "Working on it",
+   2,
+   "",
+   ""
+  ],
+  [
+   "M-11",
+   "P1",
+   "Liveness check: every ON bot shows a position or a scanner run - HALF DONE",
+   "Cowork",
+   "Not started",
+   2,
+   "",
+   ""
+  ],
+  [
+   "M-15",
+   "P1",
+   "Bookmarklet capture of /bots IS the roster authority - take it BEFORE any sweep",
+   "Cowork",
+   "Not started",
+   2,
+   "",
+   ""
+  ],
+  [
+   "M-37",
+   "P1",
+   "Liveness check plus drift report on day 1",
+   "Cowork",
+   "Not started",
+   2,
+   "",
+   ""
+  ],
+  [
+   "M-38",
+   "P1",
+   "Every active bot GREEN on the drift report for 5 consecutive trading days",
+   "Cowork",
+   "Not started",
+   1,
+   "",
+   ""
+  ],
+  [
+   "M-14",
+   "P2",
+   "Open the first Track B arms - LOSS SIDE first, 8 slots max",
+   "Andy",
+   "Not started",
+   2,
+   "",
+   ""
+  ],
+  [
+   "M-28",
+   "P2",
+   "Build the greenfield IC family (4-6 bots), matched",
+   "Andy",
+   "Not started",
+   2,
+   "",
+   ""
+  ],
+  [
+   "M-30",
+   "P2",
+   "Optional: 1-lot canary bot whose PT should fill daily",
+   "Andy",
+   "Not started",
+   3,
+   "",
+   ""
+  ],
+  [
+   "M-31",
+   "P2",
+   "Build a few EXPLORATORY test bots that fire every day and usually trade",
+   "Andy",
+   "Not started",
+   3,
+   "",
+   ""
+  ],
+  [
+   "M-33",
+   "P3",
+   "Set sizing once, at restart",
+   "Andy",
+   "Not started",
+   2,
+   "",
+   ""
+  ],
+  [
+   "M-36",
+   "P3",
+   "Order-level verification on all 17 ON bots",
+   "Andy",
+   "Working on it",
+   1,
+   "",
+   ""
+  ],
+  [
+   "M-29",
+   "P4",
+   "Build the rebuilt hedge tournament arms, matched",
+   "Andy",
+   "Not started",
+   2,
+   "",
+   ""
+  ],
+  [
+   "M-39",
+   "P4",
+   "QQQ-IC-0DTE-Baseline forensic",
+   "Cowork",
+   "Not started",
+   3,
+   "",
+   ""
+  ],
+  [
+   "M-40",
+   "P4",
+   "Batch T1 (exit mechanic) and Batch M (middle-band coverage)",
+   "Cowork",
+   "Not started",
+   3,
+   "",
+   ""
+  ],
+  [
+   "M-13",
+   "P5",
+   "Freeze research_loop.py (VERSION, FROZEN_ON, self-hash) and wire as stage 9 of daily.sh",
+   "Cowork",
+   "Stuck",
+   2,
+   "",
+   "M-03"
+  ],
+  [
+   "M-43",
+   "P6",
+   "Commit Block 2 - git rm current-state.md and add state.md, CLAUDE.md, evidence-standards, history-index, session-log",
+   "Andy",
+   "Not started",
+   2,
+   "",
+   ""
+  ],
+  [
+   "M-44",
+   "P6",
+   "Block 3 - narrative trims of v2-born ops docs",
+   "Cowork",
+   "Not started",
+   4,
+   "",
+   ""
+  ],
+  [
+   "M-45",
+   "P6",
+   "Block 4 - reference merges and trims",
+   "Cowork",
+   "Not started",
+   4,
+   "",
+   ""
+  ],
+  [
+   "M-32",
+   "P7",
+   "DRAFT all ~18 pre-registration entries during the build window",
+   "Cowork",
+   "Not started",
+   2,
+   "",
+   ""
+  ],
+  [
+   "M-34",
+   "P7",
+   "REWRITE rules-of-engagement.md - your edit, not Claude's",
+   "Andy",
+   "Not started",
+   3,
+   "",
+   ""
+  ],
+  [
+   "M-35",
+   "P7",
+   "REWRITE north-star.md - your edit, not Claude's",
+   "Andy",
+   "Not started",
+   3,
+   "",
+   ""
+  ],
+  [
+   "M-41",
+   "P7",
+   "Evidence-standards redesign session - proposal prepared, awaiting your ruling",
+   "Andy",
+   "Working on it",
+   2,
+   "",
+   ""
+  ],
+  [
+   "M-42",
+   "P7",
+   "Later REWRITEs from the archive - no deadline",
+   "Cowork",
+   "Not started",
+   4,
+   "",
+   ""
+  ],
+  [
+   "M-08",
+   "P9",
+   "One-dead-bot probe: does an archived bot still appear in the Export CSV?",
+   "Cowork",
+   "Not started",
+   3,
+   "",
+   ""
+  ],
+  [
+   "M-10",
+   "P9",
+   "Verify the single-rep support answers in the UI - narrowed to ONE Day-0 question",
+   "Cowork",
+   "Working on it",
+   3,
+   "",
+   ""
+  ],
+  [
+   "M-12",
+   "P9",
+   "Section 9 #5 - is re-applying Update Position Exit Options side-effect-free?",
+   "Cowork",
+   "Not started",
+   3,
+   "",
+   ""
+  ],
+  [
+   "M-27",
+   "P9",
+   "Follow the 9-step per-clone checklist every time",
+   "Cowork",
+   "Not started",
+   2,
+   "",
+   ""
+  ],
+  [
+   "M-06",
+   "P9",
+   "DELETE EXACTLY TWO BOTS - DIR-SPX-PutVIX22-SL75 is NOT one of them",
+   "Cowork",
+   "Not started",
+   4,
+   "",
+   ""
+  ],
+  [
+   "M-16",
+   "P9",
+   "DELETE the zero-trade bots (2 known, capture-determined)",
+   "Cowork",
+   "Not started",
+   4,
+   "",
+   ""
+  ],
+  [
+   "M-17",
+   "P9",
+   "Archive the 2 SPX Fortress arms",
+   "Cowork",
+   "Not started",
+   4,
+   "",
+   ""
+  ],
+  [
+   "M-18",
+   "P9",
+   "Archive the 2 unverified QQQ Fortress variants",
+   "Cowork",
+   "Not started",
+   4,
+   "",
+   ""
+  ],
+  [
+   "M-19",
+   "P9",
+   "Archive the 5-bot QQQ hedge family",
+   "Cowork",
+   "Not started",
+   4,
+   "",
+   ""
+  ],
+  [
+   "M-20",
+   "P9",
+   "Archive the 3 QQQ controls",
+   "Cowork",
+   "Not started",
+   4,
+   "",
+   ""
+  ],
+  [
+   "M-21",
+   "P9",
+   "Archive the 3 killed mirrors",
+   "Cowork",
+   "Not started",
+   4,
+   "",
+   ""
+  ],
+  [
+   "M-22",
+   "P9",
+   "Archive the 4 old Range075 experiments",
+   "Cowork",
+   "Not started",
+   4,
+   "",
+   ""
+  ],
+  [
+   "M-23",
+   "P9",
+   "Archive DIR-SPX-Put-Control",
+   "Cowork",
+   "Not started",
+   4,
+   "",
+   ""
+  ],
+  [
+   "M-24",
+   "P9",
+   "Write data/archive/rename_map.csv as the sweep runs",
+   "Cowork",
+   "Working on it",
+   4,
+   "",
+   ""
+  ],
+  [
+   "M-25",
+   "P9",
+   "Confirm the 2 directional bots untouched",
+   "Cowork",
+   "Not started",
+   4,
+   "",
+   ""
+  ],
+  [
+   "M-26",
+   "P9",
+   "Confirm the 7 live mirrors untouched",
+   "Cowork",
+   "Not started",
+   4,
+   "",
+   ""
+  ],
+  [
+   "M-46",
+   "P1",
+   "Build data/bots_config_v2.csv from captures",
+   "Cowork",
+   "Done",
+   2,
+   "",
+   ""
+  ],
+  [
+   "M-47",
+   "P6",
+   "Decide Notion's role in v2",
+   "Andy",
+   "Done",
+   2,
+   "",
+   ""
+  ]
+ ]
+};
+/* ==== DATA END ==== */
+
+const SC={"Done":"var(--done)","Working on it":"var(--work)","Stuck":"var(--stuck)",
+          "Not started":"var(--none)","Ready":"var(--ready)","Needs sign-off":"var(--work)"};
+const PC=[0,"var(--crit)","var(--high)","var(--med)","var(--low)"];
+const PL=[0,"Critical","High","Medium","Low"];
+const AV={"Andy":"#0073ea","Devin":"#a25ddc","Cowork":"#00c875","Any agent":"#9699a6","—":"#c4c4c4"};
+const PALETTE=["var(--g1)","var(--g2)","var(--g3)","var(--g4)","var(--g5)",
+               "var(--g6)","var(--g7)","var(--g8)","var(--g3)"];
+const P=DATA.programs.map((p,i)=>({...p,color:p.color||PALETTE[i%PALETTE.length]}));
+const T=DATA.tasks;
+const of=id=>T.filter(t=>t[1]===id);
+const av=o=>`<div class="av" style="background:${AV[o]||'#9699a6'}" title="${o}">${o==="Any agent"?"?":(o==="—"?"–":o[0])}</div>`;
+const prog=id=>{const t=of(id);if(!t.length)return null;
+  const c={};t.forEach(x=>c[x[4]]=(c[x[4]]||0)+1);
+  return {n:t.length,c,pct:Math.round(100*(c["Done"]||0)/t.length)};};
+
+/* live-derived facts strip — these three come from surfaces the board does not author */
+(function(){const f=(DATA.facts)||{},d=v=>(v===null||v===undefined)?"—":v;
+ document.getElementById("factstrip").innerHTML =
+  `<span class="lbl">derived live —</span>`
+ +`<span><span class="lbl">roster rows</span> <b>${d(f.roster_rows)}</b></span>`
+ +`<span><span class="lbl">bots ON</span> <b>${d(f.roster_on)}</b></span>`
+ +`<span><span class="lbl">unsigned bots</span> <b>${d(f.unsigned)}</b></span>`
+ +`<span class="lbl">bots_meta.csv · STATUS.md</span>`;})();
+
+/* header line */
+document.getElementById("bdesc").innerHTML =
+  `${P.length} programs · ${T.length} items · one objective · 3 active slots — generated from `
+  +`<span class="mono">data/portfolio.csv</span> + <span class="mono">STATUS.md</span>`;
+
+/* sidebar */
+document.getElementById("sbprog").innerHTML=P.map(p=>
+ `<a href="#"><span class="dot" style="background:${p.color}"></span>${p.name}</a>`).join("");
+
+/* ---------- VIEW 1 · PORTFOLIO ---------- */
+const EMPTY=P.filter(p=>!of(p.n).length);
+const BANNER = EMPTY.length ? `<div class="banner"><b>⚠ ${EMPTY.length} of ${P.length} program${P.length===1?"":"s"} ${EMPTY.length===1?"has":"have"} zero items.</b>
+<p>${EMPTY.map(p=>p.name).join(", ")} — a program with a metric and no work behind it is either not really a program,
+or it is the one being avoided. An empty program is not a finished one.</p></div>` : "";
+document.getElementById("v-portfolio").innerHTML=`
+<div class="obj"><div class="ol">Objective</div><div class="ov">${DATA.objective}</div></div>
+${BANNER}
+<div class="grp"><div class="ghead" onclick="this.parentNode.classList.toggle('cl')">
+  <span class="gchev" style="color:var(--blue)">▼</span><span class="gname" style="color:var(--blue)">Programs</span>
+  <span class="gcount">${P.length} items · ${P.filter(p=>p.wip==="Active").length} of 3 active slots filled</span></div>
+<div class="gwrap"><table>
+<tr><th class="cbar"></th><th>Program</th><th style="width:130px">WIP</th><th style="width:150px">Metric state</th>
+<th style="width:60px">Owner</th><th style="width:290px">Headline metric</th><th style="width:170px">Progress</th><th style="width:80px">Items</th></tr>
+${P.map(p=>{const g=prog(p.n);
+ return `<tr class="prow-main" onclick="toggleProg('${p.n}')" title="click to show this program's items">
+ <td class="cbar" style="background:${p.color}"></td>
+ <td class="cname"><span class="pexp-chev" id="chev-${p.n}">›</span><span class="tid">${p.n}</span><b>${p.name}</b><br><span style="font-size:11.5px;color:var(--ink3);font-style:italic">${p.q} — ${p.note}</span></td>
+ <td><span class="pill" style="background:${p.wip==="Active"?"var(--done)":"var(--none)"}">${p.wip}</span></td>
+ <td><span class="pill" style="background:${SC[p.state]}">${p.state}</span></td>
+ <td>${av(p.owner)}</td>
+ <td style="padding:0 10px;color:var(--ink2);font-size:12.5px">${p.metric}</td>
+ <td>${g?`<div class="bat">${Object.entries(g.c).map(([s,n])=>
+     `<span style="background:${SC[s]};width:${100*n/g.n}%" title="${s}: ${n}"></span>`).join("")}</div>
+     <div style="text-align:center;font-size:10.5px;color:var(--ink3);margin-top:1px">${g.pct}% done</div>`
+   :`<div style="text-align:center;color:var(--stuck);font-size:12px;font-weight:600">no items</div>`}</td>
+ <td class="ctr">${g?g.n:0}</td></tr>
+ <tr><td class="cbar" style="background:${p.color}"></td>
+ <td class="cname" colspan="7" style="padding:5px 10px;font-size:12px;color:${p.wip==="Active"?"#1f7a4d":"var(--ink3)"}">
+   ${p.wip==="Active"
+     ? `<b>BET:</b> ${p.bet||"— not set —"} &nbsp;·&nbsp; <b>kill date</b> ${p.kill||"—"}`
+     : `<b>restart trigger:</b> ${p.restart||"— none named —"}`}</td></tr>
+ <tr class="pexp" id="exp-${p.n}"><td class="cbar" style="background:${p.color}"></td>
+ <td colspan="7" style="padding:0">${
+   of(p.n).length
+   ? of(p.n).map(x=>`<div class="t"><span class="tid">${x[0]}</span><span class="ttxt">${x[2]}</span>`
+       +`<span class="town">${x[3]}</span>`
+       +`<span class="tst" style="background:${SC[x[4]]};color:#fff;border-color:${SC[x[4]]}">${x[4]}</span>`
+       +`<span class="tst">${PL[x[5]]}</span></div>`).join("")
+   : `<div class="empty">Zero items. This program has a metric and no work behind it.</div>`
+ }</td></tr>`}).join("")}
+</table></div><div class="addrow">+ Add program</div></div>
+
+<div class="wide"><h3>Right now — 3 slots</h3>
+<div class="h3s">One bet per program, max three programs at a time. Everything else is idle on purpose.</div>
+${(()=>{const A=P.filter(p=>p.wip==="Active");
+ return [0,1,2].map(i=>{const p=A[i];
+  return p ? `<div class="prow"><div class="pnm"><span class="dot" style="background:${p.color}"></span>${p.name}</div>
+   <div class="pmet"><b>${p.bet||"— bet not set —"}</b></div>
+   <div style="width:130px;flex:none;text-align:right;font-size:12px;color:var(--ink2)">kill ${p.kill||"—"}</div></div>`
+   : `<div class="slot"><span class="sn">SLOT ${i+1}</span><span>empty</span></div>`;}).join("");})()}
+</div>`;
+
+/* ---------- VIEW 2 · MAIN TABLE ---------- */
+document.getElementById("v-table").innerHTML=P.map(p=>{const t=of(p.n);
+ return `<div class="grp${t.length?"":" cl"}"><div class="ghead" onclick="this.parentNode.classList.toggle('cl')">
+ <span class="gchev" style="color:${p.color}">▼</span><span class="gname" style="color:${p.color}">${p.name}</span>
+ <span class="gcount">${t.length} item${t.length===1?"":"s"}</span><span class="gq">${p.q}</span></div>
+ <div class="gwrap"><table>
+ <tr><th class="cbar"></th><th>Item</th><th style="width:60px">Owner</th><th style="width:135px">Status</th>
+ <th style="width:105px">Priority</th><th style="width:100px">Est</th><th style="width:110px">Blocked by</th></tr>
+ ${t.length?t.map(x=>`<tr>
+  <td class="cbar" style="background:${p.color}"></td>
+  <td class="cname"><span class="tid">${x[0]}</span>${x[2]}</td>
+  <td>${av(x[3])}</td>
+  <td><span class="pill" style="background:${SC[x[4]]}">${x[4]}</span></td>
+  <td><span class="prio" style="background:${PC[x[5]]}">${PL[x[5]]}</span></td>
+  <td class="ctr">${x[6]||"—"}</td>
+  <td class="ctr mono">${x[7]||"—"}</td></tr>`).join("")
+ :`<tr><td class="cbar" style="background:${p.color}"></td><td colspan="6" style="padding:11px 14px;color:var(--stuck);font-size:13px">
+   Zero items. This program has a metric and no work behind it — either it isn't really a program, or it's the one you've been avoiding.</td></tr>`}
+ </table></div><div class="addrow">+ Add item</div></div>`}).join("");
+
+/* ---------- VIEW 3 · DASHBOARD ---------- */
+const all=T.length, done=T.filter(t=>t[4]==="Done").length, stuck=T.filter(t=>t[4]==="Stuck").length,
+      sign=T.filter(t=>t[4]==="Needs sign-off").length, empty=EMPTY.length;
+document.getElementById("v-dash").innerHTML=`
+<div class="wgrid">
+ <div class="w"><div class="wt">Programs</div><div class="wn">${P.length}</div><div class="ws">1 objective · 3 active slots</div></div>
+ <div class="w"><div class="wt">Active bets</div><div class="wn" style="color:${P.filter(p=>p.wip==="Active").length?"var(--done)":"var(--work)"}">${P.filter(p=>p.wip==="Active").length} / 3</div><div class="ws">${P.filter(p=>p.wip==="Active").map(p=>p.n).join(" · ")||"none picked yet"}</div></div>
+ <div class="w"><div class="wt">Items mapped</div><div class="wn">${all}</div><div class="ws" style="color:var(--done)">${T.filter(t=>!P.some(p=>p.n===t[1])).length} orphans</div></div>
+ <div class="w"><div class="wt">Done</div><div class="wn" style="color:var(--done)">${done}</div><div class="ws">${Math.round(100*done/all)}% of all items</div></div>
+ <div class="w"><div class="wt">Awaiting Andy</div><div class="wn" style="color:var(--work)">${sign}</div><div class="ws">signatures blocking downstream</div></div>
+ <div class="w"><div class="wt">Empty programs</div><div class="wn" style="color:var(--stuck)">${empty}</div><div class="ws">${EMPTY.map(p=>p.n).join(" · ")||"none"}</div></div>
+</div>
+<div class="wide"><h3>Program health</h3>
+<div class="h3s">One metric each. Never a % complete — a metric must come from a surface you didn't author.</div>
+${P.map(p=>{const g=prog(p.n);return `<div class="prow">
+ <div class="pnm"><span class="dot" style="background:${p.color}"></span>${p.name}</div>
+ <div><span class="chip" style="background:${SC[p.state]}">${p.state}</span></div>
+ <div class="pmet">${p.metric}</div>
+ <div class="barwrap">${g?Object.entries(g.c).map(([s,n])=>
+   `<span style="background:${SC[s]};width:${100*n/g.n}%" title="${s}: ${n}"></span>`).join(""):""}</div>
+ <div style="width:62px;text-align:right;font-size:12.5px;color:var(--ink2)">${g?g.n+" items":"—"}</div>
+</div>`}).join("")}</div>
+<div class="wide"><h3>Where the work actually is</h3>
+<div class="h3s">Open items by program. The shape of this chart is the finding.</div>
+${P.map(p=>{const n=of(p.n).filter(t=>t[4]!=="Done").length,mx=Math.max(...P.map(q=>of(q.n).filter(t=>t[4]!=="Done").length));
+ return `<div class="prow"><div class="pnm"><span class="dot" style="background:${p.color}"></span>${p.name}</div>
+ <div style="flex:1"><div style="height:21px;border-radius:4px;background:${n?p.color:'#eaecf2'};width:${n?Math.max(4,100*n/mx):3}%;min-width:26px;
+ color:#fff;font-size:11.5px;font-weight:700;line-height:21px;text-align:right;padding-right:7px">${n||"0"}</div></div></div>`}).join("")}
+</div>`;
+
+/* ---------- VIEW 4 · KANBAN ---------- */
+const cols=["Stuck","Needs sign-off","Ready","Working on it","Not started","Done"];
+document.getElementById("v-kanban").innerHTML=`<div class="kb">${cols.map(c=>{
+ const t=T.filter(x=>x[4]===c);
+ return `<div class="kcol"><div class="kh"><span class="dot" style="background:${SC[c]}"></span>${c}
+ <span style="color:var(--ink3);font-weight:400">${t.length}</span></div>
+ ${t.map(x=>{const p=P.find(q=>q.n===x[1]);return `<div class="kcard" style="border-left-color:${p.color}">
+  <div class="kt"><span class="tid">${x[0]}</span>${x[2]}</div>
+  <div class="kfoot"><span class="ktag">${p.name}</span>${av(x[3])}</div></div>`}).join("")||
+  `<div style="font-size:12px;color:var(--ink3);padding:7px 3px">—</div>`}
+ </div>`}).join("")}</div>`;
+
+/* expand a program row into its items */
+function toggleProg(id){
+  const r=document.getElementById("exp-"+id), c=document.getElementById("chev-"+id);
+  if(!r) return;
+  r.classList.toggle("open"); if(c) c.classList.toggle("open");
+}
+window.toggleProg=toggleProg;
+
+/* tabs */
+document.querySelectorAll(".tab").forEach(t=>t.onclick=()=>{
+ document.querySelectorAll(".tab").forEach(x=>x.classList.remove("on"));
+ document.querySelectorAll(".view").forEach(x=>x.classList.remove("on"));
+ t.classList.add("on"); document.getElementById("v-"+t.dataset.v).classList.add("on");
+});
+</script>
+</body>
+</html>

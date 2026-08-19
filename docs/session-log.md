@@ -9631,3 +9631,125 @@ contains no `GF-QQQ-IC-*` names.
 **Fixup.** `docs/devin-queue.md` P1-1 said "all seven GF arms"; corrected to "all eight GF arms
 (PR-14…PR-20 plus the previously signed PR-23)" to match `data/bots_meta.csv`.
 `docs/state.md` top block also updated. `scripts/check_docs_vs_csv.py` now reports no contradictions.
+
+---
+
+## 2026-08-19 — Portfolio spine (Cowork)
+
+**Built.** A portfolio structure over the whole program: OBJECTIVE → **9 PROGRAMS** → BET →
+TASK, with one metric per program and hard WIP limits (one active bet per program, max three
+programs active). Programs settled by Andy in-session: P1 Ledger & Capture Truth · P2 Edge
+Discovery · P3 Execution Realism · P4 Hedging & Breach Response · P5 Research Engine ·
+P6 Agent Harness · P7 Governance & Evidence · P8 The Business · **P9 OA Platform & Account**.
+Rejected and not to be re-proposed: Adjacent Markets, Risk & Capital (folded to P3), Operator
+Cadence (it is the review ritual, not a program). Board rendered as desktop artifact
+`bot-fleet-portfolio` (monday.com-styled, four views).
+
+**Build-vs-buy.** monday.com DECLINED — a fourth tracking system agents cannot write to, with a
+3-seat minimum on every paid tier ($432/yr floor for a team of one). Adopted: in-repo spine,
+Notion demoted to P8 only. Boundary rule recorded: work whose evidence is a file lives in git;
+work whose evidence is a conversation, a bank balance, or a signature lives in Notion.
+
+**Findings.** (1) All 26 open `todo-2026-08-16.csv` items map to a program with zero orphans,
+but **P2, P4 and P8 had zero items** while 17 of 26 sat in P6+P7 — the backlog was machinery and
+paperwork with nothing asking whether the fleet makes money. (2) The missing P2/P4 work was in
+the `bot-fleet-migration` tracker (136 items / 92 done / **44 open**) the whole time. (3) Phase 4's
+clean-slate sweep is superseded: it targeted "35 → ≈18–20 active" and `bots_meta.csv` reads
+**44 rows / 19 ON** — reached via the 08-07 restore plus greenfield builds, not the sweep.
+
+**Ruled by Andy 2026-08-19.** The 11 superseded sweep items **stay live at LOW priority** and are
+**added to the board** under P9; the "re-rule the sweep" placeholder is withdrawn. Disposition of
+all 44: 31 re-homed at normal priority · 11 live at low · 2 closed. Recorded in
+`docs/migration-parking-lot-2026-08-19.md`. Consequent: the `bot-fleet-migration` artifact freezes
+read-only as the rebuild's history, per T-21's one-authority-per-kind-of-work principle.
+
+**Correction applied — `CLAUDE.md`, §5 authority.** §3 item 2 and §6 `data/` both claimed
+`bots_config_v2.csv` was "not yet written — Phase 2". Falsified by dated first-hand device read:
+**246 data rows**, sha `e54ee4ea9f3bfa7d…`; `mirror_baseline.csv` **10 data rows**, sha
+`cdceb0a8d444e570…` (matches the pre-existing §3 banner). Dated `[CORRECTED 2026-08-19 …]`
+banners added, original text left standing / struck. Changes no decision. Andy may reject at
+commit review.
+
+**Queued.** `_dispatch-2026-08-19-4-portfolio-claudecode.md` — Claude Code foreman, CAP 2 Devin
+agents, builds `scripts/portfolio.py` + `tests/test_portfolio.py`, additive only, `daily.sh`
+wiring queued for Andy not applied. Blocked on Cowork delivering `data/portfolio.csv` and
+`docs/portfolio.template.html` first (categorisation is judgment, not a code-agent task).
+
+**Verification:** `CLAUDE.md` sha `9f0f0d8c15b1e23d…` → `96bade2fb8df2b50…`, single-match grep on
+both banner strings; `docs/migration-parking-lot-2026-08-19.md` sha `933e2cb006dfa577…`;
+`_dispatch-2026-08-19-4-portfolio-claudecode.md` sha `6707daa0c8046616…`. Item arithmetic checked
+both directions: 26/26 todo items mapped, no dupes; 44 migration items = 31 + 11 + 2.
+
+**Amendment — same session.** Two changes to the entry above.
+
+1. **⛔ The migration-tracker count was wrong and is corrected.** The entry first said the
+`bot-fleet-migration` artifact held 136 items / 92 done / 44 open across 13 phases. It holds
+**201 items / 132 done / 69 open across 15 phases**. The parse used one regex over a file that
+mixes two literal styles (`w:"CLAUDE"` and `"w": "CLAUDE"`) and silently under-matched the
+JSON-quoted form. Caught only because two derivations disagreed — a whole-file count said 44,
+the per-phase sum said 47 — and chasing the gap exposed two unseen phases: `e3impl` (5/1) and
+**`agentconv` (34 items / 21 open)**. `agentconv` is a second copy of `todo-2026-08-16.csv`
+carrying the same T-numbers with a **fresher status on T-01, T-04, T-10 and T-21** — the
+duplicate-authority failure T-21 exists to name. Five items exist only there: T-29, T-30, T-31,
+**G-4** (re-key `hedge_tournament.csv` on the natural key — gates P4's own metric) and E3-1.
+`docs/migration-parking-lot-2026-08-19.md` carries the correction banner and restated arithmetic.
+
+2. **Dispatch 4-CC was NOT run; `scripts/portfolio.py` was written here instead**, on Andy's
+call. `_dispatch-2026-08-19-4-portfolio-claudecode.md` is marked SUPERSEDED and retained as the
+spec the implementation was built against.
+
+**Shipped.** `scripts/portfolio.py` — renders `portfolio.html` from `data/portfolio.csv` +
+`docs/portfolio.template.html`. House style matches `report.py` (`ROOT`/`set_root()`/`FLEET_ROOT`/
+`--validate`). Hard-fails on unknown program, duplicate item id, unknown status, out-of-range
+priority; a missing input renders as `—`, never `0`. `--check` exits 1 on drift and writes
+nothing. Three facts are derived live so the board carries a surface it did not author.
+
+**Verification (on the real tree, not a fixture):** `--validate` **11/11**; `--check` clean;
+`--check` correctly exits 1 after a mutated CSV row. Cross-surface: the script's derived facts
+(**44 roster rows · 19 ON · 4 unsigned**) match an independent shell derivation exactly —
+`tail`/`awk` over `bots_meta.csv` and `STATUS.md`. Rendered output loaded in a real DOM (jsdom):
+87 table rows · 87 kanban cards · 87 unique ids · 0 orphans · banner computed. **That DOM render
+caught a real defect** — the facts-strip `<div>` had failed to insert while the JS that populates
+it did, so the page threw on load; fixed and re-verified. No literal counts appear in any
+predicate. `data/portfolio.csv` = 9 programs + 87 items (35 from the todo CSV, 52 from the
+tracker); only P8 is empty.
+
+**Uncommitted at handoff — Andy runs the commit.** `CLAUDE.md` · `docs/session-log.md` ·
+`docs/migration-parking-lot-2026-08-19.md` · `docs/portfolio-inbox-2026-08-19.md` ·
+`docs/portfolio.template.html` · `data/portfolio.csv` · `portfolio.html` · `scripts/portfolio.py` ·
+`_dispatch-2026-08-19-4-portfolio-claudecode.md`.
+
+**Amendment 2 — same session.** Objective SET, WIP state ruled, one defect fixed.
+
+**Objective (Andy, 2026-08-19):** *"A bot fleet whose P&L I can prove, that runs unattended, and
+that a competent stranger could take over from the docs alone."* Stored as the `objective` row of
+`data/portfolio.csv`.
+
+**WIP ruled.** Active: **P1 Ledger & Capture Truth · P2 Edge Discovery · P7 Governance & Evidence**.
+The other six are Idle, each carrying a named restart trigger (P3 ← P2's figure positive · P4 ← G-4
+lands · P5 ← T-16 ruled · P6 ← an active bet blocked on build capacity · P8 ← P2 positive 4
+consecutive weeks · P9 ← any unexplained `/bots` state change). Schema gained `bet`, `kill_date`,
+`restart_trigger` on program rows.
+
+**Bets are DRAFT — proposed by Cowork, NOT yet ruled by Andy.** P1: close the unsigned-P&L clause
+(every bot contributing to headline P&L signed or off), kill 2026-09-02. P2: make the signed-bot
+P&L figure exist and appear in STATUS.md, kill 2026-08-26. P7: sign the agent charter and the
+mechanics contract, kill 2026-08-26. *P2's bet is deliberately small: its metric is P&L from
+signed bots and that number does not exist anywhere yet, so building new arms first would add rows
+that cannot be read.*
+
+**Defect found and fixed (Andy reported).** Clicking a program on the Portfolio tab did nothing —
+the monday.com rebuild had dropped the click-to-expand behaviour described in the design. DOM
+check confirmed: 0 rows with an onclick, 0 expansion blocks. Added `toggleProg()`, per-row
+expansion markup and a rotating chevron. Re-verified in jsdom: 9 clickable rows · toggle on and
+off · 13 items under P1 · 4 under P4 · the empty-program message under P8 · **87 items across all
+expansions, equal to the task count**. Main Table was never affected (9 groups, 87 rows).
+
+**Second render-surface lesson.** `--check` was clean and `--validate` 11/11 through the entire
+period the click handler was missing — a generator can be perfectly correct about a page that
+does not work. Recorded in [[dispatch_scoping]].
+
+**Uncommitted at handoff (9 files) — Andy runs the commit.** Modified: `CLAUDE.md` ·
+`docs/session-log.md`. New: `data/portfolio.csv` · `docs/portfolio.template.html` ·
+`scripts/portfolio.py` · `portfolio.html` · `docs/migration-parking-lot-2026-08-19.md` ·
+`docs/portfolio-inbox-2026-08-19.md` · `_dispatch-2026-08-19-4-portfolio-claudecode.md`.
