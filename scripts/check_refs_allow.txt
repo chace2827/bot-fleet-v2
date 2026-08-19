@@ -24,3 +24,35 @@ data/bots_mechanics_v2.csv  # tracked in pending-tracker-items-2026-08-10.md
 scripts/build_config.py     # specified in split2-design-2026-08-08.md, not implemented
 scripts/lean_run.sh         # specified in quantconnect-lean-exploration-brief.md
 scripts/cw_git.sh           # tracked in pending-tracker-items-2026-08-10.md
+
+# --- planned filenames in DATED docs; the work landed elsewhere -------------
+# Added 2026-08-19, burn-down group B. Ruled MARK-do-not-rewrite: a dated doc is
+# a historical record, so the brief stays as written and the delivered name is
+# NOT substituted in (TRADE-ID-STABILITY §6 precedent). Each doc also carries an
+# inline HISTORICAL marker for the human reader; these lines are the machine half.
+docs/day0-audit-2026-08-07.md            # sprint-2026-08-04.md:435 planned this name; landed as docs/day0-audit-2026-08-05.md, verified by content ("Day-0 runbook adversarial audit"), not filename proximity
+docs/mirror-funding-memo-2026-08-07.md   # sprint-2026-08-04.md:464 planned this name; landed as docs/mirror-funding-memo-2026-08-05.md, which self-identifies as "Sprint Rank 8 / Task 9"
+docs/baseline-forensic-qqq-2026-08-08.md # session-log.md:7180 quotes a brief whose premise was WRONG; the file was correctly NEVER WRITTEN under any name, as the log itself states three lines below
+
+# --- archive doc marked REWRITE that LIVE docs still cite -------------------
+# Added 2026-08-19, burn-down group E (5 citations, all from rules-catalog.md).
+# ⚠️ NOT history. CLAUDE.md §8 marks it REWRITE — still needed, only after
+# correction, never copied verbatim — and the rewrite must strip TT3.
+# evidence-standards.md §9.2 and rules-catalog.md §4/§9.2 name "external review
+# of rules-of-engagement.md plus pre-registration" as the SUBSTITUTE CONTROL for
+# the 7/27 audit's declined custody-separation / independent-go-live-authority
+# recommendations. That substitute is only as real as this document is.
+# ⚠️ Its four <FILL> blanks are unfilled and permanent-pending until a number is
+# written (rules-catalog.md §10 item 4; board gate G4; audit H3) — verified still
+# <FILL> in the archive copy 2026-08-19. A ceiling reading `<FILL $____>` caps nothing.
+# Archive path: ~/bot-fleet/rules-of-engagement.md — the archive ROOT, NOT
+# ~/bot-fleet/docs/, which is where history-index.md's stated archive root sends a reader.
+docs/rules-of-engagement.md  # archive-only, REWRITE pending; cited as a live substitute control, not as history
+
+# --- capture step that ran but was never saved ------------------------------
+# Added 2026-08-19, burn-down group F. pilot-clone-card-qqq-fortress.md:150 is a
+# record of something EXECUTED, so per CLAUDE.md §5 the instruction stays as
+# written and carries a banner rather than being rewritten to match what was kept.
+# 00-original/ and 06-clone-final/ bracket the missing step; treat the 02- fork
+# state as unevidenced and re-derive any claim resting on it.
+data/captures/2026-08-03-pilot/02-clone-automations-forked.txt  # step ran, artifact never saved; dir holds 00-original/, 06-clone-final/, FINISH-capture-diff-2026-08-04.md only
