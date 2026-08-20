@@ -692,3 +692,120 @@ not 33. Docstring corrected from `239 / 10.3%` to **250 / 10.8%**, measured with
 `fragment()`. **497, 33 and 239 are all retired as instrument errors — the catalog was right every
 time.** `GATED` remains proposed, with the manager's recommendation to adopt.
 
+# ═══ WAVE 3 SCOPE-DOWN, 2026-08-20 — Andy, relayed by MANAGER-CW ═══
+
+**Spec A is HELD, not cancelled. The 56-slice fan-out will not run, and its three open defects
+are deliberately NOT being fixed** — they only matter if the wave runs. `anchor.py`, the cap and
+the `trimmed` column stay exactly as they are; the narrow pass reuses them verbatim.
+
+## ✅ WHAT THE WAVE ALREADY BOUGHT — banked here, needs no fan-out
+
+1. **Five QQQ hedge bots whose status depends on which document you read.**
+   `docs/strategy-taxonomy.md` keeps `HedgeA-S1` / `HedgeB-S2` / `HedgeC-S3` / `HedgeD-Conditional`
+   / `HedgeTest` as live "Iron Condor · Experiment" bots; `docs/build-plan.md` §2A archives them
+   directly, no clone, because the *"Tournament [is] invalid as a selector"*. This is the A21
+   row-14 finding and it is about **five real bots**, not a sentence.
+2. **318 catalog rows marked `Gated — Pending` read as LIVE** to anything consuming the catalog —
+   the `Status` column existed on all 2310 rows and every triage test ignored it (Test 0.5).
+3. **The blocker dataset's two structural facts:** 44% of rows (164/369) carry a PR-body premise
+   that is unverifiable from a repo clone, and 28% (102/369) can be falsified by a *word* rather
+   than a figure. Both change how any future sweep must be packed and prompted.
+4. **The instrument itself:** `scripts/anchor.py` at declared sha
+   `973b68058e28b18b42ecbabb0641a923b4f2518358683c3df0f12c7341daa6e5`, capped, with `trimmed`
+   carried per row — plus the standing finding that **three consecutive count disputes were
+   instrument errors, never catalog errors** (497, 33, 239 all withdrawn; the catalog was right
+   every time).
+
+## ⭐ RE-AIMED: slice-spec C — one slice = one BOT
+
+`_slice-spec-C-bot-disposition-2026-08-20.md`. Scope: **doc-vs-doc contradictions that change which
+bots run or are archived.** Roster = `build-plan.md` §2 (35 dispositioned bots: 2 delete, 20
+archive, 4 clone-then-archive, 9 leave-in-place); §D fresh builds are out of scope.
+
+⛔ **The roster must be curated by hand and reconciled to 2/20/4/9 before any dispatch — it is the
+first acceptance gate.** Three counts exist and none agree: build-plan says 35, the manager's
+extractor found 28, mine found 25 and then 40 once abbreviated `-Suffix` forms were expanded, and
+that 40 included `bots_meta`, `data/archive/`, two ruling ids and the fragment "opened this side
+today". §C's seven mirrors are OA display names (`3DTE $140-$350`, `QQQ long call`, `Tasty
+Condor`…) that **no bot-name regex will ever match**. A regex cannot produce this list.
+
+**Source scoping is a rule, not a convenience.** The pilot bot appears in **90 files** and only
+**18 prose docs**. `data/archive/**` is barred by `CLAUDE.md` §3, generated output states no
+disposition, and `docs/rules-catalog.md` is an index of the others — counting it double-counts
+every rule it quotes.
+
+## PILOT — `QQQ-IC-0DTE-Fortress-NoPT50`, foreman by hand (agent running now)
+
+Chosen because it is **armed ON while unsigned** — inbox I-06, `AUTOS ON / EXITS ON` in two
+independent first-hand captures 48h apart (`2026-08-17-r3`, `2026-08-19-roster`). A disagreement
+about this bot is a live control failure with money on it.
+
+| Doc | States |
+|---|---|
+| `build-plan.md:103` §B | clone → spec → archive original; 15:50 time exit + 15:52 backstop, **NO PT50**, RESOLVED 2026-07-30 |
+| `portfolio-inbox-2026-08-19.md:11` | **I-06, P1**: armed while unsigned — *"sign it or disarm it"* |
+| `state.md:22` | listed in the **UNSIGNED** banner, pending an owed first-trading-day capture |
+| `RULINGS.md:1803` | Active ruling, `applies_to: PR-04 … — ARMED + ON` |
+| `strategy-taxonomy.md:140` | roster table: status **ON**, +$2,760 |
+
+**CONTRADICTS-CANDIDATE — `strategy-taxonomy.md:140` vs `portfolio-inbox-2026-08-19.md:11`.**
+*Concrete case:* reading the taxonomy roster, this bot being **ON** is its normal validated state
+and needs no action; reading I-06 and `state.md`, that same ON state is a **P1 roster-truth defect
+that must be signed or disarmed today** — so the taxonomy row licenses leaving armed a bot the
+inbox says to disarm.
+**⛔ RE-TYPED 2026-08-20 — this is not a precedence verdict. `FALSIFIED-BY-DATA`.**
+The original verdict (below, left standing) preferred the inbox on precedence and **left the false
+number sitting in a live document**. The number is not merely outranked; it is untrue:
+`data/trades.csv` holds **71 rows across 15 bots and ZERO for this one**; `STATUS.md:237` reads
+`| … | 0 | 0 | 0 | insufficient data | insufficient data |`; `STATUS.md:14` puts the bot on the
+**UNSIGNED — DO NOT SWITCH ON** list. Every P/L in that taxonomy block (`+$2,760`, `+$2,975`,
+`+$908`, `−$445`, `−$450`) names a bot with **no post-cutover ledger row**. Verified against two
+independent surfaces. **Only a factual verdict closes it: `:140` states a number that is not true.**
+
+**⛔ AND MY OWN CITATION WAS FABRICATED. `CLAUDE.md §3.5` DOES NOT EXIST.** The rule I meant is
+**§3 item 5** — *"Narrative docs never carry numbers. If a `.md` states a figure, the CSV wins"* —
+at `CLAUDE.md:37`. The idea was right; the section number was invented. **This is exactly the
+defect class this effort exists to find, produced by this effort, in the acceptance row of its own
+pilot.** Spec C §2.6 now requires every citation to be resolved by `grep -n` to a line before it
+may be written; a citation that does not resolve is not evidence.
+
+~~Original verdict: winner `portfolio-inbox` + `state.md` on precedence — current dated first-hand
+captures over a 2026-06-08 pre-cutover doc, and `CLAUDE.md` §3.5.~~ Left standing per the doc
+convention; superseded by the two corrections above.
+
+**Note the shape:** the sharpest conflict here is doc-vs-**capture**, not doc-vs-doc — no document
+says "armed is correct", yet the bot is armed. Spec C finds the doc-vs-doc half; the doc-vs-reality
+half is I-06 and is already Andy's.
+
+## Manager's own note, kept because it is the transferable lesson
+> *"I should have asked 'what decision changes because of this TSV' three rounds ago… being right
+> about each defect is not the same as the exercise being worth continuing."*
+That question belongs in §0 of every future dispatch, above the gates.
+
+
+## Two amendments the pilot forced into spec C, 2026-08-20
+
+**§2.5 — the cutover gate belongs to the DOCUMENT, not the bot row.** `strategy-taxonomy.md` is
+dated 2026-06-08 and its roster table states pre-cutover P/L for every bot in it. Test 1b's two
+conditions both fire **on the block**, with no judgement, so the whole roster block is
+`SUPERSEDED-BUT-STILL-READS-AS-LIVE` and is recorded **once**. Without this gate spec C
+re-litigates the same v1 table once per bot — **28 times — and calls it 28 findings.**
+
+**§2.6 — every citation must resolve** by `grep -n` before it is written. See the fabricated
+`§3.5` above.
+
+## Sharpening I-06 — the false number is the operational risk
+
+The live risk on `QQQ-IC-0DTE-Fortress-NoPT50` is **not only that it is armed**. It is that a live
+document tells any reader it has made **$2,760** and is **ON**. Anyone checking *"is this thing
+fine?"* lands on `strategy-taxonomy.md:140` and concludes yes. **The false number is the single
+thing most likely to keep an unsigned, never-filled bot armed.** That belongs in the I-06 item
+itself, not only here.
+
+## The 10 killed agents — the never-kill rule's first real cost
+
+The halted fan-out killed 10 sessions. Those are now **10 permanently unassertable acu rows**:
+`metadata=NULL`, `model=''`, and killing them later does not backfill. That is not a footnote to
+the halt — **it is the reason the never-kill rule exists**, and it was paid before the rule was
+written. The compensating evidence is only the wrapper's provenance line, which proves the *model*
+and says nothing about cost.
