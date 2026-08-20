@@ -28,6 +28,11 @@ foreman error, exactly as a missing slice pack is.
 ## §2 — Source scoping (this is a rule, not a convenience)
 
 **In scope:** `docs/*.md` and root `*.md` — prose that *states a disposition*.
+⛔ **Except the slice pack's own files.** `_slice-spec-*.md`, `anchor.py` and anything else copied
+into the clone for the agent are **not** project documents and must be excluded by name. The pilot
+agent dutifully listed `_slice-spec-C-bot-disposition-2026-08-20.md` as an in-scope doc naming the
+bot, because "root `*.md`" is literally true of it. The spec supplied the row it then had to
+report.
 **Out of scope, and each for a reason from `CLAUDE.md`:**
 - `data/archive/**` — the frozen v1 ledger, §3: never a reporting input, history only.
 - generated output — `data/brief/**`, `STATUS.md`'s computed body, `dashboard.html`: these report
@@ -118,12 +123,33 @@ bot	doc	disposition	anchor_line	trimmed	quote	contradicts_doc	concrete_case	winn
 ```
 
 **Acceptance, derived and able to fail** — last two lines:
+Emit these two lines **verbatim in this shape** — a description is not a format, and the pilot
+agent emitted `anchor_py=<path> sha256=<sha>` instead, which a strict parser rejects even though
+the sha was correct:
+
 ```
 #RECONCILE docs_in_scope=<a> rows_written=<b> candidates=<c>
-#TOOLS anchor_py_sha256=<shasum of anchor.py>
+#TOOLS anchor_py_sha256=<64 hex chars, nothing else on the line>
 ```
 `a == b` must hold. `docs_in_scope` is recomputed by the agent from its own `grep -l`, never copied
 from the prompt.
+
+## §4.5 — ⛔ CONTAINMENT: dangerous mode is NOT contained by the clone
+
+**Established the hard way, 2026-08-19 23:14: the spec-C pilot agent overwrote
+`~/.claude/primer.md`** — a file outside its workspace, outside the repo, in `$HOME`.
+
+- **A disposable clone bounds git, not the filesystem.**
+- **The wrapper's cwd guard is a LAUNCH check.** It stops Devin *starting* inside
+  `~/bot-fleet-v2`, `~/gitstore` or `~/bot-fleet`. It does **not** stop a running agent writing
+  into them, or into `$HOME`. Anyone who reads the guard as a sandbox — as this foreman did in
+  writing — will under-protect every dispatch built on it.
+- Until `--sandbox` is tested, **assume a dangerous-mode agent can write anywhere the user can**,
+  and never dispatch one alongside irreplaceable un-pushed state.
+
+**`--sandbox` must be tested before any fan-out.** It is a real flag on this build (*"[Research
+Preview] Sandbox exec-tool processes (macOS seatbelt / Linux bwrap+seccomp)"*). One session answers
+it, and it goes first.
 
 ## §5 — Dispatch law (unchanged, all measured)
 

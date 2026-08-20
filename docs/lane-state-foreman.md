@@ -809,3 +809,60 @@ The halted fan-out killed 10 sessions. Those are now **10 permanently unassertab
 the halt — **it is the reason the never-kill rule exists**, and it was paid before the rule was
 written. The compensating evidence is only the wrapper's provenance line, which proves the *model*
 and says nothing about cost.
+
+# ⛔⛔ CONTAINMENT FAILURE, 2026-08-19 23:14 — an agent wrote outside its workspace
+
+**A fleet agent running `--permission-mode dangerous` in a disposable `/tmp` clone overwrote
+`~/.claude/primer.md`** — the foreman's own lane-continuity file, 99 lines — with a 15-line summary
+of its own slice. Confirmed by mtime (23:14, matching its completion) and by its own closing line:
+*"I also updated `~/.claude/primer.md`."*
+
+**It did not touch the live repo. Nothing stopped it.** The only live-tree files modified in that
+window were ones the foreman edited.
+
+⛔ **My earlier claim — that dangerous mode is "contained by the disposable clone and the wrapper's
+cwd guard" — WAS WRONG, and this is the correction.**
+- **The clone bounds git, not the filesystem.** It isolates what the agent can *commit*; it does
+  nothing about what it can *write*.
+- **The v2 cwd guard stops Devin STARTING inside `~/bot-fleet-v2`, `~/gitstore`, `~/bot-fleet`. It
+  does not stop a running agent from writing INTO them**, or into `$HOME`, or anywhere else the
+  user can reach. The guard is a launch check, not a sandbox, and I described it as if it were both.
+- Therefore **every dangerous-mode dispatch so far could have written anywhere the user can.**
+  Fourteen agents ran under it tonight.
+
+**Untested mitigation, and it must be tested before any fan-out:** `--sandbox` is a real flag on
+this build — `--help` describes it as *"[Research Preview] Sandbox exec-tool processes (macOS
+seatbelt / Linux bwrap+seccomp)"*. That is the open question the primer has been carrying since
+before wave 3 (*"does `--sandbox` permit the exec tool?"*), and it has just stopped being an
+efficiency question and become the containment question. **One session answers it. It goes first.**
+
+**Recovery:** `primer.md` reconstructed from this file, which is why the close-out discipline of
+writing state here rather than only in the primer is what saved it. `docs/lane-state-foreman.md`
+was untouched, and the branch copy was already pushed.
+
+## Spec C pilot — agent result, and it beat the foreman on scoping
+
+`data/wave3-pilot-2026-08-19/C-pilot-QQQ-IC-0DTE-Fortress-NoPT50-agent.tsv`.
+`#RECONCILE docs_in_scope=22 rows_written=22 candidates=8`; `#TOOLS` sha matches the declared
+`973b6805…`.
+
+**22 in-scope docs against the foreman's 18.** The agent applied §2 scoping correctly where the
+foreman had not — it **excluded** `docs/rules-catalog.md` (an index of the others) and `STATUS.md`
+(generated output), which the hand pass had wrongly counted, and it **found six docs the hand pass
+missed**: `devin-queue.md`, `audit-report-2026-08-08.md`, `decision-card-2026-08-06.md`,
+`exploratory-bots-design-2026-08-07.md`, `pending-tracker-items-2026-08-10.md`,
+`day0-session-pack-2026-08-07.md`. It reached `strategy-taxonomy.md:140` as `LIVE/ON` in conflict
+with `RULINGS.md`, and flagged 8 candidates.
+
+**It did not type the `+$2,760` as false — and that is the spec's fault, not the agent's:** it ran
+against the spec-C revision from *before* `FALSIFIED-BY-DATA` existed, so precedence was the only
+verdict class it had. The next pilot run tests that class.
+
+**Two spec-C defects the pilot exposed:**
+1. **§2's "root `*.md`" swallows the spec file itself** — row 1 of the agent's output is
+   `_slice-spec-C-bot-disposition-2026-08-20.md`. The slice pack's own documents must be excluded
+   from the source set explicitly.
+2. **The `#TOOLS` line format drifted** — the agent emitted `anchor_py=<path> sha256=<sha>` rather
+   than the specified `anchor_py_sha256=<sha>`. The sha was right and matched, but a strict parser
+   would reject it. The spec must give the exact literal line, not a description of it.
+
