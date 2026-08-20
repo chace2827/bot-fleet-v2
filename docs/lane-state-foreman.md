@@ -272,6 +272,15 @@ Three checks below. **Workspace trust was not touched**: `trusted_workspaces.jso
 loop above exec, C returns above exec; B never started a process at all.
 (2) **The log directory never changed** — the same 4 entries with the same parent mtime
 (Aug 17 22:45) before A, after A, before D and after D.
+    **[CORRECTED 2026-08-19 step 6 — THIS LEG IS VOID. Original text left standing.**
+    `~/Library/Application Support/Devin/logs` is the **GUI app's** launch log. It did **not**
+    move when the CLI genuinely ran a session (acceptance 5), so its stillness never
+    distinguished "denied" from "ran" and was never evidence. The real per-run instrument is
+    `~/.local/share/devin/cli/logs/devin_<ts>_<pid>.log` — 744 files before acceptance 5, 746
+    after one session, and 744 → 744 across the re-run of deny test 1. **Legs (1) and (3) stand
+    and are sufficient**: A was refused by the harness before any process existed, and the
+    provenance line — which prints immediately above `exec` — was absent from every refused run.
+    Lesson: an instrument that has never been SEEN to move is not an instrument.]**
 (3) **No provenance line was ever emitted.** `devin-free` prints
 `sha256 … | model swe-1-7 (free)` to stderr immediately before `exec`, so its absence across every
 check is a per-run marker that no invocation occurred. No Devin session was created, and
@@ -304,3 +313,150 @@ expecting the provenance line `devin-free: sha256 a6dded83… | model swe-1-7 (f
 followed by Devin's trust refusal. The provenance line is the assertion; the trust refusal is the
 stop. **A guard proven under the old configuration is stale** — the whole point of step 6 is to
 move the line these probes were measured against.
+
+## STEP 6 — RULED AND EXECUTED, 2026-08-19: devin-free v2
+
+**Ruling:** do not disable trust globally, do not touch Andy's real Devin config. v2 hardcodes the
+config the way v1 hardcodes the model, and replaces the protection that turning trust off removes.
+
+**PR #63, `devin-free-v2-scratch-config-cwd-guard`. OPEN, NOT MERGED.** Wave 2 does not dispatch
+until Andy has the six results below.
+
+- **Scratch config, wrapper-owned.** `--config` still refused from argv in both spellings; the
+  wrapper supplies `~/.local/share/devin-free-lane/config.json` = `{"skip_workspace_trust": true}`.
+  Created if absent; otherwise left alone unless the trust key goes missing.
+- **Separation is asserted at run time, not just commented.** The script refuses if its scratch
+  config resolves inside `~/.config/devin`, `~/.local/share/devin`, or any guarded repo. Andy's
+  real config `~/.config/devin/config.json` and the shared `trusted_workspaces.json` appear in the
+  file only inside refusals, and neither was touched: 158 bytes / 2026-08-17 22:49 and 2616 bytes /
+  2026-08-18 20:54, unchanged across every run tonight.
+- **⛔ THE CWD GUARD IS THE POINT.** `skip_workspace_trust` removes the only thing that had been
+  protecting the live tree all evening — `~/bot-fleet-v2` is already in `trusted_paths`. v2 refuses,
+  above `exec`, exit 2, inside `~/bot-fleet-v2`, `~/gitstore`, and `~/bot-fleet` (the read-only
+  archive per CLAUDE.md §8 — one root beyond the two ruled, same argument, flagged for Andy).
+- **`--workspace DIR` was added, and it is load-bearing.** The grant is a PREFIX match on the
+  script path, so `cd DIR && devin-free` never matches it — the same wall that cancelled test B.
+  The wrapper owns the chdir; the guard runs on the RESOLVED target, so `--workspace` into the live
+  tree is refused exactly like standing in it (SEEN).
+
+### The six results — all re-proven against the shipped hash, none inherited
+
+The first build was `01013b19…`; a defect found by running it (below) changed the file, so every
+guard was re-run against the shipped hash. **Shipped: `3479939d4129996a580e3fdea3ed96241bfead3999889d371d9ea57bfcb868ec`.**
+
+1. **`--selfhash` == canonical.** `3479939d…` equals `shasum -a 256 scripts/devin_free.sh` on the
+   PR branch. ⚠️ **It does NOT equal the copy in the live tree, which is still v1 `a6dded83…`
+   until PR #63 merges.** The pre-wave assertion will fail by design until then; that is the
+   interlock, not a fault.
+2. **Deny test 1 re-proven.** Raw devin path, typed bare, DENIED by the classifier. CLI log count
+   744 → 744.
+3. **Deny test 2 re-proven.** `--model swe-1-7-lightning` → exit 2, no provenance line. Also
+   `--model=claude-opus-5` → exit 2, and `--config /tmp/evil.json` → exit 2. The scratch-config
+   directory did not exist at all until acceptance 5, which independently places all these
+   refusals above the config block as well as above `exec`.
+4. **NEW cwd guard: SEEN RED.** From `~/bot-fleet-v2` → exit 2. Also `--workspace
+   ~/bot-fleet-v2/scripts` → exit 2, `--workspace ~/gitstore` → exit 2, `--workspace ~/bot-fleet`
+   → exit 2. Sibling paths (`bot-fleet-v2-sandbox`, `bot-fleet-vault`) correctly NOT caught.
+5. **THE DEFERRED CHECK RAN, AND PASSED. First thing ever observed below the `exec` line.**
+   From a fresh untrusted `/tmp` clone (`grep -c` against `trusted_paths` = 0): the provenance line
+   printed, `exec` fired, the binary ran (`✓ Organization: chace2827`), and the agent replied `OK`.
+   No "Refusing to run in an untrusted workspace". Exit 0. The clone was left clean
+   (`git status --porcelain` empty).
+6. **Session row — the first real free-lane session of this sequence.**
+   `bead-hyssop` · `backend_type=windsurf` · `model=swe-1-7` · `agent_mode=normal` ·
+   `total_acu_cost=0.0` · `total_credit_cost=0`, read read-only from
+   `~/.local/share/devin/cli/sessions.db`. The first build's session `brook-trilby` reads
+   identically. **acu 0.0 / credit 0 on both.**
+
+### Two findings from running it
+
+1. **The deny-test instrument used all evening was the wrong directory.** See the CORRECTED banner
+   in the probe section above. `~/Library/Application Support/Devin/logs` is the GUI app's; the CLI
+   writes `~/.local/share/devin/cli/logs/devin_<ts>_<pid>.log`, two files per session (the `-p`
+   parent and its helper child).
+2. **The CLI writes back into whatever config it is handed** — it added `version`, `devin.org_id`,
+   `shell.setup_complete` and `theme_mode` to the scratch config on first use. v2's first draft
+   rewrote the file whenever its content differed from the literal, which would have reset that
+   every run and pushed the CLI's first-run banner (`Welcome to Devin CLI! … You're all set.`)
+   into the stdout of every dispatch, where a fleet parser reads it as agent output. Fixed before
+   the PR: create-if-absent, repair only a missing trust key. Proof it works — the second run's
+   stdout is exactly `OK`, and the config's sha was identical before and after it.
+
+**Open for Andy:** review PR #63 and merge, or reject the `~/bot-fleet` third root. Until it
+merges, `~/bin/devin-free` (v2) and `scripts/devin_free.sh` in the live tree (v1) deliberately
+disagree, and **wave 2 does not dispatch.**
+
+## WAVE 3 — §0/§1/§2 done, HOLDING AT THE §3 PILOT GATE, 2026-08-19
+
+**§0 gate PASSED.** master `1d56fc0`; `~/bin/devin-free --selfhash` == `shasum -a 256
+scripts/devin_free.sh` == `3479939d4129996a580e3fdea3ed96241bfead3999889d371d9ea57bfcb868ec`.
+
+### §1 — both counts re-derived. Neither was taken on trust.
+
+**Item 1 — `docs/rules-catalog.md` = 2310 rules. CONFIRMED, three ways.**
+Table-row parse = 2310; per-source-doc declared sum = 2310; **and all 56 sections reconcile
+individually**, so offsetting errors are excluded, not merely unlikely. Structural check:
+2422 lines beginning `|` = 2310 data + 56 headers + 56 separators.
+The board's "55 source docs" and the file's "56" are **both right and count different things**:
+55 files rules were extracted from (3 root + 50 `docs/*.md` + 2 `data/*.md`), plus one section for
+`docs/AI Agentic.pdf`, which the audit could not read. That section's single row is a
+"file not found" placeholder — **1 of the 2310 rows is not a rule.**
+
+**Item 2 — LOCATED, and both memory figures were mislabelled.**
+Artifact: `~/Documents/fleet-runs/2026-08-19/pr-sweep/findings_final.json` (869 rows, sha256
+`8374e2e1…`); 58 distinct workspaces, so **58/58 is confirmed**.
+- **"804 findings" is a cluster count, not a finding count.** 869 rows collapse to 804 clusters
+  (`analysis.json`; 749 singletons, 47 pairs, 6 triples, 2 quads, summing to 869).
+- **"130 likely-valid" is real but its denominator is 352, not 869.** Of the 352 actionable rows
+  (284 DEFECT-SUSPECT + 68 GUARD-UNNAMED): 175 re-verify / **130** untouched-since-pin / 47 no file
+  citation. Reproduced exactly from the stored `t` field.
+- ⚠️ **130 also appears as DEFECT-SUSPECT ∧ re-verify.** Same value, different quantity — the
+  "a fabricated number can equal a real quantity" trap, live in this dataset.
+- ⛔ **The code that computed `t` is NOT in the durable copy.** An independent reconstruction from
+  git lands at 159/128/65, disagreeing on 30 of 352 rows. So **no slice may consume `t`** — spec B
+  re-derives every citation itself, at a stated sha.
+
+### §2 — two slice-specs written (repo root, untracked)
+`_slice-spec-A-rules-catalog-2026-08-19.md` — 56 slices, one per source doc, all named.
+`_slice-spec-B-blocker-findings-2026-08-19.md` — 25 slices of 15 canon rows, all named, over
+`work/canon.json` (369 rows `R001`–`R369`, sha256 `a96f35a1…`).
+
+### §3 — PILOT RUN. Bar was set BEFORE anything ran.
+**Bar: ≥80% exact bucket agreement (≥13/16), plus three hard gates** — `#RECONCILE` present and
+reading `declared=parsed=written=16`; no bucket assigned without the evidence its test requires;
+no row omitted, duplicated or re-ordered.
+
+**Result: 13/16 = 81% bucket agreement — bar met. All three hard gates passed.
+Anchor agreement 16/16 — every anchor line identical.**
+
+**Executing the spec by hand found four defects in it, before any agent saw it. That is what §3 is
+for, and it is the whole return on this gate:**
+1. `grep -F` cannot find a quote that spans a hard wrap (~105 cols). The `DIR-SPX-PutVIX22-SL75`
+   KEEP quote is real at `capture-architecture-2026-07-30.md:67-68` and greps as absent.
+2. The fragment must be taken from **inside** the row's quotes; the trailing `" — <section>` is the
+   catalog's own note. Taking the whole cell produced **14 false ABSENTs out of 16**.
+3. The catalog normalises the source's `"` to `'` and moves `**` inside quotes, so the match must
+   normalise whitespace, emphasis and quote characters. All three fixes now live in a shipped
+   `anchor.py` that every agent runs identically — 16/16 after, and the wrap case still passes.
+4. **A banner-only supersession test sends every v1-era rule to LIVE** — 16 of 16 on a doc dated
+   2026-06-08. Added **Test 1b (cutover supersession)**, mechanical on two conditions, which is
+   what caught row 16 (`Scalp-` name + 214-trade pre-cutover count).
+
+**Where the 3 disagreements fell is the real signal: all of them in Test 2 (CONTRADICTS), none in
+the mechanical tests.** The agent found two contradictions the foreman missed (row 5 mirror-funding
+bar vs `CLAUDE.md` §1 watch-only; row 15 build priority vs `build-plan.md` §2B) and both are
+evidenced and defensible; row 14 is a genuine edge (is "superseded by the backtest tournament" a
+banner *over* the rule, or the rule itself?). **Test 2's scope rule is under-determined and is the
+one thing to tighten before fan-out — Andy's call, per §5.**
+
+### Dispatch law learned in the pilot, now in §6 of both specs
+- ⛔ `--permission-mode dangerous` is required. Default `-p` auto-approves read-only tools only;
+  `accept-edits` does not cover the exec tool; **`smart` is advertised in `--help` but prints
+  "Smart permission mode is not available. Falling back to normal"** on this build. Three runs
+  produced nothing before `dangerous` produced the slice. (This contradicts the harness lane's
+  TRAP-2 note that `smart` is present — present in help, unavailable at runtime.)
+- ⛔ **Exit 0 is not an acceptance signal.** All three blocked runs exited 0, empty stdout, no file.
+- All 6 sessions tonight: `backend_type=windsurf`, `model=swe-1-7`, **acu 0.0, credit 0**.
+
+**HOLDING. No fan-out. Andy authorises the pilot (or rules on Test 2) before §4.**
+
