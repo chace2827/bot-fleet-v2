@@ -9930,3 +9930,256 @@ One test needs exactly one Devin session when the classifier is ruled on: **does
 the exec tool?** — 209 rows depend on the answer, and it must be tested before any slicing.
 `work/canon.json`, the Class C package and the two new gates are left in place, untracked, ready to
 resume. No `bot-fleet-migration` tracker row corresponds to this work; the tracker was not updated.
+
+---
+
+## 2026-08-19 — Cowork — OA driver evaluation: CDP capture path added (`scripts/oa-playwright/`)
+
+**Question asked.** Claude-in-Chrome is slow and freezes on OA; are there better MCP browser
+drivers, and is Playwright MCP or Browserbase the right one?
+
+**Finding, on evidence.** OA has **no public REST API**. Webhooks are inbound trigger-only —
+docs.optionalpha.com/tools/bots/webhooks.md: *"A Webhook allows you to trigger automations within
+Option Alpha from any external source you choose."* No bot-state read, no config edit, no
+backtest access. Browser automation remains the only read/edit path for this fleet; that is a
+constraint, not a tooling preference.
+
+**Diagnosis.** The latency is the per-call bridge round-trip, not Chrome. A 44-row roster sweep is
+~40 round-trips. Swapping MCP servers removes the extension hop and the harness content filter but
+**not** the round-trip. Only scripting removes the round-trip.
+
+**Added, untracked, read-only.** `scripts/oa-playwright/` — zero-dependency CDP path (Node 22+
+global `fetch`/`WebSocket`; no npm install, no `node_modules` in the tree).
+- `oa_grab_page.js` — `OA Grab` bookmarklet **v2.1** (ancestor-climb, `oa-ops-runbook.md` §1.2)
+  transcribed as a page expression that RETURNS instead of downloading. Same ancestor-climb, same
+  `/^BOT/` filter, same dedupe, same section header incl. literal tabs. sha256
+  `c18a31205a3a4863…`
+- `oa_capture.mjs` — `targets` · `roster` · `bot <ID>` · `automation-hash`. Reads only: dispatches
+  no pointer/mouse/click events, types nothing, refuses to navigate off `app.optionalpha.com`,
+  attaches to an existing OA tab and will not open one. §5 trap 2 (`Runtime.evaluate` ~45s timeout
+  with work committed) is a write-path trap and cannot bite a read. sha256 `8f185b18e32f6a49…`
+- `oa_normalize.py` — §1.5 noise-stripping, structural `summary`, `compare`. sha256
+  `0776a5ccf1e5462e…`
+- `README.md` — debug-Chrome launch, the pilot, MCP configs. sha256 `27713187d5646327…`
+
+**Parser cross-checked on a second surface.** `oa_normalize.py summary` run against
+`data/captures/2026-08-17-r3/01-oa-bots-capture-2026-08-17-195713.txt` recomputes raw sha256
+`8d9c59b71858c97f43357595dd252d5bd4594a8ab20887da5cda120f64ccdf89` — identical to the hash
+recorded independently in `02-roster-toggles-44-2026-08-17.tsv`'s own header. Structural read of
+that capture: 44 bots, AUTOS ON 19, EXITS ON 16. Normalization strips exactly three lines from
+941 (`captured:`, the `7:57PM` sidebar clock, the `44 active bots • 6 left in your plan • Upgrade`
+footer) — no over-stripping.
+
+**NOT run against live OA.** No capture has been taken with this path. The acceptance predicate is
+stated as a derivation in the README §4 — toggle section present in both, ID-set symmetric
+difference empty except for genuine adds/archives, `toggle_changes` empty except for genuine
+flips — deliberately **not** as the literal `44`, which would pass a broken read the day the
+roster changes.
+
+**Rulings carried, unchanged.** Nothing here writes to OA, so §5 edit authority is not engaged.
+The moment something does, both proof layers apply and it is a different review. §7 lane noted in
+the README: code is Claude Code's to own; this is a starting point drafted in Cowork.
+
+**Browserbase: declined for the edit lane**, notwithstanding that the brokerage account has been
+unlinked. A cloud browser relocates latency to a network hop rather than removing it, and needs OA
+logged in from a datacenter IP. Its parallel-session advantage is real for backtest sweeps only —
+revisit after the edit lane is fast.
+
+**Open.** Pilot unrun. No `bot-fleet-migration` tracker row corresponds to this work; the tracker
+was not updated.
+
+### 2026-08-19 — same session, ADDENDUM: write path added; folder renamed `scripts/oa-driver/`
+
+**Andy's directive.** "I absolutely want it to be able to click — think about all the OA
+backtesting we need to run or bot edits." The read-only design above is retained; a write path
+is added beside it.
+
+**Renamed** `scripts/oa-playwright/` → `scripts/oa-driver/` (the read path contains no
+Playwright; the folder now holds both stacks).
+
+**Added.** `oa_driver.mjs` (Playwright over `connectOverCDP`, sha256 `f5d4a20e74175dcc…`),
+`package.json` pinning `playwright-core` **1.62.1** (verified current via `npm view`, sha
+`c962736764106987…`), README rewritten (sha `fa92079b377dc3d6…`). `.gitignore` extended:
+`node_modules/`, `package-lock.json`, `data/receipts/traces/`.
+
+**Why Playwright here and raw CDP for reads.** Not because it can click — raw CDP clicks via
+`Input.dispatchMouseEvent` too. Because of what surrounds the click: (1) **locators re-resolve
+per action**, which retires §5 trap 6 (stale editor DOM silently editing the WRONG automation) —
+a stale-handle bug cannot survive a handle-free API; (2) actionability + **hit-target test**
+(visible / stable across two animation frames / enabled / the centre point actually resolves to
+the target) covers trap 1 and the `Delete`-29px-below-`Archive` hazard; (3) `waitForResponse`
+gives OA's own POST as a **second surface** for "did it commit?", replacing inference off the
+Leave-site guard; (4) traces (per-action screenshot + DOM snapshot + network) are a §9.1a
+artifact produced automatically.
+
+**⚠️ HYPOTHESIS, NOT A FINDING — flagged in code and README, do not cite as fact.** The recorded
+trap is that element-ref clicks silently no-op because the app ignores the synthetic single
+click; the documented workaround dispatches a JS `MouseEvent` chain, i.e. `isTrusted:false`.
+Playwright's click is CDP-injected at the browser input pipeline, **`isTrusted:true`** — a THIRD
+mechanism, distinct from both. It may work where both failed. `--method trusted|js|both` exists
+to settle it **on a dead bot**, post-condition = the config hash. **Not yet run.** `both` cannot
+fall back on a *silent* no-op (nothing is raised); only the post-condition catches those.
+
+**Safety model.** Dry run is the default — without `--allow-write` every actionability check
+runs and nothing is clicked. `--allow-write` additionally requires `--bot <id|name>` and the
+script reads `a5.bots.bot` and **refuses on mismatch**. Ambiguous selectors refused (never index
+into a guess). Occluded elements refused. Tracing forced on for writes.
+
+**`save-automation` automates LAYER 1 across three surfaces** — pre-hash → click `a.saveclose`
+(the real commit; the drawer Save is not, trap 7) → observe the POST → hard reload with
+`beforeunload` **observed rather than dismissed** (trap 8's dirty-state oracle read as evidence)
+→ re-hash. It prints the three surfaces and **declines to blend them into a verdict**. A changed
+hash with a fired guard is not a clean save. **Layer 2 (first new position's Trades list) is
+untouched and still owed** — nothing here shortcuts a live-market observation.
+
+**⛔ BACKTESTING IS BLOCKED ON RECON, and this is the finding of the addendum.** The OA
+backtester is **not scriptable from this repo**: `backtest-ingest-protocol.md` is a PASTE
+protocol (Andy screenshots Compare + each column's Details and downloads `positions.csv` by
+hand), and `oa-platform-reference.md:47` lists the June 2026 backtester as UI-research-pending.
+No selectors exist anywhere in the folder. Inference from absence is not evidence, so nothing
+was written against a guessed UI.
+
+`oa_driver.mjs watch <sec>` is the answer and is the highest-leverage command in the folder: it
+clicks nothing and logs every request/response/download OA's own frontend makes while Andy
+drives one backtest by hand, to `data/captures/<date>-recon/`. **If the backtester runs on JSON
+endpoints, the backtest lane needs no clicking at all** — issuing the frontend's own POST on the
+same session cookies is faster than any driver, parallelises across parameter sets, and returns
+data instead of a screenshot to be re-read. If recon shows server-rendered or WebSocket-driven,
+we script clicks — but from evidence. Sweep rate against Andy's own account is Andy's decision,
+not a script default.
+
+**Open.** All pilots unrun: read compare, `status`, the `watch` recon, the `--method` shoot-out
+on a dead bot. `npm i` not yet run on the Mac. No tracker row corresponds; tracker not updated.
+
+### 2026-08-20 — RECON RESULT: OA has an internal RPC API. Tier 2 parked, Tier 1 procedure written.
+
+**Ruling on priority (Andy's call, this session).** The driver work splits. **Tier 1 = the
+verification half** (proceed: it serves the measurement problem). **Tier 2 = the backtest sweep**
+(PARKED: it serves throughput, which is not this phase's constraint). Reasoning recorded because it
+will be re-litigated: 29 of 44 bots traded zero times in August, 88% of the month came from one
+unsigned bot, zero of 18 bots have reached a sample target, `check_refs` exits 0 on 30 danglers so
+CI is blind, and 130 audit rows are untriaged. **Throughput upstream of a clogged triage stage
+produces inventory, not output.** Parking costs nothing: mapping the API was the perishable work
+and it is done; the build costs the same later.
+
+**⭐ FINDING — Option Alpha drives everything through one batched RPC endpoint.**
+`POST https://app.optionalpha.com/api/request`, body a JSON array of
+`{t:"rpc", tid, api:"<ns>.<method>", args:[…]}`. Auth is the session cookie; no bearer token
+observed. Full map in **`docs/oa-internal-api.md`** (sha `244781d97e63ec4f…`).
+Backtester namespace `zdte.*`: `startTest` (3 calls = Andy's 3 variants) · `testStatus` (poll) ·
+`testResults` · `testDetails` · `listTests` · `counts` · `getBotDefs` · `symdata`. Also seen:
+`bots.listItems`, `accounts.menuItems`, `market.time`, `member.setData`, `posts.exists`.
+**Progress is POLLED, not streamed — no OA WebSocket exists in the capture at all.**
+
+**The knobs were DERIVED, not guessed.** Three variants run in one session, diffed field-by-field:
+only `exits.profits` (0.05→0.10), `opp.longCall.delta` (0.05→0.82), `series.days` (0→1) and
+`series.filter` (absent→`"*"`) differ; 21 other fields are the fixed frame.
+⛔ **Display-string trap:** `text`/`textValues` are denormalised mirrors that travel WITH the
+numbers (`delta 0.82` ↔ `text ".82 delta"`). A sweep that updates one and not the other produces a
+test mislabelled against its own config — the same class that made 3 of 4 audited config records
+wrong. Whether OA validates or merely displays them is **UNKNOWN**.
+
+⭐ Likely (UNCONFIRMED): the CSV export is built **client-side** — the download carried a blob/data
+URL and no export endpoint appears in the log. If so a sweep reads positions from `zdte.testResults`
+and downloads nothing.
+
+**⛔ Reads yes, writes no.** RPC skips the app's own client-side validation — the way to create a
+config the UI would never permit and not find out for weeks. Rule: backtests/reads via RPC, bot
+edits via the browser with §5's two layers intact. An HTTP 200 is not Layer 1.
+
+**⛔ INCIDENT — the recorder over-captured, into a repo file.** The raw 109-event capture contained
+41 WebSocket frames from `naiadsystems.com`, an unrelated site open in another tab of the same
+browser: the `websocket` handler lacked the host filter its request/response handlers already had.
+`…CLEAN.json` (64 events, `optionalpha.com` only, verified) is the artifact of record; the raw file
+was moved to `data/captures/2026-08-20-recon/_to_delete/` **for Andy to delete — it must not be
+committed** (Cowork cannot delete on the mount). Nothing left the machine; only aggregate counts
+were returned. ⭐ **Generalised lesson: a recorder pointed at "the browser" records the WHOLE
+browser — scope to the host at capture time, not in analysis.**
+
+**Three driver defects found by running it, all fixed** (`oa_driver.mjs` sha `31b6d977bd7da96a…`):
+(1) `browser.close()` on a connectOverCDP browser **killed Andy's Chrome** — now a documented
+no-op; we did not open it, we do not close it. (2) the recon log buffered in memory and serialised
+only at the end of the timer, so Ctrl+C discarded the session — now JSONL-appended per event with
+SIGINT/SIGTERM flush. (3) a Playwright `download` listener silently took ownership of downloads
+(they vanished from `~/Downloads` into a temp dir deleted at exit) and then saved under the
+suggested name, so a second `positions.csv` **overwrote the first** — now `saveAs` into the capture
+dir with a timestamped, non-clobbering name.
+
+**Tier 1 procedure written, NOT RUN — `scripts/oa-driver/TIER1-PILOT.md`** (sha
+`157141b2b2c85327…`). Target `QQQ-IC-0DTE-HedgeTest`, selected on evidence: `bots_meta.csv` has it
+`OFF` / `experiment` / `superseded=yes` / *"suspected dup of A/D; archive candidate"*, and it
+appears **0** times in `data/trades.csv` and **0** times in `RULINGS.md`.
+⭐ **Test A is NON-MUTATING** — the post-condition for "did the trusted click land?" is UI state
+(`a5.bots.acedit.routine` absent → populated), not saved data, so the `isTrusted` hypothesis can be
+settled with zero write risk. Test B (three-surface `save-automation`) runs only if A passes, with
+the edit made by hand so only the commit-and-verify path is under test.
+⛔ One run licenses a session-log note, **not** an edit to §5 or the `oa-driving` skill; a trap
+earned from repeated experience is not overturned by one green result.
+
+**Open.** Tier 1 unrun. `_to_delete/` awaiting Andy. Tier 2 parked pending either the "why did 29
+of 44 trade zero times" diagnosis returning *strategy* rather than *plumbing*, or research becoming
+the thing waited on instead of triage. No tracker row corresponds; tracker not updated.
+
+## 2026-08-19 (close) — Cowork — daily loop for trading day 08-19 + roster capture bundle
+
+**Daily loop ran and landed clean.** Export `data/raw/2026-08-19.csv` (451,353 bytes),
+`scripts/daily.sh 2026-08-19`, nine stages, `final_exit 0`. `STATUS.md` regenerated 2026-08-19:
+**$4,706 · 71 legs · 15 bots** (from $4,327 / 49 legs on 08-18) — **+22 legs, +$379**.
+Directional turned negative for the first time post-cutover: **−$255** (SPX). IC $4,681
+(SPX $4,500 · QQQ $181). OA-Mirror $280.
+Should-have-fired verdict: **1 structural · 0 evidenced** — the standing INC-01 row
+(`IC-SPX-Fortress-Unstopped`, no market gate and no `fill_precondition` declared). Second
+consecutive clean night for the detector.
+
+**⚠️ Two receipts exist for 2026-08-19.** The first is `exit 1, 1 stage` — `build_ledger`
+refused; the second is the clean nine-stage run. Cause: the export had not reached `data/raw/`
+on the first attempt (see the save-dialog note below). Benign, but see the finding.
+
+### ⛔ FINDING — `daily-runs.jsonl` does not record `argv`
+A receipt records `day`, `final_exit` and the per-stage exit codes. It does **not** record the
+command line. So a run made with `--allow-rewind`, `--allow-front-truncate` or
+`--allow-ops-reclass` is **indistinguishable in the permanent record from one made without them** —
+the three guards added at `65799e0` are each overridable, and the artifact whose job is to answer
+"what was this ledger built from" cannot answer whether a guard was silenced. A failed-then-passed
+receipt pair, like tonight's, is exactly the shape that would follow an override. Tonight's was
+not one (confirmed with Andy at the time), but the record cannot show that. Proposed: `run_receipt.py`
+persists `argv` and an explicit `overrides` list. **Not built — needs Andy as a guard change.**
+
+### ⛔ FINDING — the OA export save dialog mangles a typed path into a filename
+`~/Downloads/~:bot-fleet-v2:data:raw:2026-08-19.csv` — Chrome turned the typed destination path
+into a single filename with colons for separators. The same artifact exists for 08-18
+(`data:raw:2026-08-18.csv`). Consequence: the export appears to have been saved while
+`data/raw/` is still empty, `daily.sh` then either refuses (tonight) or **silently re-runs the
+previous day from the newest file present** (the trap recorded on night one). Both stray copies
+were hash-compared against the committed exports and cleared.
+
+### Capture bundle — `data/captures/2026-08-19-roster/`
+Second capture in the `roster-toggles-44` series; first drift check against the 08-17 R-3 bundle
+that `docs/roster-mechanics-ruling.md` §2.5 made the roster authority.
+- `01-bots-roster-recent-activity-2026-08-19-211733.txt` `b4738278e6e2dde2…` — raw bookmarklet
+  capture, 21:17:33 ET, 44 list rows + the 44-row `i.sticon[title]` AUTOS/EXITS block.
+- `02-roster-toggles-44-2026-08-19.tsv` `fb62fa7b56436302…` — derived `bot_name / bot_id /
+  AUTOS / EXITS` join.
+- `screenshots/01-bots-roster-2026-08-19-211733.pdf` `da1756a2b8b9fea8…` — FireShot full-page.
+- `README.md` `56e60715a2f555a6…` · `SHA256SUMS.txt`.
+
+⭐ **This bundle satisfies both halves of §2.5** (text + image); the 08-17 bundle satisfied only
+the text half, its screenshots having been supplied in chat and never committed.
+
+**Result: 44 bots · AUTOS ON 19 of 44 · EXITS ON 16 of 44 · DRIFT vs 2026-08-17 = ZERO.**
+Not one bot changed either toggle across two trading days; the 19/16 membership is identical bot
+for bot. Gate A6 intact (`QQQ long call`, `Tasty Condor` both OFF/OFF). The Exit-Option-free
+controls remain EXITS OFF as designed. INC-01 unchanged at AUTOS ON / EXITS OFF.
+
+### ⛔ FINDING — an unsigned bot is armed, confirmed across two captures
+`QQQ-IC-0DTE-Fortress-NoPT50` (`BOTfw5TkkCRF3017862038322323202`) reads **AUTOS ON / EXITS ON**
+in both the 08-17 and 08-19 captures, while listed under **UNSIGNED PRE-REGISTRATION BOTS — DO
+NOT SWITCH ON** in `STATUS.md`. Every performance column on its roster row is `--`: armed, never
+filled. Exposure is prospective, not realised. Needs a signature or a disarm; not ruled here.
+
+### ⚠️ Method note — the join proof caught a real error, in this session
+The first derivation of the toggle TSV skipped the title block's first data row, shifting every
+name onto the next bot's id. It produced a well-formed file reporting **12 toggle changes, all
+false**, and it would have read as a plausible drift report. The 44/44 cross-check against the
+08-17 id map is the only thing that surfaced it. A positional join is not self-checking. The
+proof is now restated in the TSV header as a standing requirement for the series.
