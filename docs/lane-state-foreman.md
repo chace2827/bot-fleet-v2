@@ -866,3 +866,62 @@ verdict class it had. The next pilot run tests that class.
    than the specified `anchor_py_sha256=<sha>`. The sha was right and matched, but a strict parser
    would reject it. The spec must give the exact literal line, not a description of it.
 
+# ═══ WAVE 3 CLOSE-OUT — 2026-08-20, Andy's call: wrap, don't extend ═══
+
+## The pilot's one line
+
+**The agent did NOT catch `+$2,760` as false. It typed it as a precedence conflict.**
+Its row reads `LIVE/ON`, anchor 140, `trimmed=0`, quote `| …NoPT50 | Experiment (no-PT) | QQQ |
++$2,760 | ON |`, contradicting `pre-registration-ledger.md`, winner `docs/RULINGS.md`, concrete
+case *"If the strategy taxonomy lists PR-04 as ON, the pre-registration ledger's 'stays OFF' cannot
+hold."* It never opened `data/trades.csv`; the strings "zero rows", "insufficient data" and
+"falsified" appear nowhere in its output.
+
+**That is the spec's doing, not the agent's** — it ran against the revision from before
+`FALSIFIED-BY-DATA` existed, so precedence was the only class available to it. The lesson is the
+transferable part: **a verdict class that does not exist in the spec cannot be reached by the
+agent, however visible the fact.** The false number was sitting in the quote column the agent
+itself wrote, and was still recorded as one of two defensible readings.
+
+Its contradiction is nonetheless real and its citation resolves — `pre-registration-ledger.md:12`,
+*"No entry, no restart. A bot without a signed entry stays OFF on Day-0"* — and that framing is
+stronger than the foreman's in one way: the ledger states a **general gate**, which "ON" violates
+directly, rather than a document-versus-document preference.
+
+**⭐ And the rule that disposes of the number already existed.** `CLAUDE.md:37` §3 item 5:
+*"Narrative docs never carry numbers. If a `.md` states a figure, the CSV wins."* The doc simply
+violates it. **This is a propagation failure, not a missing rule** — and it is the single best
+argument for spec C existing at all, some other night.
+
+**Session:** `woolen-manta` · `backend_type=windsurf` · `model=swe-1-7` · `acu 0.0` · `credit 0`.
+Exited naturally; not killed.
+
+## WHAT SHIPPED
+- **`scripts/anchor.py`** at declared sha `973b68058e28b18b42ecbabb0641a923b4f2518358683c3df0f12c7341daa6e5` — raw cell in, threshold 25, multiplicity reported, backoff capped, `trimmed` carried per row. Reusable as-is.
+- **The blocker-audit basis on disk and fully reconciled** — 369 canon rows `R001`–`R369` contiguous · 869 raw rows · 58 workspaces · 804 clusters summing back to 869.
+- **Four findings banked:** row 14's **five QQQ hedge bots** whose status depends on which doc you read · **318 `Gated — Pending` rows reading as LIVE** to anything consuming the catalog · **44% PR-body-premise / 28% word-falsifiable** in the blocker set · and the **I-06 falsification** below.
+- **The method:** the pilot gate, the full-catalog dry run, citations that must resolve, and the standing result that **five consecutive count disputes were instrument errors, never catalog errors**.
+
+## WHAT IS PARKED — one next action each, and nothing else
+| | Status | The one next action |
+|---|---|---|
+| **Spec A** | held | fold cell extraction into `anchor.py`. Not tonight. |
+| **Spec B** | held, basis verified | its own pilot. Not tonight. |
+| **Spec C** | held | the hand-curated 2/20/4/9 roster as acceptance gate 1. |
+| **`--sandbox`** | untested | one session: does it contain a dangerous-mode agent's writes? **Goes before any fan-out.** |
+| **I-06** | ⛔ **Andy's, and the live one** | see below |
+
+## ⛔ I-06 — the live item, stated once, completely
+`QQQ-IC-0DTE-Fortress-NoPT50` is **ON and armed**, on the **UNSIGNED — DO NOT SWITCH ON** list
+(`STATUS.md:14`), with **zero rows in `data/trades.csv`** (71 rows, 15 bots, none of them this one)
+and `0 | 0 | 0 | insufficient data` at `STATUS.md:237` — while `strategy-taxonomy.md:140` tells any
+reader it has made **+$2,760** and is **ON**. The same holds for four sibling figures in that block
+(`+$2,975`, `+$908`, `−$445`, `−$450`), every one naming a bot with no post-cutover ledger row.
+**The false number is the thing most likely to keep an unsigned, never-filled bot armed.**
+
+## Uncommitted, and it is the last thing outstanding
+`scripts/anchor.py` · `data/wave3-pilot-2026-08-19/` · `data/blocker-audit-2026-08-19/` ·
+`_slice-spec-A/B/C` · `docs/lane-state-foreman.md`. Master is `e9ee47f3`; all of it is pushed to
+`durable-blocker-audit-basis` so nothing can be lost, but the mount still needs **Andy's one-line
+commit**. The `GATED` call can wait; the commit shouldn't.
+
