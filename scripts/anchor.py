@@ -9,10 +9,12 @@ makes an identical tool produce non-identical answers.
 
 Output (always FRAGMENT= first, so the derivation is visible in the transcript):
     FRAGMENT=<what was actually searched for>
-    FOUND start_line=N end_line=M wrapped=<bool>     exit 0   -- exactly one match
-    AMBIGUOUS n=<k> lines=<n1,n2,...>                exit 2   -- MORE THAN ONE match
-    ABSENT                                           exit 1   -- no match
-    TOO_SHORT longest=<n>                            exit 3   -- no part reaches 25 chars
+    FOUND start_line=N end_line=M wrapped=<b> trimmed=<n>  exit 0  -- exactly one match
+    AMBIGUOUS n=<k> lines=<n1,n2,...>                      exit 2  -- MORE THAN ONE match
+    ABSENT                                                 exit 1  -- no match
+    TOO_SHORT longest=<n>                                  exit 3  -- no part reaches 25 chars
+    TRIM_EXCEEDED trimmed=<n> limit=<n>                    exit 4  -- matched only after
+                                                                      trimming too much to trust
 
 AMBIGUOUS and TOO_SHORT are both UNRESOLVED verdicts. Never pick one of several
 matches: first-match-wins with no signal is exactly the miscite class this wave exists
@@ -26,7 +28,12 @@ Normalisation -- each rule was added because it produced a FALSE ABSENT on real 
 """
 import sys, re, io
 
-MIN_FRAGMENT = 25          # was 40; 239 of 2310 rows (10.3%) could never reach 40
+MIN_FRAGMENT = 25          # was 40; 250 of 2310 rows (10.8%) could never reach 40, measured at
+                           # normalised length with this file's own fragment(). An earlier
+                           # "239 / 10.3%" was measured with a reimplementation, not with this
+                           # tool -- the same class of error this tool exists to prevent.
+MAX_TRIM_ABS = 15          # a match found only after dropping more than this is not the quote
+MAX_TRIM_FRAC = 0.20       # ... nor is one that dropped more than a fifth of it
 QUOTES = dict.fromkeys(map(ord, "‘’“”'"), '"')
 
 def norm(s):
@@ -89,6 +96,15 @@ def main():
             probe = probe[:cut].rstrip(' .,;:!?"\')-')
     if not hits:
         print("ABSENT"); return 1
+
+    # Cap the backoff. Added 2026-08-20 after a full-catalog dry run showed 355 of 2114 matches
+    # (15.4%) resolving ONLY through the backoff, with a maximum of 120 characters dropped -- a
+    # 120-char trim is not "the same quote with its full stop removed", it is a different string.
+    # Uncapped, those rows were recorded identically to exact matches.
+    if trimmed:
+        limit = max(MAX_TRIM_ABS, int(MAX_TRIM_FRAC * len(frag)))
+        if trimmed > MAX_TRIM_ABS or trimmed > MAX_TRIM_FRAC * len(frag):
+            print("TRIM_EXCEEDED trimmed=%d limit=%d" % (trimmed, limit)); return 4
     frag = cand
 
     def line_of(off):
