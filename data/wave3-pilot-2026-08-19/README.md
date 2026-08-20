@@ -62,3 +62,34 @@ ship unreviewed at 56-slice scale. **Proposed and NOT applied** (a bucket-defini
 the pilot is Andy's under dispatch §5): restrict `dead` to the mechanical branch only — anchor
 absent from every `.md` in the repo — and route banner/judgement-based retirement to a flag that
 pass 2 adjudicates alongside the contradiction candidates.
+
+## Third pilot, 2026-08-20 — the capped tool (`973b6805…`), two slices
+
+The backoff added on 2026-08-20 was **validated on a slice where it never fired**: all 16 A21 rows
+are `trimmed=0`. It then became the sole basis for hundreds of anchors catalog-wide, with matches
+surviving after up to **120 characters** were dropped, recorded identically to exact matches. The
+cap (`trimmed > 15` or `> 20%` → `TRIM_EXCEEDED` → `UNRESOLVED`) and the 12th `trimmed` column both
+exist because of that.
+
+| File | Slice | Purpose |
+|---|---|---|
+| `A08-agent-capped-tool.tsv` | A08 `pilot-clone-card-qqq-fortress.md`, 22 rows | the slice where the cap **actually fires** |
+| `A21-agent-capped-tool.tsv` | A21 `strategy-taxonomy.md`, 16 rows | carries the row-14 named acceptance row |
+
+**A08 — 22/22 on anchors, 22/22 on `trimmed`, 22/22 twelve columns**, `#RECONCILE 22/22/22`,
+`#TOOLS` = declared sha. Nine rows hit the cap (trims 25, 31, 34, 35, 37, 47, 77, 85, 94) and every
+one is `UNRESOLVED / anchor-trim-exceeded:<n>` with the integer recorded — under the previous tool
+all nine would have been indistinguishable from exact matches. Test 0.5 fired on three classes in
+the same slice: row 6 `Superseded` → `RETIRED-CANDIDATE`, row 16 `Gated — Pending` → `UNRESOLVED /
+status-gated` (the 318-row class that used to fall through to `LIVE`), rows 3 and 10
+`Active — Frozen` → `LIVE`, noted `frozen`. Row 1 `ABSENT` → `dead`, the one mechanical branch
+where `dead` is still reachable.
+
+**A21 row 14 — the acceptance row — PASSED.** Returned `CONTRADICTS-CANDIDATE`,
+`winner=docs/build-plan.md`, reached **independently**: the prompt never named `build-plan.md:85`.
+The agent found the archive-directly disposition through the new deference check and wrote the
+case itself. 16/16 anchors, 16/16 `trimmed`, `#RECONCILE 16/16/16`.
+
+**Both sessions finalised with full metadata** — `lean-dolomite` and `auspicious-balmoral`, both
+`windsurf` / `swe-1-7` / `acu 0.0` / `credit 0`. Neither was killed. That is the never-kill rule
+working: let a session exit naturally and both evidence surfaces survive.
