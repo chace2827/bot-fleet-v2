@@ -272,6 +272,15 @@ Three checks below. **Workspace trust was not touched**: `trusted_workspaces.jso
 loop above exec, C returns above exec; B never started a process at all.
 (2) **The log directory never changed** — the same 4 entries with the same parent mtime
 (Aug 17 22:45) before A, after A, before D and after D.
+    **[CORRECTED 2026-08-19 step 6 — THIS LEG IS VOID. Original text left standing.**
+    `~/Library/Application Support/Devin/logs` is the **GUI app's** launch log. It did **not**
+    move when the CLI genuinely ran a session (acceptance 5), so its stillness never
+    distinguished "denied" from "ran" and was never evidence. The real per-run instrument is
+    `~/.local/share/devin/cli/logs/devin_<ts>_<pid>.log` — 744 files before acceptance 5, 746
+    after one session, and 744 → 744 across the re-run of deny test 1. **Legs (1) and (3) stand
+    and are sufficient**: A was refused by the harness before any process existed, and the
+    provenance line — which prints immediately above `exec` — was absent from every refused run.
+    Lesson: an instrument that has never been SEEN to move is not an instrument.]**
 (3) **No provenance line was ever emitted.** `devin-free` prints
 `sha256 … | model swe-1-7 (free)` to stderr immediately before `exec`, so its absence across every
 check is a per-run marker that no invocation occurred. No Devin session was created, and
@@ -304,3 +313,382 @@ expecting the provenance line `devin-free: sha256 a6dded83… | model swe-1-7 (f
 followed by Devin's trust refusal. The provenance line is the assertion; the trust refusal is the
 stop. **A guard proven under the old configuration is stale** — the whole point of step 6 is to
 move the line these probes were measured against.
+
+## STEP 6 — RULED AND EXECUTED, 2026-08-19: devin-free v2
+
+**Ruling:** do not disable trust globally, do not touch Andy's real Devin config. v2 hardcodes the
+config the way v1 hardcodes the model, and replaces the protection that turning trust off removes.
+
+**PR #63, `devin-free-v2-scratch-config-cwd-guard`. OPEN, NOT MERGED.** Wave 2 does not dispatch
+until Andy has the six results below.
+
+- **Scratch config, wrapper-owned.** `--config` still refused from argv in both spellings; the
+  wrapper supplies `~/.local/share/devin-free-lane/config.json` = `{"skip_workspace_trust": true}`.
+  Created if absent; otherwise left alone unless the trust key goes missing.
+- **Separation is asserted at run time, not just commented.** The script refuses if its scratch
+  config resolves inside `~/.config/devin`, `~/.local/share/devin`, or any guarded repo. Andy's
+  real config `~/.config/devin/config.json` and the shared `trusted_workspaces.json` appear in the
+  file only inside refusals, and neither was touched: 158 bytes / 2026-08-17 22:49 and 2616 bytes /
+  2026-08-18 20:54, unchanged across every run tonight.
+- **⛔ THE CWD GUARD IS THE POINT.** `skip_workspace_trust` removes the only thing that had been
+  protecting the live tree all evening — `~/bot-fleet-v2` is already in `trusted_paths`. v2 refuses,
+  above `exec`, exit 2, inside `~/bot-fleet-v2`, `~/gitstore`, and `~/bot-fleet` (the read-only
+  archive per CLAUDE.md §8 — one root beyond the two ruled, same argument, flagged for Andy).
+- **`--workspace DIR` was added, and it is load-bearing.** The grant is a PREFIX match on the
+  script path, so `cd DIR && devin-free` never matches it — the same wall that cancelled test B.
+  The wrapper owns the chdir; the guard runs on the RESOLVED target, so `--workspace` into the live
+  tree is refused exactly like standing in it (SEEN).
+
+### The six results — all re-proven against the shipped hash, none inherited
+
+The first build was `01013b19…`; a defect found by running it (below) changed the file, so every
+guard was re-run against the shipped hash. **Shipped: `3479939d4129996a580e3fdea3ed96241bfead3999889d371d9ea57bfcb868ec`.**
+
+1. **`--selfhash` == canonical.** `3479939d…` equals `shasum -a 256 scripts/devin_free.sh` on the
+   PR branch. ⚠️ **It does NOT equal the copy in the live tree, which is still v1 `a6dded83…`
+   until PR #63 merges.** The pre-wave assertion will fail by design until then; that is the
+   interlock, not a fault.
+2. **Deny test 1 re-proven.** Raw devin path, typed bare, DENIED by the classifier. CLI log count
+   744 → 744.
+3. **Deny test 2 re-proven.** `--model swe-1-7-lightning` → exit 2, no provenance line. Also
+   `--model=claude-opus-5` → exit 2, and `--config /tmp/evil.json` → exit 2. The scratch-config
+   directory did not exist at all until acceptance 5, which independently places all these
+   refusals above the config block as well as above `exec`.
+4. **NEW cwd guard: SEEN RED.** From `~/bot-fleet-v2` → exit 2. Also `--workspace
+   ~/bot-fleet-v2/scripts` → exit 2, `--workspace ~/gitstore` → exit 2, `--workspace ~/bot-fleet`
+   → exit 2. Sibling paths (`bot-fleet-v2-sandbox`, `bot-fleet-vault`) correctly NOT caught.
+5. **THE DEFERRED CHECK RAN, AND PASSED. First thing ever observed below the `exec` line.**
+   From a fresh untrusted `/tmp` clone (`grep -c` against `trusted_paths` = 0): the provenance line
+   printed, `exec` fired, the binary ran (`✓ Organization: chace2827`), and the agent replied `OK`.
+   No "Refusing to run in an untrusted workspace". Exit 0. The clone was left clean
+   (`git status --porcelain` empty).
+6. **Session row — the first real free-lane session of this sequence.**
+   `bead-hyssop` · `backend_type=windsurf` · `model=swe-1-7` · `agent_mode=normal` ·
+   `total_acu_cost=0.0` · `total_credit_cost=0`, read read-only from
+   `~/.local/share/devin/cli/sessions.db`. The first build's session `brook-trilby` reads
+   identically. **acu 0.0 / credit 0 on both.**
+
+### Two findings from running it
+
+1. **The deny-test instrument used all evening was the wrong directory.** See the CORRECTED banner
+   in the probe section above. `~/Library/Application Support/Devin/logs` is the GUI app's; the CLI
+   writes `~/.local/share/devin/cli/logs/devin_<ts>_<pid>.log`, two files per session (the `-p`
+   parent and its helper child).
+2. **The CLI writes back into whatever config it is handed** — it added `version`, `devin.org_id`,
+   `shell.setup_complete` and `theme_mode` to the scratch config on first use. v2's first draft
+   rewrote the file whenever its content differed from the literal, which would have reset that
+   every run and pushed the CLI's first-run banner (`Welcome to Devin CLI! … You're all set.`)
+   into the stdout of every dispatch, where a fleet parser reads it as agent output. Fixed before
+   the PR: create-if-absent, repair only a missing trust key. Proof it works — the second run's
+   stdout is exactly `OK`, and the config's sha was identical before and after it.
+
+**Open for Andy:** review PR #63 and merge, or reject the `~/bot-fleet` third root. Until it
+merges, `~/bin/devin-free` (v2) and `scripts/devin_free.sh` in the live tree (v1) deliberately
+disagree, and **wave 2 does not dispatch.**
+
+## WAVE 3 — §0/§1/§2 done, HOLDING AT THE §3 PILOT GATE, 2026-08-19
+
+**§0 gate PASSED.** master `1d56fc0`; `~/bin/devin-free --selfhash` == `shasum -a 256
+scripts/devin_free.sh` == `3479939d4129996a580e3fdea3ed96241bfead3999889d371d9ea57bfcb868ec`.
+
+### §1 — both counts re-derived. Neither was taken on trust.
+
+**Item 1 — `docs/rules-catalog.md` = 2310 rules. CONFIRMED, three ways.**
+Table-row parse = 2310; per-source-doc declared sum = 2310; **and all 56 sections reconcile
+individually**, so offsetting errors are excluded, not merely unlikely. Structural check:
+2422 lines beginning `|` = 2310 data + 56 headers + 56 separators.
+The board's "55 source docs" and the file's "56" are **both right and count different things**:
+55 files rules were extracted from (3 root + 50 `docs/*.md` + 2 `data/*.md`), plus one section for
+`docs/AI Agentic.pdf`, which the audit could not read. That section's single row is a
+"file not found" placeholder — **1 of the 2310 rows is not a rule.**
+
+**Item 2 — LOCATED, and both memory figures were mislabelled.**
+Artifact: `~/Documents/fleet-runs/2026-08-19/pr-sweep/findings_final.json` (869 rows, sha256
+`8374e2e1…`); 58 distinct workspaces, so **58/58 is confirmed**.
+- **"804 findings" is a cluster count, not a finding count.** 869 rows collapse to 804 clusters
+  (`analysis.json`; 749 singletons, 47 pairs, 6 triples, 2 quads, summing to 869).
+- **"130 likely-valid" is real but its denominator is 352, not 869.** Of the 352 actionable rows
+  (284 DEFECT-SUSPECT + 68 GUARD-UNNAMED): 175 re-verify / **130** untouched-since-pin / 47 no file
+  citation. Reproduced exactly from the stored `t` field.
+- ⚠️ **130 also appears as DEFECT-SUSPECT ∧ re-verify.** Same value, different quantity — the
+  "a fabricated number can equal a real quantity" trap, live in this dataset.
+- ⛔ **The code that computed `t` is NOT in the durable copy.** An independent reconstruction from
+  git lands at 159/128/65, disagreeing on 30 of 352 rows. So **no slice may consume `t`** — spec B
+  re-derives every citation itself, at a stated sha.
+
+### §2 — two slice-specs written (repo root, untracked)
+`_slice-spec-A-rules-catalog-2026-08-19.md` — 56 slices, one per source doc, all named.
+`_slice-spec-B-blocker-findings-2026-08-19.md` — 25 slices of 15 canon rows, all named, over
+`work/canon.json` (369 rows `R001`–`R369`, sha256 `a96f35a1…`).
+
+### §3 — PILOT RUN. Bar was set BEFORE anything ran.
+**Bar: ≥80% exact bucket agreement (≥13/16), plus three hard gates** — `#RECONCILE` present and
+reading `declared=parsed=written=16`; no bucket assigned without the evidence its test requires;
+no row omitted, duplicated or re-ordered.
+
+**Result: 13/16 = 81% bucket agreement — bar met. All three hard gates passed.
+Anchor agreement 16/16 — every anchor line identical.**
+
+**Executing the spec by hand found four defects in it, before any agent saw it. That is what §3 is
+for, and it is the whole return on this gate:**
+1. `grep -F` cannot find a quote that spans a hard wrap (~105 cols). The `DIR-SPX-PutVIX22-SL75`
+   KEEP quote is real at `capture-architecture-2026-07-30.md:67-68` and greps as absent.
+2. The fragment must be taken from **inside** the row's quotes; the trailing `" — <section>` is the
+   catalog's own note. Taking the whole cell produced **14 false ABSENTs out of 16**.
+3. The catalog normalises the source's `"` to `'` and moves `**` inside quotes, so the match must
+   normalise whitespace, emphasis and quote characters. All three fixes now live in a shipped
+   `anchor.py` that every agent runs identically — 16/16 after, and the wrap case still passes.
+4. **A banner-only supersession test sends every v1-era rule to LIVE** — 16 of 16 on a doc dated
+   2026-06-08. Added **Test 1b (cutover supersession)**, mechanical on two conditions, which is
+   what caught row 16 (`Scalp-` name + 214-trade pre-cutover count).
+
+**Where the 3 disagreements fell is the real signal: all of them in Test 2 (CONTRADICTS), none in
+the mechanical tests.** The agent found two contradictions the foreman missed (row 5 mirror-funding
+bar vs `CLAUDE.md` §1 watch-only; row 15 build priority vs `build-plan.md` §2B) and both are
+evidenced and defensible; row 14 is a genuine edge (is "superseded by the backtest tournament" a
+banner *over* the rule, or the rule itself?). **Test 2's scope rule is under-determined and is the
+one thing to tighten before fan-out — Andy's call, per §5.**
+
+### Dispatch law learned in the pilot, now in §6 of both specs
+- ⛔ `--permission-mode dangerous` is required. Default `-p` auto-approves read-only tools only;
+  `accept-edits` does not cover the exec tool; **`smart` is advertised in `--help` but prints
+  "Smart permission mode is not available. Falling back to normal"** on this build. Three runs
+  produced nothing before `dangerous` produced the slice. (This contradicts the harness lane's
+  TRAP-2 note that `smart` is present — present in help, unavailable at runtime.)
+- ⛔ **Exit 0 is not an acceptance signal.** All three blocked runs exited 0, empty stdout, no file.
+- All 6 sessions tonight: `backend_type=windsurf`, `model=swe-1-7`, **acu 0.0, credit 0**.
+
+**HOLDING. No fan-out. Andy authorises the pilot (or rules on Test 2) before §4.**
+
+## WAVE 3 — FAN-OUT HALTED ON MANAGER VERIFICATION, 2026-08-20
+
+MANAGER-CW verified the wave read-only and called HOLD. **The fan-out was live when the hold
+arrived and was killed immediately.** What that cost, stated plainly rather than smoothed over:
+
+- **Banked: 1 slice** — A02 (`README.md`, the warm-up), which passed the post-split contract.
+- **Killed in flight: 10** — A01, A06, A07, A10, A11, A12, A26, A38, A51, A52. No output, nothing
+  partial merged, nothing half-written into `out/`.
+- **Never started: 45.** Total 56.
+
+### What the manager confirmed independently
+2310 rules · 2422 pipe-lines · 56 sections all reconciling individually · pin `1d56fc0` ·
+`devin_free.sh` `3479939d…` · `anchor.py` logic including a RED test · the wrapped case at 67–68
+where `grep -Fn` returns nothing · and a **third-party re-run of pilot A21: 16/16 FOUND, 0 ABSENT,
+7 of 16 wrapped**. The anchor claim is reproducible by someone who did not write it.
+
+### Blocker 1 — the tool existed only as a fenced block in the spec. FIXED.
+`anchor.py` was real in the foreman's template and in PR #64, but **not in either mount and with no
+declared sha in the spec**, so `#TOOLS` was an acceptance gate with nothing to compare against and
+56 clones meant 56 possible transcriptions. Now: the file ships in PR #64, the spec states the
+declared sha, and Test 0 requires an **in-clone assertion before the first anchor call** — a
+mismatch is a halt, not a note. Two checks now, one before the work and one in the output.
+
+### Blocker 2 — spec B has no row basis. HELD, and the spec now says so at the top.
+`data/blocker-audit-2026-08-19/` does not exist at `origin/master` because **PR #64 is unmerged**.
+All 25 B slices are undispatchable, and by spec B's own §1 a slice sent without its pack is
+**foreman error, not an agent finding**. Spec B carries a HOLD banner until #64 lands and
+`a96f35a1…` / `8374e2e1…` re-assert against the merged tree. **This was the foreman's own rule
+being broken by the foreman.**
+
+### Defect 5 — the ≥40-char fragment rule. CONFIRMED INDEPENDENTLY, FIXED IN THE TOOL.
+Re-derived here before acting: **239 of 2310 rows (10.3%)** can never reach 40 characters, 187 of
+them in the 25–39 band. The spec was silent past that point, so each agent improvised — which is
+what "the tool is identical but its input is hand-derived" actually costs. All three fixes landed
+**in the tool, not in prose**:
+- **(a)** the raw cell goes in and `anchor.py` derives the fragment, so the input is derived
+  identically too. It never searches a string still containing an ellipsis.
+- **(b)** threshold 40 → **25**; below that it emits `TOO_SHORT` (exit 3) → `UNRESOLVED`.
+- **(c)** **multiplicity is reported**: >1 match prints `AMBIGUOUS n=k lines=…` (exit 2) →
+  `UNRESOLVED`. First-match-wins with no signal made `anchor_line` a coin flip on 45 rows.
+
+**A fifth class surfaced while re-running the regression:** the catalog appends terminal
+punctuation the source does not carry (`never fired**.` against the source's `never fired** in 22
+days`), so the full fragment reported ABSENT on text plainly present. Added longest-matching-prefix
+backoff, never below the threshold, reporting `trimmed=n`.
+
+**Measured over all 2310 rows with the fixed tool:** FOUND 2096 (90.7%) · ABSENT 107 ·
+TOO_SHORT 61 · AMBIGUOUS 45 · 1 unreadable (the PDF placeholder). The 106 ambiguous/too-short rows
+are now forced to `UNRESOLVED` instead of silently guessed. Declared sha
+**`e20fed809784be2a8de86a4e49543bd71694ac3d902e5b77dc6ed6cd58c3f6aa`**.
+
+### Defect 6 — the pilot slice was named nowhere. FIXED.
+The pilot is **A21 = `docs/strategy-taxonomy.md`** (lines 1096–1116). The wrap defect was found in
+**A15** (`capture-architecture-2026-07-30.md:67-68`) — the slice begun by hand and set aside as
+non-discriminating — and the spec narrated the two as one, which made 13/16 un-re-derivable by
+anyone. Both pilot TSVs are now committed at `data/wave3-pilot-2026-08-19/` with the correction.
+
+### The rate, stated correctly
+**13/16** raw — the number the bar was set against and met. **16/16** on what agents actually
+produce under the split ruling, because all three disagreements were Test-2 `CONTRADICTS` verdicts
+and agents no longer render those. Anchor lines agreed 16/16 throughout. Both are true of different
+questions; the second is the one that describes the fan-out's actual work.
+
+### Two findings from the session table that no one asked for
+1. ⛔ **A killed session leaves a row with NULL metadata and an empty `model`.** The §4 rule
+   "assert acu=0.0 on each new session row" **cannot be satisfied for a killed run** — 12 of
+   tonight's rows are unassertable this way. Their model is recoverable only from the wrapper's own
+   provenance line (all 11 killed fan-out runs printed `model swe-1-7 (free)`). **A NULL metadata
+   row is "unknown", not "$0"** — the assertion must say which it is.
+2. ⛔ **Two historical sessions ran with `~/bot-fleet-v2` itself as the working directory** —
+   `wooden-cathedral` (2026-08-18 03:10) and `lush-sparrow` (2026-08-19 01:00), both before the v2
+   cwd guard existed. The hazard the guard closes is not hypothetical; it had already happened
+   twice. Both were short and both are acu 0.0.
+
+**Batch spend: 22 rows inspected, non-zero acu or credit = 0.**
+
+**Order from here (manager's, adopted):** land PR #64 → re-pilot A21 with the patched tool → then
+fan out spec A. **Spec B stays held until its basis exists.** Merging #64 is a push to master:
+per dispatch §5 that is halt-and-report, so it is Andy's, not this lane's.
+
+### RE-PILOT A21 under the patched tool — done 2026-08-20, still holding
+
+**Mechanical layer 16/16** against `anchor.py`'s deterministic output, driven independently over
+the same 16 raw cells. `#RECONCILE 16/16/16`; `#TOOLS` = declared `e20fed80…`.
+
+**RED TEST PASSED.** Row 8 (`**Pillar 3 only.**`, 14 chars normalised) → `TOO_SHORT` → the agent
+recorded `UNRESOLVED / fragment-too-short`. Under the old spec **both the foreman by hand and the
+first agent** improvised a sub-threshold fragment and called it `LIVE` at line 77. That is defect 5
+demonstrated and closed on the row that exhibited it.
+
+**Judgement layer moved:** 5 `CONTRADICTS-CANDIDATE`s (rows 4, 5, 9, 13, 15) vs the first run's 2,
+each with a genuine one-sentence case — row 9 cites `R-2026-08-07-IC-GROUPS-BOTH-STAY`. Under the
+split that is a flag routed to pass 2, so more candidates is not a regression.
+
+⛔ **OPEN FOR ANDY — row 14 has given three terminal answers in three passes**, on a stable anchor
+(line 125): `LIVE` (foreman) / `SUPERSEDED-BUT-STILL-READS-AS-LIVE` (agent run 1) / `dead` (agent
+re-pilot, citing `build-plan.md` §2D). The rule's own text says the QQQ hedge family is
+"Reclassified … superseded by the backtest tournament" — is a rule describing its own supersession
+retired, or descriptive? **`dead` is terminal and does not route to pass 2**, so at 56-slice scale
+this divergence ships unreviewed. **Proposed, NOT applied** (§5: bucket-definition change after the
+pilot is Andy's): restrict `dead` to the mechanical anchor-absent branch, and route judgement-based
+retirement to a flag pass 2 adjudicates.
+
+### ⛔ THE acu ASSERTION HAS A HOLE — established by test, not inference
+`plain-brain` (the re-pilot) **completed, wrote a valid slice, and its session row still reads
+`model=''`, `agent_mode=''`, `metadata=NULL`.** Killing the lingering process did **not** backfill
+it. Sessions that exit naturally (`patch-evening`, `grand-rondeletia`, `bead-hyssop`, …) all carry
+`acu=0.0 / credit=0`; sessions killed or left lingering never do, permanently.
+
+Consequences for §4, both now binding:
+1. **Output present ≠ session finalised.** The re-pilot wrote its complete TSV and the process
+   lingered afterwards.
+2. **A NULL-metadata row is `acu=UNKNOWN`, never `$0`.** 14 of tonight's rows are permanently
+   unassertable this way. The only compensating evidence is the wrapper's own provenance line —
+   all 11 killed fan-out runs printed `model swe-1-7 (free)` — plus the fact that the wrapper
+   hardcodes the free model. That is evidence about the MODEL, not about acu.
+   The runner must wait for natural exit before asserting, and must report killed/lingering
+   sessions as UNKNOWN rather than counting them into a `$0` total.
+
+**Status: spec A is re-piloted and ready to fan out. Still HOLDING** on: (1) PR #64 merge —
+a push to master, therefore Andy's under §5 — and (2) the row-14 bucket ruling. Spec B stays held
+until its basis exists in the merged tree.
+
+## 2026-08-20 01:34 — manager re-check answered; everything landed on disk
+
+**The one thing asked for is done: the artifacts are in `~/bot-fleet-v2` on disk**, not only on a
+PR branch and not only in `/tmp`. Paths, all verified by `shasum -a 256` against their sources:
+
+| Path | sha256 |
+|---|---|
+| `scripts/anchor.py` | `e20fed809784be2a8de86a4e49543bd71694ac3d902e5b77dc6ed6cd58c3f6aa` |
+| `data/wave3-pilot-2026-08-19/A21-foreman-by-hand.tsv` | the by-hand pass, written before any agent ran |
+| `data/wave3-pilot-2026-08-19/A21-agent.tsv` | agent, run 1 |
+| `data/wave3-pilot-2026-08-19/A21-agent-repilot-patched-tool.tsv` | `30dfc8cd77272100ee7f218c81a319c912caf7a44b3c43f8eb1878e4783e559f` |
+| `data/wave3-pilot-2026-08-19/A02-warmup-agent.tsv` | the §4 warm-up |
+| `data/blocker-audit-2026-08-19/{findings_final,analysis,rows_slim,canon}.json` | `8374e2e1…` `9e7a9120…` `e27ccbb7…` `a96f35a1…` |
+
+**16/16 re-derived reading nothing but the live tree** — `docs/rules-catalog.md`,
+`scripts/anchor.py` and the committed TSV. `#RECONCILE declared=16 parsed=16 written=16`;
+`#TOOLS` = the declared sha.
+
+### Correction to the manager, with evidence
+`docs/lane-state-foreman.md` was **NOT** swept into the daily-loop commit. `git show --stat
+3943f51` contains **0** matches for it — the only `docs/` files in that commit are
+`portfolio-inbox-2026-08-19.md` and `session-log.md`. Its last commit is
+**`d857ee4 "wave 3: slice-specs A and B, pilot gate passed 13/16"`**, correctly titled. The mtime
+coincidence at 01:14:50 was real but the file was not in the commit. No pointer commit is needed;
+what *is* uncommitted is everything written since d857ee4, which still needs a wave-3-titled commit.
+
+### Rulings applied
+- **Row 14 → `CONTRADICTS-CANDIDATE`, winner `docs/build-plan.md`, routes to pass 2.** Basis
+  verified in the tree: `build-plan.md:85` puts the QQQ hedge family in archive-directly with
+  *"Tournament invalid as a selector: S1≈D identical on 73/86 days…"*, and `CLAUDE.md:38`/`:115`
+  make build-plan frozen. Recorded as a worked example in spec A §7, with the generalisation: **a
+  rule can be undermined by the invalidation of the authority it defers to**, which is neither a
+  banner over it nor a contradiction on its face.
+- **`RETIRED-CANDIDATE` adopted; agents now render no terminal judgement verdict at all.** `dead`
+  is reachable only from Test 0's mechanical anchor-absent branch. `CONTRADICTS`,
+  `SUPERSEDED-BUT-STILL-READS-AS-LIVE` and judgement-`dead` are all pass-2 verdicts. Pass 2 takes
+  both candidate kinds in one queue, since a rule can be flagged as both.
+- **§6, both specs: NEVER KILL A SESSION.** Killing is what destroys the acu evidence permanently.
+  Lingering is wait-and-report. A NULL row is reported as **"two evidence surfaces dropped to
+  one"** — the provenance line still proves the model, nothing proves the cost — never as `$0`.
+
+### Test 0.5 added — and it is bigger than reported
+The `Status` column exists on all 2310 rows and the spec ignored it. Re-measured here with an
+escape-aware splitter (all 2310 rows have exactly 5 cells; **174 distinct status strings**):
+`Active` 1703 · `Gated — Pending` 318 · `Supersed*` 88 (59 exact) · `Active — Frozen` 56 ·
+**13 compound rows carrying BOTH `Supersed*` and `Active`** · 6 cells that are not statuses.
+**The 6 is confirmed exactly** (`t`×3, `t\`×2, `premium\`×1); the earlier 33 was a splitter
+ignoring `\|` escapes and is not carried anywhere.
+
+Gated rows now go to `UNRESOLVED` rather than falling through to `LIVE`; a first-class `GATED`
+bucket is **proposed, not applied** (§5), because 318 rows should not sit in the unresolved queue
+purely for want of a name.
+
+> **Two derivations of "non-Active" disagree and both are recorded: 607 (not exactly `Active`) vs
+> the manager's 497.** The entire gap is `Active — Frozen` (56) + ~25 dated `Active — …` variants
+> + `Supersed*` counted exactly (59) vs by substring (88). **318, 64 and 6 agree exactly in both.**
+> The operative conclusion is identical, which is why the disagreement is recorded rather than
+> resolved by fiat.
+
+## 2026-08-20 — THIRD PILOT. The backoff cap, proven where it fires.
+
+**The manager found the blocker inside my own fix, and it was the same defect class this wave
+exists to find.** The prefix backoff was added on reasoning and validated on A21 — where **all 16
+rows are `trimmed=0`, so it never once fired on its own validation set** — and then became the
+sole basis for hundreds of anchors, with matches surviving after up to **120 characters** were
+dropped and recorded identically to exact matches.
+
+**Fix, all three parts:**
+- **(a) `trimmed` is a 12th column** in both specs, copied from the tool on every row, `0` included.
+  The `#TOOLS` sha stops slices being silently incomparable; this stops **rows inside one slice**
+  being silently incomparable.
+- **(b) The backoff is capped:** `trimmed > 15` or `> 20%` of the fragment → `TRIM_EXCEEDED`
+  (exit 4) → `UNRESOLVED`, never `FOUND`. New declared sha
+  **`973b68058e28b18b42ecbabb0641a923b4f2518358683c3df0f12c7341daa6e5`**.
+- **(c) Re-piloted on a slice where it actually fires**, plus A21 for the row-14 acceptance row.
+
+**Shipped-tool dry run, post-cap, all 2310 rows** (by subprocess against `scripts/anchor.py`, not a
+reimplementation — the previous count came from a reimplementation and was wrong):
+`FOUND` 1963 (85.0%, of which **205 via backoff, max 15, median 1**) · `TRIM_EXCEEDED` 152 ·
+`ABSENT` 100 · `TOO_SHORT` **51** · `AMBIGUOUS` 43 · 1 unreadable.
+The manager's `TOO_SHORT 51` reproduces exactly; their `ABSENT 101` = my 100 + the PDF counted
+separately; their `AMBIGUOUS 44` = my 43 + one row that was ambiguous only *via* an over-trim and
+now returns `TRIM_EXCEEDED` first. **347 rows (15.0%) will not anchor cleanly** — deliberately more
+than the pre-cap 196, because 152 rows that read as clean matches are now explicitly unresolved.
+
+### Results
+**A08 `pilot-clone-card-qqq-fortress.md`, 22 rows — 22/22 anchors, 22/22 `trimmed`, 22/22 twelve
+columns**, `#RECONCILE 22/22/22`, `#TOOLS` correct. **Nine rows hit the cap** (trims 25, 31, 34, 35,
+37, 47, 77, 85, 94), every one `UNRESOLVED / anchor-trim-exceeded:<n>`. Test 0.5 fired on three
+classes in the same slice: `Superseded` → `RETIRED-CANDIDATE`; `Gated — Pending` → `UNRESOLVED /
+status-gated` (the 318-row class that used to reach `LIVE`); `Active — Frozen` → `LIVE`. Row 1
+`ABSENT` → `dead`, the only mechanical branch where `dead` survives.
+
+**A21 row 14 — named acceptance row — PASSED.** `CONTRADICTS-CANDIDATE`,
+`winner=docs/build-plan.md`, reached **independently**: the prompt never named `build-plan.md:85`.
+The agent found the archive-directly disposition through the new **deference check** in Test 2 and
+wrote the concrete case itself. 16/16 anchors, 16/16 `trimmed`.
+
+**Both sessions finalised with full metadata** — `lean-dolomite`, `auspicious-balmoral`, both
+`windsurf` / `swe-1-7` / **acu 0.0 / credit 0**. Neither was killed. The never-kill rule is now
+demonstrated rather than asserted: let a session exit naturally and both evidence surfaces survive.
+
+### Counts settled
+**Carry 607** (`Status=='Active'` exact = 1703). The pair is **607 vs 425**, not 497 — the manager
+withdrew 497 as an ad-hoc classifier that bucketed frozen ahead of active. Malformed cells: **6**,
+not 33. Docstring corrected from `239 / 10.3%` to **250 / 10.8%**, measured with the tool's own
+`fragment()`. **497, 33 and 239 are all retired as instrument errors — the catalog was right every
+time.** `GATED` remains proposed, with the manager's recommendation to adopt.
+
