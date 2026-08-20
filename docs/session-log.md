@@ -10183,3 +10183,84 @@ name onto the next bot's id. It produced a well-formed file reporting **12 toggl
 false**, and it would have read as a plausible drift report. The 44/44 cross-check against the
 08-17 id map is the only thing that surfaced it. A positional join is not self-checking. The
 proof is now restated in the TSV header as a standing requirement for the series.
+
+## 2026-08-19 (close, part 2) — Cowork — the brief renderer: `scripts/render_brief.py`
+
+**The gap.** `daily_brief.py:14` describes its output as a "structured pack **Claude renders**".
+The renderer was never built. The loop has therefore been writing `data/brief/<DAY>_brief.json`
+every night into a file nobody opened, and the reading step of the daily ritual — the only step
+that produces understanding rather than an artifact — was done by hand or not at all. Tonight's
+close reached "ready to commit" without anyone having looked at the day.
+
+**Built:** `scripts/render_brief.py` (720 lines, sha `ba75ee26c53de361…`).
+`python3 scripts/render_brief.py [YYYY-MM-DD] [--root R] [--out P] [--check]`; no date = newest
+pack. Reads the pack (required), `<DAY>_p3_verdicts.tsv` (optional), `data/trades.csv` (required),
+`<DAY>_narrative.md` (optional). Writes `data/brief/<DAY>_brief.html` — §0–§6 plus the
+three-verdict table, in the fixed running order of `docs/daily-loop-spec.md` §6.
+
+**Three rules it is built to obey, each stated in its docstring:**
+1. **No figure is a literal.** Every number is derived from an input at run time; a day-specific
+   constant would silently mis-describe every other day.
+2. **An absent value never falls through to a pass.** Missing evidence renders as NOT EVALUABLE
+   with the missing artifact named — never 0, never "clean", never `—`. Includes the F-1 defect
+   class: an empty price window yields NOT EVALUABLE, not NO BREACH.
+3. **Failure is loud.** A missing required input exits non-zero with the path.
+
+**It does not write the narrative.** §0's grading of the previous watch list, §5's convexity note,
+§6's lesson, tomorrow's watch, and the FIRE/STRATEGY verdicts are judgment. They live in a tracked
+sidecar — `data/brief/<DAY>_narrative.md`, sections `## since-yesterday | convexity | lesson |
+tomorrow | fire | strategy` — which the renderer injects. **An absent section renders as a visible
+UNFILLED slot naming the file and heading to write.** Raw HTML in the narrative is escaped by
+design; a verdict section opens with a bare `GREEN` / `AMBER` / `RED` / `NOT EVALUABLE` token which
+becomes the pill, so the status is machine-readable rather than a hand-written span.
+
+**Acceptance — `--check` renders every day that has a pack and asserts invariants, writing nothing.**
+9 of 9 days pass (2026-08-08, 08-10…08-14, 08-17, 08-18, 08-19), including 08-08 with **zero legs**,
+which degrades to a 8,475-byte page rather than crashing. Predicates assert derivations, never
+literals: the ledger figure on the page must equal the ledger recomputed from `trades.csv`; every
+bot that opened a position must appear in the body; an absent verdict file must render as NOT
+EVALUABLE; every SVG must parse as XML.
+
+⭐ **The check caught its own bad predicate.** The first version asserted the literal string
+`"NARRATIVE SLOT"` was present — which passed while every day was unwritten and failed the moment
+08-19 was fully written up. Replaced with the property: *every narrative region renders as either a
+filled block or a visible unfilled slot, and there are at least four.* This is the
+`R-…-ACCEPTANCE-DERIVATION` rule biting in practice — a predicate that names a literal tests the
+sample, not the invariant.
+
+### Reconciliation the renderer now states every day
+Ledger grew **$4,327 → $4,706 = +$379**, but positions **opened** 2026-08-19 account for **$354**.
+The missing **$25** is a single `3DTE $140-$350` **ironcondor opened 2026-08-14 that settled today** —
+a multi-day position banks on the day it settles, not the day it opened. Verified against a
+different surface (the previous STATUS.md figure), not a second pass over the same file. "Opened
+today" and "ledger delta" are different numbers and the brief prints both with the carry named.
+
+### The 2026-08-19 brief itself
+`data/brief/2026-08-19_brief.html` sha `b69caa5af2b06848…`, narrative sha `480de4f0321aba1c…`.
+Rendered, loaded in a real DOM (Chromium, zero console errors, both SVGs laid out at 958×293) and
+read before shipping — file checks alone miss render defects, and two were caught that way: raw
+`<span>` markup leaking into the verdict cells, and 21 near-identical hedge-clinic rows now
+collapsed by (side, strike, extreme, verdict) with a `+N more` count.
+
+**Verdicts for the day, kept separate:** FIRE 🟡 AMBER · MECHANICS ⬜ NOT EVALUABLE (no Trades-list
+pull recorded) · STRATEGY 🟡 AMBER. No RED on an evidenced axis, so no instruction card.
+
+### ⭐ THE FINDING OF THE DAY — the greenfield call side filled for the first time
+Seven of eight GF arms sold a **720 call spread at 13:52**, having never filled a call side on any
+arm on any day. **But it is still not a condor:** the put spread filled at 13:33, the call 19
+minutes later, two separate `trade_id`s, `single_sided=True` on both rows. Eight arms, eight
+sessions, **zero condors**. The old hypothesis ("the call leg never fills") is dead; the narrower
+one that replaces it is **"the two sides fill as separate events"** — and if that is permanent, the
+**n=100-condor sample targets are unreachable as written.** That is a live threat to the whole
+measurement plan and it is tomorrow's first question.
+
+Also: `GF-QQQ-IC-Ride-Delta` double-filled the put side a **third** time (08-14, 08-17, 08-19) and
+was the only arm with no call side at all. `DIR-SPX-CallVIXdrop` is the day's only loss, −$320 of
+$640 risk in 28 minutes: VIX fell 6.0%, its gate was satisfied, SPX did not follow. FIRE clean,
+STRATEGY bad — the pair the three-verdict rule exists to keep apart.
+
+### Not done
+The renderer is **not wired into `scripts/daily.sh`** and that is deliberate. `TOTAL_STAGES=9` and
+"stages 9" is a checked receipt invariant; adding a tenth stage changes the receipt contract and is
+Andy's call, not a side effect of building a renderer. It runs as its own step between the receipt
+check and the commit.
