@@ -84,70 +84,135 @@ Run tests **in this order** and stop at the first that fires. Exactly one bucket
 **A bucket you cannot produce the required evidence for is a bucket you may not assign.**
 
 ### Test 0 — ANCHOR. Does the rule's textual basis still exist?
-**The fragment is the text INSIDE the row's outermost double quotes**, not the whole cell. The
-`Source quote/anchor` column is written `"<source text>" — <section name>`; everything after the
-closing quote is the catalog's own anchor note and is **not** in the source doc. Take the longest
-`"…"` span, drop any `...`/`…`, and use the longest remaining run of at least 40 characters.
-(Taking the whole cell produced 14 false `ABSENT`s out of 16 in the pilot.)
 
-⛔ **Do not use `grep -F` for this, and do not conclude "absent" from a failed grep.** The source
-docs are hard-wrapped at ~105 columns, so a quoted sentence routinely spans two lines and a
-line-oriented fixed search finds nothing even though the text is right there. This defect was hit
-on the very first row of the pilot slice: the `DIR-SPX-PutVIX22-SL75` KEEP quote is real, at
-`docs/capture-architecture-2026-07-30.md:67-68`, and `grep -Fn` returns nothing for it.
+**You do not derive the fragment. `anchor.py` does.** Pass it the source doc and the row's
+**raw `Source quote/anchor` cell**, exactly as it appears in the catalog:
 
-Use this script, shipped in your slice pack as `anchor.py`. Every agent runs the identical script,
-so every agent gets the identical answer:
-
-```python
-import sys, re, io
-# Locate a quote fragment in a hard-wrapped Markdown file.
-# Prints the TIGHTEST line window containing it: earliest end, then latest start.
-# Normalisation, in this order -- each was added because it produced a FALSE ABSENT in the
-# wave-3 pilot, not on theory:
-#   1. whitespace collapsed      (source docs hard-wrap at ~105 cols; quotes span lines)
-#   2. markdown emphasis dropped (* _ ` -- the catalog moves ** around inside a quote)
-#   3. quote characters unified  (the catalog renders the source's " as ' because the cell
-#                                 is itself quoted)
-QUOTES = dict.fromkeys(map(ord, "‘’“”'"), '"')
-def norm(s):
-    s = s.translate(QUOTES)
-    s = re.sub(r'[*_`]', '', s)
-    return re.sub(r'\s+', ' ', s).strip()
-
-frag = norm(sys.argv[1])
-lines = io.open(sys.argv[2], encoding='utf-8').read().split('\n')
-for end in range(len(lines)):
-    for start in range(end, max(-1, end - 6), -1):
-        if frag in norm(' '.join(lines[start:end + 1])):
-            print("FOUND start_line=%d end_line=%d wrapped=%s" % (start + 1, end + 1, start != end))
-            raise SystemExit(0)
-print("ABSENT")
-raise SystemExit(1)
+```
+python3 anchor.py <source doc> "<the whole raw cell>"
 ```
 
-`python3 anchor.py "<fragment>" <source doc>`
+An identical script fed a hand-derived input is not an identical instrument. Fragment extraction —
+take the longest `"…"` span, split on ellipsis, take the longest surviving part, never search a
+string that still contains an ellipsis — now lives inside the tool, so every agent's *input* is
+derived the same way too.
 
-- **FOUND** → `anchor_file` = the source doc, `anchor_line` = `start_line` (the line the fragment
-  BEGINS on). If `wrapped=True`, append `wrapped:<start>-<end>` to `notes`. Go to Test 1.
-- **ABSENT** → run the same script against every `.md` file in the repo.
-  - Found in a different file → `UNRESOLVED`, `notes=anchor-moved:<file>:<line>`.
-  - Found nowhere → bucket **`dead`**, `notes=anchor-absent`. Evidence required: the exact
-    fragment you searched for, in the `quote_fragment` column.
+⛔ **Assert the tool before your first anchor call, and abort the slice if it disagrees:**
+
+```
+shasum -a 256 anchor.py
+# must be 973b68058e28b18b42ecbabb0641a923b4f2518358683c3df0f12c7341daa6e5
+```
+
+`anchor.py` is shared load-bearing code. If your copy differs, every row you produce is measured
+with a different instrument than the rest of the wave and nothing in the output would say so.
+A mismatch is a **halt**, not a note.
+
+**The four outcomes, and what each one means for the row:**
+
+| Output | Exit | Bucket |
+|---|---|---|
+| `FOUND start_line=N end_line=M wrapped=… trimmed=…` | 0 | record `anchor_line=N`, continue to Test 1 |
+| `AMBIGUOUS n=k lines=…` | 2 | **`UNRESOLVED`**, `notes=ambiguous-anchor:<lines>` |
+| `TOO_SHORT longest=n` | 3 | **`UNRESOLVED`**, `notes=fragment-too-short`, cell verbatim in `quote_fragment` |
+| `TRIM_EXCEEDED trimmed=n limit=n` | 4 | **`UNRESOLVED`**, `notes=anchor-trim-exceeded:<n>` |
+| `ABSENT` | 1 | run it against every other `.md` in the repo → found elsewhere = `UNRESOLVED`, `notes=anchor-moved:<file>:<line>`; found nowhere = **`dead`**, `notes=anchor-absent` |
+
+**`AMBIGUOUS` is never resolved by taking the first match.** The tool used to do that silently, and
+first-match-wins with no signal is exactly the miscite class this wave exists to find — it makes
+`anchor_line` a coin flip on 45 rows across the catalog while the spec claims the cited line is the
+line the span begins on. If the tool cannot tell you which occurrence is yours, neither can you.
+
+`trimmed=<n>` reports characters dropped by longest-matching-prefix backoff, which exists because
+the catalog appends terminal punctuation the source does not carry. **Record it in the `trimmed`
+column on every row, always** — `0` included.
+
+⛔ **The backoff is capped, and the cap exists because the backoff was shipped unproven.** It was
+added on reasoning and validated on A21, where **all 16 rows are `trimmed=0` — it never once
+fired there**, and it then became the sole basis for hundreds of anchors catalog-wide. A dry run
+found matches surviving after **120 characters** were dropped; a 120-character trim is not the same
+quote with its full stop removed, it is a different string. The cap is `trimmed > 15` **or**
+`trimmed > 20%` of the fragment → `TRIM_EXCEEDED` → `UNRESOLVED`. Never `FOUND`.
+
+**Measured over all 2310 rows with the shipped tool, post-cap** (run by subprocess against
+`scripts/anchor.py` itself, not a reimplementation — an earlier count was taken from a
+reimplementation and was wrong, which is the very failure this spec keeps finding):
+
+| Outcome | Rows | % |
+|---|---|---|
+| `FOUND` | 1963 | 85.0% |
+| `TRIM_EXCEEDED` | 152 | 6.6% |
+| `ABSENT` | 100 | 4.3% |
+| `TOO_SHORT` | 51 | 2.2% |
+| `AMBIGUOUS` | 43 | 1.9% |
+| unreadable source (the PDF) | 1 | — |
+
+Of the 1963 `FOUND`, **205 matched only through the backoff** (max 15 after the cap, median 1).
+**Expect about one row in seven not to reach a clean anchor** — 347 of 2310. That is the data, not
+your slice going wrong, and it is deliberately higher than before the cap: 152 rows that used to be
+recorded as clean matches are now explicitly unresolved.
 
 **The cited line must be the line the span begins on.** A span that starts on line N and continues
-onto N+1, cited as N+1, is the wrap-driven miscite this whole exercise exists to catch.
+onto N+1, cited as N+1, is the wrap-driven miscite.
+
+### Test 0.5 — THE `Status` COLUMN. Read it before you judge anything.
+
+⛔ **Added 2026-08-20. The catalog carries a `Status` cell on all 2310 rows and this spec ignored
+it entirely** — which is the root cause of the row-14 three-way split, and would have sent every
+gated rule to `LIVE`.
+
+Measured here with an **escape-aware** splitter (`(?<!\\)\|`; all 2310 rows have exactly 5 cells,
+so there are no malformed *rows*), **174 distinct status strings**:
+
+| Status | Rows | What you do |
+|---|---|---|
+| `Active` exactly | 1703 | continue to Test 1 |
+| `Active — Frozen` | 56 | continue to Test 1; frozen ≠ inactive. Note `frozen` |
+| other dated `Active — …` variants | ~25 | continue to Test 1 |
+| `Gated — Pending` (296 exact, 318 incl. variants) | 318 | **`UNRESOLVED`**, `notes=status-gated:<cell verbatim>` |
+| contains `Supersed*`, not compound | 75 | **`RETIRED-CANDIDATE`**, `notes=status-superseded` |
+| **compound** — contains BOTH `supersed*` and `active` | 13 | **`UNRESOLVED`**, `notes=status-compound` |
+| `unclear…` | ~6 | **`UNRESOLVED`**, `notes=status-unclear` |
+| not a status at all — `t` ×3, `t\` ×2, `premium\` ×1 | 6 | **`UNRESOLVED`**, `notes=status-not-a-status` |
+
+**A gated rule is not a live rule.** 318 rows say `Gated — Pending` in their own Status cell; under
+the previous spec every one reached Test 3 and bucketed `LIVE`. **Proposed and NOT applied** (§5 —
+bucket definitions are Andy's): a first-class `GATED` bucket, so 318 rows do not sit in the
+`UNRESOLVED` queue purely for want of a name.
+
+**Compound statuses are real and must not be collapsed.** Thirteen rows carry both readings at
+once, e.g. `Superseded (prior rationale) / Active (current framing)` and
+`Superseded (original one-window claim) / Active (corrected)`. The cell itself refuses to answer;
+so do you.
+
+> **The two derivations of "non-Active" are now resolved, and the manager's own number was the
+> defective one — by their own re-check.** `Status == 'Active'` exactly = **1703 → 607
+> not-exactly-Active**. `Status.startswith('Active')` = 1885 → 425 in the Active family. The pair
+> is **607 vs 425**; the earlier 497 came from an ad-hoc classifier that bucketed frozen ahead of
+> active and swallowed ~31 rows into a catch-all. **Carry 607** — it is the operative set for this
+> test, because `Active — Frozen` (56) and the dated `Active — ruled…` variants (118) carry
+> information Tests 0–3 never consult, exactly like `Gated`.
+>
+> Likewise the malformed-cell count: the real figure is **6** (`t`×3, `t\`×2, `premium\`×1). An
+> earlier "33" came from a splitter that ignored `\|` escapes. **Do not carry 33 or 497 anywhere.**
+> Both were instrument errors, not catalog errors — the catalog was right both times.
 
 ### Test 1 — SUPERSEDED. Has a dated correction overtaken the rule?
 Read the anchor line and the enclosing section of the source doc. A rule is superseded if the doc
 carries any of: `[CORRECTED`, `[AMENDED`, `SCOPE AMENDMENT`, `~~`-struck text, `supersedes`,
 `superseded`, `overruled`, `declined`, `REMOVED`, or a dated banner in `docs/RULINGS.md` naming it —
 **and** that banner changes what the rule requires or who it binds.
+⛔ **RULED 2026-08-20: agents render no terminal judgement verdict at all.** Both outcomes below
+are **`RETIRED-CANDIDATE`**, which routes to pass 2 exactly like a contradiction candidate. Pass 2
+decides between `dead`, `SUPERSEDED-BUT-STILL-READS-AS-LIVE` and `LIVE`.
 - Banner present **and the original rule text is still standing and still reads as an instruction**
-  → bucket **`SUPERSEDED-BUT-STILL-READS-AS-LIVE`**. Required evidence: `superseded_by` = the
+  → **`RETIRED-CANDIDATE`**, `notes=reads-as-live`. Required evidence: `superseded_by` = the
   banner's ruling id or its `file:line`.
-- Banner present **and the rule text is struck, removed, or explicitly retired** → bucket **`dead`**,
-  `superseded_by` = same.
+- Banner present **and the rule text is struck, removed, or explicitly retired** →
+  **`RETIRED-CANDIDATE`**, `notes=retired`, `superseded_by` = same.
+
+**`dead` is now reachable from exactly one place: Test 0's anchor-absent branch**, where it is
+mechanical — the fragment is in no `.md` in the repo. Nothing you *judge* may be `dead`.
 - Banner changes only scope, not the requirement → **not** superseded; continue to Test 1b.
   (Worked example: `R-2026-08-17-GIT-RULE-SCOPE` scopes the git prohibition to bridge sessions on
   the mounted tree. Rows stating the prohibition are **LIVE**, scoped — not superseded.)
@@ -166,8 +231,9 @@ Fires only when **both** hold, and both are mechanical:
    - an item on `CLAUDE.md` §1's out-of-scope list: TT3, the Intraday Cockpit, discretionary
      scalping (including `Scalp-` bot names), `investor-profile.md`.
 
-→ **`SUPERSEDED-BUT-STILL-READS-AS-LIVE`**, `superseded_by` = `CLAUDE.md §3 DATA CUTOVER 2026-07-30`
-(or `CLAUDE.md §1` when it is the out-of-scope list that fires). Otherwise continue to Test 2.
+→ **`RETIRED-CANDIDATE`**, `notes=cutover`, `superseded_by` = `CLAUDE.md §3 DATA CUTOVER
+2026-07-30` (or `CLAUDE.md §1` when it is the out-of-scope list that fires). Otherwise continue to
+Test 2.
 
 **Neither condition is a judgement call.** If you find yourself arguing that a rule "feels" stale
 without condition 2 firing, that is `LIVE` — or `UNRESOLVED` if you can name the specific conflict.
@@ -196,6 +262,26 @@ two real contradictions the foreman missed and evidenced both. So you may check:
 
 You may **not** read all 2310 catalog rows. Fan-out safety depends on slice-local work.
 
+**Run the deference check before you may conclude `LIVE`.** If the rule's own text defers to
+another mechanism or authority — "superseded by X", "per Y", "decided by Z", "pending the W
+tournament" — then **X, Y, Z or W is load-bearing for this rule, and you must confirm it is still
+standing.** Search `docs/build-plan.md` and `docs/RULINGS.md` for it by name. If that authority has
+itself been invalidated, archived, or ruled out, the rule is a `CONTRADICTS-CANDIDATE` whose
+`winner` is the document that invalidated it.
+
+> **A rule can be undermined by the invalidation of the authority it defers to — neither a banner
+> over it nor a contradiction on its face.**
+>
+> **Worked example, A21 row 14, ruled 2026-08-20.** The rule says the QQQ "Hedge family" is
+> reclassified and *"superseded by the backtest tournament"*. The tournament is the authority. But
+> `docs/build-plan.md:85` places `HedgeA-S1` / `HedgeB-S2` / `HedgeC-S3` / `HedgeD-Conditional` /
+> `HedgeTest` in the **archive-directly, no-clone** group with the reason *"Tournament invalid as a
+> selector: S1≈D identical on 73/86 days, S3 a different execution class, no arm carries
+> Range075"*, and `CLAUDE.md:38` / `:115` make build-plan frozen. The authority was ruled out from
+> under the rule. **Correct verdict: `CONTRADICTS-CANDIDATE`, `winner=docs/build-plan.md`.**
+> Three earlier passes returned `LIVE`, `SUPERSEDED-BUT-STILL-READS-AS-LIVE` and `dead` — three
+> different *terminal* answers, which is why no agent renders this class at all.
+
 When it fires, bucket **`CONTRADICTS-CANDIDATE`** and fill **all four**:
 - `contradicts_row` — the other rule's label **and** its source doc,
 - `concrete_case` — **the one sentence.** A candidate without it is rejected in pass 2 unread,
@@ -223,13 +309,20 @@ source doc path with `/` → `__`, ` ` → `_`, `.` → `_`.
 Tab-separated, one header line, then one row per catalog row **in catalog order**:
 
 ```
-row_ord	rule_label	bucket	anchor_file	anchor_line	quote_fragment	superseded_by	contradicts_row	concrete_case	winner	notes
+row_ord	rule_label	bucket	anchor_file	anchor_line	trimmed	quote_fragment	superseded_by	contradicts_row	concrete_case	winner	notes
 ```
 
 - `row_ord` — 1-based position of the row within your section. Every integer 1..N exactly once.
-- `bucket` — one of `LIVE`, `CONTRADICTS-CANDIDATE`, `SUPERSEDED-BUT-STILL-READS-AS-LIVE`,
-  `dead`, `UNRESOLVED`. **Plain `CONTRADICTS` is not available to you** — it is a pass-2 verdict.
+- `bucket` — one of `LIVE`, `CONTRADICTS-CANDIDATE`, `RETIRED-CANDIDATE`, `dead`, `UNRESOLVED`.
+  **`CONTRADICTS`, `SUPERSEDED-BUT-STILL-READS-AS-LIVE` and judgement-based `dead` are not
+  available to you** — all three are pass-2 verdicts. `dead` is reachable only from Test 0's
+  mechanical anchor-absent branch.
 - `concrete_case` — required and only meaningful for `CONTRADICTS-CANDIDATE`: the one sentence.
+- `trimmed` — **the integer `anchor.py` printed**, copied, not judged. `0` means the quote matched
+  exactly. Non-zero means the match survived only after characters were dropped from its tail.
+  ⛔ **Without this column a heavily-trimmed anchor is recorded identically to an exact one.** The
+  `#TOOLS` sha stops whole slices being silently incomparable; this stops *rows inside one slice*
+  being silently incomparable. It is not optional and it is not derivable after the fact.
 - Empty cells are a literal `-`. Never leave a tab-run empty; never re-order columns.
 
 ## §4 — Acceptance predicate (a derivation, and it can fail)
@@ -259,8 +352,10 @@ after** `#RECONCILE`:
 #TOOLS anchor_py_sha256=<output of `shasum -a 256 anchor.py`>
 ```
 
-A slice output without this line is **not accepted**, and the foreman rejects any slice whose sha
-differs from the wave's declared sha rather than merging it.
+**The wave's declared sha is `973b68058e28b18b42ecbabb0641a923b4f2518358683c3df0f12c7341daa6e5`.**
+A slice output without this line is **not accepted**, and the foreman rejects — does not merge —
+any slice whose sha differs. This is a second check on the in-clone assertion in Test 0: the first
+catches a wrong tool before the work, this one catches it after.
 
 ## §5 — Escalation
 
@@ -292,6 +387,16 @@ differs from the wave's declared sha rather than merging it.
 - After every batch, assert `model` / `backend_type=windsurf` / `acu=0.0` / `credit=0` on each new
   row of `~/.local/share/devin/cli/sessions.db` (read-only, `mode=ro`). **A non-zero acu halts the
   wave and is reported — never a footnote.**
+- ⛔ **NEVER KILL A SESSION.** Killing is what permanently destroys the acu evidence: a session
+  that is killed — or merely left lingering — keeps `metadata=NULL` and `model=''` in
+  `sessions.db` **forever**, and killing it later does not backfill. Established by test on
+  2026-08-20: the A21 re-pilot **completed and wrote a valid slice** and its row is still NULL.
+  **Lingering is wait-and-report, never kill.**
+- ⛔ **Output present ≠ session finalised**, and a NULL-metadata row is **not** `$0`. Report it as
+  **"two evidence surfaces dropped to one"**: the wrapper's provenance line still proves the
+  *model* (`model swe-1-7 (free)`), and nothing proves the *cost*. Never fold a NULL row into a
+  `$0` total. Assert acu only after a session has exited naturally.
+
 
 ## §7 — PASS 2: adjudicating the flagged candidates (a separate, smaller wave)
 
@@ -306,8 +411,31 @@ is missing, or is a restatement of topic overlap rather than a situation ("both 
 champion"), is returned as `LIVE` **without adjudication**. The sentence is the filter; that is why
 it is mandatory in pass 1.
 
-**Verdicts.** `CONTRADICTS` (with the winner named under the §2 precedence order) · `LIVE`
-(the concrete case does not hold on inspection) · `UNRESOLVED` (real conflict, precedence silent).
+**Verdicts.** Pass 2 owns every terminal judgement: `CONTRADICTS` (winner named under the §2
+precedence order) · `SUPERSEDED-BUT-STILL-READS-AS-LIVE` · `dead` · `LIVE` (the concrete case does
+not hold on inspection) · `UNRESOLVED` (real conflict, precedence silent).
+
+**Pass 2 takes both candidate kinds** — `CONTRADICTS-CANDIDATE` and `RETIRED-CANDIDATE` — in one
+queue, because a rule can be flagged as both and the two readings must be settled together.
+
+### Worked example — row 14 of A21, ruled 2026-08-20
+
+Three passes gave three different terminal answers on a stable anchor: `LIVE` (foreman by hand),
+`SUPERSEDED-BUT-STILL-READS-AS-LIVE` (agent run 1), `dead` (agent re-pilot). **The ruling is
+`CONTRADICTS-CANDIDATE`, winner `docs/build-plan.md`, routed to pass 2** — not `dead`, not `LIVE`,
+not superseded.
+
+The basis, verified in the tree: `docs/build-plan.md:85` places `HedgeA-S1` / `HedgeB-S2` /
+`HedgeC-S3` / `HedgeD-Conditional` / `HedgeTest` in the **archive-directly, no-clone** group, with
+the reason *"Tournament invalid as a selector: S1≈D identical on 73/86 days, S3 a different
+execution class, no arm carries Range075"*; `CLAUDE.md:38` and `:115` make `build-plan.md` frozen.
+**The authority the rule defers to has been ruled out from under it** — the taxonomy rule says the
+hedge family is superseded *by the backtest tournament*, and the tournament is itself invalid as a
+selector. Test 1b's condition 2 never fires, so it was never cutover-superseded either.
+
+The lesson generalises: **a rule can be undermined by the invalidation of the thing it defers to,
+which is neither a banner over it nor a contradiction on its face.** That is why no agent renders
+this class of verdict.
 
 **⛔ `UNRESOLVED` with a real concrete case is Andy's, not the wave's.** Per dispatch §5, whether a
 CONTRADICTS verdict becomes a ruling is Andy's decision. Pass 2 delivers the case, both quotes and
@@ -315,3 +443,19 @@ the precedence trace; it never edits a project document and never writes a rulin
 
 **Batching.** One agent per 10 candidates, same dispatch law (§6), same `#RECONCILE` /`#TOOLS`
 discipline, output at `_wave3/rules-pass2/P<NN>.tsv`.
+
+## §8 — Provenance of this spec
+
+The pilot slice is **A21 = `docs/strategy-taxonomy.md`** (16 rules, catalog lines 1096–1116).
+Both pilot artifacts — the foreman's by-hand execution and the agent's — are committed at
+`data/wave3-pilot-2026-08-19/`, so the agreement rate is re-derivable by anyone.
+
+**The rate, both ways.** Raw, all 16 rows: **13/16**, the number the bar was set against and met.
+On what agents actually produce under Andy's split ruling: **16/16** — all three disagreements were
+Test-2 `CONTRADICTS` verdicts, which agents no longer render. Anchor lines agreed 16/16 throughout.
+
+**Correction.** An earlier draft of this spec said the `grep -F` wrap defect was hit on "the very
+first row of the pilot slice". It was found in **A15** (`docs/capture-architecture-2026-07-30.md`,
+the `DIR-SPX-PutVIX22-SL75` KEEP quote, lines 67–68) — the slice the foreman began by hand and set
+aside as non-discriminating, since every row in it buckets `LIVE`. A21 became the pilot. Two slices
+were narrated as one; the defect reproduces in A15 either way.

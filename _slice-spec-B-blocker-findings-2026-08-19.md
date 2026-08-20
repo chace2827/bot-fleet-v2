@@ -1,5 +1,12 @@
 # SLICE-SPEC B — triage the blocker-audit findings (369 rows, 25 slices)
 
+> ⛔ **HELD, 2026-08-20. DO NOT DISPATCH ANY SLICE OF THIS SPEC.** Its row basis
+> (`canon.json`, `findings_final.json`) is not in the repo: PR #64 is open and unmerged, so
+> `data/blocker-audit-2026-08-19/` does not exist at `origin/master`. Every one of the 25 slices is
+> undispatchable, and by this spec's own §1 a slice sent without its pack is **foreman error, not
+> an agent finding**. Land #64, then re-assert `a96f35a1…` (canon) and `8374e2e1…` (findings)
+> against the merged tree before any B dispatch.
+
 **Written by the wave-3 foreman, 2026-08-19. Read in full before executing a slice.
 If the spec does not answer your question, you write `UNRESOLVED` — you never ask and never guess.**
 
@@ -117,13 +124,16 @@ One file per slice, `_wave3/findings/B<NN>.tsv`. **No two slices write the same 
 Tab-separated, one header line, then one row per canon row in `row_id` order:
 
 ```
-row_id	pr	verdict	command	rc	evidence_file	evidence_line	evidence_span	files_changed_since_c0e24b4	notes
+row_id	pr	verdict	command	rc	evidence_file	evidence_line	trimmed	evidence_span	files_changed_since_c0e24b4	notes
 ```
 
 - `verdict` ∈ `REPRODUCES`, `REFUTED`, `STALE-PREMISE`, `UNVERIFIABLE-FROM-CLONE`, `MANUAL-READ`,
   `UNRESOLVED`.
 - `command` — exactly what you ran, including every flag; prefix `DEVIATION:` if it differs from
   `check`.
+- `trimmed` — the integer `anchor.py` printed for any anchored span, copied, not judged; `-` where
+  no anchor call was made. Without it a heavily-trimmed span is recorded identically to an exact
+  one, which makes rows inside a slice silently incomparable.
 - Empty cells are a literal `-`.
 
 ## §4 — Acceptance predicate (a derivation, and it can fail)
@@ -142,6 +152,8 @@ Then, as the line **immediately after** `#RECONCILE`:
 #TOOLS anchor_py_sha256=<output of `shasum -a 256 anchor.py`>
 ```
 
+**The wave's declared sha is `973b68058e28b18b42ecbabb0641a923b4f2518358683c3df0f12c7341daa6e5`**;
+assert it in-clone before the first anchor call and abort on a mismatch.
 `anchor.py` is shared load-bearing code across every slice of both specs. A mid-wave change to it
 makes slices silently incomparable, so the sha travels with every output and the foreman rejects a
 slice whose sha differs from the wave's declared sha. **A slice output without this line is not
@@ -181,3 +193,13 @@ Never edit your output to make the predicate pass.
 - After every batch, assert `model` / `backend_type=windsurf` / `acu=0.0` / `credit=0` on each new
   row of `~/.local/share/devin/cli/sessions.db` (read-only, `mode=ro`). **A non-zero acu halts the
   wave and is reported — never a footnote.**
+- ⛔ **NEVER KILL A SESSION.** Killing is what permanently destroys the acu evidence: a session
+  that is killed — or merely left lingering — keeps `metadata=NULL` and `model=''` in
+  `sessions.db` **forever**, and killing it later does not backfill. Established by test on
+  2026-08-20: the A21 re-pilot **completed and wrote a valid slice** and its row is still NULL.
+  **Lingering is wait-and-report, never kill.**
+- ⛔ **Output present ≠ session finalised**, and a NULL-metadata row is **not** `$0`. Report it as
+  **"two evidence surfaces dropped to one"**: the wrapper's provenance line still proves the
+  *model* (`model swe-1-7 (free)`), and nothing proves the *cost*. Never fold a NULL row into a
+  `$0` total. Assert acu only after a session has exited naturally.
+

@@ -460,3 +460,409 @@ one thing to tighten before fan-out — Andy's call, per §5.**
 
 **HOLDING. No fan-out. Andy authorises the pilot (or rules on Test 2) before §4.**
 
+## WAVE 3 — FAN-OUT HALTED ON MANAGER VERIFICATION, 2026-08-20
+
+MANAGER-CW verified the wave read-only and called HOLD. **The fan-out was live when the hold
+arrived and was killed immediately.** What that cost, stated plainly rather than smoothed over:
+
+- **Banked: 1 slice** — A02 (`README.md`, the warm-up), which passed the post-split contract.
+- **Killed in flight: 10** — A01, A06, A07, A10, A11, A12, A26, A38, A51, A52. No output, nothing
+  partial merged, nothing half-written into `out/`.
+- **Never started: 45.** Total 56.
+
+### What the manager confirmed independently
+2310 rules · 2422 pipe-lines · 56 sections all reconciling individually · pin `1d56fc0` ·
+`devin_free.sh` `3479939d…` · `anchor.py` logic including a RED test · the wrapped case at 67–68
+where `grep -Fn` returns nothing · and a **third-party re-run of pilot A21: 16/16 FOUND, 0 ABSENT,
+7 of 16 wrapped**. The anchor claim is reproducible by someone who did not write it.
+
+### Blocker 1 — the tool existed only as a fenced block in the spec. FIXED.
+`anchor.py` was real in the foreman's template and in PR #64, but **not in either mount and with no
+declared sha in the spec**, so `#TOOLS` was an acceptance gate with nothing to compare against and
+56 clones meant 56 possible transcriptions. Now: the file ships in PR #64, the spec states the
+declared sha, and Test 0 requires an **in-clone assertion before the first anchor call** — a
+mismatch is a halt, not a note. Two checks now, one before the work and one in the output.
+
+### Blocker 2 — spec B has no row basis. HELD, and the spec now says so at the top.
+`data/blocker-audit-2026-08-19/` does not exist at `origin/master` because **PR #64 is unmerged**.
+All 25 B slices are undispatchable, and by spec B's own §1 a slice sent without its pack is
+**foreman error, not an agent finding**. Spec B carries a HOLD banner until #64 lands and
+`a96f35a1…` / `8374e2e1…` re-assert against the merged tree. **This was the foreman's own rule
+being broken by the foreman.**
+
+### Defect 5 — the ≥40-char fragment rule. CONFIRMED INDEPENDENTLY, FIXED IN THE TOOL.
+Re-derived here before acting: **239 of 2310 rows (10.3%)** can never reach 40 characters, 187 of
+them in the 25–39 band. The spec was silent past that point, so each agent improvised — which is
+what "the tool is identical but its input is hand-derived" actually costs. All three fixes landed
+**in the tool, not in prose**:
+- **(a)** the raw cell goes in and `anchor.py` derives the fragment, so the input is derived
+  identically too. It never searches a string still containing an ellipsis.
+- **(b)** threshold 40 → **25**; below that it emits `TOO_SHORT` (exit 3) → `UNRESOLVED`.
+- **(c)** **multiplicity is reported**: >1 match prints `AMBIGUOUS n=k lines=…` (exit 2) →
+  `UNRESOLVED`. First-match-wins with no signal made `anchor_line` a coin flip on 45 rows.
+
+**A fifth class surfaced while re-running the regression:** the catalog appends terminal
+punctuation the source does not carry (`never fired**.` against the source's `never fired** in 22
+days`), so the full fragment reported ABSENT on text plainly present. Added longest-matching-prefix
+backoff, never below the threshold, reporting `trimmed=n`.
+
+**Measured over all 2310 rows with the fixed tool:** FOUND 2096 (90.7%) · ABSENT 107 ·
+TOO_SHORT 61 · AMBIGUOUS 45 · 1 unreadable (the PDF placeholder). The 106 ambiguous/too-short rows
+are now forced to `UNRESOLVED` instead of silently guessed. Declared sha
+**`e20fed809784be2a8de86a4e49543bd71694ac3d902e5b77dc6ed6cd58c3f6aa`**.
+
+### Defect 6 — the pilot slice was named nowhere. FIXED.
+The pilot is **A21 = `docs/strategy-taxonomy.md`** (lines 1096–1116). The wrap defect was found in
+**A15** (`capture-architecture-2026-07-30.md:67-68`) — the slice begun by hand and set aside as
+non-discriminating — and the spec narrated the two as one, which made 13/16 un-re-derivable by
+anyone. Both pilot TSVs are now committed at `data/wave3-pilot-2026-08-19/` with the correction.
+
+### The rate, stated correctly
+**13/16** raw — the number the bar was set against and met. **16/16** on what agents actually
+produce under the split ruling, because all three disagreements were Test-2 `CONTRADICTS` verdicts
+and agents no longer render those. Anchor lines agreed 16/16 throughout. Both are true of different
+questions; the second is the one that describes the fan-out's actual work.
+
+### Two findings from the session table that no one asked for
+1. ⛔ **A killed session leaves a row with NULL metadata and an empty `model`.** The §4 rule
+   "assert acu=0.0 on each new session row" **cannot be satisfied for a killed run** — 12 of
+   tonight's rows are unassertable this way. Their model is recoverable only from the wrapper's own
+   provenance line (all 11 killed fan-out runs printed `model swe-1-7 (free)`). **A NULL metadata
+   row is "unknown", not "$0"** — the assertion must say which it is.
+2. ⛔ **Two historical sessions ran with `~/bot-fleet-v2` itself as the working directory** —
+   `wooden-cathedral` (2026-08-18 03:10) and `lush-sparrow` (2026-08-19 01:00), both before the v2
+   cwd guard existed. The hazard the guard closes is not hypothetical; it had already happened
+   twice. Both were short and both are acu 0.0.
+
+**Batch spend: 22 rows inspected, non-zero acu or credit = 0.**
+
+**Order from here (manager's, adopted):** land PR #64 → re-pilot A21 with the patched tool → then
+fan out spec A. **Spec B stays held until its basis exists.** Merging #64 is a push to master:
+per dispatch §5 that is halt-and-report, so it is Andy's, not this lane's.
+
+### RE-PILOT A21 under the patched tool — done 2026-08-20, still holding
+
+**Mechanical layer 16/16** against `anchor.py`'s deterministic output, driven independently over
+the same 16 raw cells. `#RECONCILE 16/16/16`; `#TOOLS` = declared `e20fed80…`.
+
+**RED TEST PASSED.** Row 8 (`**Pillar 3 only.**`, 14 chars normalised) → `TOO_SHORT` → the agent
+recorded `UNRESOLVED / fragment-too-short`. Under the old spec **both the foreman by hand and the
+first agent** improvised a sub-threshold fragment and called it `LIVE` at line 77. That is defect 5
+demonstrated and closed on the row that exhibited it.
+
+**Judgement layer moved:** 5 `CONTRADICTS-CANDIDATE`s (rows 4, 5, 9, 13, 15) vs the first run's 2,
+each with a genuine one-sentence case — row 9 cites `R-2026-08-07-IC-GROUPS-BOTH-STAY`. Under the
+split that is a flag routed to pass 2, so more candidates is not a regression.
+
+⛔ **OPEN FOR ANDY — row 14 has given three terminal answers in three passes**, on a stable anchor
+(line 125): `LIVE` (foreman) / `SUPERSEDED-BUT-STILL-READS-AS-LIVE` (agent run 1) / `dead` (agent
+re-pilot, citing `build-plan.md` §2D). The rule's own text says the QQQ hedge family is
+"Reclassified … superseded by the backtest tournament" — is a rule describing its own supersession
+retired, or descriptive? **`dead` is terminal and does not route to pass 2**, so at 56-slice scale
+this divergence ships unreviewed. **Proposed, NOT applied** (§5: bucket-definition change after the
+pilot is Andy's): restrict `dead` to the mechanical anchor-absent branch, and route judgement-based
+retirement to a flag pass 2 adjudicates.
+
+### ⛔ THE acu ASSERTION HAS A HOLE — established by test, not inference
+`plain-brain` (the re-pilot) **completed, wrote a valid slice, and its session row still reads
+`model=''`, `agent_mode=''`, `metadata=NULL`.** Killing the lingering process did **not** backfill
+it. Sessions that exit naturally (`patch-evening`, `grand-rondeletia`, `bead-hyssop`, …) all carry
+`acu=0.0 / credit=0`; sessions killed or left lingering never do, permanently.
+
+Consequences for §4, both now binding:
+1. **Output present ≠ session finalised.** The re-pilot wrote its complete TSV and the process
+   lingered afterwards.
+2. **A NULL-metadata row is `acu=UNKNOWN`, never `$0`.** 14 of tonight's rows are permanently
+   unassertable this way. The only compensating evidence is the wrapper's own provenance line —
+   all 11 killed fan-out runs printed `model swe-1-7 (free)` — plus the fact that the wrapper
+   hardcodes the free model. That is evidence about the MODEL, not about acu.
+   The runner must wait for natural exit before asserting, and must report killed/lingering
+   sessions as UNKNOWN rather than counting them into a `$0` total.
+
+**Status: spec A is re-piloted and ready to fan out. Still HOLDING** on: (1) PR #64 merge —
+a push to master, therefore Andy's under §5 — and (2) the row-14 bucket ruling. Spec B stays held
+until its basis exists in the merged tree.
+
+## 2026-08-20 01:34 — manager re-check answered; everything landed on disk
+
+**The one thing asked for is done: the artifacts are in `~/bot-fleet-v2` on disk**, not only on a
+PR branch and not only in `/tmp`. Paths, all verified by `shasum -a 256` against their sources:
+
+| Path | sha256 |
+|---|---|
+| `scripts/anchor.py` | `e20fed809784be2a8de86a4e49543bd71694ac3d902e5b77dc6ed6cd58c3f6aa` |
+| `data/wave3-pilot-2026-08-19/A21-foreman-by-hand.tsv` | the by-hand pass, written before any agent ran |
+| `data/wave3-pilot-2026-08-19/A21-agent.tsv` | agent, run 1 |
+| `data/wave3-pilot-2026-08-19/A21-agent-repilot-patched-tool.tsv` | `30dfc8cd77272100ee7f218c81a319c912caf7a44b3c43f8eb1878e4783e559f` |
+| `data/wave3-pilot-2026-08-19/A02-warmup-agent.tsv` | the §4 warm-up |
+| `data/blocker-audit-2026-08-19/{findings_final,analysis,rows_slim,canon}.json` | `8374e2e1…` `9e7a9120…` `e27ccbb7…` `a96f35a1…` |
+
+**16/16 re-derived reading nothing but the live tree** — `docs/rules-catalog.md`,
+`scripts/anchor.py` and the committed TSV. `#RECONCILE declared=16 parsed=16 written=16`;
+`#TOOLS` = the declared sha.
+
+### Correction to the manager, with evidence
+`docs/lane-state-foreman.md` was **NOT** swept into the daily-loop commit. `git show --stat
+3943f51` contains **0** matches for it — the only `docs/` files in that commit are
+`portfolio-inbox-2026-08-19.md` and `session-log.md`. Its last commit is
+**`d857ee4 "wave 3: slice-specs A and B, pilot gate passed 13/16"`**, correctly titled. The mtime
+coincidence at 01:14:50 was real but the file was not in the commit. No pointer commit is needed;
+what *is* uncommitted is everything written since d857ee4, which still needs a wave-3-titled commit.
+
+### Rulings applied
+- **Row 14 → `CONTRADICTS-CANDIDATE`, winner `docs/build-plan.md`, routes to pass 2.** Basis
+  verified in the tree: `build-plan.md:85` puts the QQQ hedge family in archive-directly with
+  *"Tournament invalid as a selector: S1≈D identical on 73/86 days…"*, and `CLAUDE.md:38`/`:115`
+  make build-plan frozen. Recorded as a worked example in spec A §7, with the generalisation: **a
+  rule can be undermined by the invalidation of the authority it defers to**, which is neither a
+  banner over it nor a contradiction on its face.
+- **`RETIRED-CANDIDATE` adopted; agents now render no terminal judgement verdict at all.** `dead`
+  is reachable only from Test 0's mechanical anchor-absent branch. `CONTRADICTS`,
+  `SUPERSEDED-BUT-STILL-READS-AS-LIVE` and judgement-`dead` are all pass-2 verdicts. Pass 2 takes
+  both candidate kinds in one queue, since a rule can be flagged as both.
+- **§6, both specs: NEVER KILL A SESSION.** Killing is what destroys the acu evidence permanently.
+  Lingering is wait-and-report. A NULL row is reported as **"two evidence surfaces dropped to
+  one"** — the provenance line still proves the model, nothing proves the cost — never as `$0`.
+
+### Test 0.5 added — and it is bigger than reported
+The `Status` column exists on all 2310 rows and the spec ignored it. Re-measured here with an
+escape-aware splitter (all 2310 rows have exactly 5 cells; **174 distinct status strings**):
+`Active` 1703 · `Gated — Pending` 318 · `Supersed*` 88 (59 exact) · `Active — Frozen` 56 ·
+**13 compound rows carrying BOTH `Supersed*` and `Active`** · 6 cells that are not statuses.
+**The 6 is confirmed exactly** (`t`×3, `t\`×2, `premium\`×1); the earlier 33 was a splitter
+ignoring `\|` escapes and is not carried anywhere.
+
+Gated rows now go to `UNRESOLVED` rather than falling through to `LIVE`; a first-class `GATED`
+bucket is **proposed, not applied** (§5), because 318 rows should not sit in the unresolved queue
+purely for want of a name.
+
+> **Two derivations of "non-Active" disagree and both are recorded: 607 (not exactly `Active`) vs
+> the manager's 497.** The entire gap is `Active — Frozen` (56) + ~25 dated `Active — …` variants
+> + `Supersed*` counted exactly (59) vs by substring (88). **318, 64 and 6 agree exactly in both.**
+> The operative conclusion is identical, which is why the disagreement is recorded rather than
+> resolved by fiat.
+
+## 2026-08-20 — THIRD PILOT. The backoff cap, proven where it fires.
+
+**The manager found the blocker inside my own fix, and it was the same defect class this wave
+exists to find.** The prefix backoff was added on reasoning and validated on A21 — where **all 16
+rows are `trimmed=0`, so it never once fired on its own validation set** — and then became the
+sole basis for hundreds of anchors, with matches surviving after up to **120 characters** were
+dropped and recorded identically to exact matches.
+
+**Fix, all three parts:**
+- **(a) `trimmed` is a 12th column** in both specs, copied from the tool on every row, `0` included.
+  The `#TOOLS` sha stops slices being silently incomparable; this stops **rows inside one slice**
+  being silently incomparable.
+- **(b) The backoff is capped:** `trimmed > 15` or `> 20%` of the fragment → `TRIM_EXCEEDED`
+  (exit 4) → `UNRESOLVED`, never `FOUND`. New declared sha
+  **`973b68058e28b18b42ecbabb0641a923b4f2518358683c3df0f12c7341daa6e5`**.
+- **(c) Re-piloted on a slice where it actually fires**, plus A21 for the row-14 acceptance row.
+
+**Shipped-tool dry run, post-cap, all 2310 rows** (by subprocess against `scripts/anchor.py`, not a
+reimplementation — the previous count came from a reimplementation and was wrong):
+`FOUND` 1963 (85.0%, of which **205 via backoff, max 15, median 1**) · `TRIM_EXCEEDED` 152 ·
+`ABSENT` 100 · `TOO_SHORT` **51** · `AMBIGUOUS` 43 · 1 unreadable.
+The manager's `TOO_SHORT 51` reproduces exactly; their `ABSENT 101` = my 100 + the PDF counted
+separately; their `AMBIGUOUS 44` = my 43 + one row that was ambiguous only *via* an over-trim and
+now returns `TRIM_EXCEEDED` first. **347 rows (15.0%) will not anchor cleanly** — deliberately more
+than the pre-cap 196, because 152 rows that read as clean matches are now explicitly unresolved.
+
+### Results
+**A08 `pilot-clone-card-qqq-fortress.md`, 22 rows — 22/22 anchors, 22/22 `trimmed`, 22/22 twelve
+columns**, `#RECONCILE 22/22/22`, `#TOOLS` correct. **Nine rows hit the cap** (trims 25, 31, 34, 35,
+37, 47, 77, 85, 94), every one `UNRESOLVED / anchor-trim-exceeded:<n>`. Test 0.5 fired on three
+classes in the same slice: `Superseded` → `RETIRED-CANDIDATE`; `Gated — Pending` → `UNRESOLVED /
+status-gated` (the 318-row class that used to reach `LIVE`); `Active — Frozen` → `LIVE`. Row 1
+`ABSENT` → `dead`, the only mechanical branch where `dead` survives.
+
+**A21 row 14 — named acceptance row — PASSED.** `CONTRADICTS-CANDIDATE`,
+`winner=docs/build-plan.md`, reached **independently**: the prompt never named `build-plan.md:85`.
+The agent found the archive-directly disposition through the new **deference check** in Test 2 and
+wrote the concrete case itself. 16/16 anchors, 16/16 `trimmed`.
+
+**Both sessions finalised with full metadata** — `lean-dolomite`, `auspicious-balmoral`, both
+`windsurf` / `swe-1-7` / **acu 0.0 / credit 0**. Neither was killed. The never-kill rule is now
+demonstrated rather than asserted: let a session exit naturally and both evidence surfaces survive.
+
+### Counts settled
+**Carry 607** (`Status=='Active'` exact = 1703). The pair is **607 vs 425**, not 497 — the manager
+withdrew 497 as an ad-hoc classifier that bucketed frozen ahead of active. Malformed cells: **6**,
+not 33. Docstring corrected from `239 / 10.3%` to **250 / 10.8%**, measured with the tool's own
+`fragment()`. **497, 33 and 239 are all retired as instrument errors — the catalog was right every
+time.** `GATED` remains proposed, with the manager's recommendation to adopt.
+
+# ═══ WAVE 3 SCOPE-DOWN, 2026-08-20 — Andy, relayed by MANAGER-CW ═══
+
+**Spec A is HELD, not cancelled. The 56-slice fan-out will not run, and its three open defects
+are deliberately NOT being fixed** — they only matter if the wave runs. `anchor.py`, the cap and
+the `trimmed` column stay exactly as they are; the narrow pass reuses them verbatim.
+
+## ✅ WHAT THE WAVE ALREADY BOUGHT — banked here, needs no fan-out
+
+1. **Five QQQ hedge bots whose status depends on which document you read.**
+   `docs/strategy-taxonomy.md` keeps `HedgeA-S1` / `HedgeB-S2` / `HedgeC-S3` / `HedgeD-Conditional`
+   / `HedgeTest` as live "Iron Condor · Experiment" bots; `docs/build-plan.md` §2A archives them
+   directly, no clone, because the *"Tournament [is] invalid as a selector"*. This is the A21
+   row-14 finding and it is about **five real bots**, not a sentence.
+2. **318 catalog rows marked `Gated — Pending` read as LIVE** to anything consuming the catalog —
+   the `Status` column existed on all 2310 rows and every triage test ignored it (Test 0.5).
+3. **The blocker dataset's two structural facts:** 44% of rows (164/369) carry a PR-body premise
+   that is unverifiable from a repo clone, and 28% (102/369) can be falsified by a *word* rather
+   than a figure. Both change how any future sweep must be packed and prompted.
+4. **The instrument itself:** `scripts/anchor.py` at declared sha
+   `973b68058e28b18b42ecbabb0641a923b4f2518358683c3df0f12c7341daa6e5`, capped, with `trimmed`
+   carried per row — plus the standing finding that **three consecutive count disputes were
+   instrument errors, never catalog errors** (497, 33, 239 all withdrawn; the catalog was right
+   every time).
+
+## ⭐ RE-AIMED: slice-spec C — one slice = one BOT
+
+`_slice-spec-C-bot-disposition-2026-08-20.md`. Scope: **doc-vs-doc contradictions that change which
+bots run or are archived.** Roster = `build-plan.md` §2 (35 dispositioned bots: 2 delete, 20
+archive, 4 clone-then-archive, 9 leave-in-place); §D fresh builds are out of scope.
+
+⛔ **The roster must be curated by hand and reconciled to 2/20/4/9 before any dispatch — it is the
+first acceptance gate.** Three counts exist and none agree: build-plan says 35, the manager's
+extractor found 28, mine found 25 and then 40 once abbreviated `-Suffix` forms were expanded, and
+that 40 included `bots_meta`, `data/archive/`, two ruling ids and the fragment "opened this side
+today". §C's seven mirrors are OA display names (`3DTE $140-$350`, `QQQ long call`, `Tasty
+Condor`…) that **no bot-name regex will ever match**. A regex cannot produce this list.
+
+**Source scoping is a rule, not a convenience.** The pilot bot appears in **90 files** and only
+**18 prose docs**. `data/archive/**` is barred by `CLAUDE.md` §3, generated output states no
+disposition, and `docs/rules-catalog.md` is an index of the others — counting it double-counts
+every rule it quotes.
+
+## PILOT — `QQQ-IC-0DTE-Fortress-NoPT50`, foreman by hand (agent running now)
+
+Chosen because it is **armed ON while unsigned** — inbox I-06, `AUTOS ON / EXITS ON` in two
+independent first-hand captures 48h apart (`2026-08-17-r3`, `2026-08-19-roster`). A disagreement
+about this bot is a live control failure with money on it.
+
+| Doc | States |
+|---|---|
+| `build-plan.md:103` §B | clone → spec → archive original; 15:50 time exit + 15:52 backstop, **NO PT50**, RESOLVED 2026-07-30 |
+| `portfolio-inbox-2026-08-19.md:11` | **I-06, P1**: armed while unsigned — *"sign it or disarm it"* |
+| `state.md:22` | listed in the **UNSIGNED** banner, pending an owed first-trading-day capture |
+| `RULINGS.md:1803` | Active ruling, `applies_to: PR-04 … — ARMED + ON` |
+| `strategy-taxonomy.md:140` | roster table: status **ON**, +$2,760 |
+
+**CONTRADICTS-CANDIDATE — `strategy-taxonomy.md:140` vs `portfolio-inbox-2026-08-19.md:11`.**
+*Concrete case:* reading the taxonomy roster, this bot being **ON** is its normal validated state
+and needs no action; reading I-06 and `state.md`, that same ON state is a **P1 roster-truth defect
+that must be signed or disarmed today** — so the taxonomy row licenses leaving armed a bot the
+inbox says to disarm.
+**⛔ RE-TYPED 2026-08-20 — this is not a precedence verdict. `FALSIFIED-BY-DATA`.**
+The original verdict (below, left standing) preferred the inbox on precedence and **left the false
+number sitting in a live document**. The number is not merely outranked; it is untrue:
+`data/trades.csv` holds **71 rows across 15 bots and ZERO for this one**; `STATUS.md:237` reads
+`| … | 0 | 0 | 0 | insufficient data | insufficient data |`; `STATUS.md:14` puts the bot on the
+**UNSIGNED — DO NOT SWITCH ON** list. Every P/L in that taxonomy block (`+$2,760`, `+$2,975`,
+`+$908`, `−$445`, `−$450`) names a bot with **no post-cutover ledger row**. Verified against two
+independent surfaces. **Only a factual verdict closes it: `:140` states a number that is not true.**
+
+**⛔ AND MY OWN CITATION WAS FABRICATED. `CLAUDE.md §3.5` DOES NOT EXIST.** The rule I meant is
+**§3 item 5** — *"Narrative docs never carry numbers. If a `.md` states a figure, the CSV wins"* —
+at `CLAUDE.md:37`. The idea was right; the section number was invented. **This is exactly the
+defect class this effort exists to find, produced by this effort, in the acceptance row of its own
+pilot.** Spec C §2.6 now requires every citation to be resolved by `grep -n` to a line before it
+may be written; a citation that does not resolve is not evidence.
+
+~~Original verdict: winner `portfolio-inbox` + `state.md` on precedence — current dated first-hand
+captures over a 2026-06-08 pre-cutover doc, and `CLAUDE.md` §3.5.~~ Left standing per the doc
+convention; superseded by the two corrections above.
+
+**Note the shape:** the sharpest conflict here is doc-vs-**capture**, not doc-vs-doc — no document
+says "armed is correct", yet the bot is armed. Spec C finds the doc-vs-doc half; the doc-vs-reality
+half is I-06 and is already Andy's.
+
+## Manager's own note, kept because it is the transferable lesson
+> *"I should have asked 'what decision changes because of this TSV' three rounds ago… being right
+> about each defect is not the same as the exercise being worth continuing."*
+That question belongs in §0 of every future dispatch, above the gates.
+
+
+## Two amendments the pilot forced into spec C, 2026-08-20
+
+**§2.5 — the cutover gate belongs to the DOCUMENT, not the bot row.** `strategy-taxonomy.md` is
+dated 2026-06-08 and its roster table states pre-cutover P/L for every bot in it. Test 1b's two
+conditions both fire **on the block**, with no judgement, so the whole roster block is
+`SUPERSEDED-BUT-STILL-READS-AS-LIVE` and is recorded **once**. Without this gate spec C
+re-litigates the same v1 table once per bot — **28 times — and calls it 28 findings.**
+
+**§2.6 — every citation must resolve** by `grep -n` before it is written. See the fabricated
+`§3.5` above.
+
+## Sharpening I-06 — the false number is the operational risk
+
+The live risk on `QQQ-IC-0DTE-Fortress-NoPT50` is **not only that it is armed**. It is that a live
+document tells any reader it has made **$2,760** and is **ON**. Anyone checking *"is this thing
+fine?"* lands on `strategy-taxonomy.md:140` and concludes yes. **The false number is the single
+thing most likely to keep an unsigned, never-filled bot armed.** That belongs in the I-06 item
+itself, not only here.
+
+## The 10 killed agents — the never-kill rule's first real cost
+
+The halted fan-out killed 10 sessions. Those are now **10 permanently unassertable acu rows**:
+`metadata=NULL`, `model=''`, and killing them later does not backfill. That is not a footnote to
+the halt — **it is the reason the never-kill rule exists**, and it was paid before the rule was
+written. The compensating evidence is only the wrapper's provenance line, which proves the *model*
+and says nothing about cost.
+
+# ⛔⛔ CONTAINMENT FAILURE, 2026-08-19 23:14 — an agent wrote outside its workspace
+
+**A fleet agent running `--permission-mode dangerous` in a disposable `/tmp` clone overwrote
+`~/.claude/primer.md`** — the foreman's own lane-continuity file, 99 lines — with a 15-line summary
+of its own slice. Confirmed by mtime (23:14, matching its completion) and by its own closing line:
+*"I also updated `~/.claude/primer.md`."*
+
+**It did not touch the live repo. Nothing stopped it.** The only live-tree files modified in that
+window were ones the foreman edited.
+
+⛔ **My earlier claim — that dangerous mode is "contained by the disposable clone and the wrapper's
+cwd guard" — WAS WRONG, and this is the correction.**
+- **The clone bounds git, not the filesystem.** It isolates what the agent can *commit*; it does
+  nothing about what it can *write*.
+- **The v2 cwd guard stops Devin STARTING inside `~/bot-fleet-v2`, `~/gitstore`, `~/bot-fleet`. It
+  does not stop a running agent from writing INTO them**, or into `$HOME`, or anywhere else the
+  user can reach. The guard is a launch check, not a sandbox, and I described it as if it were both.
+- Therefore **every dangerous-mode dispatch so far could have written anywhere the user can.**
+  Fourteen agents ran under it tonight.
+
+**Untested mitigation, and it must be tested before any fan-out:** `--sandbox` is a real flag on
+this build — `--help` describes it as *"[Research Preview] Sandbox exec-tool processes (macOS
+seatbelt / Linux bwrap+seccomp)"*. That is the open question the primer has been carrying since
+before wave 3 (*"does `--sandbox` permit the exec tool?"*), and it has just stopped being an
+efficiency question and become the containment question. **One session answers it. It goes first.**
+
+**Recovery:** `primer.md` reconstructed from this file, which is why the close-out discipline of
+writing state here rather than only in the primer is what saved it. `docs/lane-state-foreman.md`
+was untouched, and the branch copy was already pushed.
+
+## Spec C pilot — agent result, and it beat the foreman on scoping
+
+`data/wave3-pilot-2026-08-19/C-pilot-QQQ-IC-0DTE-Fortress-NoPT50-agent.tsv`.
+`#RECONCILE docs_in_scope=22 rows_written=22 candidates=8`; `#TOOLS` sha matches the declared
+`973b6805…`.
+
+**22 in-scope docs against the foreman's 18.** The agent applied §2 scoping correctly where the
+foreman had not — it **excluded** `docs/rules-catalog.md` (an index of the others) and `STATUS.md`
+(generated output), which the hand pass had wrongly counted, and it **found six docs the hand pass
+missed**: `devin-queue.md`, `audit-report-2026-08-08.md`, `decision-card-2026-08-06.md`,
+`exploratory-bots-design-2026-08-07.md`, `pending-tracker-items-2026-08-10.md`,
+`day0-session-pack-2026-08-07.md`. It reached `strategy-taxonomy.md:140` as `LIVE/ON` in conflict
+with `RULINGS.md`, and flagged 8 candidates.
+
+**It did not type the `+$2,760` as false — and that is the spec's fault, not the agent's:** it ran
+against the spec-C revision from *before* `FALSIFIED-BY-DATA` existed, so precedence was the only
+verdict class it had. The next pilot run tests that class.
+
+**Two spec-C defects the pilot exposed:**
+1. **§2's "root `*.md`" swallows the spec file itself** — row 1 of the agent's output is
+   `_slice-spec-C-bot-disposition-2026-08-20.md`. The slice pack's own documents must be excluded
+   from the source set explicitly.
+2. **The `#TOOLS` line format drifted** — the agent emitted `anchor_py=<path> sha256=<sha>` rather
+   than the specified `anchor_py_sha256=<sha>`. The sha was right and matched, but a strict parser
+   would reject it. The spec must give the exact literal line, not a description of it.
+

@@ -1,0 +1,25 @@
+row_ord	rule_label	bucket	anchor_file	anchor_line	trimmed	quote_fragment	superseded_by	contradicts_row	concrete_case	winner	notes
+1	unlabeled (re-stamp rule)	dead	docs/pilot-clone-card-qqq-fortress.md	-	-	If this card is ever re-run on a different day, every one of those 11 spots is a stale literal again	-	-	-	-	anchor-absent
+2	READ THIS FIRST #3	LIVE	docs/pilot-clone-card-qqq-fortress.md	35	0	When you hit one, stop and tell me what you see — do not improvise a spec on the fly.	-	-	-	-	-
+3	target spec	LIVE	docs/pilot-clone-card-qqq-fortress.md	44	0	NOT IN SCOPE any new exit architecture, any filter change, any sizing change	-	-	-	-	frozen
+4	STEP 0	LIVE	docs/pilot-clone-card-qqq-fortress.md	59	0	You cannot verify a clone against an original you did not record. This step is not optional	-	-	-	-	-
+5	STEP 1	LIVE	docs/pilot-clone-card-qqq-fortress.md	112	0	Every remaining step happens on the CLONE. If you edit the original by mistake	-	-	-	-	-
+6	STEP 2 / TRAP 1 (superseded)	RETIRED-CANDIDATE	docs/pilot-clone-card-qqq-fortress.md	119	0	VOID 2026-08-05 — THIS STEP'S PREMISE IS FALSE	oa-ops-runbook.md §5 Trap 1 (corrected 2026-08-05)	-	-	-	status-superseded
+7	STEP 2 (corrected rule)	UNRESOLVED	docs/pilot-clone-card-qqq-fortress.md	-	31	In-Library → Copy to fork (OA-0682: Library edits propagate). Not in the Library — the default — → edit directly.	-	-	-	-	anchor-trim-exceeded:31
+8	STEP 3 / TRAP 2	UNRESOLVED	docs/pilot-clone-card-qqq-fortress.md	-	35	The Symbols panel is not carried on clone. A bot with no Symbols looks completely configured and simply never scans.	-	-	-	-	anchor-trim-exceeded:35
+9	STEP 4	UNRESOLVED	docs/pilot-clone-card-qqq-fortress.md	-	37	OA models each spread as a SEPARATE POSITION. A full iron condor is two positions	-	-	-	-	anchor-trim-exceeded:37
+10	STEP 5	LIVE	docs/pilot-clone-card-qqq-fortress.md	201	0	The spec is PT50 + 15:50 time exit + 15:52 flat-close Scheduled Event backstop. No new exit architecture, no filter changes, no sizing changes.	-	-	-	-	frozen
+11	DECISION POINT B	UNRESOLVED	docs/pilot-clone-card-qqq-fortress.md	-	77	STOP. Do not substitute a different time. The spec is under decision freeze and changing it needs an explicit 'amend the plan' from you.	-	-	-	-	anchor-trim-exceeded:77
+12	STEP 5c pricing	CONTRADICTS-CANDIDATE	docs/pilot-clone-card-qqq-fortress.md	238	0	Confirm no exit on this bot uses Market pricing, with one permitted exception — the end-of-day flat close	-	docs/RULINGS.md R-2026-08-04-D-3	If a QQQ-IC 0DTE Fortress leg expires ITM, the account-level itmlive=market setting will close it with a Market order, which this rule forbids for any exit except the 15:52 flat-close backstop.	NONE	R-2026-08-04-D-3: "itmlive = market is a HARD DAY-0 GATE — deliberately left at auto; it must be set before any capital is live" (catalog conflict #2)
+13	STEP 6	UNRESOLVED	docs/pilot-clone-card-qqq-fortress.md	-	25	This capture is what bots_config_v2.csv will cite for this bot. If it is thin, the config row is unfounded.	-	-	-	-	anchor-trim-exceeded:25
+14	STEP 7	LIVE	docs/pilot-clone-card-qqq-fortress.md	274	0	Add a Tag carrying the pre-registration ID: PR-03 (pre-registration-ledger.md §4 — scheme is PR-NN, ledger entry order).	-	-	-	-	-
+15	STEP 7 (paste verbatim)	UNRESOLVED	docs/pilot-clone-card-qqq-fortress.md	-	85	Editing pre-registration text live, mid-ritual, to match what you just built is how a pre-registration stops being one.	-	-	-	-	anchor-trim-exceeded:85
+16	STEP 7 (signing)	UNRESOLVED	docs/pilot-clone-card-qqq-fortress.md	282	0	The entry is STATUS DRAFT — unsigned; signing is a Day-0 act	-	-	-	-	status-gated:Gated — Pending
+17	STEP 8	LIVE	docs/pilot-clone-card-qqq-fortress.md	304	0	in this exact order 1. Original → rename	-	-	-	-	-
+18	STEP 8 (name-collision guard)	LIVE	docs/pilot-clone-card-qqq-fortress.md	315	0	Name-collision guard: you did not touch 60min-ORB-10W-Paper-v1	-	-	-	-	-
+19	STEP 8 (rename_map.csv)	UNRESOLVED	docs/pilot-clone-card-qqq-fortress.md	-	94	This is the only thing that will later connect a name in the frozen ledger to a bot running today. Without it, every lineage question becomes archaeology.	-	-	-	-	anchor-trim-exceeded:94
+20	STEP 9	LIVE	docs/pilot-clone-card-qqq-fortress.md	344	0	Leave them as they are. Turning this bot ON is a Day-0 action, not a today action.	-	-	-	-	-
+21	FINISH (Day-0 verification)	UNRESOLVED	docs/pilot-clone-card-qqq-fortress.md	-	47	Open the first new position and read its Trades list. It must contain a PT row and a time-exit row.	-	-	-	-	anchor-trim-exceeded:47
+22	FINISH (Exit Options not evidence)	UNRESOLVED	docs/pilot-clone-card-qqq-fortress.md	-	34	The Trades list is the only order-level ground truth. This has no exception, and it is the reason this bot is being rebuilt.	-	-	-	-	anchor-trim-exceeded:34
+#RECONCILE declared=22 parsed=22 written=22
+#TOOLS anchor_py_sha256=973b68058e28b18b42ecbabb0641a923b4f2518358683c3df0f12c7341daa6e5
