@@ -1,0 +1,18 @@
+row_ord	rule_label	bucket	anchor_file	anchor_line	quote_fragment	superseded_by	contradicts_row	winner	notes
+1	unlabeled	LIVE	docs/strategy-taxonomy.md	16	A bot is always "**Pillar · Role**"	-	-	-	-
+2	unlabeled	LIVE	docs/strategy-taxonomy.md	33	A **morning go/no-go router** classifies the session	-	-	-	wrapped:33-34
+3	unlabeled	LIVE	docs/strategy-taxonomy.md	47	Two experiments run head-to-head for the high-vol slot	-	-	-	wrapped:47-48
+4	unlabeled	LIVE	docs/strategy-taxonomy.md	56	Bots stay here (they do NOT graduate out).	-	-	-	-
+5	Graduation bar (paper -> funded)	LIVE	docs/strategy-taxonomy.md	59	>=20 trades and positive P/L and win-rate within ~10%	-	-	-	wrapped:59-60; 20 is a forward gate, not a pre-cutover count
+6	unlabeled	LIVE	docs/strategy-taxonomy.md	65	the role is a variant of a defined pillar strategy	-	-	-	wrapped:65-66
+7	unlabeled	LIVE	docs/strategy-taxonomy.md	80	Graduation is a **role change, not a new bot**.	-	-	-	-
+8	unlabeled	LIVE	docs/strategy-taxonomy.md	77	**Pillar 3 only.**	-	-	-	-
+9	unlabeled	LIVE	docs/strategy-taxonomy.md	87	**OA Bot Group = Pillar**	-	-	-	-
+10	unlabeled	LIVE	docs/strategy-taxonomy.md	89	graduation is a retag, not a rename	-	-	-	-
+11	unlabeled	LIVE	docs/strategy-taxonomy.md	90	**Bot name = `Pillar-Underlying-Config-Hedge`**	-	-	-	-
+12	unlabeled	LIVE	docs/strategy-taxonomy.md	108	It's a **standalone bot** only when	-	-	-	wrapped:108-109
+13	unlabeled	LIVE	docs/strategy-taxonomy.md	113	1. **Backtest** the bracket on the champion's clean SPX history	-	-	-	-
+14	unlabeled	LIVE	docs/strategy-taxonomy.md	125	Reclassified to "Iron Condor · Experiment"	-	-	-	Test 1 does not fire: the supersession language is the rule itself, not a banner over it
+15	Build priority (decided 2026-06-08)	LIVE	docs/strategy-taxonomy.md	181	keep closing the **IC champion go-live gate**	-	-	-	wrapped:181-182
+16	unlabeled	SUPERSEDED-BUT-STILL-READS-AS-LIVE	docs/strategy-taxonomy.md	187	in the same change so the 214-trade history doesn't fork	CLAUDE.md §1	-	-	wrapped:187-188; Test 1b fires: doc dated 2026-06-08 (<2026-07-30) and the rule names a Scalp- bot (out-of-scope list) and the 214-trade pre-cutover count
+#RECONCILE declared=16 parsed=16 written=16
