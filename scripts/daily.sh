@@ -120,6 +120,11 @@ export FLEET_PINNED_DAY="${1:-}"
 # the ROOT, and every scratch run would label itself live.
 export FLEET_REPO="$REPO"
 
+# R-2026-08-21-RECEIPT-ARGV: the exact invocation argv as a JSON list, so the
+# receipt can distinguish a plain run, a pinned day, and any override flags.
+FLEET_ARGV="$(python3 -c 'import json,sys; print(json.dumps(sys.argv[1:]))' "$@")"
+export FLEET_ARGV
+
 # If no day was supplied, use the newest raw export filename; otherwise fall
 # back to today. Resolving here gives every stage a concrete DAY and lets the
 # heartbeat file be named after the actual trading day processed.
