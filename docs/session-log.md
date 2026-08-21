@@ -10264,3 +10264,36 @@ The renderer is **not wired into `scripts/daily.sh`** and that is deliberate. `T
 "stages 9" is a checked receipt invariant; adding a tenth stage changes the receipt contract and is
 Andy's call, not a side effect of building a renderer. It runs as its own step between the receipt
 check and the commit.
+
+---
+
+## 2026-08-21 — Cowork (Fable) — daily-close automation: plan agreed, Phase 0 drafts written
+
+**Context.** Andy reviewed the 2026-08-19 close transcript (`_transcript-2026-08-19-cowork-close.md`)
+and asked for a plan to fix the daily recording process — more automated, outputs readable by the
+other roles, using the free Devin lane. Plan proposed and **agreed by Andy in-chat**: Phase 0
+rulings → Phase 1 one-command close (Devin free lane) → Phase 2 roster capture via oa-driver reads
+(Cowork/OA lane) → Phase 3 export automation LAST. Andy's judgment steps (export click, narrative,
+commit) stay; everything mechanical becomes `scripts/close.sh` + a per-day
+`data/close/<day>/manifest.json` that other roles read.
+
+**Written this session (both scratch `_*`, uncommitted by design, verified by direct device
+sha256 + grep):**
+- `_rulings-draft-2026-08-21-close-automation.md` (`26e5298f7535e918…`) — three UNSIGNED drafts:
+  R-2026-08-21-RECEIPT-ARGV (resolves I-05; records overrides at the point of use, since daily.sh
+  plumbs only `--allow-rewind`), R-2026-08-21-CLOSE-RECEIPT-SURFACE (Option 1 wrap recommended —
+  daily.sh stays 9 stages; Option 2 extend documented), R-2026-08-21-STAGING-MANIFEST (§9.1 step-3
+  mechanics: generated file-by-file commit command; Andy's authority unchanged).
+- `_dispatch-2026-08-21-close-wave-claudecode.md` (`bda618d8ed37445f…`) — gated 3-agent sequential
+  Devin pack via `devin-free` only: D1 `ingest_export.py` + argv receipts · D2 `capture_bundle.py`
+  with the (name,bot_id) cross-check as built-in FATAL · D3 `close.sh` + manifest + commit-command
+  generator. Every acceptance a derivation; every predicate must be seen red once.
+
+**Premises verified against the tree:** `daily.sh` `TOTAL_STAGES=9`, `--allow-rewind` only as `$2`;
+`run_receipt.py` has no argv field. **Gitstore read:** local master `a7ffc52` is ONE COMMIT AHEAD
+of `origin/master` `3d456bd` (unpushed "wave 3: lane-state close-out") — push before any dispatch.
+
+**Gates:** nothing dispatched, no code changed, no OA touched. The wave is gated on Andy signing
+all three rulings and pushing master.
+
+**Ready to commit:** `docs/session-log.md` (this entry) only. The two `_*` drafts stay untracked.
