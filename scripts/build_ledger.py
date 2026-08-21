@@ -1140,7 +1140,7 @@ def selftest():
     norm_meta = {"bot": NORMBOT, "pillar": "IC", "role": "experiment",
                  "underlying": "QQQ", "status": "ON", OPS_CLASS_COL: ""}
 
-    tmp = tempfile.mkdtemp(prefix="bl-selftest-", dir=repo)
+    tmp = tempfile.mkdtemp(prefix="bl-selftest-")
     try:
         # ---- N1-N6: the declared ops bot is excluded, and reported -------
         _st_env(tmp, [norm_meta, ops_meta],
