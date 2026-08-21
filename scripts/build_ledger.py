@@ -591,7 +591,7 @@ def assert_no_ops_leak(out_rows, ops_bots):
                  f"First: {leaked[0][:6]}")
 
 
-def write_empty_ledger(ledger_start, ls_source, reason):
+def write_empty_ledger(ledger_start, ls_source, reason, overrides=None):
     """The n=0 state. Header-only files so every downstream script has a schema
     to read rather than a missing file to crash on."""
     os.makedirs(OUT, exist_ok=True)
@@ -607,7 +607,8 @@ def write_empty_ledger(ledger_start, ls_source, reason):
                   counts={"export_rows": 0, "post_cutover": 0,
                           "straddler": 0, "pre_cutover": 0, "ops_rows": 0},
                   n_trades_condors=0, n_bots=0, total_pnl=0.0,
-                  ops_bots=[], ops_rows=0, note=reason)
+                  ops_bots=[], ops_rows=0, note=reason,
+                  overrides=overrides)
     print(f"LEDGER_START: {ledger_start}   (from {ls_source})")
     print(f"NOTE: {reason}")
     print("Wrote header-only data/trades.csv, data/bots.csv, data/straddlers.csv, "
@@ -654,6 +655,9 @@ def main():
                   "the live ledger in the repo is NOT being written")
 
     ledger_start, ls_source = resolve_ledger_start(args.ledger_start)
+    overrides = {"allow_rewind": bool(args.allow_rewind),
+                 "allow_front_truncate": bool(args.allow_front_truncate),
+                 "allow_ops_reclass": bool(args.allow_ops_reclass)}
 
     meta = load_meta()
     # E-3 §3.3 — resolve the declared ops set (and run the group/pillar fence)
@@ -683,7 +687,8 @@ def main():
                 "  Rebuilding would erase them. Restore an export to data/raw/ first."
             )
         write_empty_ledger(ledger_start, ls_source,
-                           "no export in data/raw/ yet — pre-Day-0 empty ledger")
+                           "no export in data/raw/ yet — pre-Day-0 empty ledger",
+                           overrides=overrides)
         return
 
     rows = list(csv.DictReader(open(src)))
@@ -981,7 +986,8 @@ def main():
                   source_export=os.path.basename(src), counts=counts,
                   n_trades_condors=ntr, n_bots=len(legs),
                   total_pnl=round(tot, 2),
-                  ops_bots=sorted(ops_bots), ops_rows=counts["ops_rows"], note="")
+                  ops_bots=sorted(ops_bots), ops_rows=counts["ops_rows"], note="",
+                  overrides=overrides)
 
     print(f"LEDGER_START: {ledger_start}   (from {ls_source})")
     print(f"Source: {os.path.basename(src)}")
@@ -1134,7 +1140,7 @@ def selftest():
     norm_meta = {"bot": NORMBOT, "pillar": "IC", "role": "experiment",
                  "underlying": "QQQ", "status": "ON", OPS_CLASS_COL: ""}
 
-    tmp = tempfile.mkdtemp(prefix="bl-selftest-")
+    tmp = tempfile.mkdtemp(prefix="bl-selftest-", dir=repo)
     try:
         # ---- N1-N6: the declared ops bot is excluded, and reported -------
         _st_env(tmp, [norm_meta, ops_meta],

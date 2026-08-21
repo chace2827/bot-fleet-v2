@@ -138,6 +138,18 @@ def build_receipt(root, env=None, now=None):
         p = os.path.join(root, rel)
         hashes[rel] = sha256(p) if os.path.exists(p) else None
 
+    # R-2026-08-21-RECEIPT-ARGV: capture the invocation argv when daily.sh
+    # exported it; absent means UNKNOWN. overrides are read from ledger_meta.json
+    # like the other meta-derived fields and are null when the meta is old-shape.
+    argv = None
+    raw_argv = env.get("FLEET_ARGV")
+    if raw_argv:
+        try:
+            argv = json.loads(raw_argv)
+        except (ValueError, TypeError):
+            argv = None
+    overrides = meta.get("overrides") if isinstance(meta, dict) else None
+
     ts = now or datetime.datetime.now(datetime.timezone.utc)
     # NOT derived from __file__: under G-3 the stages run out of a COPY of
     # scripts/ inside the scratch root, so this file's own location IS the root
@@ -165,6 +177,8 @@ def build_receipt(root, env=None, now=None):
         "stages": stages,
         "final_exit": final_exit,
         "hashes": hashes,
+        "argv": argv,
+        "overrides": overrides,
     }
 
 
@@ -211,7 +225,7 @@ def selftest():
         fails += not ok
         results.append((ok, name, got, want))
 
-    tmp = tempfile.mkdtemp(prefix="rcpt-selftest-")
+    tmp = tempfile.mkdtemp(prefix="rcpt-selftest-", dir=ROOT)
     try:
         data = os.path.join(tmp, "data")
         os.makedirs(data)
@@ -302,6 +316,48 @@ def selftest():
         body = src.split("def append_receipt", 1)[1].split("\ndef ", 1)[0]
         check("S8  append_receipt opens the receipts file in append mode only",
               ('open(path, "a")' in body) and ('open(path, "w")' not in body), True)
+
+        # --- R-2026-08-21-RECEIPT-ARGV ---------------------------------------
+        check("S9  FLEET_ARGV absent -> argv is null",
+              r1["argv"], None)
+        check("S10 old-shape ledger_meta.json (no override block) -> overrides is null",
+              r1["overrides"], None)
+
+        # overrides all-false, with a FLEET_ARGV that exercises JSON escaping
+        with open(os.path.join(data, "ledger_meta.json"), "w") as fo:
+            json.dump({"ledger_start": "2099-01-01",
+                       "ledger_start_source": "$LEDGER_START",
+                       "source_export": "2099-01-03.csv",
+                       "counts": {"export_rows": 17, "post_cutover": 2},
+                       "overrides": {"allow_rewind": False,
+                                     "allow_front_truncate": False,
+                                     "allow_ops_reclass": False}}, fo)
+        tricky = ["2026-08-21", "--allow-rewind", 'a"b\\c']
+        env_with_argv = dict(env, FLEET_ARGV=json.dumps(tricky))
+        raf = build_receipt(tmp, env=env_with_argv)
+        check("S11 override absent (all-false) is recorded as all-false",
+              raf["overrides"],
+              {"allow_rewind": False,
+               "allow_front_truncate": False,
+               "allow_ops_reclass": False})
+        check("S12 FLEET_ARGV present with quotes/backslash -> argv parsed",
+              raf["argv"], tricky)
+
+        # override present and recorded true
+        with open(os.path.join(data, "ledger_meta.json"), "w") as fo:
+            json.dump({"ledger_start": "2099-01-01",
+                       "ledger_start_source": "$LEDGER_START",
+                       "source_export": "2099-01-03.csv",
+                       "counts": {"export_rows": 17, "post_cutover": 2},
+                       "overrides": {"allow_rewind": True,
+                                     "allow_front_truncate": False,
+                                     "allow_ops_reclass": False}}, fo)
+        rt = build_receipt(tmp, env=env)
+        check("S13 override present and recorded true",
+              (rt["overrides"]["allow_rewind"],
+               rt["overrides"]["allow_front_truncate"],
+               rt["overrides"]["allow_ops_reclass"]),
+              (True, False, False))
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 
