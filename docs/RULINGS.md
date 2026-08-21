@@ -3745,3 +3745,126 @@ source: >-
   ruling in the Cowork session.
 unclear: false
 ```
+
+```yaml
+ruling_id: R-2026-08-21-RECEIPT-ARGV
+date: 2026-08-21
+scope: >-
+  Resolves inbox I-05 (raised 2026-08-19): data/receipts/daily-runs.jsonl
+  does not record how a run was invoked, so a run made with an override flag
+  (--allow-rewind / --allow-front-truncate / --allow-ops-reclass) is
+  indistinguishable in the permanent record from one made without. Ruled:
+  (1) daily.sh exports FLEET_ARGV, a JSON list of its exact invocation argv.
+  (2) build_ledger.py writes the RESOLVED override state (allow_rewind,
+  allow_front_truncate, allow_ops_reclass, each true/false) into
+  ledger_meta.json — the point-of-use record, load-bearing because daily.sh
+  plumbs only --allow-rewind as $2 and the other two flags reach
+  build_ledger.py only by direct invocation. (3) run_receipt.py adds two
+  fields: argv (from FLEET_ARGV, null when absent) and overrides (copied
+  from ledger_meta.json, subject to the existing ledger_stale flag).
+  (4) Reading rule: in receipts written before this lands, the absent field
+  means UNKNOWN, never "no override" — an absent value never falls through
+  to a pass. (5) Selftest rows for: override recorded when passed, all-false
+  when not, absent-field-is-null on old-shape env. Not changed: the guards
+  themselves, their thresholds, the append-only receipt contract. This is a
+  guard change; this signature is the pre-auth it requires.
+verbatim: >-
+  A receipt must say how the run was invoked. Record the resolved override
+  flags where they are used, carry them into the receipt, and read an absent
+  field in an old receipt as unknown, never as clean.
+verbatim_of: andy
+owner: Andy
+status: Active
+applies_to: >-
+  scripts/daily.sh (FLEET_ARGV export); scripts/build_ledger.py
+  (resolved-overrides into ledger_meta.json); scripts/run_receipt.py
+  (argv + overrides fields and selftests); every future reading of
+  data/receipts/daily-runs.jsonl. Implemented by CLOSE-WAVE agent D1
+  (_dispatch-2026-08-21-close-wave-claudecode.md).
+superseded_by: none
+source: >-
+  Inbox I-05 in docs/portfolio-inbox-2026-08-19.md; drafted in
+  _rulings-draft-2026-08-21-close-automation.md after the close-automation
+  plan was agreed in the Cowork Fable chat 2026-08-21. Signed via Andy's
+  explicit in-chat authorization ("I give you permission to edit and sign
+  them for me"), signature applied by Claude, same session.
+unclear: false
+```
+
+```yaml
+ruling_id: R-2026-08-21-CLOSE-RECEIPT-SURFACE
+date: 2026-08-21
+scope: >-
+  The daily close gains stages (export ingest, capture bundle, brief render,
+  manifest). Question ruled: do they go inside daily.sh's receipted run or
+  around it? DECISION: OPTION 1 — WRAP. daily.sh is untouched; TOTAL_STAGES=9
+  and the "stages 9" receipt invariant stand unchanged. A new
+  scripts/close.sh orchestrates ingest -> daily.sh <day> -> capture bundle ->
+  render_brief.py -> manifest, and leaves its own trace:
+  data/close/<day>/manifest.json plus an append-only
+  data/receipts/close-runs.jsonl in the run_receipt.py house style. The
+  ritual's receipt check becomes two lines (daily receipt + close manifest).
+  Rationale: refactor-first / behavior-neutral (CLAUDE.md §5) — no existing
+  checker, CI fixture, or memory note about "stages 9" is invalidated.
+  Option 2 (extend daily.sh to N stages, update every checker) was
+  documented and not adopted. The recommended option was adopted under
+  Andy's blanket in-chat authorization; Andy may overturn at commit review
+  before the wave dispatches.
+verbatim: >-
+  Wrap, don't extend. The nine-stage receipt keeps meaning what it has meant
+  since 2026-08-18; the close gets its own manifest and its own append-only
+  receipt file.
+verbatim_of: andy
+owner: Andy
+status: Active
+applies_to: >-
+  scripts/close.sh and scripts/close_manifest.py (new, CLOSE-WAVE agent D3);
+  data/close/<day>/manifest.json; data/receipts/close-runs.jsonl;
+  scripts/daily.sh explicitly UNCHANGED; the daily ritual's receipt-check
+  step. The queued "wire render_brief into daily.sh as a tenth stage"
+  question (2026-08-19) is CLOSED by this ruling: it is not wired.
+superseded_by: none
+source: >-
+  Drafted in _rulings-draft-2026-08-21-close-automation.md; the 2026-08-19
+  renderer decision deliberately left this open (brief_renderer memory,
+  session-log 2026-08-19). Signed via Andy's explicit in-chat authorization,
+  Cowork Fable chat 2026-08-21, signature applied by Claude.
+unclear: false
+```
+
+```yaml
+ruling_id: R-2026-08-21-STAGING-MANIFEST
+date: 2026-08-21
+scope: >-
+  Amends the MECHANICS of CLAUDE.md §9.1 step 3 for the daily close only:
+  the commit file list is GENERATED, not hand-typed. close.sh derives it
+  from the close manifest and prints the exact command — file-by-file git
+  add (never -A), commit message with figures derived from the manifest,
+  push. Generator constraints: every printed path appears in the manifest
+  with a sha256, and the printed list and manifest list are derived
+  independently and must match; paths matching _*, .claude/**, _locktrash/**
+  or the stray file "one" are a FATAL refusal, never a silent skip.
+  UNCHANGED AND EXPLICIT: Andy runs every commit and push to the main tree;
+  Claude and agents still never run git on the mounted tree; Andy's
+  commit-review veto is untouched. This replaces the typing, not the
+  authority.
+verbatim: >-
+  Generate the staging list from the manifest and print me the command.
+  I still run every commit; nothing about who commits changes.
+verbatim_of: andy
+owner: Andy
+status: Active
+applies_to: >-
+  The daily-close commit hand-off (CLAUDE.md §9.1 step 3 mechanics, daily
+  close only); scripts/close.sh's printed commit command (CLOSE-WAVE agent
+  D3). Hand-typed staging lists remain the fallback for non-close commits.
+superseded_by: none
+source: >-
+  The 2026-08-19 close transcript (_transcript-2026-08-19-cowork-close.md),
+  exchanges 7–10: hand-typed staging lists produced a broken flag, a
+  line-continuation error and three retries. Drafted in
+  _rulings-draft-2026-08-21-close-automation.md; signed via Andy's explicit
+  in-chat authorization, Cowork Fable chat 2026-08-21, signature applied by
+  Claude.
+unclear: false
+```

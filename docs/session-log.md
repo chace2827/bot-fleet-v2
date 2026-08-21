@@ -10297,3 +10297,12 @@ of `origin/master` `3d456bd` (unpushed "wave 3: lane-state close-out") — push 
 all three rulings and pushing master.
 
 **Ready to commit:** `docs/session-log.md` (this entry) only. The two `_*` drafts stay untracked.
+
+**Addendum 2026-08-21 (same session, later):** Andy committed and pushed the session-log entry
+(`fcc80661`, verified from gitstore refs — local == origin). Andy then explicitly authorized
+in-chat: "I give you permission to edit and sign them for me." All three rulings SIGNED (R-SURFACE
+= Option 1 WRAP, the recommended option) — signature lines applied to the draft, and the three
+rulings registered in `docs/RULINGS.md` in the standard yaml-block format. Wave gate condition 1
+(rulings signed) and condition 2 (master pushed) are now both satisfied. **Ready to commit:**
+`docs/RULINGS.md` + this addendum. Andy may overturn the Option-1 call at commit review before
+dispatching the wave.
