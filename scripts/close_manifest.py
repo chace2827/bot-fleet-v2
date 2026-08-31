@@ -30,6 +30,7 @@ import json
 import os
 import re
 import shutil
+import subprocess
 import sys
 import tempfile
 
@@ -104,6 +105,28 @@ def check_forbidden(paths):
             die(f"forbidden path in output set: {p!r}")
 
 
+def _untracked_top_level(root):
+    """Top-level names that are UNTRACKED and NOT IGNORED, or None if unknowable.
+
+    This is git's own definition of untracked -- exactly what `git status`
+    reports as `??` -- via `ls-files --others --exclude-standard`.  Read-only;
+    the same `git ls-files` mechanism check_refs.py already relies on.
+
+    Anything the repository has accepted (tracked) or deliberately excluded
+    (.gitignore, e.g. `.claude/` and `_locktrash/`) is NOT a stray and is not
+    returned.  Returns None when `root` is not a git checkout (a seeded scratch
+    root is not), so the caller can skip the arm visibly rather than treat
+    every entry as untracked and refuse on all of them.
+    """
+    try:
+        out = subprocess.run(
+            ["git", "-C", root, "ls-files", "--others", "--exclude-standard"],
+            capture_output=True, text=True, check=True).stdout
+    except (OSError, subprocess.SubprocessError):
+        return None
+    return {p.split("/", 1)[0] for p in out.splitlines() if p}
+
+
 def scan_for_forbidden(root, day):
     """Walk the close output directories and the repo root (top-level only)
     and refuse on any forbidden file.
@@ -120,16 +143,32 @@ def scan_for_forbidden(root, day):
     """
     # Top-level repo-root entries are staged-file sources too.  Report the
     # full set, not just the first, so the operator can clean once.
-    forbidden_root = []
-    for name in os.listdir(root):
-        ap = os.path.join(root, name)
-        rel = name if not os.path.isdir(ap) else name + "/"
-        if is_forbidden(rel):
-            forbidden_root.append(name)
-    if forbidden_root:
-        forbidden_root.sort()
-        die("forbidden top-level repo file(s): "
-            + ", ".join(repr(p) for p in forbidden_root))
+    #
+    # R-2026-08-31-ROOT-SCAN-READING-B narrows this arm to UNTRACKED / NEW
+    # entries: an entry already committed to the repository has been accepted
+    # into it and is not a stray.  Reading A -- refuse on mere presence -- was
+    # declined because `(^|/)_` matches six files committed at master, so it
+    # would refuse on every run in every clean checkout.
+    untracked = _untracked_top_level(root)
+    if untracked is None:
+        # Tracked-ness is unknowable here (a seeded scratch root is not a git
+        # checkout).  Skip the arm VISIBLY: a guard that cannot run must say so
+        # rather than pass silently.
+        print("close_manifest.py: NOTE: repo-root forbidden scan skipped "
+              "(root is not a git checkout, so tracked-ness is unknown)",
+              file=sys.stderr)
+    else:
+        forbidden_root = []
+        for name in sorted(untracked):
+            ap = os.path.join(root, name)
+            rel = name if not os.path.isdir(ap) else name + "/"
+            if is_forbidden(rel):
+                forbidden_root.append(name)
+        if forbidden_root:
+            forbidden_root.sort()
+            die("forbidden untracked top-level repo entr"
+                + ("y: " if len(forbidden_root) == 1 else "ies: ")
+                + ", ".join(repr(p) for p in forbidden_root))
 
     dirs = [
         os.path.join(root, "data", "raw"),
@@ -864,10 +903,29 @@ def selftest():
               True)
 
         # --- F1: top-level repo-root scan -------------------------------
-        # Plant forbidden files at the root of a clean test directory and
-        # confirm scan_for_forbidden refuses, names both, and exits rc=2.
+        # R-2026-08-31-ROOT-SCAN-READING-B: the arm refuses on UNTRACKED /
+        # NEW root entries only, so these fixtures must be real git
+        # checkouts -- tracked-ness is the whole distinction under test.
+        def _st_git_repo(path):
+            """Init a git repo at `path` with one tracked committed file."""
+            os.makedirs(path, exist_ok=True)
+            env = dict(os.environ, GIT_CONFIG_GLOBAL=os.path.join(tmp, "gitcfg"),
+                       GIT_CONFIG_SYSTEM=os.devnull)
+            run = lambda *a: subprocess.run(
+                ["git", "-C", path] + list(a), check=True,
+                capture_output=True, text=True, env=env)
+            run("init", "-q")
+            run("config", "user.email", "selftest@example.invalid")
+            run("config", "user.name", "selftest")
+            open(os.path.join(path, "README.md"), "w").close()
+            run("add", "README.md")
+            run("commit", "-q", "-m", "seed")
+            return run
+
+        # Plant forbidden files at the root of a clean test repo and confirm
+        # scan_for_forbidden refuses, names both, and exits rc=2.
         scan_root = os.path.join(tmp, "scan-root-test")
-        os.makedirs(scan_root, exist_ok=True)
+        _st_git_repo(scan_root)
         open(os.path.join(scan_root, "_root_scratch.md"), "w").close()
         open(os.path.join(scan_root, "one"), "w").close()
         err = io.StringIO()
@@ -890,7 +948,7 @@ def selftest():
         # Confirm the scan is top-level only: a nested underscore file under
         # an otherwise-allowed subdirectory must not be discovered.
         clean_root = os.path.join(tmp, "clean-root-test")
-        os.makedirs(clean_root, exist_ok=True)
+        _st_git_repo(clean_root)
         os.makedirs(os.path.join(clean_root, "allowed"), exist_ok=True)
         open(os.path.join(clean_root, "allowed", "_nested.md"), "w").close()
         err2 = io.StringIO()
@@ -904,6 +962,43 @@ def selftest():
             clean_code = e.code
         check("F1d top-level-only scan ignores nested _nested.md",
               (clean_ok, clean_code), (True, 0))
+
+        # F1e is the Reading A / Reading B distinction itself, and it is the
+        # reason this arm is narrowed: a forbidden-NAMED root entry that the
+        # repository already TRACKS is not a stray and must NOT be refused.
+        # Under Reading A this case exits 2 and the close pipeline dies in
+        # every clean checkout of master, which carries six such files.
+        tracked_root = os.path.join(tmp, "tracked-root-test")
+        run_tr = _st_git_repo(tracked_root)
+        open(os.path.join(tracked_root, "_dispatch-committed.md"), "w").close()
+        run_tr("add", "-f", "_dispatch-committed.md")
+        run_tr("commit", "-q", "-m", "commit a forbidden-named root file")
+        err3 = io.StringIO()
+        try:
+            with contextlib.redirect_stderr(err3):
+                scan_for_forbidden(tracked_root, day1)
+            tracked_ok, tracked_code = True, 0
+        except SystemExit as e:
+            tracked_ok, tracked_code = False, e.code
+        check("F1e tracked root _dispatch-committed.md is NOT refused",
+              (tracked_ok, tracked_code), (True, 0))
+
+        # F1f: the arm must skip VISIBLY, never pass silently, when tracked-ness
+        # cannot be determined (a seeded scratch root is not a git checkout).
+        nogit_root = os.path.join(tmp, "nogit-root-test")
+        os.makedirs(nogit_root, exist_ok=True)
+        open(os.path.join(nogit_root, "_root_scratch.md"), "w").close()
+        err4 = io.StringIO()
+        try:
+            with contextlib.redirect_stderr(err4):
+                scan_for_forbidden(nogit_root, day1)
+            nogit_ok, nogit_code = True, 0
+        except SystemExit as e:
+            nogit_ok, nogit_code = False, e.code
+        check("F1f non-git root skips the arm rather than refusing",
+              (nogit_ok, nogit_code), (True, 0))
+        check("F1g the skip is announced on stderr, not silent",
+              "repo-root forbidden scan skipped" in err4.getvalue(), True)
 
         # (e) capture: ABSENT recorded loudly when no bundle.
         day2 = "2099-01-09"
