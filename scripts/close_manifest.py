@@ -24,6 +24,8 @@ import contextlib
 import csv
 import datetime
 import glob
+
+import market_calendar as mcal
 import hashlib
 import io
 import json
@@ -228,35 +230,14 @@ def previous_close_day(daily_runs_path, current_day):
     return rec.get("day") if rec else None
 
 
-def add_weekdays(d, n):
-    """Add n weekdays (Mon-Fri) to date d; n may be negative."""
-    step = 1 if n >= 0 else -1
-    count = 0
-    while count < abs(n):
-        d += datetime.timedelta(days=step)
-        if d.weekday() < 5:
-            count += 1
-    return d
-
-
-def count_weekdays(start, end):
-    """Count weekdays in [start, end] inclusive."""
-    n = 0
-    d = start
-    while d <= end:
-        if d.weekday() < 5:
-            n += 1
-        d += datetime.timedelta(days=1)
-    return n
-
-
 def gap_statement(previous_day, current_day):
     """Return the gap object and the human statement.
 
-    Calendar is weekdays only; market holidays are not modelled.  This is the
-    same approximation as check_heartbeat.py and report.py, stated in the
-    manifest rather than hidden.
+    Calendar uses the shared market_calendar module: weekends plus US equity
+    market holidays (rule-derived) are excluded.  This is the same source of
+    truth as check_heartbeat.py and report.py, stated in the manifest.
     """
+    CALENDAR = "rule-derived US equity market holidays; weekends excluded"
     if previous_day is None:
         return {
             "last_close": None,
@@ -264,7 +245,7 @@ def gap_statement(previous_day, current_day):
             "unobserved_count": 0,
             "evaluable": False,
             "statement": "no prior close on record",
-            "calendar": "weekdays only; market holidays not modelled",
+            "calendar": CALENDAR,
         }
     try:
         p = datetime.date.fromisoformat(previous_day)
@@ -275,7 +256,7 @@ def gap_statement(previous_day, current_day):
     unobs = []
     d = p + datetime.timedelta(days=1)
     while d < c:
-        if d.weekday() < 5:
+        if mcal.is_trading_day(d):
             unobs.append(d.isoformat())
         d += datetime.timedelta(days=1)
 
@@ -295,7 +276,7 @@ def gap_statement(previous_day, current_day):
         "unobserved_count": len(unobs),
         "evaluable": True,
         "statement": statement,
-        "calendar": "weekdays only; market holidays not modelled",
+        "calendar": CALENDAR,
     }
 
 
@@ -779,9 +760,9 @@ def selftest():
               (1, ["2099-01-07"],
                "last close 2099-01-06, 1 trading day unobserved (2099-01-07)"))
 
-        # --- G2: weekday-only calendar is explicit --------------------------
-        check("G2a calendar states the approximation",
-              gap["calendar"], "weekdays only; market holidays not modelled")
+        # --- G2: market holidays are rule-derived ---------------------------
+        check("G2a calendar states rule-derived US market holidays",
+              gap["calendar"], "rule-derived US equity market holidays; weekends excluded")
 
         # --- M1: full manifest on a fixture day -----------------------------
         _st_write(daily_runs, "", append=False)

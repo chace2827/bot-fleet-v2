@@ -229,24 +229,24 @@
 ---
 
 ## Decidability countdown — per armed arm (PROJECTION, not evidence)
-> **This is a forward projection, not a result.** It extrapolates the recent fire rate and assumes that rate holds. Calendar projection skips weekends and does **not** model market holidays, so the date is approximate. The unit of account is the **POSITION** (a two-sided condor = two spread rows paired by `trade_id`); *n* = 100 means **100 condors**, not 100 legs. One-sided spreads are listed separately and do **not** count toward the 100-condor target. The recent window is the last **20 trading days**; the post-cutover ledger currently contributes **16 trading days** to this window.
+> **This is a forward projection, not a result.** It extrapolates the recent fire rate and assumes that rate holds. Calendar projection skips weekends and US market holidays (rule-derived), so the date is approximate. The unit of account is the **POSITION** (a two-sided condor = two spread rows paired by `trade_id`); *n* = 100 means **100 condors**, not 100 legs. One-sided spreads are listed separately and do **not** count toward the 100-condor target. The recent window is the last **20 trading days**; the post-cutover ledger currently contributes **16 trading days** to this window.
 
 | Arm | Pillar | Current condors, positions | One-sided positions, spreads | Closes in 20-trading-day window | Fire rate (closes/trading-day, condors) | Projected 100-condor date |
 |---|---|--:|--:|--:|--:|---|
-| 3DTE $140-$350 | OA-Mirror | 4 | 0 | 4 | 0.25 | 2028-02-18 |
+| 3DTE $140-$350 | OA-Mirror | 4 | 0 | 4 | 0.25 | 2028-03-13 |
 | 60min-ORB-10W-Paper-v1 | OA-Mirror | 0 | 9 | 0 | insufficient data | insufficient data |
-| DIR-SPX-CallVIXdrop | Directional | 4 | 0 | 4 | 0.25 | 2028-02-18 |
+| DIR-SPX-CallVIXdrop | Directional | 4 | 0 | 4 | 0.25 | 2028-03-13 |
 | DIR-SPX-PutVIX22-SL75 | Directional | 0 | 0 | 0 | insufficient data | insufficient data |
 | Friday 14 DTE Broken Wing IB (B-70) | OA-Mirror | 1 | 0 | 1 | insufficient data | insufficient data |
-| GF-QQQ-IC-Canary | IC | 4 | 7 | 4 | 0.25 | 2028-02-18 |
-| GF-QQQ-IC-PT50 | IC | 4 | 7 | 4 | 0.25 | 2028-02-18 |
-| GF-QQQ-IC-Ride | IC | 4 | 7 | 4 | 0.25 | 2028-02-18 |
-| GF-QQQ-IC-SL100 | IC | 4 | 7 | 4 | 0.25 | 2028-02-18 |
-| GF-QQQ-IC-SL200 | IC | 4 | 7 | 4 | 0.25 | 2028-02-18 |
-| GF-QQQ-IC-Touch0 | IC | 4 | 7 | 4 | 0.25 | 2028-02-18 |
-| GF-QQQ-IC-Trail | IC | 4 | 7 | 4 | 0.25 | 2028-02-18 |
+| GF-QQQ-IC-Canary | IC | 4 | 7 | 4 | 0.25 | 2028-03-13 |
+| GF-QQQ-IC-PT50 | IC | 4 | 7 | 4 | 0.25 | 2028-03-13 |
+| GF-QQQ-IC-Ride | IC | 4 | 7 | 4 | 0.25 | 2028-03-13 |
+| GF-QQQ-IC-SL100 | IC | 4 | 7 | 4 | 0.25 | 2028-03-13 |
+| GF-QQQ-IC-SL200 | IC | 4 | 7 | 4 | 0.25 | 2028-03-13 |
+| GF-QQQ-IC-Touch0 | IC | 4 | 7 | 4 | 0.25 | 2028-03-13 |
+| GF-QQQ-IC-Trail | IC | 4 | 7 | 4 | 0.25 | 2028-03-13 |
 | IC-SPX-FastPT25-S2 | IC | 1 | 15 | 1 | insufficient data | insufficient data |
-| IC-SPX-FastPT25-S2-130PM | IC | 16 | 0 | 16 | 1.00 | 2026-12-25 |
+| IC-SPX-FastPT25-S2-130PM | IC | 16 | 0 | 16 | 1.00 | 2026-12-30 |
 | IC-SPX-Fortress-Unstopped | IC | 0 | 1 | 0 | insufficient data | insufficient data |
 | Nigiri-Paper-v1 | OA-Mirror | 0 | 10 | 0 | insufficient data | insufficient data |
 | QQQ-IC-0DTE-Fortress-NoPT50 | IC | 1 | 0 | 1 | insufficient data | insufficient data |

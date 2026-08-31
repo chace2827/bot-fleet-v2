@@ -24,6 +24,9 @@ jobs:
       - name: py_compile all Python scripts
         run: python3 -m py_compile scripts/*.py
 
+      - name: market calendar selftest
+        run: python3 scripts/market_calendar.py --selftest
+
       - name: execution audit validation matrix
         run: python3 scripts/execution_audit.py --validate
 

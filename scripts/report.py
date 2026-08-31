@@ -7,6 +7,7 @@ N reporting: 'Trades' = condors (legs paired into one entry); 'Legs' = OA positi
 rows (matches OA's "Positions" count). Win rate shown is trade-level (per condor).
 """
 import argparse, collections, csv, datetime, glob, json, math, os, random, re, shutil, subprocess, sys, tempfile
+import market_calendar as mcal
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 D = os.path.join(ROOT, "data")
@@ -20,28 +21,6 @@ def set_root(root):
 
 
 CLI_TODAY = None
-
-
-def add_weekdays(d, n):
-    """Add n trading days (Mon-Fri) to date d; n may be negative."""
-    step = 1 if n >= 0 else -1
-    count = 0
-    while count < abs(n):
-        d += datetime.timedelta(days=step)
-        if d.weekday() < 5:
-            count += 1
-    return d
-
-
-def count_weekdays(start, end):
-    """Count weekdays in [start, end] inclusive."""
-    n = 0
-    d = start
-    while d <= end:
-        if d.weekday() < 5:
-            n += 1
-        d += datetime.timedelta(days=1)
-    return n
 
 
 DECIDABILITY_WINDOW = 20          # trading days
@@ -119,16 +98,16 @@ def decidability_countdown(trades, meta, today, ledger_start,
         return []
 
     # The recent window is the last *window* trading days ending at today, inclusive.
-    window_start = add_weekdays(today, -(window - 1))
+    window_start = mcal.add_trading_days(today, -(window - 1))
     effective_start = max(window_start,
                           datetime.date.fromisoformat(ledger_start) if ledger_start else window_start)
-    trading_days_present = count_weekdays(effective_start, today)
+    trading_days_present = mcal.count_trading_days(effective_start, today)
 
     lines = ["", "---", "",
              "## Decidability countdown — per armed arm (PROJECTION, not evidence)",
              "> **This is a forward projection, not a result.** It extrapolates the recent fire rate "
-             "and assumes that rate holds. Calendar projection skips weekends and does **not** model "
-             "market holidays, so the date is approximate. The unit of account is the **POSITION** "
+             "and assumes that rate holds. Calendar projection skips weekends and US market holidays "
+             "(rule-derived), so the date is approximate. The unit of account is the **POSITION** "
              "(a two-sided condor = two spread rows paired by `trade_id`); *n* = 100 means **100 condors**, "
              "not 100 legs. One-sided spreads are listed separately and do **not** count toward the "
              "100-condor target. The recent window is the last **{} trading days**; the post-cutover "
@@ -161,7 +140,7 @@ def decidability_countdown(trades, meta, today, ledger_start,
                 proj_s = f"reached (n=100 at {hundredth})"
             else:
                 needed = math.ceil(remaining / fire_rate)
-                proj_date = add_weekdays(today, needed)
+                proj_date = mcal.add_trading_days(today, needed)
                 proj_s = proj_date.isoformat()
 
         lines.append(f"| {bot} | {pillar} | {total} | {n_one_sided} | {n_window} | {rate_s} | {proj_s} |")
@@ -196,7 +175,7 @@ def validate():
         today = datetime.date(2026, 8, 14)
         # The 20-trading-day window ends at today.  Ledger starts on the first day of
         # the window so every present trading day has a condor (fire rate = 1.00).
-        ledger_start = add_weekdays(today, -(DECIDABILITY_WINDOW - 1)).isoformat()
+        ledger_start = mcal.add_trading_days(today, -(DECIDABILITY_WINDOW - 1)).isoformat()
 
         # bots_meta.csv fixture
         with open(os.path.join(root, "data", "bots_meta.csv"), "w") as f:
@@ -221,7 +200,7 @@ def validate():
             condor_row = "{},IC,SPX,experiment,post-fix,{},SPX,ironcondor,closed,1,0.20,0.10,0,50,{},{},2026-08-14 16:00:00,,False,100,95,110,115,0.20,100,100,1,0,2026-08-14 15:00:00,2026-08-14 10:00:00\n"
             one_sided_row = "OneSidedArm,IC,SPX,experiment,post-fix,TOS1,SPX,shortputspread,closed,1,0.20,0.10,0,50,2026-08-14 10:00:00,2026-08-14 16:00:00,2026-08-14 16:00:00,,True,100,95,,,0.20,100,100,1,0,2026-08-14 15:00:00,2026-08-14 10:00:00\n"
             for i in range(DECIDABILITY_WINDOW):
-                cd = add_weekdays(today, -(DECIDABILITY_WINDOW - 1 - i))
+                cd = mcal.add_trading_days(today, -(DECIDABILITY_WINDOW - 1 - i))
                 od = f"{cd.isoformat()} 10:00:00"
                 cdts = f"{cd.isoformat()} 16:00:00"
                 f.write(condor_row.format("TestArm", f"T{i:04d}", od, cdts))
@@ -274,8 +253,8 @@ def validate():
 
         # Defect-2: an arm closing on every present trading day must render fire rate 1.00.
         test_cells = _parse_table_row(status, "TestArm")
-        if not test_cells or test_cells[6] != "1.00" or test_cells[7] != "2026-12-04":
-            print(f"FAIL: TestArm row should have fire rate 1.00 and projected date 2026-12-04; got {test_cells}", file=sys.stderr)
+        if not test_cells or test_cells[6] != "1.00" or test_cells[7] != "2026-12-08":
+            print(f"FAIL: TestArm row should have fire rate 1.00 and projected date 2026-12-08; got {test_cells}", file=sys.stderr)
             print(status, file=sys.stderr)
             return 1
 
