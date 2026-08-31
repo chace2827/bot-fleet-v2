@@ -105,6 +105,19 @@ platform change): `docs/evidence-standards.md` §1, §9.2. The audit itself: `do
     not an observation; it is a screen that was not opened (`oa-platform-reference.md` §0.2).
   - **Andy retains revoke authority** — globally or per-file, at any time.
   Worked example, sixteen edits ruled per-item: `docs/r-edit-authorization-2026-08-05.md`.
+- **Derived-ruling authority — ADDED 2026-08-31, at Andy's explicit instruction.** Claude may
+  issue rulings directly, without pre-authorization, in exactly two shapes: (a) **mechanical
+  propagation** — the ruling is entailed by a decision Andy already signed, the entailment cited
+  in the ruling itself (a discharged PR, a commit id, a fact ID), no new judgment involved; or
+  (b) **bounded operational design choice** — a choice between implementations of
+  already-decided machinery (guard scope, scan surface, test shape) with a clearly dominant
+  option, the rejected alternative recorded in the ruling. **Always gated, no exception,
+  ambiguity included**: capital, sizing, kill criteria, sample targets, pre-registration
+  content, go-live gates, OA bot behavior, the frozen build-plan, evidence tiers. Every
+  delegated ruling is recorded in `docs/RULINGS.md` citing
+  `R-2026-08-31-DERIVED-RULING-AUTHORITY` plus its evidence, and listed in the close-out
+  hand-off. **Andy may veto at commit review and retains revoke authority — globally or
+  per-category — at any time.**
 - **Standing exception**: the legacy champion (`IC-SPX-FastPT25-S2`) and its `-130PM` clone are
   deliberately **Exit-Option-free ride+S2 controls**. Do not "fix" them, do not re-arm them. See §Day-0
   in `docs/reactivation-runbook.md`.

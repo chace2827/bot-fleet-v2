@@ -10717,3 +10717,29 @@ Andy signs or explicitly authorizes the status bump.
 **Next:** Andy signs (or amends) the two rulings files → a separate OA session runs the execution
 paste at `_sizing-policy-draft-2026-09-01.md` §6, whose STEP 0 is the read-only shared-scanner
 enumeration and whose PRECONDITION 1 is the signature itself.
+
+## 2026-08-31 (late) — free-lane wave report triaged; two rulings drafted (Cowork Fable chat)
+Commits landed by Andy: `62c7bf7` (board T-38..T-42, 97 items) · `065220e` (4 unsigned sizing
+drafts + log). Foreman wave report received: PRs #69 (T-38) / #70 (T-37) / #71 (T-33) all OPEN,
+blocked by phase0 red pre-existing on master. **Verified first-hand this session:**
+`pre_registration_ledger.py --selftest` FAILS on the working tree — "live ledger does not flag
+QQQ-IC-0DTE-Fortress-NoPT50 as unsigned" — and RULINGS.md:2822
+(R-2026-08-18-SELFTEST-KNOWN-POSITIVE-PREAUTH) authorizes ONLY the 130PM removal, verbatim
+"'QQQ-IC-0DTE-Fortress-NoPT50' remains". Foreman's reading of both escalations is correct; its
+revert of the agents' unsanctioned selftest edits was right. Two ruling drafts handed to Andy:
+(1) R-…-NOPT50 — remove NoPT50 from the LIVE known-positive tuple only (fact changed by PR-04
+discharge 08-31; fixtures/INC-01 untouched), unblocks all three PRs; (2) T-38 Reading B — root
+scan covers untracked/new entries only (065220e added 4 more committed `_*` root files; Reading A
+now demands relocating 10+). Also flagged: Devin agents wrote outside clones to
+~/.claude/primer.md twice (foreman restored); wrapper cwd guard doesn't cover $HOME — fold into
+T-41 wrapper hardening. Board status for T-33/T-37/T-38 updates after merges, one edit.
+
+## 2026-08-31 (later) — derived-ruling authority delegated (Cowork Fable chat)
+Andy, verbatim: "If these are so obvious, going forward, just make those recommendations. This
+is a change that i trust you on." Codified as **R-2026-08-31-DERIVED-RULING-AUTHORITY**
+(RULINGS.md) + a matching CLAUDE.md §5 bullet: Claude rules directly on (a) mechanical
+propagation of already-signed decisions and (b) bounded operational design choices with a
+dominant option; capital/sizing/kill-criteria/pre-reg/go-live/OA-behavior/frozen-plan/evidence
+tiers stay gated, ambiguity stays gated; every delegated ruling recorded + listed at close-out;
+Andy vetoes at commit review, revoke any time. Scope drafted by Claude — Andy should read the
+two files at commit and reject if the boundary is wider than he meant.

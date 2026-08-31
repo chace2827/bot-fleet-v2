@@ -3868,3 +3868,44 @@ source: >-
   Claude.
 unclear: false
 ```
+
+```
+ruling_id: R-2026-08-31-DERIVED-RULING-AUTHORITY
+date: 2026-08-31
+scope: >-
+  Delegates to Claude (Cowork) the authority to issue rulings directly,
+  without pre-authorization, in exactly two shapes. (a) MECHANICAL
+  PROPAGATION: the ruling is entailed by a decision Andy already signed
+  and the entailment is cited in the ruling itself (a discharged PR, a
+  commit id, a fact ID); no new judgment is involved — e.g. removing a
+  selftest literal that pins a fact a signed discharge changed. (b)
+  BOUNDED OPERATIONAL DESIGN CHOICE: a choice between implementations of
+  already-decided machinery (guard scope, scan surface, test shape) where
+  one option is clearly dominant; the ruling must record the rejected
+  alternative and why. ALWAYS GATED, no exception, ambiguity included:
+  capital, sizing, kill criteria, sample targets, pre-registration
+  content, go-live gates, OA bot behavior, the frozen build-plan, and the
+  evidence tiers. Every ruling issued under this authority is recorded in
+  docs/RULINGS.md citing this ruling_id plus its evidence, and listed in
+  the close-out hand-off. Andy may veto any of them at commit review and
+  retains revoke authority over this delegation, globally or
+  per-category, at any time.
+verbatim: >-
+  If these are so obvious, going forward, just make those recommendations.
+  This is a change that i trust you on
+verbatim_of: andy
+owner: Andy
+status: Active
+applies_to: >-
+  Rulings of shapes (a) and (b) above, project-wide. Precedent instances:
+  R-2026-08-31-SELFTEST-KNOWN-POSITIVE-NOPT50 (shape a) and
+  R-2026-08-31-ROOT-SCAN-READING-B (shape b), both drafted by Claude and
+  signed by Andy immediately before this delegation.
+superseded_by: none
+source: >-
+  Cowork Fable chat 2026-08-31, immediately after Andy pasted both
+  escalation rulings to the foreman; scope drafted by Claude, applied at
+  Andy's explicit in-chat instruction; CLAUDE.md §5 carries the
+  corresponding bullet, same date.
+unclear: false
+```
