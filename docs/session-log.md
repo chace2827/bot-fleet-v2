@@ -10306,3 +10306,30 @@ rulings registered in `docs/RULINGS.md` in the standard yaml-block format. Wave 
 (rulings signed) and condition 2 (master pushed) are now both satisfied. **Ready to commit:**
 `docs/RULINGS.md` + this addendum. Andy may overturn the Option-1 call at commit review before
 dispatching the wave.
+
+## 2026-08-31 (Devin) — CLOSE-WAVE D3: `scripts/close.sh` and `scripts/close_manifest.py`
+
+Built the two D3 deliverables for R-2026-08-21-CLOSE-RECEIPT-SURFACE and R-2026-08-21-STAGING-MANIFEST.
+
+- `scripts/close.sh` orchestrates ingest -> `daily.sh` (still 9 stages) -> `capture_bundle.py` (conditional
+  on raw capture files) -> `render_brief.py` -> `close_manifest.py`, then prints a file-by-file
+  `git add` / `git commit` / `git push origin HEAD` command. It never runs git.
+- `scripts/close_manifest.py` writes `data/close/<day>/manifest.json` (export sha, daily-receipt
+  summary, capture bundle shas + drift verdict, brief path + narrative-slot status, close argv,
+  gap statement, staged paths) and appends one line to `data/receipts/close-runs.jsonl` in mode `a`.
+- Staged paths are derived two independent ways and compared; a mismatch or forbidden path
+  (`_*`, `.claude/**`, `_locktrash/**`, `one`) is a fatal refusal.
+- The gap statement reuses the existing weekday-only convention from `check_heartbeat.py` / `report.py`
+  and states "weekdays only; market holidays not modelled" in the manifest.
+- `close_manifest.py --selftest` runs a fixture check matrix covering gap forms, sha correctness,
+  staged-path two-way derivation, commit-command output, append-only close-runs, and the forbidden
+  `_scratch.md` refusal.
+
+**Verification:**
+- `python3 scripts/close_manifest.py --selftest` — 12/12 passed.
+- `FLEET_ROOT=/tmp/fleet-close-test ... scripts/close.sh 2099-01-08` end-to-end on a hermetic
+  scratch root — `data/close/2099-01-08/manifest.json` written, `data/receipts/close-runs.jsonl`
+  appended, and the printed commit command staged 25 paths.
+- Component selftests re-run: `capture_bundle.py` 18/18, `ingest_export.py` 14/14, `render_brief.py --check` 9/9.
+
+**Ready to commit:** `scripts/close.sh`, `scripts/close_manifest.py`, `docs/session-log.md` (this entry).
