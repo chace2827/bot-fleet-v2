@@ -2,7 +2,7 @@
 # close.sh — one-command daily close orchestrator.
 #
 # Implements R-2026-08-21-CLOSE-RECEIPT-SURFACE (WRAP, Option 1):
-#   ingest_export -> daily.sh <day> -> render_brief -> capture_bundle ->
+#   ingest_export -> daily.sh <day> -> capture_bundle -> render_brief ->
 #   close_manifest -> print derived commit command.
 #
 # This script NEVER runs git. It prints the derived commit command for Andy
@@ -118,7 +118,7 @@ else
   fi
 fi
 
-echo "== 4/5 capture_bundle $DAY =="
+echo "== 3/5 capture_bundle $DAY =="
 if [ -n "$CAPTURE_TXT" ]; then
   if [ ${#CAPTURE_SCREENSHOTS[@]} -gt 0 ]; then
     python3 "$SCRIPTS/capture_bundle.py" --out-root "$FLEET_ROOT/data/captures" \
