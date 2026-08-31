@@ -1,19 +1,24 @@
 {
   "ledger_start": "2026-08-10",
   "ledger_start_source": "the LEDGER_START constant in build_ledger.py",
-  "source_export": "2026-08-19.csv",
+  "source_export": "2026-08-31.csv",
   "counts": {
-    "export_rows": 1457,
-    "post_cutover": 71,
-    "straddler": 0,
+    "export_rows": 1596,
+    "post_cutover": 205,
+    "straddler": 5,
     "pre_cutover": 1386,
     "ops_rows": 0
   },
-  "n_trades_condors": 63,
-  "n_bots": 15,
-  "total_pnl": 4706.0,
+  "n_trades_condors": 156,
+  "n_bots": 18,
+  "total_pnl": 4557.0,
   "ops_bots": [],
   "ops_rows": 0,
   "note": "",
+  "overrides": {
+    "allow_rewind": false,
+    "allow_front_truncate": false,
+    "allow_ops_reclass": false
+  },
   "contract": "working ledger is POST-CUTOVER ONLY; the filter is on open_date. AND LAB-OPS-EXCLUDED; the filter is bots_meta.csv ops_class == 'lab-ops' (E-3 \u00a73.3). Two independent axes: time and class."
 }

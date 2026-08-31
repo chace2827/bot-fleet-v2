@@ -1,0 +1,450 @@
+[
+  {
+    "t": "2026-08-20T00:17:22.505Z",
+    "dir": ">",
+    "method": "POST",
+    "url": "https://app.optionalpha.com/api/request",
+    "body": "[{\"t\":\"rpc\",\"tid\":\"1787185042469-10007\",\"api\":\"zdte.counts\",\"args\":[]},{\"t\":\"rpc\",\"tid\":\"1787185042469-10008\",\"api\":\"zdte.listTests\",\"args\":[{\"where\":{},\"start\":0,\"limit\":30,\"order\":[\"updated\",\"desc\"]}]}]"
+  },
+  {
+    "t": "2026-08-20T00:17:22.675Z",
+    "dir": "<",
+    "status": 200,
+    "url": "https://app.optionalpha.com/api/request",
+    "body": "[{\"t\":\"res\",\"tid\":\"1787185042469-10008\",\"api\":\"zdte.listTests\",\"data\":[{\"id\":\"ZT21787184173504134954\",\"uid\":\"fw5TkkCRF\",\"opts\":{\"cri\":{},\"opp\":{\"text\":\".30 delta\",\"type\":\"longcall\",\"symbol\":\"SPX\",\"longCall\":{\"mode\":\"closest\",\"text\":\".30 delta\",\"type\":\"delta\",\"delta\":0.3,\"optionType\":\"call\",\"textValues\":{\"mode\":\"or closest\",\"delta\":\".30\"}}},\"uid\":\"fw5TkkCRF\",\"seed\":50000,\"text\":\"SPX Long Call\",\"emode\":\"time\",\"entry\":{},\"exits\":{\"profits\":0.05},\"ntime\":945,\"psize\":{\"pct\":10,\"prop\":\"seed\",\"text\":\"10% of allocation\",\"type\":\"drawpct\",\"textValues\":{\"pct\":\"10%\",\"prop\":\"allocation\"}},\"period\":\"2y\",\"series\":{\"days\":0,\"text\":\"exactly 0 days\",\"type\":\"days\",\"dtype\":\"m\",\"compare\":\"exact\"},\"posLimit\":1},\"symbol\":\"SPX\",\"strategy\":\"longcall\",\"status\":\"done\",\"stats\":{\"dd\":-40061,\"cap\":43347,\"low\":-30688,\"mlp\":0.1232,\"mpp\":0,\"pnl\":-6653,\"rdd\":-0.1661,\"win\":434,\"best\":3060,\"high\":9373,\"loss\":61,\"worst\":-4980,\"avgpnl\":-13.44,\"avgqty\":7.4,\"avgror\":-0.0029,\"avgrwr\":0,\"avgwin\":639.28,\"fcount\":7,\"maxwin\":0,\"trades\":495,\"winPnl\":277448,\"avgloss\":-4657.39,\"avgrisk\":4638.32,\"expired\":61,\"lossPnl\":-284101,\"maxloss\":61,\"maxrisk\":-35148,\"pfactor\":0.98,\"profits\":434,\"winrate\":0.8768,\"avgprice\":7.37,\"winstreak\":38,\"avgpremium\":4638.32,\"lossstreak\":-2},\"created\":\"2026-08-20T00:02:53.504Z\",\"updated\":\"2026-08-20T00:03:07.421Z\"},{\"id\":\"ZT217831412942036761069\",\"uid\":\"fw5TkkCRF\",\"opts\":{\"cri\":{},\"opp\":{\"text\":\"$15.00 below long put leg, $0.01 below underlying price\",\"type\":\"longputspread\",\"symbol\":\"SPX\",\"longPut\":{\"cop\":\"lt\",\"gap\":0.01,\"mode\":\"closest\",\"text\":\"$0.01 below underlying price\",\"type\":\"leggapprice\",\"priceprop\":\"last\",\"optionType\":\"put\",\"textValues\":{\"cop\":\"below\",\"gap\":\"$0.01\",\"mode\":\"or closest\",\"priceprop\":\"price\"}},\"shortPut\":{\"cop\":\"lt\",\"gap\":15,\"mode\":\"closest\",\"shlg\":\"long\",\"text\":\"$15.00 below long put leg\",\"type\":\"leggap\",\"ltype\":\"put\",\"optionType\":\"put\",\"textValues\":{\"cop\":\"below\",\"gap\":\"$15.00\",\"mode\":\"or closest\",\"shlg\":\"long\",\"ltype\":\"put\"}}},\"uid\":\"fw5TkkCRF\",\"name\":\"PUT-OOS-control\",\"seed\":50000,\"text\":\"SPX Long Put Spread\",\"emode\":\"time\",\"entry\":{\"oslip\":0.03},\"exits\":{\"profits\":1,\"stoploss\":0.75},\"ntime\":1100,\"psize\":{\"text\":\"1 contract\",\"type\":\"quantity\",\"quantity\":1},\"period\":\"custom\",\"series\":{\"days\":0,\"text\":\"exactly 0 days\",\"type\":\"days\",\"dtype\":\"m\",\"compare\":\"exact\"},\"endDate\":\"\",\"posLimit\":1,\"startDate\":\"2024-01-01\"},\"symbol\":\"SPX\",\"strategy\":\"longputspread\",\"status\":\"done\",\"stats\":{\"dd\":-13872,\"cap\":40357,\"low\":-13647,\"mlp\":0.0049,\"mpp\":0.0016,\"pnl\":-9643,\"rdd\":-0.6951,\"win\":249,\"best\":967,\"high\":225,\"loss\":367,\"worst\":-585,\"avgpnl\":-15.65,\"avgqty\":1,\"avgror\":-0.0297,\"avgrwr\":1.9005,\"avgwin\":555.51,\"fcount\":10,\"maxwin\":1,\"trades\":616,\"winPnl\":138323,\"avgloss\":-403.18,\"avgrisk\":527.05,\"expired\":20,\"lossPnl\":-147966,\"maxloss\":3,\"maxrisk\":-14220,\"pfactor\":0.93,\"profits\":240,\"winrate\":0.4042,\"avgprice\":5.27,\"stoploss\":356,\"winstreak\":7,\"avgpremium\":527.05,\"lossstreak\":-9},\"created\":\"2026-07-04T05:01:34.204Z\",\"updated\":\"2026-07-04T05:03:14.964Z\"},{\"id\":\"ZT217831412485209811066\",\"uid\":\"fw5TkkCRF\",\"opts\":{\"cri\":{},\"opp\":{\"text\":\"$15.00 below long put leg, $0.01 below underlying price\",\"type\":\"longputspread\",\"symbol\":\"SPX\",\"longPut\":{\"cop\":\"lt\",\"gap\":0.01,\"mode\":\"closest\",\"text\":\"$0.01 below underlying price\",\"type\":\"leggapprice\",\"priceprop\":\"last\",\"optionType\":\"put\",\"textValues\":{\"cop\":\"below\",\"gap\":\"$0.01\",\"mode\":\"or closest\",\"priceprop\":\"price\"}},\"shortPut\":{\"cop\":\"lt\",\"gap\":15,\"mode\":\"closest\",\"shlg\":\"long\",\"text\":\"$15.00 below long put leg\",\"type\":\"leggap\",\"ltype\":\"put\",\"optionType\":\"put\",\"textValues\":{\"cop\":\"below\",\"gap\":\"$15.00\",\"mode\":\"or closest\",\"shlg\":\"long\",\"ltype\":\"put\"}}},\"uid\":\"fw5TkkCRF\",\"name\":\"PUT-OOS-gated\",\"seed\":50000,\"text\":\"SPX Long Put Spread\",\"emode\":\"time\",\"entry\":{\"text\":\"VIX: 22 to *\",\"oslip\":0.03,\"minVix\":22},\"exits\":{\"profits\":1,\"stoploss\":0.75},\"ntime\":1100,\"psize\":{\"text\":\"1 contract\",\"type\":\"quantity\",\"quantity\":1},\"period\":\"custom\",\"series\":{\"days\":0,\"text\":\"exactly 0 days\",\"type\":\"days\",\"dtype\":\"m\",\"c"
+  },
+  {
+    "t": "2026-08-20T00:17:24.475Z",
+    "dir": ">",
+    "method": "POST",
+    "url": "https://app.optionalpha.com/cdn-cgi/rum?",
+    "body": "{\"resources\":[],\"referrer\":\"https://app.optionalpha.com/home\",\"eventType\":1,\"firstPaint\":240,\"firstContentfulPaint\":240,\"startTime\":1787185025836.6,\"versions\":{\"fl\":\"2024.11.0\",\"js\":\"2026.6.0\",\"timings\":1},\"pageloadId\":\"5a8b0277-ccf9-49a4-b653-f0cf184cb7c5\",\"location\":\"https://app.optionalpha.com/backtests\",\"nt\":\"navigate\",\"timingsV2\":{\"nextHopProtocol\":\"h3\",\"transferSize\":1602,\"decodedBodySize\":2688},\"dt\":\"\",\"siteToken\":\"21920e4c4e15414881d5f7600bad8b0e\",\"st\":2}"
+  },
+  {
+    "t": "2026-08-20T00:17:24.507Z",
+    "dir": "<",
+    "status": 204,
+    "url": "https://app.optionalpha.com/cdn-cgi/rum?",
+    "body": null
+  },
+  {
+    "t": "2026-08-20T00:17:24.510Z",
+    "dir": ">",
+    "method": "POST",
+    "url": "https://app.optionalpha.com/api/request",
+    "body": "[{\"t\":\"rpc\",\"tid\":\"1787185044468-10009\",\"api\":\"zdte.testDetails\",\"args\":[\"ZT21787184173504134954\"]}]"
+  },
+  {
+    "t": "2026-08-20T00:17:24.548Z",
+    "dir": "<",
+    "status": 200,
+    "url": "https://app.optionalpha.com/api/request",
+    "body": "[{\"t\":\"res\",\"tid\":\"1787185044468-10009\",\"api\":\"zdte.testDetails\",\"data\":{\"id\":\"ZT21787184173504134954\",\"uid\":\"fw5TkkCRF\",\"opts\":{\"cri\":{},\"opp\":{\"text\":\".30 delta\",\"type\":\"longcall\",\"symbol\":\"SPX\",\"longCall\":{\"mode\":\"closest\",\"text\":\".30 delta\",\"type\":\"delta\",\"delta\":0.3,\"optionType\":\"call\",\"textValues\":{\"mode\":\"or closest\",\"delta\":\".30\"}}},\"uid\":\"fw5TkkCRF\",\"seed\":50000,\"text\":\"SPX Long Call\",\"emode\":\"time\",\"entry\":{},\"exits\":{\"profits\":0.05},\"ntime\":945,\"psize\":{\"pct\":10,\"prop\":\"seed\",\"text\":\"10% of allocation\",\"type\":\"drawpct\",\"textValues\":{\"pct\":\"10%\",\"prop\":\"allocation\"}},\"period\":\"2y\",\"series\":{\"days\":0,\"text\":\"exactly 0 days\",\"type\":\"days\",\"dtype\":\"m\",\"compare\":\"exact\"},\"posLimit\":1},\"status\":\"done\",\"symbol\":\"SPX\",\"strategy\":\"longcall\",\"okey\":\"SPXlongcall2ytimeprofits0.05945typelongcall,symbolSPX,longCalldelta0.3,modeclosest,typedelta,optionTypecall\",\"flags\":0,\"flagged\":false}}]"
+  },
+  {
+    "t": "2026-08-20T00:17:24.566Z",
+    "dir": ">",
+    "method": "POST",
+    "url": "https://app.optionalpha.com/api/request",
+    "body": "[{\"t\":\"rpc\",\"tid\":\"1787185044537-10010\",\"api\":\"zdte.testResults\",\"args\":[{\"id\":\"ZT21787184173504134954\",\"pos\":true}]}]"
+  },
+  {
+    "t": "2026-08-20T00:17:24.716Z",
+    "dir": "<",
+    "status": 200,
+    "url": "https://app.optionalpha.com/api/request",
+    "body": "[{\"t\":\"res\",\"tid\":\"1787185044537-10010\",\"api\":\"zdte.testResults\",\"data\":{\"id\":\"ZT21787184173504134954\",\"status\":\"done\",\"bars\":[{\"pnl\":390,\"ndate\":20240816},{\"pnl\":660,\"ndate\":20240819},{\"pnl\":1410,\"ndate\":20240820},{\"pnl\":1770,\"ndate\":20240821},{\"pnl\":-3045,\"ndate\":20240822},{\"pnl\":-2695,\"ndate\":20240823},{\"pnl\":-7295,\"ndate\":20240826},{\"pnl\":-6415,\"ndate\":20240827},{\"pnl\":-6055,\"ndate\":20240828},{\"pnl\":-5695,\"ndate\":20240829},{\"pnl\":-5380,\"ndate\":20240830},{\"pnl\":-10315,\"ndate\":20240903},{\"pnl\":-9895,\"ndate\":20240904},{\"pnl\":-9645,\"ndate\":20240905},{\"pnl\":-9220,\"ndate\":20240906},{\"pnl\":-8500,\"ndate\":20240909},{\"pnl\":-12945,\"ndate\":20240910},{\"pnl\":-12285,\"ndate\":20240911},{\"pnl\":-11385,\"ndate\":20240912},{\"pnl\":-10650,\"ndate\":20240913},{\"pnl\":-10300,\"ndate\":20240916},{\"pnl\":-9535,\"ndate\":20240917},{\"pnl\":-9205,\"ndate\":20240918},{\"pnl\":-8890,\"ndate\":20240919},{\"pnl\":-13580,\"ndate\":20240920},{\"pnl\":-13265,\"ndate\":20240923},{\"pnl\":-12550,\"ndate\":20240924},{\"pnl\":-12060,\"ndate\":20240925},{\"pnl\":-16740,\"ndate\":20240926},{\"pnl\":-15970,\"ndate\":20240927},{\"pnl\":-15730,\"ndate\":20240930},{\"pnl\":-20410,\"ndate\":20241001},{\"pnl\":-20080,\"ndate\":20241002},{\"pnl\":-19275,\"ndate\":20241003},{\"pnl\":-18750,\"ndate\":20241004},{\"pnl\":-18430,\"ndate\":20241007},{\"pnl\":-17440,\"ndate\":20241008},{\"pnl\":-16945,\"ndate\":20241009},{\"pnl\":-16675,\"ndate\":20241010},{\"pnl\":-16045,\"ndate\":20241011},{\"pnl\":-15275,\"ndate\":20241014},{\"pnl\":-14975,\"ndate\":20241015},{\"pnl\":-14175,\"ndate\":20241016},{\"pnl\":-13895,\"ndate\":20241017},{\"pnl\":-13195,\"ndate\":20241018},{\"pnl\":-12655,\"ndate\":20241021},{\"pnl\":-11710,\"ndate\":20241022},{\"pnl\":-10690,\"ndate\":20241023},{\"pnl\":-10375,\"ndate\":20241024},{\"pnl\":-9775,\"ndate\":20241025},{\"pnl\":-9375,\"ndate\":20241028},{\"pnl\":-8375,\"ndate\":20241029},{\"pnl\":-7095,\"ndate\":20241030},{\"pnl\":-11960,\"ndate\":20241031},{\"pnl\":-11575,\"ndate\":20241101},{\"pnl\":-10945,\"ndate\":20241104},{\"pnl\":-9615,\"ndate\":20241105},{\"pnl\":-9195,\"ndate\":20241106},{\"pnl\":-8775,\"ndate\":20241107},{\"pnl\":-8500,\"ndate\":20241108},{\"pnl\":-13450,\"ndate\":20241111},{\"pnl\":-18190,\"ndate\":20241112},{\"pnl\":-17650,\"ndate\":20241113},{\"pnl\":-17290,\"ndate\":20241114},{\"pnl\":-16695,\"ndate\":20241115},{\"pnl\":-15930,\"ndate\":20241118},{\"pnl\":-15010,\"ndate\":20241119},{\"pnl\":-14690,\"ndate\":20241120},{\"pnl\":-14240,\"ndate\":20241121},{\"pnl\":-13720,\"ndate\":20241122},{\"pnl\":-13005,\"ndate\":20241125},{\"pnl\":-11865,\"ndate\":20241126},{\"pnl\":-11325,\"ndate\":20241127},{\"pnl\":-11325,\"code\":\"early\",\"ndate\":20241129},{\"pnl\":-10720,\"ndate\":20241202},{\"pnl\":-9895,\"ndate\":20241203},{\"pnl\":-9475,\"ndate\":20241204},{\"pnl\":-9150,\"ndate\":20241205},{\"pnl\":-8750,\"ndate\":20241206},{\"pnl\":-8300,\"ndate\":20241209},{\"pnl\":-7580,\"ndate\":20241210},{\"pnl\":-6605,\"ndate\":20241211},{\"pnl\":-6280,\"ndate\":20241212},{\"pnl\":-5720,\"ndate\":20241213},{\"pnl\":-4921,\"ndate\":20241216},{\"pnl\":-4321,\"ndate\":20241217},{\"pnl\":-4081,\"ndate\":20241218},{\"pnl\":-3181,\"ndate\":20241219},{\"pnl\":-2581,\"ndate\":20241220},{\"pnl\":-1951,\"ndate\":20241223},{\"pnl\":-1951,\"code\":\"early\",\"ndate\":20241224},{\"pnl\":-1681,\"ndate\":20241226},{\"pnl\":-1201,\"ndate\":20241227},{\"pnl\":-801,\"ndate\":20241230},{\"pnl\":274,\"ndate\":20241231},{\"pnl\":599,\"ndate\":20250102},{\"pnl\":1019,\"ndate\":20250103},{\"pnl\":2419,\"ndate\":20250106},{\"pnl\":2734,\"ndate\":20250107},{\"pnl\":2984,\"ndate\":20250108},{\"pnl\":3404,\"ndate\":20250110},{\"pnl\":3704,\"ndate\":20250113},{\"pnl\":-596,\"ndate\":20250114},{\"pnl\":-246,\"ndate\":20250115},{\"pnl\":-4926,\"ndate\":20250116},{\"pnl\":-3806,\"ndate\":20250117},{\"pnl\":-3316,\"ndate\":20250121},{\"pnl\":-2866,\"ndate\":20250122},{\"pnl\":-2506,\"ndate\":20250123},{\"pnl\":-1956,\"ndate\":20250124},{\"pnl\":-1266,\"ndate\":20250127},{\"pnl\":-876,\"ndate\":20250128},{\"pnl\":-156,\"ndate\":20250129},{\"pnl\":89,\"ndate\":20250130},{\"pnl\":359,\"ndate\":20250131},{\"pnl\":2784,\"ndate\":20250203},{\"pnl\":3174,\"ndate\":20250204},{\"pnl\":4364,\"ndate\":20250205},{\"pnl\":5174,\"ndate\":20250206},{\"pnl\":5454,\"ndate\":20250207},{\"pnl\":5734,\"ndate\":20250210},{\"pnl\":6274,\"ndate\":20250211},{\"pnl\":6914,\"ndate\":20250212},{\"pnl\":7154,\"nd"
+  },
+  {
+    "t": "2026-08-20T00:17:29.286Z",
+    "dir": ">",
+    "method": "POST",
+    "url": "https://app.optionalpha.com/cdn-cgi/rum?",
+    "body": "{\"resources\":[],\"referrer\":\"https://app.optionalpha.com/backtests\",\"eventType\":1,\"firstPaint\":240,\"firstContentfulPaint\":240,\"startTime\":1787185025836.6,\"versions\":{\"fl\":\"2024.11.0\",\"js\":\"2026.6.0\",\"timings\":1},\"pageloadId\":\"9c8aff9e-4df3-460c-a5e0-9f5a2c77c4c7\",\"location\":\"https://app.optionalpha.com/backtests/test/ZT21787184173504134954\",\"nt\":\"navigate\",\"timingsV2\":{\"nextHopProtocol\":\"h3\",\"transferSize\":1602,\"decodedBodySize\":2688},\"dt\":\"\",\"siteToken\":\"21920e4c4e15414881d5f7600bad8b0e\",\"st\":2}"
+  },
+  {
+    "t": "2026-08-20T00:17:29.315Z",
+    "dir": "<",
+    "status": 204,
+    "url": "https://app.optionalpha.com/cdn-cgi/rum?",
+    "body": null
+  },
+  {
+    "t": "2026-08-20T00:17:29.316Z",
+    "dir": ">",
+    "method": "POST",
+    "url": "https://app.optionalpha.com/api/request",
+    "body": "[{\"t\":\"rpc\",\"tid\":\"1787185049257-10011\",\"api\":\"zdte.testDetails\",\"args\":[\"ZT21787184173504134954\"]},{\"t\":\"rpc\",\"tid\":\"1787185049258-10012\",\"api\":\"zdte.testResults\",\"args\":[{\"id\":\"ZT21787184173504134954\",\"pos\":true}]}]"
+  },
+  {
+    "t": "2026-08-20T00:17:29.417Z",
+    "dir": "<",
+    "status": 200,
+    "url": "https://app.optionalpha.com/api/request",
+    "body": "[{\"t\":\"res\",\"tid\":\"1787185049257-10011\",\"api\":\"zdte.testDetails\",\"data\":{\"id\":\"ZT21787184173504134954\",\"uid\":\"fw5TkkCRF\",\"opts\":{\"cri\":{},\"opp\":{\"text\":\".30 delta\",\"type\":\"longcall\",\"symbol\":\"SPX\",\"longCall\":{\"mode\":\"closest\",\"text\":\".30 delta\",\"type\":\"delta\",\"delta\":0.3,\"optionType\":\"call\",\"textValues\":{\"mode\":\"or closest\",\"delta\":\".30\"}}},\"uid\":\"fw5TkkCRF\",\"seed\":50000,\"text\":\"SPX Long Call\",\"emode\":\"time\",\"entry\":{},\"exits\":{\"profits\":0.05},\"ntime\":945,\"psize\":{\"pct\":10,\"prop\":\"seed\",\"text\":\"10% of allocation\",\"type\":\"drawpct\",\"textValues\":{\"pct\":\"10%\",\"prop\":\"allocation\"}},\"period\":\"2y\",\"series\":{\"days\":0,\"text\":\"exactly 0 days\",\"type\":\"days\",\"dtype\":\"m\",\"compare\":\"exact\"},\"posLimit\":1},\"status\":\"done\",\"symbol\":\"SPX\",\"strategy\":\"longcall\",\"okey\":\"SPXlongcall2ytimeprofits0.05945typelongcall,symbolSPX,longCalldelta0.3,modeclosest,typedelta,optionTypecall\",\"flags\":0,\"flagged\":false}},{\"t\":\"res\",\"tid\":\"1787185049258-10012\",\"api\":\"zdte.testResults\",\"data\":{\"id\":\"ZT21787184173504134954\",\"status\":\"done\",\"bars\":[{\"pnl\":390,\"ndate\":20240816},{\"pnl\":660,\"ndate\":20240819},{\"pnl\":1410,\"ndate\":20240820},{\"pnl\":1770,\"ndate\":20240821},{\"pnl\":-3045,\"ndate\":20240822},{\"pnl\":-2695,\"ndate\":20240823},{\"pnl\":-7295,\"ndate\":20240826},{\"pnl\":-6415,\"ndate\":20240827},{\"pnl\":-6055,\"ndate\":20240828},{\"pnl\":-5695,\"ndate\":20240829},{\"pnl\":-5380,\"ndate\":20240830},{\"pnl\":-10315,\"ndate\":20240903},{\"pnl\":-9895,\"ndate\":20240904},{\"pnl\":-9645,\"ndate\":20240905},{\"pnl\":-9220,\"ndate\":20240906},{\"pnl\":-8500,\"ndate\":20240909},{\"pnl\":-12945,\"ndate\":20240910},{\"pnl\":-12285,\"ndate\":20240911},{\"pnl\":-11385,\"ndate\":20240912},{\"pnl\":-10650,\"ndate\":20240913},{\"pnl\":-10300,\"ndate\":20240916},{\"pnl\":-9535,\"ndate\":20240917},{\"pnl\":-9205,\"ndate\":20240918},{\"pnl\":-8890,\"ndate\":20240919},{\"pnl\":-13580,\"ndate\":20240920},{\"pnl\":-13265,\"ndate\":20240923},{\"pnl\":-12550,\"ndate\":20240924},{\"pnl\":-12060,\"ndate\":20240925},{\"pnl\":-16740,\"ndate\":20240926},{\"pnl\":-15970,\"ndate\":20240927},{\"pnl\":-15730,\"ndate\":20240930},{\"pnl\":-20410,\"ndate\":20241001},{\"pnl\":-20080,\"ndate\":20241002},{\"pnl\":-19275,\"ndate\":20241003},{\"pnl\":-18750,\"ndate\":20241004},{\"pnl\":-18430,\"ndate\":20241007},{\"pnl\":-17440,\"ndate\":20241008},{\"pnl\":-16945,\"ndate\":20241009},{\"pnl\":-16675,\"ndate\":20241010},{\"pnl\":-16045,\"ndate\":20241011},{\"pnl\":-15275,\"ndate\":20241014},{\"pnl\":-14975,\"ndate\":20241015},{\"pnl\":-14175,\"ndate\":20241016},{\"pnl\":-13895,\"ndate\":20241017},{\"pnl\":-13195,\"ndate\":20241018},{\"pnl\":-12655,\"ndate\":20241021},{\"pnl\":-11710,\"ndate\":20241022},{\"pnl\":-10690,\"ndate\":20241023},{\"pnl\":-10375,\"ndate\":20241024},{\"pnl\":-9775,\"ndate\":20241025},{\"pnl\":-9375,\"ndate\":20241028},{\"pnl\":-8375,\"ndate\":20241029},{\"pnl\":-7095,\"ndate\":20241030},{\"pnl\":-11960,\"ndate\":20241031},{\"pnl\":-11575,\"ndate\":20241101},{\"pnl\":-10945,\"ndate\":20241104},{\"pnl\":-9615,\"ndate\":20241105},{\"pnl\":-9195,\"ndate\":20241106},{\"pnl\":-8775,\"ndate\":20241107},{\"pnl\":-8500,\"ndate\":20241108},{\"pnl\":-13450,\"ndate\":20241111},{\"pnl\":-18190,\"ndate\":20241112},{\"pnl\":-17650,\"ndate\":20241113},{\"pnl\":-17290,\"ndate\":20241114},{\"pnl\":-16695,\"ndate\":20241115},{\"pnl\":-15930,\"ndate\":20241118},{\"pnl\":-15010,\"ndate\":20241119},{\"pnl\":-14690,\"ndate\":20241120},{\"pnl\":-14240,\"ndate\":20241121},{\"pnl\":-13720,\"ndate\":20241122},{\"pnl\":-13005,\"ndate\":20241125},{\"pnl\":-11865,\"ndate\":20241126},{\"pnl\":-11325,\"ndate\":20241127},{\"pnl\":-11325,\"code\":\"early\",\"ndate\":20241129},{\"pnl\":-10720,\"ndate\":20241202},{\"pnl\":-9895,\"ndate\":20241203},{\"pnl\":-9475,\"ndate\":20241204},{\"pnl\":-9150,\"ndate\":20241205},{\"pnl\":-8750,\"ndate\":20241206},{\"pnl\":-8300,\"ndate\":20241209},{\"pnl\":-7580,\"ndate\":20241210},{\"pnl\":-6605,\"ndate\":20241211},{\"pnl\":-6280,\"ndate\":20241212},{\"pnl\":-5720,\"ndate\":20241213},{\"pnl\":-4921,\"ndate\":20241216},{\"pnl\":-4321,\"ndate\":20241217},{\"pnl\":-4081,\"ndate\":20241218},{\"pnl\":-3181,\"ndate\":20241219},{\"pnl\":-2581,\"ndate\":20241220},{\"pnl\":-1951,\"ndate\":20241223},{\"pnl\":-1951,\"code\":\"early\",\"ndate\":20241224},{\"pnl\":-1681,\"ndate\":20241226},{\"pnl\":-1201,\"ndate\":20241227},{\"pnl\":-801,\"ndate\":"
+  },
+  {
+    "t": "2026-08-20T00:17:32.042Z",
+    "dir": ">",
+    "method": "POST",
+    "url": "https://app.optionalpha.com/api/request",
+    "body": "[{\"t\":\"rpc\",\"tid\":\"1787185052011-10013\",\"api\":\"zdte.getBotDefs\",\"args\":[[\"ZT21787184173504134954\"]]}]"
+  },
+  {
+    "t": "2026-08-20T00:17:32.102Z",
+    "dir": "<",
+    "status": 200,
+    "url": "https://app.optionalpha.com/api/request",
+    "body": "[{\"t\":\"res\",\"tid\":\"1787185052011-10013\",\"api\":\"zdte.getBotDefs\",\"data\":[]}]"
+  },
+  {
+    "t": "2026-08-20T00:17:32.109Z",
+    "dir": ">",
+    "method": "POST",
+    "url": "https://app.optionalpha.com/api/request",
+    "body": "[{\"t\":\"rpc\",\"tid\":\"1787185052080-10014\",\"api\":\"accounts.menuItems\",\"args\":[]},{\"t\":\"rpc\",\"tid\":\"1787185052081-10015\",\"api\":\"bots.listItems\",\"args\":[]}]"
+  },
+  {
+    "t": "2026-08-20T00:17:32.178Z",
+    "dir": "<",
+    "status": 200,
+    "url": "https://app.optionalpha.com/api/request",
+    "body": "[{\"t\":\"res\",\"tid\":\"1787185052080-10014\",\"api\":\"accounts.menuItems\",\"data\":[{\"value\":\"sim\",\"text\":\"Paper Trading\",\"type\":\"sim\"},{\"value\":\"TDR2117802787868500101\",\"text\":\"TR ****4219\",\"type\":\"tdr\"}]},{\"t\":\"res\",\"tid\":\"1787185052081-10015\",\"api\":\"bots.listItems\",\"data\":[{\"value\":\"BOTfw5TkkCRF3317782764426812572\",\"text\":\"1-45pm-Sandwich-Paper-v1\",\"icon\":\"fas-sandwich bg-purple\",\"accountId\":\"sim\"},{\"value\":\"BOTfw5TkkCRF2217765235512870291\",\"text\":\"3DTE $140-$350\",\"icon\":\"fas-car bg-green\",\"accountId\":\"sim\"},{\"value\":\"BOTfw5TkkCRF3317782759988647731\",\"text\":\"60min-ORB-10W-Paper-v1\",\"icon\":\"fas-10 bg-purple\",\"accountId\":\"sim\"},{\"value\":\"BOTfw5TkkCRF217824370390678863\",\"text\":\"DIR-SPX-CallVIXdrop\",\"icon\":\"fas-robot bg-blue\",\"accountId\":\"sim\"},{\"value\":\"BOTfw5TkkCRF217824312740732922\",\"text\":\"DIR-SPX-Put-Control\",\"icon\":\"fas-robot bg-blue\",\"accountId\":\"sim\"},{\"value\":\"BOTfw5TkkCRF217824306963282811\",\"text\":\"DIR-SPX-PutVIX22-SL75\",\"icon\":\"fas-robot bg-blue\",\"accountId\":\"sim\"},{\"value\":\"BOTfw5TkkCRF1017766446781407596\",\"text\":\"Friday 14 DTE Broken Wing IB (B-70)\",\"icon\":\"fas-14 bg-blue\",\"accountId\":\"sim\"},{\"value\":\"BOTfw5TkkCRF4417860774419022836\",\"text\":\"GF-QQQ-IC-Canary\",\"icon\":\"fas-robot bg-blue\",\"accountId\":\"sim\"},{\"value\":\"BOTfw5TkkCRF4417860738688735152\",\"text\":\"GF-QQQ-IC-PT50\",\"icon\":\"fas-robot bg-blue\",\"accountId\":\"sim\"},{\"value\":\"BOTfw5TkkCRF4417860701930934951\",\"text\":\"GF-QQQ-IC-Ride\",\"icon\":\"fas-robot bg-blue\",\"accountId\":\"sim\"},{\"value\":\"BOTfw5TkkCRF1317864858068078811\",\"text\":\"GF-QQQ-IC-Ride-Delta\",\"icon\":\"fas-robot bg-blue\",\"accountId\":\"sim\"},{\"value\":\"BOTfw5TkkCRF4417860767788927225\",\"text\":\"GF-QQQ-IC-SL100\",\"icon\":\"fas-robot bg-blue\",\"accountId\":\"sim\"},{\"value\":\"BOTfw5TkkCRF4417860785000861357\",\"text\":\"GF-QQQ-IC-SL200\",\"icon\":\"fas-robot bg-blue\",\"accountId\":\"sim\"},{\"value\":\"BOTfw5TkkCRF4417860760818962144\",\"text\":\"GF-QQQ-IC-Touch0\",\"icon\":\"fas-robot bg-blue\",\"accountId\":\"sim\"},{\"value\":\"BOTfw5TkkCRF4417860754672239833\",\"text\":\"GF-QQQ-IC-Trail\",\"icon\":\"fas-robot bg-blue\",\"accountId\":\"sim\"},{\"value\":\"BOTfw5TkkCRF4417860821948715488\",\"text\":\"IC-SPX-FastPT25-S2\",\"icon\":\"fas-robot bg-blue\",\"accountId\":\"sim\"},{\"value\":\"BOTfw5TkkCRF3017861977616287731\",\"text\":\"IC-SPX-FastPT25-S2-130PM\",\"icon\":\"fas-robot bg-blue\",\"accountId\":\"sim\"},{\"value\":\"BOTfw5TkkCRF3717814485128334371\",\"text\":\"IC-SPX-FastPT25-S2-130PM-ARCHIVED-2026-08-08\",\"icon\":\"fas-robot bg-blue\",\"accountId\":\"sim\"},{\"value\":\"BOTfw5TkkCRF1217757048550308561\",\"text\":\"IC-SPX-FastPT25-S2-ARCHIVED-2026-08-07\",\"icon\":\"fas-robot bg-blue\",\"accountId\":\"sim\"},{\"value\":\"BOTfw5TkkCRF3317787969081429752\",\"text\":\"IC-SPX-Fortress-Defang\",\"icon\":\"fas-robot bg-blue\",\"accountId\":\"sim\"},{\"value\":\"BOTfw5TkkCRF3317787955825912621\",\"text\":\"IC-SPX-Fortress-Unstopped\",\"icon\":\"fas-robot bg-blue\",\"accountId\":\"sim\"},{\"value\":\"BOTfw5TkkCRF1017766118057607741\",\"text\":\"Nigiri-Paper-v1\",\"icon\":\"fas-robot bg-blue\",\"accountId\":\"sim\"},{\"value\":\"BOTfw5TkkCRF1017766137341516344\",\"text\":\"Opening Range Breakout 60m\",\"icon\":\"fas-helmet-battle bg-orange\",\"accountId\":\"sim\"},{\"value\":\"BOTfw5TkkCRF3317727290514286611\",\"text\":\"QQQ-IC-0DTE-Baseline\",\"icon\":\"fas-robot bg-blue\",\"accountId\":\"sim\"},{\"value\":\"BOTfw5TkkCRF2717857919585029021\",\"text\":\"QQQ-IC-0DTE-Fortress\",\"icon\":\"fas-robot bg-blue\",\"accountId\":\"sim\"},{\"value\":\"BOTfw5TkkCRF4517755108623629541\",\"text\":\"QQQ-IC-0DTE-Fortress-NoFilter\",\"icon\":\"fas-robot bg-blue\",\"accountId\":\"sim\"},{\"value\":\"BOTfw5TkkCRF3017862038322323202\",\"text\":\"QQQ-IC-0DTE-Fortress-NoPT50\",\"icon\":\"fas-robot bg-blue\",\"accountId\":\"sim\"},{\"value\":\"BOTfw5TkkCRF2617743681996538301\",\"text\":\"QQQ-IC-0DTE-Fortress-NoPT50-ARCHIVED-2026-08-08\",\"icon\":\"fas-robot bg-blue\",\"accountId\":\"sim\"},{\"value\":\"BOTfw5TkkCRF3217755946065115241\",\"text\":\"QQQ-IC-0DTE-Fortress-S2\",\"icon\":\"fas-robot bg-blue\",\"accountId\":\"sim\"},{\"value\":\"BOTfw5TkkCRF2717738719192568831\",\"text\":\"QQQ-IC-0DTE-HedgeA-S1\",\"icon\":\"fas-robot bg-blue\",\"accountId\":\"sim\"},{\"value\":\"BOTfw5TkkCRF2717738721388027602\",\"text\":\"QQQ-IC-0DTE-HedgeB-S2\",\"ic"
+  },
+  {
+    "t": "2026-08-20T00:17:40.405Z",
+    "dir": ">",
+    "method": "POST",
+    "url": "https://app.optionalpha.com/api/request",
+    "body": "[{\"t\":\"rpc\",\"tid\":\"1787185060378-10016\",\"api\":\"market.time\",\"args\":[]},{\"t\":\"rpc\",\"tid\":\"1787185060378-10017\",\"api\":\"zdte.symdata\",\"args\":[\"SPX\"]}]"
+  },
+  {
+    "t": "2026-08-20T00:17:40.537Z",
+    "dir": "<",
+    "status": 200,
+    "url": "https://app.optionalpha.com/api/request",
+    "body": "[{\"t\":\"res\",\"tid\":\"1787185060378-10016\",\"api\":\"market.time\",\"data\":{\"open\":false,\"isMarketDay\":true,\"ntime\":2017,\"closeTime\":1600,\"pre\":false,\"post\":true}},{\"t\":\"res\",\"tid\":\"1787185060378-10017\",\"api\":\"zdte.symdata\",\"data\":{\"sec\":{\"symbol\":\"SPX\",\"type\":\"equity\",\"bid\":7707.98,\"ask\":7707.98,\"open\":7716.74,\"high\":7743.93,\"low\":7700.07,\"close\":7691.76,\"last\":7707.98,\"change\":16.22,\"changePercent\":0.00210875,\"mark\":7707.98,\"mark25\":7707.98,\"mark75\":7707.98,\"time\":1787185057334,\"description\":\"S&P 500 Index\",\"exchange\":\"\",\"isSecurity\":true,\"usymbol\":\"SPX\",\"priceIncrement\":0.01,\"sd\":0.00784756,\"averageMove\":60.36,\"annualVolatility\":0.12457615,\"av\":0.12457615,\"ivr\":29.5775,\"sd5\":0.00516572,\"low5\":7688.63,\"high5\":7816.7,\"open5\":7763.18,\"sd10\":0.00443619,\"low10\":7688.63,\"high10\":7816.7,\"open10\":7713.79,\"sd15\":0.00785027,\"low15\":7370.98,\"high15\":7816.7,\"open15\":7390.45,\"sd20\":0.00855454,\"low20\":7313.92,\"high20\":7816.7,\"open20\":7418.29,\"sd30\":0.00784756,\"low30\":7313.92,\"high30\":7816.7,\"open30\":7491.6,\"sd3m\":0.00845835,\"low3m\":7237.85,\"high3m\":7816.7,\"open3m\":7375.75,\"sd6m\":0.0088639,\"low6m\":6316.91,\"high6m\":7816.7,\"open6m\":6861.34,\"sd1y\":0.00809056,\"low1y\":6316.91,\"high1y\":7816.7,\"open1y\":6446.24,\"range52w\":0.92750985,\"mom3m\":0.045,\"mom6m\":0.1234,\"mom1y\":0.1957,\"iv\":0.144,\"ivfront\":0.1359,\"ivback\":0.1527,\"callVolume\":773,\"putVolume\":565,\"pcratio\":0.730918499353169,\"optionVolume\":1338,\"exdays\":false,\"beta\":1,\"high52w\":7816.7,\"low52w\":6316.91,\"tilt50\":0.0239,\"tiltr50\":28,\"tilt100\":0.0485,\"tiltr100\":54,\"tilt200\":0.0875,\"tiltr200\":67,\"tilt50low\":-0.0674,\"tilt50high\":0.0856,\"tilt100low\":-0.069,\"tilt100high\":0.0904,\"tilt200low\":-0.0441,\"tilt200high\":0.1302,\"exdata\":false,\"liq\":0.0000552,\"liqr\":1,\"liqd\":[0.583293,0.551752,0.0000996,0.0000054,0.0000552,192605],\"volr\":1.15592,\"nvrp\":0.15592,\"gap\":24.98,\"gappct\":0.00324763,\"openchg\":-8.76,\"openchgpct\":-0.00113519,\"sdchange\":0.27},\"techs\":{\"rsi\":[57.4,\"neutral\"],\"stoch\":[77.21337,\"neutral\"],\"cci\":[43.68387,\"sell\"],\"adx\":[21.37635,\"neutral\"],\"mom\":[-15.57,\"neutral\"],\"macd\":[70.59687,\"buy\"],\"stochrsi\":[31.75474,\"neutral\"],\"willr\":[-26.08007,\"neutral\"],\"ultimate\":[41.03529,\"neutral\"],\"mfi\":[null,\"buy\"],\"cmo\":[11.01148,\"buy\"],\"ema10\":[7712.51848,\"sell\"],\"sma10\":[7742.696,\"sell\"],\"ema20\":[7657.88962,\"buy\"],\"sma20\":[7619.6635,\"buy\"],\"ema30\":[7614.83123,\"buy\"],\"sma30\":[7586.21767,\"buy\"],\"ema50\":[7542.66409,\"buy\"],\"sma50\":[7527.8096,\"buy\"],\"ema100\":[7381.72186,\"buy\"],\"sma100\":[7351.1696,\"buy\"],\"ema200\":[7132.015,\"buy\"],\"sma200\":[7087.6072,\"buy\"],\"buy\":13,\"neutral\":7,\"sell\":3,\"rating\":\"buy\"},\"vix\":14.89,\"vixch\":-0.95,\"vixchp\":-0.05997475}}]"
+  },
+  {
+    "t": "2026-08-20T00:17:45.054Z",
+    "dir": ">",
+    "method": "POST",
+    "url": "https://app.optionalpha.com/api/request",
+    "body": "[{\"t\":\"rpc\",\"tid\":\"1787185065028-10018\",\"api\":\"posts.exists\",\"args\":[\"hp-rec-delta\"]}]"
+  },
+  {
+    "t": "2026-08-20T00:17:45.090Z",
+    "dir": "<",
+    "status": 200,
+    "url": "https://app.optionalpha.com/api/request",
+    "body": "[{\"t\":\"res\",\"tid\":\"1787185065028-10018\",\"api\":\"posts.exists\",\"data\":true}]"
+  },
+  {
+    "t": "2026-08-20T00:17:53.103Z",
+    "dir": ">",
+    "method": "POST",
+    "url": "https://app.optionalpha.com/api/request",
+    "body": "[{\"t\":\"rpc\",\"tid\":\"1787185073072-10019\",\"api\":\"member.setData\",\"args\":[\"bots\",{\"ztestseed\":50000}]},{\"t\":\"rpc\",\"tid\":\"1787185073074-10020\",\"api\":\"zdte.startTest\",\"args\":[{\"entry\":{},\"exits\":{\"profits\":0.05},\"cri\":{},\"series\":{\"days\":0,\"text\":\"exactly 0 days\",\"type\":\"days\",\"dtype\":\"m\",\"compare\":\"exact\"},\"posLimit\":1,\"seed\":50000,\"opp\":{\"type\":\"longcall\",\"symbol\":\"SPX\",\"longCall\":{\"delta\":0.05,\"mode\":\"closest\",\"type\":\"delta\",\"textValues\":{\"delta\":\".05\",\"mode\":\"or closest\"},\"text\":\".05 delta\",\"optionType\":\"call\"},\"text\":\".05 delta\"},\"text\":\"SPX Long Call\",\"emode\":\"time\",\"ntime\":945,\"psize\":{\"pct\":10,\"prop\":\"seed\",\"text\":\"10% of allocation\",\"type\":\"drawpct\",\"textValues\":{\"pct\":\"10%\",\"prop\":\"allocation\"}},\"period\":\"2y\"}]}]"
+  },
+  {
+    "t": "2026-08-20T00:17:53.158Z",
+    "dir": ">",
+    "method": "POST",
+    "url": "https://app.optionalpha.com/cdn-cgi/rum?",
+    "body": "{\"resources\":[],\"referrer\":\"https://app.optionalpha.com/backtests/test/ZT21787184173504134954\",\"eventType\":1,\"firstPaint\":240,\"firstContentfulPaint\":240,\"startTime\":1787185025836.6,\"versions\":{\"fl\":\"2024.11.0\",\"js\":\"2026.6.0\",\"timings\":1},\"pageloadId\":\"36c6f309-4255-408f-8b7e-dfe106568461\",\"location\":\"https://app.optionalpha.com/backtests/compare/ZT21787184173504134954\",\"nt\":\"navigate\",\"timingsV2\":{\"nextHopProtocol\":\"h3\",\"transferSize\":1602,\"decodedBodySize\":2688},\"dt\":\"\",\"siteToken\":\"21920e4c4e15414881d5f7600bad8b0e\",\"st\":2}"
+  },
+  {
+    "t": "2026-08-20T00:17:53.203Z",
+    "dir": "<",
+    "status": 204,
+    "url": "https://app.optionalpha.com/cdn-cgi/rum?",
+    "body": null
+  },
+  {
+    "t": "2026-08-20T00:17:53.204Z",
+    "dir": ">",
+    "method": "POST",
+    "url": "https://app.optionalpha.com/api/request",
+    "body": "[{\"t\":\"rpc\",\"tid\":\"1787185073151-10021\",\"api\":\"zdte.testDetails\",\"args\":[\"ZT21787184173504134954\"]},{\"t\":\"rpc\",\"tid\":\"1787185073151-10022\",\"api\":\"zdte.testDetails\",\"args\":[\"ZT21787185073123908967\"]},{\"t\":\"rpc\",\"tid\":\"1787185073151-10023\",\"api\":\"zdte.testResults\",\"args\":[{\"id\":\"ZT21787184173504134954\",\"pos\":true}]},{\"t\":\"rpc\",\"tid\":\"1787185073151-10024\",\"api\":\"zdte.testResults\",\"args\":[{\"id\":\"ZT21787185073123908967\",\"pos\":true}]}]"
+  },
+  {
+    "t": "2026-08-20T00:17:53.207Z",
+    "dir": "<",
+    "status": 200,
+    "url": "https://app.optionalpha.com/api/request",
+    "body": "[{\"t\":\"res\",\"tid\":\"1787185073074-10020\",\"api\":\"zdte.startTest\",\"data\":\"ZT21787185073123908967\"},{\"t\":\"res\",\"tid\":\"1787185073072-10019\",\"api\":\"member.setData\"}]"
+  },
+  {
+    "t": "2026-08-20T00:17:53.352Z",
+    "dir": "<",
+    "status": 200,
+    "url": "https://app.optionalpha.com/api/request",
+    "body": "[{\"t\":\"res\",\"tid\":\"1787185073151-10024\",\"api\":\"zdte.testResults\"},{\"t\":\"res\",\"tid\":\"1787185073151-10021\",\"api\":\"zdte.testDetails\",\"data\":{\"id\":\"ZT21787184173504134954\",\"uid\":\"fw5TkkCRF\",\"opts\":{\"cri\":{},\"opp\":{\"text\":\".30 delta\",\"type\":\"longcall\",\"symbol\":\"SPX\",\"longCall\":{\"mode\":\"closest\",\"text\":\".30 delta\",\"type\":\"delta\",\"delta\":0.3,\"optionType\":\"call\",\"textValues\":{\"mode\":\"or closest\",\"delta\":\".30\"}}},\"uid\":\"fw5TkkCRF\",\"seed\":50000,\"text\":\"SPX Long Call\",\"emode\":\"time\",\"entry\":{},\"exits\":{\"profits\":0.05},\"ntime\":945,\"psize\":{\"pct\":10,\"prop\":\"seed\",\"text\":\"10% of allocation\",\"type\":\"drawpct\",\"textValues\":{\"pct\":\"10%\",\"prop\":\"allocation\"}},\"period\":\"2y\",\"series\":{\"days\":0,\"text\":\"exactly 0 days\",\"type\":\"days\",\"dtype\":\"m\",\"compare\":\"exact\"},\"posLimit\":1},\"status\":\"done\",\"symbol\":\"SPX\",\"strategy\":\"longcall\",\"okey\":\"SPXlongcall2ytimeprofits0.05945typelongcall,symbolSPX,longCalldelta0.3,modeclosest,typedelta,optionTypecall\",\"flags\":0,\"flagged\":false}},{\"t\":\"res\",\"tid\":\"1787185073151-10022\",\"api\":\"zdte.testDetails\",\"data\":{\"id\":\"ZT21787185073123908967\",\"uid\":\"fw5TkkCRF\",\"opts\":{\"cri\":{},\"opp\":{\"text\":\".05 delta\",\"type\":\"longcall\",\"symbol\":\"SPX\",\"longCall\":{\"mode\":\"closest\",\"text\":\".05 delta\",\"type\":\"delta\",\"delta\":0.05,\"optionType\":\"call\",\"textValues\":{\"mode\":\"or closest\",\"delta\":\".05\"}}},\"uid\":\"fw5TkkCRF\",\"seed\":50000,\"text\":\"SPX Long Call\",\"emode\":\"time\",\"entry\":{},\"exits\":{\"profits\":0.05},\"ntime\":945,\"psize\":{\"pct\":10,\"prop\":\"seed\",\"text\":\"10% of allocation\",\"type\":\"drawpct\",\"textValues\":{\"pct\":\"10%\",\"prop\":\"allocation\"}},\"period\":\"2y\",\"series\":{\"days\":0,\"text\":\"exactly 0 days\",\"type\":\"days\",\"dtype\":\"m\",\"compare\":\"exact\"},\"posLimit\":1},\"status\":\"active\",\"symbol\":\"SPX\",\"strategy\":\"longcall\",\"okey\":\"SPXlongcall2ytimeprofits0.05945typelongcall,symbolSPX,longCalldelta0.05,modeclosest,typedelta,optionTypecall\",\"flags\":0,\"flagged\":false}},{\"t\":\"res\",\"tid\":\"1787185073151-10023\",\"api\":\"zdte.testResults\",\"data\":{\"id\":\"ZT21787184173504134954\",\"status\":\"done\",\"bars\":[{\"pnl\":390,\"ndate\":20240816},{\"pnl\":660,\"ndate\":20240819},{\"pnl\":1410,\"ndate\":20240820},{\"pnl\":1770,\"ndate\":20240821},{\"pnl\":-3045,\"ndate\":20240822},{\"pnl\":-2695,\"ndate\":20240823},{\"pnl\":-7295,\"ndate\":20240826},{\"pnl\":-6415,\"ndate\":20240827},{\"pnl\":-6055,\"ndate\":20240828},{\"pnl\":-5695,\"ndate\":20240829},{\"pnl\":-5380,\"ndate\":20240830},{\"pnl\":-10315,\"ndate\":20240903},{\"pnl\":-9895,\"ndate\":20240904},{\"pnl\":-9645,\"ndate\":20240905},{\"pnl\":-9220,\"ndate\":20240906},{\"pnl\":-8500,\"ndate\":20240909},{\"pnl\":-12945,\"ndate\":20240910},{\"pnl\":-12285,\"ndate\":20240911},{\"pnl\":-11385,\"ndate\":20240912},{\"pnl\":-10650,\"ndate\":20240913},{\"pnl\":-10300,\"ndate\":20240916},{\"pnl\":-9535,\"ndate\":20240917},{\"pnl\":-9205,\"ndate\":20240918},{\"pnl\":-8890,\"ndate\":20240919},{\"pnl\":-13580,\"ndate\":20240920},{\"pnl\":-13265,\"ndate\":20240923},{\"pnl\":-12550,\"ndate\":20240924},{\"pnl\":-12060,\"ndate\":20240925},{\"pnl\":-16740,\"ndate\":20240926},{\"pnl\":-15970,\"ndate\":20240927},{\"pnl\":-15730,\"ndate\":20240930},{\"pnl\":-20410,\"ndate\":20241001},{\"pnl\":-20080,\"ndate\":20241002},{\"pnl\":-19275,\"ndate\":20241003},{\"pnl\":-18750,\"ndate\":20241004},{\"pnl\":-18430,\"ndate\":20241007},{\"pnl\":-17440,\"ndate\":20241008},{\"pnl\":-16945,\"ndate\":20241009},{\"pnl\":-16675,\"ndate\":20241010},{\"pnl\":-16045,\"ndate\":20241011},{\"pnl\":-15275,\"ndate\":20241014},{\"pnl\":-14975,\"ndate\":20241015},{\"pnl\":-14175,\"ndate\":20241016},{\"pnl\":-13895,\"ndate\":20241017},{\"pnl\":-13195,\"ndate\":20241018},{\"pnl\":-12655,\"ndate\":20241021},{\"pnl\":-11710,\"ndate\":20241022},{\"pnl\":-10690,\"ndate\":20241023},{\"pnl\":-10375,\"ndate\":20241024},{\"pnl\":-9775,\"ndate\":20241025},{\"pnl\":-9375,\"ndate\":20241028},{\"pnl\":-8375,\"ndate\":20241029},{\"pnl\":-7095,\"ndate\":20241030},{\"pnl\":-11960,\"ndate\":20241031},{\"pnl\":-11575,\"ndate\":20241101},{\"pnl\":-10945,\"ndate\":20241104},{\"pnl\":-9615,\"ndate\":20241105},{\"pnl\":-9195,\"ndate\":20241106},{\"pnl\":-8775,\"ndate\":20241107},{\"pnl\":-8500,\"ndate\":20241108},{\"pnl\":-13450,\"ndate\":20241111},{\"pnl\":-18190,\"ndate\":20241112},{\"pnl\":-17650,\"ndate\":20241113},{\"pnl\":-17290,\"ndate\":2024"
+  },
+  {
+    "t": "2026-08-20T00:17:58.326Z",
+    "dir": ">",
+    "method": "POST",
+    "url": "https://app.optionalpha.com/api/request",
+    "body": "[{\"t\":\"rpc\",\"tid\":\"1787185078297-10025\",\"api\":\"zdte.testStatus\",\"args\":[\"ZT21787185073123908967\",\"SPX\"]}]"
+  },
+  {
+    "t": "2026-08-20T00:17:58.384Z",
+    "dir": "<",
+    "status": 200,
+    "url": "https://app.optionalpha.com/api/request",
+    "body": "[{\"t\":\"res\",\"tid\":\"1787185078297-10025\",\"api\":\"zdte.testStatus\",\"data\":\"done\"}]"
+  },
+  {
+    "t": "2026-08-20T00:17:58.405Z",
+    "dir": ">",
+    "method": "POST",
+    "url": "https://app.optionalpha.com/api/request",
+    "body": "[{\"t\":\"rpc\",\"tid\":\"1787185078363-10026\",\"api\":\"zdte.testResults\",\"args\":[{\"id\":\"ZT21787185073123908967\",\"pos\":true}]}]"
+  },
+  {
+    "t": "2026-08-20T00:17:58.670Z",
+    "dir": "<",
+    "status": 200,
+    "url": "https://app.optionalpha.com/api/request",
+    "body": "[{\"t\":\"res\",\"tid\":\"1787185078363-10026\",\"api\":\"zdte.testResults\",\"data\":{\"id\":\"ZT21787185073123908967\",\"status\":\"done\",\"bars\":[{\"pnl\":511,\"ndate\":20240816},{\"pnl\":1169,\"ndate\":20240819},{\"pnl\":1430,\"ndate\":20240820},{\"pnl\":2387,\"ndate\":20240821},{\"pnl\":-2593,\"ndate\":20240822},{\"pnl\":-2116,\"ndate\":20240823},{\"pnl\":-7076,\"ndate\":20240826},{\"pnl\":-5972,\"ndate\":20240827},{\"pnl\":-10954,\"ndate\":20240828},{\"pnl\":-10422,\"ndate\":20240829},{\"pnl\":-9732,\"ndate\":20240830},{\"pnl\":-14700,\"ndate\":20240903},{\"pnl\":-13800,\"ndate\":20240904},{\"pnl\":-13520,\"ndate\":20240905},{\"pnl\":-12920,\"ndate\":20240906},{\"pnl\":-11800,\"ndate\":20240909},{\"pnl\":-16764,\"ndate\":20240910},{\"pnl\":-14780,\"ndate\":20240911},{\"pnl\":-14050,\"ndate\":20240912},{\"pnl\":-13690,\"ndate\":20240913},{\"pnl\":-13210,\"ndate\":20240916},{\"pnl\":-12730,\"ndate\":20240917},{\"pnl\":-12450,\"ndate\":20240918},{\"pnl\":-12036,\"ndate\":20240919},{\"pnl\":-16995,\"ndate\":20240920},{\"pnl\":-16695,\"ndate\":20240923},{\"pnl\":-16260,\"ndate\":20240924},{\"pnl\":-15605,\"ndate\":20240925},{\"pnl\":-20587,\"ndate\":20240926},{\"pnl\":-20123,\"ndate\":20240927},{\"pnl\":-25073,\"ndate\":20240930},{\"pnl\":-30003,\"ndate\":20241001},{\"pnl\":-29451,\"ndate\":20241002},{\"pnl\":-28171,\"ndate\":20241003},{\"pnl\":-27481,\"ndate\":20241004},{\"pnl\":-32440,\"ndate\":20241007},{\"pnl\":-31885,\"ndate\":20241008},{\"pnl\":-31509,\"ndate\":20241009},{\"pnl\":-31133,\"ndate\":20241010},{\"pnl\":-30497,\"ndate\":20241011},{\"pnl\":-29318,\"ndate\":20241014},{\"pnl\":-28883,\"ndate\":20241015},{\"pnl\":-28507,\"ndate\":20241016},{\"pnl\":-27952,\"ndate\":20241017},{\"pnl\":-32940,\"ndate\":20241018},{\"pnl\":-32476,\"ndate\":20241021},{\"pnl\":-31519,\"ndate\":20241022},{\"pnl\":-30459,\"ndate\":20241023},{\"pnl\":-30009,\"ndate\":20241024},{\"pnl\":-29163,\"ndate\":20241025},{\"pnl\":-28683,\"ndate\":20241028},{\"pnl\":-27871,\"ndate\":20241029},{\"pnl\":-27071,\"ndate\":20241030},{\"pnl\":-32035,\"ndate\":20241031},{\"pnl\":-31275,\"ndate\":20241101},{\"pnl\":-30318,\"ndate\":20241104},{\"pnl\":-29904,\"ndate\":20241105},{\"pnl\":-34832,\"ndate\":20241106},{\"pnl\":-34142,\"ndate\":20241107},{\"pnl\":-32518,\"ndate\":20241108},{\"pnl\":-37506,\"ndate\":20241111},{\"pnl\":-42484,\"ndate\":20241112},{\"pnl\":-47443,\"ndate\":20241113},{\"pnl\":-47121,\"ndate\":20241114},{\"pnl\":-46651,\"ndate\":20241115},{\"pnl\":-46013,\"ndate\":20241118},{\"pnl\":-45220,\"ndate\":20241119},{\"pnl\":-44758,\"ndate\":20241120},{\"pnl\":-44281,\"ndate\":20241121},{\"pnl\":-43831,\"ndate\":20241122},{\"pnl\":-43031,\"ndate\":20241125},{\"pnl\":-41639,\"ndate\":20241126},{\"pnl\":-41175,\"ndate\":20241127},{\"pnl\":-41175,\"code\":\"early\",\"ndate\":20241129},{\"pnl\":-40115,\"ndate\":20241202},{\"pnl\":-39460,\"ndate\":20241203},{\"pnl\":-38805,\"ndate\":20241204},{\"pnl\":-38341,\"ndate\":20241205},{\"pnl\":-37405,\"ndate\":20241206},{\"pnl\":-42397,\"ndate\":20241209},{\"pnl\":-41461,\"ndate\":20241210},{\"pnl\":-40301,\"ndate\":20241211},{\"pnl\":-39837,\"ndate\":20241212},{\"pnl\":-39575,\"ndate\":20241213},{\"pnl\":-38863,\"ndate\":20241216},{\"pnl\":-38227,\"ndate\":20241217},{\"pnl\":-37867,\"ndate\":20241218},{\"pnl\":-36838,\"ndate\":20241219},{\"pnl\":-36368,\"ndate\":20241220},{\"pnl\":-35954,\"ndate\":20241223},{\"pnl\":-35954,\"code\":\"early\",\"ndate\":20241224},{\"pnl\":-40924,\"ndate\":20241226},{\"pnl\":-40118,\"ndate\":20241227},{\"pnl\":-39863,\"ndate\":20241230},{\"pnl\":-38103,\"ndate\":20241231},{\"pnl\":-37788,\"ndate\":20250102},{\"pnl\":-42716,\"ndate\":20250103},{\"pnl\":-40876,\"ndate\":20250106},{\"pnl\":-40396,\"ndate\":20250107},{\"pnl\":-39926,\"ndate\":20250108},{\"pnl\":-39526,\"ndate\":20250110},{\"pnl\":-38506,\"ndate\":20250113},{\"pnl\":-43470,\"ndate\":20250114},{\"pnl\":-42810,\"ndate\":20250115},{\"pnl\":-47760,\"ndate\":20250116},{\"pnl\":-47280,\"ndate\":20250117},{\"pnl\":-47055,\"ndate\":20250121},{\"pnl\":-46683,\"ndate\":20250122},{\"pnl\":-46375,\"ndate\":20250123},{\"pnl\":-46039,\"ndate\":20250124},{\"pnl\":-45439,\"ndate\":20250127},{\"pnl\":-45207,\"ndate\":20250128},{\"pnl\":-44253,\"ndate\":20250129},{\"pnl\":-43839,\"ndate\":20250130},{\"pnl\":-42594,\"ndate\":20250131},{\"pnl\":-41244,\"ndate\":20250203},{\"pnl\":-40988,\"ndate\":20250204},{\"pnl\":-45958,\"ndate\":20250205},{\"pnl\":-45274,\"ndate\":20250206},{\"pnl\":-44666,\"ndate\":20250207},{\"pnl\":-44311,\"nd"
+  },
+  {
+    "t": "2026-08-20T00:20:13.333Z",
+    "dir": ">",
+    "method": "POST",
+    "url": "https://app.optionalpha.com/api/request",
+    "body": "[{\"t\":\"rpc\",\"tid\":\"1787185213299-10027\",\"api\":\"market.time\",\"args\":[]},{\"t\":\"rpc\",\"tid\":\"1787185213299-10028\",\"api\":\"zdte.symdata\",\"args\":[\"SPX\"]}]"
+  },
+  {
+    "t": "2026-08-20T00:20:13.494Z",
+    "dir": "<",
+    "status": 200,
+    "url": "https://app.optionalpha.com/api/request",
+    "body": "[{\"t\":\"res\",\"tid\":\"1787185213299-10027\",\"api\":\"market.time\",\"data\":{\"open\":false,\"isMarketDay\":true,\"ntime\":2020,\"closeTime\":1600,\"pre\":false,\"post\":true}},{\"t\":\"res\",\"tid\":\"1787185213299-10028\",\"api\":\"zdte.symdata\",\"data\":{\"sec\":{\"symbol\":\"SPX\",\"type\":\"equity\",\"bid\":7707.98,\"ask\":7707.98,\"open\":7716.74,\"high\":7743.93,\"low\":7700.07,\"close\":7691.76,\"last\":7707.98,\"change\":16.22,\"changePercent\":0.00210875,\"mark\":7707.98,\"mark25\":7707.98,\"mark75\":7707.98,\"time\":1787185200377,\"description\":\"S&P 500 Index\",\"exchange\":\"\",\"isSecurity\":true,\"usymbol\":\"SPX\",\"priceIncrement\":0.01,\"sd\":0.00784756,\"averageMove\":60.36,\"annualVolatility\":0.12457615,\"av\":0.12457615,\"ivr\":29.5775,\"sd5\":0.00516572,\"low5\":7688.63,\"high5\":7816.7,\"open5\":7763.18,\"sd10\":0.00443619,\"low10\":7688.63,\"high10\":7816.7,\"open10\":7713.79,\"sd15\":0.00785027,\"low15\":7370.98,\"high15\":7816.7,\"open15\":7390.45,\"sd20\":0.00855454,\"low20\":7313.92,\"high20\":7816.7,\"open20\":7418.29,\"sd30\":0.00784756,\"low30\":7313.92,\"high30\":7816.7,\"open30\":7491.6,\"sd3m\":0.00845835,\"low3m\":7237.85,\"high3m\":7816.7,\"open3m\":7375.75,\"sd6m\":0.0088639,\"low6m\":6316.91,\"high6m\":7816.7,\"open6m\":6861.34,\"sd1y\":0.00809056,\"low1y\":6316.91,\"high1y\":7816.7,\"open1y\":6446.24,\"range52w\":0.92750985,\"mom3m\":0.045,\"mom6m\":0.1234,\"mom1y\":0.1957,\"iv\":0.144,\"ivfront\":0.1359,\"ivback\":0.1527,\"callVolume\":1018,\"putVolume\":722,\"pcratio\":0.709233791748527,\"optionVolume\":1740,\"exdays\":false,\"beta\":1,\"high52w\":7816.7,\"low52w\":6316.91,\"tilt50\":0.0239,\"tiltr50\":28,\"tilt100\":0.0485,\"tiltr100\":54,\"tilt200\":0.0875,\"tiltr200\":67,\"tilt50low\":-0.0674,\"tilt50high\":0.0856,\"tilt100low\":-0.069,\"tilt100high\":0.0904,\"tilt200low\":-0.0441,\"tilt200high\":0.1302,\"exdata\":false,\"liq\":0.0000552,\"liqr\":1,\"liqd\":[0.583293,0.551752,0.0000996,0.0000054,0.0000552,192605],\"volr\":1.15592,\"nvrp\":0.15592,\"gap\":24.98,\"gappct\":0.00324763,\"openchg\":-8.76,\"openchgpct\":-0.00113519,\"sdchange\":0.27},\"techs\":{\"rsi\":[57.4,\"neutral\"],\"stoch\":[77.21337,\"neutral\"],\"cci\":[43.68387,\"sell\"],\"adx\":[21.37635,\"neutral\"],\"mom\":[-15.57,\"neutral\"],\"macd\":[70.59687,\"buy\"],\"stochrsi\":[31.75474,\"neutral\"],\"willr\":[-26.08007,\"neutral\"],\"ultimate\":[41.03529,\"neutral\"],\"mfi\":[null,\"buy\"],\"cmo\":[11.01148,\"buy\"],\"ema10\":[7712.51848,\"sell\"],\"sma10\":[7742.696,\"sell\"],\"ema20\":[7657.88962,\"buy\"],\"sma20\":[7619.6635,\"buy\"],\"ema30\":[7614.83123,\"buy\"],\"sma30\":[7586.21767,\"buy\"],\"ema50\":[7542.66409,\"buy\"],\"sma50\":[7527.8096,\"buy\"],\"ema100\":[7381.72186,\"buy\"],\"sma100\":[7351.1696,\"buy\"],\"ema200\":[7132.015,\"buy\"],\"sma200\":[7087.6072,\"buy\"],\"buy\":13,\"neutral\":7,\"sell\":3,\"rating\":\"buy\"},\"vix\":14.89,\"vixch\":-0.95,\"vixchp\":-0.05997475}}]"
+  },
+  {
+    "t": "2026-08-20T00:20:17.211Z",
+    "dir": ">",
+    "method": "POST",
+    "url": "https://app.optionalpha.com/api/request",
+    "body": "[{\"t\":\"rpc\",\"tid\":\"1787185217132-10029\",\"api\":\"posts.exists\",\"args\":[\"hp-rec-delta\"]}]"
+  },
+  {
+    "t": "2026-08-20T00:20:17.379Z",
+    "dir": "<",
+    "status": 200,
+    "url": "https://app.optionalpha.com/api/request",
+    "body": "[{\"t\":\"res\",\"tid\":\"1787185217132-10029\",\"api\":\"posts.exists\",\"data\":true}]"
+  },
+  {
+    "t": "2026-08-20T00:20:35.672Z",
+    "dir": ">",
+    "method": "POST",
+    "url": "https://app.optionalpha.com/api/request",
+    "body": "[{\"t\":\"rpc\",\"tid\":\"1787185235637-10030\",\"api\":\"member.setData\",\"args\":[\"bots\",{\"ztestseed\":50000}]},{\"t\":\"rpc\",\"tid\":\"1787185235638-10031\",\"api\":\"zdte.startTest\",\"args\":[{\"entry\":{},\"exits\":{\"profits\":0.1},\"cri\":{},\"series\":{\"days\":0,\"text\":\"exactly 0 days\",\"type\":\"days\",\"dtype\":\"m\",\"compare\":\"exact\"},\"posLimit\":1,\"seed\":50000,\"opp\":{\"type\":\"longcall\",\"symbol\":\"SPX\",\"longCall\":{\"delta\":0.82,\"mode\":\"closest\",\"type\":\"delta\",\"textValues\":{\"delta\":\".82\",\"mode\":\"or closest\"},\"text\":\".82 delta\",\"optionType\":\"call\"},\"text\":\".82 delta\"},\"text\":\"SPX Long Call\",\"emode\":\"time\",\"ntime\":945,\"psize\":{\"pct\":10,\"prop\":\"seed\",\"text\":\"10% of allocation\",\"type\":\"drawpct\",\"textValues\":{\"pct\":\"10%\",\"prop\":\"allocation\"}},\"period\":\"2y\"}]}]"
+  },
+  {
+    "t": "2026-08-20T00:20:35.781Z",
+    "dir": ">",
+    "method": "POST",
+    "url": "https://app.optionalpha.com/cdn-cgi/rum?",
+    "body": "{\"resources\":[],\"referrer\":\"https://app.optionalpha.com/backtests/compare/ZT21787184173504134954\",\"eventType\":1,\"firstPaint\":240,\"firstContentfulPaint\":240,\"startTime\":1787185025836.6,\"versions\":{\"fl\":\"2024.11.0\",\"js\":\"2026.6.0\",\"timings\":1},\"pageloadId\":\"1e038c6f-b27f-491d-9d88-6bcf57fc6e41\",\"location\":\"https://app.optionalpha.com/backtests/compare/ZT21787184173504134954,ZT21787185073123908967\",\"nt\":\"navigate\",\"timingsV2\":{\"nextHopProtocol\":\"h3\",\"transferSize\":1602,\"decodedBodySize\":2688},\"dt\":\"\",\"siteToken\":\"21920e4c4e15414881d5f7600bad8b0e\",\"st\":2}"
+  },
+  {
+    "t": "2026-08-20T00:20:35.845Z",
+    "dir": ">",
+    "method": "POST",
+    "url": "https://app.optionalpha.com/api/request",
+    "body": "[{\"t\":\"rpc\",\"tid\":\"1787185235730-10032\",\"api\":\"zdte.testDetails\",\"args\":[\"ZT21787184173504134954\"]},{\"t\":\"rpc\",\"tid\":\"1787185235730-10033\",\"api\":\"zdte.testDetails\",\"args\":[\"ZT21787185073123908967\"]},{\"t\":\"rpc\",\"tid\":\"1787185235730-10034\",\"api\":\"zdte.testDetails\",\"args\":[\"ZT21787185235691368970\"]},{\"t\":\"rpc\",\"tid\":\"1787185235730-10035\",\"api\":\"zdte.testResults\",\"args\":[{\"id\":\"ZT21787184173504134954\",\"pos\":true}]},{\"t\":\"rpc\",\"tid\":\"1787185235730-10036\",\"api\":\"zdte.testResults\",\"args\":[{\"id\":\"ZT21787185073123908967\",\"pos\":true}]},{\"t\":\"rpc\",\"tid\":\"1787185235730-10037\",\"api\":\"zdte.testResults\",\"args\":[{\"id\":\"ZT21787185235691368970\",\"pos\":true}]}]"
+  },
+  {
+    "t": "2026-08-20T00:20:35.845Z",
+    "dir": "<",
+    "status": 204,
+    "url": "https://app.optionalpha.com/cdn-cgi/rum?",
+    "body": null
+  },
+  {
+    "t": "2026-08-20T00:20:35.846Z",
+    "dir": "<",
+    "status": 200,
+    "url": "https://app.optionalpha.com/api/request",
+    "body": "[{\"t\":\"res\",\"tid\":\"1787185235638-10031\",\"api\":\"zdte.startTest\",\"data\":\"ZT21787185235691368970\"},{\"t\":\"res\",\"tid\":\"1787185235637-10030\",\"api\":\"member.setData\"}]"
+  },
+  {
+    "t": "2026-08-20T00:20:36.018Z",
+    "dir": "<",
+    "status": 200,
+    "url": "https://app.optionalpha.com/api/request",
+    "body": "[{\"t\":\"res\",\"tid\":\"1787185235730-10037\",\"api\":\"zdte.testResults\"},{\"t\":\"res\",\"tid\":\"1787185235730-10034\",\"api\":\"zdte.testDetails\",\"data\":{\"id\":\"ZT21787185235691368970\",\"uid\":\"fw5TkkCRF\",\"opts\":{\"cri\":{},\"opp\":{\"text\":\".82 delta\",\"type\":\"longcall\",\"symbol\":\"SPX\",\"longCall\":{\"mode\":\"closest\",\"text\":\".82 delta\",\"type\":\"delta\",\"delta\":0.82,\"optionType\":\"call\",\"textValues\":{\"mode\":\"or closest\",\"delta\":\".82\"}}},\"uid\":\"fw5TkkCRF\",\"seed\":50000,\"text\":\"SPX Long Call\",\"emode\":\"time\",\"entry\":{},\"exits\":{\"profits\":0.1},\"ntime\":945,\"psize\":{\"pct\":10,\"prop\":\"seed\",\"text\":\"10% of allocation\",\"type\":\"drawpct\",\"textValues\":{\"pct\":\"10%\",\"prop\":\"allocation\"}},\"period\":\"2y\",\"series\":{\"days\":0,\"text\":\"exactly 0 days\",\"type\":\"days\",\"dtype\":\"m\",\"compare\":\"exact\"},\"posLimit\":1},\"status\":\"active\",\"symbol\":\"SPX\",\"strategy\":\"longcall\",\"okey\":\"SPXlongcall2ytimeprofits0.1945typelongcall,symbolSPX,longCalldelta0.82,modeclosest,typedelta,optionTypecall\",\"flags\":0,\"flagged\":false}},{\"t\":\"res\",\"tid\":\"1787185235730-10033\",\"api\":\"zdte.testDetails\",\"data\":{\"id\":\"ZT21787185073123908967\",\"uid\":\"fw5TkkCRF\",\"opts\":{\"cri\":{},\"opp\":{\"text\":\".05 delta\",\"type\":\"longcall\",\"symbol\":\"SPX\",\"longCall\":{\"mode\":\"closest\",\"text\":\".05 delta\",\"type\":\"delta\",\"delta\":0.05,\"optionType\":\"call\",\"textValues\":{\"mode\":\"or closest\",\"delta\":\".05\"}}},\"uid\":\"fw5TkkCRF\",\"seed\":50000,\"text\":\"SPX Long Call\",\"emode\":\"time\",\"entry\":{},\"exits\":{\"profits\":0.05},\"ntime\":945,\"psize\":{\"pct\":10,\"prop\":\"seed\",\"text\":\"10% of allocation\",\"type\":\"drawpct\",\"textValues\":{\"pct\":\"10%\",\"prop\":\"allocation\"}},\"period\":\"2y\",\"series\":{\"days\":0,\"text\":\"exactly 0 days\",\"type\":\"days\",\"dtype\":\"m\",\"compare\":\"exact\"},\"posLimit\":1},\"status\":\"done\",\"symbol\":\"SPX\",\"strategy\":\"longcall\",\"okey\":\"SPXlongcall2ytimeprofits0.05945typelongcall,symbolSPX,longCalldelta0.05,modeclosest,typedelta,optionTypecall\",\"flags\":0,\"flagged\":false}},{\"t\":\"res\",\"tid\":\"1787185235730-10032\",\"api\":\"zdte.testDetails\",\"data\":{\"id\":\"ZT21787184173504134954\",\"uid\":\"fw5TkkCRF\",\"opts\":{\"cri\":{},\"opp\":{\"text\":\".30 delta\",\"type\":\"longcall\",\"symbol\":\"SPX\",\"longCall\":{\"mode\":\"closest\",\"text\":\".30 delta\",\"type\":\"delta\",\"delta\":0.3,\"optionType\":\"call\",\"textValues\":{\"mode\":\"or closest\",\"delta\":\".30\"}}},\"uid\":\"fw5TkkCRF\",\"seed\":50000,\"text\":\"SPX Long Call\",\"emode\":\"time\",\"entry\":{},\"exits\":{\"profits\":0.05},\"ntime\":945,\"psize\":{\"pct\":10,\"prop\":\"seed\",\"text\":\"10% of allocation\",\"type\":\"drawpct\",\"textValues\":{\"pct\":\"10%\",\"prop\":\"allocation\"}},\"period\":\"2y\",\"series\":{\"days\":0,\"text\":\"exactly 0 days\",\"type\":\"days\",\"dtype\":\"m\",\"compare\":\"exact\"},\"posLimit\":1},\"status\":\"done\",\"symbol\":\"SPX\",\"strategy\":\"longcall\",\"okey\":\"SPXlongcall2ytimeprofits0.05945typelongcall,symbolSPX,longCalldelta0.3,modeclosest,typedelta,optionTypecall\",\"flags\":0,\"flagged\":false}},{\"t\":\"res\",\"tid\":\"1787185235730-10036\",\"api\":\"zdte.testResults\",\"data\":{\"id\":\"ZT21787185073123908967\",\"status\":\"done\",\"bars\":[{\"pnl\":511,\"ndate\":20240816},{\"pnl\":1169,\"ndate\":20240819},{\"pnl\":1430,\"ndate\":20240820},{\"pnl\":2387,\"ndate\":20240821},{\"pnl\":-2593,\"ndate\":20240822},{\"pnl\":-2116,\"ndate\":20240823},{\"pnl\":-7076,\"ndate\":20240826},{\"pnl\":-5972,\"ndate\":20240827},{\"pnl\":-10954,\"ndate\":20240828},{\"pnl\":-10422,\"ndate\":20240829},{\"pnl\":-9732,\"ndate\":20240830},{\"pnl\":-14700,\"ndate\":20240903},{\"pnl\":-13800,\"ndate\":20240904},{\"pnl\":-13520,\"ndate\":20240905},{\"pnl\":-12920,\"ndate\":20240906},{\"pnl\":-11800,\"ndate\":20240909},{\"pnl\":-16764,\"ndate\":20240910},{\"pnl\":-14780,\"ndate\":20240911},{\"pnl\":-14050,\"ndate\":20240912},{\"pnl\":-13690,\"ndate\":20240913},{\"pnl\":-13210,\"ndate\":20240916},{\"pnl\":-12730,\"ndate\":20240917},{\"pnl\":-12450,\"ndate\":20240918},{\"pnl\":-12036,\"ndate\":20240919},{\"pnl\":-16995,\"ndate\":20240920},{\"pnl\":-16695,\"ndate\":20240923},{\"pnl\":-16260,\"ndate\":20240924},{\"pnl\":-15605,\"ndate\":20240925},{\"pnl\":-20587,\"ndate\":20240926},{\"pnl\":-20123,\"ndate\":20240927},{\"pnl\":-25073,\"ndate\":20240930},{\"pnl\":-30003,\"ndate\":20241001},{\"pnl\":-29451,\"ndate\":20241002},{\"pnl\":-28171,\"ndate\":20241003},{\"pnl\":-27481,\"ndate\":20241004},{\"pnl\":"
+  },
+  {
+    "t": "2026-08-20T00:20:40.969Z",
+    "dir": ">",
+    "method": "POST",
+    "url": "https://app.optionalpha.com/api/request",
+    "body": "[{\"t\":\"rpc\",\"tid\":\"1787185240920-10038\",\"api\":\"zdte.testStatus\",\"args\":[\"ZT21787185235691368970\",\"SPX\"]}]"
+  },
+  {
+    "t": "2026-08-20T00:20:41.102Z",
+    "dir": "<",
+    "status": 200,
+    "url": "https://app.optionalpha.com/api/request",
+    "body": "[{\"t\":\"res\",\"tid\":\"1787185240920-10038\",\"api\":\"zdte.testStatus\",\"data\":50}]"
+  },
+  {
+    "t": "2026-08-20T00:20:45.949Z",
+    "dir": ">",
+    "method": "POST",
+    "url": "https://app.optionalpha.com/api/request",
+    "body": "[{\"t\":\"rpc\",\"tid\":\"1787185245919-10039\",\"api\":\"zdte.testStatus\",\"args\":[\"ZT21787185235691368970\",\"SPX\"]}]"
+  },
+  {
+    "t": "2026-08-20T00:20:46.019Z",
+    "dir": "<",
+    "status": 200,
+    "url": "https://app.optionalpha.com/api/request",
+    "body": "[{\"t\":\"res\",\"tid\":\"1787185245919-10039\",\"api\":\"zdte.testStatus\",\"data\":100}]"
+  },
+  {
+    "t": "2026-08-20T00:20:50.952Z",
+    "dir": ">",
+    "method": "POST",
+    "url": "https://app.optionalpha.com/api/request",
+    "body": "[{\"t\":\"rpc\",\"tid\":\"1787185250920-10040\",\"api\":\"zdte.testStatus\",\"args\":[\"ZT21787185235691368970\",\"SPX\"]}]"
+  },
+  {
+    "t": "2026-08-20T00:20:51.055Z",
+    "dir": "<",
+    "status": 200,
+    "url": "https://app.optionalpha.com/api/request",
+    "body": "[{\"t\":\"res\",\"tid\":\"1787185250920-10040\",\"api\":\"zdte.testStatus\",\"data\":\"done\"}]"
+  },
+  {
+    "t": "2026-08-20T00:20:51.075Z",
+    "dir": ">",
+    "method": "POST",
+    "url": "https://app.optionalpha.com/api/request",
+    "body": "[{\"t\":\"rpc\",\"tid\":\"1787185251049-10041\",\"api\":\"zdte.testResults\",\"args\":[{\"id\":\"ZT21787185235691368970\",\"pos\":true}]}]"
+  },
+  {
+    "t": "2026-08-20T00:20:51.287Z",
+    "dir": "<",
+    "status": 200,
+    "url": "https://app.optionalpha.com/api/request",
+    "body": "[{\"t\":\"res\",\"tid\":\"1787185251049-10041\",\"api\":\"zdte.testResults\",\"data\":{\"id\":\"ZT21787185235691368970\",\"status\":\"done\",\"bars\":[{\"pnl\":440,\"ndate\":20240816},{\"pnl\":770,\"ndate\":20240819},{\"pnl\":1125,\"ndate\":20240820},{\"pnl\":1530,\"ndate\":20240821},{\"pnl\":-2165,\"ndate\":20240822},{\"msg\":\"The risk for 1 contract $5,480.00 exceeds 10% of allocation (5000)\",\"pnl\":-2165,\"code\":\"risk\",\"ndate\":20240823},{\"pnl\":-5020,\"ndate\":20240826},{\"pnl\":-4450,\"ndate\":20240827},{\"pnl\":-7492,\"ndate\":20240828},{\"pnl\":-6782,\"ndate\":20240829},{\"pnl\":-6397,\"ndate\":20240830},{\"msg\":\"The risk for 1 contract $6,330.00 exceeds 10% of allocation (5000)\",\"pnl\":-6397,\"code\":\"risk\",\"ndate\":20240903},{\"pnl\":-5847,\"ndate\":20240904},{\"pnl\":-4947,\"ndate\":20240905},{\"msg\":\"The risk for 1 contract $6,295.00 exceeds 10% of allocation (5000)\",\"pnl\":-4947,\"code\":\"risk\",\"ndate\":20240906},{\"msg\":\"The risk for 1 contract $5,325.00 exceeds 10% of allocation (5000)\",\"pnl\":-4947,\"code\":\"risk\",\"ndate\":20240909},{\"pnl\":-4920,\"ndate\":20240910},{\"pnl\":-4275,\"ndate\":20240911},{\"pnl\":-3780,\"ndate\":20240912},{\"pnl\":-3160,\"ndate\":20240913},{\"pnl\":-2520,\"ndate\":20240916},{\"pnl\":-1955,\"ndate\":20240917},{\"msg\":\"The risk for 1 contract $8,060.00 exceeds 10% of allocation (5000)\",\"pnl\":-1955,\"code\":\"risk\",\"ndate\":20240918},{\"pnl\":-1440,\"ndate\":20240919},{\"pnl\":-645,\"ndate\":20240920},{\"pnl\":-225,\"ndate\":20240923},{\"pnl\":180,\"ndate\":20240924},{\"pnl\":550,\"ndate\":20240925},{\"pnl\":-1123,\"ndate\":20240926},{\"pnl\":-738,\"ndate\":20240927},{\"pnl\":-328,\"ndate\":20240930},{\"pnl\":-2383,\"ndate\":20241001},{\"pnl\":-1833,\"ndate\":20241002},{\"pnl\":-1353,\"ndate\":20241003},{\"pnl\":-793,\"ndate\":20241004},{\"pnl\":-433,\"ndate\":20241007},{\"pnl\":122,\"ndate\":20241008},{\"pnl\":432,\"ndate\":20241009},{\"pnl\":862,\"ndate\":20241010},{\"pnl\":1182,\"ndate\":20241011},{\"pnl\":1742,\"ndate\":20241014},{\"pnl\":2072,\"ndate\":20241015},{\"pnl\":2487,\"ndate\":20241016},{\"pnl\":79,\"ndate\":20241017},{\"pnl\":389,\"ndate\":20241018},{\"pnl\":664,\"ndate\":20241021},{\"pnl\":984,\"ndate\":20241022},{\"pnl\":1264,\"ndate\":20241023},{\"pnl\":1789,\"ndate\":20241024},{\"pnl\":2229,\"ndate\":20241025},{\"pnl\":2759,\"ndate\":20241028},{\"pnl\":3104,\"ndate\":20241029},{\"pnl\":3599,\"ndate\":20241030},{\"pnl\":-66,\"ndate\":20241031},{\"pnl\":719,\"ndate\":20241101},{\"pnl\":1194,\"ndate\":20241104},{\"pnl\":1759,\"ndate\":20241105},{\"msg\":\"The risk for 1 contract $6,090.00 exceeds 10% of allocation (5000)\",\"pnl\":1759,\"code\":\"risk\",\"ndate\":20241106},{\"pnl\":2254,\"ndate\":20241107},{\"pnl\":2659,\"ndate\":20241108},{\"pnl\":1499,\"ndate\":20241111},{\"pnl\":-1011,\"ndate\":20241112},{\"pnl\":-606,\"ndate\":20241113},{\"pnl\":-151,\"ndate\":20241114},{\"pnl\":464,\"ndate\":20241115},{\"pnl\":944,\"ndate\":20241118},{\"pnl\":1439,\"ndate\":20241119},{\"pnl\":1849,\"ndate\":20241120},{\"msg\":\"The risk for 1 contract $5,070.00 exceeds 10% of allocation (5000)\",\"pnl\":1849,\"code\":\"risk\",\"ndate\":20241121},{\"pnl\":1598,\"ndate\":20241122},{\"pnl\":-952,\"ndate\":20241125},{\"pnl\":-507,\"ndate\":20241126},{\"pnl\":-2623,\"ndate\":20241127},{\"pnl\":-2623,\"code\":\"early\",\"ndate\":20241129},{\"pnl\":-2033,\"ndate\":20241202},{\"pnl\":-1758,\"ndate\":20241203},{\"pnl\":-1248,\"ndate\":20241204},{\"pnl\":-628,\"ndate\":20241205},{\"pnl\":422,\"ndate\":20241206},{\"pnl\":-3348,\"ndate\":20241209},{\"pnl\":-2898,\"ndate\":20241210},{\"pnl\":-2438,\"ndate\":20241211},{\"pnl\":-1848,\"ndate\":20241212},{\"pnl\":-1458,\"ndate\":20241213},{\"pnl\":-848,\"ndate\":20241216},{\"pnl\":-358,\"ndate\":20241217},{\"pnl\":2,\"ndate\":20241218},{\"msg\":\"The risk for 1 contract $5,475.00 exceeds 10% of allocation (5000)\",\"pnl\":2,\"code\":\"risk\",\"ndate\":20241219},{\"msg\":\"The risk for 1 contract $5,895.00 exceeds 10% of allocation (5000)\",\"pnl\":2,\"code\":\"risk\",\"ndate\":20241220},{\"pnl\":417,\"ndate\":20241223},{\"pnl\":417,\"code\":\"early\",\"ndate\":20241224},{\"pnl\":752,\"ndate\":20241226},{\"pnl\":1572,\"ndate\":20241227},{\"msg\":\"The risk for 1 contract $5,620.00 exceeds 10% of allocation (5000)\",\"pnl\":1572,\"code\":\"risk\",\"ndate\":20241230},{\"msg\":\"The risk for 1 contract $5,115.00 exceeds 10% of allocation (5000)\",\"pnl\":1572,\"code\":\"risk\",\"ndate\":20241231},{\"pnl\":2"
+  },
+  {
+    "t": "2026-08-20T00:22:16.788Z",
+    "dir": ">",
+    "method": "POST",
+    "url": "https://app.optionalpha.com/api/request",
+    "body": "[{\"t\":\"rpc\",\"tid\":\"1787185336749-10042\",\"api\":\"market.time\",\"args\":[]},{\"t\":\"rpc\",\"tid\":\"1787185336749-10043\",\"api\":\"zdte.symdata\",\"args\":[\"SPX\"]}]"
+  },
+  {
+    "t": "2026-08-20T00:22:17.137Z",
+    "dir": "<",
+    "status": 200,
+    "url": "https://app.optionalpha.com/api/request",
+    "body": "[{\"t\":\"res\",\"tid\":\"1787185336749-10042\",\"api\":\"market.time\",\"data\":{\"open\":false,\"isMarketDay\":true,\"ntime\":2022,\"closeTime\":1600,\"pre\":false,\"post\":true}},{\"t\":\"res\",\"tid\":\"1787185336749-10043\",\"api\":\"zdte.symdata\",\"data\":{\"sec\":{\"symbol\":\"SPX\",\"type\":\"equity\",\"bid\":7707.98,\"ask\":7707.98,\"open\":7716.74,\"high\":7743.93,\"low\":7700.07,\"close\":7691.76,\"last\":7707.98,\"change\":16.22,\"changePercent\":0.00210875,\"mark\":7707.98,\"mark25\":7707.98,\"mark75\":7707.98,\"time\":1787185320413,\"description\":\"S&P 500 Index\",\"exchange\":\"\",\"isSecurity\":true,\"usymbol\":\"SPX\",\"priceIncrement\":0.01,\"sd\":0.00784756,\"averageMove\":60.36,\"annualVolatility\":0.12457615,\"av\":0.12457615,\"ivr\":29.5775,\"sd5\":0.00516572,\"low5\":7688.63,\"high5\":7816.7,\"open5\":7763.18,\"sd10\":0.00443619,\"low10\":7688.63,\"high10\":7816.7,\"open10\":7713.79,\"sd15\":0.00785027,\"low15\":7370.98,\"high15\":7816.7,\"open15\":7390.45,\"sd20\":0.00855454,\"low20\":7313.92,\"high20\":7816.7,\"open20\":7418.29,\"sd30\":0.00784756,\"low30\":7313.92,\"high30\":7816.7,\"open30\":7491.6,\"sd3m\":0.00845835,\"low3m\":7237.85,\"high3m\":7816.7,\"open3m\":7375.75,\"sd6m\":0.0088639,\"low6m\":6316.91,\"high6m\":7816.7,\"open6m\":6861.34,\"sd1y\":0.00809056,\"low1y\":6316.91,\"high1y\":7816.7,\"open1y\":6446.24,\"range52w\":0.92750985,\"mom3m\":0.045,\"mom6m\":0.1234,\"mom1y\":0.1957,\"iv\":0.1439,\"ivfront\":0.1359,\"ivback\":0.1526,\"callVolume\":1152,\"putVolume\":817,\"pcratio\":0.709201388888889,\"optionVolume\":1969,\"exdays\":false,\"beta\":1,\"high52w\":7816.7,\"low52w\":6316.91,\"tilt50\":0.0239,\"tiltr50\":28,\"tilt100\":0.0485,\"tiltr100\":54,\"tilt200\":0.0875,\"tiltr200\":67,\"tilt50low\":-0.0674,\"tilt50high\":0.0856,\"tilt100low\":-0.069,\"tilt100high\":0.0904,\"tilt200low\":-0.0441,\"tilt200high\":0.1302,\"exdata\":false,\"liq\":0.0000552,\"liqr\":1,\"liqd\":[0.583293,0.551752,0.0000996,0.0000054,0.0000552,192605],\"volr\":1.155117,\"nvrp\":0.155117,\"gap\":24.98,\"gappct\":0.00324763,\"openchg\":-8.76,\"openchgpct\":-0.00113519,\"sdchange\":0.27},\"techs\":{\"rsi\":[57.4,\"neutral\"],\"stoch\":[77.21337,\"neutral\"],\"cci\":[43.68387,\"sell\"],\"adx\":[21.37635,\"neutral\"],\"mom\":[-15.57,\"neutral\"],\"macd\":[70.59687,\"buy\"],\"stochrsi\":[31.75474,\"neutral\"],\"willr\":[-26.08007,\"neutral\"],\"ultimate\":[41.03529,\"neutral\"],\"mfi\":[null,\"buy\"],\"cmo\":[11.01148,\"buy\"],\"ema10\":[7712.51848,\"sell\"],\"sma10\":[7742.696,\"sell\"],\"ema20\":[7657.88962,\"buy\"],\"sma20\":[7619.6635,\"buy\"],\"ema30\":[7614.83123,\"buy\"],\"sma30\":[7586.21767,\"buy\"],\"ema50\":[7542.66409,\"buy\"],\"sma50\":[7527.8096,\"buy\"],\"ema100\":[7381.72186,\"buy\"],\"sma100\":[7351.1696,\"buy\"],\"ema200\":[7132.015,\"buy\"],\"sma200\":[7087.6072,\"buy\"],\"buy\":13,\"neutral\":7,\"sell\":3,\"rating\":\"buy\"},\"vix\":14.89,\"vixch\":-0.95,\"vixchp\":-0.05997475}}]"
+  },
+  {
+    "t": "2026-08-20T00:22:22.132Z",
+    "dir": ">",
+    "method": "POST",
+    "url": "https://app.optionalpha.com/api/request",
+    "body": "[{\"t\":\"rpc\",\"tid\":\"1787185342102-10044\",\"api\":\"member.setData\",\"args\":[\"bots\",{\"ztestseed\":50000}]},{\"t\":\"rpc\",\"tid\":\"1787185342103-10045\",\"api\":\"zdte.startTest\",\"args\":[{\"entry\":{},\"exits\":{\"profits\":0.1},\"cri\":{},\"series\":{\"type\":\"days\",\"compare\":\"exact\",\"days\":1,\"filter\":\"*\",\"text\":\"exactly 1 market day\",\"dtype\":\"m\"},\"posLimit\":1,\"seed\":50000,\"opp\":{\"type\":\"longcall\",\"symbol\":\"SPX\",\"longCall\":{\"mode\":\"closest\",\"text\":\".82 delta\",\"type\":\"delta\",\"delta\":0.82,\"optionType\":\"call\",\"textValues\":{\"mode\":\"or closest\",\"delta\":\".82\"}},\"text\":\".82 delta\"},\"text\":\"SPX Long Call\",\"emode\":\"time\",\"ntime\":945,\"psize\":{\"pct\":10,\"prop\":\"seed\",\"text\":\"10% of allocation\",\"type\":\"drawpct\",\"textValues\":{\"pct\":\"10%\",\"prop\":\"allocation\"}},\"period\":\"2y\"}]}]"
+  },
+  {
+    "t": "2026-08-20T00:22:22.266Z",
+    "dir": ">",
+    "method": "POST",
+    "url": "https://app.optionalpha.com/cdn-cgi/rum?",
+    "body": "{\"resources\":[],\"referrer\":\"https://app.optionalpha.com/backtests/compare/ZT21787184173504134954,ZT21787185073123908967\",\"eventType\":1,\"firstPaint\":240,\"firstContentfulPaint\":240,\"startTime\":1787185025836.6,\"versions\":{\"fl\":\"2024.11.0\",\"js\":\"2026.6.0\",\"timings\":1},\"pageloadId\":\"505da3f0-a550-4cc8-a720-e50572ca72c0\",\"location\":\"https://app.optionalpha.com/backtests/compare/ZT21787184173504134954,ZT21787185073123908967,ZT21787185235691368970\",\"nt\":\"navigate\",\"timingsV2\":{\"nextHopProtocol\":\"h3\",\"transferSize\":1602,\"decodedBodySize\":2688},\"dt\":\"\",\"siteToken\":\"21920e4c4e15414881d5f7600bad8b0e\",\"st\":2}"
+  },
+  {
+    "t": "2026-08-20T00:22:22.319Z",
+    "dir": "<",
+    "status": 204,
+    "url": "https://app.optionalpha.com/cdn-cgi/rum?",
+    "body": null
+  },
+  {
+    "t": "2026-08-20T00:22:22.322Z",
+    "dir": ">",
+    "method": "POST",
+    "url": "https://app.optionalpha.com/api/request",
+    "body": "[{\"t\":\"rpc\",\"tid\":\"1787185342246-10046\",\"api\":\"zdte.testDetails\",\"args\":[\"ZT21787184173504134954\"]},{\"t\":\"rpc\",\"tid\":\"1787185342246-10047\",\"api\":\"zdte.testDetails\",\"args\":[\"ZT21787185073123908967\"]},{\"t\":\"rpc\",\"tid\":\"1787185342246-10048\",\"api\":\"zdte.testDetails\",\"args\":[\"ZT21787185235691368970\"]},{\"t\":\"rpc\",\"tid\":\"1787185342246-10049\",\"api\":\"zdte.testDetails\",\"args\":[\"ZT21787185342155405973\"]},{\"t\":\"rpc\",\"tid\":\"1787185342246-10050\",\"api\":\"zdte.testResults\",\"args\":[{\"id\":\"ZT21787184173504134954\",\"pos\":true}]},{\"t\":\"rpc\",\"tid\":\"1787185342246-10051\",\"api\":\"zdte.testResults\",\"args\":[{\"id\":\"ZT21787185073123908967\",\"pos\":true}]},{\"t\":\"rpc\",\"tid\":\"1787185342246-10052\",\"api\":\"zdte.testResults\",\"args\":[{\"id\":\"ZT21787185235691368970\",\"pos\":true}]},{\"t\":\"rpc\",\"tid\":\"1787185342246-10053\",\"api\":\"zdte.testResults\",\"args\":[{\"id\":\"ZT21787185342155405973\",\"pos\":true}]}]"
+  },
+  {
+    "t": "2026-08-20T00:22:22.325Z",
+    "dir": "<",
+    "status": 200,
+    "url": "https://app.optionalpha.com/api/request",
+    "body": "[{\"t\":\"res\",\"tid\":\"1787185342103-10045\",\"api\":\"zdte.startTest\",\"data\":\"ZT21787185342155405973\"},{\"t\":\"res\",\"tid\":\"1787185342102-10044\",\"api\":\"member.setData\"}]"
+  },
+  {
+    "t": "2026-08-20T00:22:22.504Z",
+    "dir": "<",
+    "status": 200,
+    "url": "https://app.optionalpha.com/api/request",
+    "body": "[{\"t\":\"res\",\"tid\":\"1787185342246-10053\",\"api\":\"zdte.testResults\"},{\"t\":\"res\",\"tid\":\"1787185342246-10048\",\"api\":\"zdte.testDetails\",\"data\":{\"id\":\"ZT21787185235691368970\",\"uid\":\"fw5TkkCRF\",\"opts\":{\"cri\":{},\"opp\":{\"text\":\".82 delta\",\"type\":\"longcall\",\"symbol\":\"SPX\",\"longCall\":{\"mode\":\"closest\",\"text\":\".82 delta\",\"type\":\"delta\",\"delta\":0.82,\"optionType\":\"call\",\"textValues\":{\"mode\":\"or closest\",\"delta\":\".82\"}}},\"uid\":\"fw5TkkCRF\",\"seed\":50000,\"text\":\"SPX Long Call\",\"emode\":\"time\",\"entry\":{},\"exits\":{\"profits\":0.1},\"ntime\":945,\"psize\":{\"pct\":10,\"prop\":\"seed\",\"text\":\"10% of allocation\",\"type\":\"drawpct\",\"textValues\":{\"pct\":\"10%\",\"prop\":\"allocation\"}},\"period\":\"2y\",\"series\":{\"days\":0,\"text\":\"exactly 0 days\",\"type\":\"days\",\"dtype\":\"m\",\"compare\":\"exact\"},\"posLimit\":1},\"status\":\"done\",\"symbol\":\"SPX\",\"strategy\":\"longcall\",\"okey\":\"SPXlongcall2ytimeprofits0.1945typelongcall,symbolSPX,longCalldelta0.82,modeclosest,typedelta,optionTypecall\",\"flags\":0,\"flagged\":false}},{\"t\":\"res\",\"tid\":\"1787185342246-10049\",\"api\":\"zdte.testDetails\",\"data\":{\"id\":\"ZT21787185342155405973\",\"uid\":\"fw5TkkCRF\",\"opts\":{\"cri\":{},\"opp\":{\"text\":\".82 delta\",\"type\":\"longcall\",\"symbol\":\"SPX\",\"longCall\":{\"mode\":\"closest\",\"text\":\".82 delta\",\"type\":\"delta\",\"delta\":0.82,\"optionType\":\"call\",\"textValues\":{\"mode\":\"or closest\",\"delta\":\".82\"}}},\"uid\":\"fw5TkkCRF\",\"seed\":50000,\"text\":\"SPX Long Call\",\"emode\":\"time\",\"entry\":{},\"exits\":{\"profits\":0.1},\"ntime\":945,\"psize\":{\"pct\":10,\"prop\":\"seed\",\"text\":\"10% of allocation\",\"type\":\"drawpct\",\"textValues\":{\"pct\":\"10%\",\"prop\":\"allocation\"}},\"period\":\"2y\",\"series\":{\"days\":1,\"text\":\"exactly 1 market day\",\"type\":\"days\",\"dtype\":\"m\",\"filter\":\"*\",\"compare\":\"exact\"},\"posLimit\":1},\"status\":\"active\",\"symbol\":\"SPX\",\"strategy\":\"longcall\",\"okey\":\"SPXlongcall2ytimeprofits0.1945typelongcall,symbolSPX,longCallmodeclosest,typedelta,delta0.82,optionTypecall\",\"flags\":0,\"flagged\":false}},{\"t\":\"res\",\"tid\":\"1787185342246-10047\",\"api\":\"zdte.testDetails\",\"data\":{\"id\":\"ZT21787185073123908967\",\"uid\":\"fw5TkkCRF\",\"opts\":{\"cri\":{},\"opp\":{\"text\":\".05 delta\",\"type\":\"longcall\",\"symbol\":\"SPX\",\"longCall\":{\"mode\":\"closest\",\"text\":\".05 delta\",\"type\":\"delta\",\"delta\":0.05,\"optionType\":\"call\",\"textValues\":{\"mode\":\"or closest\",\"delta\":\".05\"}}},\"uid\":\"fw5TkkCRF\",\"seed\":50000,\"text\":\"SPX Long Call\",\"emode\":\"time\",\"entry\":{},\"exits\":{\"profits\":0.05},\"ntime\":945,\"psize\":{\"pct\":10,\"prop\":\"seed\",\"text\":\"10% of allocation\",\"type\":\"drawpct\",\"textValues\":{\"pct\":\"10%\",\"prop\":\"allocation\"}},\"period\":\"2y\",\"series\":{\"days\":0,\"text\":\"exactly 0 days\",\"type\":\"days\",\"dtype\":\"m\",\"compare\":\"exact\"},\"posLimit\":1},\"status\":\"done\",\"symbol\":\"SPX\",\"strategy\":\"longcall\",\"okey\":\"SPXlongcall2ytimeprofits0.05945typelongcall,symbolSPX,longCalldelta0.05,modeclosest,typedelta,optionTypecall\",\"flags\":0,\"flagged\":false}},{\"t\":\"res\",\"tid\":\"1787185342246-10046\",\"api\":\"zdte.testDetails\",\"data\":{\"id\":\"ZT21787184173504134954\",\"uid\":\"fw5TkkCRF\",\"opts\":{\"cri\":{},\"opp\":{\"text\":\".30 delta\",\"type\":\"longcall\",\"symbol\":\"SPX\",\"longCall\":{\"mode\":\"closest\",\"text\":\".30 delta\",\"type\":\"delta\",\"delta\":0.3,\"optionType\":\"call\",\"textValues\":{\"mode\":\"or closest\",\"delta\":\".30\"}}},\"uid\":\"fw5TkkCRF\",\"seed\":50000,\"text\":\"SPX Long Call\",\"emode\":\"time\",\"entry\":{},\"exits\":{\"profits\":0.05},\"ntime\":945,\"psize\":{\"pct\":10,\"prop\":\"seed\",\"text\":\"10% of allocation\",\"type\":\"drawpct\",\"textValues\":{\"pct\":\"10%\",\"prop\":\"allocation\"}},\"period\":\"2y\",\"series\":{\"days\":0,\"text\":\"exactly 0 days\",\"type\":\"days\",\"dtype\":\"m\",\"compare\":\"exact\"},\"posLimit\":1},\"status\":\"done\",\"symbol\":\"SPX\",\"strategy\":\"longcall\",\"okey\":\"SPXlongcall2ytimeprofits0.05945typelongcall,symbolSPX,longCalldelta0.3,modeclosest,typedelta,optionTypecall\",\"flags\":0,\"flagged\":false}},{\"t\":\"res\",\"tid\":\"1787185342246-10051\",\"api\":\"zdte.testResults\",\"data\":{\"id\":\"ZT21787185073123908967\",\"status\":\"done\",\"bars\":[{\"pnl\":511,\"ndate\":20240816},{\"pnl\":1169,\"ndate\":20240819},{\"pnl\":1430,\"ndate\":20240820},{\"pnl\":2387,\"ndate\":20240821},{\"pnl\":-2593,\"ndate\":20240822},{\"pnl\":-2116,\"ndate\":20240823},{\"pnl\":-7076,\"nd"
+  },
+  {
+    "t": "2026-08-20T00:22:27.433Z",
+    "dir": ">",
+    "method": "POST",
+    "url": "https://app.optionalpha.com/api/request",
+    "body": "[{\"t\":\"rpc\",\"tid\":\"1787185347402-10054\",\"api\":\"zdte.testStatus\",\"args\":[\"ZT21787185342155405973\",\"SPX\"]}]"
+  },
+  {
+    "t": "2026-08-20T00:22:27.525Z",
+    "dir": "<",
+    "status": 200,
+    "url": "https://app.optionalpha.com/api/request",
+    "body": "[{\"t\":\"res\",\"tid\":\"1787185347402-10054\",\"api\":\"zdte.testStatus\",\"data\":40}]"
+  },
+  {
+    "t": "2026-08-20T00:22:32.448Z",
+    "dir": ">",
+    "method": "POST",
+    "url": "https://app.optionalpha.com/api/request",
+    "body": "[{\"t\":\"rpc\",\"tid\":\"1787185352404-10055\",\"api\":\"zdte.testStatus\",\"args\":[\"ZT21787185342155405973\",\"SPX\"]}]"
+  },
+  {
+    "t": "2026-08-20T00:22:32.484Z",
+    "dir": "<",
+    "status": 200,
+    "url": "https://app.optionalpha.com/api/request",
+    "body": "[{\"t\":\"res\",\"tid\":\"1787185352404-10055\",\"api\":\"zdte.testStatus\",\"data\":94}]"
+  },
+  {
+    "t": "2026-08-20T00:22:37.441Z",
+    "dir": ">",
+    "method": "POST",
+    "url": "https://app.optionalpha.com/api/request",
+    "body": "[{\"t\":\"rpc\",\"tid\":\"1787185357403-10056\",\"api\":\"zdte.testStatus\",\"args\":[\"ZT21787185342155405973\",\"SPX\"]}]"
+  },
+  {
+    "t": "2026-08-20T00:22:37.482Z",
+    "dir": "<",
+    "status": 200,
+    "url": "https://app.optionalpha.com/api/request",
+    "body": "[{\"t\":\"res\",\"tid\":\"1787185357403-10056\",\"api\":\"zdte.testStatus\",\"data\":\"done\"}]"
+  },
+  {
+    "t": "2026-08-20T00:22:37.504Z",
+    "dir": ">",
+    "method": "POST",
+    "url": "https://app.optionalpha.com/api/request",
+    "body": "[{\"t\":\"rpc\",\"tid\":\"1787185357478-10057\",\"api\":\"zdte.testResults\",\"args\":[{\"id\":\"ZT21787185342155405973\",\"pos\":true}]}]"
+  },
+  {
+    "t": "2026-08-20T00:22:37.631Z",
+    "dir": "<",
+    "status": 200,
+    "url": "https://app.optionalpha.com/api/request",
+    "body": "[{\"t\":\"res\",\"tid\":\"1787185357478-10057\",\"api\":\"zdte.testResults\",\"data\":{\"id\":\"ZT21787185342155405973\",\"status\":\"done\",\"bars\":[{\"msg\":\"The risk for 1 contract $6,310.00 exceeds 10% of allocation (5000)\",\"pnl\":0,\"code\":\"risk\",\"ndate\":20240816},{\"pnl\":565,\"ndate\":20240819},{\"pnl\":1145,\"ndate\":20240820},{\"msg\":\"The risk for 1 contract $6,305.00 exceeds 10% of allocation (5000)\",\"pnl\":1145,\"code\":\"risk\",\"ndate\":20240821},{\"msg\":\"The risk for 1 contract $7,670.00 exceeds 10% of allocation (5000)\",\"pnl\":1145,\"code\":\"risk\",\"ndate\":20240822},{\"msg\":\"The risk for 1 contract $6,870.00 exceeds 10% of allocation (5000)\",\"pnl\":1145,\"code\":\"risk\",\"ndate\":20240823},{\"msg\":\"The risk for 1 contract $5,405.00 exceeds 10% of allocation (5000)\",\"pnl\":1145,\"code\":\"risk\",\"ndate\":20240826},{\"msg\":\"The risk for 1 contract $5,105.00 exceeds 10% of allocation (5000)\",\"pnl\":1145,\"code\":\"risk\",\"ndate\":20240827},{\"msg\":\"The risk for 1 contract $6,775.00 exceeds 10% of allocation (5000)\",\"pnl\":1145,\"code\":\"risk\",\"ndate\":20240828},{\"msg\":\"The risk for 1 contract $7,475.00 exceeds 10% of allocation (5000)\",\"pnl\":1145,\"code\":\"risk\",\"ndate\":20240829},{\"pnl\":1145,\"ndate\":20240830},{\"pnl\":-3285,\"code\":\"poslimit\",\"ndate\":20240903},{\"msg\":\"The risk for 1 contract $7,285.00 exceeds 10% of allocation (5000)\",\"pnl\":-3285,\"code\":\"risk\",\"ndate\":20240904},{\"msg\":\"The risk for 1 contract $9,915.00 exceeds 10% of allocation (5000)\",\"pnl\":-3285,\"code\":\"risk\",\"ndate\":20240905},{\"msg\":\"The risk for 1 contract $7,750.00 exceeds 10% of allocation (5000)\",\"pnl\":-3285,\"code\":\"risk\",\"ndate\":20240906},{\"msg\":\"The risk for 1 contract $7,710.00 exceeds 10% of allocation (5000)\",\"pnl\":-3285,\"code\":\"risk\",\"ndate\":20240909},{\"msg\":\"The risk for 1 contract $8,005.00 exceeds 10% of allocation (5000)\",\"pnl\":-3285,\"code\":\"risk\",\"ndate\":20240910},{\"msg\":\"The risk for 1 contract $8,130.00 exceeds 10% of allocation (5000)\",\"pnl\":-3285,\"code\":\"risk\",\"ndate\":20240911},{\"msg\":\"The risk for 1 contract $8,295.00 exceeds 10% of allocation (5000)\",\"pnl\":-3285,\"code\":\"risk\",\"ndate\":20240912},{\"msg\":\"The risk for 1 contract $6,630.00 exceeds 10% of allocation (5000)\",\"pnl\":-3285,\"code\":\"risk\",\"ndate\":20240913},{\"msg\":\"The risk for 1 contract $6,300.00 exceeds 10% of allocation (5000)\",\"pnl\":-3285,\"code\":\"risk\",\"ndate\":20240916},{\"msg\":\"The risk for 1 contract $8,635.00 exceeds 10% of allocation (5000)\",\"pnl\":-3285,\"code\":\"risk\",\"ndate\":20240917},{\"msg\":\"The risk for 1 contract $10,325.00 exceeds 10% of allocation (5000)\",\"pnl\":-3285,\"code\":\"risk\",\"ndate\":20240918},{\"msg\":\"The risk for 1 contract $8,110.00 exceeds 10% of allocation (5000)\",\"pnl\":-3285,\"code\":\"risk\",\"ndate\":20240919},{\"msg\":\"The risk for 1 contract $5,930.00 exceeds 10% of allocation (5000)\",\"pnl\":-3285,\"code\":\"risk\",\"ndate\":20240920},{\"msg\":\"The risk for 1 contract $5,275.00 exceeds 10% of allocation (5000)\",\"pnl\":-3285,\"code\":\"risk\",\"ndate\":20240923},{\"pnl\":-2570,\"ndate\":20240924},{\"pnl\":-2570,\"ndate\":20240925},{\"msg\":\"The risk for 1 contract $5,450.00 exceeds 10% of allocation (5000)\",\"pnl\":-345,\"code\":\"risk\",\"ndate\":20240926},{\"pnl\":195,\"ndate\":20240927},{\"msg\":\"The risk for 1 contract $6,365.00 exceeds 10% of allocation (5000)\",\"pnl\":195,\"code\":\"risk\",\"ndate\":20240930},{\"msg\":\"The risk for 1 contract $7,685.00 exceeds 10% of allocation (5000)\",\"pnl\":195,\"code\":\"risk\",\"ndate\":20241001},{\"msg\":\"The risk for 1 contract $7,820.00 exceeds 10% of allocation (5000)\",\"pnl\":195,\"code\":\"risk\",\"ndate\":20241002},{\"msg\":\"The risk for 1 contract $9,335.00 exceeds 10% of allocation (5000)\",\"pnl\":195,\"code\":\"risk\",\"ndate\":20241003},{\"msg\":\"The risk for 1 contract $7,530.00 exceeds 10% of allocation (5000)\",\"pnl\":195,\"code\":\"risk\",\"ndate\":20241004},{\"msg\":\"The risk for 1 contract $6,745.00 exceeds 10% of allocation (5000)\",\"pnl\":195,\"code\":\"risk\",\"ndate\":20241007},{\"msg\":\"The risk for 1 contract $6,630.00 exceeds 10% of allocation (5000)\",\"pnl\":195,\"code\":\"risk\",\"ndate\":20241008},{\"msg\":\"The risk for 1 contract $6,440.00 exceeds 10% of allocation ("
+  }
+]

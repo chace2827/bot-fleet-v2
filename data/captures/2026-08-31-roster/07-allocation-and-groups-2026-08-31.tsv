@@ -1,0 +1,55 @@
+# ALLOCATION + BOT GROUP — all 44 bots — 2026-08-31 17:31 ET
+# alloc/AUTOS/EXITS/risk/pos derived from 01-bots-roster-recent-activity-2026-08-31-173107.txt
+#   (sha256 3c9c0ac51f6fd2d02f45f944230a6fc056712bd8d5aa92d44d056d36f8bbb46e), ALLOCATION column.
+# bot_group read separately by applying each /bots Bot Group filter in turn and collecting the
+#   anchor title attributes (a[href^=/bots/bot/] title = full bot name). 7 groups exist:
+#   Archive 17 · Directional-Focus 2 · IC 8 · IC-Focus 3 · Lab 0 · Monitor 9 · OA-Mirror-Focus 4 = 43.
+#   One bot is in NO group (listed as (none) below).
+# Account totals: ALLOCATION $2,145,000 · RISK $18,858 · TOTAL P/L -$87,318
+# READ ONLY — no allocation was changed in this session.
+#
+# bot_name	bot_group	allocation	AUTOS	EXITS	open_risk	open_pos
+1-45pm-Sandwich-Paper-v1	Archive	$10K	OFF	OFF	--	--
+3DTE $140-$350	OA-Mirror-Focus	$5K	ON	ON	$965	1
+60min-ORB-10W-Paper-v1	Monitor	$10K	ON	ON	--	--
+DIR-SPX-CallVIXdrop	Directional-Focus	$10K	ON	ON	--	--
+DIR-SPX-Put-Control	Monitor	$10K	OFF	OFF	--	--
+DIR-SPX-PutVIX22-SL75	Directional-Focus	$10K	ON	ON	--	--
+Friday 14 DTE Broken Wing IB (B-70)	OA-Mirror-Focus	$10K	ON	ON	$1,995	1
+GF-QQQ-IC-Canary	IC	$2.5K	ON	ON	--	--
+GF-QQQ-IC-PT50	IC	$2.5K	ON	ON	--	--
+GF-QQQ-IC-Ride	IC	$2.5K	ON	ON	--	--
+GF-QQQ-IC-Ride-Delta	IC	$2.5K	ON	ON	--	--
+GF-QQQ-IC-SL100	IC	$2.5K	ON	ON	--	--
+GF-QQQ-IC-SL200	IC	$2.5K	ON	ON	--	--
+GF-QQQ-IC-Touch0	IC	$2.5K	ON	ON	--	--
+GF-QQQ-IC-Trail	IC	$2.5K	ON	ON	--	--
+IC-SPX-FastPT25-S2	IC-Focus	$50K	ON	OFF	--	--
+IC-SPX-FastPT25-S2-130PM	IC-Focus	$50K	ON	OFF	--	--
+IC-SPX-FastPT25-S2-130PM-ARCHIVED-2026-08-08	Monitor	$30K	OFF	OFF	--	--
+IC-SPX-FastPT25-S2-ARCHIVED-2026-08-07	IC-Focus	$50K	OFF	OFF	--	--
+IC-SPX-Fortress-Defang	Monitor	$50K	OFF	OFF	--	--
+IC-SPX-Fortress-Unstopped	Monitor	$50K	ON	OFF	--	--
+Nigiri-Paper-v1	OA-Mirror-Focus	$10K	ON	ON	$4,900	1
+Opening Range Breakout 60m	Archive	$10K	OFF	OFF	--	--
+QQQ long call	OA-Mirror-Focus	$30K	OFF	OFF	$10.1K	3
+QQQ-IC-0DTE-Baseline	Archive	$100K	OFF	OFF	--	--
+QQQ-IC-0DTE-Fortress	(none)	$100K	OFF	OFF	--	--
+QQQ-IC-0DTE-Fortress-NoFilter	Archive	$100K	OFF	OFF	--	--
+QQQ-IC-0DTE-Fortress-NoPT50	Monitor	$100K	ON	ON	--	--
+QQQ-IC-0DTE-Fortress-NoPT50-ARCHIVED-2026-08-08	Monitor	$100K	OFF	OFF	--	--
+QQQ-IC-0DTE-Fortress-S2	Archive	$100K	OFF	OFF	--	--
+QQQ-IC-0DTE-HedgeA-S1	Archive	$100K	OFF	OFF	--	--
+QQQ-IC-0DTE-HedgeB-S2	Archive	$100K	OFF	OFF	--	--
+QQQ-IC-0DTE-HedgeC-S3	Archive	$100K	OFF	OFF	--	--
+QQQ-IC-0DTE-HedgeD-Conditional	Archive	$100K	OFF	OFF	--	--
+QQQ-IC-0DTE-HedgeTest	Archive	$100K	OFF	OFF	--	--
+QQQ-IC-0DTE-InverseFilter-HoldToExp	Archive	$100K	OFF	OFF	--	--
+QQQ-IC-0DTE-Range075-PT50	Archive	$100K	OFF	OFF	--	--
+QQQ-IC-0DTE-Range075-PT50-Wide2-1230PM	Archive	$100K	OFF	OFF	--	--
+QQQ-IC-0DTE-Range075-PT50-Wide2-155PM	Archive	$100K	OFF	OFF	--	--
+QQQ-IC-0DTE-Raw-HoldToExp	Archive	$100K	OFF	OFF	--	--
+QQQ-IC-0DTE-VIX25-Range075-PT50	Archive	$100K	OFF	OFF	--	--
+Tasty Condor	Monitor	$10K	OFF	OFF	--	--
+Trendy-Paper-v1	Monitor	$10K	ON	ON	$933	1
+Weekly-IB-SPY-Paper-v1	Archive	$10K	OFF	OFF	--	--

@@ -1,0 +1,255 @@
+# IC-SPX-FastPT25-S2 (11AM) — Automation Log (task F)
+https://app.optionalpha.com/bots/bot/BOTfw5TkkCRF4417860821948715488/log
+captured: Mon Aug 31 2026 17:44:39 GMT-0400 (Eastern Daylight Time)
+bot_id: BOTfw5TkkCRF4417860821948715488
+READ-ONLY.
+
+5:44PM
+IC-SPX-FastPT25-S2
+ACCOUNT
+Paper Trading
+BOT GROUP
+IC-Focus
+AUTOMATIONS
+ON
+OFF
+EXIT OPTIONS
+ON
+OFF
+Dashboard
+Positions
+Log
+Settings
+Errors
+Warnings
+Clear Log
+TIME
+AUTOMATION
+INFO
+Today
+3:55PM
+Scalp-Mon-S2-Cleanup
+2 decisions
+2 conditionals
+1 loop
+3:55PM
+Scalp-Mon-S2-StrikeTouch
+4 decisions
+1 loop
+3:54PM
+Scalp-Mon-S2-Cleanup
+2 decisions
+2 conditionals
+1 loop
+3:54PM
+Scalp-Mon-S2-StrikeTouch
+4 decisions
+1 loop
+3:53PM
+Scalp-Mon-S2-Cleanup
+2 decisions
+2 conditionals
+1 loop
+3:53PM
+Scalp-Mon-S2-StrikeTouch
+4 decisions
+1 loop
+3:52PM
+Scalp-Mon-S2-Cleanup
+2 decisions
+2 conditionals
+1 loop
+3:52PM
+Scalp-Mon-S2-StrikeTouch
+4 decisions
+1 loop
+3:51PM
+Scalp-Mon-S2-Cleanup
+2 decisions
+2 conditionals
+1 loop
+3:51PM
+Scalp-Mon-S2-StrikeTouch
+4 decisions
+1 loop
+3:50PM
+Scalp-Mon-S2-Cleanup
+2 decisions
+2 conditionals
+1 loop
+3:50PM
+Scalp-Mon-S2-StrikeTouch
+4 decisions
+1 loop
+3:49PM
+Scalp-Mon-S2-Cleanup
+2 decisions
+2 conditionals
+1 loop
+3:49PM
+Scalp-Mon-S2-StrikeTouch
+4 decisions
+1 loop
+3:48PM
+Scalp-Mon-S2-Cleanup
+2 decisions
+2 conditionals
+1 loop
+3:48PM
+Scalp-Mon-S2-StrikeTouch
+4 decisions
+1 loop
+3:47PM
+Scalp-Mon-S2-Cleanup
+2 decisions
+2 conditionals
+1 loop
+3:47PM
+Scalp-Mon-S2-StrikeTouch
+4 decisions
+1 loop
+3:46PM
+Scalp-Mon-S2-Cleanup
+2 decisions
+2 conditionals
+1 loop
+3:46PM
+Scalp-Mon-S2-StrikeTouch
+4 decisions
+1 loop
+3:45PM
+Scalp-Mon-S2-Cleanup
+2 decisions
+2 conditionals
+1 loop
+3:45PM
+Scalp-Mon-S2-StrikeTouch
+4 decisions
+1 loop
+3:44PM
+Scalp-Mon-S2-Cleanup
+2 decisions
+2 conditionals
+1 loop
+3:44PM
+Scalp-Mon-S2-StrikeTouch
+4 decisions
+1 loop
+3:43PM
+Scalp-Mon-S2-Cleanup
+2 decisions
+2 conditionals
+1 loop
+3:43PM
+Scalp-Mon-S2-StrikeTouch
+4 decisions
+1 loop
+3:42PM
+Scalp-Mon-S2-Cleanup
+2 decisions
+2 conditionals
+1 loop
+3:42PM
+Scalp-Mon-S2-StrikeTouch
+4 decisions
+1 loop
+3:41PM
+Scalp-Mon-S2-Cleanup
+2 decisions
+2 conditionals
+1 loop
+3:41PM
+Scalp-Mon-S2-StrikeTouch
+4 decisions
+1 loop
+3:40PM
+Scalp-Mon-S2-Cleanup
+2 decisions
+2 conditionals
+1 loop
+3:40PM
+Scalp-Mon-S2-StrikeTouch
+4 decisions
+1 loop
+3:39PM
+Scalp-Mon-S2-Cleanup
+2 decisions
+2 conditionals
+1 loop
+3:39PM
+Scalp-Mon-S2-StrikeTouch
+4 decisions
+1 loop
+3:38PM
+Scalp-Mon-S2-Cleanup
+2 decisions
+2 conditionals
+1 loop
+3:38PM
+Scalp-Mon-S2-StrikeTouch
+4 decisions
+1 loop
+3:37PM
+Scalp-Mon-S2-Cleanup
+2 decisions
+2 conditionals
+1 loop
+3:37PM
+Scalp-Mon-S2-StrikeTouch
+4 decisions
+1 loop
+3:36PM
+Scalp-Mon-S2-Cleanup
+2 decisions
+2 conditionals
+1 loop
+3:36PM
+Scalp-Mon-S2-StrikeTouch
+4 decisions
+1 loop
+3:35PM
+Scalp-Mon-S2-Cleanup
+2 decisions
+2 conditionals
+1 loop
+3:35PM
+Scalp-Mon-S2-StrikeTouch
+4 decisions
+1 loop
+3:34PM
+Scalp-Mon-S2-Cleanup
+2 decisions
+2 conditionals
+1 loop
+3:34PM
+Scalp-Mon-S2-StrikeTouch
+4 decisions
+1 loop
+3:33PM
+Scalp-Mon-S2-Cleanup
+2 decisions
+2 conditionals
+1 loop
+3:33PM
+Scalp-Mon-S2-StrikeTouch
+4 decisions
+1 loop
+3:32PM
+Scalp-Mon-S2-Cleanup
+2 decisions
+2 conditionals
+1 loop
+3:32PM
+Scalp-Mon-S2-StrikeTouch
+4 decisions
+1 loop
+3:31PM
+Scalp-Mon-S2-Cleanup
+2 decisions
+2 conditionals
+1 loop
+3:31PM
+Scalp-Mon-S2-StrikeTouch
+4 decisions
+1 loop
+Load more

@@ -1,5 +1,106 @@
 # State — Bot Fleet v2
 
+## 2026-08-31 — Backfill: 8 missing days ingested, PR-04 discharged, PR-23 mooted (repo lane)
+
+Source: `scripts/daily.sh 2026-08-31` on `data/raw/2026-08-31.csv` (1,596 rows), all 9 stages
+exit 0 with no override flags; receipt in `data/receipts/daily-runs.jsonl`. Repo-only lane —
+nothing here touched OA.
+
+- **The ledger now runs 2026-08-10 → 2026-08-31.** `STATUS.md` headline **$4,557 · 205 legs ·
+  18 bots** (was $4,706 · 71 legs · 15 bots at the 08-19 close). The 08-19 frozen history is
+  unchanged: ledger rows closing ≤ 08-19 still sum to exactly $4,706.
+- **The armed fleet was flat on vacation.** Ex-legacy 08-20..08-31 P/L is **−$149** over 134
+  legs, derived independently from the raw export and matching
+  `_review-2026-08-31-vacation.md` §Headline to the dollar.
+- **All five legacy closes in the window are OUT of the ledger** (Tasty Condor +$418, and QQQ
+  long call −$2,971 / −$3,158 / −$3,164 / −$2,371). They are opened pre-`LEDGER_START` and route
+  to `data/straddlers.csv`. **Zero** ledger rows have `open_date < 2026-08-10`. The −$8,693 of
+  realised legacy loss is not in cumulative P/L and must not be added to it.
+- **⭐ THE READINESS BOARD'S REAL MOVEMENT IS G3, NOT P/L.** Eight bots that read CANDIDATE
+  `●○●●··` on 08-19 now read VALIDATE `●○○●··`: the vacation tail widened every confidence
+  interval back through zero. **Nobody crossed G2.** `IC-SPX-FastPT25-S2-130PM` went n=8 → **16
+  clean condors** (G2 needs 20) while Exp(R) fell +11.6% → **+5.5% [−2.9, +11.6]** — it gained
+  sample and LOST G3. `DIR-SPX-CallVIXdrop` is the fleet's worst line: n=4, **−36.6%
+  [−53.6, −5.2]**, CI entirely below zero.
+- **PR-04 IS DISCHARGED and the unsigned banner now reads three bots** — QQQ long call ·
+  QQQ-IC-0DTE-Fortress · Tasty Condor. `QQQ-IC-0DTE-Fortress-NoPT50` dropped off it. First
+  trading day was **2026-08-26**, not the 2026-08-10 the entry deferred to. The banner parser
+  was not touched.
+- **PR-23 is MOOTED AND ARCHIVED, not killed.** Its kill criterion was never reached; the
+  hypothesis lost its comparator when `R-2026-08-17-GF-ENTRY-METHOD` moved the whole greenfield
+  family to delta selection. Pre-fix sample **EXCLUDED**, not discounted.
+  `data/bots_meta.csv` status `ON → OFF`. ⚠️ Ride-Delta's **EXIT OPTIONS are still ON** in OA —
+  inert while it holds nothing, still Andy's call.
+- **`3DTE $140-$350` has a sizing epoch at 2026-08-31**, recorded in `bots_meta.csv`: allocation
+  $5K→$10K, but POSITION SIZE is 26% of net liquid, so per-position dollar size doubles from
+  this date. **Do not pool raw P/L across that boundary. R is unaffected.**
+- **Known blind spots, reported not patched.** `daily_brief.py` ran CONFIG-BLIND —
+  `data/bots_config_v2.csv` carries none of the graded mechanic columns — so 0 ON bots were
+  graded and `lessons.py` wrote 0 rows; `execution_audit` reports 22 NOT-EVALUATED checks for
+  the same reason. `should_have_fired` and the decidability countdowns assume daily cadence and
+  read oddly across an 8-day gap. None of these is a pass.
+- **`scripts/close_manifest.py` exists** as of close-wave D3 (PR #67, head `cf12009`). It was
+  not run this session; the staging manifest was hand-written. Next close should use the tool.
+
+
+## 2026-08-31 — OA return sweep: roster clean, F-7 falsified, Ride-Delta root cause found
+
+Source: `data/captures/2026-08-31-roster/` (READ-ONLY OA session; `SHA256SUMS.txt` verifies).
+Supersedes the 2026-08-31 vacation review's findings F-7 and F-6 where they conflict.
+
+- **The roster is 44 bots and it reconciles.** `/bots` footer verbatim: `44 active bots • 6 left
+  in your plan • Upgrade`. Set-diff run this session: **OA roster 44 vs `data/bots_meta.csv` 44,
+  zero names on either side.** **TOGGLE DRIFT vs 2026-08-19: ZERO** over 8 trading days
+  (AUTOS 19/44, EXITS 16/44, membership byte-identical).
+- **F-7 is FALSIFIED.** `Friday 14 DTE Broken Wing IB (B-70)`
+  (`BOTfw5TkkCRF1017766446781407596`) was already in the 08-19 capture bundle, is already in
+  `data/bots_meta.csv` line 24 (`pillar OA-Mirror`), places cleanly on `roster.py`'s
+  `Live mirrors` rule, and is already in OA's `OA-Mirror-Focus` group. **The 8-day backfill is
+  not blocked by it.** It is still live and holding an open SPX iron butterfly opened 08-28.
+- **PR-04's owed first-trading-day capture NOW EXISTS** —
+  `data/captures/2026-08-31-roster/04-pr04-discharge-trades-2026-08-31.txt`
+  (`ea520796b5e6019d…`): time-exit row present, no PT row, backstop negative, on both legs.
+  The ledger discharge edit itself is still owed and still gated on Andy.
+  **[CORRECTED 2026-08-31 — APPLIED. The discharge edit landed the same evening in the repo lane;
+  see the backfill section at the top of this file. Original text left standing.]**
+- **Ride-Delta's double-fire is four scanners, not a scanner bug.** Two shared-library scanners
+  plus two functionally identical bot-local copies, all on; both put scanners opened a position
+  in the same 1:39PM tick on 08-31. Safeguards cap the bot at 2 positions/day, so a double-fire
+  also **blocks the opposite side** — the arm is not a doubled condor, it is a one-sided trade.
+  Fix proposed, NOT APPLIED, gated on Andy; after the fix the arm is identical to GF-QQQ-IC-Ride.
+- **F-6 restated.** `IC-SPX-FastPT25-S2` has ZERO config delta since 2026-08-07 (4 of 4
+  automation hashes byte-identical to the `bots_config_v2.csv` baseline). `Scalp-Mon-S2-Cleanup`
+  closes only when the bot holds **exactly 1** open position, so it scratches unpaired legs at
+  +2 minutes and leaves real condors alone. The defect is the CALL SIDE not filling
+  (3 of 14 bot-days two-sided), not the exit.
+- **Allocation, read live from OA:** every family is already internally equal — GF arms all
+  $2.5K, FastPT25 live pair both $50K, **DIR trio all $10K** (the review's "$50k CallVIXdrop"
+  does not hold), Fortress arms all $100K. The **only** within-family gap is the mirror family:
+  eight at $10K, `3DTE $140-$350` at $5K, `QQQ long call` at $30K. Also: `QQQ-IC-0DTE-Fortress`
+  belongs to no bot group.
+- **Legacy exposure (F-8) is 3 positions, one bot, $10,065 at risk, -$8,691 unrealised** — all
+  `QQQ long call`, opened Jun 15 / Jun 22 / Jun 29 2026, none in the post-cutover ledger.
+
+### Same session, later — four authorized edits APPLIED (Andy, in-chat)
+Record: `data/captures/2026-08-31-roster/10-authorized-edits-2026-08-31.md`. Every bot touched
+was Paper Trading. Fleet control (capture 01 pre vs capture 13 post): exactly three bots
+differ, nothing else moved. AUTOS ON **19/44 -> 18/44**; EXITS ON 16/44 unchanged.
+
+- **GF-QQQ-IC-Ride-Delta is ARCHIVED.** Both bot-local scanners toggled off (not deleted) and
+  bot AUTOMATIONS OFF. All five automation config hashes byte-identical before/after — the
+  shared GF library was not touched, so no other GF arm changed. EXIT OPTIONS left ON.
+- **The fleet's legacy open exposure is now ZERO.** All three `QQQ long call` legacy positions
+  closed 2026-08-31, filled immediately in the paper account: **-$3,158 / -$3,164 / -$2,371 =
+  -$8,693 realised** on $10,065 at risk. All opened before LEDGER_START, so **none is
+  ledger-eligible — this figure must not enter post-cutover cumulative P/L.** F-8 is closed.
+- **`3DTE $140-$350` allocation is $10,000** (was $5,000). ⚠️ This bot's POSITION SIZE input is
+  "26% of net liquid", so the change doubles its future per-trade dollar size — equalizing
+  allocation did NOT equalize risk here. Open question for Andy: which did the mirror ruling
+  mean? Mirror family now: eight at $10K, 3DTE $10K, `QQQ long call` $30K (left as-is).
+- **`QQQ-IC-0DTE-Fortress` is in the Monitor group**; toggles untouched (OFF/OFF). Group
+  membership is now 44 of 44 — the "no group" fact above is superseded.
+
+
 ## 2026-08-19 — P1-1A roster facts applied
 
 - `R-2026-08-18-P1-1A-ROSTER-FACTS` ratified; `docs/pre-registration-ledger.md` now has seven

@@ -1,0 +1,80 @@
+# ROSTER + TOGGLE STATE — all 44 active bots, with bot IDs — 2026-08-31
+# DERIVED FILE. Source of every field below: 01-bots-roster-recent-activity-2026-08-31-173107.txt
+#   (sha256 3c9c0ac51f6fd2d02f45f944230a6fc056712bd8d5aa92d44d056d36f8bbb46e), the /bots OA Grab capture taken
+#   Mon Aug 31 2026 17:31:07 GMT-0400 (page clock 5:31PM) in-session via Claude in Chrome,
+#   scripts/oa-driver/oa_grab_page.js (bookmarklet v2.1 transcription, read-only).
+#   Nothing here is typed from memory and nothing is read from data/bots_meta.csv.
+#
+# METHOD (identical to data/captures/2026-08-19-roster/02-roster-toggles-44-2026-08-19.tsv):
+#   AUTOS / EXITS are the `title` ATTRIBUTE of the two <i class="... sticon"> elements in each
+#   /bots row (S0b-3 fix v2.1, ancestor-climb 2026-08-09):
+#       AUTOS : "Scheduled automations are on|off"
+#       EXITS : "Exit Options for positions managed by this bot are on|off"
+#   The capture emits those 44 (bot_id, autos_title, exits_title) triples in /bots row order but
+#   WITHOUT the bot name. Names are the 44 row names of the same capture's list table, in the
+#   same order (19-line stride: 1 name + 18 values).
+#
+# JOIN PROOF — the pairing is NOT trusted to row order alone:
+#   ALL 44 of the (name, bot_id) pairs produced by the positional join are IDENTICAL to the
+#   independently captured pairs in 2026-08-19-roster/02-roster-toggles-44-2026-08-19.tsv
+#   (sha256 b4738278e6e2dde2d20d902c4e4b5ac59e7f5c36aaaa05ce92798c19babb6b9b).
+#   Zero mismatches, zero new names, zero dropped names.
+#
+# FOOTER, verbatim: "44 active bots • 6 left in your plan • Upgrade"
+# Account header (capture text): TOTAL P/L -$87,318 · RISK $18,858 · ALLOCATION $2,145,000
+#   (2026-08-19 read: -$85,950 · $21,940 · $2,145,000)
+#
+# VERDICT
+#   AUTOS ON        : 19 of 44
+#   EXIT OPTIONS ON : 16 of 44
+#   DRIFT vs 2026-08-19: ZERO. Not one bot changed either toggle in eight trading days
+#     (12 calendar days). The 19/16 membership is byte-identical to the 08-19 capture.
+#   BOT COUNT: 44, NOT 45. "Friday 14 DTE Broken Wing IB (B-70)"
+#     (BOTfw5TkkCRF1017766446781407596) was ALREADY present in the 08-19 bundle — the
+#     dispatch's "expect 45, B-70 is the +1" premise is falsified by both captures.
+#
+# bot_name	bot_id	AUTOS	EXITS
+1-45pm-Sandwich-Paper-v1	BOTfw5TkkCRF3317782764426812572	OFF	OFF
+3DTE $140-$350	BOTfw5TkkCRF2217765235512870291	ON	ON
+60min-ORB-10W-Paper-v1	BOTfw5TkkCRF3317782759988647731	ON	ON
+DIR-SPX-CallVIXdrop	BOTfw5TkkCRF217824370390678863	ON	ON
+DIR-SPX-Put-Control	BOTfw5TkkCRF217824312740732922	OFF	OFF
+DIR-SPX-PutVIX22-SL75	BOTfw5TkkCRF217824306963282811	ON	ON
+Friday 14 DTE Broken Wing IB (B-70)	BOTfw5TkkCRF1017766446781407596	ON	ON
+GF-QQQ-IC-Canary	BOTfw5TkkCRF4417860774419022836	ON	ON
+GF-QQQ-IC-PT50	BOTfw5TkkCRF4417860738688735152	ON	ON
+GF-QQQ-IC-Ride	BOTfw5TkkCRF4417860701930934951	ON	ON
+GF-QQQ-IC-Ride-Delta	BOTfw5TkkCRF1317864858068078811	ON	ON
+GF-QQQ-IC-SL100	BOTfw5TkkCRF4417860767788927225	ON	ON
+GF-QQQ-IC-SL200	BOTfw5TkkCRF4417860785000861357	ON	ON
+GF-QQQ-IC-Touch0	BOTfw5TkkCRF4417860760818962144	ON	ON
+GF-QQQ-IC-Trail	BOTfw5TkkCRF4417860754672239833	ON	ON
+IC-SPX-FastPT25-S2	BOTfw5TkkCRF4417860821948715488	ON	OFF
+IC-SPX-FastPT25-S2-130PM	BOTfw5TkkCRF3017861977616287731	ON	OFF
+IC-SPX-FastPT25-S2-130PM-ARCHIVED-2026-08-08	BOTfw5TkkCRF3717814485128334371	OFF	OFF
+IC-SPX-FastPT25-S2-ARCHIVED-2026-08-07	BOTfw5TkkCRF1217757048550308561	OFF	OFF
+IC-SPX-Fortress-Defang	BOTfw5TkkCRF3317787969081429752	OFF	OFF
+IC-SPX-Fortress-Unstopped	BOTfw5TkkCRF3317787955825912621	ON	OFF
+Nigiri-Paper-v1	BOTfw5TkkCRF1017766118057607741	ON	ON
+Opening Range Breakout 60m	BOTfw5TkkCRF1017766137341516344	OFF	OFF
+QQQ long call	BOTfw5TkkCRF1017766424258604555	OFF	OFF
+QQQ-IC-0DTE-Baseline	BOTfw5TkkCRF3317727290514286611	OFF	OFF
+QQQ-IC-0DTE-Fortress	BOTfw5TkkCRF2717857919585029021	OFF	OFF
+QQQ-IC-0DTE-Fortress-NoFilter	BOTfw5TkkCRF4517755108623629541	OFF	OFF
+QQQ-IC-0DTE-Fortress-NoPT50	BOTfw5TkkCRF3017862038322323202	ON	ON
+QQQ-IC-0DTE-Fortress-NoPT50-ARCHIVED-2026-08-08	BOTfw5TkkCRF2617743681996538301	OFF	OFF
+QQQ-IC-0DTE-Fortress-S2	BOTfw5TkkCRF3217755946065115241	OFF	OFF
+QQQ-IC-0DTE-HedgeA-S1	BOTfw5TkkCRF2717738719192568831	OFF	OFF
+QQQ-IC-0DTE-HedgeB-S2	BOTfw5TkkCRF2717738721388027602	OFF	OFF
+QQQ-IC-0DTE-HedgeC-S3	BOTfw5TkkCRF2717738721535026943	OFF	OFF
+QQQ-IC-0DTE-HedgeD-Conditional	BOTfw5TkkCRF2717738721652044244	OFF	OFF
+QQQ-IC-0DTE-HedgeTest	BOTfw5TkkCRF817734404268067862	OFF	OFF
+QQQ-IC-0DTE-InverseFilter-HoldToExp	BOTfw5TkkCRF4517755118383321712	OFF	OFF
+QQQ-IC-0DTE-Range075-PT50	BOTfw5TkkCRF2717738722042782917	OFF	OFF
+QQQ-IC-0DTE-Range075-PT50-Wide2-1230PM	BOTfw5TkkCRF2617743684426809593	OFF	OFF
+QQQ-IC-0DTE-Range075-PT50-Wide2-155PM	BOTfw5TkkCRF2717738721925710956	OFF	OFF
+QQQ-IC-0DTE-Raw-HoldToExp	BOTfw5TkkCRF2617743683072748392	OFF	OFF
+QQQ-IC-0DTE-VIX25-Range075-PT50	BOTfw5TkkCRF2717738721783221645	OFF	OFF
+Tasty Condor	BOTfw5TkkCRF1017766126336204213	OFF	OFF
+Trendy-Paper-v1	BOTfw5TkkCRF1017766118431160782	ON	ON
+Weekly-IB-SPY-Paper-v1	BOTfw5TkkCRF3317782770973508333	OFF	OFF

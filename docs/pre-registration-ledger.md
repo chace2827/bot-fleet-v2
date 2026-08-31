@@ -382,7 +382,7 @@ SIGNED           2026-08-09 - ANDY - gate cleared at S2b, in-chat. Runbook Step 
                  agree at $100,000.
                  SIGNED != VERIFIED. Step 6 (the Trades list carries a TIME-EXIT row and NO PT
                  row, plus BACKSTOP_CAUGHT_IT NEGATIVE) is DEFERRED to 2026-08-10.
-                 FIRST-TRADING-DAY CAPTURE OWED 2026-08-10.
+                 FIRST-TRADING-DAY CAPTURE — OWED 2026-08-10, DISCHARGED 2026-08-31 (see amendment below).
                  CONFIG NOTE: limits read 2/2 at signing - ALREADY the value Andy ruled for this
                  bot in-chat at S2b ("2 per day / 2 at once", condor-aware). NO EDIT WAS MADE,
                  so nothing forked and there is nothing to revert. Allocation $100,000 untouched.
@@ -398,6 +398,22 @@ SIGNED           2026-08-09 - ANDY - gate cleared at S2b, in-chat. Runbook Step 
                  inherited 15:50 exit cannot fire and the 15:52 backstop becomes the closing
                  mechanism by construction. THIS SIGNATURE DOES NOT AUTHORIZE SWITCH-ON. The bot
                  stays OFF until that finding is ruled. See the S2b session-log entry.
+                 RIDER DISCHARGED 2026-08-31 (Andy-authorized, 2026-08-31). FIRST TRADING DAY = 2026-08-26,
+                 not 2026-08-10: the bot's first fill is the condor opened 2026-08-26 1:31PM. Capture
+                 data/captures/2026-08-31-roster/04-pr04-discharge-trades-2026-08-31.txt sha256
+                 ea520796b5e6019d7ee681ee234c199aa6b2f71f4c62529112bba5ceeda51daf. Step 6, 3/3:
+                   (1) TIME-EXIT ROW PRESENT — both legs `Close 26 contracts - Aug 26, 2026 3:50PM`,
+                       `Exit Trigger: Expires in 10 minutes`.
+                   (2) NO PT ROW — Exit Options read PROFIT %, PROFIT $, STOP LOSS %, STOP LOSS $ all
+                       `None` on both sides; only EXPIRATION `10 minutes` is set. The A/B is intact:
+                       no removed exit fired, so the PR-04 KILL CRITERION's REMOVED_EXIT_FIRED branch
+                       is NOT triggered.
+                   (3) BACKSTOP_CAUGHT_IT NEGATIVE — the close fired at 15:50 (the inherited time exit),
+                       not at the 15:52 flat-close backstop.
+                 This also discharges finding S2b-R3 as a matter of fact: EXIT OPTIONS read ON at capture
+                 and the 15:50 exit DID fire, so the backstop did not become the closing mechanism.
+                 Precedent: R-2026-08-18 SUBSTITUTE-VERIFY (5a). Position P/L for the record (evidence,
+                 not a reporting surface — numbers live in the ledger): put +$104, call -$442, net -$338.
 ```
 > The name is accurate under this spec — `build-plan.md` §2B resolved the earlier
 > name-vs-spec conflict in favour of keeping the name and removing the PT.
@@ -1778,6 +1794,42 @@ SIGNED           2026-08-17 · ANDY — in-session, verbatim "Sign now", under
                  the 2026-08-17 edit; nothing before it counts. Review at 10 sessions.
                  ⚠️ LAYER 2 IS OUTSTANDING — the first new position's Trades list must confirm the
                  strikes are delta-selected, not 0.40%-selected. Signature stands on Layer 1.
+                 ⛔ MOOTED AND ARCHIVED 2026-08-31 (Andy-authorized, 2026-08-31). Original text above
+                 left standing; nothing here re-reads the sample, it withdraws the question.
+                   HYPOTHESIS MOOTED by `R-2026-08-17-GF-ENTRY-METHOD`. That ruling moved the WHOLE
+                   greenfield family to delta-based short-strike selection, which removed the
+                   fixed-percent comparator this entry was built to pair against. Post-2026-08-17 the
+                   bot is config-identical to `GF-QQQ-IC-Ride`, so the PRIMARY READ (entry frequency
+                   and realised OTM%, delta vs fixed percent) has no contrast left to measure.
+                   PRE-FIX SAMPLE EXCLUDED, not discounted. Root cause, first-hand 2026-08-31: FOUR
+                   scanners were enabled on this bot — the shared GF pair plus a bot-local Ride-Delta
+                   pair, functionally identical after the 08-17 family-wide delta change. Same-tick
+                   races double-fired one side, and the 2-positions/day safeguard then BLOCKED the
+                   other, so those days are ONE-SIDED TRADES, not condors — a different strategy, not
+                   a noisy version of this one. Evidence: data/captures/2026-08-31-roster/
+                   05-ride-delta-log-2026-08-31.txt sha256
+                   f0f97dae10d280ba78c8b935d576265e4c68b601d9637e67e3340d28c9ee733f and
+                   06-ride-delta-scanner-diff-2026-08-31.md sha256
+                   abc4857359b4d33410e69aa8c7d98ec4faee45c9f27ca131d8a77184eeb26065.
+                   BOT ARCHIVED 2026-08-31 — bot-local scanners `Ride-Delta-Scan-Put` and
+                   `Ride-Delta-Scan-Call` set OFF, and bot-level AUTOMATIONS ON -> OFF
+                   (`a5.bots.bot.scanning === false`), re-read after a hard reload. All 5 automation
+                   config hashes byte-identical before and after, so enabled state changed and
+                   configuration did not; the shared ScannerA/ScannerB library was untouched, so no
+                   other GF arm moved. Neither bot-local scanner was deleted; both are re-openable.
+                   EXIT OPTIONS left ON (`disableExits === 0`) — the archive instruction named
+                   automations only and the bot holds no open positions, so exits are inert.
+                   ⚠️ FLAGGED FOR ANDY, NOT DECIDED HERE.
+                   Evidence: data/captures/2026-08-31-roster/12-ride-delta-postedit-2026-08-31.txt
+                   sha256 bfcbb5f15646598535846784af7e061c1ba52d96a95769350c44944313887810; edit
+                   record 10-authorized-edits-2026-08-31.md sha256
+                   827ba19e235d4d0201c12aae2c6aa404f1afacc913d929b8ba33f4809e3742c7 (its Edit 1
+                   discloses one `Inspected target navigated or closed` return on the bot-level
+                   toggle; per the runbook the action was NOT re-fired and the state was re-read
+                   instead, and the fleet-wide pre/post roster diff independently shows a single
+                   change on this bot).
+                   NOT KILLED ON P/L. The KILL CRITERION above is untouched and was never reached —
+                   this entry ends because its question was withdrawn, not because the bot lost.
 ```
 
 > **Andy authorised the build and the switch-on verbally, 2026-08-11** ("i give permission to

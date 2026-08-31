@@ -1,0 +1,43 @@
+{
+  "date": "2026-08-31",
+  "generated": "2026-08-31T00:00:00",
+  "stages": [
+    {
+      "name": "build_ledger",
+      "exit_code": 0
+    },
+    {
+      "name": "tape",
+      "exit_code": 0
+    },
+    {
+      "name": "execution_audit",
+      "exit_code": 0
+    },
+    {
+      "name": "daily_brief",
+      "exit_code": 0
+    },
+    {
+      "name": "should_have_fired",
+      "exit_code": 0
+    },
+    {
+      "name": "hedge_tournament",
+      "exit_code": 0
+    },
+    {
+      "name": "trade_window",
+      "exit_code": 0
+    },
+    {
+      "name": "lessons",
+      "exit_code": 0
+    },
+    {
+      "name": "report",
+      "exit_code": 0
+    }
+  ],
+  "final_exit_code": 0
+}

@@ -1,0 +1,249 @@
+# QQQ long call — positions AFTER the 3 legacy closes (edit 2)
+https://app.optionalpha.com/bots/bot/BOTfw5TkkCRF1017766424258604555/positions
+captured: Mon Aug 31 2026 18:10:40 GMT-0400 (Eastern Daylight Time)
+bot_id: BOTfw5TkkCRF1017766424258604555
+ACCOUNT: Paper Trading
+
+6:10PM
+QQQ long call
+ACCOUNT
+Paper Trading
+BOT GROUP
+OA-Mirror-Focus
+AUTOMATIONS
+ON
+OFF
+EXIT OPTIONS
+ON
+OFF
+Dashboard
+Positions
+Log
+Settings
+Open Positions
+Show tags
+New Position
+DESCRIPTION
+LEGS
+LAST
+DTE
+QTY
+P/L
+ROR
+NET LIQ
+PREMIUM
+RISK
+DIT
+No open positions
+Show tags
+Analyze Results
+DESCRIPTION
+LEGS
+EXP
+STATUS
+QTY
+TRADE PRICE
+CLOSE PRICE
+P/L
+ROR
+PREMIUM
+RISK
+DIT
+PRICE AT OPEN
+PRICE AT CLOSE
+TODAY
+QQQ
+Long Call Spread
+839
+C
+727
+C
+Sep 30
+Closed
+Aug 31
+1
+32.78
+9.07
+-$2,371
+-72.3%
+-$3,278
+$3,278
+63d
+719.83
+716.76
+QQQ
+Long Call Spread
+870
+C
+745
+C
+Sep 30
+Closed
+Aug 31
+1
+34.88
+3.24
+-$3,164
+-90.7%
+-$3,488
+$3,488
+70d
+737.60
+716.76
+QQQ
+Long Call Spread
+865
+C
+745
+C
+Sep 18
+Closed
+Aug 31
+1
+32.99
+1.41
+-$3,158
+-95.7%
+-$3,299
+$3,299
+77d
+739.71
+716.76
+QQQ
+Long Call Spread
+850
+C
+743
+C
+Aug 31
+Expired
+Aug 31
+1
+29.71
+--
+-$2,971
+-100.0%
+-$2,971
+$2,971
+91d
+737.64
+716.77
+JUN 22
+QQQ
+Long Call Spread
+840
+C
+725
+C
+Sep 18
+Closed
+Jun 22
+1
+33.07
+44.10
+$1,103
+33.4%
+-$3,307
+$3,307
+14d
+717.37
+741.40
+JUN 1
+QQQ
+Long Call Spread
+825
+C
+720
+C
+Aug 21
+Closed
+Jun 1
+1
+29.25
+41.84
+$1,259
+43.0%
+-$2,925
+$2,925
+21d
+712.60
+741.55
+QQQ
+Long Call Spread
+820
+C
+715
+C
+Aug 21
+Closed
+Jun 1
+1
+28.97
+43.28
+$1,431
+49.4%
+-$2,897
+$2,897
+14d
+707.36
+739.47
+MAY 6
+QQQ
+Long Call Spread
+775
+C
+680
+C
+Aug 21
+Closed
+May 6
+1
+28.76
+36.09
+$733
+25.5%
+-$2,876
+$2,876
+2d
+674.65
+689.09
+MAY 5
+QQQ
+Long Call Spread
+755
+C
+667
+C
+Jul 31
+Closed
+May 5
+1
+26.53
+33.84
+$731
+27.6%
+-$2,653
+$2,653
+8d
+662.17
+678.31
+APR 24
+QQQ
+Long Call Spread
+750
+C
+655
+C
+Aug 21
+Closed
+Apr 24
+1
+28.16
+35.26
+$710
+25.2%
+-$2,816
+$2,816
+4d
+646.79
+660.36

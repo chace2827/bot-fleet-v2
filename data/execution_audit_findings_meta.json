@@ -4,12 +4,12 @@
   "detector_sha256_16": "fdc43d0dcb727556",
   "mode": "REDUCED",
   "window_start": "2026-08-10",
-  "window_end": "2026-08-19",
-  "n_position_rows": 71,
+  "window_end": "2026-08-31",
+  "n_position_rows": 205,
   "counts": {
-    "AMBER": 4,
-    "INFO": 2,
-    "SKIPPED": 20
+    "AMBER": 14,
+    "INFO": 20,
+    "SKIPPED": 22
   },
   "contract": "findings are evidence with an address, never a verdict; every RED names the artifact that closes it"
 }

@@ -37,3 +37,13 @@ venv/
 # Logs (raw; session-log.md is intentionally tracked)
 *.log
 .claude/
+
+# Node (scripts/oa-driver — playwright-core is installed locally, never committed)
+node_modules/
+package-lock.json
+
+# Playwright traces (evidence artifacts; large, regenerable, kept out of git)
+data/receipts/traces/
+
+# Lock-file quarantine (stranded .git lock artifacts; never committed)
+_locktrash/

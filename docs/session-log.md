@@ -10306,3 +10306,307 @@ rulings registered in `docs/RULINGS.md` in the standard yaml-block format. Wave 
 (rulings signed) and condition 2 (master pushed) are now both satisfied. **Ready to commit:**
 `docs/RULINGS.md` + this addendum. Andy may overturn the Option-1 call at commit review before
 dispatching the wave.
+
+**Addendum 2 (2026-08-21):** At Andy's request, the D3 card in the dispatch pack gained a GAP
+STATEMENT requirement — close.sh derives the previous close from the last receipt's `day` field
+and states any unobserved trading days on stdout and in the manifest (empty receipts = NOT
+EVALUABLE, never "no gap") — plus acceptance clause (e), all fixture-derived. Pack sha now
+`63ccb16e…`. Context: the 08-20 close was skipped; established that a missed day costs per-day
+analysis artifacts and the toggle observation, never ledger data (full-range rebuild).
+
+---
+
+## 2026-08-31 — OA return sweep (Cowork/Chrome lane, dispatch tasks A–F). READ-ONLY.
+
+Executed `_dispatch-2026-08-31-1-oa-session-cowork.md` end to end. **No OA edit, no toggle, no
+save, no allocation change.** Bundle: `data/captures/2026-08-31-roster/` (10 files + `SHA256SUMS.txt`,
+`shasum -c` OK on all 10). Roster capture instrument: `scripts/oa-driver/oa_grab_page.js` run in
+page context; its sha256 was computed **in the browser before transfer** (`3c9c0ac5…`) and matches
+the on-disk file, so the capture is byte-exact, not a re-typed transcription.
+
+**A · Roster/toggle capture #3 — `roster-toggles-44` third bundle.**
+`01-…-173107.txt` `3c9c0ac51f6fd2d0…`, derived `02-roster-toggles-44-2026-08-31.tsv`
+`405db6f4fcf52e9d…`. **Bot count 44, NOT 45** — footer verbatim `44 active bots • 6 left in your
+plan • Upgrade`. **TOGGLE DRIFT vs 2026-08-19: ZERO** across 8 trading days; AUTOS 19/44,
+EXITS 16/44, membership byte-identical. Join proof: all 44 (name, bot_id) pairs identical to the
+08-19 file; independently corroborated this session by the `/bots` anchor `title` attribute, which
+carries the full bot name on the same element as the bot id — a direct join, no row-order trust.
+Account header: TOTAL P/L -$87,318 · RISK $18,858 · ALLOCATION $2,145,000 (08-19: -$85,950 ·
+$21,940 · $2,145,000).
+
+**F-7 IS FALSIFIED — twice.** (1) "Friday 14 DTE Broken Wing IB (B-70)"
+(`BOTfw5TkkCRF1017766446781407596`) was **already in the 08-19 bundle**; the dispatch's "expect 45,
+B-70 is the +1" premise is wrong on both captures. (2) It is **already in `data/bots_meta.csv`
+line 24** (`pillar OA-Mirror, role mirror-watch, status ON, multi-day`) and `roster.py`
+`FAMILY_RULES` has a `Live mirrors` rule keyed on `pillar == "OA-Mirror"`, so it places cleanly —
+no FATAL. Set-diff run this session: **OA roster 44 vs `bots_meta.csv` 44, zero on either side.**
+It is also already in the OA `OA-Mirror-Focus` bot group. **The backfill is not blocked by F-7.**
+
+**B · PR-04 discharge capture — ALL THREE CHECKS PASS.**
+`04-pr04-discharge-trades-2026-08-31.txt` `ea520796b5e6019d…`. QQQ-IC-0DTE-Fortress-NoPT50, both
+08-26 positions, Position Details **Trades list** (the Exit Options panel is not the evidence):
+  put side  Open 26 contracts Aug 26 1:31PM @0.10 → Close 26 contracts Aug 26 **3:50PM**,
+            `Exit Trigger: Expires in 10 minutes`, @0.06. +$104.
+  call side Open 26 contracts Aug 26 1:31PM @0.10 → Close 26 contracts Aug 26 **3:50PM**,
+            `Exit Trigger: Expires in 10 minutes`, @0.27. -$442.
+  (1) time-exit row PRESENT on both legs. (2) NO PT row on either leg; Exit Options reads
+  PROFIT % None / PROFIT $ None / STOP LOSS % None / STOP LOSS $ None, EXPIRATION 10 minutes.
+  (3) **BACKSTOP_CAUGHT_IT NEGATIVE** — the closes are the 10-minute expiration trigger at 15:50,
+  not the 15:52 backstop. Precedent R-2026-08-18 SUBSTITUTE-VERIFY (5a).
+Ledger NOT edited — the discharge edit belongs to the repo lane with Andy's authorization, citing
+this capture and its sha.
+
+**C · Ride-Delta double-fire — ROOT CAUSE ESTABLISHED.** `06-ride-delta-scanner-diff-2026-08-31.md`
+`abc4857359b4d334…`, log `05-…` `f0f97dae10d280ba…`.
+GF-QQQ-IC-Ride-Delta carries **FOUR** scanners, all on: the two shared-library
+`GF-ScannerA-PutSpread` / `GF-ScannerB-CallSpread` **plus** bot-local `Ride-Delta-Scan-Put` /
+`Ride-Delta-Scan-Call`. The control GF-QQQ-IC-Ride carries the two shared ones only.
+Hashes (fresh open, hard reload between each, `a5.bots.acedit.routine`, never a DOM read):
+  `GF-ScannerA-PutSpread   1e5eb9936a1adf067af65a4841d42e755592f7c179f3c0cad477502dfdbfcdc8`
+  `GF-ScannerB-CallSpread  a925d490b8a0d2337566f47307fc52470da129935d3bd83d24389c6dc433dfb5`
+  `Ride-Delta-Scan-Put     a8643224fa99a7f79286aa81ce487cd64cace272442c2c55f9ccb7d5d9f3db86`
+  `Ride-Delta-Scan-Call    4f7251025257d95d1ee49de48b115a5b6a50cb98bd77434e937a60d141cee967`
+The two shared hashes are byte-identical to the `ScannerA v12` / `ScannerB v4` values stamped in
+GF-QQQ-IC-Ride's own bot Notes under `R-2026-08-17-GF-ENTRY-METHOD` — the library pair is
+unmodified and at the ruled delta-0.10 config. The bot-local pair is **functionally identical** to
+it: same gate chain (after 1:30pm / before 2:00pm / symbol change % > -0.75 / < 0.75 /
+`Bot opened a position with <put|call> side today`) and same action (1 contract, exactly 0 days,
+$2.00 leg gap, ±.10 delta). Only node ids differ, plus a vestigial unused `GF_EXITS_PUT` input on
+`Ride-Delta-Scan-Call`.
+Behavioural proof, bot Log 2026-08-31: at **1:39PM** `Ride-Delta-Scan-Put` = 1 open position AND
+`GF-ScannerA-PutSpread` = 1 open position; both call scanners filtered. The two resulting positions
+are both QQQ 712/710 short put spreads opened `Aug 31, 2026 1:39PM`, price at open 714.42 / 714.43,
+both tagged `put side`.
+MECHANISM: the `postagtoday` gate is evaluated by both put scanners inside the same 1-minute scan
+tick, before either position exists. It prevents a second fire by the SAME automation on a LATER
+tick; it cannot arbitrate between two automations in the same tick.
+**NEW, not in F-3:** safeguards are DAILY POSITIONS 2/day and POSITION LIMIT 2 at once, so two
+same-side fires consume the entire daily budget and **block the opposite side for the rest of the
+day**. 08-31 closed two put spreads and no call side. The double-fire does not merely double the
+winners — on double-fire days it destroys the condor and leaves a one-sided position. The pre-fix
+sample is therefore not a contaminated version of the intended strategy; it is a different
+strategy, and the case for excluding it is stronger than for discounting it.
+Proposed minimal fix (**NOT APPLIED — Andy did not authorize an edit in-session**): turn OFF, do
+not delete, `Ride-Delta-Scan-Put` and `Ride-Delta-Scan-Call` on this bot only — zero blast radius
+to the other GF arms, forensics preserved, hashes above are the before-state. **Decision Andy must
+make first:** after that fix Ride-Delta is configurationally IDENTICAL to GF-QQQ-IC-Ride. It is not
+a delta arm; it is a duplicate control. Fixing it yields a second copy of PR-14, not an experiment.
+
+**D · Allocation read — every bot.** `07-allocation-and-groups-2026-08-31.tsv` `2912e7039b07b176…`
+(allocation from the roster capture's ALLOCATION column; bot group read by applying each `/bots`
+Bot Group filter in turn and collecting the anchor `title` attributes). Seven groups:
+Archive 17 · Directional-Focus 2 · IC 8 · IC-Focus 3 · Lab 0 · Monitor 9 · OA-Mirror-Focus 4 = 43;
+**`QQQ-IC-0DTE-Fortress` is in no group at all.**
+Within-family equalization state — **the review's two named suspects are both falsified**:
+  GF-QQQ arms (8)          all $2.5K                                     EQUAL
+  FastPT25 live pair       S2 $50K · 130PM $50K                          EQUAL (130PM archive $30K)
+  DIR trio                 CallVIXdrop **$10K** · PutVIX22-SL75 $10K ·
+                           Put-Control $10K                              EQUAL — the "$50k vs $10k"
+                           reading in `_review-2026-08-31-vacation.md` does not hold at this read
+  QQQ Fortress arms (5)    all $100K                                     EQUAL
+  IC-SPX-Fortress pair     Defang $50K · Unstopped $50K                  EQUAL
+  **Mirror family (10)**   eight at $10K, **`3DTE $140-$350` $5K**,
+                           **`QQQ long call` $30K**                      **NOT EQUAL** — the only
+                           real equalization target on the fleet
+(The 10 mirrors are the ten OA-copied bots, matching `mirror_baseline.csv`'s 10; the OA
+`OA-Mirror-Focus` group holds only 4 of them, so the group is not the family. Confirm the family
+definition against `bots_meta.csv` `pillar == OA-Mirror` before drafting the edit list.)
+
+**E · Legacy open-position sweep (F-8) — 3 positions remain, all one bot.**
+`03-open-positions-2026-08-31-173500.txt` `e89b53b1ac30c8d5…`. 7 open positions total; open dates
+read from each row's `Opened:` title attribute:
+  `QQQ long call` (toggles OFF) — QQQ Long Call Spread 865/745, opened **Jun 15 2026 9:45AM**,
+     risk $3,299, P/L **-$3,157** (-95.7%), 18d to expiry
+  `QQQ long call` — QQQ Long Call Spread 870/745, opened **Jun 22 2026 2:15PM**, risk $3,488,
+     P/L **-$3,163** (-90.7%), 30d
+  `QQQ long call` — QQQ Long Call Spread 839/727, opened **Jun 29 2026 12:30PM**, risk $3,278,
+     P/L **-$2,371** (-72.3%), 30d
+  Combined: risk **$10,065**, unrealised **-$8,691**, none in the post-cutover ledger (open date
+  < LEDGER_START). Every other open position is ≥ 08-27 (`3DTE $140-$350` 08-27, `Nigiri-Paper-v1`
+  08-28, `Trendy-Paper-v1` 08-27, `Friday 14 DTE B-70` 08-28 — B-70 is live and still trading).
+  F-8's lesson holds and is now quantified: toggles OFF stopped new entries, not this exposure.
+
+**F · 11AM S2 — NO CONFIG CHANGE, and the "anomaly" explains the standing defect.**
+`09-s2-config-check-2026-08-31.md` `6bcd201cd01d5b30…`, log `08-…` `a42d4ed2940a3a1a…`.
+All four automations re-hashed live and compared to the 2026-08-07 baseline in
+`data/bots_config_v2.csv` line 227 / `docs/pre-registration-ledger.md` PR-01 — **4 of 4 byte-
+identical**: `Scalp-Scan-Put f83ed32b…` (v4), `Scalp-Scan-Call 892ba0c9…` (v5),
+`Scalp-Mon-S2-StrikeTouch 01af4963…` (v4), `Scalp-Mon-S2-Cleanup f3673f29…` (v2). BOT VERSION 1,
+Aug 7 2026. Nothing was edited on this bot between 08-07 and 08-31. EXIT OPTIONS remains OFF
+(the CLAUDE.md §5 standing exception), automations ON.
+`Scalp-Mon-S2-Cleanup`, read verbatim from the model: ALL of `Position has been open 2 minutes or
+more` **AND `Bot has exactly 1 position with any type and open status`** → close 100%.
+So Cleanup fires **only when the bot is one-legged**. One side fills → the leg is scratched at
++2 minutes (that IS the "puts-only 11:01→11:03 scratch" of F-6). Both sides fill → count is 2, the
+guard fails, the condor rides to expiration — which is exactly 08-31 (+$100 / +$100 = +$200, risk
+$4,900/side, both `Expired`), and the 08-31 log shows both monitors looping to 3:55PM with no close.
+**F-6 needs restating:** the exit mechanism is not broken and it is not "puts-only". Cleanup does
+precisely what it was built to do — destroy an unpaired leg. The failure is upstream: the call side
+fills on only 3 of 14 bot-days. Fixing the exit would be fixing the wrong end.
+
+**Ready to commit:** `data/captures/2026-08-31-roster/` (10 new files + `SHA256SUMS.txt`),
+`docs/session-log.md` (this entry), `docs/state.md` (F-7 / F-6 / allocation corrections).
+Nothing in OA was changed; nothing in the ledger, the pre-registration ledger or the build plan was
+touched. The Ride-Delta fix and the PR-04 discharge edit both remain gated on Andy.
+
+**Addendum (2026-08-31, same session): FOUR AUTHORIZED OA EDITS APPLIED.** Andy authorized four
+edits in-chat after the read-only sweep. All applied under the verified-edit protocol — read
+before, apply, **hard reload**, re-read from the hydrated model AND the `i.sticon` title
+attributes, re-hash every automation; no version number was used as evidence. Every bot touched
+was confirmed **Paper Trading** on its own page first. Full record with before/after tables:
+`data/captures/2026-08-31-roster/10-authorized-edits-2026-08-31.md` (`827ba19e235d4d02…`).
+
+**Fleet-wide control.** `01-…-173107.txt` (pre-edit) vs `13-bots-roster-POSTEDIT-…-181115.txt`
+(post-edit), same instrument and same parse: **exactly three bots differ, nothing else moved** —
+3DTE alloc `$5K→$10K`, Ride-Delta AUTOS `ON→OFF`, QQQ long call open positions `3→none` and risk
+`$10.1K→--`. Footer `44 active bots` both times. AUTOS ON **19/44 → 18/44**; EXITS ON 16/44
+unchanged. (Edit 4 is a group change and does not surface in the roster columns; it was verified
+separately on the bot page.)
+
+1. **GF-QQQ-IC-Ride-Delta ARCHIVED.** `Ride-Delta-Scan-Put` and `Ride-Delta-Scan-Call` toggled
+   **off** (not deleted — both still listed and re-openable); then bot-level AUTOMATIONS
+   **ON→OFF**, confirmed on three independent surfaces (`bot.scanning === false`, the Scan Speeds
+   `OFF` badge, and the three remaining automations' own titles now reading "Automation is on but
+   bot automations master switch is off"). **All five config hashes byte-identical before and
+   after** — ScannerA `1e5eb993…`, ScannerB `a925d490…`, Scan-Put `a8643224…`, Scan-Call
+   `4f725102…`, Backstop `116069bd…` — so enabled state changed and configuration did not, and
+   the shared library was not touched, so no other GF arm was affected. EXIT OPTIONS left ON
+   (`disableExits === 0`): Andy's instruction named automations only and the bot holds no open
+   positions, so exits are inert — flagged for his call.
+   ⚠️ INCIDENT, DISCLOSED: the call that fired the bot-level toggle returned `Inspected target
+   navigated or closed` rather than a result — the documented class where the work may already be
+   committed. Per the runbook it was **NOT re-fired**; state was re-read after a hard reload and
+   showed the toggle off exactly once, and the fleet diff confirms a single change on this bot.
+   PR-23's card still reads `DISPOSITION RETIRED 2026-08-17 per R-2026-08-17-PR23-RETIRE`; the
+   ledger annotation (hypothesis moot per the 08-17 family-wide delta change) is the repo lane's,
+   citing `06-ride-delta-scanner-diff-2026-08-31.md` (`abc4857359b4d334…`).
+
+2. **QQQ long call — all three legacy positions CLOSED.** Placed one at a time from each
+   position's own Close Position form (1 contract, SmartPricing Normal), hard reload and re-read
+   between each. **All three filled immediately — nothing left working or queued**; the paper
+   account fills outside regular hours, so the "next session" caveat did not apply.
+   Jun 15 865/745 Sep18 → close 1.41, **-$3,158** (77d) · Jun 22 870/745 Sep30 → close 3.24,
+   **-$3,164** (70d) · Jun 29 839/727 Sep30 → close 9.07, **-$2,371** (63d). Realised
+   **-$8,693** on $10,065 at risk; the bot now reads `No open positions`.
+   **All three opened before LEDGER_START (2026-08-10) — none is ledger-eligible. This realised
+   loss is a pre-cutover legacy figure and must NOT be folded into post-cutover cumulative P/L**
+   (it is the same exposure `_review-2026-08-31-vacation.md` F-8 flagged as invisible; the
+   remaining unrealised portion is now realised and the fleet's legacy open exposure is zero).
+   Allocation left at $30K as instructed.
+
+3. **3DTE $140-$350 allocation $5,000 → $10,000.** `input[name="seed"]` set via the native value
+   setter with input/change/blur, saved; after hard reload `bot.seed === 10000` and the Safeguards
+   panel reads $10,000, with DAILY POSITIONS / POSITION LIMIT / DAY TRADING / group / toggles
+   re-read unchanged. Mirror family is now eight at $10K, 3DTE at $10K, QQQ long call at $30K.
+   ⚠️ **This bot sizes off net liquid — Bot Input POSITION SIZE is "26% of net liquid", not a
+   fixed dollar amount. Doubling the allocation doubles the dollar size of every future position.
+   Equalizing allocation did NOT hold risk-per-trade constant here.** Its open position from
+   08-27 is unaffected. Andy should decide whether the mirror-equalization ruling meant equal
+   allocation or equal risk; they are not the same thing on this bot.
+
+4. **QQQ-IC-0DTE-Fortress added to the Monitor group.** BOT GROUP `None → Monitor`; after hard
+   reload `bot.group.name === "Monitor"`. Toggles deliberately untouched and re-read: AUTOMATIONS
+   OFF, EXIT OPTIONS OFF. Group membership is now 44 of 44 — no ungrouped bot remains, so the
+   `(none)` row in `07-allocation-and-groups-2026-08-31.tsv` is superseded by this edit.
+   ⚠️ INCIDENT, DISCLOSED: while locating the group control one click landed on the adjacent
+   ACCOUNT dropdown and opened it (it lists `Paper Trading` and a live brokerage account
+   `TR ****4219`). Nothing was selected; dismissed with Escape, and ACCOUNT re-read as
+   `Paper Trading` immediately and again after the hard reload. **No account was changed on any
+   bot in this session.**
+
+**Ready to commit (supersedes the list above):** `data/captures/2026-08-31-roster/` (14 files +
+`SHA256SUMS.txt`, `shasum -c` clean on all 14), `docs/session-log.md`, `docs/state.md`.
+Still owed and still Andy's: the PR-04 ledger discharge edit, the PR-23 ledger annotation, and
+the decision on whether Ride-Delta's sample is excluded rather than reset.
+
+---
+
+## 2026-08-31 · Backfill + hygiene (Claude Code lane) — 8 missing days ingested, PR-04 discharged, PR-23 mooted
+
+Dispatch `_dispatch-2026-08-31-2-backfill-hygiene-claudecode.md`, phases 0–E. Andy runs the commit
+(`R-2026-08-21-STAGING-MANIFEST`). Nothing in this entry was written to OA; this lane is repo-only.
+
+**0 · Pre-flight.** `git pull --ff-only` fast-forwarded `1f29e2f → cf12009` (close-wave D1 #65,
+D2 #66, D3 #67 — `ingest_export.py`, `capture_bundle.py`, `close.sh`, `close_manifest.py`).
+`1f29e2f` verified an ancestor of the new head. Head read from the LOOSE ref, not `packed-refs`.
+Three dispatch premises were stale and are corrected below rather than acted on: the capture
+bundle is **15** files not 11; the uncommitted `session-log.md` addendum is **212** lines not 7
+(it carries the OA sweep's own entry); and **`scripts/close_manifest.py` now exists** — D3 merged
+it. It was NOT run: it writes `data/close/<day>/manifest.json` and appends to
+`close-runs.jsonl`, artifacts this dispatch's manifest does not cover. The staging manifest was
+hand-written as instructed. Next close should use the tool.
+
+**A · Hygiene.** `data/captures/2026-08-20-recon/` → `2026-08-19-recon/` — the UTC trap confirmed,
+not assumed: the files were written 20:22–20:51 EDT on 08-19 and the capture's own first record is
+`2026-08-20T00:17:22.505Z`. The file *inside* keeps its `…2026-08-20-00-32-14…` name: that string
+is the capture's own UTC stamp and renaming it would falsify an evidence artifact.
+`one` (0-byte, verified 0-byte before removal) deleted. `docs/AI Agentic.pdf` (20.4MB) moved to
+**`~/Documents/AI Agentic.pdf`** — out of the repo, not deleted. `.gitignore`: `_locktrash/` added
+(`git check-ignore` confirms) and Andy's uncommitted node/traces diff kept. `.claude/settings.local.json`
+`git rm --cached` — the file is untouched on disk and now matches the `.claude/` ignore rule
+(`R-2026-08-19-LANE-STATE-OWNERSHIP`).
+
+**B · B-70 verified, not added.** `bots_meta.csv` carries **exactly one** `B-70` row (line 24,
+OA-Mirror / mirror-watch). Set-diff of the 44 OA roster names in
+`02-roster-toggles-44-2026-08-31.tsv` against the 44 `bots_meta.csv` rows is **empty in both
+directions**. `roster.py --validate` 16/16 (its printed `FATAL: duplicate bot row(s)` line is the
+self-test's own red fixture in a scratch root, not a finding against `data/`).
+
+**PR-04 DISCHARGED.** First trading day is **2026-08-26**, not the 2026-08-10 the entry deferred to.
+Evidence `data/captures/2026-08-31-roster/04-pr04-discharge-trades-2026-08-31.txt`
+(`ea520796b5e6019d7ee681ee234c199aa6b2f71f4c62529112bba5ceeda51daf`), Step 6 3/3: time-exit row
+present on both legs (`Close 26 contracts - Aug 26, 2026 3:50PM`, `Exit Trigger: Expires in 10
+minutes`); NO PT row (PROFIT %/$ and STOP LOSS %/$ all `None`, only EXPIRATION set) — so the
+KILL CRITERION's `REMOVED_EXIT_FIRED` branch is not triggered and the A/B is intact; backstop
+negative (15:50, not the 15:52 flat-close). This also discharges finding S2b-R3 as a matter of
+fact: EXIT OPTIONS read ON at capture and the 15:50 exit did fire. Precedent
+`R-2026-08-18 SUBSTITUTE-VERIFY (5a)`. The `FIRST-TRADING-DAY CAPTURE OWED` phrase was broken the
+same way PR-02's was (`CAPTURE — OWED …, DISCHARGED …`), original text left standing. The parser
+was not touched; `report.py` re-run confirms the unsigned banner now lists **QQQ long call ·
+QQQ-IC-0DTE-Fortress · Tasty Condor** and no longer lists NoPT50.
+
+**PR-23 MOOTED AND ARCHIVED.** Gate met: the OA lane's `10-authorized-edits-2026-08-31.md`
+(`827ba19e235d4d02…`) evidences the archive with before/after toggle states and 5/5 byte-identical
+config hashes. Ledger entry annotated — hypothesis mooted by `R-2026-08-17-GF-ENTRY-METHOD`
+(family-wide delta adoption removed the fixed-strike comparator), pre-fix sample **excluded** not
+discounted (four-scanner race → one-sided trades), bot archived 2026-08-31, **not killed on P/L**
+(the kill criterion was never reached). `bots_meta.csv` row status `ON → OFF` with the same note.
+Exit Options were left ON on the bot and are flagged for Andy, not decided here.
+Two further `bots_meta.csv` notes from the authorized-edit record: the 3DTE **sizing epoch**
+(allocation $5K→$10K but POSITION SIZE is 26% of net liquid, so per-position dollar size doubles —
+do not pool raw P/L across the boundary; R is unaffected) and QQQ long call's three legacy closes.
+
+**C · Backfill.** `scripts/daily.sh 2026-08-31` on the 1,596-row export. **All 9 stages exit 0, no
+override flags** — the receipt records `argv ["2026-08-31"]` and `allow_rewind / allow_ops_reclass
+/ allow_front_truncate` all false. `rows_in 1596 → rows_out 205`, straddler 5, pre_cutover 1386.
+Four acceptance predicates, both sides derived, each proven RED against a mutated fixture first:
+(a) frozen history — ledger rows closing ≤ 08-19 sum **$4,706**, equal to the headline derived from
+`git show HEAD:STATUS.md`; (b) continuity — new cumulative **$4,557** equals $4,706 + the
+**−$149** bracket derived independently from the raw export (`openDate ≥ LEDGER_START`,
+`closeDate` in 08-20..08-31); (c) legacy exclusion — **zero** ledger rows with `open_date <
+LEDGER_START`, and all 5 legacy closes in the window (Tasty +418, and QQQ long call −2,971 /
+−3,158 / −3,164 / −2,371) are absent from the post-cutover ledger, routed to `straddlers.csv`;
+(d) B-70's trade is in the ledger, pillar OA-Mirror, +$140, with `bots_meta` still at one row.
+Second surface agrees with `_review-2026-08-31-vacation.md` §Headline to the dollar: ex-legacy
+vacation −$149, cumulative $4,557. Nothing was reconciled silently.
+
+**D · Boards.** STATUS.md headline **$4,557 · 205 legs · 18 bots** (was $4,706 · 71 · 15).
+The readiness board's real movement is not the P/L, it is **G3 collapsing across the fleet**: eight
+bots that read CANDIDATE `●○●●··` on 08-19 now read VALIDATE `●○○●··` — the vacation tail widened
+every confidence interval through zero. `IC-SPX-FastPT25-S2-130PM` n 8 → **16 clean condors**,
+Exp(R) +11.6% → **+5.5% [−2.9, +11.6]**: it did NOT cross G2 (needs 20) and it LOST G3.
+`DIR-SPX-CallVIXdrop` is the worst line on the fleet — n=4, **−36.6% [−53.6, −5.2]**, CI entirely
+below zero, consistent with F-5. New on the board: NoPT50 (n=1, blocked at **G1 strike-bug
+contamination**), IC-SPX-Fortress-Unstopped (n=1), B-70 (n=1). `roster.py` and `portfolio.py` run
+manually (still not in `daily.sh` — I-03/I-04): 44 bots / 12 families, 9 programs / 92 items, both
+`--check` clean after regeneration, self-tests 16/16 and 11/11.
+
+**Benign anomalies — reported, not patched.** `should_have_fired` and the decidability countdowns
+assume daily cadence and read oddly across an 8-day gap. `daily_brief.py` ran CONFIG-BLIND
+(`bots_config_v2.csv` carries none of the graded mechanic columns) so 0 ON bots were graded and
+`lessons.py` therefore wrote 0 rows — pre-existing, and it says so rather than passing silently.
+`execution_audit` reports 22 NOT-EVALUATED blind spots for the same schema reason.
+
+**Ready to commit:** 42 files — see the staging manifest in the dispatch report. Excluded and
+flagged for Andy's call: `scripts/oa-driver/` and `docs/oa-internal-api.md` (OA-lane tooling, named
+by the capture bundle's method line but not by this dispatch), and every `_*` working file.

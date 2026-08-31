@@ -1,0 +1,265 @@
+# GF-QQQ-IC-Ride-Delta — Automation Log (double-fire diagnosis, task C)
+https://app.optionalpha.com/bots/bot/BOTfw5TkkCRF1317864858068078811/log
+captured: Mon Aug 31 2026 17:39:14 GMT-0400 (Eastern Daylight Time)
+bot_id: BOTfw5TkkCRF1317864858068078811
+READ-ONLY. No edits.
+
+5:39PM
+GF-QQQ-IC-Ride-Delta
+ACCOUNT
+Paper Trading
+BOT GROUP
+IC
+AUTOMATIONS
+ON
+OFF
+EXIT OPTIONS
+ON
+OFF
+Dashboard
+Positions
+Log
+Settings
+Errors
+Warnings
+Clear Log
+TIME
+AUTOMATION
+INFO
+Today
+3:52PM
+GF-Backstop-1552-FlatClose
+1 loop
+1:39PM
+Ride-Delta-Scan-Putwith1 input
+1 open position
+5 decisions
+1 loop
+1:39PM
+Ride-Delta-Scan-Callwith2 inputs
+5 decisions
+1 filtered position
+1 loop
+1:39PM
+GF-ScannerB-CallSpreadwith1 input
+5 decisions
+1 filtered position
+1 loop
+1:39PM
+GF-ScannerA-PutSpreadwith1 input
+1 open position
+5 decisions
+1 loop
+1:38PM
+Ride-Delta-Scan-Callwith2 inputs
+5 decisions
+1 filtered position
+1 loop
+1:38PM
+Ride-Delta-Scan-Putwith1 input
+5 decisions
+1 filtered position
+1 loop
+1:38PM
+GF-ScannerB-CallSpreadwith1 input
+5 decisions
+1 filtered position
+1 loop
+1:38PM
+GF-ScannerA-PutSpreadwith1 input
+5 decisions
+1 filtered position
+1 loop
+1:37PM
+Ride-Delta-Scan-Callwith2 inputs
+5 decisions
+1 filtered position
+1 loop
+1:37PM
+Ride-Delta-Scan-Putwith1 input
+5 decisions
+1 filtered position
+1 loop
+1:37PM
+GF-ScannerB-CallSpreadwith1 input
+5 decisions
+1 filtered position
+1 loop
+1:37PM
+GF-ScannerA-PutSpreadwith1 input
+5 decisions
+1 filtered position
+1 loop
+1:36PM
+Ride-Delta-Scan-Putwith1 input
+5 decisions
+1 filtered position
+1 loop
+1:36PM
+Ride-Delta-Scan-Callwith2 inputs
+5 decisions
+1 filtered position
+1 loop
+1:36PM
+GF-ScannerB-CallSpreadwith1 input
+5 decisions
+1 filtered position
+1 loop
+1:36PM
+GF-ScannerA-PutSpreadwith1 input
+5 decisions
+1 filtered position
+1 loop
+1:35PM
+Ride-Delta-Scan-Callwith2 inputs
+5 decisions
+1 filtered position
+1 loop
+1:35PM
+Ride-Delta-Scan-Putwith1 input
+5 decisions
+1 filtered position
+1 loop
+1:35PM
+GF-ScannerB-CallSpreadwith1 input
+5 decisions
+1 filtered position
+1 loop
+1:35PM
+GF-ScannerA-PutSpreadwith1 input
+5 decisions
+1 filtered position
+1 loop
+1:34PM
+Ride-Delta-Scan-Callwith2 inputs
+5 decisions
+1 filtered position
+1 loop
+1:34PM
+Ride-Delta-Scan-Putwith1 input
+5 decisions
+1 filtered position
+1 loop
+1:34PM
+GF-ScannerB-CallSpreadwith1 input
+5 decisions
+1 filtered position
+1 loop
+1:34PM
+GF-ScannerA-PutSpreadwith1 input
+5 decisions
+1 filtered position
+1 loop
+1:33PM
+Ride-Delta-Scan-Callwith2 inputs
+5 decisions
+1 filtered position
+1 loop
+1:33PM
+Ride-Delta-Scan-Putwith1 input
+5 decisions
+1 filtered position
+1 loop
+1:33PM
+GF-ScannerB-CallSpreadwith1 input
+5 decisions
+1 filtered position
+1 loop
+1:33PM
+GF-ScannerA-PutSpreadwith1 input
+5 decisions
+1 filtered position
+1 loop
+1:32PM
+Ride-Delta-Scan-Putwith1 input
+5 decisions
+1 filtered position
+1 loop
+1:32PM
+Ride-Delta-Scan-Callwith2 inputs
+5 decisions
+1 filtered position
+1 loop
+1:32PM
+GF-ScannerB-CallSpreadwith1 input
+5 decisions
+1 filtered position
+1 loop
+1:32PM
+GF-ScannerA-PutSpreadwith1 input
+5 decisions
+1 filtered position
+1 loop
+1:31PM
+Ride-Delta-Scan-Putwith1 input
+5 decisions
+1 filtered position
+1 loop
+1:31PM
+Ride-Delta-Scan-Callwith2 inputs
+5 decisions
+1 filtered position
+1 loop
+1:31PM
+GF-ScannerB-CallSpreadwith1 input
+5 decisions
+1 filtered position
+1 loop
+1:31PM
+GF-ScannerA-PutSpreadwith1 input
+5 decisions
+1 filtered position
+1 loop
+1:30PM
+Ride-Delta-Scan-Callwith2 inputs
+1 decision
+1 loop
+1:30PM
+Ride-Delta-Scan-Putwith1 input
+1 decision
+1 loop
+1:30PM
+GF-ScannerB-CallSpreadwith1 input
+1 decision
+1 loop
+1:30PM
+GF-ScannerA-PutSpreadwith1 input
+1 decision
+1 loop
+1:29PM
+Ride-Delta-Scan-Putwith1 input
+1 decision
+1 loop
+1:29PM
+Ride-Delta-Scan-Callwith2 inputs
+1 decision
+1 loop
+1:29PM
+GF-ScannerB-CallSpreadwith1 input
+1 decision
+1 loop
+1:29PM
+GF-ScannerA-PutSpreadwith1 input
+1 decision
+1 loop
+1:28PM
+Ride-Delta-Scan-Putwith1 input
+1 decision
+1 loop
+1:28PM
+Ride-Delta-Scan-Callwith2 inputs
+1 decision
+1 loop
+1:28PM
+GF-ScannerB-CallSpreadwith1 input
+1 decision
+1 loop
+1:28PM
+GF-ScannerA-PutSpreadwith1 input
+1 decision
+1 loop
+1:27PM
+Ride-Delta-Scan-Callwith2 inputs
+1 decision
+1 loop
+Load more

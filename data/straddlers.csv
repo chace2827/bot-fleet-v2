@@ -1,1 +1,6 @@
 bot,structure,status,pnl,risk,open_date,close_date,symbol,quantity,note
+QQQ long call,longcallspread,closed,-2371,3278,2026-06-29 12:30:13,2026-08-31 18:10:06,QQQ,1,PRE-CUTOVER OPEN — mirror baseline layer only; NEVER a working-ledger or reporting input
+QQQ long call,longcallspread,closed,-3164,3488,2026-06-22 14:15:08,2026-08-31 18:09:14,QQQ,1,PRE-CUTOVER OPEN — mirror baseline layer only; NEVER a working-ledger or reporting input
+QQQ long call,longcallspread,closed,-3158,3299,2026-06-15 09:45:04,2026-08-31 18:08:27,QQQ,1,PRE-CUTOVER OPEN — mirror baseline layer only; NEVER a working-ledger or reporting input
+QQQ long call,longcallspread,expired,-2971,2971,2026-06-01 10:15:06,2026-08-31 16:15:00,QQQ,1,PRE-CUTOVER OPEN — mirror baseline layer only; NEVER a working-ledger or reporting input
+Tasty Condor,ironcondor,expired,418,1082,2026-06-22 10:30:14,2026-08-21 16:15:00,SPY,1,PRE-CUTOVER OPEN — mirror baseline layer only; NEVER a working-ledger or reporting input

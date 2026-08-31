@@ -149,9 +149,9 @@ tr:hover td{background:#f5f6f8}
 /* ==== DATA START ==== */
 const DATA = {
  "facts": {
-  "roster_on": 19,
+  "roster_on": 18,
   "roster_rows": 44,
-  "unsigned": 4
+  "unsigned": 3
  },
  "objective": "A bot fleet whose P&L I can prove, that runs unattended, and that a competent stranger could take over from the docs alone.",
  "programs": [
@@ -161,11 +161,11 @@ const DATA = {
    "metric": "Consecutive trading days all-guards-green AND $0 headline P&L from an unsigned bot",
    "n": "P1",
    "name": "Ledger & Capture Truth",
-   "note": "~88% of Aug P&L from one unsigned bot; 4 bots on DO-NOT-SWITCH-ON",
+   "note": "08-31: PR-02 signed+discharged; PR-04 discharge edit in flight (evidence captured); remaining unsigned (PR-03, QQQ long call, Tasty) are OFF; 3 roster captures show zero drift",
    "owner": "Andy",
    "q": "are the numbers real",
    "restart": "",
-   "state": "Stuck",
+   "state": "Working on it",
    "wip": "Active"
   },
   {
@@ -174,7 +174,7 @@ const DATA = {
    "metric": "Closed P&L attributable to signed, gated bots only",
    "n": "P2",
    "name": "Edge Discovery",
-   "note": "29 of 44 bots traded zero times; headline concentrated in one variant",
+   "note": "29/44 zero-trade still true; NOTE kill_date 2026-08-26 has PASSED with the bet unmet - Andy to re-rule or extend",
    "owner": "Andy",
    "q": "does it actually make money",
    "restart": "",
@@ -309,7 +309,7 @@ const DATA = {
    "P1",
    "Heartbeat artifact per trading day",
    "Devin",
-   "Not started",
+   "Done",
    2,
    "1 session",
    ""
@@ -319,7 +319,7 @@ const DATA = {
    "P1",
    "Unsigned banner in report.py",
    "Devin",
-   "Not started",
+   "Done",
    3,
    "30 min",
    ""
@@ -379,7 +379,7 @@ const DATA = {
    "P6",
    "Commit the five untracked files",
    "Any agent",
-   "Working on it",
+   "Done",
    1,
    "5 min",
    ""
@@ -629,7 +629,7 @@ const DATA = {
    "P6",
    "Merge the gate - PR #3 plus branch protection",
    "Andy",
-   "Not started",
+   "Done",
    1,
    "",
    ""
@@ -699,7 +699,7 @@ const DATA = {
    "P5",
    "research_loop.py fix spec for Claude Code implementation",
    "Cowork",
-   "Working on it",
+   "Done",
    2,
    "",
    ""
@@ -729,7 +729,7 @@ const DATA = {
    "P1",
    "Toggle-state screenshots - both AUTOMATIONS and EXIT OPTIONS, per bot",
    "Cowork",
-   "Not started",
+   "Done",
    2,
    "",
    ""
@@ -759,7 +759,7 @@ const DATA = {
    "P1",
    "Bookmarklet capture of /bots IS the roster authority - take it BEFORE any sweep",
    "Cowork",
-   "Not started",
+   "Done",
    2,
    "",
    ""
@@ -879,7 +879,7 @@ const DATA = {
    "P5",
    "Freeze research_loop.py (VERSION, FROZEN_ON, self-hash) and wire as stage 9 of daily.sh",
    "Cowork",
-   "Stuck",
+   "Done",
    2,
    "",
    "M-03"
@@ -1141,6 +1141,56 @@ const DATA = {
    "Andy",
    "Done",
    2,
+   "",
+   ""
+  ],
+  [
+   "T-33",
+   "P6",
+   "Market-holiday calendar: single source consumed by report.py, check_heartbeat.py, close manifest",
+   "",
+   "Not started",
+   3,
+   "",
+   ""
+  ],
+  [
+   "T-34",
+   "P2",
+   "11AM S2 entry-side investigation: call side fills only 3 of 14 bot-days (exit logic verified correct)",
+   "",
+   "Not started",
+   2,
+   "",
+   ""
+  ],
+  [
+   "T-35",
+   "P2",
+   "DIR-SPX-CallVIXdrop hard checkpoint at n=10: if Exp(R)<0, kill without re-litigation",
+   "",
+   "Not started",
+   2,
+   "",
+   ""
+  ],
+  [
+   "T-36",
+   "P2",
+   "130PM G2 review at n=20 clean condors (~4 trading days out)",
+   "",
+   "Not started",
+   1,
+   "",
+   ""
+  ],
+  [
+   "T-37",
+   "P6",
+   "Wire roster.py --check and portfolio.py --check into daily.sh or CI (parked I-03/I-04)",
+   "",
+   "Not started",
+   3,
    "",
    ""
   ]

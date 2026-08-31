@@ -1,0 +1,141 @@
+# PR-04 DISCHARGE CAPTURE — QQQ-IC-0DTE-Fortress-NoPT50 first trading day
+https://app.optionalpha.com/bots/bot/BOTfw5TkkCRF3017862038322323202/positions?closed=true
+captured: Mon Aug 31 2026 17:37:00 GMT-0400 (Eastern Daylight Time)
+bot_id: BOTfw5TkkCRF3017862038322323202
+Source: Position Details drawer (Trades list), read-only. No edits made.
+
+===== PUT SIDE =====
+Position Details
+Edit
+QQQ
+Short Put Spread
+AUG 26
+703
+P
+705
+P
+CLOSED P/L
+$104
+RETURN %
+40.00%
+CREDIT TO OPEN
+$260
+DEBIT TO CLOSE
+$156
+CAPITAL AT RISK
+$4,940
+RETURN ON RISK
+2.11%
+TRADE PRICE
+$0.10
+CLOSE PRICE
+$0.06
+QUANTITY
+26 contracts
+DIT
+0days
+PRICE AT OPEN
+710.69
+PRICE AT CLOSE
+712.16
+Exit Options
+PROFIT %
+None
+70.0% high5 days ago
+PROFIT $
+None
+$182 high5 days ago
+STOP LOSS %
+None
+-20.0% low5 days ago
+STOP LOSS $
+None
+-$52 low5 days ago
+EXPIRATION
+10 minutes
+Bot
+QQQ-IC-0DTE-Fortress-NoPT50
+Paper Trading
+Trades
+Close 26 contracts - Aug 26, 2026 3:50PM
+Exit Trigger: Expires in 10 minutes
+Market
+filled at $0.06
+Open 26 contracts - Aug 26, 2026 1:31PM
+Automation Log
+Market
+filled at $0.10
+Tags
+put side
+Notes
+Edit Notes
+
+===== CALL SIDE =====
+Position Details
+Edit
+QQQ
+Short Call Spread
+AUG 26
+716
+C
+718
+C
+CLOSED P/L
+-$442
+RETURN %
+-170.00%
+CREDIT TO OPEN
+$260
+DEBIT TO CLOSE
+$702
+CAPITAL AT RISK
+$4,940
+RETURN ON RISK
+-8.95%
+TRADE PRICE
+$0.10
+CLOSE PRICE
+$0.27
+QUANTITY
+26 contracts
+DIT
+0days
+PRICE AT OPEN
+710.66
+PRICE AT CLOSE
+712.16
+Exit Options
+PROFIT %
+None
+10.0% high5 days ago
+PROFIT $
+None
+$26 high5 days ago
+STOP LOSS %
+None
+-230.0% low5 days ago
+STOP LOSS $
+None
+-$598 low5 days ago
+EXPIRATION
+10 minutes
+Bot
+QQQ-IC-0DTE-Fortress-NoPT50
+Paper Trading
+Trades
+Close 26 contracts - Aug 26, 2026 3:50PM
+Exit Trigger: Expires in 10 minutes
+Market
+filled at $0.27
+Open 26 contracts - Aug 26, 2026 1:31PM
+Automation Log
+Market
+filled at $0.10
+Tags
+call side
+Notes
+Edit Notes
+
+===== BOT PAGE HEADER (same session) =====
+ALLOCATION $100,000 · BOT GROUP Monitor · AUTOMATIONS ON · EXIT OPTIONS ON · Account: Paper Trading
+Tags: experiment, pr 04 · Closed positions 2 · Closed P/L -$338

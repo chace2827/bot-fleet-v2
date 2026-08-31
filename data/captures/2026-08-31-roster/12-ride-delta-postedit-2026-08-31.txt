@@ -1,0 +1,84 @@
+# GF-QQQ-IC-Ride-Delta — settings AFTER archive edit (edit 1)
+https://app.optionalpha.com/bots/bot/BOTfw5TkkCRF1317864858068078811/settings
+captured: Mon Aug 31 2026 18:10:55 GMT-0400 (Eastern Daylight Time)
+bot_id: BOTfw5TkkCRF1317864858068078811
+bot.scanning=false  bot.disableExits=0
+
+# AUTOMATION TOGGLES -- i.sticon title attribute
+GF-ScannerA-PutSpread	Automation is on but bot automations master switch is off
+GF-ScannerB-CallSpread	Automation is on but bot automations master switch is off
+Ride-Delta-Scan-Put	Automation is off
+Ride-Delta-Scan-Call	Automation is off
+GF-Backstop-1552-FlatClose	Automation is on but bot automations master switch is off
+
+6:10PM
+GF-QQQ-IC-Ride-Delta
+ACCOUNT
+Paper Trading
+BOT GROUP
+IC
+AUTOMATIONS
+ON
+OFF
+EXIT OPTIONS
+ON
+OFF
+Dashboard
+Positions
+Log
+Settings
+Automations
+Add Automation
+Run
+SCANNERS
+GF-ScannerA-PutSpread
+with1 input
+GF-ScannerB-CallSpread
+with1 input
+Ride-Delta-Scan-Put
+with1 input
+Ride-Delta-Scan-Call
+with2 inputs
+TRIGGERS
+GF-Backstop-1552-FlatClose
+Every week on Mon-Fri, 3:52pm EST
+Bot Inputs
+GF_EXITS_PUT
+Expiration: 10 minutes
+GF_EXITS_CALL
+Expiration: 10 minutes
+Notes
+Edit
+### GF-QQQ-IC-Ride-Delta
+ID PR-23
+DISPOSITION RETIRED 2026-08-17 per R-2026-08-17-PR23-RETIRE
+PROVENANCE card was an unmodified byte-identical copy of PR-14's card from clone-creation
+until 2026-08-17; never documented as a distinct arm
+NOTE Display copy - repo ledger governs: docs/pre-registration-ledger.md
+Safeguards
+ALLOCATION
+$2,500
+DAILY POSITIONS
+2 per day
+2 todayreset
+POSITION LIMIT
+2 at once
+DAY TRADING
+Allowed
+Scan Speeds
+AUTOMATIONS
+OFF
+Every 1m
+EXIT OPTIONS
+Every 1m
+Symbols
+QQQ
+Template
+GF-QQQ-IC-Ride
+BOT VERSION
+1 Aug 6, 2026
+Activity Alerts
+Open position
+Close position
+Automation warning
+Automation error

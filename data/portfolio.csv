@@ -1,7 +1,7 @@
 kind,id,program,title,owner,status,priority,est,blocked_by,source,anchor,question,metric,metric_state,metric_note,bet,kill_date,restart_trigger,lane,dispatch_blocker
 program,objective,,"A bot fleet whose P&L I can prove, that runs unattended, and that a competent stranger could take over from the docs alone.",,,,,,,,,,,,,,,,
-program,P1,P1,Ledger & Capture Truth,,Active,,,,,,are the numbers real,Consecutive trading days all-guards-green AND $0 headline P&L from an unsigned bot,Stuck,~88% of Aug P&L from one unsigned bot; 4 bots on DO-NOT-SWITCH-ON,Close the unsigned-P&L clause: every bot contributing to headline P&L is signed or switched off,2026-09-02,,,
-program,P2,P2,Edge Discovery,,Active,,,,,,does it actually make money,"Closed P&L attributable to signed, gated bots only",Stuck,29 of 44 bots traded zero times; headline concentrated in one variant,Make the signed-bot P&L figure exist and appear in STATUS.md,2026-08-26,,,
+program,P1,P1,Ledger & Capture Truth,,Active,,,,,,are the numbers real,Consecutive trading days all-guards-green AND $0 headline P&L from an unsigned bot,Working on it,"08-31: PR-02 signed+discharged; PR-04 discharge edit in flight (evidence captured); remaining unsigned (PR-03, QQQ long call, Tasty) are OFF; 3 roster captures show zero drift",Close the unsigned-P&L clause: every bot contributing to headline P&L is signed or switched off,2026-09-02,,,
+program,P2,P2,Edge Discovery,,Active,,,,,,does it actually make money,"Closed P&L attributable to signed, gated bots only",Stuck,29/44 zero-trade still true; NOTE kill_date 2026-08-26 has PASSED with the bet unmet - Andy to re-rule or extend,Make the signed-bot P&L figure exist and appear in STATUS.md,2026-08-26,,,
 program,P3,P3,Execution Realism,,Idle,,,,,,does it survive real money,Slippage-adjusted P&L as a % of paper P&L,Not started,unmeasured; 1-lot bots flagged fill-untested at scale,,,when P2's signed-bot P&L figure exists and is positive,,
 program,P4,P4,Hedging & Breach Response,,Idle,,,,,,what do you do when it goes against you,Count of valid arms (hedge-research.md 5.2) then delta-R vs the unhedged Ride control,Stuck,0 valid arms; section 5 invalidated the tournament and every ranking,,,when G-4 lands (hedge_tournament.csv re-keyed on the natural key),,
 program,P5,P5,Research Engine,,Idle,,,,,,is the edge-finding machine worth running,Backtest-to-paper agreement rate,Not started,"4 engines built, 0 wired into daily.sh",,,when T-16 is ruled — the four engine triggers decided,,
@@ -12,14 +12,14 @@ program,P9,P9,OA Platform & Account,,Idle,,,,,,is the venue still what we think 
 item,T-03,P1,Investigate the ledger regression,Any agent,Not started,1,10 min,,todo-2026-08-16.csv,data/trades.csv,,,,,,,,DEVIN,
 item,T-05,P1,Add the stable trade_id tracker item,Any agent,Not started,2,5 min,T-03,todo-2026-08-16.csv,tracker item 2b,,,,,,,,DEVIN,T-03 finding
 item,T-10,P1,Stable trade_id from the natural key and migrate the accumulator,Devin,Working on it,2,1 session,T-03,todo-2026-08-16.csv,comparative-machinery-spec.md 1.4,,,,,,,,DEVIN,in flight - do not re-dispatch
-item,T-12,P1,Heartbeat artifact per trading day,Devin,Not started,2,1 session,,todo-2026-08-16.csv,data/heartbeat/,,,,,,,,DEVIN,
-item,T-13,P1,Unsigned banner in report.py,Devin,Not started,3,30 min,,todo-2026-08-16.csv,scripts/report.py,,,,,,,,DEVIN,
+item,T-12,P1,Heartbeat artifact per trading day,Devin,Done,2,1 session,,todo-2026-08-16.csv,data/heartbeat/,,,,heartbeat.py writes artifacts/heartbeat/<day>.json in daily.sh; seen in close-wave D1 acceptance 08-31,,,,DEVIN,
+item,T-13,P1,Unsigned banner in report.py,Devin,Done,3,30 min,,todo-2026-08-16.csv,scripts/report.py,,,,banner live in report.py; parser semantics verified 08-31 (SIGNED!=VERIFIED + CAPTURE OWED => listed),,,,DEVIN,
 item,D-02,P1,F1 roster - bots_meta rebuilt with the greenfield arms,Devin,Done,2,,,todo-2026-08-16.csv,data/bots_meta.csv,,,,,,,,DONE,
 item,T-04,P3,Fix the Tradier tracker line,Any agent,Working on it,2,10 min,,todo-2026-08-16.csv,pending-tracker-items-2026-08-10.md:40,,,,,,,,DEVIN,
 item,T-11,P3,Split the Tradier failure modes then re-issue the token,Devin,Not started,2,1 session,T-04,todo-2026-08-16.csv,scripts/tape.py _get(),,,,,,,,DEVIN,
 item,T-16,P5,Decide whether the four unwired engines get triggers and in what order,Andy,Not started,3,Thursday,T-02,todo-2026-08-16.csv,research_loop / comparative_machinery / a_series / intraday_read,,,,,,,,ANDY,human signature / ruling / credential / commit
 item,S-01,P5,SCOREBOARD - engines wired into daily.sh,-,Stuck,1,,,todo-2026-08-16.csv,scripts/daily.sh,,,,,,,,--,"scoreboard row, not a task"
-item,T-01,P6,Commit the five untracked files,Any agent,Working on it,1,5 min,,todo-2026-08-16.csv,repo root and docs/,,,,,,,,ANDY,human signature / ruling / credential / commit
+item,T-01,P6,Commit the five untracked files,Any agent,Done,1,5 min,,todo-2026-08-16.csv,repo root and docs/,,,,SUPERSEDED: folded into the 08-31 backfill+hygiene staging manifest (chat 3),,,,ANDY,human signature / ruling / credential / commit
 item,T-09,P6,Adopt branch discipline in practice,Cowork,Working on it,1,now,,todo-2026-08-16.csv,docs/agent-charter.md 6,,,,,,,,CC,"foreman/manager work - writing it IS the work, do not dispatch"
 item,T-15,P6,Fixture-isolate the non-hermetic tests and add TAPE_FIXTURE mode,Devin,Not started,3,1 session,,todo-2026-08-16.csv,comparative_machinery.py --validate R-1,,,,,,,,DEVIN,
 item,T-18,P6,Devin API key into the Cowork connector,Andy,Not started,3,5 min,,todo-2026-08-16.csv,list_available_repos,,,,,,,,ANDY,human signature / ruling / credential / commit
@@ -44,20 +44,20 @@ item,T-07,P7,Carry the two operating rules into the charter,Cowork,Done,2,,,todo
 item,T-08,P7,Turn the build map into docs/agent-charter.md,Cowork,Done,1,,,todo-2026-08-16.csv,docs/agent-charter.md,,,,,,,,DONE,
 item,D-03,P7,Rules catalog generated,Devin,Done,2,,,todo-2026-08-16.csv,docs/rules-catalog.md,,,,,,,,DONE,
 item,D-04,P7,Canonical rulings register consolidated,Devin,Done,2,,,todo-2026-08-16.csv,docs/RULINGS.md,,,,,,,,DONE,
-item,T-29,P6,Merge the gate - PR #3 plus branch protection,Andy,Not started,1,,,bot-fleet-migration,agentconv / repo merge path,,,,,,,,ANDY,human signature / ruling / credential / commit
+item,T-29,P6,Merge the gate - PR #3 plus branch protection,Andy,Done,1,,,bot-fleet-migration,agentconv / repo merge path,,,,SUPERSEDED/moot: PR #3 superseded per devin merge state 08-16,,,,ANDY,human signature / ruling / credential / commit
 item,T-30,P7,Rule the Reconciler IN (roles-and-ingredients row 10),Andy,Not started,2,,,bot-fleet-migration,docs/roles-and-ingredients.md row 10,,,,,,,,ANDY,human signature / ruling / credential / commit
 item,T-31,P7,Build the Reconciler - daily read-only contradiction report,Cowork,Not started,2,,T-30,bot-fleet-migration,agentconv / loop spine,,,,,,,,DEVIN,SPEC - acceptance predicate not yet writable
 item,G-4,P4,Re-key hedge_tournament.csv on the natural key,Devin,Working on it,2,,,bot-fleet-migration,data/hedge_tournament.csv,,,,,,,,DEVIN,in flight - do not re-dispatch
 item,E3-1,P7,"E-3 section 3.3 - THREE ITEMS GATED, nothing decided by that session",Andy,Stuck,2,,,bot-fleet-migration,E-3 3.3 Lab ops-class exclusion,,,,,,,,ANDY,human signature / ruling / credential / commit
 item,M-01,P6,T11 Tracker refresh and retag,Cowork,Working on it,3,,,bot-fleet-migration,sprint-2026-08-04.md,,,,,,,,CC,"foreman/manager work - writing it IS the work, do not dispatch"
 item,M-02,P2,T12 Baseline forensic (optional capacity burn),Cowork,Not started,4,,,bot-fleet-migration,sprint-2026-08-04.md,,,,,,,,DEVIN,SPEC - acceptance predicate not yet writable
-item,M-03,P5,research_loop.py fix spec for Claude Code implementation,Cowork,Working on it,2,,,bot-fleet-migration,research-loop-fix-spec-2026-08-07.md,,,,,,,,DEVIN,SPEC - acceptance predicate not yet writable
+item,M-03,P5,research_loop.py fix spec for Claude Code implementation,Cowork,Done,2,,,bot-fleet-migration,research-loop-fix-spec-2026-08-07.md,,,,"fix-spec rewrite landed (0.2.0-DRAFT), see research-loop-fix-spec",,,,DEVIN,SPEC - acceptance predicate not yet writable
 item,M-04,P7,Review the consolidated plan and runbook,Andy,Not started,2,,,bot-fleet-migration,build-plan.md + oa-ops-runbook.md,,,,,,,,ANDY,human signature / ruling / credential / commit
 item,M-05,P6,git init v2 plus new private repo; re-point the launchd backup agent,Andy,Working on it,2,,,bot-fleet-migration,Phase 1,,,,,,,,ANDY,human signature / ruling / credential / commit
-item,M-07,P1,"Toggle-state screenshots - both AUTOMATIONS and EXIT OPTIONS, per bot",Cowork,Not started,2,,,bot-fleet-migration,Phase 2,,,,,,,,OA,"needs the OA browser - Cowork Chrome-direct, never Devin"
+item,M-07,P1,"Toggle-state screenshots - both AUTOMATIONS and EXIT OPTIONS, per bot",Cowork,Done,2,,,bot-fleet-migration,Phase 2,,,,satisfied by committed 08-19 + 08-31 capture bundles (both halves of §2.5),,,,OA,"needs the OA browser - Cowork Chrome-direct, never Devin"
 item,M-09,P1,Log every inactive-era edit,Cowork,Working on it,2,,,bot-fleet-migration,Phase 2,,,,,,,,OA,"needs the OA browser - Cowork Chrome-direct, never Devin"
 item,M-11,P1,Liveness check: every ON bot shows a position or a scanner run - HALF DONE,Cowork,Not started,2,,,bot-fleet-migration,Phase 3,,,,,,,,OA,"needs the OA browser - Cowork Chrome-direct, never Devin"
-item,M-15,P1,Bookmarklet capture of /bots IS the roster authority - take it BEFORE any sweep,Cowork,Not started,2,,,bot-fleet-migration,Phase 4,,,,,,,,OA,"needs the OA browser - Cowork Chrome-direct, never Devin"
+item,M-15,P1,Bookmarklet capture of /bots IS the roster authority - take it BEFORE any sweep,Cowork,Done,2,,,bot-fleet-migration,Phase 4,,,,"practice established: captures #1 (08-17), #2 (08-19), #3 (08-31); TSV cross-check now element-anchored",,,,OA,"needs the OA browser - Cowork Chrome-direct, never Devin"
 item,M-37,P1,Liveness check plus drift report on day 1,Cowork,Not started,2,,,bot-fleet-migration,Phase 5 Day-0,,,,,,,,OA,"needs the OA browser - Cowork Chrome-direct, never Devin"
 item,M-38,P1,Every active bot GREEN on the drift report for 5 consecutive trading days,Cowork,Not started,1,,,bot-fleet-migration,Phase 5 Day-0,,,,,,,,OA,"needs the OA browser - Cowork Chrome-direct, never Devin"
 item,M-14,P2,"Open the first Track B arms - LOSS SIDE first, 8 slots max",Andy,Not started,2,,,bot-fleet-migration,track-b-arms-spec.md,,,,,,,,OA,needs the OA browser AND a signed pre-registration entry (M-32)
@@ -69,7 +69,7 @@ item,M-36,P3,Order-level verification on all 17 ON bots,Andy,Working on it,1,,,b
 item,M-29,P4,"Build the rebuilt hedge tournament arms, matched",Andy,Not started,2,,,bot-fleet-migration,hedge-research.md 5.2,,,,,,,,OA,needs the OA browser AND a signed pre-registration entry (M-32)
 item,M-39,P4,QQQ-IC-0DTE-Baseline forensic,Cowork,Not started,3,,,bot-fleet-migration,Phase 6 optional research,,,,,,,,OA,"needs the OA browser - Cowork Chrome-direct, never Devin"
 item,M-40,P4,Batch T1 (exit mechanic) and Batch M (middle-band coverage),Cowork,Not started,3,,,bot-fleet-migration,Phase 6 optional research,,,,,,,,OA,"needs the OA browser - Cowork Chrome-direct, never Devin"
-item,M-13,P5,"Freeze research_loop.py (VERSION, FROZEN_ON, self-hash) and wire as stage 9 of daily.sh",Cowork,Stuck,2,,M-03,bot-fleet-migration,research-loop-spec.md,,,,,,,,DEVIN,T-16 - Andy rules on engine wiring
+item,M-13,P5,"Freeze research_loop.py (VERSION, FROZEN_ON, self-hash) and wire as stage 9 of daily.sh",Cowork,Done,2,,M-03,bot-fleet-migration,research-loop-spec.md,,,,"KILLED by ruling: contradicts DO-NOT-WIRE (research_loop is a generator by design); closed 08-31, nothing built",,,,DEVIN,T-16 - Andy rules on engine wiring
 item,M-43,P6,"Commit Block 2 - git rm current-state.md and add state.md, CLAUDE.md, evidence-standards, history-index, session-log",Andy,Not started,2,,,bot-fleet-migration,Phase 7 folder cleanup,,,,,,,,ANDY,human signature / ruling / credential / commit
 item,M-44,P6,Block 3 - narrative trims of v2-born ops docs,Cowork,Not started,4,,,bot-fleet-migration,Phase 7 folder cleanup,,,,,,,,DEVIN,SPEC - acceptance predicate not yet writable
 item,M-45,P6,Block 4 - reference merges and trims,Cowork,Not started,4,,,bot-fleet-migration,Phase 7 folder cleanup,,,,,,,,DEVIN,SPEC - acceptance predicate not yet writable
@@ -96,3 +96,8 @@ item,M-25,P9,Confirm the 2 directional bots untouched,Cowork,Not started,4,,,bot
 item,M-26,P9,Confirm the 7 live mirrors untouched,Cowork,Not started,4,,,bot-fleet-migration,Phase 4 / superseded sweep,,,,,,,,OA,"needs the OA browser - Cowork Chrome-direct, never Devin"
 item,M-46,P1,Build data/bots_config_v2.csv from captures,Cowork,Done,2,,,bot-fleet-migration,"246 rows, sha e54ee4ea9f3bfa7d",,,,,,,,DONE,
 item,M-47,P6,Decide Notion's role in v2,Andy,Done,2,,,bot-fleet-migration,ruled 2026-08-19: P8 only,,,,,,,,DONE,
+item,T-33,P6,"Market-holiday calendar: single source consumed by report.py, check_heartbeat.py, close manifest",,Not started,3,,,,,,,,"from D3 calendar ruling 08-31: weekday-only accepted, hand-rolled lists banned; first phantom day Labor Day 09-07",,,,DEVIN,
+item,T-34,P2,11AM S2 entry-side investigation: call side fills only 3 of 14 bot-days (exit logic verified correct),,Not started,2,,,,,,,,"F-6 restated 08-31; 4/4 automation hashes match 08-07 baseline, so the cause is entry/pricing not config drift",,,,OA,
+item,T-35,P2,"DIR-SPX-CallVIXdrop hard checkpoint at n=10: if Exp(R)<0, kill without re-litigation",,Not started,2,,,,,,,,"ruled 08-31; n=4, Exp(R) -0.366, three consecutive ~-0.5R stops",,,,ANDY,
+item,T-36,P2,130PM G2 review at n=20 clean condors (~4 trading days out),,Not started,1,,,,,,,,n=16 at 08-31; tail confirmed at ~1/3 max loss and survived; Exp(R) +0.055/condor,,,,ANDY,
+item,T-37,P6,Wire roster.py --check and portfolio.py --check into daily.sh or CI (parked I-03/I-04),,Not started,3,,,,,,,,both boards regenerate manually only; pushes have bypassed phase0 repeatedly,,,,DEVIN,
