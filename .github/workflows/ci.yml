@@ -224,6 +224,12 @@ jobs:
       - name: check refs (ruling IDs + bots_meta row count)
         run: python3 scripts/check_refs.py
 
+      - name: roster board up to date
+        run: python3 scripts/roster.py --check
+
+      - name: portfolio board up to date
+        run: python3 scripts/portfolio.py --check
+
   selftests:
     runs-on: ubuntu-latest
     steps:
