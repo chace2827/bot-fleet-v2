@@ -225,7 +225,7 @@ def selftest():
         fails += not ok
         results.append((ok, name, got, want))
 
-    tmp = tempfile.mkdtemp(prefix="rcpt-selftest-", dir=ROOT)
+    tmp = tempfile.mkdtemp(prefix="rcpt-selftest-")
     try:
         data = os.path.join(tmp, "data")
         os.makedirs(data)

@@ -266,7 +266,7 @@ def selftest():
 
     repo = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-    tmp = tempfile.mkdtemp(prefix="ingest-selftest-", dir=repo)
+    tmp = tempfile.mkdtemp(prefix="ingest-selftest-")
     try:
         downloads = os.path.join(tmp, "downloads")
         root = os.path.join(tmp, "root")
