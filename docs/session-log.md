@@ -10610,3 +10610,110 @@ assume daily cadence and read oddly across an 8-day gap. `daily_brief.py` ran CO
 **Ready to commit:** 42 files — see the staging manifest in the dispatch report. Excluded and
 flagged for Andy's call: `scripts/oa-driver/` and `docs/oa-internal-api.md` (OA-lane tooling, named
 by the capture bundle's method line but not by this dispatch), and every `_*` working file.
+
+## 2026-08-31 (evening) — T-42 added to the portfolio board (Cowork Fable chat)
+At Andy's explicit instruction. New item **T-42 (P4, prio 2, blocked_by T-40, lane ANDY)**:
+red-day postmortem loop — trigger threshold in R; inputs = ledger + tape + per-position Trades
+lists + breach captures; output = written finding + pre-registered hypothesis, never a direct
+fleet edit (discipline rules: red days generate experiments, not edits). Candidate machinery:
+intraday_read/tape, pending T-16. Board now 9 programs / 97 items; `portfolio.py --check` green;
+CRLF artifact from the csv append caught and reverted to LF before anything else read the file.
+Hosted portfolio artifact republished to the same URL. Changed files: `data/portfolio.csv`,
+`portfolio.html`, `docs/session-log.md` — ready for Andy's commit (portfolio.csv/html were
+already riding uncommitted from earlier today).
+
+---
+
+## 2026-08-31 (evening, ET) — sizing-policy session (Cowork/Opus lane). DRAFT-ONLY, NO EXECUTION.
+
+Executed `_dispatch-2026-09-01-sizing-policy-cowork.md`, folding in **Phase 1 only** of
+`_dispatch-2026-09-01-gf-sizing-cowork.md` (its Phases 2–3 are post-signature and out of scope).
+**No OA edit, no toggle, no save, no allocation change, no plan amendment, no sizing applied.**
+Four `_*` draft files written at repo root; **no repo-tracked file was changed except this log.**
+Verified by `find . -newermt "today 23:10"` → exactly the four drafts, nothing else.
+
+```
+_sizing-policy-draft-2026-09-01.md     609829cbbc2b31e3d19b882b4d32279893cea21761a19d1057af8ad3e70c9ca1
+_rulings-draft-2026-09-01-sizing.md    a08ce86b97fc503e5d190c9d1be65947bdce284e9d2b65079f7b6d40b22169f7
+_rulings-draft-2026-09-01-gf-sizing.md 7d43d465fc3b5ed51dc5f9651272bb8956b24a495439713e3fd004cb69128132
+_roe-cap-proposal-2026-09-01.md        93f7e17555aa18bf79bccf25db5273d32dffff519b18cd1d117388cb20d385ff
+```
+(direct `device_bash` sha256 of each file, not a tool response — §9.1a. Final values, re-read
+after the last in-session edit; an earlier draft of this entry carried two pre-edit hashes.)
+
+⚠️ **DISCLOSED — two tracked files moved mtime during this session and this session did not write
+them.** `data/portfolio.csv` (23:25:30Z) and `portfolio.html` (23:25:16Z) were re-stamped seconds
+before/after my own first write, and an empty `.tmp.driveupload/` directory appeared at repo root
+— the signature of a Drive sync client touching the mounted tree, not a content change. Last
+commit is `1e34ea0 "backfill"` (`gitstore/bot-fleet-v2.git/logs/HEAD`, read as a file — no git
+command run on the mounted tree, §9.1), which post-dates the earlier 08-31 session's portfolio
+work, so those files were already committed. **Andy: check `git status` at commit review; if
+either shows a diff it did not come from here.**
+
+**Six rulings drafted, all UNSIGNED:** `SIZING-LADDER` (size at entry, not on graduation) ·
+`GF-INTERIM-CLAUSE` (3 options + Canary sub-ruling) · `SLEEVE-CAPS` · `MIRRORS-NO-RESIZE`
+(+ the 3DTE exception, revert recommended) · `GROUP-HYGIENE` · `G4-ROE-CAP`.
+Plus the GF-family instance (G-1…G-6) in its own file.
+
+**FINDINGS — five, all derived in-session from file surfaces, none previously recorded:**
+
+1. **The SPX IC sleeve is over its signed daily cap TODAY, and this predates this session.**
+   PR-01/PR-02 carry `Daily aggregate ≤ $10K across the SPX IC sleeve`. Three ON arms at
+   ~$4,900/position each = **$14,700** (`data/trades.csv` median `risk`: FastPT25-S2 $4,900,
+   -130PM $4,750 med/$4,900 max, Fortress-Unstopped $4,900). Live breach of a signed line.
+   Re-ruled cap proposed at $15,000; **not applied.**
+
+2. **The GF arms are one bet in seven wrappers — correlation proven, not assumed.**
+   Daily sum-of-arm-R from `data/trades.csv`: on **2026-08-26 all 8 arms lost on the same day**
+   (family ΣR −0.532). Every other day in the sample is 0–2 arms losing. Any aggregate cap that
+   treats them as independent is wrong on the only evidence there is.
+
+3. **The ledger's sizing ladder is self-blocking.** L82-83 sets size by stage
+   (1 lot experiment → ≈$5K CANDIDATE+), but **every graduating bot on the readiness board is
+   VALIDATE, all blocked at G2, best n=16** — so nothing would ever size up. Meanwhile
+   `STATUS.md`'s own allocation-realism table flags **twelve** ON bots `1-lot — fill-untested`
+   with *"their edge won't survive the slippage of a real order size"*. i.e. the ladder defers
+   size until evidence justifies it, using evidence that by the board's own words cannot.
+   Proposed resolution: **size at entry**, reason in writing per G6 — *R is size-free, fills are not.*
+
+4. **The shared-scanner attachment list is NOT answerable from any local surface.**
+   `data/bots_config_v2.csv` has `attached_to = "NONE (Unused)"` for `GF-ScannerA-PutSpread` at
+   **v9** — stale; the automation is at **v12**. The ledger's `sharing:1, "8 bots"` is a **count**,
+   and a count is not a membership list. Per §5 (*inference from absence is never an
+   evidence-backed correction*) the drafts do **not** assert the scanners are GF-only. It is
+   STEP 0 (read-only) of the execution paste and a **STOP condition** if any non-GF bot appears.
+
+5. **Two figures named in the dispatch do not reproduce; corrected in the drafts.**
+   (a) *"champion maxDD-R −0.68 at n=16"* — that is **`IC-SPX-FastPT25-S2-130PM`** (−0.684).
+   The champion proper is **−0.010**, cross-checked against `STATUS.md` L33 (−$50 ÷ $4,900).
+   (b) *"one max loss ≈ 1.7 winning days at current tier"* — derived **17.3**
+   ($4,940 largest single-position max loss ÷ $285 fleet mean/day). Lost factor of ten.
+
+**T-39 — G4 RoE $ cap, three levels, each anchored to an observed number:**
+Cap 1 per-bot drawdown **$15,000** (= v1 champion's worst cumulative DD **−$14,540** at this exact
+tier, 364 legs / 221 positions, `data/archive/trades.csv`) · Cap 2 fleet drawdown **$35,000**
+(= the GF family's own structural single-day max at the new tier, 7 × $5K) · Cap 3 single-day
+fleet halt **$8,000** (= the worst single day this program has had at this tier, **−$8,050**,
+2026-06-11). Three because each covers the others' blind spot (finding 2 kills a per-bot-only cap).
+Tail recomputed at the new tier: GF family full tail **$1,302 → $33,852** (×26); fleet mean
+$285 → $681/day; fleet authorized risk-at-work ~$26K → **~$72K/day**.
+⚠️ Signing the caps **creates a code task, not a brake** — nothing in `scripts/report.py` computes
+them; the `$` half of G4 stays `<FILL>` until the Claude Code lane implements it.
+⚠️ Every post-cutover figure is **T5** (n=16 trading days). The v1 anchors are larger-sample but
+pre-cutover and are cited **as history only**. Re-derive at n≥100.
+
+**T-40 — breach playbook drafted** (`_roe-cap-proposal-2026-09-01.md` Part 2): exit config → 
+automations-side backstop (⚠️ the 15:52 timestamp is still unverified) → else expiry; intraday
+check order (EXIT OPTIONS toggle first — the v1 lapse mechanism; then the 10-errors/day failsafe;
+then bot logs, because zero log rows ≠ a gated bot); capture set; cap-breach actions; four gaps
+stated rather than papered over.
+
+**Tracker (§9.1 step 2) — DELIBERATELY NOT UPDATED.** T-39/T-40 live in `data/portfolio.csv`,
+which is repo-tracked, and the artifact renders from it. Nothing here is decided — the rows are
+`Not started` and the honest next state is "draft awaiting signature", which is a status change
+this draft-only session was told not to make. Flagged in the hand-off instead; one command once
+Andy signs or explicitly authorizes the status bump.
+
+**Next:** Andy signs (or amends) the two rulings files → a separate OA session runs the execution
+paste at `_sizing-policy-draft-2026-09-01.md` §6, whose STEP 0 is the read-only shared-scanner
+enumeration and whose PRECONDITION 1 is the signature itself.
