@@ -11,21 +11,14 @@ import json
 import os
 import sys
 
+import market_calendar as mcal
+
 ROOT = os.environ.get("FLEET_ROOT") or os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 HEARTBEAT_DIR = os.path.join(ROOT, "artifacts", "heartbeat")
 
 
-def previous_trading_day(day):
-    """Previous calendar day that is not a weekend (US markets)."""
-    d = datetime.date.fromisoformat(day)
-    d -= datetime.timedelta(days=1)
-    while d.weekday() >= 5:  # 5 = Saturday, 6 = Sunday
-        d -= datetime.timedelta(days=1)
-    return d.isoformat()
-
-
 def check(day):
-    prev = previous_trading_day(day)
+    prev = mcal.previous_trading_day(day)
     path = os.path.join(HEARTBEAT_DIR, f"{prev}.json")
 
     if not os.path.exists(path):
@@ -68,7 +61,7 @@ def check(day):
 def selftest():
     """Create a heartbeat, check the next day, delete it, and confirm the check fails."""
     day = "2026-08-11"
-    prev = previous_trading_day(day)
+    prev = mcal.previous_trading_day(day)
     path = os.path.join(HEARTBEAT_DIR, f"{prev}.json")
     os.makedirs(HEARTBEAT_DIR, exist_ok=True)
 
