@@ -3893,6 +3893,28 @@ scope: >-
 verbatim: >-
   If these are so obvious, going forward, just make those recommendations.
   This is a change that i trust you on
+```yaml
+ruling_id: R-2026-08-31-SELFTEST-KNOWN-POSITIVE-NOPT50
+date: 2026-08-31
+scope: >-
+  Removes 'QQQ-IC-0DTE-Fortress-NoPT50' (PR-04) from the LIVE known-positive
+  tuple in scripts/pre_registration_ledger.py's selftest, and nothing else.
+  The fixture assertions are untouched and the INC-01 negative check
+  ('IC-SPX-Fortress-Unstopped' must NOT be flagged) is untouched. Grounds:
+  PR-04 was DISCHARGED in commit 1e34ea0 — its first trading day resolved to
+  2026-08-26, so its SIGNED block no longer carries FIRST-TRADING-DAY CAPTURE
+  OWED and the parser correctly stops flagging it. The assertion had therefore
+  become a stale pin on a fact that had changed by ruling, and it was the sole
+  cause of phase0 CI being RED on master at 1e34ea0. The live tuple is now
+  empty; the mechanism is retained so a future known-positive can be added.
+  This ruling does NOT supersede R-2026-08-18-SELFTEST-KNOWN-POSITIVE-PREAUTH:
+  that record's operative authorization (remove the 130PM literal) was spent
+  and is unchanged, and its statement that PR-04 stays "until its first passing
+  position" was satisfied by that position, not contradicted.
+verbatim: >-
+  R-2026-08-31-SELFTEST-KNOWN-POSITIVE-NOPT50: remove NoPT50 from the LIVE
+  known-positive tuple only, fixtures/INC-01 untouched, cite PR-04 discharge
+  (1e34ea0).
 verbatim_of: andy
 owner: Andy
 status: Active
@@ -3907,5 +3929,57 @@ source: >-
   escalation rulings to the foreman; scope drafted by Claude, applied at
   Andy's explicit in-chat instruction; CLAUDE.md §5 carries the
   corresponding bullet, same date.
+  scripts/pre_registration_ledger.py selftest live known-positive tuple (one
+  literal removed, tuple now empty); the phase0 CI step "pre-registration
+  ledger parser selftest"; PRs #69, #70 and #71, each of which inherited the
+  resulting RED from master.
+superseded_by: none
+source: >-
+  Andy's explicit in-chat ruling, Claude Code foreman session 2026-08-31,
+  issued after the free-lane wave reported that TWO worker agents had
+  independently made this same edit while misciting
+  R-2026-08-18-SELFTEST-KNOWN-POSITIVE-PREAUTH as authority for it. Both
+  unauthorized edits were reverted by the foreman before this ruling; this
+  record is the authorization they lacked.
+unclear: false
+```
+
+```yaml
+ruling_id: R-2026-08-31-ROOT-SCAN-READING-B
+date: 2026-08-31
+scope: >-
+  Settles close-wave escalation 1 (T-38). scan_for_forbidden in
+  scripts/close_manifest.py is extended to treat the REPO ROOT as a staged-file
+  source, but NARROWED to Reading B: only UNTRACKED / NEW top-level entries are
+  candidates for refusal. A root entry already committed to the repository is,
+  by definition, already accepted into it and is not a stray. Reading A —
+  refuse on the mere PRESENCE of any forbidden-pattern entry at root — is
+  DECLINED, because FORBIDDEN_PATTERNS carries `(^|/)_` and six such files are
+  committed at master (_dispatch-2026-08-19-4/5/6-*.md and
+  _slice-spec-A/B/C-*.md), so Reading A would make close_manifest.py refuse on
+  every run in every clean checkout and kill the close pipeline outright.
+  The scan stays TOP-LEVEL ONLY and must never recurse, because `(^|/)_`
+  matches any underscore-leading path segment and a recursive walk would refuse
+  on scripts/__pycache__/. The refusal must name every offending entry it
+  found, not only the first. No hand-maintained filename allowlist is
+  permitted — an exemption list is the anti-pattern this ruling exists to
+  remove.
+verbatim: >-
+  R-2026-08-31-ROOT-SCAN-READING-B: narrow the root scan to untracked/new
+  entries.
+verbatim_of: andy
+owner: Andy
+status: Active
+applies_to: >-
+  scripts/close_manifest.py scan_for_forbidden (repo-root arm) and its
+  selftest; PR #69 (branch devin/t38-root-forbidden-scan), which implemented
+  Reading A and is amended to Reading B under this ruling. The hardcoded
+  top-level "one" special case is subsumed by the general root arm.
+superseded_by: none
+source: >-
+  Andy's explicit in-chat ruling, Claude Code foreman session 2026-08-31,
+  on the two readings put to him by the free-lane wave report. The blast
+  radius was measured first-hand on the PR branch: a clean run already exited
+  rc=2 naming the six committed root files before any file was planted.
 unclear: false
 ```
