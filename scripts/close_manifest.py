@@ -30,7 +30,6 @@ import json
 import os
 import re
 import shutil
-import subprocess
 import sys
 import tempfile
 
@@ -106,12 +105,32 @@ def check_forbidden(paths):
 
 
 def scan_for_forbidden(root, day):
-    """Walk the close output directories and refuse on any forbidden file.
+    """Walk the close output directories and the repo root (top-level only)
+    and refuse on any forbidden file.
 
     The second scan is intentionally redundant with the staged-path checks:
     a file that is not part of the manifest but sits in an output directory
     (e.g. a planted `_scratch.md`) must still be seen red.
+
+    The repo-root scan is top-level only: the `_` pattern matches any path
+    segment beginning with an underscore, so a recursive walk would refuse
+    on `scripts/__pycache__/` and similar.  Only top-level entries are
+    staged-file sources; subdirectories are output directories covered by
+    the explicit directory list above.
     """
+    # Top-level repo-root entries are staged-file sources too.  Report the
+    # full set, not just the first, so the operator can clean once.
+    forbidden_root = []
+    for name in os.listdir(root):
+        ap = os.path.join(root, name)
+        rel = name if not os.path.isdir(ap) else name + "/"
+        if is_forbidden(rel):
+            forbidden_root.append(name)
+    if forbidden_root:
+        forbidden_root.sort()
+        die("forbidden top-level repo file(s): "
+            + ", ".join(repr(p) for p in forbidden_root))
+
     dirs = [
         os.path.join(root, "data", "raw"),
         os.path.join(root, "data", "receipts"),
@@ -133,10 +152,6 @@ def scan_for_forbidden(root, day):
                 rel = os.path.relpath(ap, root)
                 if is_forbidden(rel):
                     die(f"forbidden path in output set: {rel!r}")
-    # Top-level stray file "one"
-    one = os.path.join(root, "one")
-    if os.path.exists(one):
-        die("forbidden top-level file: one")
 
 
 # ---------------------------------------------------------------------------
@@ -847,6 +862,48 @@ def selftest():
         check("M1c-after removing _scratch.md, manifest succeeds",
               os.path.isfile(os.path.join(data, "close", day1, "manifest.json")),
               True)
+
+        # --- F1: top-level repo-root scan -------------------------------
+        # Plant forbidden files at the root of a clean test directory and
+        # confirm scan_for_forbidden refuses, names both, and exits rc=2.
+        scan_root = os.path.join(tmp, "scan-root-test")
+        os.makedirs(scan_root, exist_ok=True)
+        open(os.path.join(scan_root, "_root_scratch.md"), "w").close()
+        open(os.path.join(scan_root, "one"), "w").close()
+        err = io.StringIO()
+        try:
+            with contextlib.redirect_stderr(err):
+                scan_for_forbidden(scan_root, day1)
+            refused = False
+            code = None
+        except SystemExit as e:
+            refused = True
+            code = e.code
+        msg = err.getvalue()
+        check("F1a root _root_scratch.md is refused",
+              (refused, code), (True, 2))
+        check("F1b root file 'one' is still caught by the general rule",
+              "one" in msg, True)
+        check("F1c refusal names the root offending file(s)",
+              "_root_scratch.md" in msg, True)
+
+        # Confirm the scan is top-level only: a nested underscore file under
+        # an otherwise-allowed subdirectory must not be discovered.
+        clean_root = os.path.join(tmp, "clean-root-test")
+        os.makedirs(clean_root, exist_ok=True)
+        os.makedirs(os.path.join(clean_root, "allowed"), exist_ok=True)
+        open(os.path.join(clean_root, "allowed", "_nested.md"), "w").close()
+        err2 = io.StringIO()
+        try:
+            with contextlib.redirect_stderr(err2):
+                scan_for_forbidden(clean_root, day1)
+            clean_ok = True
+            clean_code = 0
+        except SystemExit as e:
+            clean_ok = False
+            clean_code = e.code
+        check("F1d top-level-only scan ignores nested _nested.md",
+              (clean_ok, clean_code), (True, 0))
 
         # (e) capture: ABSENT recorded loudly when no bundle.
         day2 = "2099-01-09"
