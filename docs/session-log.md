@@ -10743,3 +10743,18 @@ dominant option; capital/sizing/kill-criteria/pre-reg/go-live/OA-behavior/frozen
 tiers stay gated, ambiguity stays gated; every delegated ruling recorded + listed at close-out;
 Andy vetoes at commit review, revoke any time. Scope drafted by Claude — Andy should read the
 two files at commit and reject if the boundary is wider than he meant.
+
+## 2026-08-31 (night) — free-lane wave CLOSED OUT (Cowork Fable chat)
+Foreman report: rulings applied via PR #72 (records both in RULINGS.md + applies the selftest
+edit same-commit); merge order #72->#69->#71->#70, each rebased onto moved master (fd176c6) and
+re-verified; **origin master 1e34ea0 -> 115f7b4, phase0 GREEN** (was red all wave). Cost 4/4
+sessions acu=0.0. R-2026-08-18-SELFTEST-KNOWN-POSITIVE-PREAUTH left Active (scope spent, clause
+satisfied) — foreman judgment call, flagged in #72 body, Andy may reverse. Board updated
+(Cowork, cited): T-33/T-37/T-38 -> Done w/ PR + red-green evidence; T-41 note += $HOME primer
+clobber gap; **T-43 added** (wire close_manifest --selftest into phase0 — foreman's uncovered
+gap). Board 98 items, --check green, artifact republished same URL.
+⚠️ ACTION BEFORE TUE CLOSE: local tree has NOT pulled the merged code, and ~22 untracked _*.md
+at repo root will trip the new root guard (rc=2 refusal) on the first live close.sh run.
+Hand-off command to Andy: pull, then relocate untracked _*.md -> drafts/ (git's own untracked
+definition via ls-files), then commit board+log. Verify after pull: pre_registration_ledger
+--selftest OK locally; read merged scan code to confirm drafts/ is outside its surface.
