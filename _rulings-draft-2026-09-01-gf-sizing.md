@@ -1,6 +1,6 @@
-# RULING DRAFT — GF family sizing — 2026-09-01 — ⬜ UNSIGNED
+# RULING DRAFT — GF family sizing — 2026-09-01 — ✅ SIGNED 2026-09-02 (N = 26, route (a))
 
-Status: **DRAFT. Phase 1 only.** No OA edit made, no repo-tracked file changed, nothing executed.
+Status: **SIGNED 2026-09-02 (Andy, in-chat; transcribed by Claude). Phase 2 (execute) authorized → `drafts/_dispatch-2026-09-03-sizing-execution-cowork.md`. Phase 3 (record) follows execution.**
 Source dispatch: `_dispatch-2026-09-01-gf-sizing-cowork.md` — **Phase 1 folded into the sizing
 policy session; Phases 2 (execute) and 3 (record) are out of scope and post-signature.**
 Companion: `_rulings-draft-2026-09-01-sizing.md` (R-2 is the same decision at family grain — sign
@@ -46,7 +46,7 @@ of $40,000/day** (7 GF + `QQQ-IC-0DTE-Fortress-NoPT50`). The standing `≤ $10K 
 sleeve` line is superseded by `_rulings-draft-2026-09-01-sizing.md` **R-3**, which must be signed
 in the same sitting. **Signing G-1 without R-3 puts two signed documents in contradiction.**
 
-SIGNED — Andy — ......................        N = ......
+SIGNED — Andy — 2026-09-02        N = 26
 
 ---
 
@@ -78,7 +78,7 @@ family single-day tail (all 7 arms max-lose together) **$1,302 → $33,852**, ×
 Correlation is **proven, not assumed**: on **2026-08-26 all 8 arms lost on the same day** — the
 only bad day in the sample hit every arm at once. This family is one bet in seven wrappers.
 
-**Andy approves the final N.**   N = ......        SIGNED — Andy — ......................
+**Andy approves the final N.**   N = 26        SIGNED — Andy — 2026-09-02
 
 ---
 
@@ -142,7 +142,7 @@ eight. Two routes, pick one at signing; **do not improvise a third:**
   smallest expressible risk` as an amendment. *Cost:* ~$4,825/day of tail on a bot whose P/L is
   stipulated to be meaningless.
 
-Route: ☐ (a)   ☐ (b)        SIGNED — Andy — ......................
+Route: ☑ (a) detach Canary to bot-local 1-ct scanner copies   ☐ (b)        SIGNED — Andy — 2026-09-02 ("detach to bot-local, keep 1ct")
 
 ### G-3e · Verification — both layers, neither substitutes for the other (`CLAUDE.md` §5)
 - **Layer 1, immediate:** re-open each edited automation fresh with a **HARD RELOAD**, recompute

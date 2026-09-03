@@ -1,6 +1,6 @@
-# RULING DRAFTS — fleet sizing policy — 2026-09-01 — ⬜ UNSIGNED, ALL SIX
+# RULING DRAFTS — fleet sizing policy — 2026-09-01 — ✅ SIGNED 2026-09-02, ALL SIX (+ R-7 addendum)
 
-Status: **DRAFT. Nothing signed, nothing applied, no OA edit made, no repo-tracked file changed.**
+Status: **SIGNED 2026-09-02 (Andy, in-chat, Cowork Fable session; transcribed by Claude per R-2026-08-31-DERIVED-RULING-AUTHORITY). NOT YET APPLIED — OA execution pending (`drafts/_dispatch-2026-09-03-sizing-execution-cowork.md`).**
 Analysis and derivations: `_sizing-policy-draft-2026-09-01.md`.
 GF-family instance: `_rulings-draft-2026-09-01-gf-sizing.md` (sign both or neither — R-1 and
 R-2 are the same decision at two grains).
@@ -52,7 +52,7 @@ readiness board already shows losing.
 P/L is not poolable across it. **R, sample counts and gate progress are unaffected** — the
 readiness board is size-free by construction. Recorded per bot in `data/bots_meta.csv`.
 
-SIGNED — Andy — ......................
+SIGNED — Andy — 2026-09-02   (unit confirmed by Andy: "$5K per condor" = larger side of the condor, per CLAUDE.md §4)
 
 ---
 
@@ -80,7 +80,7 @@ changes, no new tail, and the stated intent is deferred.
 arm count; 7 × $5K is expensive *because there are 7 arms*. This is a separate decision and is not
 drafted here.
 
-SIGNED — Andy — ......................        OPTION: ......
+SIGNED — Andy — 2026-09-02        OPTION: 1 — AMEND NOW (Andy: "i")
 
 ### R-2b — Canary exception (sub-ruling; only if Option 1)
 PR-20 is `IC · control (instrument)`, `MECHANISM n/a — not run for edge`, `SAMPLE TARGET n/a —
@@ -94,7 +94,7 @@ It is not an arm of the exit-policy A/B, so holding it at 1 ct does not make the
 all eight. Resolution route must be chosen before execution; see
 `_rulings-draft-2026-09-01-gf-sizing.md` §G-3.
 
-SIGNED — Andy — ......................        CHOICE: ......
+SIGNED — Andy — 2026-09-02        CHOICE: Canary stays at 1 ct; route (a) detach to bot-local (Andy verbatim: "detach to bot-local, keep 1ct")
 
 ---
 
@@ -123,7 +123,7 @@ session**. It is disclosed here rather than fixed quietly.
 
 This is *authorized exposure*, not a loss estimate. The loss brake is R-6.
 
-SIGNED — Andy — ......................
+SIGNED — Andy — 2026-09-02   (caps as tabled: SPX $15K · QQQ $40K · Dir $5K · Mirror $12K · fleet $72K. Andy: "Your reccos are fine". Andy stated the paper account net liq is "$100k, possibly higher" — the $72K authorized figure is ~72% of that; recorded, not re-derived.)
 
 ---
 
@@ -156,7 +156,7 @@ either way.
 recording that the 20%-of-allocation criterion is re-based to $10K and that its post-08-31
 positions are a **new sizing epoch** not poolable with what came before.
 
-SIGNED — Andy — ......................        CHOICE: ......
+SIGNED — Andy — 2026-09-02        CHOICE: REVERT to $5,000 (Andy verbatim: "Revert to $5K")
 
 ---
 
@@ -189,7 +189,7 @@ already carries lineage; a third axis would need a third thing kept in sync.
 ⚠️ Whether `PR-NN` tags exist in OA today is **not readable from any local surface** — a read-only
 OA pass, not asserted here.
 
-SIGNED — Andy — ......................   (A ☐ · B ☐ · tags ☐ — tick what you authorize)
+SIGNED — Andy — 2026-09-02   (A ☑ · B ☑ · tags ☑ — all three authorized; Andy: "yes")
 
 ---
 
@@ -225,4 +225,30 @@ pre-cutover and are cited **as history only**. Re-derive at n≥100.
 any surface are OA paper allocations, which are not capital. State a live figure and all three
 convert in one pass.
 
-SIGNED — Andy — ......................
+SIGNED — Andy — 2026-09-02   (three levels as tabled: per-bot $15K / fleet $35K / day-halt $8K. Signed as the R-1 package. Creates a CODE task (report.py MAXDD $ cap) — DEVIN/CC lane, not an OA edit. §1.7 input now stated by Andy: paper net liq ≈ $100K, possibly higher — a paper allocation, still not live capital; the %-of-capital form stays underived.)
+
+---
+
+## R-2026-09-02-POSITION-LIMITS — addendum (Andy, 2026-09-02, not in the 09-01 draft)
+
+**Decision.** DAILY POSITIONS / POSITION LIMIT per bot:
+- `IC-SPX-FastPT25-S2` and `-130PM`: **keep 2 per day / 2 at a time** (live candidate + its A/B
+  clone; S2b values). Read-only confirm, do not edit.
+- The 6 sized GF arms (`Ride`, `PT50`, `Trail`, `Touch0`, `SL100`, `SL200`) and `Canary`:
+  **target 1 per day / 1 at a time.** Andy verbatim: "keep 2/2 on FastPT25 (it's the live
+  candidate), set GF arms 1/1."
+
+**Execution guard (Claude, derived, per DERIVED-RULING-AUTHORITY).** The 08-31 capture read
+`GF-QQQ-IC-Ride-Delta` as already `1 per day / 1 at a time`, and the family opens a put spread
+AND a call spread as separate scanner actions (`data/trades.csv` 2026-08-20 T00345 both sides,
+same day). So "1/1" is likely ALREADY the GF value and OA's limit evidently does not block the
+second side under it. Therefore: **READ each arm's limits first. If already 1/1 → record, no
+edit. If anything else → set 1/1, record the prior value, and add a Layer-2 check that BOTH
+sides still open on the next fill-day.** Never lower a limit on the SPX pair.
+
+SIGNED — Andy — 2026-09-02   (transcribed from in-chat answer #8)
+
+## Deferred, explicitly: R-DIRECTIONAL (Andy, 2026-09-02)
+`DIR-SPX-CallVIXdrop` (CI below zero) / `DIR-SPX-PutVIX22-SL75` (no post-cutover fills): Andy —
+"I dont understand. Come back to this one later, not a major priority." **No change. Both stay
+ON at 1 ct (R-1 class E / no-change).** The execution session does not touch them.
