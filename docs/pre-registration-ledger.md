@@ -250,6 +250,16 @@ SIGNED           2026-08-09 · ANDY — gate A7, in-chat at the S2 Day-0 sitting
                  posLimitDay/posLimit are set to 1 for the first-position read and REVERTED
                  immediately after, with the revert HASH-PROVEN.
 ```
+
+> ### 📝 AMENDED 2026-09-02 — `R-2026-09-01-SLEEVE-CAPS` (SIGNED — Andy — 2026-09-02)
+> **The `MAX LOSS` line above is left standing, unedited.** The SPX IC daily aggregate cap of
+> **$10,000 is superseded by $15,000/day** (3 ON arms x ~$5K). The re-ruling exists because the
+> sleeve was **already over its signed cap before this session**: IC-SPX-FastPT25-S2 $4,900 +
+> -130PM $4,750 median/$4,900 max + IC-SPX-Fortress-Unstopped $4,900 = **$14,700 against $10,000**
+> (all from `data/trades.csv`). The breach predates 2026-09-02 and is disclosed, not fixed quietly.
+> Fleet authorized risk-at-work: SPX $15K + QQQ $40K + Directional $5K + Mirror $12K = **$72,000/day**.
+> Nothing on this bot was edited on 2026-09-02; its limits were read-only confirmed at 2 per day /
+> 2 at a time (`data/captures/2026-09-02-gf-sizing/06-groups-tags-2026-09-02-222800.md`).
 > ⚠️ **This entry deliberately does NOT inherit the 29 post-fix condors.** `build-plan.md` §4:
 > the clone is a fresh pre-registered control at n=0; the old "the baseline continues unbroken"
 > argument is dead and must not reappear.
@@ -314,6 +324,16 @@ SIGNED           2026-08-09 - ANDY - gate cleared at S2b, in-chat. Runbook Step 
                  RIDER DISCHARGED BY SUBSTITUTE 2026-08-18 per R-2026-08-18-PR02-DISCHARGE-PR04-REANCHOR; capture data/captures/2026-08-18-pr02pr04/01-PR-02-closed-positions-2026-08-18-042142.txt sha256 61c9fdae944b6569f5d7126f02973f21a47001e07fbe625cf1b7900fedae17d5; evidence 2026-08-10..2026-08-17 remains SIGNED != VERIFIED.
 ```
 
+> ### 📝 AMENDED 2026-09-02 — `R-2026-09-01-SLEEVE-CAPS` (SIGNED — Andy — 2026-09-02)
+> **The `MAX LOSS` line above is left standing, unedited.** The SPX IC daily aggregate cap of
+> **$10,000 is superseded by $15,000/day** (3 ON arms x ~$5K). The re-ruling exists because the
+> sleeve was **already over its signed cap before this session**: IC-SPX-FastPT25-S2 $4,900 +
+> -130PM $4,750 median/$4,900 max + IC-SPX-Fortress-Unstopped $4,900 = **$14,700 against $10,000**
+> (all from `data/trades.csv`). The breach predates 2026-09-02 and is disclosed, not fixed quietly.
+> Fleet authorized risk-at-work: SPX $15K + QQQ $40K + Directional $5K + Mirror $12K = **$72,000/day**.
+> Nothing on this bot was edited on 2026-09-02; its limits were read-only confirmed at 2 per day /
+> 2 at a time (`data/captures/2026-09-02-gf-sizing/06-groups-tags-2026-09-02-222800.md`).
+
 ### `QQQ-IC-0DTE-Fortress` (clone; original archived) — the pilot bot
 ```
 ID               PR-03
@@ -339,6 +359,14 @@ VERIFICATION     First new position's Trades list contains BOTH a PT row and a t
                  closing positions.
 SIGNED           ..............................
 ```
+
+> ### 📝 AMENDED 2026-09-02 — `R-2026-09-01-SLEEVE-CAPS` (SIGNED — Andy — 2026-09-02)
+> **The `MAX LOSS` line above is left standing, unedited.** The QQQ IC daily aggregate cap of
+> **$10,000 is superseded by $40,000/day** — 8 ON arms x ~$5K (7 GF arms + `QQQ-IC-0DTE-Fortress-NoPT50`).
+> The re-ruling is mandatory rather than optional: under `R-2026-09-01-GF-INTERIM-CLAUSE` Option 1,
+> signed and applied on 2026-09-02, the GF family alone reaches $35,000/day, which would put two
+> signed documents in contradiction if the $10K line stood alone.
+> Nothing on this bot was edited on 2026-09-02.
 > ⚠️ **This is the pilot bot for the 9-step clone ritual** (runbook §3 Step A). Nothing else in
 > Phase 4 starts until this one is clean.
 > ⚠️ **The 15:52 backstop timestamp is unverified** — the Market-close trigger is hard-coded to
@@ -641,6 +669,26 @@ SIGNED           2026-08-09 · ANDY — in-chat at the S2 Day-0 sitting. Ruling 
                  still required before this bot may trade, and rider 2's first-trading-day
                  capture is still owed. [PR-07]
 ```
+
+> ### 📝 AMENDED 2026-09-02 — `R-2026-09-01-MIRRORS-NO-RESIZE` (SIGNED — Andy — 2026-09-02, "Revert to $5K")
+> **All text above is left standing, unedited.**
+> ```
+> ALLOCATION       $10,000 -> $5,000, REVERTED 2026-09-02. The 2026-08-31 raise crossed the
+>                  do-not-resize line in effect. Verified after a HARD RELOAD on two surfaces:
+>                  a5.bots.bot.seed === 5000 AND the Safeguards panel reads $5,000.
+>                  The $5K figure is load-bearing inside this entry's own funding criterion
+>                  ("one bad position is 20%+ of it"), not incidental.
+> MAX LOSS         UNCHANGED. Its one open position (opened 2026-08-27, risk $965) was not touched.
+> SIZING TIER      UNCHANGED - do not resize a watch-only bot.
+> ```
+> ⚠️ **A CLAIM THIS AMENDMENT DOES NOT INHERIT.** `10-authorized-edits-2026-08-31.md` Edit 3, and
+> R-4's own rationale, state that this bot's Bot Input POSITION SIZE is "26% of net liquid", so the
+> allocation change doubles per-position dollar size. **Read first-hand 2026-09-02 from
+> `a5.bots.bot.inputs` after a hard reload, POSITION SIZE is
+> `{"text":"1 contract","type":"quantity","quantity":1}` — a fixed 1 contract.** On that reading
+> neither the raise nor this revert changes position size. The bot's automations were not opened,
+> so an automation-level override is not excluded. **Flagged for Andy; the revert stands either way.**
+> Evidence: `data/captures/2026-09-02-gf-sizing/05-allocations-2026-09-02-215500.md`.
 
 ### `Nigiri-Paper-v1`
 ```
@@ -1315,6 +1363,34 @@ GO-LIVE ORDERING `R-2026-08-09-S2-R5-LIMITS` — condor-aware: arms stay 2/2.
 TRACE CARRIER    `R-2026-08-18-P1-1A-ROSTER-FACTS` (per-arm roster facts ratified).
 ```
 
+> ### 📝 AMENDED 2026-09-02 — `R-2026-09-01-GF-SIZING` G-1 (SIGNED — Andy — 2026-09-02, N = 26)
+> **The `MAX LOSS`, `SIZING TIER` and `CONFIG HASH` lines above are left standing, unedited.**
+> Applied to OA the same day; evidence `data/captures/2026-09-02-gf-sizing/`.
+> ```
+> MAX LOSS         ~$5K risk per position (the LARGER SIDE of the condor, CLAUDE.md §4), 26 ct;
+>                  1 condor/day. 26 x $193 = $5,018. The standing "~$185 net risk per condor" is
+>                  a design estimate; the measured figure is $193/leg at 1 ct (data/trades.csv
+>                  median, n=15 legs/arm). Family daily aggregate <= $35,000 at 7 active arms;
+>                  only 6 arms are live (GF-QQQ-IC-Ride-Delta is AUTOS OFF and excluded by G-1),
+>                  so today's structural maximum is ~$30,108. Inside the re-ruled QQQ IC sleeve
+>                  cap of $40,000/day (R-2026-09-01-SLEEVE-CAPS).
+> SIZING TIER      ~$5K risk/position, 26 ct - IDENTICAL across all active arms. Set once, never
+>                  ad hoc. Opens a SIZING EPOCH at 2026-09-02: raw P/L is NOT poolable across the
+>                  boundary. R, sample counts and gate progress are unaffected.
+> CONFIG HASH      RE-STAMPED 2026-09-02 (the quantity edit changed both shared automations):
+>                    GF-ScannerA-PutSpread  2c4a96c5e2e3c8503dfe05263b45502f49de607b3e236263211c7e5e283e60d2
+>                    GF-ScannerB-CallSpread a1a48af1caebc35900ac7652b14bb26df084e492fa87aba2fc783c8068a9d7ba
+>                  `sharing:1`, attached-bot list now **7 bots** (Canary detached per R-2b route (a)),
+>                  enumerated by name in 02-scanner-attachments-2026-09-02-210500.md.
+> ALLOCATION       $2,500 -> $10,000, 2026-09-02. A container, not position size.
+> POSITION LIMITS  UNCHANGED at 2 per day / 2 at a time - and deliberately NOT edited.
+>                  `R-2026-09-02-POSITION-LIMITS` targets 1/1; the execution session withheld that
+>                  edit because a GF condor is TWO OA positions, so 1/day opens one side only.
+>                  The `GO-LIVE ORDERING` line above already reads "condor-aware: arms stay 2/2".
+>                  Escalated to Andy, unresolved. See docs/RULINGS.md, R-2026-09-02-POSITION-LIMITS.
+> LAYER 2          OUTSTANDING: the first new position's Trades list must read quantity 26.
+> ```
+
 ### PR-15 — `GF-QQQ-IC-PT50`
 ```
 ID               PR-15
@@ -1349,6 +1425,34 @@ SIGNED           2026-08-09 per `R-2026-08-09-S2-GATE-A7-SIGN-ALL-SEVEN`, re-sig
 GO-LIVE ORDERING `R-2026-08-09-S2-R5-LIMITS` — condor-aware: arms stay 2/2.
 TRACE CARRIER    `R-2026-08-18-P1-1A-ROSTER-FACTS` (per-arm roster facts ratified).
 ```
+
+> ### 📝 AMENDED 2026-09-02 — `R-2026-09-01-GF-SIZING` G-1 (SIGNED — Andy — 2026-09-02, N = 26)
+> **The `MAX LOSS`, `SIZING TIER` and `CONFIG HASH` lines above are left standing, unedited.**
+> Applied to OA the same day; evidence `data/captures/2026-09-02-gf-sizing/`.
+> ```
+> MAX LOSS         ~$5K risk per position (the LARGER SIDE of the condor, CLAUDE.md §4), 26 ct;
+>                  1 condor/day. 26 x $193 = $5,018. The standing "~$185 net risk per condor" is
+>                  a design estimate; the measured figure is $193/leg at 1 ct (data/trades.csv
+>                  median, n=15 legs/arm). Family daily aggregate <= $35,000 at 7 active arms;
+>                  only 6 arms are live (GF-QQQ-IC-Ride-Delta is AUTOS OFF and excluded by G-1),
+>                  so today's structural maximum is ~$30,108. Inside the re-ruled QQQ IC sleeve
+>                  cap of $40,000/day (R-2026-09-01-SLEEVE-CAPS).
+> SIZING TIER      ~$5K risk/position, 26 ct - IDENTICAL across all active arms. Set once, never
+>                  ad hoc. Opens a SIZING EPOCH at 2026-09-02: raw P/L is NOT poolable across the
+>                  boundary. R, sample counts and gate progress are unaffected.
+> CONFIG HASH      RE-STAMPED 2026-09-02 (the quantity edit changed both shared automations):
+>                    GF-ScannerA-PutSpread  2c4a96c5e2e3c8503dfe05263b45502f49de607b3e236263211c7e5e283e60d2
+>                    GF-ScannerB-CallSpread a1a48af1caebc35900ac7652b14bb26df084e492fa87aba2fc783c8068a9d7ba
+>                  `sharing:1`, attached-bot list now **7 bots** (Canary detached per R-2b route (a)),
+>                  enumerated by name in 02-scanner-attachments-2026-09-02-210500.md.
+> ALLOCATION       $2,500 -> $10,000, 2026-09-02. A container, not position size.
+> POSITION LIMITS  UNCHANGED at 2 per day / 2 at a time - and deliberately NOT edited.
+>                  `R-2026-09-02-POSITION-LIMITS` targets 1/1; the execution session withheld that
+>                  edit because a GF condor is TWO OA positions, so 1/day opens one side only.
+>                  The `GO-LIVE ORDERING` line above already reads "condor-aware: arms stay 2/2".
+>                  Escalated to Andy, unresolved. See docs/RULINGS.md, R-2026-09-02-POSITION-LIMITS.
+> LAYER 2          OUTSTANDING: the first new position's Trades list must read quantity 26.
+> ```
 
 ### PR-16 — `GF-QQQ-IC-Trail`
 ```
@@ -1388,6 +1492,34 @@ GO-LIVE ORDERING `R-2026-08-09-S2-R5-LIMITS` — condor-aware: arms stay 2/2.
 TRACE CARRIER    `R-2026-08-18-P1-1A-ROSTER-FACTS` (per-arm roster facts ratified).
 ```
 
+> ### 📝 AMENDED 2026-09-02 — `R-2026-09-01-GF-SIZING` G-1 (SIGNED — Andy — 2026-09-02, N = 26)
+> **The `MAX LOSS`, `SIZING TIER` and `CONFIG HASH` lines above are left standing, unedited.**
+> Applied to OA the same day; evidence `data/captures/2026-09-02-gf-sizing/`.
+> ```
+> MAX LOSS         ~$5K risk per position (the LARGER SIDE of the condor, CLAUDE.md §4), 26 ct;
+>                  1 condor/day. 26 x $193 = $5,018. The standing "~$185 net risk per condor" is
+>                  a design estimate; the measured figure is $193/leg at 1 ct (data/trades.csv
+>                  median, n=15 legs/arm). Family daily aggregate <= $35,000 at 7 active arms;
+>                  only 6 arms are live (GF-QQQ-IC-Ride-Delta is AUTOS OFF and excluded by G-1),
+>                  so today's structural maximum is ~$30,108. Inside the re-ruled QQQ IC sleeve
+>                  cap of $40,000/day (R-2026-09-01-SLEEVE-CAPS).
+> SIZING TIER      ~$5K risk/position, 26 ct - IDENTICAL across all active arms. Set once, never
+>                  ad hoc. Opens a SIZING EPOCH at 2026-09-02: raw P/L is NOT poolable across the
+>                  boundary. R, sample counts and gate progress are unaffected.
+> CONFIG HASH      RE-STAMPED 2026-09-02 (the quantity edit changed both shared automations):
+>                    GF-ScannerA-PutSpread  2c4a96c5e2e3c8503dfe05263b45502f49de607b3e236263211c7e5e283e60d2
+>                    GF-ScannerB-CallSpread a1a48af1caebc35900ac7652b14bb26df084e492fa87aba2fc783c8068a9d7ba
+>                  `sharing:1`, attached-bot list now **7 bots** (Canary detached per R-2b route (a)),
+>                  enumerated by name in 02-scanner-attachments-2026-09-02-210500.md.
+> ALLOCATION       $2,500 -> $10,000, 2026-09-02. A container, not position size.
+> POSITION LIMITS  UNCHANGED at 2 per day / 2 at a time - and deliberately NOT edited.
+>                  `R-2026-09-02-POSITION-LIMITS` targets 1/1; the execution session withheld that
+>                  edit because a GF condor is TWO OA positions, so 1/day opens one side only.
+>                  The `GO-LIVE ORDERING` line above already reads "condor-aware: arms stay 2/2".
+>                  Escalated to Andy, unresolved. See docs/RULINGS.md, R-2026-09-02-POSITION-LIMITS.
+> LAYER 2          OUTSTANDING: the first new position's Trades list must read quantity 26.
+> ```
+
 ### PR-17 — `GF-QQQ-IC-Touch0`
 ```
 ID               PR-17
@@ -1423,6 +1555,34 @@ SIGNED           2026-08-09 per `R-2026-08-09-S2-GATE-A7-SIGN-ALL-SEVEN`, re-sig
 GO-LIVE ORDERING `R-2026-08-09-S2-R5-LIMITS` — condor-aware: arms stay 2/2.
 TRACE CARRIER    `R-2026-08-18-P1-1A-ROSTER-FACTS` (per-arm roster facts ratified).
 ```
+
+> ### 📝 AMENDED 2026-09-02 — `R-2026-09-01-GF-SIZING` G-1 (SIGNED — Andy — 2026-09-02, N = 26)
+> **The `MAX LOSS`, `SIZING TIER` and `CONFIG HASH` lines above are left standing, unedited.**
+> Applied to OA the same day; evidence `data/captures/2026-09-02-gf-sizing/`.
+> ```
+> MAX LOSS         ~$5K risk per position (the LARGER SIDE of the condor, CLAUDE.md §4), 26 ct;
+>                  1 condor/day. 26 x $193 = $5,018. The standing "~$185 net risk per condor" is
+>                  a design estimate; the measured figure is $193/leg at 1 ct (data/trades.csv
+>                  median, n=15 legs/arm). Family daily aggregate <= $35,000 at 7 active arms;
+>                  only 6 arms are live (GF-QQQ-IC-Ride-Delta is AUTOS OFF and excluded by G-1),
+>                  so today's structural maximum is ~$30,108. Inside the re-ruled QQQ IC sleeve
+>                  cap of $40,000/day (R-2026-09-01-SLEEVE-CAPS).
+> SIZING TIER      ~$5K risk/position, 26 ct - IDENTICAL across all active arms. Set once, never
+>                  ad hoc. Opens a SIZING EPOCH at 2026-09-02: raw P/L is NOT poolable across the
+>                  boundary. R, sample counts and gate progress are unaffected.
+> CONFIG HASH      RE-STAMPED 2026-09-02 (the quantity edit changed both shared automations):
+>                    GF-ScannerA-PutSpread  2c4a96c5e2e3c8503dfe05263b45502f49de607b3e236263211c7e5e283e60d2
+>                    GF-ScannerB-CallSpread a1a48af1caebc35900ac7652b14bb26df084e492fa87aba2fc783c8068a9d7ba
+>                  `sharing:1`, attached-bot list now **7 bots** (Canary detached per R-2b route (a)),
+>                  enumerated by name in 02-scanner-attachments-2026-09-02-210500.md.
+> ALLOCATION       $2,500 -> $10,000, 2026-09-02. A container, not position size.
+> POSITION LIMITS  UNCHANGED at 2 per day / 2 at a time - and deliberately NOT edited.
+>                  `R-2026-09-02-POSITION-LIMITS` targets 1/1; the execution session withheld that
+>                  edit because a GF condor is TWO OA positions, so 1/day opens one side only.
+>                  The `GO-LIVE ORDERING` line above already reads "condor-aware: arms stay 2/2".
+>                  Escalated to Andy, unresolved. See docs/RULINGS.md, R-2026-09-02-POSITION-LIMITS.
+> LAYER 2          OUTSTANDING: the first new position's Trades list must read quantity 26.
+> ```
 
 ### Rebuilt hedge tournament arms (count TBD)
 ```
@@ -1523,6 +1683,34 @@ GO-LIVE ORDERING `R-2026-08-09-S2-R5-LIMITS` — condor-aware: arms stay 2/2.
 TRACE CARRIER    `R-2026-08-18-P1-1A-ROSTER-FACTS` (per-arm roster facts ratified).
 ```
 
+> ### 📝 AMENDED 2026-09-02 — `R-2026-09-01-GF-SIZING` G-1 (SIGNED — Andy — 2026-09-02, N = 26)
+> **The `MAX LOSS`, `SIZING TIER` and `CONFIG HASH` lines above are left standing, unedited.**
+> Applied to OA the same day; evidence `data/captures/2026-09-02-gf-sizing/`.
+> ```
+> MAX LOSS         ~$5K risk per position (the LARGER SIDE of the condor, CLAUDE.md §4), 26 ct;
+>                  1 condor/day. 26 x $193 = $5,018. The standing "~$185 net risk per condor" is
+>                  a design estimate; the measured figure is $193/leg at 1 ct (data/trades.csv
+>                  median, n=15 legs/arm). Family daily aggregate <= $35,000 at 7 active arms;
+>                  only 6 arms are live (GF-QQQ-IC-Ride-Delta is AUTOS OFF and excluded by G-1),
+>                  so today's structural maximum is ~$30,108. Inside the re-ruled QQQ IC sleeve
+>                  cap of $40,000/day (R-2026-09-01-SLEEVE-CAPS).
+> SIZING TIER      ~$5K risk/position, 26 ct - IDENTICAL across all active arms. Set once, never
+>                  ad hoc. Opens a SIZING EPOCH at 2026-09-02: raw P/L is NOT poolable across the
+>                  boundary. R, sample counts and gate progress are unaffected.
+> CONFIG HASH      RE-STAMPED 2026-09-02 (the quantity edit changed both shared automations):
+>                    GF-ScannerA-PutSpread  2c4a96c5e2e3c8503dfe05263b45502f49de607b3e236263211c7e5e283e60d2
+>                    GF-ScannerB-CallSpread a1a48af1caebc35900ac7652b14bb26df084e492fa87aba2fc783c8068a9d7ba
+>                  `sharing:1`, attached-bot list now **7 bots** (Canary detached per R-2b route (a)),
+>                  enumerated by name in 02-scanner-attachments-2026-09-02-210500.md.
+> ALLOCATION       $2,500 -> $10,000, 2026-09-02. A container, not position size.
+> POSITION LIMITS  UNCHANGED at 2 per day / 2 at a time - and deliberately NOT edited.
+>                  `R-2026-09-02-POSITION-LIMITS` targets 1/1; the execution session withheld that
+>                  edit because a GF condor is TWO OA positions, so 1/day opens one side only.
+>                  The `GO-LIVE ORDERING` line above already reads "condor-aware: arms stay 2/2".
+>                  Escalated to Andy, unresolved. See docs/RULINGS.md, R-2026-09-02-POSITION-LIMITS.
+> LAYER 2          OUTSTANDING: the first new position's Trades list must read quantity 26.
+> ```
+
 ### PR-19 — `GF-QQQ-IC-SL200`
 ```
 ID               PR-19
@@ -1563,6 +1751,34 @@ SIGNED           2026-08-09 per `R-2026-08-09-S2-GATE-A7-SIGN-ALL-SEVEN`, re-sig
 GO-LIVE ORDERING `R-2026-08-09-S2-R5-LIMITS` — condor-aware: arms stay 2/2.
 TRACE CARRIER    `R-2026-08-18-P1-1A-ROSTER-FACTS` (per-arm roster facts ratified).
 ```
+
+> ### 📝 AMENDED 2026-09-02 — `R-2026-09-01-GF-SIZING` G-1 (SIGNED — Andy — 2026-09-02, N = 26)
+> **The `MAX LOSS`, `SIZING TIER` and `CONFIG HASH` lines above are left standing, unedited.**
+> Applied to OA the same day; evidence `data/captures/2026-09-02-gf-sizing/`.
+> ```
+> MAX LOSS         ~$5K risk per position (the LARGER SIDE of the condor, CLAUDE.md §4), 26 ct;
+>                  1 condor/day. 26 x $193 = $5,018. The standing "~$185 net risk per condor" is
+>                  a design estimate; the measured figure is $193/leg at 1 ct (data/trades.csv
+>                  median, n=15 legs/arm). Family daily aggregate <= $35,000 at 7 active arms;
+>                  only 6 arms are live (GF-QQQ-IC-Ride-Delta is AUTOS OFF and excluded by G-1),
+>                  so today's structural maximum is ~$30,108. Inside the re-ruled QQQ IC sleeve
+>                  cap of $40,000/day (R-2026-09-01-SLEEVE-CAPS).
+> SIZING TIER      ~$5K risk/position, 26 ct - IDENTICAL across all active arms. Set once, never
+>                  ad hoc. Opens a SIZING EPOCH at 2026-09-02: raw P/L is NOT poolable across the
+>                  boundary. R, sample counts and gate progress are unaffected.
+> CONFIG HASH      RE-STAMPED 2026-09-02 (the quantity edit changed both shared automations):
+>                    GF-ScannerA-PutSpread  2c4a96c5e2e3c8503dfe05263b45502f49de607b3e236263211c7e5e283e60d2
+>                    GF-ScannerB-CallSpread a1a48af1caebc35900ac7652b14bb26df084e492fa87aba2fc783c8068a9d7ba
+>                  `sharing:1`, attached-bot list now **7 bots** (Canary detached per R-2b route (a)),
+>                  enumerated by name in 02-scanner-attachments-2026-09-02-210500.md.
+> ALLOCATION       $2,500 -> $10,000, 2026-09-02. A container, not position size.
+> POSITION LIMITS  UNCHANGED at 2 per day / 2 at a time - and deliberately NOT edited.
+>                  `R-2026-09-02-POSITION-LIMITS` targets 1/1; the execution session withheld that
+>                  edit because a GF condor is TWO OA positions, so 1/day opens one side only.
+>                  The `GO-LIVE ORDERING` line above already reads "condor-aware: arms stay 2/2".
+>                  Escalated to Andy, unresolved. See docs/RULINGS.md, R-2026-09-02-POSITION-LIMITS.
+> LAYER 2          OUTSTANDING: the first new position's Trades list must read quantity 26.
+> ```
 
 > ⚠️ **Do not include a `Conditional` / sustained-touch arm.** OA cannot express time
 > persistence; the only build path is a 10-rung tag ladder that consumes the scan budget and
@@ -1651,6 +1867,28 @@ SIGNED           2026-08-09 per `R-2026-08-09-S2-GATE-A7-SIGN-ALL-SEVEN`, re-sig
 GO-LIVE ORDERING `R-2026-08-09-S2-R5-LIMITS` — condor-aware: arms stay 2/2.
 TRACE CARRIER    `R-2026-08-18-P1-1A-ROSTER-FACTS` (per-arm roster facts ratified).
 ```
+
+> ### 📝 AMENDED 2026-09-02 — `R-2026-09-01-GF-SIZING` G-3d route (a) (SIGNED — Andy — 2026-09-02)
+> **All text above is left standing, unedited.** Andy verbatim: "detach to bot-local, keep 1ct".
+> ```
+> MAX LOSS         UNCHANGED - 1 lot, smallest expressible risk. Canary is NOT resized with the
+>                  family: its output is a fill/no-fill signal, which is size-invariant.
+> SIZING TIER      UNCHANGED - 1 ct. Allocation stays $2,500. No sizing epoch is opened here.
+> ENTRY SURFACE    CHANGED 2026-09-02. The two SHARED library scanners were detached from this
+>                  bot only (dialog read verbatim: "Remove scanner?"; neither library object was
+>                  deleted) and replaced by bot-local copies:
+>                    Canary-Scan-Put   29abf4e4795ac408f9c4a56c31da32b6b795671af41ec100ed03b94214efb04a
+>                    Canary-Scan-Call  67763502669d1b822a4f3a1a47a5c72bbce8e64ac4d1aa4f0a2875bde749c8d8
+>                  The hashes differ from the shared originals ONLY because `name` differs; the
+>                  proof of equivalence is the field diff - `inputs` and `root` compare EQUAL to
+>                  GF-ScannerA/B ignoring node ids, and the open-position action carries
+>                  amount {"text":"1 contract","type":"quantity","quantity":1}.
+>                  `GF-Backstop-1552-FlatClose` remains SHARED and attached.
+>                  Precedent: GF-QQQ-IC-Ride-Delta's bot-local pair, 06-ride-delta-scanner-diff-2026-08-31.md.
+> POSITION LIMITS  UNCHANGED at 2 per day / 2 at a time; not edited (same reasoning as PR-14..PR-19).
+> LAYER 2          OUTSTANDING: Canary's first new position must read quantity 1 and its 5% PT must fill.
+> ```
+> Evidence: `data/captures/2026-09-02-gf-sizing/03-canary-detach-2026-09-02-212700.md`.
 
 ---
 

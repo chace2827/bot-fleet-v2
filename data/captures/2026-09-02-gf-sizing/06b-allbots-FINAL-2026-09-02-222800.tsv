@@ -1,0 +1,45 @@
+# bot_name	bot_id	group	seed	status	disableExits	posLimit	account	tags
+1-45pm-Sandwich-Paper-v1	BOTfw5TkkCRF3317782764426812572	Archive	10000	off	1	1	Paper Trading	mirror watch
+3DTE $140-$350	BOTfw5TkkCRF2217765235512870291	OA-Mirror-Focus	5000	on	0	1	Paper Trading	mirror watch,focus oa mirror,pr 07
+60min-ORB-10W-Paper-v1	BOTfw5TkkCRF3317782759988647731	Monitor	10000	on	0	1	Paper Trading	mirror watch,pr 12
+DIR-SPX-CallVIXdrop	BOTfw5TkkCRF217824370390678863	Directional-Focus	10000	on	0	1	Paper Trading	experiment,focus directional,pr 06
+DIR-SPX-Put-Control	BOTfw5TkkCRF217824312740732922	Monitor	10000	off	1	1	Paper Trading	experiment,control
+DIR-SPX-PutVIX22-SL75	BOTfw5TkkCRF217824306963282811	Directional-Focus	10000	on	0	1	Paper Trading	experiment,focus directional,pr 05
+Friday 14 DTE Broken Wing IB (B-70)	BOTfw5TkkCRF1017766446781407596	OA-Mirror-Focus	10000	on	0	1	Paper Trading	7 dte,14 dte,21 dte,mirror watch,focus oa mirror,pr 10
+GF-QQQ-IC-Canary	BOTfw5TkkCRF4417860774419022836	GF-Family	2500	on	0	2	Paper Trading	experiment,gfam,arm canary,pr 20
+GF-QQQ-IC-PT50	BOTfw5TkkCRF4417860738688735152	GF-Family	10000	on	0	2	Paper Trading	experiment,gfam,arm pt50,pr 15
+GF-QQQ-IC-Ride	BOTfw5TkkCRF4417860701930934951	GF-Family	10000	on	0	2	Paper Trading	experiment,gfam,arm ride,pr 14
+GF-QQQ-IC-Ride-Delta	BOTfw5TkkCRF1317864858068078811	GF-Family	2500	off	0	2	Paper Trading	
+GF-QQQ-IC-SL100	BOTfw5TkkCRF4417860767788927225	GF-Family	10000	on	0	2	Paper Trading	experiment,gfam,arm sl100,pr 18
+GF-QQQ-IC-SL200	BOTfw5TkkCRF4417860785000861357	GF-Family	10000	on	0	2	Paper Trading	experiment,gfam,arm sl200,pr 19
+GF-QQQ-IC-Touch0	BOTfw5TkkCRF4417860760818962144	GF-Family	10000	on	0	2	Paper Trading	experiment,gfam,arm touch0,pr 17
+GF-QQQ-IC-Trail	BOTfw5TkkCRF4417860754672239833	GF-Family	10000	on	0	2	Paper Trading	experiment,gfam,arm trail,pr 16
+IC-SPX-FastPT25-S2	BOTfw5TkkCRF4417860821948715488	IC-Focus	50000	on	1	2	Paper Trading	live candidate,focus ic,pr 01
+IC-SPX-FastPT25-S2-130PM	BOTfw5TkkCRF3017861977616287731	IC-Focus	50000	on	1	2	Paper Trading	live candidate,focus ic,pr 02
+IC-SPX-FastPT25-S2-130PM-ARCHIVED-2026-08-08	BOTfw5TkkCRF3717814485128334371	Archive	30000	off	1	10	Paper Trading	
+IC-SPX-FastPT25-S2-ARCHIVED-2026-08-07	BOTfw5TkkCRF1217757048550308561	Archive	50000	off	1	10	Paper Trading	live candidate,focus ic
+IC-SPX-Fortress-Defang	BOTfw5TkkCRF3317787969081429752	Monitor	50000	off	1	2	Paper Trading	fortress defang,research,hedge variant,vacation test 2026 05,spx,experiment
+IC-SPX-Fortress-Unstopped	BOTfw5TkkCRF3317787955825912621	Monitor	50000	on	1	2	Paper Trading	research,hedge variant,vacation test 2026 05,spx,fortress baseline,fortress defang,control
+Nigiri-Paper-v1	BOTfw5TkkCRF1017766118057607741	OA-Mirror-Focus	10000	on	0	1	Paper Trading	mirror watch,focus oa mirror,pr 08
+Opening Range Breakout 60m	BOTfw5TkkCRF1017766137341516344	Archive	10000	off	1	1	Paper Trading	mirror watch
+QQQ long call	BOTfw5TkkCRF1017766424258604555	OA-Mirror-Focus	30000	off	1	10	Paper Trading	mirror watch,focus oa mirror,pr 09
+QQQ-IC-0DTE-Baseline	BOTfw5TkkCRF3317727290514286611	Archive	100000	off	1	2	Paper Trading	control
+QQQ-IC-0DTE-Fortress	BOTfw5TkkCRF2717857919585029021	Monitor	100000	off	1	2	Paper Trading	experiment,pr 03
+QQQ-IC-0DTE-Fortress-NoFilter	BOTfw5TkkCRF4517755108623629541	Archive	100000	off	1	2	Paper Trading	experiment
+QQQ-IC-0DTE-Fortress-NoPT50	BOTfw5TkkCRF3017862038322323202	Monitor	100000	on	0	2	Paper Trading	experiment,pr 04
+QQQ-IC-0DTE-Fortress-NoPT50-ARCHIVED-2026-08-08	BOTfw5TkkCRF2617743681996538301	Archive	100000	off	1	2	Paper Trading	experiment
+QQQ-IC-0DTE-Fortress-S2	BOTfw5TkkCRF3217755946065115241	Archive	100000	off	1	2	Paper Trading	experiment
+QQQ-IC-0DTE-HedgeA-S1	BOTfw5TkkCRF2717738719192568831	Archive	100000	off	1	2	Paper Trading	experiment
+QQQ-IC-0DTE-HedgeB-S2	BOTfw5TkkCRF2717738721388027602	Archive	100000	off	1	2	Paper Trading	experiment
+QQQ-IC-0DTE-HedgeC-S3	BOTfw5TkkCRF2717738721535026943	Archive	100000	off	1	2	Paper Trading	experiment
+QQQ-IC-0DTE-HedgeD-Conditional	BOTfw5TkkCRF2717738721652044244	Archive	100000	off	1	2	Paper Trading	experiment
+QQQ-IC-0DTE-HedgeTest	BOTfw5TkkCRF817734404268067862	Archive	100000	off	1	2	Paper Trading	experiment
+QQQ-IC-0DTE-InverseFilter-HoldToExp	BOTfw5TkkCRF4517755118383321712	Archive	100000	off	1	2	Paper Trading	experiment
+QQQ-IC-0DTE-Range075-PT50	BOTfw5TkkCRF2717738722042782917	Archive	100000	off	1	2	Paper Trading	experiment
+QQQ-IC-0DTE-Range075-PT50-Wide2-1230PM	BOTfw5TkkCRF2617743684426809593	Archive	100000	off	1	2	Paper Trading	experiment
+QQQ-IC-0DTE-Range075-PT50-Wide2-155PM	BOTfw5TkkCRF2717738721925710956	Archive	100000	off	1	2	Paper Trading	experiment
+QQQ-IC-0DTE-Raw-HoldToExp	BOTfw5TkkCRF2617743683072748392	Archive	100000	off	1	2	Paper Trading	control
+QQQ-IC-0DTE-VIX25-Range075-PT50	BOTfw5TkkCRF2717738721783221645	Archive	100000	off	1	2	Paper Trading	experiment
+Tasty Condor	BOTfw5TkkCRF1017766126336204213	Monitor	10000	off	1	4	Paper Trading	mirror watch,pr 13
+Trendy-Paper-v1	BOTfw5TkkCRF1017766118431160782	Monitor	10000	on	0	1	Paper Trading	mirror watch,pr 11
+Weekly-IB-SPY-Paper-v1	BOTfw5TkkCRF3317782770973508333	Archive	10000	off	1	6	Paper Trading	mirror watch

@@ -3983,3 +3983,331 @@ source: >-
   rc=2 naming the six committed root files before any file was planted.
 unclear: false
 ```
+
+```yaml
+ruling_id: R-2026-09-01-SIZING-LADDER
+date: 2026-09-02
+scope: >-
+  The fleet sizing ladder. A bot is sized, from its FIRST position, at the tier
+  its results are intended to be read at - not at 1 lot until it graduates.
+  Classes: A read-at-live-scale ~$5K/position; B control, identical to its
+  paired arm; C instrument (ops-class), 1 lot permanently; D mirror-watch,
+  never resized; E negative-CI, frozen at current size; F OFF/archived, no
+  change while OFF. Reason in writing per gate G6: R is size-free, fills are
+  not, so a 1-lot arm run to n=100 certifies a statistic about an instrument
+  nobody will trade. Supersedes IN PRINCIPLE the ladder at
+  docs/pre-registration-ledger.md L82-83; "set once, never ad hoc" is
+  unchanged and reaffirmed. A sizing change opens an EPOCH BOUNDARY: raw P/L is
+  not poolable across it; R, sample counts and gate progress are unaffected.
+verbatim: >-
+  SIGNED - Andy - 2026-09-02. Unit confirmed by Andy: "$5K per condor" = the
+  larger side of the condor, per CLAUDE.md §4.
+verbatim_of: andy
+owner: Andy
+status: Active
+applies_to: >-
+  Every bot in data/bots_meta.csv; the SIZING TIER line of every
+  pre-registration entry; scripts/report.py sizing surfaces.
+superseded_by: none
+source: >-
+  _rulings-draft-2026-09-01-sizing.md, signed in-chat 2026-09-02 (Cowork Fable
+  session), transcribed by Claude per R-2026-08-31-DERIVED-RULING-AUTHORITY.
+  Analysis: _sizing-policy-draft-2026-09-01.md.
+unclear: false
+```
+
+```yaml
+ruling_id: R-2026-09-01-GF-INTERIM-CLAUSE
+date: 2026-09-02
+scope: >-
+  Amends the greenfield family's "1 lot per arm until one clears its interim
+  read (n=60)" clause. OPTION 1 - AMEND NOW is chosen: the ACTIVE arms move to
+  ~$5K risk/position immediately and identically. GF-QQQ-IC-Ride-Delta is
+  EXCLUDED (AUTOMATIONS OFF since 2026-08-31, R-1 class F). Cost, stated:
+  family single-day tail $1,302 -> $33,852. Conditional on R-2026-09-01-G4-ROE-CAP,
+  which was signed in the same sitting as a package.
+  SUB-RULING R-2b: GF-QQQ-IC-Canary STAYS AT 1 CONTRACT - its output is a
+  fill/no-fill signal, which is size-invariant - and is detached from the
+  shared scanners onto bot-local copies, route (a).
+verbatim: >-
+  OPTION 1 - AMEND NOW (Andy: "i"). Canary stays at 1 ct; route (a) - Andy
+  verbatim: "detach to bot-local, keep 1ct".
+verbatim_of: andy
+owner: Andy
+status: Active
+applies_to: >-
+  pre-registration-ledger.md PR-14..PR-20; data/bots_meta.csv rows for the six
+  sized arms and Canary; OA shared automations GF-ScannerA-PutSpread /
+  GF-ScannerB-CallSpread.
+superseded_by: none
+source: >-
+  _rulings-draft-2026-09-01-sizing.md R-2/R-2b and
+  _rulings-draft-2026-09-01-gf-sizing.md G-1/G-2/G-3, signed 2026-09-02.
+unclear: false
+```
+
+```yaml
+ruling_id: R-2026-09-01-GF-SIZING
+date: 2026-09-02
+scope: >-
+  The greenfield family contract count. N = 26. Derived from data/trades.csv:
+  QQQ $2.00-wide spread less $0.07 median credit = $193 risk per contract
+  (reproduces the ledger's `risk` field exactly, n=120 legs);
+  round(5000/193) = 26; 26 x $193 = $5,018 per position, larger side.
+  Cross-checked on a second surface: QQQ-IC-0DTE-Fortress-NoPT50 ALREADY runs
+  26 ct on QQQ in the same ledger, so 26 is a size OA is observed expressing on
+  this account today, and it makes the family's Exp(R) directly comparable to
+  NoPT50 at identical contract size. The LEVER is the SHARED library scanner
+  amount field, gated on STEP 0 returning exactly the 8 GF arms.
+verbatim: >-
+  N = 26. SIGNED - Andy - 2026-09-02.
+verbatim_of: andy
+owner: Andy
+status: Active
+applies_to: >-
+  GF-ScannerA-PutSpread and GF-ScannerB-CallSpread (shared library, now 7
+  attached bots); PR-14..PR-19 MAX LOSS / SIZING TIER / CONFIG HASH.
+superseded_by: none
+source: >-
+  _rulings-draft-2026-09-01-gf-sizing.md G-2, signed 2026-09-02. EXECUTED
+  2026-09-02 ET; evidence bundle data/captures/2026-09-02-gf-sizing/.
+unclear: false
+```
+
+```yaml
+ruling_id: R-2026-09-01-SLEEVE-CAPS
+date: 2026-09-02
+scope: >-
+  Re-rules the daily aggregate sleeve caps, because R-2026-09-01-GF-INTERIM-CLAUSE
+  Option 1 takes the QQQ IC sleeve to 4x its signed cap and would otherwise put
+  two signed documents in contradiction. SPX IC $15,000/day (3 ON arms x ~$5K);
+  QQQ IC $40,000/day (8 ON arms x ~$5K); Directional $5,000/day as a ceiling not
+  a target; OA-Mirror $12,000/day, never resized; FLEET $72,000/day authorized
+  risk-at-work. This is authorized exposure, not a loss estimate; the loss brake
+  is R-2026-09-01-G4-ROE-CAP.
+  DISCLOSED FINDING, independent of any sizing decision: the SPX IC sleeve was
+  ALREADY over its signed $10K cap before this session, at $14,700.
+verbatim: >-
+  Caps as tabled: SPX $15K, QQQ $40K, Dir $5K, Mirror $12K, fleet $72K.
+  Andy: "Your reccos are fine."
+verbatim_of: andy
+owner: Andy
+status: Active
+applies_to: >-
+  pre-registration-ledger.md PR-01, PR-02 (SPX sleeve line) and PR-03 (QQQ
+  sleeve line); the daily brief's exposure check.
+superseded_by: none
+source: >-
+  _rulings-draft-2026-09-01-sizing.md R-3, signed 2026-09-02. Andy stated the
+  paper account net liq is "$100k, possibly higher"; the $72K figure is ~72% of
+  that, recorded as stated and not re-derived.
+unclear: false
+```
+
+```yaml
+ruling_id: R-2026-09-01-MIRRORS-NO-RESIZE
+date: 2026-09-02
+scope: >-
+  Part 1, the default: NO OA-Mirror bot is resized by this or any sizing
+  ruling. The reason is measurement, not caution - the funding bar scores
+  "max single-trade loss <=20% of intended live allocation" and "no single loss
+  >1.5x the source's largest disclosed loss", both denominated against the
+  source's size, and data/mirror_baseline.csv stops being comparable if the
+  mirror moves. Part 2, the exception already applied: 3DTE $140-$350 had its
+  allocation raised $5,000 -> $10,000 on 2026-08-31, which crossed the
+  do-not-resize line in effect. CHOICE: REVERT to $5,000.
+verbatim: >-
+  Andy verbatim: "Revert to $5K".
+verbatim_of: andy
+owner: Andy
+status: Active
+applies_to: >-
+  3DTE $140-$350 (BOTfw5TkkCRF2217765235512870291); pre-registration-ledger.md
+  PR-07; the seven mirror entries' SIZING TIER lines.
+superseded_by: none
+source: >-
+  _rulings-draft-2026-09-01-sizing.md R-4, signed 2026-09-02. EXECUTED
+  2026-09-02 ET, verified seed === 5000 on two surfaces after a hard reload;
+  evidence data/captures/2026-09-02-gf-sizing/05-allocations-2026-09-02-215500.md.
+unclear: false
+```
+
+```yaml
+ruling_id: R-2026-09-01-GROUP-HYGIENE
+date: 2026-09-02
+scope: >-
+  Three group findings, all three authorized. A - move the three -ARCHIVED-
+  clones into the Archive group; an archived clone sitting in IC-Focus inflates
+  the "bots you're actively perfecting" roster. B - rename the group IC to
+  GF-Family; IC was the only group named for a PILLAR rather than a lifecycle
+  stage and it contains exactly the 8 greenfield arms. C - no action on Lab
+  (empty, consistent with the ledger). TAGS - verify and complete the bare
+  PR-NN tag on every bot carrying a pre-registration entry, and nothing else;
+  that tag is the only label joining the OA surface to the ledger BY KEY rather
+  than by name-match, and name-matching is what breaks on rename or clone.
+verbatim: >-
+  A checked, B checked, tags checked - all three authorized; Andy: "yes".
+verbatim_of: andy
+owner: Andy
+status: Active
+applies_to: >-
+  OA bot groups; the OA tag scheme; scripts/roster.py FAMILY_RULES stays
+  orthogonal and is not touched.
+superseded_by: none
+source: >-
+  _rulings-draft-2026-09-01-sizing.md R-5, signed 2026-09-02. EXECUTED
+  2026-09-02 ET; evidence data/captures/2026-09-02-gf-sizing/06-groups-tags-2026-09-02-222800.md.
+  20 of 21 PR-NN tags now correct and unique; PR-23 NOT APPLIED (see
+  R-2026-09-02-PR23-TAG-NOT-APPLIED).
+unclear: false
+```
+
+```yaml
+ruling_id: R-2026-09-01-G4-ROE-CAP
+date: 2026-09-02
+scope: >-
+  Fills the G4 dollar blank at docs/evidence-standards.md L277 /
+  scripts/report.py L1022 with THREE levels, because each covers the others'
+  blind spot. 1 - per-bot cumulative drawdown per epoch $15,000, anchored on
+  the v1 champion's worst cumulative DD at this exact tier (-$14,540 over 221
+  positions). 2 - fleet cumulative drawdown $35,000, the GF family's own
+  structural single-day maximum at the new tier. 3 - single-day fleet loss halt
+  $8,000, the worst single day this program has had at this tier (-$8,050,
+  2026-06-11). Correlation is proven not assumed: on 2026-08-26 all 8 GF arms
+  lost on the same day. PACKAGE WITH R-1/R-2 - sizing up with the $ half still
+  an unfilled <FILL> is the one combination this project's evidence law forbids.
+  Two things this signature does NOT do: it does not create a brake (nothing in
+  report.py computes these; they are human-checked at the daily brief until the
+  code lane implements them - signing CREATES A CODE TASK), and it does not
+  re-score anything today.
+verbatim: >-
+  Three levels as tabled: per-bot $15K / fleet $35K / day-halt $8K. Signed as
+  the R-1 package.
+verbatim_of: andy
+owner: Andy
+status: Active
+applies_to: >-
+  docs/evidence-standards.md L277; scripts/report.py L1022 (MAXDD $ cap) -
+  DEVIN/CC lane, not an OA edit; the daily brief's human-checked cap review.
+superseded_by: none
+source: >-
+  _rulings-draft-2026-09-01-sizing.md R-6, signed 2026-09-02. Carried limit:
+  every post-cutover figure behind these caps is T5 (n = 16 trading days).
+  Re-derive at n>=100. The %-of-live-capital form stays underived.
+unclear: false
+```
+
+```yaml
+ruling_id: R-2026-09-02-POSITION-LIMITS
+date: 2026-09-02
+scope: >-
+  DAILY POSITIONS / POSITION LIMIT per bot. IC-SPX-FastPT25-S2 and -130PM keep
+  2 per day / 2 at a time (live candidate + its A/B clone); read-only confirm,
+  do not edit. The 6 sized GF arms and Canary: TARGET 1 per day / 1 at a time.
+verbatim: >-
+  keep 2/2 on FastPT25 (it's the live candidate), set GF arms 1/1
+verbatim_of: andy
+owner: Andy
+status: Active - SPX half discharged; GF half NOT EXECUTED, escalated
+applies_to: >-
+  IC-SPX-FastPT25-S2, -130PM (confirmed 2/2, unedited); GF-QQQ-IC-Ride, -PT50,
+  -Trail, -Touch0, -SL100, -SL200, -Canary (all read at 2/2, NOT edited).
+superseded_by: none
+source: >-
+  _rulings-draft-2026-09-01-sizing.md, addendum transcribed from Andy's in-chat
+  answer #8, 2026-09-02.
+unclear: false
+```
+
+```yaml
+ruling_id: R-2026-09-02-GF-LIMITS-WITHHELD
+date: 2026-09-02
+scope: >-
+  Claude WITHHELD the GF half of R-2026-09-02-POSITION-LIMITS during the
+  2026-09-02 OA execution session and escalated instead of executing. This
+  record exists so the non-execution is on the register, not buried in a
+  capture. THE PREMISE IS FALSIFIED. The addendum's execution guard states
+  "The 08-31 capture read GF-QQQ-IC-Ride-Delta as already 1 per day / 1 at a
+  time". It did not: data/captures/2026-08-31-roster/06-ride-delta-scanner-diff-2026-08-31.md
+  §5 reads verbatim "Safeguards: DAILY POSITIONS 2 per day, POSITION LIMIT 2 at
+  once." The bot the 08-31 bundle recorded at 1/1 is 3DTE $140-$350 (Edit 3), a
+  mirror. THE CONSEQUENCE IS DESTRUCTIVE. A GF condor is TWO OA positions -
+  ScannerA opens the put spread, ScannerB the call spread, separate actions,
+  same day (data/trades.csv 2026-08-20 T00345). All seven arms were read
+  first-hand at 2/2 on 2026-09-02. At 1 per day exactly one side opens, every
+  day, leaving a naked one-sided position - the same damage the 08-31 forensics
+  documented for the double-fire. OA's counter at 2/day IS "1 condor/day", the
+  unit CLAUDE.md §4 makes the unit of account and the unit PR-14..PR-20 MAX
+  LOSS already uses. A signed line inside PR-14..PR-20 says so in words:
+  "GO-LIVE ORDERING R-2026-08-09-S2-R5-LIMITS - condor-aware: arms stay 2/2."
+  Sizing and OA bot behaviour are ALWAYS GATED under
+  R-2026-08-31-DERIVED-RULING-AUTHORITY, ambiguity included, so this is
+  escalated rather than resolved. Andy was told in-session at the moment it was
+  found, before any other Batch-D edit landed.
+verbatim: >-
+  Not executed. Escalated to Andy in-session. Awaiting his ruling on whether he
+  wants OA's raw counter at 1 (which opens one side per day) or intends
+  "1 condor/day", which is the standing 2/2.
+verbatim_of: ruling_text
+owner: Claude, pending Andy
+status: Open - awaiting Andy
+applies_to: >-
+  R-2026-09-02-POSITION-LIMITS, GF half; GF-QQQ-IC-Ride, -PT50, -Trail,
+  -Touch0, -SL100, -SL200, -Canary.
+superseded_by: none
+source: >-
+  2026-09-02 OA execution session (Cowork, Claude in Chrome). Evidence:
+  data/captures/2026-09-02-gf-sizing/05-allocations-2026-09-02-215500.md;
+  data/captures/2026-08-31-roster/06-ride-delta-scanner-diff-2026-08-31.md §5.
+unclear: false
+```
+
+```yaml
+ruling_id: R-2026-09-02-PR23-TAG-NOT-APPLIED
+date: 2026-09-02
+scope: >-
+  The PR-23 tag was NOT applied to GF-QQQ-IC-Ride-Delta during the 2026-09-02
+  tag pass, and the omission is recorded rather than quietly left. The bot
+  carries NO tags at all (a5.bots.bot.tags is undefined, not an empty string) -
+  itself a pre-existing anomaly, since every other GF arm carries
+  experiment/gfam/arm-<name>. The tag widget would not accept input on this bot
+  across three attempts (real typing did not reach the field; a synthetic value
+  plus a real Enter did not commit), so the oa-driving STOP rule applied.
+  Two mitigating facts: PR-23 is itself "DRAFT, UNSIGNED" in the ledger, and
+  the bot has been AUTOMATIONS OFF since 2026-08-31. Restoring its missing
+  non-PR tags was NOT attempted - R-2026-09-01-GROUP-HYGIENE authorises the
+  PR-NN tag "and nothing else".
+verbatim: >-
+  NOT APPLIED. Recorded, not worked around.
+verbatim_of: ruling_text
+owner: Claude, pending Andy
+status: Open - awaiting Andy
+applies_to: GF-QQQ-IC-Ride-Delta (BOTfw5TkkCRF1317864858068078811); PR-23.
+superseded_by: none
+source: >-
+  2026-09-02 OA execution session. Evidence:
+  data/captures/2026-09-02-gf-sizing/06-groups-tags-2026-09-02-222800.md.
+unclear: false
+```
+
+```yaml
+ruling_id: R-2026-09-02-DIRECTIONAL-DEFERRED
+date: 2026-09-02
+scope: >-
+  DIR-SPX-CallVIXdrop (Exp(R) CI entirely below zero) and DIR-SPX-PutVIX22-SL75
+  (no post-cutover fills) are explicitly DEFERRED. No change. Both stay ON at
+  1 contract under R-2026-09-01-SIZING-LADDER class E / no-change. The
+  2026-09-02 execution session did not touch either bot; only their PR-05 /
+  PR-06 tags were added under R-2026-09-01-GROUP-HYGIENE.
+verbatim: >-
+  I dont understand. Come back to this one later, not a major priority.
+verbatim_of: andy
+owner: Andy
+status: Active
+applies_to: DIR-SPX-CallVIXdrop; DIR-SPX-PutVIX22-SL75.
+superseded_by: none
+source: >-
+  _rulings-draft-2026-09-01-sizing.md, "Deferred, explicitly: R-DIRECTIONAL",
+  Andy 2026-09-02.
+unclear: false
+```

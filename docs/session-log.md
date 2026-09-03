@@ -10758,3 +10758,102 @@ at repo root will trip the new root guard (rc=2 refusal) on the first live close
 Hand-off command to Andy: pull, then relocate untracked _*.md -> drafts/ (git's own untracked
 definition via ls-files), then commit board+log. Verify after pull: pre_registration_ledger
 --selftest OK locally; read merged scan code to confirm drafts/ is outside its surface.
+
+## 2026-09-01 (early) — 0DTE taxonomy foreman prompt rebuilt (Cowork Fable chat)
+Read the full "0DTE trading day research prompt" Cowork transcript (Andy's RTF export) after
+Andy Esc-stopped the Claude Code orchestrator mid-Step-4. First-hand findings: zero Devin
+sessions were ever created (no workers/wave.log, no dispatch.log — the terminate/ACU-audit
+step in the chat's correction is moot); the stopped session had completed Steps 1–3 and
+committed them (repo `~/0dte-day-taxonomy`, remote pushed, SCHEMA, 8 lane prompts, 8 worker
+clones); its draft workers/dispatch.sh used flags the wrapper does not accept
+(`--prompt-file`, `--permission-mode`) — correct form per devin_free.sh's own usage header is
+`devin-free --workspace DIR -- "prompt"`. Wrote
+**`~/0dte-day-taxonomy/prompts/foreman-2026-09-01.md`** (sha `88e75b181eb51588…`, verified by
+direct device read + grep): resumes at Step 0, embeds the COST LAW on disk (wrapper-only,
+MCP read-only, no fallback, expected canonical selfhash `3479939d…` printed for the gate),
+fixes dispatch.sh (cap 4 per Andy, 8s stagger, 60-min lane timeout), per-session free-lane
+receipts read from ~/.local/share/devin/cli/logs (print ACU, never assume; GUI logs are not
+the instrument), collect/validate with 5-URL anti-fabrication curl checks, one re-dispatch
+max per lane, 13-session hard ceiling, merge docs, 1 adversarial wrapper session, PR.
+Uncommitted in that repo: the foreman file (+ dispatch.sh fix lands in the new session).
+Hand-off: Andy closes the stopped CC window without typing into it, then
+`cd ~/0dte-day-taxonomy && claude` and points it at the foreman file.
+
+## 2026-09-02 (evening, ET) — SIZING EXECUTED ON OA: GF family 1 ct → 26 ct (Cowork, Claude in Chrome)
+
+Ran `drafts/_dispatch-2026-09-03-sizing-execution-cowork.md` end to end, 20:59–22:45 ET.
+**ET date is 2026-09-02**, from OA's own page header; the container clock read 2026-09-03 UTC.
+Capture bundle: `data/captures/2026-09-02-gf-sizing/` (20 files + `SHA256SUMS.txt` + `README.md`),
+report at `08-REPORT-2026-09-02-224500.md`.
+
+**Done**
+- **STEP 0 gate passed before any edit.** `GF-ScannerA-PutSpread` / `GF-ScannerB-CallSpread` are
+  attached to exactly the 8 `GF-QQQ-IC-*` arms — the membership **list**, read from the library's
+  own `showBots` control, not the "8 bots" count the ledger had. Both pre-hashes byte-matched the
+  ruling's stamps; both read `quantity 1`.
+- **Canary detached first, route (a).** Bot-local `Canary-Scan-Put` / `Canary-Scan-Call` created
+  by Duplicate → "Yes, create a copy" and proven field-identical to the shared originals
+  (`inputs` and `root` equal ignoring node ids; byte-length delta = name-length delta exactly).
+  The two shared scanners were then removed **from Canary only** — the dialog reads verbatim
+  "Remove scanner?" and says nothing about the library. After: library still holds its original
+  four automations, ScannerA/B read **7 bots**, and both shared payloads are `cmp` byte-identical
+  to before the detach.
+- **The shared lever: `amount.quantity` 1 → 26 on both scanners.** New CONFIG HASHes
+  `2c4a96c5e2e3c850…` / `a1a48af1caebc359…`. A leaf-by-leaf diff of the whole routine shows
+  **four changed leaves per scanner, all the same quantity field**; strikes, wings, delta, gates,
+  exits bindings and tags are byte-identical. Propagation confirmed from an arm's own page
+  (`GF-QQQ-IC-Ride` reads 26).
+- **Allocations**: six arms $2,500 → $10,000; `3DTE $140-$350` **reverted** $10,000 → $5,000.
+  Verified on two surfaces after a hard reload each time.
+- **Group hygiene**: three `-ARCHIVED-` clones → `Archive`; group `IC` renamed **`GF-Family`**
+  (8 members, unchanged); **10 `PR-NN` tags added**, so `pr 01`…`pr 20` now each appear exactly
+  once, on the right bot.
+- **Outer check clean**: PRE vs POST `/bots`, same instrument — 44 bots, AUTOS ON 18/44, EXITS ON
+  16/44, footer identical. Total ALLOCATION $2,150,000 → $2,190,000, exactly the intended
+  +$40,000. Every other diff line is a derived percentage or a mark on a bot holding an open
+  position.
+- **Repo (Phase 3)**: `data/bots_meta.csv` epoch notes on 8 rows; 11 dated amendment banners in
+  `docs/pre-registration-ledger.md` (originals left standing); 11 records appended to
+  `docs/RULINGS.md`; `data/portfolio.csv` T-39/M-33 → Done and new DEVIN item **T-44** (G4 caps
+  into `report.py`); `portfolio.html` regenerated. `roster.py --check`, `portfolio.py --check`
+  and `pre_registration_ledger.py --selftest` all green.
+
+**⛔ Withheld and escalated — not executed**
+- **The GF `1 per day / 1 at a time` limits.** `R-2026-09-02-POSITION-LIMITS` says "set GF arms
+  1/1"; its execution guard assumed they already were, citing the 08-31 capture. That capture says
+  the opposite — `06-ride-delta-scanner-diff-2026-08-31.md` §5: *"DAILY POSITIONS 2 per day,
+  POSITION LIMIT 2 at once"* — and the bot it recorded at 1/1 is the mirror `3DTE $140-$350`. All
+  seven GF arms read **2/2** first-hand today. A GF condor is **two OA positions**, so a counter of
+  1/day opens one side and leaves a naked position; PR-14…PR-20 already carry the signed line
+  *"condor-aware: arms stay 2/2."* Gated ⇒ escalated in-session, before any other Batch-D edit
+  landed. Register: `R-2026-09-02-GF-LIMITS-WITHHELD`.
+- **The `PR-23` tag on `GF-QQQ-IC-Ride-Delta`.** That bot carries no tags at all and its tag
+  widget refused input three ways. PR-23 is DRAFT/unsigned and the bot is AUTOS OFF.
+  Register: `R-2026-09-02-PR23-TAG-NOT-APPLIED`.
+
+**Learned / new traps for the runbook**
+- **`a5.bots.bot.scanning` is NOT the AUTOMATIONS master switch.** Canary read `scanning:false`
+  with the switch demonstrably ON (header toggle, `status:"on"`, `i.sticon` title, roster
+  capture). It is a runtime flag and is false out of hours. **`status` is the field.** The 08-31
+  Edit 1 record used `scanning` as its evidence.
+- **The group-rename dialog's Save button does not commit a typed name — Enter does.** First
+  attempt looked saved and was not; caught by hard reload.
+- **The tag widget's Enter takes the highlighted autocomplete suggestion, not the literal.**
+  Typing `PR-12` committed `pr 11` on one bot. Caught by the post-edit model read and corrected in
+  session. Verify the stored tag after every single Enter.
+- **`Duplicate → "Yes, create a copy"` produces a BOT-LOCAL object**, not a library entry — the
+  library count was unchanged afterwards. This is the reusable route for any future detach.
+- **`STATUS.md` cannot carry a standing banner** — it is generated by `report.py` and says so.
+  The `UNVERIFIED-L2` block therefore lives at the top of `docs/state.md`.
+
+**Layer 2, OUTSTANDING** — first new position on each of Ride/PT50/Trail/Touch0/SL100/SL200 must
+read **quantity 26** in the TRADES LIST; Canary must read **1** and fill its 5% PT; **both sides**
+must still open. Exit Options panel is never evidence. First eligible day **2026-09-03**.
+
+**Incidents disclosed** (full text in `08-REPORT`): two ~45s `Runtime.evaluate` timeouts and one
+~90s renderer stall, nothing re-fired; one accidental opening of the ACCOUNT dropdown (nothing
+selected, re-read Paper Trading, all 44 bots Paper Trading in the final capture); one wrong tag
+written and corrected; Chrome blocking automatic downloads mid-session; three scripted actions
+refused by the session's own permission classifier and completed as ordinary UI clicks instead.
+
+**Ready to commit** — no git command was run from this session (`CLAUDE.md` §9.1).
