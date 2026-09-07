@@ -4522,3 +4522,139 @@ source: >-
   Decision card Q7, 2026-09-07.
 unclear: false
 ```
+
+```yaml
+ruling_id: R-2026-09-07-EVIDENCE-STANDARDS-OPTION-2
+date: 2026-09-07
+scope: >-
+  M-41 / DA-1: the evidence-standards redesign adopts OPTION 2 - two-axis scoring (evidence TIER x CORROBORATION) with a decision-grade threshold table naming, per decision type (build / size / go-live / kill), the minimum tier x corroboration admissible. docs/evidence-standards.md section 1 and 9.2 carry verbatim (preservation clause). DA-3 (retired >=15 bar) and the G4 half of DA-9 are already done; DA-2 and DA-4..DA-10 are ruled in a follow-up sitting from the proposal register; implementation is a Cowork doc task (T-49) - no threshold is invented outside that sitting.
+verbatim: >-
+  1. A (Option 2 - two-axis scoring with a threshold table)
+verbatim_of: andy
+owner: Andy (in-chat, Cowork Fable decision-card session 2026-09-07, batch 2; transcribed by Claude)
+status: Active
+applies_to: docs/evidence-standards.md; docs/evidence-standards-redesign-proposal-2026-08-08.md section 6; T-49.
+superseded_by: none
+source: >-
+  Decision card batch 2 Q1 (M-41), 2026-09-07.
+unclear: false
+```
+
+```yaml
+ruling_id: R-2026-09-07-RECONCILER-IN
+date: 2026-09-07
+scope: >-
+  T-30: the Reconciler is ruled IN, as a read-only STAGE of close.sh (not a tenth agent): it reconciles the /bots roster capture, the OA closed-positions export and data/trades.csv per bot, prints a discrepancy count with a named source per cell, and any two-source disagreement turns the close RED. Acceptance per roles-and-ingredients row 10. Build = T-31 (DEVIN lane, unblocked). The 09-02 and 09-07 hand-run signature diffs are the prototype.
+verbatim: >-
+  2. A (IN, as a stage in close.sh, not a separate agent)
+verbatim_of: andy
+owner: Andy (in-chat, Cowork Fable decision-card session 2026-09-07, batch 2; transcribed by Claude)
+status: Active
+applies_to: scripts/close.sh; T-31; docs/roles-and-ingredients.md row 10.
+superseded_by: none
+source: >-
+  Decision card batch 2 Q2 (T-30), 2026-09-07.
+unclear: false
+```
+
+```yaml
+ruling_id: R-2026-09-07-E3-1-CLOSED
+date: 2026-09-07
+scope: >-
+  E3-1 is closed as DONE: the three E-3 section 3.3 gated items were ruled 2026-08-08 (docs/decision-card-2026-08-08.md): receipt clause ADDITIVE; O4 FIXED; ops_rows.csv trade_id DEFERRED with the OPS-<bot>-<date>-<n> scheme pre-registered and reopen condition = first Lab bot build. Board row was stale.
+verbatim: >-
+  3. A (Close as Done, cite the 08-08 card)
+verbatim_of: andy
+owner: Andy (in-chat, Cowork Fable decision-card session 2026-09-07, batch 2; transcribed by Claude)
+status: Active
+applies_to: data/portfolio.csv E3-1.
+superseded_by: none
+source: >-
+  Decision card batch 2 Q3 (E3-1), 2026-09-07.
+unclear: false
+```
+
+```yaml
+ruling_id: R-2026-09-07-ARCHIVE-SWEEP-SESSION
+date: 2026-09-07
+scope: >-
+  The 11 low-priority P9 items (M-16..M-26 family) are executed as ONE unattended Opus OA session, ARCHIVE ONLY: archive the ~20 dead bots named in docs/migration-parking-lot-2026-08-19.md list A (all already AUTOS OFF, Archive group), write data/archive/rename_map.csv, confirm the 7 live mirrors and 2 DIR bots untouched by pre/post roster diff. NO deletes (M-06 / M-16 delete items stay open, Class C, not authorized). Board umbrella T-50.
+verbatim: >-
+  4. A (Run it as one session, archive only, no deletes)
+verbatim_of: andy
+owner: Andy (in-chat, Cowork Fable decision-card session 2026-09-07, batch 2; transcribed by Claude)
+status: Active
+applies_to: M-17..M-26; T-50; OA account roster.
+superseded_by: none
+source: >-
+  Decision card batch 2 Q4, 2026-09-07.
+unclear: false
+```
+
+```yaml
+ruling_id: R-2026-09-07-M-04-SUPERSEDED
+date: 2026-09-07
+scope: >-
+  M-04 (review build-plan.md + oa-ops-runbook.md, from 2026-08-04) is closed as SUPERSEDED by CLAUDE.md, the pre-registration ledger, close.sh and the oa-driving skill. No review performed; none owed.
+verbatim: >-
+  5. A (Close as superseded)
+verbatim_of: andy
+owner: Andy (in-chat, Cowork Fable decision-card session 2026-09-07, batch 2; transcribed by Claude)
+status: Active
+applies_to: data/portfolio.csv M-04.
+superseded_by: none
+source: >-
+  Decision card batch 2 Q5, 2026-09-07.
+unclear: false
+```
+
+```yaml
+ruling_id: R-2026-09-07-M-36-RESCOPED
+date: 2026-09-07
+scope: >-
+  M-36 (order-level verification on all ON bots) is RESCOPED: the 7 GF arms are covered continuously by the P3 daily GF-shape TSV (data/captures/<day>-close/03-gf-daily-shape.tsv) and the 09-07 Layer 2 read; 130PM/S2 were verified at S2b. One read-only OA pass on the 5 ON mirrors and 2 DIR bots (order placed vs config: strikes, qty, exits) closes the item.
+verbatim: >-
+  6. A (Rescope: GF covered by P3 daily TSV; one read-only pass on the 5 mirrors + 2 DIR bots, then close)
+verbatim_of: andy
+owner: Andy (in-chat, Cowork Fable decision-card session 2026-09-07, batch 2; transcribed by Claude)
+status: Active
+applies_to: data/portfolio.csv M-36; P3.
+superseded_by: none
+source: >-
+  Decision card batch 2 Q6, 2026-09-07.
+unclear: false
+```
+
+```yaml
+ruling_id: R-2026-09-07-T-16-A7-ONLY
+date: 2026-09-07
+scope: >-
+  T-16: of the four unwired engines, ONLY scripts/a_series.py assert A7 (shared-automation config-hash drift on GF-ScannerA/B and the backstop) is wired, as a READ-ONLY close.sh stage that turns the close RED on a hash change (board T-51, DEVIN). research_loop.py stays DO-NOT-WIRE (standing ruling); comparative_machinery.py stays blocked on exit_rows.csv; intraday_read.py stays unwired. P5 remains IDLE; its restart trigger is unchanged.
+verbatim: >-
+  7. A (Wire a_series.py A7 only, as a read-only close.sh stage; other three stay unwired, P5 stays idle)
+verbatim_of: andy
+owner: Andy (in-chat, Cowork Fable decision-card session 2026-09-07, batch 2; transcribed by Claude)
+status: Active
+applies_to: scripts/a_series.py; scripts/close.sh; T-51; P5.
+superseded_by: none
+source: >-
+  Decision card batch 2 Q7 (T-16), 2026-09-07.
+unclear: false
+```
+
+```yaml
+ruling_id: R-2026-09-07-DIR-BOTS-LEAVE-TO-CHECKPOINT
+date: 2026-09-07
+scope: >-
+  DIR-SPX-CallVIXdrop (n=6, Exp(R) -20.4% [-52.4,+22.2], -$840) and DIR-SPX-PutVIX22-SL75 (no post-cutover fills; VIX gate >=22 never near) are LEFT AS THEY ARE, ON at 1 ct. CallVIXdrop reaches its pre-registered hard checkpoint T-35 at n=10: if Exp(R) < 0 then, it is killed without re-litigation. No early kill, no toggle. Supersedes the 2026-09-02 deferral (R-2026-09-02-DIRECTIONAL-DEFERRED) with an explicit decision.
+verbatim: >-
+  8. A (Leave both alone; let T-35 fire at n=10 as pre-registered)
+verbatim_of: andy
+owner: Andy (in-chat, Cowork Fable decision-card session 2026-09-07, batch 2; transcribed by Claude)
+status: Active
+applies_to: DIR-SPX-CallVIXdrop; DIR-SPX-PutVIX22-SL75; T-35.
+superseded_by: none
+source: >-
+  Decision card batch 2 Q8, 2026-09-07.
+unclear: false
+```
