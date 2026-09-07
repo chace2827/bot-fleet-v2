@@ -10977,3 +10977,115 @@ Session: Opus / Claude Code in `~/bot-fleet-v2`. Authority
 
 **Ready to commit** — no git command was run against the mounted tree from this session
 (`CLAUDE.md` §9.1); repo state was read from `gitstore` refs and `logs/HEAD` directly.
+
+---
+
+## 2026-09-07 — Wave 2026-09-08 dispatched and foremanned: 6/6 lanes, 6 PRs, 0 re-dispatches
+Session: Opus / Claude Code. Base `36a37ff`. Wave 18:24:26Z → 18:42:26Z (**18m00s**), cap 4.
+Full report: `~/waves/2026-09-08/REPORT.md` (sha256 `ea95bdea9e662acf…`).
+**No merges — Andy merges.** Foreman verdicts posted as comments on all six PRs.
+
+- **All six lanes exited rc=0. Zero timeouts, zero STOP files, zero re-dispatches.**
+  PRs: #77 t45 · #74 t46 · #73 t43 · #78 t47 · #76 t44 · #75 t03.
+- **Receipts clean.** Six wrapper provenance lines (`v2 sha256 3479939d…| model swe-1-7 (free)`),
+  six CLI logs with `resolved_model_uid=swe-1-7`; `uniq -c` over every log written today returns
+  `6 resolved_model_uid=swe-1-7` and nothing else. No `acu` field (instrument does not emit one,
+  `R-2026-09-01-MODEL-UID-RECEIPT`). **Balance delta pending Andy's AFTER snapshot** — and note a
+  Devin **IDE/ACP session** (`devin_20260907-135556`, `client="windsurf"`) was already running
+  before the wave, outside the wrapper and outside the cost law's instrument, so a nonzero delta
+  would not by itself prove a paid lane.
+- **⛔ WAVE-WIDE BLOCKER — phase0 was ALREADY RED on the base `36a37ff`, before any lane.**
+  `scripts/check_docs_vs_csv.py:93-113` counts GF arms by name only, with no `status` filter:
+  `bots_meta.csv` has 8 GF rows but `GF-QQQ-IC-Ride-Delta` is `OFF`, so seven are ON and
+  `pre-registration-ledger.md:365` correctly says 7. Five of six PRs inherit the red; the one that
+  went green (#73) did so by editing signed pre-registration text to satisfy the broken checker,
+  which makes that sentence read as 9 arms while still asserting "8 ON arms"/"$40,000 = 8 × $5K".
+  **Recommend fixing the checker, not the doc** — but it is gated content either way, Andy rules.
+  **No lane can merge on "phase0 green" until this is settled.**
+- **The `Ready for review` instruction was under-specified and produced four different answers.**
+  `portfolio.py` `STATUSES` did not contain that value and `portfolio.py --check` is a phase0 gate.
+  t43/t45/t46 each added it independently; t44 used the existing `Needs sign-off` and argued the
+  value is not in the schema; t03 and t47 used `Ready`. t44 was the only lane that declined to
+  widen a schema without authority. **Wave-spec defect, not a lane defect.** Andy picks one value.
+- **MERGE ORDER: #77 → #74 → #73 → #78; #76 and #75 independent.**
+  #78 needs a **content rebase** after #77: it records `build_ledger.py` at `f2f2f706…`, #77 moves
+  it to `3f0a2719…` (both verified from the clones), so #78's new `check_frozen_panel.py` predicate
+  goes RED on #77's merge until re-recorded — the predicate working, not a bug. #74→#73 is
+  content-safe (#73's step is not count-pinned; #74 keeps `M2 ABSENT` passing at 33/33).
+- **Fixes owed:** #73 hold the pre-registration line for Andy; #75 move `PR #75` from the `bet`
+  column (program-level) to `metric_note`; #78 drop `docs/session-log.md` (not a lane artifact).
+- **The foreman premise corrections were load-bearing.** Without them five of six lanes had a
+  stated STOP condition. t46 fixed all four `<day>-roster` sites via one helper; t43 found phase0
+  is a job in `ci.yml` not a `phase0*.yml` file; t03 went to the guard implementations not the
+  docstring; t47 declined the already-done edit and found **two** untraced hash movements where I
+  had found one; t44 also cleaned the `<FILL>` legend at `report.py:1170`.
+- **Two corrections of my own, both recorded on the PRs.** (1) I claimed t43's
+  `pre-registration-ledger.md` edit was not CI-forced, having tested only `check_refs.py`; it is
+  forced, by `check_docs_vs_csv.py`. (2) I reported a $37 gap in t44's fleet-DD figure; the error
+  was mine — I re-applied a `LEDGER_START` filter the ledger already satisfies. Under t44's stated
+  rule (position-level, counted once every leg is closed) it reproduces **−3,937 exactly**. The
+  worst-day figure **−2,038 on 2026-08-27** matched on the first recompute.
+- New/changed in the tree from this session: `docs/session-log.md` only. Everything else lives in
+  `~/waves/2026-09-08/` (untracked working dir) and on the six PR branches.
+
+**Ready to commit** — no git command was run against the mounted tree from this session
+(`CLAUDE.md` §9.1); all git work happened inside the six disposable clones.
+
+## 2026-09-07 ~15:17–15:36 ET — M-36 order-level pass (Cowork, built-in browser)
+
+Scope was **M-36 only**, at Andy's explicit instruction: no archiving, no Evening 1/2, no bot
+settings touched. Read-only against OA; `Paper Trading` asserted on every page.
+
+**First session driven entirely by the Claude built-in browser pane instead of Claude in Chrome.**
+Viewport forced to 1440x900 — when the pane is hidden it lays out ~1416x2745 and collapses drawer
+footers to height 0 (see the day's earlier route test).
+
+- Most recent closed position read for the 5 ON mirrors + 2 DIR bots, via `/positions/closed`
+  (account-level, `Load more` x3 → 120 rows) → Position Details + **Trades list**. Exit Options
+  panel deliberately not used as execution evidence (§3).
+- Config side read from each bot's `/settings` (Bot Inputs, automation names/schedules,
+  Safeguards, template + version).
+- Output: `data/captures/2026-09-07-archive-sweep/05-m36-order-level.md`
+  sha256 `530cc6d7f8409054aaf51fbed712489a5bb5b6fc2776798e46272277fd04734d`; appended to that
+  directory's `SHA256SUMS.txt` (all 8 files verify OK).
+- `data/portfolio.csv` M-36: `Ready` → `Done`, metric_note cites the file + sha.
+
+**Result: 6 of 7 verifiable, 2 clean matches, 6 findings.** No order contradicted its bot's
+structure, strike geometry or quantity — every finding is about **exits and price filters**.
+- F1 `3DTE $140-$350` filled $0.35 against a scanner named `$140-$350` — same class as the open
+  T-48 ScannerB puzzle; recommend folding into T-48.
+- F2 that bot's sizing comparison spans the 09-02 change and is void in both directions.
+- F3 `Nigiri` exits via the accelerated-profit monitor at 44%, not the 75% in Bot Inputs.
+- F4 **OPEN** — `Trendy` closed at 42.11%, matching none of its three configured margins; needs
+  the close trade's Automation Log opened. The one M-36 item not closed.
+- F5 `DIR-SPX-CallVIXdrop` realizes via OA's `Auto close ITM position before expiration` **market
+  order** at 3:50PM — no bot-side profit target exists; slippage unmodeled by its backtest.
+- F6 `DIR-SPX-PutVIX22-SL75` is ON with `closedCount` 0 — never filled, unverifiable.
+- N1 `Friday IB` (v4 vs 6) and `60min-ORB` (v2 vs 3) run behind template; an `Upgrade Bot` click
+  would silently change a verified bot.
+
+**Not done, deliberately:** the hosted portfolio artifact was not regenerated, so the board lags
+the CSV by one row until the next regen.
+
+### 2026-09-07 ~15:35 ET — F4 closed (same session, read-only)
+
+Opened the Trendy close trade's **Automation Log** (`a.link.tlink`, first instance = close trade).
+Attribution verbatim: automation `Put Spread Manager (Short Duration)`, triggered by `Monitor`,
+Sep 4 10:45AM; decision *"Position trails a Profit Margin target by Trailing Profit Margin **or**
+Position premium decreased by Absolute Profit Margin since it was opened"* → Yes; action
+`Close Position`.
+
+**F4's premise was wrong and is withdrawn.** 42.11% was never meant to equal one of the three
+margins — the node is a compound OR on a *trailing* condition, and the realized figure is just the
+ask at fill on the monitor tick. ABSOLUTE (90%) cannot have fired given a 57.9% high, so the
+trailing branch did, which is precisely what `PROFIT MARGIN 50%` / `TRAILING PROFIT MARGIN 10%`
+configure. **Config and behavior agree; no defect.**
+
+M-36 now reads **6/7 verifiable, 3 clean, 0 open exit-attribution items.** Remaining findings are
+F1 (fold into T-48), F3, F5, F6.
+`05-m36-order-level.md` amended with a dated banner, original F4 text left standing; new sha256
+`9e135c16e1b1af3c5a0ba8cf29b79cdd8a0b8c8c5a0e42d1b12fbaa2d62877e1`; SHA256SUMS.txt re-verified 8/8 OK.
+
+**Reusable method learned:** the close trade's Automation Log is the correct Layer-2 surface for
+"which exit fired" — it returns automation name, trigger type, decision text verbatim and action.
+Strictly better than the close-trade label, and it is not the Exit Options panel.
