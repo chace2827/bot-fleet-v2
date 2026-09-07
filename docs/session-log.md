@@ -10935,3 +10935,45 @@ against the 09-02 POST capture: **44/44 identical on both**, AUTOS 18/44, EXITS 
   refuse, so checking by hand was not optional.
 
 **Ready to commit** — no git command was run from this session (`CLAUDE.md` §9.1).
+
+---
+
+## 2026-09-07 — Wave 2026-09-08 foreman: build complete, dispatch BLOCKED on an unpushed master
+Session: Opus / Claude Code in `~/bot-fleet-v2`. Authority
+`drafts/_dispatch-2026-09-08-wave-foreman-claudecode.md`, `R-2026-09-07-DEVIN-WAVE-SCOPE`.
+**No Devin session was created. Nothing was dispatched.** Full detail: `~/waves/2026-09-08/FINDINGS.md`
+(sha256 `ff2fad9c6e0d261d8258c37d73f258e127b7af6beafde4d1ffa73746245ddb94`).
+
+- **BLOCKER.** `origin/master` is `d01191e4` (2026-09-01); local master is `704250cb`. Six commits
+  unpushed. Verified by cloning `origin/master` and testing every lane premise against it: board rows
+  **T-44/T-45/T-46/T-47 are MISSING** there, `R-2026-09-07-DEVIN-WAVE-SCOPE` is absent from
+  `RULINGS.md`, both lane-spec drafts are missing, `data/close/2026-09-04/` and
+  `data/captures/2026-09-07-roster/` do not exist, and `bots_meta.csv` has 0 rows with a 2026-09-02
+  note (lane 1 wants 8). **Five of six lanes would STOP on their own pre-flight.** Andy pushes, then
+  `build-clones.sh` cuts the six clones. `dispatch.sh` carries a launch gate that refuses any base
+  that is not current `origin/master`, so this cannot be launched by accident.
+- **Foreman dispatch §1.3 not implemented, deliberately.** It calls for a per-run config carrying
+  `skip_workspace_trust`. That is v1-era (`_foreman-notes-2026-08-19.md` TRAP 1). `devin-free` **v2**
+  supplies that config itself and **refuses `--config` with exit 2** — implementing §1.3 would have
+  killed all six lanes. Recorded in the script header; belongs in the free-wave runbook.
+- **Lane premise drift, corrected in the prompts, tracked specs untouched.** t45 `newest_raw()` is
+  L237-239 not ~L76-79; t46's capture path is built at four sites (L179/352/465/652) not one;
+  **t43's `.github/workflows/phase0*.yml` does not exist** — `phase0` is a job in `ci.yml` L15;
+  t03's guard is at L728/L750/L773, not the L91-99 docstring; **t47's "retire the short form" and
+  "append a lineage trace" are both already done** (daily-loop-spec L36/L153 carry full shas;
+  `roster-mechanics-ruling.md` L231-242 is the trace).
+- **T-47's actual defect, found in preflight.** `roster-mechanics-ruling.md` L17 records
+  `build_ledger.py` frozen at `657cb392…`; the file hashes `f2f2f70673b6ee412820ff179408774b45db7aeec9a7fda426d9cb5d64b93af9`
+  on both local and origin. The freeze is stale and that movement is untraced. Pre-existing. This is
+  now written into the t47 prompt as its primary task. `execution_audit.py` still matches `fdc43d0d…`.
+- **Merge order matters more than the gate asked.** Lanes 2/3/4 are file-disjoint (gate PASS), but
+  t45 moves `build_ledger.py`'s sha which t47 freezes as a CI predicate, and t46 inverts the
+  `close_manifest` selftest that t43 wires into CI. **Merge t45 → t46 → t43 → t47; t44 and t03 are
+  independent.** All six write `data/portfolio.csv`, so expect serial rebases.
+- Cost-law gates all PASS: wrapper selfhash `3479939d…` matches canonical `scripts/devin_free.sh`
+  byte-for-byte, and `--model`/`-r`/`--resume`/`--config` were each *tested* to exit 2, not assumed.
+- **Andy: take the Devin balance BEFORE snapshot immediately before launching** (delta must be 0;
+  there is no `acu` field in the CLI logs).
+
+**Ready to commit** — no git command was run against the mounted tree from this session
+(`CLAUDE.md` §9.1); repo state was read from `gitstore` refs and `logs/HEAD` directly.
