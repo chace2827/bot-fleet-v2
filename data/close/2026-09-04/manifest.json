@@ -1,0 +1,85 @@
+{
+  "argv": [
+    "2026-09-04"
+  ],
+  "brief": {
+    "html_path": "data/brief/2026-09-04_brief.html",
+    "html_sha256": "dfca60aed3ffbc01c1621567684623fd8f7bd84a5b17bbcea4d876ee19b3c25d",
+    "json_path": "data/brief/2026-09-04_brief.json",
+    "narrative": {
+      "filled_count": 0,
+      "path": null,
+      "slots": {
+        "convexity": false,
+        "fire": false,
+        "lesson": false,
+        "since-yesterday": false,
+        "strategy": false,
+        "tomorrow": false
+      },
+      "unfilled_count": 6
+    },
+    "p3_verdicts_path": "data/brief/2026-09-04_p3_verdicts.tsv",
+    "tape_path": "data/brief/2026-09-04_tape.json"
+  },
+  "calendar": "rule-derived US equity market holidays; weekends excluded",
+  "capture": {
+    "present": false,
+    "status": "ABSENT"
+  },
+  "commit_message": "close 2026-09-04: 246 legs, exit 0, capture ABSENT, 0/6 narrative slots filled",
+  "daily_receipt": {
+    "day": "2026-09-04",
+    "final_exit": 0,
+    "ledger_stale": false,
+    "ledger_start": "2026-08-10",
+    "max_open_date": "2026-09-04",
+    "min_open_date": "2026-08-10",
+    "pinned": true,
+    "rows_in": 251,
+    "rows_out": 246,
+    "source_export": "data/raw/2026-09-04.csv",
+    "written_utc": "2026-09-07T16:49:15+00:00"
+  },
+  "day": "2026-09-04",
+  "export": {
+    "path": "data/raw/2026-09-04.csv",
+    "sha256": "07a70a3652d55e9c1d1d5cddb3d7955bb778bb4fbeb03ed7bbde31a923274f73"
+  },
+  "gap": {
+    "calendar": "rule-derived US equity market holidays; weekends excluded",
+    "evaluable": true,
+    "last_close": "2026-08-31",
+    "statement": "last close 2026-08-31, 3 trading days unobserved (2026-09-01, 2026-09-02, 2026-09-03)",
+    "unobserved_count": 3,
+    "unobserved_days": [
+      "2026-09-01",
+      "2026-09-02",
+      "2026-09-03"
+    ]
+  },
+  "staged_count": 20,
+  "staged_paths": [
+    "STATUS.md",
+    "dashboard.html",
+    "data/bots.csv",
+    "data/brief/2026-09-04_brief.html",
+    "data/brief/2026-09-04_brief.json",
+    "data/brief/2026-09-04_p3_verdicts.tsv",
+    "data/brief/2026-09-04_tape.json",
+    "data/close/2026-09-04/manifest.json",
+    "data/execution_audit_findings.csv",
+    "data/execution_audit_findings_meta.json",
+    "data/hedge_tournament.csv",
+    "data/ledger_meta.json",
+    "data/lessons.csv",
+    "data/ops_rows.csv",
+    "data/raw/2026-09-04.csv",
+    "data/receipts/close-runs.jsonl",
+    "data/receipts/daily-runs.jsonl",
+    "data/straddlers.csv",
+    "data/trade_window.csv",
+    "data/trades.csv"
+  ],
+  "written_utc": "2026-09-07T16:49:16+00:00"
+}

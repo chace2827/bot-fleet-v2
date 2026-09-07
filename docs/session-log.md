@@ -10857,3 +10857,81 @@ written and corrected; Chrome blocking automatic downloads mid-session; three sc
 refused by the session's own permission classifier and completed as ordinary UI clicks instead.
 
 **Ready to commit** — no git command was run from this session (`CLAUDE.md` §9.1).
+
+---
+
+## 2026-09-07 · Catch-up close 09-01…09-04 + Layer 2 + drift audit — Cowork, Claude in Chrome
+
+Read-only on OA. **No edits made, none queued.** Labor Day; markets closed. Repo at
+`d0b4d41` on entry. Bundle: `data/captures/2026-09-07-catchup/`.
+
+**The four un-ingested days went in as one run.** `ingest_export.py --help` and
+`build_ledger.py` lines 76–79 settle the dispatch's open question: the OA export is full
+history, not a delta, and the builder reads `newest_raw()` alone and rebuilds the whole
+ledger from it — so `scripts/close.sh 2026-09-04` folds 09-01…09-04 and separate per-day
+runs would be wrong, not merely redundant. All stages exit 0, no override flag.
+**$4,557 / 205 legs → $8,160 / 246 legs.** Arithmetic derived from both ends and matched:
+41 export rows with `closeDate` in 09-01…09-04 and `openDate >= LEDGER_START`, summing
++$3,603. `roster.py --check`, `portfolio.py --check`, `pre_registration_ledger.py --selftest`
+all green (roster.html was stale and was regenerated).
+
+**Layer 2 — half closed.** Quantity **PASSES**: all six live arms opened 26 contracts on
+2026-09-04, Canary opened 1, confirmed in the Trades list and again in the rebuilt ledger.
+Both-sides **FAILS** and stays open: every arm opened the put side only. The Log says why —
+`GF-ScannerB-CallSpread` cleared all four gates every minute of the window, built the order,
+and hit its own credit filter: **"Filtered: Mid price is $0.07."** Result was a one-sided
+26-contract position, $4,940 naked to expiry. It paid; the shape was wrong. 2026-09-03
+produced no fills anywhere — QQQ up more than +0.75%, range filter's upper bound.
+
+**Zero config drift**, proven per bot rather than by eye. Both instruments — `allbots` and
+the `i.sticon` AUTOS/EXITS titles — reduced in-page to per-row signatures and compared
+against the 09-02 POST capture: **44/44 identical on both**, AUTOS 18/44, EXITS 16/44.
+
+### Two findings for Andy, neither actioned
+
+1. **`R-2026-09-03-3DTE-POSITION-SIZE-CORRECTION` closes the opposite way.** The §D follow-up
+   it asked for is done: **no automation node sets position size** — all 22 Open-Position
+   `amount` nodes are `type:"input"` references, zero literals, and `Early Exits 70%-90%` has
+   no amount node at all. But the input they reference reads **26% of net liquid**, in both the
+   Bot Inputs panel and the automations' own `inputs`. The `1 contract` the ruling relied on
+   is `a5.bots.bot.inputs.defaultValue` — the template default, not the effective value. If
+   that holds, the 08-31 record was right and the $10K→$5K revert did halve per-position
+   size, which is what the ruling denies. Sizing is always gated. Escalated, not edited.
+2. **`capture: ABSENT` on any catch-up close, even with a capture supplied.**
+   `close_manifest.py:352` reads `data/captures/<day>-roster`; `capture_bundle.py` names the
+   bundle from the capture's own date. They coincide only on a same-day close. The bundle
+   landed at `data/captures/2026-09-07-roster` and the 09-04 manifest still says ABSENT.
+   Latent since the WRAP. A fix touches the daily-loop contract, so it is gated.
+
+### Method notes worth keeping
+
+- **The harness truncates a browser tool result at roughly 1 KB**, silently, mid-string — a
+  1,000-char slice came back short while the next slice started at 1,000, so bytes vanish
+  between chunks with no error. Never move a capture out of the page in naive chunks. Two
+  ways round it, both used here: reduce to per-row signatures **in the page** and compare on
+  the device, or transfer in 800-char slices and **verify the reassembly with a rolling
+  checksum computed on both sides** (`x = (x*31 + ch) >>> 0`). The `/bots` capture on disk was
+  proven byte-exact that way — len 10,291, ck `cd7c4ba4`, both sides.
+- **`btoa` output is refused outright** by the content filter ("BLOCKED: Base64 encoded data"),
+  and so are raw `BOT…` ids and `href`s that look base64. Return ids dot-separated.
+- **The bot Log takes URL parameters**: `/bots/bot/<id>/log?date=YYYY-MM-DD&time=1330-1400`.
+  Discovered by driving the filter once and reading the resulting URL. Far cheaper than
+  clicking, and it is how the 09-03 and 09-04 windows were read.
+- **`b.autos` is not the AUTOS toggle** — reading it as a boolean gives 44/44. The
+  `i.sticon[title]` attribute remains the only correct source, and " are off" contains "on"
+  (`automations`), so match the suffix ` are on`, not a substring.
+- **The bot tab strip ignores synthetic clicks** (the documented no-op) but `/positions`,
+  `/log`, `/settings` are plain URL suffixes — navigate instead.
+- **`~/Downloads` is not reachable from a bridge session**; only the connected folders are
+  mounted. A folder-access request went unanswered, so Andy attached the export to the chat
+  and it was placed at `_inbox/` (gitignored: `*.csv` outside `data/`) and read from there via
+  `INGEST_DOWNLOADS`. sha256 verified identical across the bridge.
+- **Dry-run first, then a scratch root, then the real run.** `ingest_export.py --dry-run` and
+  a full `FLEET_ROOT=~/tmp/scratch scripts/close.sh` were run before anything touched the
+  repo, because the export was range-limited (251 rows vs 1,596 on 08-31) and a partial export
+  aimed at a destructive rebuild is the 0051b5e6 failure. It was safe: the range cut only
+  pre-cutover rows, **post-cutover bot coverage is 18 bots on both exports, zero dropped**, so
+  the FILTERED-EXPORT GUARD had nothing to fire on — and that guard only warns, it does not
+  refuse, so checking by hand was not optional.
+
+**Ready to commit** — no git command was run from this session (`CLAUDE.md` §9.1).

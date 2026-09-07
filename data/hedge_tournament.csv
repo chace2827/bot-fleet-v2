@@ -204,3 +204,23 @@ date,open_date,trade_id,bot,pillar,underlying,structure,short_put,short_call,reg
 2026-08-31,2026-08-31 13:31:02,T00260,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortcallspread,,7695,Chop,sl130,-195.0,4850.0,-0.0402,True,optimistic bound: booked -130% of credit_basis at mae_pct threshold
 2026-08-31,2026-08-31 13:31:02,T00260,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortcallspread,,7695,Chop,sl50,-75.0,4850.0,-0.0155,True,optimistic bound: booked -50% of credit_basis at mae_pct threshold
 2026-08-31,2026-08-31 13:31:02,T00260,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortcallspread,,7695,Chop,sl75,-112.5,4850.0,-0.0232,True,optimistic bound: booked -75% of credit_basis at mae_pct threshold
+2026-09-04,2026-09-04 13:31:00,T00416,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortputspread,7690,,Chop,defang,,4650.0,,True,DEFERRED v1 — needs the intraday premium-decay path (mark short leg to ~$0.05) not present in the ledger. TODO: model once tick/1-min option-premium history is available.
+2026-09-04,2026-09-04 13:31:00,T00416,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortputspread,7690,,Chop,pt100,350.0,4650.0,0.0753,True,optimistic bound: booked +100% of credit_basis at mfe_pct threshold
+2026-09-04,2026-09-04 13:31:00,T00416,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortputspread,7690,,Chop,pt25,87.5,4650.0,0.0188,True,optimistic bound: booked +25% of credit_basis at mfe_pct threshold
+2026-09-04,2026-09-04 13:31:00,T00416,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortputspread,7690,,Chop,pt50,175.0,4650.0,0.0376,True,optimistic bound: booked +50% of credit_basis at mfe_pct threshold
+2026-09-04,2026-09-04 13:31:00,T00416,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortputspread,7690,,Chop,ride,350.0,4650.0,0.0753,False,"settlement pnl (ledger, verbatim)"
+2026-09-04,2026-09-04 13:31:00,T00416,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortputspread,7690,,Chop,s2,350.0,4650.0,0.0753,True,"strike-touch cut, 5-min tape grain (not sub-second latch); cut priced at the leg's own worst-excursion (mae_pct) extreme"
+2026-09-04,2026-09-04 13:31:00,T00416,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortputspread,7690,,Chop,sl100,350.0,4650.0,0.0753,True,optimistic bound: no SL hit -> rode to settlement
+2026-09-04,2026-09-04 13:31:00,T00416,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortputspread,7690,,Chop,sl130,350.0,4650.0,0.0753,True,optimistic bound: no SL hit -> rode to settlement
+2026-09-04,2026-09-04 13:31:00,T00416,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortputspread,7690,,Chop,sl50,350.0,4650.0,0.0753,True,optimistic bound: no SL hit -> rode to settlement
+2026-09-04,2026-09-04 13:31:00,T00416,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortputspread,7690,,Chop,sl75,350.0,4650.0,0.0753,True,optimistic bound: no SL hit -> rode to settlement
+2026-09-04,2026-09-04 13:31:01,T00416,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortcallspread,,7730,Chop,defang,,4750.0,,True,DEFERRED v1 — needs the intraday premium-decay path (mark short leg to ~$0.05) not present in the ledger. TODO: model once tick/1-min option-premium history is available.
+2026-09-04,2026-09-04 13:31:01,T00416,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortcallspread,,7730,Chop,pt100,250.0,4750.0,0.0526,True,optimistic bound: booked +100% of credit_basis at mfe_pct threshold
+2026-09-04,2026-09-04 13:31:01,T00416,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortcallspread,,7730,Chop,pt25,62.5,4750.0,0.0132,True,optimistic bound: booked +25% of credit_basis at mfe_pct threshold
+2026-09-04,2026-09-04 13:31:01,T00416,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortcallspread,,7730,Chop,pt50,125.0,4750.0,0.0263,True,optimistic bound: booked +50% of credit_basis at mfe_pct threshold
+2026-09-04,2026-09-04 13:31:01,T00416,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortcallspread,,7730,Chop,ride,250.0,4750.0,0.0526,False,"settlement pnl (ledger, verbatim)"
+2026-09-04,2026-09-04 13:31:01,T00416,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortcallspread,,7730,Chop,s2,250.0,4750.0,0.0526,True,"strike-touch cut, 5-min tape grain (not sub-second latch); cut priced at the leg's own worst-excursion (mae_pct) extreme"
+2026-09-04,2026-09-04 13:31:01,T00416,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortcallspread,,7730,Chop,sl100,250.0,4750.0,0.0526,True,optimistic bound: no SL hit -> rode to settlement
+2026-09-04,2026-09-04 13:31:01,T00416,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortcallspread,,7730,Chop,sl130,250.0,4750.0,0.0526,True,optimistic bound: no SL hit -> rode to settlement
+2026-09-04,2026-09-04 13:31:01,T00416,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortcallspread,,7730,Chop,sl50,250.0,4750.0,0.0526,True,optimistic bound: no SL hit -> rode to settlement
+2026-09-04,2026-09-04 13:31:01,T00416,IC-SPX-FastPT25-S2-130PM,IC,SPX,shortcallspread,,7730,Chop,sl75,250.0,4750.0,0.0526,True,optimistic bound: no SL hit -> rode to settlement
