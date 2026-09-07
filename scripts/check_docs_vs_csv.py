@@ -96,20 +96,40 @@ def check_gf_arm_count(bots, errors):
         n = (r.get("notes") or "").lower()
         return "gf-" in b or "greenfield" in b or "greenfield" in n
 
-    gf_count = sum(1 for r in bots if is_gf(r))
+    gf_rows = [r for r in bots if is_gf(r)]
+    gf_count = len(gf_rows)
+    # THE FAMILY AND THE ON SUBSET ARE BOTH REAL, AND BOTH APPEAR IN LIVE DOCS.
+    # "the eight greenfield arms" is the shared-config family: editing the shared
+    # object changes all 8, GF-QQQ-IC-Ride-Delta included, even though it is OFF
+    # (track-b-arms-spec.md, pre-registration-ledger.md MECHANISM). "7 GF arms" in a
+    # max-loss line is the ON subset, because only an ON arm can lose money
+    # (pre-registration-ledger.md:365, R-2026-09-01-SLEEVE-CAPS: $40,000/day = 8 ON
+    # arms x ~$5K, and the same block's $35,000/day for the GF family alone is 7 x $5K).
+    # A single global count cannot satisfy both senses; comparing every mention against
+    # the family count made the ON-sense line a false RED. So pick the expected count
+    # from the sense the line itself declares. bots_meta.csv carries `status`, so both
+    # counts are derived, not asserted.
+    gf_on = sum(1 for r in gf_rows if (r.get("status") or "").strip().upper() == "ON")
     # Digits or spelled-out small numbers followed by GF/greenfield and arm.
     pat = re.compile(
         r"\b(?:([0-9]+)|(one|two|three|four|five|six|seven|eight|nine|ten))\b"
         r"\s+(?:GF|greenfield)\s+arm",
         re.I,
     )
+    # An explicit "N ON arms" in the same line marks the ON sense. Deliberately NOT
+    # "ON bots": devin-queue.md:45 reads "the 19 ON bots - including all eight GF arms",
+    # where the GF number is the family, and a looser marker made that line a false RED.
+    on_sense = re.compile(r"\bON\s+arm")
     for path in md_files():
         for i, line in enumerate(load_lines(path)):
             m = pat.search(line)
             if not m:
                 continue
             expected = int_val(m.group(1) or m.group(2))
-            if expected != gf_count:
+            if on_sense.search(line):
+                if expected != gf_on:
+                    errors.append((path, i + 1, f"says {expected} ON GF/greenfield arms, bots_meta.csv has {gf_on} ON"))
+            elif expected != gf_count:
                 errors.append((path, i + 1, f"says {expected} GF/greenfield arms, bots_meta.csv has {gf_count}"))
 
 
