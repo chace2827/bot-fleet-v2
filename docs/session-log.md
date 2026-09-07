@@ -11089,3 +11089,47 @@ F1 (fold into T-48), F3, F5, F6.
 **Reusable method learned:** the close trade's Automation Log is the correct Layer-2 surface for
 "which exit fired" — it returns automation name, trigger type, decision text verbatim and action.
 Strictly better than the close-trade label, and it is not the Exit Options panel.
+
+### 2026-09-07 ~16:0x ET — automation-editor WRITE proven on the built-in browser pane
+
+Target `QQQ-IC-0DTE-HedgeTest` / `HedgeTest-ScannerB-PutSpread` (bot OFF, group Archive, never
+traded, market closed for Labor Day). Read-only elsewhere; nothing else on the account touched.
+
+**Method — predict the hash BEFORE editing.** Cloned the client model with the intended new name
+and hashed it, giving a falsifiable target computed *before* any write. Then edited, saved,
+hard-reloaded, reopened and recomputed.
+
+| Step | Hash | len |
+|---|---|---|
+| Baseline | `68b551f9442778f982a7c58c0f03dddfb4cc8e479f49ef71eceefa05801dea33` | 3216 |
+| **Predicted** (pre-edit, name → `…-WTEST`) | `a63d0f615b883eea70ddd15c44f4296a10343eeddb74db95b4a7884dac7f66fb` | 3222 |
+| Client model after edit | **matched prediction** | 3222 |
+| After `saveAndClose` + HARD RELOAD + reopen | **matched prediction** | 3222 |
+| After revert + save + HARD RELOAD + reopen | **`68b551f9…` restored** | 3216 |
+
+A match against a hash predicted beforehand proves the write landed **exactly** and nothing else
+in the routine moved — strictly stronger than observing that the hash changed.
+
+Final state re-read: status off, group Archive, tags `experiment`, disableExits 1, posLimit 2,
+notes empty, all three automations at original names. **Clean.**
+
+**Two new pane traps, both about the pane being HIDDEN:**
+1. **Hidden panes freeze CSS transitions.** Automation node cards rendered with correct widths but
+   `height 0`, pinned to the viewport bottom, at any viewport size: `opacity 0` and
+   `transform: matrix(1,0,0,0,0,0)` (= `scaleY(0)`), with `getAnimations()` reporting the opacity
+   and transform transitions `playState:"running"` at **`currentTime: 0`**. A hidden document never
+   paints, so transitions never advance. **Workaround (works):**
+   `document.getAnimations().forEach(a => a.finish())`.
+2. **Hidden panes have no focus** (`document.hasFocus() === false`, and `.focus()` will not move
+   `activeElement`). Focus-dependent inline editors do not open: `a.edit-title` produced no input,
+   and clicking the criteria expression **dismissed the whole editor** instead of opening it.
+   **Automation editing requires the pane VISIBLE and FOCUSED.** Reads and static handler buttons
+   (`saveNotes`, `saveAndClose`) do not.
+
+**Third trap, surface-independent:** a text-*substring* selector matched an ANCESTOR — searching
+`card` for `/Current market time/` returned the outer overlay card wrapping the entire editor, not
+the decision node. Match exact trimmed text and take the smallest bounding box.
+
+**Route status: the pane can now read, and can write at both layers (bot settings + automation
+commit), with automation edits requiring a visible focused pane.** Still unproven: a change to a
+decision node's criteria (the widget was not driven), action rebuild, and the `exits` bundle.
