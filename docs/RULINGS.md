@@ -4311,3 +4311,62 @@ source: >-
   Andy 2026-09-02.
 unclear: false
 ```
+
+```yaml
+ruling_id: R-2026-09-03-POSITION-LIMITS-RESCINDED
+date: 2026-09-03
+scope: >-
+  R-2026-09-02-POSITION-LIMITS (the "GF arms 1/1" addendum) is RESCINDED. It
+  was drafted on a false premise: its execution guard claimed the 08-31 capture
+  read GF-QQQ-IC-Ride-Delta at 1 per day / 1 at a time; that read was 3DTE
+  $140-$350 (a mirror). Every GF arm is 2 per day / 2 at a time, a GF condor is
+  TWO OA positions (ScannerA put spread + ScannerB call spread), and the ledger
+  already carries the signed line R-2026-08-09-S2-R5-LIMITS "condor-aware: arms
+  stay 2/2" on PR-14..PR-19. Andy's intent ("1 condor/day") is what 2/2 already
+  expresses. The 2026-09-02 execution session correctly withheld the edit.
+  Standing: GF arms and Canary stay 2/2; FastPT25 pair stay 2/2. No OA edit.
+verbatim: >-
+  keep 2/2 on FastPT25 (it's the live candidate), set GF arms 1/1.
+verbatim_of: andy
+owner: Claude (derived, per R-2026-08-31-DERIVED-RULING-AUTHORITY: a signed
+  prior ruling wins over a later addendum written on a misread capture);
+  Andy ratifies by committing.
+status: Active
+applies_to: GF-QQQ-IC-Ride/-PT50/-Trail/-Touch0/-SL100/-SL200/-Canary;
+  IC-SPX-FastPT25-S2/-130PM.
+superseded_by: none
+source: >-
+  data/captures/2026-09-02-gf-sizing/05-allocations-2026-09-02-215500.md
+  (limits table, withholding rationale); pre-registration-ledger.md L1362 et al.
+unclear: false
+```
+
+```yaml
+ruling_id: R-2026-09-03-3DTE-POSITION-SIZE-CORRECTION
+date: 2026-09-03
+scope: >-
+  The 2026-08-31 record (10-authorized-edits Edit 3) and R-2026-09-01-MIRRORS-
+  NO-RESIZE part 2 state that 3DTE $140-$350's Bot Input POSITION SIZE is "26%
+  of net liquid". Read first-hand 2026-09-02 from a5.bots.bot.inputs after a
+  hard reload it is a FIXED 1 contract. The 08-31 claim is WITHDRAWN as a
+  premise. The R-4 DECISION (revert allocation to $5,000) STANDS on its other
+  ground - PR-07's own MAX LOSS line "Paper allocation $5K, deliberately small"
+  is load-bearing in its funding criterion - and is applied. The 2026-08-31
+  bots_meta SIZING EPOCH note on this bot is therefore likely spurious: on this
+  reading neither the 08-31 raise nor the 09-02 revert changed per-position
+  dollar size. Open read-only follow-up: open the bot's automations
+  ("xDTE $140-$350 +10" x3) and confirm no automation-level position-size
+  override exists; until then the epoch note is left standing, marked doubtful.
+verbatim: >-
+  Position Size {"text":"1 contract","type":"quantity","quantity":1}
+verbatim_of: capture
+owner: Claude (derived - a corrected observation, not a policy change);
+  follow-up read is an OA read-only item.
+status: Active
+applies_to: 3DTE $140-$350 (BOTfw5TkkCRF2217765235512870291); PR-07.
+superseded_by: none
+source: >-
+  data/captures/2026-09-02-gf-sizing/05-allocations-2026-09-02-215500.md
+  (Batch E, CORRECTION block).
+unclear: false
+```

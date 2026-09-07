@@ -229,7 +229,7 @@ SIGNED — Andy — 2026-09-02   (three levels as tabled: per-bot $15K / fleet $
 
 ---
 
-## R-2026-09-02-POSITION-LIMITS — addendum (Andy, 2026-09-02, not in the 09-01 draft)
+## R-2026-09-02-POSITION-LIMITS — addendum ⛔ RESCINDED 2026-09-03 by R-2026-09-03-POSITION-LIMITS-RESCINDED (see docs/RULINGS.md). Text left standing as the record; the guard's premise was false — the 08-31 1/1 read was 3DTE, not Ride-Delta; GF arms stay 2/2 (R-2026-08-09-S2-R5-LIMITS).
 
 **Decision.** DAILY POSITIONS / POSITION LIMIT per bot:
 - `IC-SPX-FastPT25-S2` and `-130PM`: **keep 2 per day / 2 at a time** (live candidate + its A/B
