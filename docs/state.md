@@ -1,7 +1,7 @@
 # State — Bot Fleet v2
 
-> ## ⚠️ LAYER 2 — QUANTITY CLOSED 2026-09-07 · **BOTH-SIDES STILL OPEN**
-> ### carry the remaining half at the top of every brief until closed (opened 2026-09-02)
+> ## ✅ LAYER 2 — QUANTITY CLOSED 2026-09-07 · BOTH-SIDES → **MONITORED SHAPE** (ruled 2026-09-07)
+> ### `R-2026-09-07-GF-CALL-SIDE-SHAPE`: the put-only days are the family's measured shape (7 both / 4 put-only / 0 call-only on Ride, 08-14…09-04), kept as configured pending the T-48 Log study. Carry the put-only rate in every brief; it is a P3 bet input, not an open defect.
 >
 > **CLOSED — quantity.** The first post-sizing positions are in and read from the TRADES
 > LIST. All six live arms (`GF-QQQ-IC-Ride` / `-PT50` / `-Trail` / `-Touch0` / `-SL100` /

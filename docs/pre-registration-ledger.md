@@ -1363,6 +1363,7 @@ GO-LIVE ORDERING `R-2026-08-09-S2-R5-LIMITS` — condor-aware: arms stay 2/2.
 TRACE CARRIER    `R-2026-08-18-P1-1A-ROSTER-FACTS` (per-arm roster facts ratified).
 ```
 
+
 > ### 📝 AMENDED 2026-09-02 — `R-2026-09-01-GF-SIZING` G-1 (SIGNED — Andy — 2026-09-02, N = 26)
 > **The `MAX LOSS`, `SIZING TIER` and `CONFIG HASH` lines above are left standing, unedited.**
 > Applied to OA the same day; evidence `data/captures/2026-09-02-gf-sizing/`.
@@ -1390,6 +1391,16 @@ TRACE CARRIER    `R-2026-08-18-P1-1A-ROSTER-FACTS` (per-arm roster facts ratifie
 >                  Escalated to Andy, unresolved. See docs/RULINGS.md, R-2026-09-02-POSITION-LIMITS.
 > LAYER 2          OUTSTANDING: the first new position's Trades list must read quantity 26.
 > ```
+
+> ### 📝 AMENDED 2026-09-07 — `R-2026-09-07-GF-CALL-SIDE-SHAPE` (Andy, decision card Q3)
+> **Measured shape, recorded — nothing above is edited and no OA change is made.** On the family
+> control (`GF-QQQ-IC-Ride`) the ledger shows 11 fill-days 2026-08-14…09-04: **7 two-sided
+> condors, 4 put-only days, 0 call-only.** Every put-only day is `GF-ScannerB-CallSpread` building
+> the call spread and rejecting it on its own credit filter (2026-09-04: "Mid price is $0.07").
+> At 26 ct a put-only day is one ~$4,940 short put spread carried to the 15:52 backstop with no
+> offsetting side. The credit floor, call delta and structure are UNCHANGED by decision; a
+> read-only Log study (board T-48) precedes any amendment. Single-sided rows stay excluded from
+> the condor count (G1) exactly as before.
 
 ### PR-15 — `GF-QQQ-IC-PT50`
 ```
@@ -1426,6 +1437,7 @@ GO-LIVE ORDERING `R-2026-08-09-S2-R5-LIMITS` — condor-aware: arms stay 2/2.
 TRACE CARRIER    `R-2026-08-18-P1-1A-ROSTER-FACTS` (per-arm roster facts ratified).
 ```
 
+
 > ### 📝 AMENDED 2026-09-02 — `R-2026-09-01-GF-SIZING` G-1 (SIGNED — Andy — 2026-09-02, N = 26)
 > **The `MAX LOSS`, `SIZING TIER` and `CONFIG HASH` lines above are left standing, unedited.**
 > Applied to OA the same day; evidence `data/captures/2026-09-02-gf-sizing/`.
@@ -1453,6 +1465,16 @@ TRACE CARRIER    `R-2026-08-18-P1-1A-ROSTER-FACTS` (per-arm roster facts ratifie
 >                  Escalated to Andy, unresolved. See docs/RULINGS.md, R-2026-09-02-POSITION-LIMITS.
 > LAYER 2          OUTSTANDING: the first new position's Trades list must read quantity 26.
 > ```
+
+> ### 📝 AMENDED 2026-09-07 — `R-2026-09-07-GF-CALL-SIDE-SHAPE` (Andy, decision card Q3)
+> **Measured shape, recorded — nothing above is edited and no OA change is made.** On the family
+> control (`GF-QQQ-IC-Ride`) the ledger shows 11 fill-days 2026-08-14…09-04: **7 two-sided
+> condors, 4 put-only days, 0 call-only.** Every put-only day is `GF-ScannerB-CallSpread` building
+> the call spread and rejecting it on its own credit filter (2026-09-04: "Mid price is $0.07").
+> At 26 ct a put-only day is one ~$4,940 short put spread carried to the 15:52 backstop with no
+> offsetting side. The credit floor, call delta and structure are UNCHANGED by decision; a
+> read-only Log study (board T-48) precedes any amendment. Single-sided rows stay excluded from
+> the condor count (G1) exactly as before.
 
 ### PR-16 — `GF-QQQ-IC-Trail`
 ```
@@ -1492,6 +1514,7 @@ GO-LIVE ORDERING `R-2026-08-09-S2-R5-LIMITS` — condor-aware: arms stay 2/2.
 TRACE CARRIER    `R-2026-08-18-P1-1A-ROSTER-FACTS` (per-arm roster facts ratified).
 ```
 
+
 > ### 📝 AMENDED 2026-09-02 — `R-2026-09-01-GF-SIZING` G-1 (SIGNED — Andy — 2026-09-02, N = 26)
 > **The `MAX LOSS`, `SIZING TIER` and `CONFIG HASH` lines above are left standing, unedited.**
 > Applied to OA the same day; evidence `data/captures/2026-09-02-gf-sizing/`.
@@ -1519,6 +1542,16 @@ TRACE CARRIER    `R-2026-08-18-P1-1A-ROSTER-FACTS` (per-arm roster facts ratifie
 >                  Escalated to Andy, unresolved. See docs/RULINGS.md, R-2026-09-02-POSITION-LIMITS.
 > LAYER 2          OUTSTANDING: the first new position's Trades list must read quantity 26.
 > ```
+
+> ### 📝 AMENDED 2026-09-07 — `R-2026-09-07-GF-CALL-SIDE-SHAPE` (Andy, decision card Q3)
+> **Measured shape, recorded — nothing above is edited and no OA change is made.** On the family
+> control (`GF-QQQ-IC-Ride`) the ledger shows 11 fill-days 2026-08-14…09-04: **7 two-sided
+> condors, 4 put-only days, 0 call-only.** Every put-only day is `GF-ScannerB-CallSpread` building
+> the call spread and rejecting it on its own credit filter (2026-09-04: "Mid price is $0.07").
+> At 26 ct a put-only day is one ~$4,940 short put spread carried to the 15:52 backstop with no
+> offsetting side. The credit floor, call delta and structure are UNCHANGED by decision; a
+> read-only Log study (board T-48) precedes any amendment. Single-sided rows stay excluded from
+> the condor count (G1) exactly as before.
 
 ### PR-17 — `GF-QQQ-IC-Touch0`
 ```
@@ -1556,6 +1589,7 @@ GO-LIVE ORDERING `R-2026-08-09-S2-R5-LIMITS` — condor-aware: arms stay 2/2.
 TRACE CARRIER    `R-2026-08-18-P1-1A-ROSTER-FACTS` (per-arm roster facts ratified).
 ```
 
+
 > ### 📝 AMENDED 2026-09-02 — `R-2026-09-01-GF-SIZING` G-1 (SIGNED — Andy — 2026-09-02, N = 26)
 > **The `MAX LOSS`, `SIZING TIER` and `CONFIG HASH` lines above are left standing, unedited.**
 > Applied to OA the same day; evidence `data/captures/2026-09-02-gf-sizing/`.
@@ -1583,6 +1617,16 @@ TRACE CARRIER    `R-2026-08-18-P1-1A-ROSTER-FACTS` (per-arm roster facts ratifie
 >                  Escalated to Andy, unresolved. See docs/RULINGS.md, R-2026-09-02-POSITION-LIMITS.
 > LAYER 2          OUTSTANDING: the first new position's Trades list must read quantity 26.
 > ```
+
+> ### 📝 AMENDED 2026-09-07 — `R-2026-09-07-GF-CALL-SIDE-SHAPE` (Andy, decision card Q3)
+> **Measured shape, recorded — nothing above is edited and no OA change is made.** On the family
+> control (`GF-QQQ-IC-Ride`) the ledger shows 11 fill-days 2026-08-14…09-04: **7 two-sided
+> condors, 4 put-only days, 0 call-only.** Every put-only day is `GF-ScannerB-CallSpread` building
+> the call spread and rejecting it on its own credit filter (2026-09-04: "Mid price is $0.07").
+> At 26 ct a put-only day is one ~$4,940 short put spread carried to the 15:52 backstop with no
+> offsetting side. The credit floor, call delta and structure are UNCHANGED by decision; a
+> read-only Log study (board T-48) precedes any amendment. Single-sided rows stay excluded from
+> the condor count (G1) exactly as before.
 
 ### Rebuilt hedge tournament arms (count TBD)
 ```
@@ -1683,6 +1727,7 @@ GO-LIVE ORDERING `R-2026-08-09-S2-R5-LIMITS` — condor-aware: arms stay 2/2.
 TRACE CARRIER    `R-2026-08-18-P1-1A-ROSTER-FACTS` (per-arm roster facts ratified).
 ```
 
+
 > ### 📝 AMENDED 2026-09-02 — `R-2026-09-01-GF-SIZING` G-1 (SIGNED — Andy — 2026-09-02, N = 26)
 > **The `MAX LOSS`, `SIZING TIER` and `CONFIG HASH` lines above are left standing, unedited.**
 > Applied to OA the same day; evidence `data/captures/2026-09-02-gf-sizing/`.
@@ -1710,6 +1755,16 @@ TRACE CARRIER    `R-2026-08-18-P1-1A-ROSTER-FACTS` (per-arm roster facts ratifie
 >                  Escalated to Andy, unresolved. See docs/RULINGS.md, R-2026-09-02-POSITION-LIMITS.
 > LAYER 2          OUTSTANDING: the first new position's Trades list must read quantity 26.
 > ```
+
+> ### 📝 AMENDED 2026-09-07 — `R-2026-09-07-GF-CALL-SIDE-SHAPE` (Andy, decision card Q3)
+> **Measured shape, recorded — nothing above is edited and no OA change is made.** On the family
+> control (`GF-QQQ-IC-Ride`) the ledger shows 11 fill-days 2026-08-14…09-04: **7 two-sided
+> condors, 4 put-only days, 0 call-only.** Every put-only day is `GF-ScannerB-CallSpread` building
+> the call spread and rejecting it on its own credit filter (2026-09-04: "Mid price is $0.07").
+> At 26 ct a put-only day is one ~$4,940 short put spread carried to the 15:52 backstop with no
+> offsetting side. The credit floor, call delta and structure are UNCHANGED by decision; a
+> read-only Log study (board T-48) precedes any amendment. Single-sided rows stay excluded from
+> the condor count (G1) exactly as before.
 
 ### PR-19 — `GF-QQQ-IC-SL200`
 ```
@@ -1752,6 +1807,7 @@ GO-LIVE ORDERING `R-2026-08-09-S2-R5-LIMITS` — condor-aware: arms stay 2/2.
 TRACE CARRIER    `R-2026-08-18-P1-1A-ROSTER-FACTS` (per-arm roster facts ratified).
 ```
 
+
 > ### 📝 AMENDED 2026-09-02 — `R-2026-09-01-GF-SIZING` G-1 (SIGNED — Andy — 2026-09-02, N = 26)
 > **The `MAX LOSS`, `SIZING TIER` and `CONFIG HASH` lines above are left standing, unedited.**
 > Applied to OA the same day; evidence `data/captures/2026-09-02-gf-sizing/`.
@@ -1784,6 +1840,16 @@ TRACE CARRIER    `R-2026-08-18-P1-1A-ROSTER-FACTS` (per-arm roster facts ratifie
 > persistence; the only build path is a 10-rung tag ladder that consumes the scan budget and
 > fails safe-looking at every rung. `hedge-research.md` §7.1 recommends against it. Building it
 > anyway is a roster decision and is Andy's.
+
+> ### 📝 AMENDED 2026-09-07 — `R-2026-09-07-GF-CALL-SIDE-SHAPE` (Andy, decision card Q3)
+> **Measured shape, recorded — nothing above is edited and no OA change is made.** On the family
+> control (`GF-QQQ-IC-Ride`) the ledger shows 11 fill-days 2026-08-14…09-04: **7 two-sided
+> condors, 4 put-only days, 0 call-only.** Every put-only day is `GF-ScannerB-CallSpread` building
+> the call spread and rejecting it on its own credit filter (2026-09-04: "Mid price is $0.07").
+> At 26 ct a put-only day is one ~$4,940 short put spread carried to the 15:52 backstop with no
+> offsetting side. The credit floor, call delta and structure are UNCHANGED by decision; a
+> read-only Log study (board T-48) precedes any amendment. Single-sided rows stay excluded from
+> the condor count (G1) exactly as before.
 
 ### Optional 1-lot canary
 ```
@@ -1867,6 +1933,7 @@ SIGNED           2026-08-09 per `R-2026-08-09-S2-GATE-A7-SIGN-ALL-SEVEN`, re-sig
 GO-LIVE ORDERING `R-2026-08-09-S2-R5-LIMITS` — condor-aware: arms stay 2/2.
 TRACE CARRIER    `R-2026-08-18-P1-1A-ROSTER-FACTS` (per-arm roster facts ratified).
 ```
+
 
 > ### 📝 AMENDED 2026-09-02 — `R-2026-09-01-GF-SIZING` G-3d route (a) (SIGNED — Andy — 2026-09-02)
 > **All text above is left standing, unedited.** Andy verbatim: "detach to bot-local, keep 1ct".
@@ -1985,6 +2052,16 @@ checks is worse than none.
    three are OFF and out of scope, memo §1), so both are **flagged here, not edited**.
 
 ---
+
+> ### 📝 AMENDED 2026-09-07 — `R-2026-09-07-GF-CALL-SIDE-SHAPE` (Andy, decision card Q3)
+> **Measured shape, recorded — nothing above is edited and no OA change is made.** On the family
+> control (`GF-QQQ-IC-Ride`) the ledger shows 11 fill-days 2026-08-14…09-04: **7 two-sided
+> condors, 4 put-only days, 0 call-only.** Every put-only day is `GF-ScannerB-CallSpread` building
+> the call spread and rejecting it on its own credit filter (2026-09-04: "Mid price is $0.07").
+> At 26 ct a put-only day is one ~$4,940 short put spread carried to the 15:52 backstop with no
+> offsetting side. The credit floor, call delta and structure are UNCHANGED by decision; a
+> read-only Log study (board T-48) precedes any amendment. Single-sided rows stay excluded from
+> the condor count (G1) exactly as before.
 
 ### PR-23 — `GF-QQQ-IC-Ride-Delta`   ⚠️ DRAFT, UNSIGNED. Authored 2026-08-11.
 

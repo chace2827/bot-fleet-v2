@@ -4403,3 +4403,122 @@ source: >-
   same page load).
 unclear: false
 ```
+
+```yaml
+ruling_id: R-2026-09-07-P2-BET-MET-AND-RENEWED
+date: 2026-09-07
+scope: >-
+  P2 (Edge Discovery) bet "make the signed-bot P&L figure exist and appear in STATUS.md" (kill 2026-08-26) is declared MET as of 2026-08-31: every unsigned bot (PR-03, QQQ long call, Tasty Condor) is AUTOS OFF, so the STATUS.md headline IS the signed-bot figure. New P2 bet: "IC-SPX-FastPT25-S2-130PM clears G2 (20 clean condors) AND G3 (Exp(R) bootstrap 95% CI lower bound > 0)", kill date 2026-09-19. Board T-36 is the review that decides it.
+verbatim: >-
+  130PM clears G2+G3 by 09-19 (Recommended)
+verbatim_of: andy
+owner: Andy (in-chat, Cowork Fable decision-card session 2026-09-07; transcribed by Claude)
+status: Active
+applies_to: data/portfolio.csv program P2; STATUS.md readiness board; T-36.
+superseded_by: none
+source: >-
+  Decision card Q1, 2026-09-07.
+unclear: false
+```
+
+```yaml
+ruling_id: R-2026-09-07-CHARTER-CONTRACT-ROWS-CLOSED
+date: 2026-09-07
+scope: >-
+  Board rows T-02 (mechanics contract), T-19 (agent charter), T-20 (charter section 3 flag) are closed as DONE: signed 2026-08-17 by R-2026-08-17-MECHANICS-CONTRACT, R-2026-08-17-CHARTER-SIGN and R-2026-08-17-CHARTER-IRREVERSIBLES; section 2.5 put in force by R-2026-08-18-MECHANICS-IN-FORCE. The one live remainder - the section 2.4 hash-freeze PR named as the trigger in the 08-18 ruling - becomes board item T-47 (DEVIN lane) so it is tracked rather than buried.
+verbatim: >-
+  Close all three + new item for section 2.4 freeze PR (Recommended)
+verbatim_of: andy
+owner: Andy (in-chat, Cowork Fable decision-card session 2026-09-07; transcribed by Claude)
+status: Active
+applies_to: data/portfolio.csv T-02, T-19, T-20, T-47; docs/roster-mechanics-ruling.md section 2.4.
+superseded_by: none
+source: >-
+  Decision card Q2, 2026-09-07.
+unclear: false
+```
+
+```yaml
+ruling_id: R-2026-09-07-GF-CALL-SIDE-SHAPE
+date: 2026-09-07
+scope: >-
+  The GF-QQQ-IC family is KEPT AS CONFIGURED - no OA edit, no new sizing epoch. Its measured shape is recorded in the pre-registration ledger: on GF-QQQ-IC-Ride, 11 fill-days 2026-08-14..09-04 = 7 both-sided condors + 4 put-only days + 0 call-only; every put-only day is GF-ScannerB-CallSpread building the call spread and rejecting it on its own credit filter (observed "Mid price is $0.07" on 2026-09-04). At 26 ct a put-only day is one ~$4,940 short put spread carried to the 15:52 backstop with no offsetting side. Options (a) lower the min-credit floor, (c) raise call delta, (d) both-or-none monitor are NOT adopted. Before any change, a read-only study (board T-48) tabulates every GF fill-day ScannerB Log outcome since 2026-08-10 against credit and delta at scan time. Any later change to the floor, delta or structure is a pre-registration amendment and a new epoch on all seven arms.
+verbatim: >-
+  (b) Keep, record the shape, investigate (Recommended)
+verbatim_of: andy
+owner: Andy (in-chat, Cowork Fable decision-card session 2026-09-07; transcribed by Claude)
+status: Active
+applies_to: PR-14..PR-20 (AMENDED banners this date); GF-ScannerA-PutSpread / GF-ScannerB-CallSpread (untouched); T-48; docs/state.md L2 both-sides banner (now a monitored shape, not an open defect).
+superseded_by: none
+source: >-
+  Decision card Q3, 2026-09-07; data/trades.csv; data/captures/2026-09-07-catchup/03-layer2-2026-09-07.md section 3.
+unclear: false
+```
+
+```yaml
+ruling_id: R-2026-09-07-ACTIVE-SLOT-P3-IN-P7-IDLE
+date: 2026-09-07
+scope: >-
+  Active-slot swap. P7 (Governance & Evidence) goes IDLE: its bet "sign the agent charter and the mechanics contract" is met (see CHARTER-CONTRACT-ROWS-CLOSED); restart trigger = "any Class C ruling left unexecuted for more than 7 days, or a propagation gap found by the Reconciler". P3 (Execution Realism) becomes ACTIVE with the bet "the six 26-ct GF arms reproduce their 1-ct R profile over 20 fill-days (per-arm Exp(R) within the 1-ct bootstrap CI) and the both-sides rate is recorded per day", kill date 2026-10-03. Metric unchanged (slippage-adjusted P&L as a % of paper P&L) - the bet is the first measurable instance of it. Active slots are now P1, P2, P3.
+verbatim: >-
+  Swap: P3 in, P7 idle (Recommended)
+verbatim_of: andy
+owner: Andy (in-chat, Cowork Fable decision-card session 2026-09-07; transcribed by Claude)
+status: Active
+applies_to: data/portfolio.csv program rows P3, P7.
+superseded_by: none
+source: >-
+  Decision card Q4, 2026-09-07.
+unclear: false
+```
+
+```yaml
+ruling_id: R-2026-09-07-DEVIN-WAVE-SCOPE
+date: 2026-09-07
+scope: >-
+  Pre-09-16 free Devin wave scope: T-44 (G4 $ caps), T-45 (export-range refuse guard), T-46 (catch-up capture manifest), T-43 (close_manifest selftest into phase0), T-03 (ledger regression), T-47 (section 2.4 freeze PR). Six lanes, dispatcher cap 4 concurrent, each its own PR, Andy merges on phase0 green, Andy launches from Terminal per the free-wave SOP. Lane specs live in drafts/.
+verbatim: >-
+  All six, cap 4 concurrent (Recommended)
+verbatim_of: andy
+owner: Andy (in-chat, Cowork Fable decision-card session 2026-09-07; transcribed by Claude)
+status: Active
+applies_to: data/portfolio.csv T-44, T-45, T-46, T-43, T-03, T-47; drafts/_dispatch-2026-09-03-t44-g4-caps.md; drafts/_wave-2026-09-08-lanes.md.
+superseded_by: none
+source: >-
+  Decision card Q5, 2026-09-07.
+unclear: false
+```
+
+```yaml
+ruling_id: R-2026-09-07-P1-BET-MET-AND-RENEWED
+date: 2026-09-07
+scope: >-
+  P1 (Ledger & Capture Truth) bet "every bot contributing to headline P&L is signed or switched off" (kill 2026-09-02) is declared MET. New P1 bet: "T-45 export-range refuse guard merged with a red test, AND 10 consecutive close.sh runs all stages green with the manifest recording capture PRESENT (T-46 merged)", kill date 2026-09-26. Metric unchanged.
+verbatim: >-
+  T-45 guard merged + 10 clean closes by 09-26 (Recommended)
+verbatim_of: andy
+owner: Andy (in-chat, Cowork Fable decision-card session 2026-09-07; transcribed by Claude)
+status: Active
+applies_to: data/portfolio.csv program P1; T-45; T-46.
+superseded_by: none
+source: >-
+  Decision card Q6, 2026-09-07.
+unclear: false
+```
+
+```yaml
+ruling_id: R-2026-09-07-GO-LIVE-PATH-DEFERRED
+date: 2026-09-07
+scope: >-
+  No go-live pre-registration is drafted until a bot actually passes G3. Recorded so the deferral is a decision, not an omission: when T-36 reports G3 PASS on any bot, the next sitting drafts the go-live entry (sequence, gates that must still hold, daily halt, who signs what, live size) BEFORE any capital moves. Class C throughout.
+verbatim: >-
+  Not yet - wait until G3 actually passes
+verbatim_of: andy
+owner: Andy (in-chat, Cowork Fable decision-card session 2026-09-07; transcribed by Claude)
+status: Active
+applies_to: P2; T-36; P8 (idle).
+superseded_by: none
+source: >-
+  Decision card Q7, 2026-09-07.
+unclear: false
+```

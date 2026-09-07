@@ -156,12 +156,12 @@ const DATA = {
  "objective": "A bot fleet whose P&L I can prove, that runs unattended, and that a competent stranger could take over from the docs alone.",
  "programs": [
   {
-   "bet": "Close the unsigned-P&L clause: every bot contributing to headline P&L is signed or switched off",
-   "kill": "2026-09-02",
+   "bet": "T-45 export-range refuse guard merged (red test) AND 10 consecutive close.sh runs all-green with capture PRESENT",
+   "kill": "2026-09-26",
    "metric": "Consecutive trading days all-guards-green AND $0 headline P&L from an unsigned bot",
    "n": "P1",
    "name": "Ledger & Capture Truth",
-   "note": "08-31: PR-02 signed+discharged; PR-04 discharge edit in flight (evidence captured); remaining unsigned (PR-03, QQQ long call, Tasty) are OFF; 3 roster captures show zero drift",
+   "note": "08-31: PR-02 signed+discharged; PR-04 discharge edit in flight (evidence captured); remaining unsigned (PR-03, QQQ long call, Tasty) are OFF; 3 roster captures show zero drift | 09-07: prior bet MET (all unsigned bots OFF) - R-2026-09-07-P1-BET-MET-AND-RENEWED; 09-04 close: $8,160/246 legs, zero drift 44/44",
    "owner": "Andy",
    "q": "are the numbers real",
    "restart": "",
@@ -169,30 +169,30 @@ const DATA = {
    "wip": "Active"
   },
   {
-   "bet": "Make the signed-bot P&L figure exist and appear in STATUS.md",
-   "kill": "2026-08-26",
+   "bet": "IC-SPX-FastPT25-S2-130PM clears G2 (20 clean condors) AND G3 (bootstrap 95% CI lower bound > 0)",
+   "kill": "2026-09-19",
    "metric": "Closed P&L attributable to signed, gated bots only",
    "n": "P2",
    "name": "Edge Discovery",
-   "note": "29/44 zero-trade still true; NOTE kill_date 2026-08-26 has PASSED with the bet unmet - Andy to re-rule or extend",
+   "note": "09-07: prior bet MET 08-31 (headline = signed bots only) - R-2026-09-07-P2-BET-MET-AND-RENEWED. 130PM n=19, +6.6% [-0.6,+11.7]; T-36 decides",
    "owner": "Andy",
    "q": "does it actually make money",
    "restart": "",
-   "state": "Stuck",
+   "state": "Working on it",
    "wip": "Active"
   },
   {
-   "bet": "",
-   "kill": "",
+   "bet": "Six 26-ct GF arms reproduce their 1-ct R profile over 20 fill-days (per-arm Exp(R) inside the 1-ct bootstrap CI); both-sides rate recorded per day",
+   "kill": "2026-10-03",
    "metric": "Slippage-adjusted P&L as a % of paper P&L",
    "n": "P3",
    "name": "Execution Realism",
-   "note": "unmeasured; 1-lot bots flagged fill-untested at scale",
+   "note": "09-07 ACTIVATED (R-2026-09-07-ACTIVE-SLOT-P3-IN-P7-IDLE): sizing at $5K/position live since 09-02; first 26-ct fill-day 09-04, put-only",
    "owner": "Andy",
    "q": "does it survive real money",
-   "restart": "when P2's signed-bot P&L figure exists and is positive",
-   "state": "Not started",
-   "wip": "Idle"
+   "restart": "",
+   "state": "Working on it",
+   "wip": "Active"
   },
   {
    "bet": "",
@@ -234,17 +234,17 @@ const DATA = {
    "wip": "Idle"
   },
   {
-   "bet": "Sign the agent charter and the mechanics contract",
-   "kill": "2026-08-26",
+   "bet": "",
+   "kill": "",
    "metric": "Open rulings unexecuted plus known propagation gaps; target 0",
    "n": "P7",
    "name": "Governance & Evidence",
-   "note": "2310 rules never triaged; charter and mechanics contract unsigned",
+   "note": "09-07 IDLED: bet met 08-17 (charter + mechanics contract signed; s2.5 in force 08-18); s2.4 freeze PR tracked as T-47",
    "owner": "Andy",
    "q": "is it true, and does it stick",
-   "restart": "",
-   "state": "Stuck",
-   "wip": "Active"
+   "restart": "any Class C ruling left unexecuted > 7 days, or a propagation gap found by the Reconciler (T-31)",
+   "state": "Not started",
+   "wip": "Idle"
   },
   {
    "bet": "",
@@ -499,7 +499,7 @@ const DATA = {
    "P7",
    "Sign the mechanics contract",
    "Andy",
-   "Needs sign-off",
+   "Done",
    1,
    "30 min",
    "T-01"
@@ -539,7 +539,7 @@ const DATA = {
    "P7",
    "Sign the agent charter",
    "Andy",
-   "Needs sign-off",
+   "Done",
    1,
    "15 min",
    "T-01"
@@ -549,7 +549,7 @@ const DATA = {
    "P7",
    "Strike or amend charter section 3 flag",
    "Andy",
-   "Needs sign-off",
+   "Done",
    1,
    "2 min",
    "T-19"
@@ -1279,6 +1279,26 @@ const DATA = {
    "P1",
    "close_manifest.py records capture ABSENT on catch-up closes: it looks in data/captures/<day>-roster while capture_bundle names the dir by capture date",
    "Devin",
+   "Ready",
+   2,
+   "",
+   ""
+  ],
+  [
+   "T-47",
+   "P7",
+   "Section 2.4 hash-freeze PR: re-record execution_audit.py/build_ledger.py panel at full sha256, retire 16-hex short form in daily-loop-spec.md L36/152, lineage trace, version-bump procedure (trigger named in R-2026-08-18-MECHANICS-IN-FORCE)",
+   "Devin",
+   "Ready",
+   3,
+   "",
+   ""
+  ],
+  [
+   "T-48",
+   "P3",
+   "GF call-side study (read-only): every GF fill-day since 2026-08-10, ScannerB Log outcome (filled / filtered at $X mid / no candidate) vs credit and short-call delta at scan time; put-only rate; naked-side tail realised",
+   "Cowork",
    "Ready",
    2,
    "",
