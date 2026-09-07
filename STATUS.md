@@ -1,4 +1,4 @@
-# Bot Fleet — STATUS  ·  generated 2026-09-04
+# Bot Fleet — STATUS  ·  generated 2026-09-07
 
 > **Numeric source of truth.** Auto-generated from `data/trades.csv` by `scripts/report.py`. Do not edit by hand. All figures are PAPER. Task backlog: `docs/backlog.md` (also in `dashboard.html`).
 
@@ -164,9 +164,17 @@
 | Nigiri-Paper-v1 | OA-Mirror | — | mirror-watch | ON | 13 | 13 | $480 | 92% | - |
 | IC-SPX-FastPT25-S2-130PM | IC | SPX | experiment | ON | 19 | 38 | $5,900 | 89% | - |
 
+## G4 $ caps
+> Ruling **R-2026-09-01-G4-ROE-CAP** (signed 2026-09-02; inputs are T5 — re-derive at n≥100). Caps **report**; humans act — breach actions: `drafts/_roe-cap-proposal-2026-09-01.md` §2.5. Unit = position (legs summed per `trade_id`), realised $ by `close_date`. Cap 1 runs per epoch from the bot's `epoch_boundary` (`data/bots_meta.csv`, else `LEDGER_START`) and is the $ half of each bot's G4 gate below. Constants: `G4_PER_BOT_DD_CAP = -15000` · `G4_FLEET_DD_CAP = -35000` · `G4_DAY_HALT_CAP = -8000`.
+
+- **Cap 1 · per-bot cumulative drawdown per epoch** (floor $-15,000): worst $-3,300 (`IC-SPX-FastPT25-S2-130PM`) · **GREEN**
+- **Cap 2 · fleet cumulative drawdown** (floor $-35,000): $-3,937 · **GREEN**
+- **Cap 3 · single-day fleet loss halt** (breach at ≤ $-8,000): worst day $-2,038 on 2026-08-27 · **GREEN**
+
+
 ## Readiness board — per-condor, gated (the graduation view)
 > **Grain = condor** (legs summed), not leg. Six ordered gates; the **first red (○) gate is the named blocker**. `●`=pass `○`=fail `·`=pending. Exp(R) shows the **bootstrap 95% CI** (replaces the t-stat). Stage: INCUBATE→VALIDATE→CANDIDATE→LIVE-READY (LIVE = real capital). Controls & mirror-watch are listed separately — they can't graduate by design.
-> **Gates:** G1 clean data (no strike-bug, single-sided excluded) · G2 ≥20 clean condors · G3 Exp(R)>0 w/ 95% CI above 0 · G4 maxDD-R within cap (RoE $ cap still a `<FILL>` blank) · G5 instruction-mirror ≥90% (from the daily brief / `data/compliance.csv`; pending until ≥5 graded days) · G6 OOS/regime robustness.
+> **Gates:** G1 clean data (no strike-bug, single-sided excluded) · G2 ≥20 clean condors · G3 Exp(R)>0 w/ 95% CI above 0 · G4 maxDD-R ≥-5.0 AND maxDD$ ≥$-15,000/epoch (R-2026-09-01-G4-ROE-CAP) · G5 instruction-mirror ≥90% (from the daily brief / `data/compliance.csv`; pending until ≥5 graded days) · G6 OOS/regime robustness.
 
 | Bot | Role | Stage | Gates | n | Exp(R) [95% CI] | Blocker |
 |---|---|---|:--:|--:|--:|---|

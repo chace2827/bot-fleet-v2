@@ -308,6 +308,141 @@ def validate():
             print(status_missing, file=sys.stderr)
             return 1
 
+        # ------------------------------------------------------------------
+        # T-44 · G4 $ caps — R-2026-09-01-G4-ROE-CAP (signed 2026-09-02).
+        # Red predicates: (a) a bot at -$15,001 cumulative DD fails G4; (b) a
+        # fleet day at -$8,000 exactly is BREACHED (<= is inclusive); (c) a
+        # fleet day at -$7,999 is GREEN; (d) an epoch boundary resets a bot's
+        # $ DD so a pre-boundary loss does not count against it (it still
+        # counts fleet-wide).
+        # Reuses this scratch root; overwrites the ledger fixtures.
+        # ------------------------------------------------------------------
+        _g4_fails = []
+
+        def _leg(bot, tid, side, pnl, risk, od, cd):
+            struct = "shortputspread" if side == "put" else "shortcallspread"
+            return (f"{bot},IC,SPX,experiment,post-fix,{tid},SPX,{struct},closed,"
+                    f"1,0.20,0.10,{pnl},{risk},{od},{cd},2026-09-04 16:00:00,{side} side,"
+                    f"False,100,95,110,115,0.20,100,100,1,0,2026-08-14 15:00:00,2026-08-14 10:00:00\n")
+
+        def _pos(bot, tid, pnl, risk, open_d, close_d):
+            """Two leg rows sharing trade_id; position $ P/L = legs summed."""
+            od, cd = f"{open_d} 10:00:00", f"{close_d} 16:00:00"
+            return (_leg(bot, tid, "put", pnl / 2, risk, od, cd) +
+                    _leg(bot, tid, "call", pnl - pnl / 2, risk, od, cd))
+
+        def _board_dots(status, bot):
+            """Gates cell of a bot's Readiness-board row (6 chars, index 3 = G4)."""
+            board = status.split("## Readiness board")[-1]
+            for ln in board.splitlines():
+                if ln.startswith(f"| {bot} |"):
+                    cells = [c.strip() for c in ln.split("|")]
+                    if len(cells) > 4 and re.fullmatch(r"[●○·]{6}", cells[4]):
+                        return cells[4]
+            return None
+
+        def _cap_line(status, marker):
+            for ln in status.splitlines():
+                if ln.startswith(f"- **{marker}"):
+                    return ln
+            return None
+
+        def _rerun_g4():
+            proc = subprocess.run(
+                [sys.executable, __file__, "--root", root, "--today", "2026-09-04"],
+                capture_output=True, text=True)
+            if proc.returncode != 0:
+                print("report.py selftest (G4 caps) subprocess failed:", file=sys.stderr)
+                print(proc.stdout, file=sys.stderr)
+                print(proc.stderr, file=sys.stderr)
+                return None
+            return open(status_path).read()
+
+        hdr29 = ("bot,pillar,underlying,role,epoch,trade_id,symbol,structure,status,"
+                 "quantity,credit,exit_price,pnl,risk,open_date,close_date,expiration,"
+                 "tags,single_sided,short_put,long_put,short_call,long_call,premium,"
+                 "underlying_open,underlying_close,mfe_pct,mae_pct,mfe_date,mae_date\n")
+        trades_path = os.path.join(root, "data", "trades.csv")
+        with open(os.path.join(root, "data", "bots_meta.csv"), "w") as f:
+            f.write("bot,pillar,role,underlying,status,champion,epoch_boundary,hedge,strike_fix,superseded,focus,notes,ops_class\n")
+            f.write("DeepBot,IC,experiment,SPX,ON,,,,,,,,\n")
+            f.write("BoundaryBot,IC,experiment,SPX,ON,,2026-09-02,,,,,,\n")
+            f.write("DayBot,IC,experiment,SPX,ON,,,,,,,,\n")
+        with open(os.path.join(root, "data", "bots.csv"), "w") as f:
+            f.write("bot,pillar,underlying,role,status,n_trades,n_legs,total_pnl,win_rate_trade,"
+                    "win_rate_leg,first_trade,last_trade,epoch_start,needs_strike_fix,superseded\n")
+            for _b in ("DeepBot", "BoundaryBot", "DayBot"):
+                f.write(f"{_b},IC,SPX,experiment,ON,2,4,0,0%,0%,2026-08-10,2026-09-03,2026-08-10,,\n")
+        with open(os.path.join(root, "data", "ledger_meta.json"), "w") as f:
+            json.dump({"ledger_start": "2026-08-10"}, f)
+
+        # --- scenario A: cap-1 breach + epoch reset -------------------------
+        # DeepBot cum $DD = -15,001 (< -15,000 cap) while maxDD-R = -4.5005
+        # (>= -5.0), so the G4 red can only come from the $ half.
+        # BoundaryBot (epoch_boundary 2026-09-02) closed -16,000 BEFORE the
+        # boundary and +50 after -> in-epoch $DD is 0, so G4 must stay green;
+        # the -16,000 still pools into the fleet series (worst day, cap 3).
+        with open(trades_path, "w") as f:
+            f.write(hdr29)
+            f.write(_pos("DeepBot", "D1", -10_000, 5_000, "2026-08-10", "2026-08-11"))
+            f.write(_pos("DeepBot", "D2",  -5_001, 2_000, "2026-08-11", "2026-08-12"))
+            f.write(_pos("BoundaryBot", "B1", -16_000, 4_000, "2026-08-19", "2026-08-20"))
+            f.write(_pos("BoundaryBot", "B2",      +50, 1_000, "2026-09-03", "2026-09-03"))
+        st = _rerun_g4()
+        if st is None:
+            return 1
+        if "## G4 $ caps" not in st:
+            _g4_fails.append("no '## G4 $ caps' block in STATUS.md")
+        ln = _cap_line(st, "Cap 1")
+        if not ln or "BREACHED" not in ln or "DeepBot" not in ln or "-15,001" not in ln:
+            _g4_fails.append(f"(a) cap-1 line should be BREACHED naming DeepBot at -15,001; got {ln!r}")
+        ln = _cap_line(st, "Cap 2")
+        if not ln or "GREEN" not in ln or "-31,001" not in ln:
+            _g4_fails.append(f"cap-2 fleet DD should be GREEN at -31,001; got {ln!r}")
+        ln = _cap_line(st, "Cap 3")
+        if not ln or "BREACHED" not in ln or "2026-08-20" not in ln or "-16,000" not in ln:
+            _g4_fails.append(f"cap-3 line should be BREACHED, worst day -16,000 on 2026-08-20; got {ln!r}")
+        dots = _board_dots(st, "DeepBot")
+        if not dots or dots[3] != "○":
+            _g4_fails.append(f"(a) DeepBot G4 dot should be ○ (red); got {dots!r}")
+        dots = _board_dots(st, "BoundaryBot")
+        if not dots or dots[3] != "●":
+            _g4_fails.append(f"(d) BoundaryBot G4 dot should be ● — pre-boundary -16,000 must not count; got {dots!r}")
+        if not (0 < st.find("G4 $ CAP BREACH") < st.find("## Headline")):
+            _g4_fails.append("a BREACHED cap line must repeat at the TOP of STATUS.md, before '## Headline'")
+
+        # --- scenario B: cap 3 boundary, exactly -8,000 -> BREACHED (<=) ----
+        with open(trades_path, "w") as f:
+            f.write(hdr29)
+            f.write(_pos("DayBot", "K1", -8_000, 4_000, "2026-08-10", "2026-08-11"))
+            f.write(_pos("DayBot", "K2",   +100, 1_000, "2026-08-11", "2026-08-12"))
+        st = _rerun_g4()
+        if st is None:
+            return 1
+        ln = _cap_line(st, "Cap 3")
+        if not ln or "BREACHED" not in ln or "-8,000" not in ln or "2026-08-11" not in ln:
+            _g4_fails.append(f"(b) a fleet day at exactly -8,000 must be BREACHED; got {ln!r}")
+
+        # --- scenario C: cap 3 boundary, -7,999 -> GREEN --------------------
+        with open(trades_path, "w") as f:
+            f.write(hdr29)
+            f.write(_pos("DayBot", "K1", -7_999, 4_000, "2026-08-10", "2026-08-11"))
+            f.write(_pos("DayBot", "K2",   +100, 1_000, "2026-08-11", "2026-08-12"))
+        st = _rerun_g4()
+        if st is None:
+            return 1
+        for marker in ("Cap 1", "Cap 2", "Cap 3"):
+            ln = _cap_line(st, marker)
+            if not ln or "GREEN" not in ln:
+                _g4_fails.append(f"(c) {marker} should be GREEN with worst day -7,999; got {ln!r}")
+        if "G4 $ CAP BREACH" in st:
+            _g4_fails.append("(c) no breach banner may render when every cap is GREEN")
+
+        if _g4_fails:
+            for _f in _g4_fails:
+                print(f"FAIL G4$: {_f}", file=sys.stderr)
+            return 1
+
         print("report.py selftest OK")
         return 0
     finally:
@@ -652,11 +787,98 @@ _cut = (f"> **POST-CUTOVER LEDGER — `LEDGER_START = {_ledger_start}`.** Every 
         "> ⚠️ **NO `data/ledger_meta.json`** — the cutover date is unknown to this "
         "report. Re-run `scripts/build_ledger.py`. Do not quote these figures.")
 
+# --- G4 $ caps -------------------------------------------------------------
+# G4 dollar caps — R-2026-09-01-G4-ROE-CAP (signed 2026-09-02). Re-derive at n>=100.
+G4_PER_BOT_DD_CAP   = -15_000   # cap 1: per-bot cumulative drawdown, PER EPOCH
+G4_FLEET_DD_CAP     = -35_000   # cap 2: fleet cumulative drawdown (post-cutover, all signed bots)
+G4_DAY_HALT_CAP     =  -8_000   # cap 3: single-day fleet loss halt
+
+# Unit = POSITION: leg pnl is summed per trade_id, and a position counts only
+# once every leg is closed, on the latest leg's close_date (ET) — the same rule
+# _position_close_dates uses. The working ledger is post-cutover, lab-ops-
+# excluded and all-signed by construction (build_ledger.py contract), so the
+# pooled series IS the signed-fleet series. Caps REPORT; humans act
+# (drafts/_roe-cap-proposal-2026-09-01.md §2.5).
+_g4_pos = collections.defaultdict(lambda: {"bot": "", "pnl": 0.0,
+                                           "close": "", "legs": 0, "closed": 0})
+for _t in trades:
+    _p = _g4_pos[_t["trade_id"]]
+    _p["bot"] = _t["bot"]; _p["pnl"] += fl(_t["pnl"]); _p["legs"] += 1
+    _cd = (_t.get("close_date") or "")[:10]
+    if _cd:
+        _p["closed"] += 1
+        _p["close"] = max(_p["close"], _cd)
+
+# bot -> {close_date: $ pnl} for positions closed on/after the bot's latest
+# epoch boundary (bots_meta epoch_boundary, else LEDGER_START). The fleet
+# series pools every closed position — a pre-boundary loss still counts there.
+_g4_bot_days = collections.defaultdict(lambda: collections.defaultdict(float))
+_g4_fleet_days = collections.defaultdict(float)
+for _p in _g4_pos.values():
+    if not _p["close"] or _p["closed"] != _p["legs"]:
+        continue                                    # position not fully closed
+    _g4_fleet_days[_p["close"]] += _p["pnl"]
+    _bound = (meta.get(_p["bot"], {}).get("epoch_boundary")
+              or _ledger_start or "")
+    if _p["close"] >= _bound:
+        _g4_bot_days[_p["bot"]][_p["close"]] += _p["pnl"]
+
+def _maxdd_usd(day_sums):
+    """Worst peak-to-trough of cumulative $ over per-day sums, chronological.
+    None when there is no data — an absent number is not a zero."""
+    if not day_sums:
+        return None
+    cum = peak = dd = 0.0
+    for _d in sorted(day_sums):
+        cum += day_sums[_d]; peak = max(peak, cum); dd = min(dd, cum - peak)
+    return dd
+
+def _usd(v): return "—" if v is None else f"${v:,.0f}"
+
+bot_dd_usd = {b: _maxdd_usd(ds) for b, ds in _g4_bot_days.items()}
+fleet_dd_usd = _maxdd_usd(_g4_fleet_days)
+g4_worst_day = (min(_g4_fleet_days.items(), key=lambda kv: (kv[1], kv[0]))
+                if _g4_fleet_days else None)
+
+_g4_worst_bot = (min(bot_dd_usd.items(), key=lambda kv: kv[1])
+                 if bot_dd_usd else None)
+g4_cap_status = [
+    "—" if _g4_worst_bot is None
+    else ("BREACHED" if _g4_worst_bot[1] < G4_PER_BOT_DD_CAP else "GREEN"),
+    "—" if fleet_dd_usd is None
+    else ("BREACHED" if fleet_dd_usd < G4_FLEET_DD_CAP else "GREEN"),
+    "—" if g4_worst_day is None
+    else ("BREACHED" if g4_worst_day[1] <= G4_DAY_HALT_CAP else "GREEN"),
+]
+g4_cap_lines = [
+    (f"**Cap 1 · per-bot cumulative drawdown per epoch** "
+     f"(floor {_usd(G4_PER_BOT_DD_CAP)}): "
+     + ("—" if _g4_worst_bot is None
+        else f"worst {_usd(_g4_worst_bot[1])} (`{_g4_worst_bot[0]}`)")
+     + f" · **{g4_cap_status[0]}**"),
+    (f"**Cap 2 · fleet cumulative drawdown** "
+     f"(floor {_usd(G4_FLEET_DD_CAP)}): {_usd(fleet_dd_usd)} · **{g4_cap_status[1]}**"),
+    (f"**Cap 3 · single-day fleet loss halt** "
+     f"(breach at ≤ {_usd(G4_DAY_HALT_CAP)}): "
+     + ("—" if g4_worst_day is None
+        else f"worst day {_usd(g4_worst_day[1])} on {g4_worst_day[0]}")
+     + f" · **{g4_cap_status[2]}**"),
+]
+_g4_breaches = [ln for ln, s in zip(g4_cap_lines, g4_cap_status) if s == "BREACHED"]
+
 L = [f"# Bot Fleet — STATUS  ·  generated {date}", "",
      "> **Numeric source of truth.** Auto-generated from `data/trades.csv` by "
      "`scripts/report.py`. Do not edit by hand. All figures are PAPER. Task backlog: "
      "`docs/backlog.md` (also in `dashboard.html`).", "",
      _cut, ""]
+# An open cap breach repeats at the TOP of every brief until closed (CLAUDE.md §5).
+if _g4_breaches:
+    L += ["## ⛔ G4 $ CAP BREACH — open until closed", "",
+          "> Caps report; humans act — breach actions: "
+          "`drafts/_roe-cap-proposal-2026-09-01.md` §2.5. Ruling "
+          "**R-2026-09-01-G4-ROE-CAP**.", ""]
+    L += [f"- {ln}" for ln in _g4_breaches]
+    L.append("")
 if not trades:
     L += ["## ⏳ EMPTY LEDGER — n=0", "",
           "**No positions have been opened since the cutover.** Every table below is "
@@ -998,7 +1220,7 @@ for b in bots:
 # First gate that's RED (fails) = the named blocker. Controls & mirror-watch
 # are flagged non-graduating (they can't go live by design).
 random.seed(7)
-MAXDD_R_CAP = -5.0        # maxDD-R floor for G4 (RoE $ cap still a <FILL> blank)
+MAXDD_R_CAP = -5.0        # maxDD-R floor for G4 (the $ half: G4_*_CAP constants, R-2026-09-01-G4-ROE-CAP)
 BOOT_B = 3000             # bootstrap resamples
 
 def pctile(sorted_xs, q):
@@ -1108,8 +1330,12 @@ def gate_eval(bot):
             needed = max(0, n_need - n)
         g.append((False, f"CI includes 0 (~{needed} more trades)" if needed
                          else "CI includes 0"))
-    # G4 risk: maxDD-R within cap (RoE $ cap still a <FILL> blank -> that half pending)
-    g.append((mdd >= MAXDD_R_CAP, f"maxDD-R {mdd:.1f} (RoE $ cap pending)"))
+    # G4 risk: maxDD-R within cap AND per-epoch maxDD$ within cap 1
+    # (R-2026-09-01-G4-ROE-CAP). "—" = no closed positions this epoch.
+    mdd_usd = bot_dd_usd.get(bot)
+    g.append((mdd >= MAXDD_R_CAP and (mdd_usd is None or mdd_usd >= G4_PER_BOT_DD_CAP),
+              f"maxDD-R {mdd:.1f} · maxDD$ {_usd(mdd_usd)} "
+              f"(floors {MAXDD_R_CAP:.1f}R / {_usd(G4_PER_BOT_DD_CAP)}/epoch)"))
     # G5 compliance: instruction-mirror >=90% graded days -> from the daily brief (data/compliance.csv)
     g.append(g5_eval(bot))
     # G6 robustness: OOS half-split positive + not >60% single-year concentrated
@@ -1161,13 +1387,28 @@ def cifmt(ci):
     if lo is None: return "—"
     return f"[{lo*100:+.1f}, {hi*100:+.1f}]"
 
+L += ["", "## G4 $ caps",
+      "> Ruling **R-2026-09-01-G4-ROE-CAP** (signed 2026-09-02; inputs are T5 — "
+      "re-derive at n≥100). Caps **report**; humans act — breach actions: "
+      "`drafts/_roe-cap-proposal-2026-09-01.md` §2.5. Unit = position (legs summed "
+      "per `trade_id`), realised $ by `close_date`. Cap 1 runs per epoch from the "
+      "bot's `epoch_boundary` (`data/bots_meta.csv`, else `LEDGER_START`) and is "
+      "the $ half of each bot's G4 gate below. Constants: "
+      f"`G4_PER_BOT_DD_CAP = {G4_PER_BOT_DD_CAP}` · "
+      f"`G4_FLEET_DD_CAP = {G4_FLEET_DD_CAP}` · "
+      f"`G4_DAY_HALT_CAP = {G4_DAY_HALT_CAP}`.",
+      ""]
+L += [f"- {ln}" for ln in g4_cap_lines]
+L.append("")
+
 L += ["", "## Readiness board — per-condor, gated (the graduation view)",
       "> **Grain = condor** (legs summed), not leg. Six ordered gates; the **first red (○) gate "
       "is the named blocker**. `●`=pass `○`=fail `·`=pending. Exp(R) shows the **bootstrap 95% CI** "
       "(replaces the t-stat). Stage: INCUBATE→VALIDATE→CANDIDATE→LIVE-READY (LIVE = real capital). "
       "Controls & mirror-watch are listed separately — they can't graduate by design.",
       "> **Gates:** G1 clean data (no strike-bug, single-sided excluded) · G2 ≥20 clean condors · "
-      "G3 Exp(R)>0 w/ 95% CI above 0 · G4 maxDD-R within cap (RoE $ cap still a `<FILL>` blank) · "
+      f"G3 Exp(R)>0 w/ 95% CI above 0 · G4 maxDD-R ≥{MAXDD_R_CAP:.1f} AND "
+      f"maxDD$ ≥{_usd(G4_PER_BOT_DD_CAP)}/epoch (R-2026-09-01-G4-ROE-CAP) · "
       f"G5 instruction-mirror ≥{G5_THRESH:.0f}% (from the daily brief / `data/compliance.csv`; "
       f"pending until ≥{G5_MIN_DAYS} graded days) · G6 OOS/regime robustness.",
       "",
