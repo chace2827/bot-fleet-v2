@@ -4658,3 +4658,122 @@ source: >-
   Decision card batch 2 Q8, 2026-09-07.
 unclear: false
 ```
+
+```yaml
+ruling_id: R-2026-09-07-DA-2-BRACKETS-RATIFIED
+date: 2026-09-07
+scope: >-
+  DA-2: the bracket citation vocabulary ([FIRST-HAND, UNCORROBORATED], [FIRST-HAND x2], [DOCUMENTED + FIRST-HAND], [DERIVED, UNCORROBORATED], [DOCUMENTED], [PROJECT-RULE]) is RATIFIED as the provenance vocabulary, permanently valid, with the Option 2 mapping to C-levels (C1 / C2 / C2 / C1 / C2-with-quote-else-C1 / C0). Migration is LAZY - a line is re-tagged only when next edited - NEVER a sweep. 342 citations across 29 surfaces stand.
+verbatim: >-
+  1. A (Ratify, mapping table as proposed, lazy migration)
+verbatim_of: andy
+owner: Andy (in-chat, Cowork Fable T-49 sitting 2026-09-07; transcribed by Claude)
+status: Active
+applies_to: docs/evidence-standards.md section 2.3 (mapping table to be written by T-49 implementation).
+superseded_by: none
+source: >-
+  docs/evidence-standards-redesign-proposal-2026-08-08.md section 6 register; T-49 sitting 2026-09-07.
+unclear: false
+```
+
+```yaml
+ruling_id: R-2026-09-07-DA-4-TIER-COLLISIONS-RENAMED
+date: 2026-09-07
+scope: >-
+  DA-4: the three non-evidence "tier" vocabularies are renamed to clear the section 1.3 collisions: detector Tier S/C -> detector CLASSES; counterfactual cost tiers -> cost BANDS; Build tiers 0-2 -> build LEVELS. Evidence tiers T1-T5 keep the word. Spec edit in docs/daily-loop-spec.md sections 5, 7, 11; no behavior change; one Devin PR (board T-52).
+verbatim: >-
+  2. A (Rename all three in daily-loop-spec.md, one Devin PR)
+verbatim_of: andy
+owner: Andy (in-chat, Cowork Fable T-49 sitting 2026-09-07; transcribed by Claude)
+status: Active
+applies_to: docs/daily-loop-spec.md; T-52.
+superseded_by: none
+source: >-
+  docs/evidence-standards-redesign-proposal-2026-08-08.md section 6 register; T-49 sitting 2026-09-07.
+unclear: false
+```
+
+```yaml
+ruling_id: R-2026-09-07-DA-5-SCORE-DORMANT
+date: 2026-09-07
+scope: >-
+  DA-5: the section 4-I 0-100 confidence score is formally DORMANT. The 2026-08-08 self-score of 9/100 is preserved verbatim as the audit record. Nothing computes it; no surface may cite a current value. Reopen only by explicit ruling (it would be Option 3 scope).
+verbatim: >-
+  3. A (Mark dormant, preserve 9/100)
+verbatim_of: andy
+owner: Andy (in-chat, Cowork Fable T-49 sitting 2026-09-07; transcribed by Claude)
+status: Active
+applies_to: docs/evidence-standards.md section 4-I.
+superseded_by: none
+source: >-
+  docs/evidence-standards-redesign-proposal-2026-08-08.md section 6 register; T-49 sitting 2026-09-07.
+unclear: false
+```
+
+```yaml
+ruling_id: R-2026-09-07-DA-6-HAIRCUT-BY-STRUCTURE
+date: 2026-09-07
+scope: >-
+  DA-6: gate T3.4 haircut becomes structure-dependent, one number each: 30% for credit structures (short spreads, condors); 40% for debit and directional structures. Applied to backtest expectancy before commissions, then commissions. The 30-40% range text is retired. Rationale: the 2026-08-08 R-denominator receipt showed credit-seller optimism is the smaller distortion.
+verbatim: >-
+  4. A (Structure-dependent: 30% credit structures / 40% debit and directional)
+verbatim_of: andy
+owner: Andy (in-chat, Cowork Fable T-49 sitting 2026-09-07; transcribed by Claude)
+status: Active
+applies_to: docs/evidence-standards.md section 4.5 T3.4.
+superseded_by: none
+source: >-
+  docs/evidence-standards-redesign-proposal-2026-08-08.md section 6 register; T-49 sitting 2026-09-07.
+unclear: false
+```
+
+```yaml
+ruling_id: R-2026-09-07-DA-7-N0-ADMISSIBILITY-CLARIFICATION
+date: 2026-09-07
+scope: >-
+  DA-7: Option 2 decision classes D0-D3 are ADOPTED as written (D0 record a fact: any tier, provenance stated; D1 correct a doc: >= C1 quotable + CLAUDE.md section 5; D2 authorize a build: >= T3/C1; D3 set sizing: >= T3/C2 + gate T3 full pass). D4/D5 restate today's live-capital bars unchanged. DECLARED per the locking clause: "B1 (>=100 positions) and B2 (>=6 months) never gated build or sizing decisions" is a CLARIFICATION of the standing text (they are audit gates on live capital), not a loosening. The 2026-09-02 sizing was made under exactly this reading and is consistent with D3.
+verbatim: >-
+  5. A (Adopt D0-D3 as written; declare it a CLARIFICATION)
+verbatim_of: andy
+owner: Andy (in-chat, Cowork Fable T-49 sitting 2026-09-07; transcribed by Claude)
+status: Active
+applies_to: docs/evidence-standards.md section 10 item 5; the decision-grade threshold table (T-49 implementation).
+superseded_by: none
+source: >-
+  docs/evidence-standards-redesign-proposal-2026-08-08.md section 6 register; T-49 sitting 2026-09-07.
+unclear: false
+```
+
+```yaml
+ruling_id: R-2026-09-07-DA-8-GATE-MAP-OUT-OF-SCOPE
+date: 2026-09-07
+scope: >-
+  DA-8: the audit A-K to board G1-G6 map is OUT OF SCOPE for T-49 and opens as its own item (board T-53), DUE BEFORE the first G3 pass on any bot - because a bot can be LIVE-READY on the board while its pillar fails audit gate B and nothing notices. T-36 (130PM at n=20) is the clock.
+verbatim: >-
+  6. A (Out of scope for T-49; open as its own item, due before the first G3 pass)
+verbatim_of: andy
+owner: Andy (in-chat, Cowork Fable T-49 sitting 2026-09-07; transcribed by Claude)
+status: Active
+applies_to: docs/evidence-standards.md sections 3, 10; T-53; T-36.
+superseded_by: none
+source: >-
+  docs/evidence-standards-redesign-proposal-2026-08-08.md section 6 register; T-49 sitting 2026-09-07.
+unclear: false
+```
+
+```yaml
+ruling_id: R-2026-09-07-DA-10-INSTANCE-PROFITABILITY-REPORT-ONLY
+date: 2026-09-07
+scope: >-
+  DA-10: instance profitability (fraction of a bot's instances that are profitable, vs trade win rate) is added to the readiness board as a REPORTED column beside Exp(R), with NO threshold and NO gate effect. A G3 rider threshold is decided later, by ruling, from at least 20 bot-days of the reported distribution. Code task: report.py column (board T-54, DEVIN).
+verbatim: >-
+  7. A (Report-only now on the board; threshold decided later from data)
+verbatim_of: andy
+owner: Andy (in-chat, Cowork Fable T-49 sitting 2026-09-07; transcribed by Claude)
+status: Active
+applies_to: scripts/report.py readiness board; docs/evidence-standards.md section 6.3; T-54.
+superseded_by: none
+source: >-
+  docs/evidence-standards-redesign-proposal-2026-08-08.md section 6 register; T-49 sitting 2026-09-07.
+unclear: false
+```
