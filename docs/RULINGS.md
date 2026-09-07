@@ -4370,3 +4370,36 @@ source: >-
   (Batch E, CORRECTION block).
 unclear: false
 ```
+
+```yaml
+ruling_id: R-2026-09-07-3DTE-POSITION-SIZE-RECORRECTION
+date: 2026-09-07
+scope: >-
+  SUPERSEDES R-2026-09-03-3DTE-POSITION-SIZE-CORRECTION. That ruling withdrew the
+  "26% of net liquid" premise on one surface (a5.bots.bot.inputs, 2026-09-02),
+  which the 2026-09-07 read-only follow-up shows carries the TEMPLATE DEFAULT
+  (defaultValue = 1 contract), not the set value. The two surfaces the automations
+  actually consume - the rendered Bot Inputs panel and the automations' own inputs
+  array (22 Open-Position amount nodes, all type:"input" references) - both read
+  Position Size = 26% of net liquid, first-hand 2026-09-07 on a fresh load.
+  Operative reading: 26% of net liquid. Therefore the 2026-08-31 allocation raise
+  DID double per-position dollar size and the 2026-09-02 revert halved it back; the
+  bots_meta SIZING EPOCH 2026-08-31 note stands and gains a second boundary at
+  2026-09-02 (both epochs are 26%-of-$X sizing; raw P/L not poolable across either).
+  The R-4 DECISION (allocation $5,000) is unchanged and applied; it stands on PR-07's
+  own MAX LOSS line. Lesson recorded: a5.bots.bot.inputs.defaultValue is NOT the
+  effective bot input - read the rendered panel or the automation inputs.
+verbatim: >-
+  Position Size = 26% of net liquid
+verbatim_of: capture
+owner: Claude (derived - an evidence correction that changes no decision and
+  no OA state; Andy ratifies by committing)
+status: Active
+applies_to: 3DTE $140-$350 (BOTfw5TkkCRF2217765235512870291); PR-07;
+  R-2026-09-03-3DTE-POSITION-SIZE-CORRECTION (superseded).
+superseded_by: none
+source: >-
+  data/captures/2026-09-07-catchup/04-followups-2026-09-07.md (three surfaces,
+  same page load).
+unclear: false
+```
