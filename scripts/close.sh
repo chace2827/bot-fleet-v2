@@ -20,6 +20,11 @@
 #     $CAPTURE_INBOX/<day>/ (default data/captures/<day>/):
 #     exactly one .txt and any .png/.jpg/.jpeg/.pdf in the same directory.
 #   - If no raw capture is found, the manifest records capture: ABSENT.
+#   - capture_bundle.py names the bundle by the CAPTURE's own `captured:`
+#     date, which differs from the close day on a catch-up close.  The dir
+#     it actually writes is parsed from its output and passed to
+#     close_manifest.py --capture-dir, so the manifest records PRESENT for
+#     the bundle this run produced rather than looking for <day>-roster.
 #
 # Scratch runs:
 #   If FLEET_ROOT is outside the repo and has no scripts/ directory, the
@@ -119,13 +124,22 @@ else
 fi
 
 echo "== 3/5 capture_bundle $DAY =="
+CAPTURE_DIR=""
 if [ -n "$CAPTURE_TXT" ]; then
   if [ ${#CAPTURE_SCREENSHOTS[@]} -gt 0 ]; then
-    python3 "$SCRIPTS/capture_bundle.py" --out-root "$FLEET_ROOT/data/captures" \
-      "$CAPTURE_TXT" "${CAPTURE_SCREENSHOTS[@]}"
+    BUNDLE_OUT="$(python3 "$SCRIPTS/capture_bundle.py" --out-root "$FLEET_ROOT/data/captures" \
+      "$CAPTURE_TXT" "${CAPTURE_SCREENSHOTS[@]}")"
   else
-    python3 "$SCRIPTS/capture_bundle.py" --out-root "$FLEET_ROOT/data/captures" \
-      "$CAPTURE_TXT"
+    BUNDLE_OUT="$(python3 "$SCRIPTS/capture_bundle.py" --out-root "$FLEET_ROOT/data/captures" \
+      "$CAPTURE_TXT")"
+  fi
+  echo "$BUNDLE_OUT"
+  # The bundle is named by the capture's own `captured:` date; parse the dir
+  # capture_bundle.py reports so a catch-up close records capture: PRESENT.
+  CAPTURE_DIR="$(printf '%s\n' "$BUNDLE_OUT" | sed -n 's/^capture_bundle\.py: wrote //p')"
+  if [ -z "$CAPTURE_DIR" ]; then
+    echo "close.sh: FATAL: cannot parse the bundle dir from capture_bundle.py output" >&2
+    exit 1
   fi
 else
   echo "close.sh: no raw capture files found for $DAY; manifest will record capture: ABSENT"
@@ -141,7 +155,11 @@ python3 "$SCRIPTS/render_brief.py" --root "$FLEET_ROOT" "$DAY"
 # 5. Write the close manifest and the close-runs receipt (append-only).
 # ---------------------------------------------------------------------------
 echo "== 5/5 close_manifest $DAY =="
-python3 "$SCRIPTS/close_manifest.py" --root "$FLEET_ROOT" "$DAY"
+if [ -n "$CAPTURE_DIR" ]; then
+  python3 "$SCRIPTS/close_manifest.py" --root "$FLEET_ROOT" "$DAY" --capture-dir "$CAPTURE_DIR"
+else
+  python3 "$SCRIPTS/close_manifest.py" --root "$FLEET_ROOT" "$DAY"
+fi
 
 # ---------------------------------------------------------------------------
 # 6. Print the derived commit command for Andy to run.

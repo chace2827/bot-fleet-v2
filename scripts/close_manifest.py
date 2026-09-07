@@ -15,9 +15,19 @@ Writes:
   data/receipts/close-runs.jsonl (append-only)
 
 Usage:
-  python3 scripts/close_manifest.py <YYYY-MM-DD> [--root ROOT]
+  python3 scripts/close_manifest.py <YYYY-MM-DD> [--root ROOT] [--capture-dir DIR]
   python3 scripts/close_manifest.py <YYYY-MM-DD> --commit-command
+  python3 scripts/close_manifest.py <YYYY-MM-DD> --reconcile [--capture-dir DIR]
   python3 scripts/close_manifest.py --selftest
+
+--capture-dir is the bundle dir capture_bundle.py actually produced in this
+run (close.sh passes it explicitly).  It differs from the default
+data/captures/<day>-roster on a catch-up close: the bundle is named by the
+capture's own `captured:` date, not by the close day.
+
+--reconcile prints what the EXISTING manifest for a day would record under
+the current capture rules.  It writes nothing; a recorded manifest is
+history and is never rewritten.
 """
 import argparse
 import contextlib
@@ -129,7 +139,7 @@ def _untracked_top_level(root):
     return {p.split("/", 1)[0] for p in out.splitlines() if p}
 
 
-def scan_for_forbidden(root, day):
+def scan_for_forbidden(root, day, capture_dir=None):
     """Walk the close output directories and the repo root (top-level only)
     and refuse on any forbidden file.
 
@@ -176,7 +186,7 @@ def scan_for_forbidden(root, day):
         os.path.join(root, "data", "raw"),
         os.path.join(root, "data", "receipts"),
         os.path.join(root, "data", "close", day),
-        os.path.join(root, "data", "captures", f"{day}-roster"),
+        resolve_capture_dir(root, day, capture_dir),
     ]
     # data/brief/ for the current day only
     for p in glob.glob(os.path.join(root, "data", "brief", f"{day}_*")):
@@ -347,9 +357,114 @@ def load_brief(root, day):
     return out
 
 
-def load_capture(root, day):
-    """Return capture bundle info, or a loud ABSENT object."""
-    bundle_dir = os.path.join(root, "data", "captures", f"{day}-roster")
+def resolve_capture_dir(root, day, capture_dir=None):
+    """Return the absolute bundle dir this close should read.
+
+    `capture_dir` is the dir capture_bundle.py actually produced in this run,
+    passed explicitly by close.sh; the fallback is data/captures/<day>-roster.
+    The two differ on a catch-up close: the bundle is named by the capture's
+    own `captured:` date, not the close day.
+
+    An explicit dir lands in staged_paths, so it is validated: it must live
+    under <root>/data/captures, be named *-roster, and exist.  A bad explicit
+    dir is FATAL -- an operator error is not an absent capture.
+    """
+    if capture_dir is None:
+        return os.path.join(root, "data", "captures", f"{day}-roster")
+    # realpath settles the containment question (/var -> /private/var and
+    # friends); the returned path stays in root's own terms so that every
+    # downstream os.path.relpath(..., root) stays inside the tree.
+    d = capture_dir if os.path.isabs(capture_dir) else os.path.join(root, capture_dir)
+    d = os.path.abspath(d)
+    real = os.path.realpath(d)
+    cap_root = os.path.realpath(os.path.join(root, "data", "captures"))
+    try:
+        inside = os.path.commonpath([real, cap_root]) == cap_root and real != cap_root
+    except ValueError:
+        inside = False
+    if not inside or not os.path.basename(real).endswith("-roster"):
+        die(f"--capture-dir must be a *-roster dir inside data/captures: {capture_dir!r}")
+    if not os.path.isdir(d):
+        die(f"--capture-dir not found: {capture_dir!r}")
+    # Re-express in root's own spelling: if the caller passed the path through
+    # a symlinked prefix (/var vs /private/var on macOS), relpath(real, root)
+    # would escape with ../.. and break the staged-path derivations.
+    return os.path.join(root, os.path.relpath(real, os.path.realpath(root)))
+
+
+def _read_sha256sums(bundle_dir):
+    """Parse <bundle>/SHA256SUMS.txt into {rel_path: sha256}, or None."""
+    p = os.path.join(bundle_dir, "SHA256SUMS.txt")
+    if not os.path.isfile(p):
+        return None
+    out = {}
+    with open(p, encoding="utf-8") as fo:
+        for line in fo:
+            line = line.rstrip("\n")
+            if not line.strip():
+                continue
+            sha, _sep, rel = line.partition("  ")
+            out[rel.strip()] = sha.strip()
+    return out
+
+
+def _verify_capture_txt(bundle_dir):
+    """Verify the bundle's raw capture .txt against its SHA256SUMS.txt.
+
+    Returns (status, error, captured_et, capture_day).  status is PRESENT
+    only when at least one raw .txt exists and EVERY one matches the sha256
+    recorded at bundle time.  `captured_et` is the capture's own `captured:`
+    header verbatim; `capture_day` is the ET date derived from it.
+    """
+    txts = sorted(
+        t for t in glob.glob(os.path.join(bundle_dir, "*.txt"))
+        if os.path.basename(t) != "SHA256SUMS.txt")
+    if not txts:
+        return "MISMATCH", "no raw capture .txt in bundle", None, None
+
+    sums = _read_sha256sums(bundle_dir)
+    if sums is None:
+        return "MISMATCH", "SHA256SUMS.txt missing", None, None
+    for t in txts:
+        rel = "./" + os.path.relpath(t, bundle_dir).replace(os.sep, "/")
+        want = sums.get(rel)
+        if want is None:
+            return ("MISMATCH",
+                    f"{os.path.basename(t)} not listed in SHA256SUMS.txt",
+                    None, None)
+        if sha256(t) != want:
+            return ("MISMATCH",
+                    f"sha256 mismatch for {os.path.basename(t)}",
+                    None, None)
+
+    captured_et = capture_day = None
+    with open(txts[0], encoding="utf-8") as fo:
+        for line in fo:
+            m = re.match(r"^captured:\s*(.+?)\s*$", line)
+            if m:
+                captured_et = m.group(1)
+                try:
+                    dt = datetime.datetime.strptime(
+                        captured_et.split(" (")[0].strip(),
+                        "%a %b %d %Y %H:%M:%S GMT%z")
+                    capture_day = dt.strftime("%Y-%m-%d")
+                except ValueError:
+                    capture_day = None
+                break
+    return "PRESENT", None, captured_et, capture_day
+
+
+def load_capture(root, day, capture_dir=None):
+    """Return capture bundle info, or a loud ABSENT object.
+
+    `capture_dir` is the bundle dir produced in this run (see
+    resolve_capture_dir); the fallback is data/captures/<day>-roster.
+
+    status is PRESENT only when the bundle's raw .txt verifies against its
+    SHA256SUMS.txt.  A verification failure is recorded as MISMATCH -- never
+    silently -- with the reason in verification_error.
+    """
+    bundle_dir = resolve_capture_dir(root, day, capture_dir)
     if not os.path.isdir(bundle_dir):
         return {"present": False, "status": "ABSENT"}
 
@@ -374,13 +489,22 @@ def load_capture(root, day):
             files.append({"path": rel, "sha256": sha256(ap)})
     files.sort(key=lambda x: x["path"])
 
-    return {
+    status, verr, captured_et, capture_day = _verify_capture_txt(bundle_dir)
+    out = {
         "present": True,
+        "status": status,
         "bundle_dir": os.path.relpath(bundle_dir, root),
+        "captured_et": captured_et,
+        "capture_day": capture_day,
         "drift_verdict": drift,
         "tsv": os.path.relpath(tsvs[0], root),
         "files": files,
     }
+    if verr:
+        out["verification_error"] = verr
+        print(f"close_manifest.py: WARNING: capture bundle failed "
+              f"verification: {verr}", file=sys.stderr)
+    return out
 
 
 # ---------------------------------------------------------------------------
@@ -431,8 +555,13 @@ def derive_staged_first(root, day, manifest, daily_receipt):
     return sorted(paths)
 
 
-def derive_staged_second(root, day):
-    """Second derivation: from a direct filesystem scan."""
+def derive_staged_second(root, day, capture_rel=None):
+    """Second derivation: from a direct filesystem scan.
+
+    `capture_rel` is the bundle dir actually read for this close, relative to
+    root (the manifest records it as capture.bundle_dir); the default is the
+    historical same-day dir data/captures/<day>-roster.
+    """
     paths = set()
 
     _add_output_files(root, paths, DAILY_OUTPUTS)
@@ -462,7 +591,8 @@ def derive_staged_second(root, day):
     paths.add(os.path.relpath(manifest_path, root))
 
     # Capture bundle
-    bundle_dir = os.path.join(root, "data", "captures", f"{day}-roster")
+    bundle_dir = os.path.join(
+        root, capture_rel or os.path.join("data", "captures", f"{day}-roster"))
     if os.path.isdir(bundle_dir):
         for dirpath, _dirnames, filenames in os.walk(bundle_dir):
             for fn in filenames:
@@ -474,17 +604,17 @@ def derive_staged_second(root, day):
     return sorted(paths)
 
 
-def build_and_write_manifest(root, day, argv):
+def build_and_write_manifest(root, day, argv, capture_dir=None):
     """Assemble the manifest, run the two staged-path derivations, write files."""
     # Pre-scan for forbidden files in the output directories.
-    scan_for_forbidden(root, day)
+    scan_for_forbidden(root, day, capture_dir=capture_dir)
 
     export = load_export(root, day)
     daily_receipt = load_daily_receipt(root, day)
     gap = gap_statement(
         previous_close_day(os.path.join(root, "data", DAILY_RUNS), day), day)
     brief = load_brief(root, day)
-    capture = load_capture(root, day)
+    capture = load_capture(root, day, capture_dir=capture_dir)
 
     # Initial manifest without staged paths.
     manifest = {
@@ -502,7 +632,7 @@ def build_and_write_manifest(root, day, argv):
 
     # The two derivations.
     first = derive_staged_first(root, day, manifest, daily_receipt)
-    second = derive_staged_second(root, day)
+    second = derive_staged_second(root, day, capture.get("bundle_dir"))
     check_forbidden(first)
     check_forbidden(second)
     if first != second:
@@ -536,7 +666,14 @@ def build_and_write_manifest(root, day, argv):
 
     print(f"close_manifest.py: wrote {os.path.relpath(manifest_path, root)}")
     print(f"  gap: {gap['statement']}")
-    print(f"  capture: {capture.get('status') or capture.get('drift_verdict', 'present')}")
+    if capture.get("status") == "PRESENT":
+        cap_line = ("PRESENT — " + capture["bundle_dir"]
+                    + " — drift: " + capture["drift_verdict"].splitlines()[0])
+    elif capture.get("status") == "MISMATCH":
+        cap_line = "MISMATCH — " + capture.get("verification_error", "")
+    else:
+        cap_line = capture.get("status", "?")
+    print(f"  capture: {cap_line}")
     print(f"  staged: {len(first)} path(s)")
     return manifest
 
@@ -556,15 +693,20 @@ def derive_commit_message(manifest):
     rows = manifest["daily_receipt"]["rows_out"] if manifest["daily_receipt"] else None
     exitv = manifest["daily_receipt"]["final_exit"] if manifest["daily_receipt"] else None
     cap = manifest["capture"]
-    if cap.get("present"):
+    if cap.get("status") == "MISMATCH":
+        cap_s = "capture MISMATCH"
+    elif cap.get("present"):
         drift = cap["drift_verdict"]
         # Keep the commit message short: first line only, or a short status.
         if drift == "NOT EVALUABLE":
-            cap_s = "capture NOT EVALUABLE"
+            cap_s = "capture PRESENT, NOT EVALUABLE"
         elif "ZERO" in drift:
-            cap_s = "drift ZERO"
+            cap_s = "capture PRESENT, drift ZERO"
         else:
-            cap_s = drift.splitlines()[0]
+            cap_s = "capture PRESENT, " + drift.splitlines()[0]
+        bdir = os.path.basename(cap.get("bundle_dir") or "")
+        if bdir and bdir != f"{day}-roster":
+            cap_s += f" (bundle {bdir})"
     else:
         cap_s = "capture ABSENT"
     narr = manifest["brief"]["narrative"]
@@ -595,10 +737,11 @@ def print_commit_command(root, day):
         manifest = json.load(fo)
 
     first = manifest.get("staged_paths", [])
-    second = derive_staged_second(root, day)
+    cap_rel = (manifest.get("capture") or {}).get("bundle_dir")
+    second = derive_staged_second(root, day, cap_rel)
     check_forbidden(first)
     check_forbidden(second)
-    scan_for_forbidden(root, day)
+    scan_for_forbidden(root, day, capture_dir=cap_rel)
     if first != second:
         die("staged-path mismatch between manifest and second derivation")
 
@@ -608,6 +751,71 @@ def print_commit_command(root, day):
         print(f"git add {p}")
     print(f'git commit -m "{msg}"')
     print("git push origin HEAD")
+
+
+def reconcile(root, day, capture_dir=None):
+    """Print what the EXISTING manifest for `day` would record under the
+    current capture rules.  Writes nothing -- the recorded manifest is
+    history and is never rewritten.
+
+    Bundle resolution order: explicit --capture-dir, then the same-day
+    fallback data/captures/<day>-roster, then the earliest <date>-roster
+    bundle dated after the close day -- the bundle a catch-up close would
+    have consumed.
+    """
+    manifest_path = os.path.join(root, "data", "close", day, "manifest.json")
+    if not os.path.isfile(manifest_path):
+        die(f"manifest not found: {manifest_path}")
+    with open(manifest_path) as fo:
+        manifest = json.load(fo)
+
+    resolution = None
+    if capture_dir:
+        resolution = f"explicit --capture-dir: {capture_dir}"
+    elif os.path.isdir(os.path.join(root, "data", "captures", f"{day}-roster")):
+        resolution = f"same-day fallback data/captures/{day}-roster"
+    else:
+        cap_root = os.path.join(root, "data", "captures")
+        cands = []
+        if os.path.isdir(cap_root):
+            for entry in os.listdir(cap_root):
+                m = re.match(r"^(\d{4}-\d{2}-\d{2})-roster$", entry)
+                if (m and m.group(1) > day
+                        and os.path.isdir(os.path.join(cap_root, entry))):
+                    cands.append(entry)
+        if cands:
+            pick = sorted(cands)[0]
+            capture_dir = os.path.join("data", "captures", pick)
+            resolution = ("earliest <date>-roster bundle dated after the "
+                          f"close day: {pick}")
+
+    new_capture = load_capture(root, day, capture_dir)
+
+    old_cap = manifest.get("capture") or {}
+    old_bdir = old_cap.get("bundle_dir")
+    staged = [p for p in manifest.get("staged_paths", [])
+              if not (old_bdir and
+                      (p == old_bdir or p.startswith(old_bdir + "/")))]
+    if new_capture.get("present"):
+        staged.extend(f["path"] for f in new_capture["files"])
+    staged = sorted(set(staged))
+
+    would = dict(manifest)
+    would["capture"] = new_capture
+    would["staged_paths"] = staged
+    would["staged_count"] = len(staged)
+    would["commit_message"] = derive_commit_message(would)
+
+    out = {
+        "day": day,
+        "note": "what the recorded manifest would say under the current "
+                "capture rules; the manifest on disk is unchanged",
+        "resolution": resolution or "no capture bundle resolved",
+        "recorded_capture": old_cap,
+        "would_be": would,
+    }
+    print(json.dumps(out, indent=2, sort_keys=True))
+    return out
 
 
 # ---------------------------------------------------------------------------
@@ -658,11 +866,13 @@ def _st_build_bundle(root, day, bots, prev_bundle=None):
     raw_name = f"01-bots-roster-recent-activity-{day}-{time_str}.txt"
     tsv_name = f"02-roster-toggles-{n}-{day}.tsv"
 
-    # raw capture text
+    # raw capture text — the captured: header derives from `day` so the
+    # manifest's captured_et/capture_day fields can be checked against it.
+    cap_date = datetime.date.fromisoformat(day)
     raw = os.path.join(bundle, raw_name)
     with open(raw, "w", encoding="utf-8") as fo:
         fo.write(f"# Capture bundle fixture for {day}\n"
-                 f"captured: Mon Aug {int(day.split('-')[2])} {day[:4]} "
+                 f"captured: {cap_date.strftime('%a %b %d %Y')} "
                  f"19:57:13 GMT-0400 (Eastern Daylight Time)\n")
 
     # tsv with a drift verdict line
@@ -1005,6 +1215,128 @@ def selftest():
         check("M2 capture absent -> status is ABSENT",
               m2["capture"]["status"], "ABSENT")
 
+        # --- M3: catch-up close — bundle dir is named by the CAPTURE day --
+        # The T-46 defect: capture_bundle.py names the bundle by the
+        # capture's own `captured:` date, so a catch-up close for `day`
+        # produces <capture-day>-roster, which <day>-roster never matches.
+        day3 = "2099-01-12"
+        cap_day3 = "2099-01-13"
+        _st_write_csv(os.path.join(data, "raw", f"{day3}.csv"),
+                      [_st_oa_row(day3)])
+        _st_write(os.path.join(data, "brief", f"{day3}_brief.json"),
+                  json.dumps({"tape": {"underlyings": {}}}) + "\n")
+        _st_write(os.path.join(data, "brief", f"{day3}_brief.html"),
+                  "<html><body>brief</body></html>\n")
+        day3_hashes = {rel: sha256(os.path.join(root, rel))
+                       for rel in DAILY_OUTPUTS
+                       if os.path.isfile(os.path.join(root, rel))}
+        day3_receipt = {
+            "day": day3, "final_exit": 0, "pinned": False,
+            "ledger_start": "2099-01-01", "ledger_stale": False,
+            "rows_in": 1, "rows_out": 2,
+            "source_export": f"data/raw/{day3}.csv",
+            "min_open_date": day3, "max_open_date": day3,
+            "written_utc": "2099-01-12T00:00:00+00:00",
+            "hashes": day3_hashes,
+        }
+        _st_write(daily_runs, json.dumps(day3_receipt, sort_keys=True) + "\n",
+                  append=True)
+
+        # The bundle the catch-up run produced: named by the capture's own
+        # day, not the close day.
+        bundle3 = _st_build_bundle(root, cap_day3, bots)
+        want_captured = (datetime.date.fromisoformat(cap_day3)
+                         .strftime("%a %b %d %Y")
+                         + " 19:57:13 GMT-0400 (Eastern Daylight Time)")
+
+        m3 = build_and_write_manifest(root, day3, [day3],
+                                      capture_dir=bundle3)
+        check("M3a catch-up close: explicit capture dir -> status PRESENT",
+              m3["capture"]["status"], "PRESENT")
+        check("M3b manifest records the bundle dir actually produced",
+              m3["capture"]["bundle_dir"],
+              os.path.join("data", "captures", f"{cap_day3}-roster"))
+        check("M3c captured_et is the capture's own ET header, verbatim",
+              m3["capture"]["captured_et"], want_captured)
+        check("M3d capture_day is derived from that header",
+              m3["capture"]["capture_day"], cap_day3)
+        # The same fixture under the pre-T-46 lookup is still ABSENT: the
+        # fallback <day>-roster does not exist for this close.
+        check("M3e same fixture, <day>-roster fallback -> still ABSENT",
+              load_capture(root, day3)["status"], "ABSENT")
+        second3 = derive_staged_second(root, day3,
+                                       m3["capture"]["bundle_dir"])
+        check("M3f staged_paths match second derivation for produced dir",
+              m3["staged_paths"], second3)
+        out3 = io.StringIO()
+        with contextlib.redirect_stdout(out3):
+            print_commit_command(root, day3)
+        printed3 = [ln.split(None, 2)[2].strip()
+                    for ln in out3.getvalue().splitlines()
+                    if ln.startswith("git add ")]
+        check("M3g printed git add paths match the recorded bundle_dir",
+              printed3, m3["staged_paths"])
+        check("M3h bundle files are in staged_paths",
+              m3["capture"]["tsv"] in m3["staged_paths"], True)
+
+        # M3i: --reconcile on the recorded manifest resolves the first
+        # <date>-roster after the close day and reports PRESENT.
+        out4 = io.StringIO()
+        with contextlib.redirect_stdout(out4):
+            rec_out = reconcile(root, day3)
+        check("M3i --reconcile resolves the post-day bundle -> PRESENT",
+              (rec_out["would_be"]["capture"]["status"],
+               rec_out["resolution"]),
+              ("PRESENT",
+               "earliest <date>-roster bundle dated after the close day: "
+               f"{cap_day3}-roster"))
+
+        # --- M4: the .txt / SHA256SUMS verification is real --------------
+        cap_txt3 = sorted(glob.glob(os.path.join(bundle3, "01-*.txt")))[0]
+        orig_txt = open(cap_txt3, "rb").read()
+        with open(cap_txt3, "ab") as fo:
+            fo.write(b"tampered\n")
+        check("M4a altered .txt -> MISMATCH",
+              load_capture(root, day3, capture_dir=bundle3)["status"],
+              "MISMATCH")
+        with open(cap_txt3, "wb") as fo:
+            fo.write(orig_txt)
+
+        sums3 = os.path.join(bundle3, "SHA256SUMS.txt")
+        orig_sums = open(sums3, "rb").read()
+        os.remove(sums3)
+        check("M4b missing SHA256SUMS.txt -> MISMATCH",
+              load_capture(root, day3, capture_dir=bundle3)["status"],
+              "MISMATCH")
+        with open(sums3, "wb") as fo:
+            fo.write(orig_sums)
+
+        moved = cap_txt3 + ".moved"
+        os.rename(cap_txt3, moved)
+        check("M4c no raw .txt -> MISMATCH",
+              load_capture(root, day3, capture_dir=bundle3)["status"],
+              "MISMATCH")
+        os.rename(moved, cap_txt3)
+
+        # --- M5: --capture-dir validation --------------------------------
+        outside = os.path.join(tmp, "elsewhere-roster")
+        os.makedirs(outside, exist_ok=True)
+        try:
+            load_capture(root, day3, capture_dir=outside)
+            refused_outside = False
+        except SystemExit:
+            refused_outside = True
+        check("M5a --capture-dir outside data/captures is refused",
+              refused_outside, True)
+        try:
+            load_capture(root, day3,
+                         capture_dir="data/captures/2099-12-31-roster")
+            refused_missing = False
+        except SystemExit:
+            refused_missing = True
+        check("M5b explicit but missing capture dir is FATAL, not ABSENT",
+              refused_missing, True)
+
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 
@@ -1027,8 +1359,15 @@ def main():
                     help="output root (default: $FLEET_ROOT or repo)")
     ap.add_argument("--argv", default=None,
                     help="JSON list of the close argv (default: $FLEET_CLOSE_ARGV)")
+    ap.add_argument("--capture-dir", default=None,
+                    help="capture bundle dir produced by this run (close.sh "
+                         "passes the dir capture_bundle.py wrote); default: "
+                         "data/captures/<day>-roster")
     ap.add_argument("--commit-command", action="store_true",
                     help="print the derived commit command for this close")
+    ap.add_argument("--reconcile", action="store_true",
+                    help="print what the existing manifest for DAY would say "
+                         "under the current capture rules; writes nothing")
     ap.add_argument("--selftest", action="store_true",
                     help="run the fixture-based self-test")
     args = ap.parse_args()
@@ -1061,8 +1400,11 @@ def main():
 
     if args.commit_command:
         print_commit_command(root, args.day)
+    elif args.reconcile:
+        reconcile(root, args.day, capture_dir=args.capture_dir)
     else:
-        build_and_write_manifest(root, args.day, argv)
+        build_and_write_manifest(root, args.day, argv,
+                                 capture_dir=args.capture_dir)
 
 
 if __name__ == "__main__":
