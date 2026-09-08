@@ -19,7 +19,7 @@ D = os.path.join(ROOT, "data")
 SENT_A = "/* ==== DATA START ==== */"
 SENT_B = "/* ==== DATA END ==== */"
 
-STATUSES = {"Not started", "Working on it", "Ready", "Needs sign-off", "Stuck", "Done"}
+STATUSES = {"Not started", "Working on it", "Ready", "Ready for review", "Needs sign-off", "Stuck", "Done"}
 
 
 def set_root(root):
