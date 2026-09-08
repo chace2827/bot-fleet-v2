@@ -24,6 +24,7 @@ EXPECTED_HEADER = [
 ]
 
 _DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+_RAW_NAME_RE = re.compile(r"^\d{4}-\d{2}-\d{2}\.csv$")
 
 
 def sha256(path):
@@ -82,6 +83,20 @@ def read_open_dates(path):
             if d:
                 dates.append(d)
     return dates
+
+
+def previous_raw_file(raw_dir, day):
+    """The export immediately before `day`'s own slot in data/raw/, or None.
+
+    Same definition as build_ledger.previous_raw(): the file the incoming
+    export succeeds in the raw sequence. A same-day destination (<day>.csv)
+    is never its own predecessor, and only YYYY-MM-DD.csv names count.
+    """
+    if not os.path.isdir(raw_dir):
+        return None
+    names = sorted(n for n in os.listdir(raw_dir)
+                   if _RAW_NAME_RE.match(n) and n < f"{day}.csv")
+    return os.path.join(raw_dir, names[-1]) if names else None
 
 
 def find_mangled(scan_dir):
@@ -170,12 +185,46 @@ def main():
              f"the export cannot be from before its latest position: {src}")
     if day < max_open:
         fail(f"ERROR: chosen day {day} is earlier than max openDate {max_open}: {src}")
+
+    root = resolve_root(args.root)
+    raw_dir = os.path.join(root, "data", "raw")
+
+    # --- RANGE-SHORTENED EXPORT GUARD (T-45) -------------------------------
+    # The same check build_ledger.py runs at ledger-build time, moved up to
+    # ingest so close.sh stops at stage 1/5 — before the shortened file ever
+    # reaches data/raw/ — instead of stage 2/5. Refuse when this export's
+    # earliest openDate is later than max(LEDGER_START, the previous raw
+    # export's earliest openDate at/after LEDGER_START); with no previous raw
+    # the floor is LEDGER_START itself. No override flag: the fix is a wider
+    # re-export, never a bypass.
+    prev_path = previous_raw_file(raw_dir, day)
+    prev_min = ""
+    if prev_path:
+        prev_post = [d for d in read_open_dates(prev_path) if d >= ledger_start]
+        prev_min = min(prev_post) if prev_post else ""
+    floor = max(ledger_start, prev_min) if prev_min else ledger_start
+    if min_open > floor:
+        fail("\n" + "!" * 72 + "\n"
+             f"REFUSED: {os.path.basename(src)} is RANGE-SHORTENED — its earliest\n"
+             "openDate is later than the coverage floor the previous export\n"
+             "established.\n"
+             "\n"
+             f"  new export       : {src}   min openDate {min_open}\n"
+             f"  previous export  : "
+             f"{prev_path + '   min openDate >= LEDGER_START: ' + prev_min if prev_path else '(none — floor is LEDGER_START)'}\n"
+             f"  LEDGER_START     : {ledger_start}   (from {ls_source})\n"
+             f"  coverage floor   : {floor}\n"
+             "\n"
+             "  Ingesting this file would let the next ledger rebuild drop every\n"
+             f"  banked trading day before {min_open}. NOTHING WAS WRITTEN.\n"
+             "\n"
+             "  There is no override flag. Re-export from OA with a start date on\n"
+             f"  or before {floor} (all groups selected) and re-run.\n"
+             + "!" * 72)
     if min_open > ledger_start:
         fail(f"ERROR: min openDate {min_open} is later than LEDGER_START {ledger_start} "
              f"(from {ls_source}); export does not cover the post-cutover window: {src}")
 
-    root = resolve_root(args.root)
-    raw_dir = os.path.join(root, "data", "raw")
     os.makedirs(raw_dir, exist_ok=True)
     dest = os.path.join(raw_dir, f"{day}.csv")
 
@@ -365,6 +414,41 @@ def selftest():
         check("D8  min openDate later than LEDGER_START refuses",
               (code is not None, "min openDate" in err, day2 in err, day1 in err),
               (True, True, True, True))
+
+        # --- range-shortened vs the PREVIOUS raw export (T-45) -------------
+        # A dedicated root whose data/raw already holds <day2>.csv, whose
+        # earliest openDate at/after LEDGER_START is day2. A new export whose
+        # own earliest openDate is later must refuse at ingest — close.sh
+        # stage 1/5, before the file ever reaches data/raw/.
+        rng_dl = os.path.join(tmp, "range_downloads")
+        os.makedirs(rng_dl)
+        rng = os.path.join(rng_dl, "range.csv")
+        _st_write(rng, [_st_row(day3)])                # export min openDate = day3
+        os.utime(rng, (_st_ts(day3), _st_ts(day3)))
+        rng_root = os.path.join(tmp, "range_root")
+        os.makedirs(os.path.join(rng_root, "data", "raw"))
+        _st_write(os.path.join(rng_root, "data", "raw", f"{day2}.csv"),
+                  [_st_row(day2)])                     # previous raw post-min = day2
+        rng_dest = os.path.join(rng_root, "data", "raw", f"{day3}.csv")
+        code, _, err = _st_run(base_args(day1, rng_root, rng_dl, ["--day", day3]))
+        check("D13 export starting after the previous raw's post-cutover front refuses",
+              (code is not None, "RANGE-SHORTENED" in err,
+               "range.csv" in err, f"{day2}.csv" in err,
+               day3 in err, day2 in err, not os.path.exists(rng_dest)),
+              (True, True, True, True, True, True, True))
+
+        # Same pair but the new export reaches back to LEDGER_START -> ingests.
+        # (The pre-existing min_openDate > LEDGER_START refusal stands: the
+        # coverage floor only ever makes the check STRICTER, never looser.)
+        ok_dl = os.path.join(tmp, "okrange_downloads")
+        os.makedirs(ok_dl)
+        ok = os.path.join(ok_dl, "okrange.csv")
+        _st_write(ok, [_st_row(day1), _st_row(day3)])  # export min = day1 = LEDGER_START
+        os.utime(ok, (_st_ts(day3), _st_ts(day3)))
+        code, out, err = _st_run(base_args(day1, rng_root, ok_dl, ["--day", day3]))
+        check("D14 export reaching LEDGER_START with a previous raw present ingests",
+              (code is None, "ingested" in out, os.path.exists(rng_dest)),
+              (True, True, True))
 
         # --- idempotent equal-sha re-run -------------------------------------
         code, out, _ = _st_run(base_args(day2, root, good_dl))
