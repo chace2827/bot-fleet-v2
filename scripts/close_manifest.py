@@ -707,9 +707,6 @@ def selftest():
     import tempfile
     fails, results = 0, []
 
-    # SACRIFICIAL: break selftest to prove the phase0 guard can turn red.
-    raise AssertionError("SACRIFICIAL close_manifest selftest failure")
-
     def check(name, got, want):
         nonlocal fails
         ok = got == want
