@@ -274,7 +274,7 @@ the named blocker. `●` pass · `○` fail · `·` pending.
 | **G1** | Clean data — no strike-bug, single-sided excluded | binary |
 | **G2** | Sample | **≥ 20 clean condors** |
 | **G3** | Edge — Exp(R) > 0 **and bootstrap 95% CI lower bound > 0** | 3,000 resamples, seed 7. Reports *"~N more trades"* when the CI still includes zero |
-| **G4** | Risk — maxDD-R within cap | **maxDD-R ≥ −5.0**. ⚠️ The RoE **$** cap is an unfilled `<FILL>`, so half of G4 is permanently pending |
+| **G4** | Risk — maxDD-R **and** maxDD-$ within caps | **maxDD-R ≥ −5.0 AND maxDD-$ ≥ −$15,000 per epoch** (from the bot's `epoch_boundary` in `data/bots_meta.csv`, else `LEDGER_START`). Two fleet-level caps are report-only in STATUS.md `## G4 $ caps`: fleet maxDD-$ ≥ −$35,000, and any single day ≤ −$8,000 is a breach. **R-2026-09-01-G4-ROE-CAP** (signed 2026-09-02; inputs T5 — re-derive at n≥100) |
 | **G5** | Compliance — instruction-mirror | **≥ 90% over ≥ 5 graded days.** Under 5 days it stays **pending, never a false pass** |
 | **G6** | Robustness — OOS half-split both halves positive, and **≤ 60%** of positive R in any single year | n < 20 → N/A |
 
