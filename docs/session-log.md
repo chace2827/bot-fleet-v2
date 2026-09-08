@@ -11133,3 +11133,47 @@ the decision node. Match exact trimmed text and take the smallest bounding box.
 **Route status: the pane can now read, and can write at both layers (bot settings + automation
 commit), with automation edits requiring a visible focused pane.** Still unproven: a change to a
 decision node's criteria (the widget was not driven), action rebuild, and the `exits` bundle.
+
+## 2026-09-08 ~20:15–20:40 ET — T-17 and T-23 closed; F5 extended (Cowork, pane, read-only)
+
+Three items closed in ~30 minutes. OA work read-only, `Paper Trading` asserted, nothing written to
+the account. Pane had to be re-logged-in by Andy — the overnight session did not survive.
+
+**T-17 RESOLVED (was Stuck on "OA reactivation" since 08-16).** My own 09-07 work unblocked it
+without anyone noticing. Positive DOM query, not inference from absence (`oa-platform-reference.md`
+§0.2): on an Exit-Option close, `a.link.tlink` count for the whole drawer is **1**, and that anchor
+sits on the **OPEN** row. **The Exit-Option close row carries no Automation Log link at all** — it
+carries the rule and its threshold inline (`Profit Target: $105.00 profit at $39.00`).
+⭐ **Consequence: `row_type` is NOT hand-assigned.** The three close-row label shapes (Exit Option /
+`Automation Log` / platform auto-close) are machine-distinguishable, which is materially better than
+the degraded schema G-1' was declined on. **`post-u1-package` §4.1 predicted exactly this** ("it
+would reopen this ruling on much better terms"). Reopening G-1' is a RULING and is **gated** —
+recorded as observation only, `R-2026-08-07-G-1'` untouched.
+
+**T-23 CLOSED.** `docs/RULINGS.md` is canonical — its own header says so ("canonical, append-only
+register", consolidated 2026-08-12). Corroborated by elimination: `rules-catalog.md` is a generated
+inventory, `roster-mechanics-ruling.md` self-labels as a draft that "does not make rulings",
+`g-rulings-card-2026-08-07.md` is a named SOURCE that RULINGS.md consolidated.
+⚠️ **Gap found:** `docs/agent-charter.md` only **cites** `docs/RULINGS.md` (in its signature block);
+it contains no "canonical"/"register" designation language. The charter governs *who may do what*
+but never says *where rulings live*. Naming it is a doc edit, not a decision — flagged, not applied.
+
+**F5 EXTENDED — the DIR exit design is ASYMMETRIC.** Yesterday's F5 read one position; three are
+now read. F5 as written stands and is strengthened.
+- **Losers exit via the `-50%` STOP LOSS Exit Option**, at a mid-price limit, with a readable quote
+  pair: Sep 2 `-51.3%` (2.95→2.90, filled $3.00); Aug 27 `-54.5%` (3.05→3.00, filled $3.10).
+- **Winners have no exit rule** and ride to OA's 3:50PM ITM auto-close as a **market order**
+  (Sep 3, +$425, label `Market`, no quote pair).
+- ⭐ **The only exit path with unmodeled execution cost is the only one OA records no quote for.**
+  Slippage on the win side is not quantifiable from this surface; it needs broker fills.
+- **The stop overshoots**: set at −50%, fired at −51.3% and −54.5% (~$8–$30 per contract on
+  $610–$675 debit; linear in size).
+- Corroborated by `/bots/bot/<id>/log`: ~50 `Entry Scanner` runs back to Jun 26, **zero exit
+  entries** — the entry trigger is the bot's only automation.
+- Sampling limit stated: 3 of 8 closes (account list caps at 90 rows; per-bot closed views are
+  unreachable by URL). Win side is **n=1**.
+
+Output: `data/captures/2026-09-08-t17-f5/01-t17-f5.md` sha256
+`50d2c572bf096cd43a37fa5c2635a6d3d9940b405baaa32b3aa2ada9d086ae31`.
+`data/portfolio.csv`: T-17 Ready→Done (blocked_by cleared), T-23 →Done, both citing the file.
+`portfolio.html` regenerated (109 items). Hosted artifact NOT republished this round.
