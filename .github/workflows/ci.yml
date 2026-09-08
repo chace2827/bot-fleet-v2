@@ -233,6 +233,9 @@ jobs:
       - name: portfolio board up to date
         run: python3 scripts/portfolio.py --check
 
+      - name: close_manifest selftest (T-38 root guard)
+        run: python3 scripts/close_manifest.py --selftest
+
   selftests:
     runs-on: ubuntu-latest
     steps:
