@@ -24,6 +24,9 @@ jobs:
       - name: py_compile all Python scripts
         run: python3 -m py_compile scripts/*.py
 
+      - name: fixed panel hash freeze
+        run: python3 scripts/check_freeze_hashes.py
+
       - name: market calendar selftest
         run: python3 scripts/market_calendar.py --selftest
 

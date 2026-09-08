@@ -14,7 +14,7 @@
 | §2.1 join keys and data lineage | **SIGNED and in force** — with the recorded file hashes acknowledged stale (see below) |
 | §2.2 current `bots_config_v2.csv` schema | **SIGNED and in force** |
 | §2.3 intended template schema + three-state `value` / `none` / `(blank)` semantics | **SIGNED and in force.** This is the protection against a `(blank)` being graded as `none`; a rule missing its column is SKIPPED BY NAME, never passed and never failed |
-| §2.4 versioned fixed-panel rule | **IN FORCE at this PR's merge, per R-2026-08-18-MECHANICS-IN-FORCE.** `docs/daily-loop-spec.md` lines 36/152 and `docs/rules-catalog.md` declare `scripts/execution_audit.py` frozen at v1.0.0, sha `fdc43d0dcb7275560069048e62d897f528d9620b5a6be87de7a410fae1851e2d`. `scripts/build_ledger.py` is frozen at sha `657cb3925100f88f65ac452b96b364af494928be938d97a151dcaddd667fc9dc`. The stale short-form and superseded intermediate references are retired. |
+| §2.4 versioned fixed-panel rule | **IN FORCE as of the merge of this PR (base `b8875b9f183d51eab511419fa231de1c32ed7203`), per R-2026-08-18-MECHANICS-IN-FORCE.** `docs/daily-loop-spec.md` lines 36/153 and `docs/rules-catalog.md` declare `scripts/execution_audit.py` frozen at v1.0.0, sha `fdc43d0dcb7275560069048e62d897f528d9620b5a6be87de7a410fae1851e2d`. `scripts/build_ledger.py` is frozen at sha `f2f2f70673b6ee412820ff179408774b45db7aeec9a7fda426d9cb5d64b93af9`. The stale short-form and superseded intermediate references are retired. |
 | §2.5 roster authority rule | **IN FORCE since commit 0007d3e, per R-2026-08-18-MECHANICS-IN-FORCE.** The rule is unchanged (roster is proven by an OA `/bots` capture, never by `data/bots_meta.csv`); what changed is the named authority. New authority: `data/captures/2026-08-17-r3/01-oa-bots-capture-2026-08-17-195713.txt` (sha256 `8d9c59b71858c97f43357595dd252d5bd4594a8ab20887da5cda120f64ccdf89`) plus its derived `data/captures/2026-08-17-r3/02-roster-toggles-44-2026-08-17.tsv`. This supersedes the stale `data/captures/2026-08-09-s2b/partB-…` authority, which predated INC-01's reopen, PR-23's retirement and the 2026-08-17 GF delta work |
 | §2.6 pre-registration IDs and OA tags | **SIGNED and in force** |
 | §2.7 data flow contract | **SIGNED and in force** — with the standing note that its pipeline description predates the G-2 monotonicity guard and G-3 fixture/live root separation |
@@ -148,7 +148,8 @@ bot,pt_pct,sl_pct,time_exit,event_backstop,capture_file,capture_hash
 
 - Counterfactual policies, detector rules, and their thresholds are frozen inputs. Changing one makes the accumulated ledger uncomparable and silently destroys every day already banked. Version and re-baseline instead.
 - `scripts/execution_audit.py` is declared frozen at v1.0.0, sha `fdc43d0dcb7275560069048e62d897f528d9620b5a6be87de7a410fae1851e2d`, in `docs/daily-loop-spec.md` §0 and §5, and in `docs/rules-catalog.md`.
-- The current `scripts/execution_audit.py` file sha matches the declared frozen version. The mismatch flagged in §3 item 5 is resolved by this PR.
+- `scripts/build_ledger.py` is declared frozen at sha `f2f2f70673b6ee412820ff179408774b45db7aeec9a7fda426d9cb5d64b93af9` in `docs/roster-mechanics-ruling.md` §0 and §2.4, and is enforced by `scripts/check_freeze_hashes.py` on every CI run.
+- The current file shas match the declared frozen versions. The stale build_ledger hash and the execution_audit short-form mismatch are resolved by the T-47 hash-freeze PR.
 
 ### 2.5 Roster authority rule
 
@@ -222,14 +223,14 @@ bot,pt_pct,sl_pct,time_exit,event_backstop,capture_file,capture_hash
 
 ## 6. LINEAGE TRACE
 
-Traces were generated at this PR's base by `git log --follow --pretty=format:"%H %s" -- <file>` followed by `git show <commit>:<file> | shasum -a 256`. PR associations were checked with `gh api repos/chace2827/bot-fleet-v2/commits/<sha>/pulls`; commits returning an empty list are recorded as direct pushes with no associated PR.
+Traces were generated at the T-47 base (`b8875b9f183d51eab511419fa231de1c32ed7203`) by `git log --oneline -- scripts/build_ledger.py`, `git show <commit>:<file> | sha256sum`, and `gh api repos/chace2827/bot-fleet-v2/commits/<sha>/pulls`; commits returning an empty list are recorded as direct pushes with no associated PR.
 
 ### `scripts/execution_audit.py`
 
 | hash | commit | PR | notes |
 |---|---|---|---|
 | `67a537977c5d089615a23cc0a62d3ded9453e3938267e7eb4076d2a0a8c91e2e` | `b70563596cb110060045f54bd2471a9475f73f3f` | (no PR) | "Bot Fleet v2 — initial commit" — the hash originally declared as frozen v1.0.0 in `docs/daily-loop-spec.md`. |
-| `fdc43d0dcb7275560069048e62d897f528d9620b5a6be87de7a410fae1851e2d` | `4c34c340bcdea658348f523134e97a2d18c3b6d4` | (no PR) | "Gate A9 CLOSED: execution_audit v1.1.0 + daily_brief same-class fix, 8/8 clean n=0 run on file; decision card 2026-08-08" — the movement 67a53797… → fdc43d0d… happened here. This hash remains current at the PR base (`1ccad01ffc9783934225cc12ff565d2381ea23c9`). |
+| `fdc43d0dcb7275560069048e62d897f528d9620b5a6be87de7a410fae1851e2d` | `4c34c340bcdea658348f523134e97a2d18c3b6d4` | (no PR) | "Gate A9 CLOSED: execution_audit v1.1.0 + daily_brief same-class fix, 8/8 clean n=0 run on file; decision card 2026-08-08" — the movement 67a53797… → fdc43d0d… happened here. This hash remains current at the T-47 base (`b8875b9f183d51eab511419fa231de1c32ed7203`); no commit after this movement touched `execution_audit.py`. |
 
 ### `scripts/build_ledger.py`
 
@@ -240,6 +241,9 @@ Traces were generated at this PR's base by `git log --follow --pretty=format:"%H
 | `314d449a5a69b4fca6e73b5326674241d8f75798c5a7f8e58ce0123d03ec5fdd` | `820d424c75987556ce8ecbff10d2bc6980c66021` | PR #29 | "fix(report, build_ledger): label positions/condors/single-sided, no guard change" — the previously UNTRACED e12c9ef1… → 314d449a… movement happened here. |
 | `314d449a5a69b4fca6e73b5326674241d8f75798c5a7f8e58ce0123d03ec5fdd` | `1ccad01ffc9783934225cc12ff565d2381ea23c9` | (no change) | From 314d449a… to the PR-44 base: no commit after PR #29 touched `build_ledger.py`; the file at the PR-44 base still hashed `314d449a…`. |
 | `657cb3925100f88f65ac452b96b364af494928be938d97a151dcaddd667fc9dc` | `6001aab9f098174f131f194b9657953905e2b69a` | PR #44 | "Phase 4: wire should_have_fired into daily.sh" — the movement 314d449a… → 657cb392… happened here. The `build_ledger.py` change was a docstring edit (`eight-stage` → `nine-stage`), display-only, Class A, no behaviour change; this re-record applies the version-bump procedure. |
+| `b1c365b970a7b2b7cb8e54594e2a0fe2ebd8b185f775fb8f6f07ae7237c5fa7a` | `65799e04c563b3ffe0a76e1c994c66ce50f94850` | PR #56 | "build_ledger: G-2/G-2b/G-2c ledger guards + bots_meta duplicate-key FATAL" — the movement 657cb392… → b1c365b9… happened here. The change adds three new ledger guards (front-truncate, ops-reclass, duplicate-key fatal) — counting/detector-predicate, **Class C**, with the explicit overrides `--allow-front-truncate` and `--allow-ops-reclass`. |
+| `f2f2f70673b6ee412820ff179408774b45db7aeec9a7fda426d9cb5d64b93af9` | `6c4e6526b5490bc858d81ebe05c8f46a62917dc0` | PR #65 | "close-wave D1: ingest_export.py + argv/overrides in receipts (R-2026-08-21-RECEIPT-ARGV)" — the movement b1c365b9… → f2f2f706… happened here. The `build_ledger.py` change only records `--allow-*` override state in `ledger_meta.json` on every path (including n=0); no counting or detector change, **Class A** (receipt/audit metadata). |
+| `f2f2f70673b6ee412820ff179408774b45db7aeec9a7fda426d9cb5d64b93af9` | `b8875b9f183d51eab511419fa231de1c32ed7203` | (no change) | From f2f2f706… to the T-47 base: no commit after PR #65 touched `build_ledger.py`; this is the hash re-recorded by T-47. |
 
 ---
 
@@ -248,3 +252,4 @@ Traces were generated at this PR's base by `git log --follow --pretty=format:"%H
 - A new version re-records its hash with a changelog line.
 - Counting or detector-predicate changes remain Class C.
 - Display-only changes remain Class A.
+- The freeze is verified by `scripts/check_freeze_hashes.py` on every CI run; a mismatch is a red build and the hash must be re-recorded before merge.
