@@ -14,8 +14,8 @@ Portfolio item T-44 (P1). Devin promo expires 2026-09-16 — DEVIN lane first.
   - `scripts/report.py` L~1001 `MAXDD_R_CAP = -5.0  # ... RoE $ cap still a <FILL> blank`
   - `scripts/report.py` L~1111-1112: G4 appended as `(mdd >= MAXDD_R_CAP, "... (RoE $ cap pending)")`
   - `docs/evidence-standards.md` G4 row says the `$` cap is an unfilled `<FILL>`
-  - `data/bots_meta.csv` has an `epoch_boundary` column; 8 rows now carry a 2026-09-02 sizing note
-    in `notes` (6 GF arms 1ct→26ct, Canary detach, 3DTE revert).
+  - 8 rows in `data/bots_meta.csv` now carry a 2026-09-02 sizing note in `notes`
+    (6 GF arms 1ct→26ct, Canary detach, 3DTE revert); the file also has an `epoch_boundary` column.
 - Unit law (CLAUDE.md §4): unit = POSITION; condor = two spread rows paired by `trade_id`;
   risk = larger side. `pnl` column in `data/trades.csv` is per row (per leg). Sum per trade_id
   for position P/L.
