@@ -57,6 +57,14 @@ Andy provides two things and one line of context:
 > carries a filtered-export guard that compares against the prior ledger and warns loudly — but
 > the guard only catches bots that already existed. **Select all groups.**
 
+> ⚠️ **THE EXPORT'S START DATE IS GUARDED TOO (T-45).** The export's date window must reach the
+> front of the post-cutover window — export start date must be on or before LEDGER_START; the
+> guard refuses otherwise. `ingest_export.py` and `build_ledger.py` both refuse (exit non-zero,
+> nothing written) when the new export's earliest `openDate` is later than `max(LEDGER_START,`
+> the previous `data/raw/` export's earliest `openDate` at/after LEDGER_START`)`. On 2026-09-07 a
+> range-shortened export passed the whole loop with only a WARN; now `close.sh` stops at stage
+> 1/5. There is no override flag — re-export with a wide enough window.
+
 Then `scripts/daily.sh` runs the nine stages (§4), and Claude renders §6 from the brief JSON.
 
 ### 1.2 CONFIG-DRIFT mode — weekly, while the account is inactive
