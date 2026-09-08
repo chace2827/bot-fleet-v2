@@ -2279,6 +2279,33 @@ recorded as dated line-items in `day0-session-pack-2026-08-07.md`'s S2 close-out
 CF-1 publication-cap acknowledgment is part of this ruling: no option here makes CF-1's
 precondition meetable.
 
+> ### ⚠️ 2026-09-08 — ONE OF G-1′'s TWO NAMED REOPENERS IS NOW OBSERVED (original text above left standing)
+> **The ruling is UNCHANGED. `G-1′` stays DECLINED, Layer 2 stays `BLOCKED`, refusal R-9 stands.**
+> This banner records only that a condition the ruling itself named as a reopener has been met.
+>
+> The line above reads *"the Automation Log link's target for an Exit-Option close (unobserved)"*.
+> **It has now been observed** — dated first-hand DOM read, Cowork 2026-09-08, built-in browser
+> pane, `Friday 14 DTE Broken Wing IB (B-70)` / SPX Iron Butterfly exp Sep 11:
+> `document.querySelectorAll('a.link.tlink').length === 1` for the whole drawer, and that anchor
+> sits on the **OPEN** row.
+>
+> **An Exit-Option close row carries NO Automation Log link at all.** In its place it carries the
+> exit rule and its threshold inline: `Profit Target: $105.00 profit at $39.00`. Per
+> `oa-platform-reference.md` §0.2 this is a positive presence/absence observation, not an inference
+> from absence — the count of 1 is what makes it evidence.
+>
+> ⭐ **Why it matters to G-1′:** the DECLINE rested on the degraded schema leaving `row_type`
+> **hand-assigned**. It is not hand-assigned. Close rows self-label, and the three shapes are
+> machine-distinguishable — Exit Option (no link, names rule + threshold) · `Automation Log`
+> (link present, names the automation) · `Auto close ITM position before expiration` / `Market`
+> (platform safety net, no link). `post-u1-package-2026-08-07.md` §4.1 predicted precisely this:
+> *"it would reopen this ruling on much better terms."*
+>
+> **Reopening G-1′ is a RULING and is GATED. Not applied. Andy's call.**
+> Evidence: `data/captures/2026-09-08-t17-f5/01-t17-f5.md`
+> sha256 `50d2c572bf096cd43a37fa5c2635a6d3d9940b405baaa32b3aa2ada9d086ae31`.
+> D3 (export timezone) remains the other, still unobserved.
+
 **`M_bot_$` calibration — RULED (fix-spec OPEN-1/OPEN-2).** ONE-TIME, not rolling; median over
 POSITIONS, computed at the stamp date over the trailing 90 days as of that date; SKIPPED (never a
 zero, never a proxy) before 90 days of history exist. Answers `research-loop-spec.md` §5a item
@@ -3026,3 +3053,52 @@ Full text: `post-u1-package-2026-08-07.md`, `pre-registration-ledger.md` (PR-16 
 > **Files changed:** `data/captures/2026-08-08-audit/` (7 new) · `docs/session-log.md` ·
 > `docs/state.md` (this block). Device-hash-verified (§9.1a). No OA write. No git.
 > **Uncommitted — Andy runs the commit.**
+
+---
+
+## 2026-09-08 — browser route changed; three board items closed; one ruling reopenable
+
+**Operating change (no ruling required — a transport choice).** OA is now driven from the **Claude
+built-in browser pane** (`mcp__remote-devices__Claude_Browser__*`), not the Chrome extension.
+Chrome is retained as the fallback; the two fail independently (pane needs the desktop app open,
+Chrome needs the extension). The `oa-driving` skill was rewritten 09-07 to cover both surfaces and
+is the single source for the mechanics.
+
+**What is proven on the pane, first-hand:**
+- Reads — the whole 43-bot roster in ONE `get_page_text`. This replaces the bookmarklet capture step.
+- Write layer 1 — bot Notes.
+- Write layer 2 — automation `saveAndClose`, proven by **predicting the post-edit hash before
+  editing**: `HedgeTest-ScannerB-PutSpread` baseline `68b551f9…` (len 3216) → predicted
+  `a63d0f61…` (len 3222) → matched in the client model → matched again after save + hard reload +
+  reopen → reverted to `68b551f9…` exactly. Bot re-read clean afterward.
+- ⛔ **Automation editing requires the pane VISIBLE and FOCUSED.** Hidden panes freeze CSS
+  transitions (`getAnimations()` reports them `running` at `currentTime: 0`; node cards render
+  `height 0`) and have no focus (`document.hasFocus() === false`; `.focus()` will not move
+  `activeElement`). Reads and static handler buttons are unaffected. **An unattended session cannot
+  edit automations.**
+
+**Board items closed 2026-09-08** — all read-only against OA, `Paper Trading` asserted:
+- **M-36** (09-07) — order-level pass, 5 ON mirrors + 2 DIR bots. 6/7 verifiable, 3 clean.
+- **T-17** — see the dated banner in the G-1′ block above. Was Stuck on "OA reactivation" since
+  08-16; the blocker had already lifted.
+- **T-23** — `docs/RULINGS.md` is canonical (its own header says so; the other three candidates are
+  a generated catalog, a self-labelled draft, and a consumed source). ⚠️ **Gap: `docs/agent-charter.md`
+  only CITES it and carries no designation language.** Naming it changes what the charter asserts,
+  so it is **gated**, not applied.
+
+**F5 — the DIR exit design is ASYMMETRIC** (`DIR-SPX-CallVIXdrop`, 3 of 8 closes readable):
+losers exit via the configured `-50%` STOP LOSS Exit Option at a mid-price limit (fired −51.3% and
+−54.5%, i.e. it overshoots its setting); **winners have no exit rule** and ride to OA's 3:50PM ITM
+auto-close as a **market order**. The bot Log shows ~50 `Entry Scanner` runs since Jun 26 and
+**zero exit entries**. ⭐ The only exit path with unmodeled execution cost is the only one OA
+records no quote for — win-side slippage is **not measurable from this surface**; it needs broker
+fills. `DIR-SPX-PutVIX22-SL75` shares the shape and has never filled (F6).
+
+**Open, all gated:** reopening G-1′ · naming RULINGS.md in the charter · F1 (recommend folding into
+T-48) · F3 · F5 · F6. **Not done:** F5's other 5 closes (account closed-list caps at 90 rows;
+per-bot closed views unreachable by URL), and a decision-node *criteria* change remains unproven on
+either surface.
+
+**Files changed:** `data/captures/2026-09-08-t17-f5/01-t17-f5.md` · `data/portfolio.csv` ·
+`portfolio.html` · `docs/session-log.md` · `docs/state.md` (this block + the G-1′ banner).
+Device-hash-verified (§9.1a). No OA write. No git run from this session.
