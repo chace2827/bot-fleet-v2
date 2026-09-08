@@ -239,6 +239,23 @@ def newest_raw():
     return files[-1] if files else None
 
 
+def previous_raw(src):
+    """The export `src` succeeded as data/raw/'s newest, or None.
+
+    The T-45 range-shortened guard is an ingest-axis check: it applies only
+    when the build is pointed at the NEWEST export — the normal daily-loop
+    path, including daily.sh's pinned <day>.csv, which is the newest file the
+    moment ingest installs it. A build pinned to an OLDER export is deliberate
+    archaeology governed by G-2/G-2b and their override flags; this guard has
+    no override flag, so it must not sit on that path. Returns None when src
+    is not the newest raw or when no earlier raw exists to compare against.
+    """
+    files = sorted(glob.glob(os.path.join(RAW, "*.csv")))
+    if not files or files[-1] != src or len(files) < 2:
+        return None
+    return files[-2]
+
+
 def _tid_int(s):
     try:
         return int(s[1:]) if s and s[0] == "T" else 0
@@ -373,6 +390,46 @@ def truncation_refusal(prior_min, new_min, prior_legs, new_legs, src, ledger_sta
         "  If you genuinely intend to truncate the front of the ledger, say so\n"
         "  explicitly:\n"
         f"      python3 scripts/build_ledger.py {os.path.basename(src)[:10]} --allow-front-truncate\n"
+        + bar
+    )
+
+
+def range_refusal(new_min, floor, prev_min, src, prev_src, ledger_start):
+    """The T-45 refusal text. Names BOTH files and BOTH dates — the new export's
+    own earliest openDate and the coverage floor, derived as max(LEDGER_START,
+    the previous export's earliest openDate at/after LEDGER_START). Returned
+    (not raised) so the selftest can read it. There is deliberately NO override
+    flag: a range-shortened export is never a legitimate rebuild source; the
+    fix is a wider re-export."""
+    bar = "!" * 72
+    return (
+        "\n" + bar + "\n"
+        "REFUSED: the newest export is RANGE-SHORTENED — its earliest openDate\n"
+        "is LATER than the front of the post-cutover window the previous export\n"
+        "covered.\n"
+        "\n"
+        f"  new export       : {os.path.basename(src)}   min openDate {new_min}\n"
+        f"  previous export  : {os.path.basename(prev_src)}   "
+        f"min openDate >= LEDGER_START: {prev_min or '(none)'}\n"
+        f"  LEDGER_START     : {ledger_start}\n"
+        f"  coverage floor   : {floor}   (= max(LEDGER_START, previous export's\n"
+        "                     earliest openDate at/after LEDGER_START))\n"
+        "\n"
+        "  build_ledger.py is a FULL rebuild from ONE export. An export that does\n"
+        "  not reach back to the coverage floor would rebuild a working ledger\n"
+        f"  missing every banked trading day before {new_min} — the same loss\n"
+        "  class as the 2026-08-12 truncation (commit 0051b5e6), entered from\n"
+        "  the front. See docs/ledger-truncation-forensics-2026-08-17.md.\n"
+        "\n"
+        "  G-2b cannot see this case: it compares the new export against the\n"
+        "  prior data/trades.csv, which is empty on a first build and already\n"
+        "  truncated after one. The comparison that survives is raw-vs-raw.\n"
+        "\n"
+        "  NOTHING WAS WRITTEN.\n"
+        "\n"
+        "  There is no override flag. Re-export from OA with a start date on or\n"
+        f"  before {floor} (all groups selected), drop it in data/raw/, and\n"
+        "  re-run.\n"
         + bar
     )
 
@@ -769,6 +826,35 @@ def main():
         print("!! Every trading day before "
               f"{new_min or 'the cutover'} is being removed from data/trades.csv.")
         print("!" * 72)
+    else:
+        # --- RANGE-SHORTENED EXPORT GUARD (T-45) ---------------------------
+        # Fires ONLY where G-2b cannot adjudicate: the branch above owns the
+        # "prior ledger still shows the loss" case — refusal, or a deliberate
+        # front-truncate explicitly authorised with --allow-front-truncate (the
+        # pre-existing escape hatch for this class of mutation; this guard adds
+        # NO flag of its own). What G-2b cannot see is a prior ledger that is
+        # empty or already truncated: on 2026-09-07 a range-shortened export
+        # (251 rows vs the previous 1,596) passed the whole loop with a WARN,
+        # and once that loss is banked the ledger-vs-export comparison is blind
+        # to it forever. The surviving evidence is the previous EXPORT in
+        # data/raw/: refuse when the new export's earliest openDate is later
+        # than max(LEDGER_START, the previous export's earliest openDate
+        # at/after LEDGER_START). No override flag — a shortened export is
+        # never a legitimate rebuild source; the fix is a wider re-export.
+        # Applies only to the NEWEST raw (see previous_raw()): builds pinned
+        # to an older export stay on G-2/G-2b and their override flags.
+        prev_src = previous_raw(src)
+        if prev_src is not None:
+            prev_rows = list(csv.DictReader(open(prev_src)))
+            prev_min = min_open_date(
+                [r for r in prev_rows
+                 if (r.get("openDate") or "")[:10] >= ledger_start],
+                "openDate")
+            floor = max(ledger_start, prev_min) if prev_min else ledger_start
+            export_min = min_open_date(rows, "openDate")
+            if export_min and export_min > floor:
+                sys.exit(range_refusal(export_min, floor, prev_min,
+                                       src, prev_src, ledger_start))
 
     # --- THE OPS-RECLASSIFICATION GUARD (G-2c) ---------------------------
     # The interior mirror: a bot with banked rows in data/trades.csv that has
@@ -1338,6 +1424,69 @@ def selftest():
                              "open_date"),
                min_open_date([], "open_date")), (day1, ""))
 
+        # ---- S1-S8: THE RANGE-SHORTENED EXPORT GUARD (T-45) --------------
+        # 2026-09-07: a range-shortened export (251 rows vs the previous 1,596)
+        # passed the whole loop with a WARN. G-2b compares the new export
+        # against the prior LEDGER — nothing compared it against the previous
+        # EXPORT still sitting in data/raw/. A build whose newest export's
+        # earliest openDate is later than max(LEDGER_START, the previous
+        # export's earliest openDate at/after LEDGER_START) must REFUSE, with
+        # no override flag: the fix is a wider re-export, never a bypass.
+        s_d0, s_d1, s_d2 = "2099-01-01", "2099-01-02", "2099-01-03"
+        s_pre = "2098-12-20"
+        prev_rows = [_st_row(NORMBOT, day=s_d1)]          # post-cutover min = s_d1
+        short_rows = [_st_row(NORMBOT, day=s_d2)]         # export min = s_d2 > s_d1
+
+        _st_env(tmp, [norm_meta], prev_rows, exports={s_d2: short_rows})
+        before = open(_st_out(tmp, "trades.csv")).read()
+        code, out, _ = _st_run(tmp)                       # unpinned -> newest = s_d2.csv
+        check("S1  range-shortened newest export REFUSES",
+              isinstance(code, str) and "RANGE-SHORTENED" in code, True)
+        check("S2  the refusal names BOTH files and BOTH dates",
+              isinstance(code, str) and f"{s_d2}.csv" in code
+              and f"{s_d1}.csv" in code and s_d2 in code and s_d1 in code,
+              True)
+        check("S3  nothing was written on the range-shortened refusal",
+              open(_st_out(tmp, "trades.csv")).read(), before)
+
+        # The new export's earliest openDate ON the coverage floor -> covers.
+        ok_rows = [_st_row(NORMBOT, day=s_d1), _st_row(NORMBOT, day=s_d2)]
+        _st_env(tmp, [norm_meta], prev_rows, exports={s_d2: ok_rows})
+        code, out, _ = _st_run(tmp)
+        led = list(csv.DictReader(open(_st_out(tmp, "trades.csv"))))
+        check("S4  new export reaching the coverage floor builds",
+              (code, sorted({r["open_date"][:10] for r in led})),
+              (None, [s_d1, s_d2]))
+
+        # The new export's earliest openDate EARLIER than the floor -> covers.
+        deep_rows = [_st_row(NORMBOT, day=s_pre), _st_row(NORMBOT, day=s_d2)]
+        _st_env(tmp, [norm_meta], prev_rows, exports={s_d2: deep_rows})
+        code, out, _ = _st_run(tmp)
+        check("S5  new export starting before the coverage floor builds",
+              (code, "REFUSED" in out), (None, False))
+
+        # A previous export with NO post-cutover rows -> floor is LEDGER_START.
+        _st_env(tmp, [norm_meta], [_st_row(NORMBOT, day=s_pre)],
+                exports={s_d2: short_rows})
+        code, out, _ = _st_run(tmp)
+        check("S6  previous export with no post-cutover rows floors at LEDGER_START",
+              isinstance(code, str) and "RANGE-SHORTENED" in code
+              and s_d0 in code, True)
+
+        # No previous export -> nothing to compare; the guard is inert.
+        _st_env(tmp, [norm_meta], short_rows)             # single raw file only
+        code, out, _ = _st_run(tmp)
+        check("S7  single export (no previous raw) is not range-refused",
+              (code, "REFUSED" in out), (None, False))
+
+        # A build PINNED to an older export is deliberate archaeology and stays
+        # on G-2/G-2b's override flags — this guard has none by design, so it
+        # only ever applies to the newest raw.
+        _st_env(tmp, [norm_meta], prev_rows, exports={s_d2: short_rows})
+        code, out, _ = _st_run(tmp, extra=[s_d1])
+        check("S8  a pinned rebuild of an older export is not range-refused",
+              (code, "RANGE-SHORTENED" in out), (None, False))
+
         # ---- M1: DUPLICATE `bot` KEY IN bots_meta.csv --------------------
         # R-2026-08-19-ROSTER-KEY-AND-OPS-RECLASS-GUARD clause (1). A repeated
         # `bot` value makes load_meta() silently last-wins; a copied ops row can
@@ -1485,6 +1634,7 @@ def selftest():
     print("       (ledger-truncation-forensics-2026-08-17.md §7;")
     print("        R-2026-08-19-LEDGER-FRONT-GUARD;")
     print("        R-2026-08-19-ROSTER-KEY-AND-OPS-RECLASS-GUARD)")
+    print("  S* = T-45 RANGE-SHORTENED EXPORT GUARD (newest raw vs previous raw)")
     print("  M* = DUPLICATE-KEY FATAL (bots_meta.csv `bot` column)")
     print("  R* = G-3 FIXTURE / LIVE SEPARATION (--root)")
     print("=" * 74)
