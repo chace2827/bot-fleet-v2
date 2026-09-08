@@ -11177,3 +11177,91 @@ Output: `data/captures/2026-09-08-t17-f5/01-t17-f5.md` sha256
 `50d2c572bf096cd43a37fa5c2635a6d3d9940b405baaa32b3aa2ada9d086ae31`.
 `data/portfolio.csv`: T-17 Ready→Done (blocked_by cleared), T-23 →Done, both citing the file.
 `portfolio.html` regenerated (109 items). Hosted artifact NOT republished this round.
+
+## 2026-09-08 — T-53 gate map DRAFTED (Claude Code, read-only on docs; proposal only)
+
+Dispatch `drafts/_dispatch-2026-09-08-t53-gate-map-claudecode.md`, under
+`R-2026-09-07-DA-8-GATE-MAP-OUT-OF-SCOPE`. **Nothing applied** — `docs/evidence-standards.md`,
+`scripts/report.py` and `docs/RULINGS.md` were read only, per the dispatch's exclusions.
+
+**Deliverable:** `drafts/_t53-gate-map-proposal-2026-09-08.md` sha256
+`a8d2375560f643a71aa3463cb4e248db0ef639c2ee73522666295f4420eaacd9`. Six sections: the map as a
+board-stage × audit-family table with per-cell rationale; the n=0 problem as three options; the
+report-only `audit:` rider spec (proposed board item T-55) plus a `data/audit_gates.csv` schema;
+paste-ready text for a new `evidence-standards.md` §5.1 and the §10 item 3 strike; a gated-vs-
+mechanical split; and what was not read.
+
+**Pre-check (wave-1 trap 3):** the map does not exist anywhere. `grep -rln "How the two systems
+meet\|gate map\|gate-map\|audit_gates" .` returns only the two dispatch files; no §5.1 in
+`evidence-standards.md`; no `data/audit_gates.csv`; `grep -oE 'gate [A-K]' scripts/` → nothing,
+i.e. System I is implemented in no code (matches redesign-proposal §2.2 S-6).
+
+**Audit family `A` located.** `evidence-standards.md` §4 is titled A–K and has no `### A` heading —
+family A is §2, the evidence tiers. Confirmed first-hand against the locked original,
+`~/bot-fleet/docs/independent-audit-2026-07-27-precommitment-ledger.md` line 8: *"## A. EVIDENCE
+TIERS (a system is scored at its HIGHEST-QUALITY tier, never averaged up)"*. Read-only; the archive
+was not modified.
+
+**Inheritance rule proposed:** a bot inherits its pillar's audit verdict via `data/bots_meta.csv`'s
+existing `pillar` column (31 bots `IC` — every `IC-*` and `GF-*` arm — 10 `OA-Mirror`, 3
+`Directional`, read this session). Audit family H joins at scope `FLEET`; audit family A is
+per-claim and does not join at all. **Absent row reads pending, never pass** (the §5 G5 lesson).
+
+⚠️ **FINDING — §10 item 5's premise is stale for audit gate B1.** From `data/trades.csv` read this
+session (`LEDGER_START = "2026-08-10"`, `scripts/build_ledger.py:158`): 246 leg rows / **187
+positions** post-cutover, all closed or expired; **IC pillar 147 closed positions** (59 of them
+paired condors), OA-Mirror 34 positions, Directional 6 positions. B1 requires n ≥ 100 closed
+**positions** at tier T1/T2, and `docs/state.md` 334–336 settles that the fleet runs on paper by
+design — evidence tier T2. So **B2 (span), not B1, is the conjunct that is unreachable by
+construction**: earliest post-cutover `open_date` 2026-08-10 → **B2 satisfiable no earlier than
+2027-02-10** (184 calendar days; 25 elapsed at the last trade, 29 at today). Three caveats keep this
+a finding and not a B1 pass: evidence tier T2's *"with realistic fills"* conjunct is unruled for OA
+paper **[UNCLEAR]**; audit gate F2 (re-tune → sample count resets) has never been evaluated; and 147
+is positions while the board counts condors (IC = 59).
+
+**Open decisions named, not taken:** the map itself, the n=0 option (option (b) would be a
+**tightening** and §1's locking clause requires flagging it as one), every new HOLD on the
+LIVE-READY row, the inheritance rule, `data/audit_gates.csv` existing, board item T-55, and whether
+a FAIL row may ever gate a stage in code. All listed in the proposal §5.1.
+
+`data/portfolio.csv`: T-53 Ready→Working on it, metric_note appended with the proposal path.
+`portfolio.py --check` went RED on a stale `portfolio.html`; regenerated (9 programs, 109
+items) and re-checked green. No other file touched — `docs/state.md`, `docs/RULINGS.md`,
+`docs/evidence-standards.md` and `scripts/report.py` are unchanged by this session.
+
+## 2026-09-08 — Honest assessment; hedge redefinition + assumption audit added to the board (Fable, Cowork)
+
+Andy asked for an honest assessment (low confidence, cause unclear), then whether the portfolio board
+is legit, then when hedging starts. Findings, all from files read this session:
+
+- **Board is legit; the work on it is skewed.** `data/portfolio.csv` 109 items → 43 of 69 open under
+  idle programs P6/P7/P9; 9 of 11 "Working on it" rows imported from `todo-2026-08-16.csv` / the
+  migration tracker with empty `metric_note` (M-05 "git init v2" still WIP with 56 PR-merged commits on
+  origin); M-17..M-26 duplicate T-50. Hosted artifact verified row-for-row against the CSV (109/109,
+  statuses match); the artifact renders 8 of 20 columns — `source`/`metric_note`/`lane` are not shown,
+  which is why fossils survive. No pruning applied (Andy has not ruled).
+- **"Hedge" in this project means EXIT RULES.** `docs/hedge-research.md` §1 principle 3 ("a hedge is
+  config, not a pillar … separate protective positions … which this fleet does not run", carried
+  "unchanged from v1") and §3 Tier 3 (straddle / far-OTM put / VIX ladder / ES delta "NOT applied").
+  The STATUS.md "hedge tournament" replays PT/SL/ride/S2. Andy 2026-09-08: **"exit strategy does not
+  equal hedge"; hedge = a separate protective position opened after the condor starts losing.** OA can
+  express the simple reactive shape (a Monitor can open, `oa-platform-reference.md` L282, native
+  triggers only — §11 rules out sustain timers / intraday regime / mid-trade branching).
+- **Carried assumptions unconfirmed post-cutover:** hedge-research §11 lists seven; "min-credit filter
+  hurts" collides with the GF ScannerB $0.07 filter currently stripping the call side (P3 runs on it);
+  "no stops on Fortress" is the ancestor of 130PM running unstopped and unhedged; §1 principle 4
+  "backtest-first" while P5 is idle.
+
+**Board edits (`data/portfolio.csv`, mechanical — items added, no program row touched, nothing ruled):**
+T-56 [P4, ANDY, pri 1] hedge redefinition ruling · T-57 [P7, CC, pri 1] assumption audit register ·
+T-58 [P4, OA, pri 2] hedge backtest day (blocked by T-56, T-57) · T-59 [P4, OA, pri 2] reactive hedge
+paper bots beside 130PM, 130PM untouched (blocked by T-56, T-58) · T-60 [P4, ANDY, pri 1] slot-swap
+ruling P1→Idle / P4→Active (blocked by T-45, T-56). **T-55 left unused** — reserved by the T-53
+proposal (`drafts/_t53-gate-map-proposal-2026-09-08.md` §3). T-48 `metric_note` appended with the
+§11 credit-filter contradiction. `portfolio.py` regenerated + `--check` green (9 programs, 114 items).
+Hosted board republished to the same URL (label "09-08 hedge + assumption audit"); staged copy sha
+`8260819a19e68e45…` = device `portfolio.html`.
+
+**Owed to Andy:** T-56 amendment text + P4 bet draft; T-57 run (Claude, next session); T-60 ruling.
+**Process note:** this session ran read-only `git log` against `~/gitstore/bot-fleet-v2.git` early on
+to date the commit history — CLAUDE.md §9.1 bars that on the mounted tree; noted, not repeated.

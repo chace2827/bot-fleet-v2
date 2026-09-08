@@ -1349,7 +1349,7 @@ const DATA = {
    "P7",
    "Map audit gates A-K onto board gates G1-G6 (which audit gate must hold for a board stage to be honest); DUE before the first G3 pass",
    "Cowork",
-   "Ready",
+   "Working on it",
    2,
    "",
    ""
@@ -1363,6 +1363,56 @@ const DATA = {
    3,
    "",
    ""
+  ],
+  [
+   "T-56",
+   "P4",
+   "RULING: redefine \"hedge\" = a separate protective position that pays when the condor loses; PT/SL/S2/ride are EXITS. Amend hedge-research.md s1 principle 3 + s3 Tier 3 (overlays in scope); rename STATUS.md \"hedge tournament\" -> exit-rule tournament; reword P4 metric",
+   "Andy",
+   "Ready",
+   1,
+   "",
+   ""
+  ],
+  [
+   "T-57",
+   "P7",
+   "ASSUMPTION AUDIT: every rule-sentence in the six core docs (CLAUDE.md, build-plan, hedge-research, evidence-standards, daily-loop-spec, oa-platform-reference) tagged origin (v1 / 7-27 audit / Andy / Claude), evidence basis, post-cutover test -> drafts/_assumption-register-2026-09-08.md for ONE ratify/strike sitting",
+   "Cowork",
+   "Ready",
+   1,
+   "",
+   ""
+  ],
+  [
+   "T-58",
+   "P4",
+   "HEDGE BACKTEST DAY (OO or OA zdte): base = 130PM shape (SPX 0DTE IC 13:30 ride); overlays H1 long ATM straddle at entry, H2 far-OTM put, H3 conditional straddle on |d%| trigger; join daily P&L by date; judge worst-day R / maxDD-R / Exp(R) net of hedge cost; PASS BAR pre-registered before the run",
+   "Cowork",
+   "Not started",
+   2,
+   "",
+   "T-56, T-57"
+  ],
+  [
+   "T-59",
+   "P4",
+   "REACTIVE HEDGE PAPER BOTS: (a) clone of 130PM with a Monitor that opens a debit spread on the tested side at position return <= -X% or short-strike touch (oa-platform-reference L282: a Monitor can open); (b) standalone straddle-overlay bot on 130PM entry days. Pre-reg entries name mechanic + primitive; proof-of-fire = each hedge's own Trades list; 130PM itself UNTOUCHED (CLAUDE.md s5 standing exception)",
+   "Cowork",
+   "Not started",
+   2,
+   "",
+   "T-56, T-58"
+  ],
+  [
+   "T-60",
+   "P4",
+   "SLOT SWAP RULING: P1 -> Idle after T-45 merges (bet met), P4 -> Active with bet + kill date",
+   "Andy",
+   "Not started",
+   1,
+   "",
+   "T-45, T-56"
   ]
  ]
 };
