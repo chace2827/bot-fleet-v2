@@ -1,0 +1,3 @@
+fd7eafdc59a1b451d349bc12bcaabf538fca08473c707156d1d60206b37e25d2  ./01-bots-roster-recent-activity-2026-09-16-173041.txt
+028c16a39c07d06fef94022b0e77b8d85e833208f799ab2cc66fdb89ad5d81f2  ./02-roster-toggles-43-2026-09-16.tsv
+8604ba2604afd4185e8ced7cca758c0d1bd0d42457bf144cd9d4dd53be78d3b0  ./README.md

@@ -11296,3 +11296,97 @@ to date the commit history — CLAUDE.md §9.1 bars that on the mounted tree; no
 - **The new ritual:** export + OA Grab (both land in `~/Downloads`) → `scripts/close.sh`
   → narrative → `render_brief.py` → paste the printed commit. Cowork's role narrows to
   the narrative and review; nothing is uploaded to it.
+
+## 2026-09-16 — Close narrative for the 6-day catch-up window (Cowork, read-only on the mounted tree)
+
+Wrote `data/brief/2026-09-16_narrative.md` — all six slots filled. Inputs read:
+`2026-09-16_brief.json`, `2026-09-16_tape.json`, `2026-09-16_p3_verdicts.tsv`,
+`data/close/2026-09-16/manifest.json`, `data/trades.csv`, `data/execution_audit_findings.csv`,
+the 09-16 and 09-07 roster bundles, `data/captures/2026-08-31-roster/09-s2-config-check-2026-08-31.md`,
+`scripts/build_ledger.py`, `scripts/execution_audit.py`. **No writes outside the narrative and
+this log. No edits to scripts, config, ledger or board.**
+
+**Grade of the 08-19 watch list (19 sessions, not one):** Q1 call-side fill — ANSWERED, not a
+one-off (7 of 7 GF arms on 09-16). Q2 single condor vs separate events — ANSWERED, separate-event
+filling was not permanent; inter-side latency collapsed ~19 min → ≤1 min, though "one condor" is
+the ledger's `PAIR_WINDOW_S` label, not an OA-side observation. Q3 Ride-Delta — CLOSED BY
+DECOMMISSION; no trades since 08-31, roster reads AUTOS OFF / EXITS ON, switched off somewhere
+between 08-31 and the 09-07 capture, no day attributable; **strike the question, don't carry it**.
+Q4 delta vs pct — still zero observations; all arms identical short put on all 16 GF sessions;
+new claim only, that 09-16's short put sat 1.50% below open vs a 0.28–0.58% band on every prior
+session. Q5 PR-01 — fires most days (09-08/09/10/14/15) and was **silent on 09-16**.
+
+**The RED, resolved in reading but not in verification.** `EXPIRY_RATIO_FLIP` on
+`IC-SPX-FastPT25-S2` (the only RED in 333 rows) reads as "an exit that no longer generates
+orders". The ledger partitions it cleanly: **3 two-leg trades, 3 expired; 23 one-leg trades,
+0 expired — 26 of 26, perfect separation.** Every expiry is a two-sided condor riding to 16:15 at
+`exit_price=0` / `mfe_pct=1`; every single-sided fill closed in 2–6 min. Sister arm
+`…-S2-130PM` is the control: 48 positions, **24 two-leg, zero one-leg ever, 21 of 24 expired**,
+baseline already 73% so it never tripped. The exit did not degrade; the bot started filling both
+sides.
+
+**Mechanism — the chat session's hypothesis was already verified on disk, not by me.** The 08-31
+config capture records `Scalp-Mon-S2-Cleanup` verbatim: `ALL of: posopentime ≥ 2 min AND countpos
+"Bot has exactly 1 position" → closepos 100%`, all four automation hashes byte-identical to the
+2026-08-07 baseline. Count 2 → guard fails → nothing closes. **Two sides filling is the absence of
+an exit, not a better trade.** Filed as claims, NOT findings: **(C-1)** config last read 08-31, so
+the 09-10 and 09-15 expiries are after the last hash and only *consistent with* the mechanism —
+the 09-16 capture is roster toggles only; **(C-2)** the cleanup window appears to stop before the
+cash close — on 09-08 the 130PM put closed 15:59 at −$1,850 (breach) and the orphaned call was
+never cleaned, expiring at 16:15, where a naive count==1 reading predicts ~16:01; the 08-31 bot
+log notes monitors looping *through 3:55PM*. Refined rule that fits all three 130PM non-expiry
+trades (08-26 −$1,650, 08-27 −$1,900, 09-08 −$1,850): StrikeTouch closes a breached leg regardless
+of count; Cleanup closes an unpaired leg after 2 min **while the loop runs**; a paired, unbreached
+condor has no exit at all. **Inferred from timestamps, not read from the bot.**
+
+**⚠ OWED — T00694 verify, NOT discharged.** The Trades list of the 08-31 position is the
+independent third surface; the ledger and the config capture are two derivations of the same
+claim. **Record and perform the verify by bot + open time — `IC-SPX-FastPT25-S2`, opened
+2026-08-31 11:01 ET — never by trade ID.**
+
+**Trade IDs renumber per export — VERIFIED on disk, not just in code.** `build_ledger.py` seeds
+`tid = max_existing_tid(day)` and renumbers every row of the export on every build. The same
+08-31 11:01:01 PR-01 condor is **`T00261` in `data/hedge_tournament.csv`** and **`T00694` in
+today's `data/trades.csv`** — one position, two IDs, both present right now.
+
+**⚠ TRACKER ITEM — FLAGGED, NOT FIXED (gated machinery, no edit proposed).**
+`scripts/execution_audit.py:344` emits `verify_by=f"the Trades list of {onset_tid} ({onset})"`,
+and ~12 sibling `verify_by` strings address positions the same way. Every such pointer is valid
+only against the export that produced it and silently misaddresses after the next close. Fix
+direction: address by `bot + open_date` (a natural key that survives renumbering). **Needs a
+ruling; Andy's call.**
+
+**Roster 44 → 43.** 09-16 footer verbatim `43 active bots • 7 left in your plan`; 09-07 read
+`44 active bots • 6 left`. Departed: **`QQQ-IC-0DTE-Baseline`** (`BOTfw5TkkCRF3317727290514286611`),
+OFF/OFF in the 09-07 toggle table, absent from the 09-16 one; AUTOS ON held 18, EXITS ON held 16.
+`data/bots_meta.csv` still carries its row ("unfiltered control; archive candidate") — an
+**orphaned meta row with no roster counterpart**, same invariant class as the 08-19 $600 reroute
+finding though harmless here (no working-ledger rows). **No day in the window is attributable.**
+
+**Verdicts:** 4 SUSPECT — PR-01 (Δ% 0.4 vs 0.75 band, silent), PR-02 (Δ% 0.31, silent;
+**both S2 arms silent together**), PR-12 60min-ORB (range 7597.61–7614.97 broken by 7616.17 at
+11:00, nothing fired), INC-01 Fortress-Unstopped (no gate and no `fill_precondition` declared —
+a documentation defect). 3 UNEVALUABLE_BY_DESIGN (PR-07, PR-08, PR-11) — unchanged since 08-19,
+**19 sessions**. 2 JUSTIFIED (PR-05 VIX high 16.75 < 22.0; PR-10 Wednesday vs a Friday gate).
+
+**Honest gap, recorded in the narrative:** six unobserved days reconstructed from closed-position
+rows alone. No tape for 09-08…09-15 (tape.json is 09-16 only, so every band/verdict/convexity
+reading is a 09-16 statement); no p3 verdicts for those days, so their silences are permanently
+unadjudicated; roster drift "ZERO" compares 09-16 against **09-07**, so a toggle-and-revert inside
+the window reads as ZERO and the 44→43 deletion has no date; no OA logs, so every exit attribution
+is timestamp inference; 338 rows in / 333 out, and anything opened-and-closed off the export is
+invisible. Ledger to date: 333 legs, 27 days, **+$11,945 on $790,834 cumulative risk**; window
+**+$3,396 on $338,808 (1.0%)**, of which 09-08 alone was **−$4,199**.
+
+**One tradeable observation, n=1.** 09-16 broke the ±0.75% band for four bars (15:10–15:25), SPX
+low 7507.77 (−1.03%) at 15:25 on the VIX high of 18.94 (+10.12%). All seven GF arms entered 13:31
+on identical strikes: SL100 stopped 15:11 (−$338) and SL200 stopped 15:14 (−$676) — **11 and 14
+minutes before the low** — while Touch0/Ride held to 15:50 for **+$546**. SL200 turned a +$546 day
+into −$364 by having a stop. First real break in 19 sessions; **not yet a finding**.
+
+**Owed to Andy:** the T00694 Trades-list read (address by bot + 08-31 11:01, not ID); a ruling on
+the `verify_by` staleness tracker item; a decision on striking watch-list Q3 (Ride-Delta,
+decommissioned) and Q4 (delta vs pct, no observation in 19 sessions); reconciliation of the
+orphaned `QQQ-IC-0DTE-Baseline` row in `bots_meta.csv`; a signed gate for PR-07/PR-08/PR-11.
+**Next step is Andy's terminal: `python3 scripts/render_brief.py 2026-09-16`, then the printed
+commit.**

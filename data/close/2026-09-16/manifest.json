@@ -1,0 +1,113 @@
+{
+  "argv": [],
+  "brief": {
+    "html_path": "data/brief/2026-09-16_brief.html",
+    "html_sha256": "544154617f78e1b88b36a986ab32817c61833c9f4a3783436927afc752f4ba47",
+    "json_path": "data/brief/2026-09-16_brief.json",
+    "narrative": {
+      "filled_count": 0,
+      "path": null,
+      "slots": {
+        "convexity": false,
+        "fire": false,
+        "lesson": false,
+        "since-yesterday": false,
+        "strategy": false,
+        "tomorrow": false
+      },
+      "unfilled_count": 6
+    },
+    "p3_verdicts_path": "data/brief/2026-09-16_p3_verdicts.tsv",
+    "tape_path": "data/brief/2026-09-16_tape.json"
+  },
+  "calendar": "rule-derived US equity market holidays; weekends excluded",
+  "capture": {
+    "bundle_dir": "data/captures/2026-09-16-roster",
+    "capture_day": "2026-09-16",
+    "captured_et": "Wed Sep 16 2026 17:30:41 GMT-0400 (Eastern Daylight Time)",
+    "drift_verdict": "ZERO. Not one bot changed either toggle.",
+    "files": [
+      {
+        "path": "data/captures/2026-09-16-roster/01-bots-roster-recent-activity-2026-09-16-173041.txt",
+        "sha256": "fd7eafdc59a1b451d349bc12bcaabf538fca08473c707156d1d60206b37e25d2"
+      },
+      {
+        "path": "data/captures/2026-09-16-roster/02-roster-toggles-43-2026-09-16.tsv",
+        "sha256": "028c16a39c07d06fef94022b0e77b8d85e833208f799ab2cc66fdb89ad5d81f2"
+      },
+      {
+        "path": "data/captures/2026-09-16-roster/README.md",
+        "sha256": "8604ba2604afd4185e8ced7cca758c0d1bd0d42457bf144cd9d4dd53be78d3b0"
+      },
+      {
+        "path": "data/captures/2026-09-16-roster/SHA256SUMS.txt",
+        "sha256": "b20ace0d033628715d449010ba796ee043456045b40578da816337b5b8c7dc49"
+      }
+    ],
+    "present": true,
+    "status": "PRESENT",
+    "tsv": "data/captures/2026-09-16-roster/02-roster-toggles-43-2026-09-16.tsv"
+  },
+  "commit_message": "close 2026-09-16: 333 legs, exit 0, capture PRESENT, drift ZERO, 0/6 narrative slots filled",
+  "daily_receipt": {
+    "day": "2026-09-16",
+    "final_exit": 0,
+    "ledger_stale": false,
+    "ledger_start": "2026-08-10",
+    "max_open_date": "2026-09-16",
+    "min_open_date": "2026-08-10",
+    "pinned": true,
+    "rows_in": 338,
+    "rows_out": 333,
+    "source_export": "data/raw/2026-09-16.csv",
+    "written_utc": "2026-09-16T21:35:33+00:00"
+  },
+  "day": "2026-09-16",
+  "export": {
+    "path": "data/raw/2026-09-16.csv",
+    "sha256": "3dd10f15edb037bdf155a593e7368ca754288a3b8afb86fca8e6f856d46dcc82"
+  },
+  "gap": {
+    "calendar": "rule-derived US equity market holidays; weekends excluded",
+    "evaluable": true,
+    "last_close": "2026-09-04",
+    "statement": "last close 2026-09-04, 6 trading days unobserved (2026-09-08, 2026-09-09, 2026-09-10, 2026-09-11, 2026-09-14, 2026-09-15)",
+    "unobserved_count": 6,
+    "unobserved_days": [
+      "2026-09-08",
+      "2026-09-09",
+      "2026-09-10",
+      "2026-09-11",
+      "2026-09-14",
+      "2026-09-15"
+    ]
+  },
+  "staged_count": 24,
+  "staged_paths": [
+    "STATUS.md",
+    "dashboard.html",
+    "data/bots.csv",
+    "data/brief/2026-09-16_brief.html",
+    "data/brief/2026-09-16_brief.json",
+    "data/brief/2026-09-16_p3_verdicts.tsv",
+    "data/brief/2026-09-16_tape.json",
+    "data/captures/2026-09-16-roster/01-bots-roster-recent-activity-2026-09-16-173041.txt",
+    "data/captures/2026-09-16-roster/02-roster-toggles-43-2026-09-16.tsv",
+    "data/captures/2026-09-16-roster/README.md",
+    "data/captures/2026-09-16-roster/SHA256SUMS.txt",
+    "data/close/2026-09-16/manifest.json",
+    "data/execution_audit_findings.csv",
+    "data/execution_audit_findings_meta.json",
+    "data/hedge_tournament.csv",
+    "data/ledger_meta.json",
+    "data/lessons.csv",
+    "data/ops_rows.csv",
+    "data/raw/2026-09-16.csv",
+    "data/receipts/close-runs.jsonl",
+    "data/receipts/daily-runs.jsonl",
+    "data/straddlers.csv",
+    "data/trade_window.csv",
+    "data/trades.csv"
+  ],
+  "written_utc": "2026-09-16T21:35:34+00:00"
+}
