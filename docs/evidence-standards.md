@@ -275,7 +275,7 @@ the named blocker. `●` pass · `○` fail · `·` pending.
 | **G2** | Sample | **≥ 20 clean condors** |
 | **G3** | Edge — Exp(R) > 0 **and bootstrap 95% CI lower bound > 0** | 3,000 resamples, seed 7. Reports *"~N more trades"* when the CI still includes zero |
 | **G4** | Risk — maxDD-R within cap | **maxDD-R ≥ −5.0**. ⚠️ The RoE **$** cap is an unfilled `<FILL>`, so half of G4 is permanently pending |
-| **G5** | Compliance — instruction-mirror | **≥ 90% over ≥ 5 graded days.** Under 5 days it stays **pending, never a false pass** |
+| **G5** | Compliance — instruction-mirror | ~~≥ 90% over ≥ 5 graded days~~ → **REDEFINED 2026-09-16 (`R-2026-09-16-G5-AUDIT-REDEFINITION` + `R-2026-09-16-G5-STREAK-UNIT`): 10 consecutive CLEAN CLOSE RUNS with zero COUNTING audit findings.** Reads `execution_audit_findings.csv` + the day's should-have-fired verdicts, **not** `compliance.csv`. Ungradeable days don't advance the streak, so it stays **pending, never a false pass** |
 | **G6** | Robustness — OOS half-split both halves positive, and **≤ 60%** of positive R in any single year | n < 20 → N/A |
 
 > ### ⛔ G5 IS THE GATE THAT LIED
@@ -287,6 +287,53 @@ the named blocker. `●` pass · `○` fail · `·` pending.
 > **In v2, G5 may only read `bots_config_v2.csv`, which is written from capture.** With that
 > file absent, `daily_brief.py` runs **CONFIG-BLIND and grades nothing** — G5 stays pending
 > rather than passing. A pending gate is honest; a passing gate built on a false record is not.
+>
+> ### ⭐ AMENDED 2026-09-16 — `R-2026-09-16-G5-AUDIT-REDEFINITION`, RULED BY ANDY. ORIGINAL TEXT ABOVE LEFT STANDING.
+> **The doctrine above anticipated the config file being ABSENT. It is present and the wrong
+> shape, which produces the same blindness with a misleading reason string.** Verified first-hand
+> 2026-09-16 on the device: `bots_config_v2.csv` carries a **137-line comment banner**, so
+> `csv.DictReader` reads line 1 as the header; the true header is on **line 138** and carries
+> **none** of the four mechanic columns `daily_brief.py` grades against
+> (`filter`, `entry_time`, `profit_target`, `reentry`). The file holds **13 data rows covering 10
+> of the 43 bots** on the 2026-09-16 roster. The per-bot mechanic table G5 was specified against
+> **has never existed for 33 of 43 bots**, so no code change can light the gate as written.
+>
+> **G5 no longer reads a config record at all.** It reads the frozen execution detector
+> (`execution_audit.py` v1.1.0, sha `fdc43d0dcb727556`) against the position ledger, plus the
+> day's should-have-fired verdicts. There is no record to be wrong.
+>
+> **A bot-day is DIRTY if it carries either:** (a) a **RED or AMBER on axis MECHANICS**, or
+> (b) **`SILENT_BOT`** *and* a should-have-fired verdict of **SUSPECT** for that bot-day.
+>
+> **⛔ THE AMBER-CLASS CARVE-OUT — report-only, never dirties a bot-day:**
+> - **`DUPLICATE_ARM`** (14 of the 15 AMBERs in the 09-16 run). It says two bots produced
+>   identical P/L at an identical entry minute — both are obeying their own instructions exactly.
+>   It is a property of the **pair**, not of either bot's fidelity. Counting it would permanently
+>   block seven arms on a question G5 does not ask. **Independence is G6's and arm design's.**
+> - **`SILENT_BOT` with a JUSTIFIED or UNEVALUABLE_BY_DESIGN verdict.** Worked case 09-16: the
+>   audit raises `SILENT_BOT` on `DIR-SPX-PutVIX22-SL75` while should-have-fired returns
+>   **JUSTIFIED** (VIX high 16.75 vs a ≥22.0 threshold). A bot correctly declining to fire is not
+>   a compliance failure — **the verdict decides this class, not the finding.**
+> - **Severity `INFO`** (`NEVER_IN_PROFIT`, `CLOSED_AT_MAE`) — outcome quality, not fidelity.
+> - **Severity `SKIPPED`** — its own text reads *"NOT a pass"*. Neither a pass nor a failure.
+>
+> **The pending rule is load-bearing.** A bot-day with no gradeable evidence is **not a graded
+> day** and does not advance the streak; a bot whose findings are all `SKIPPED`/`INFO` accrues
+> zero graded days and stays **pending forever rather than passing**. The sentence above survives
+> intact: *a pending gate is honest; a passing gate built on a false record is not.*
+>
+> **⭐ STREAK UNIT = CLOSES, not trading days** (`R-2026-09-16-G5-STREAK-UNIT`). Only 30 of 59 rows
+> in `execution_audit_findings.csv` carry a date — `SILENT_BOT`, `DUPLICATE_ARM` and 9 of 10
+> `EXPIRY_RATIO_FLIP` rows are **undated window-level findings**, so a per-day streak is not
+> computable. A window-level finding is a statement about the bot's record **as of that close**, so
+> an unresolved RED keeps the bot dirty at *every* close until it clears — **strictly tighter** than
+> a per-day reading. Requires the append-only `data/findings_ledger.csv` (board **T-67**); until it
+> banks ten closes **every bot reads PENDING**, which is the honest state, not a regression.
+>
+> **The check that this gate cannot lie the way the old one did:** under it,
+> **`IC-SPX-FastPT25-S2` FAILS G5 today** on `EXPIRY_RATIO_FLIP` (RED/MECHANICS) — an exit that
+> stopped generating orders. **That is the same defect class the old gate scored 100% on for five
+> consecutive days.**
 
 **The legacy "≥15 clean post-fix condors" go-live gate is retired.** It was declared cleared at
 "18/15" — a count that silently dropped 11 positions; the true post-fix epoch is 29 positions,

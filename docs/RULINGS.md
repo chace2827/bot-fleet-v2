@@ -4825,3 +4825,270 @@ source: >-
   auto-discovered, manifest PRESENT).
 unclear: false
 ```
+
+```yaml
+ruling_id: R-2026-09-16-G5-AUDIT-REDEFINITION
+date: 2026-09-16
+scope: >-
+  G5 (Compliance — instruction-mirror) is REDEFINED to read the execution
+  audit instead of a config record. This is a go-live gate and therefore
+  Andy's ruling, not a derived one (CLAUDE.md section 5: go-live gates are
+  always gated, no exception).
+
+  WHY THE OLD GATE COULD NOT BE UNBLOCKED. G5 as specified reads
+  data/compliance.csv, written by daily_brief.py, which grades each ON bot
+  against data/bots_config_v2.csv. Verified first-hand 2026-09-16 on the
+  mounted tree: that file carries a 137-line comment banner, so
+  csv.DictReader takes line 1 as the header and returns fieldnames
+  ['# bots_config_v2.csv — POST-CUTOVER config record. Built ONLY from
+  capture', ' never hand-written']. The true header is on line 138 and reads
+  object_kind,name,oa_id,version,attached_to,input_id,input_type,
+  input_label,input_default,a7_hash,captured,layer2_status — which carries
+  NONE of the four graded mechanic columns daily_brief.py tests for
+  (filter, entry_time, profit_target, reentry). The file holds 13 data rows
+  (10 object_kind=bot + 3 shared_automation) covering 10 of the 43 bots on
+  the 2026-09-16 roster. So the grading feed is blind for two independent
+  reasons, and the second is not fixable by code: the per-bot mechanic table
+  G5 needs has never existed for 33 of 43 bots.
+
+  NEW DEFINITION. G5 lights for a bot when that bot has TEN CONSECUTIVE
+  GRADED TRADING DAYS carrying zero COUNTING findings. Sources:
+  data/execution_audit_findings.csv (detector frozen v1.1.0,
+  sha fdc43d0dcb727556) and the per-day should-have-fired verdicts
+  (data/brief/<day>_p3_verdicts.tsv). G5 NO LONGER READS
+  data/compliance.csv; that file remains the brief's instruction-mirror
+  card feed and is no longer a gate input.
+
+  COUNTING findings (a bot-day is dirty if any is present for that bot):
+  (a) severity RED or AMBER on axis MECHANICS — did this bot's entries and
+      exits behave as configured;
+  (b) rule SILENT_BOT on axis FIRE, AND ONLY WHEN that bot-day's
+      should-have-fired verdict is SUSPECT.
+
+  THE AMBER-CLASS CARVE-OUT, decided here as instructed. The following are
+  REPORT-ONLY for G5 and never make a bot-day dirty:
+  (1) DUPLICATE_ARM (AMBER/FIRE, 14 of the 15 AMBERs in the 2026-09-16 run).
+      It states that two bots produced identical P/L at an identical entry
+      minute. Both bots are obeying their own instructions exactly; the
+      finding is about the PAIR, not about either bot's fidelity. Counting
+      it would permanently block seven bots — Canary, Ride, Ride-Delta,
+      SL100, SL200, Touch0 and their partners — on a question G5 does not
+      ask. Independence belongs to G6 and to arm design, not to G5.
+  (2) SILENT_BOT where the should-have-fired verdict is JUSTIFIED or
+      UNEVALUABLE_BY_DESIGN. Worked case, 2026-09-16: the audit raises
+      AMBER/FIRE SILENT_BOT on DIR-SPX-PutVIX22-SL75 while should_have_fired
+      returns JUSTIFIED (VIX high 16.75 against a >=22.0 threshold). A bot
+      correctly declining to fire is not a compliance failure, and the two
+      surfaces disagreeing is exactly why the verdict, not the finding,
+      decides this class.
+  (3) Severity INFO (NEVER_IN_PROFIT, CLOSED_AT_MAE — 29 rows in the
+      2026-09-16 run). Outcome quality, not instruction fidelity.
+  (4) Severity SKIPPED (14 rows). Its own detail text reads "too few
+      positions to evaluate a flip — NOT a pass". It contributes neither a
+      pass nor a failure.
+
+  PENDING RULE, load-bearing. A bot-day with no gradeable evidence is NOT a
+  graded day and does not advance the streak. A bot whose findings are
+  entirely SKIPPED and INFO therefore accumulates zero graded days and G5
+  stays PENDING indefinitely rather than passing. This preserves the
+  original doctrine verbatim: a pending gate is honest; a passing gate built
+  on a false record is not.
+
+  WHY THIS GATE CANNOT LIE THE WAY THE OLD ONE DID. The old G5 scored
+  fidelity to bots_config.csv, a hand-written record proven wrong on 3 of 4
+  audited bots, and returned 100% for five consecutive days while the
+  champion's PT25 had generated zero orders for a month. The new G5 scores
+  against the position ledger through a frozen detector and requires no
+  config record at all, so there is no record to be wrong. Concretely and
+  checkably: under this definition IC-SPX-FastPT25-S2 FAILS G5 today, on
+  EXPIRY_RATIO_FLIP (RED/MECHANICS) — an exit that stopped generating
+  orders, which is the same defect class the old gate scored 100% on.
+
+  REJECTED ALTERNATIVES. (a) Retire G5 outright: rejected — the ladder would
+  then contain no gate asking whether a bot does what it says, and
+  execution_audit.py:22 argues only that compliance scoring must not be
+  mixed INTO the detector, not that the question should go unasked.
+  (b) Build the per-bot mechanic table by capturing all 43 bots: rejected —
+  a capture campaign that re-creates a config record which goes stale
+  between captures, which is the hazard this gate already failed on once.
+  (c) Keep a percentage threshold: rejected — a percentage over graded days
+  is the exact shape that produced "100% over five days"; consecutive clean
+  days cannot average away a dirty day.
+
+  OPEN VALUE FOR RATIFICATION: the streak length N = 10 consecutive graded
+  trading days. Chosen over the old gate's 5 because 5 is the number that
+  lied and because 10 matches the existing ten-consecutive-close cadence in
+  R-2026-09-07-P1-BET-MET-AND-RENEWED. Andy ratifies or amends N at commit;
+  the carve-out above stands independently of N.
+verbatim: >-
+  Option 1, plus the banner/ungating repairs, with the amber-class carve-out
+  decided in the ruling
+verbatim_of: andy
+owner: >-
+  Andy (in-chat, Cowork session 2026-09-16; carve-out drafted by Claude at
+  Andy's instruction and ruled here). Go-live gate — gated, not derived.
+status: Active
+applies_to: >-
+  docs/evidence-standards.md section 6 G5 row and the "G5 IS THE GATE THAT
+  LIED" block; scripts/report.py g5_eval() and the G5_MIN_DAYS/G5_THRESH
+  constants; data/compliance.csv (demoted from gate input to brief feed);
+  board T-61.
+superseded_by: none
+source: >-
+  Cowork session 2026-09-16; first-hand device read of
+  data/bots_config_v2.csv (header on line 138, 13 data rows, 10 bots);
+  data/execution_audit_findings.csv 2026-09-16 run (1 RED, 15 AMBER,
+  29 INFO, 14 SKIPPED over 333 position rows);
+  data/brief/2026-09-16_p3_verdicts.tsv; docs/daily-loop-spec.md lines 9-11;
+  docs/evidence-standards.md section 6 G5 block.
+unclear: false
+```
+
+```yaml
+ruling_id: R-2026-09-16-BRIEF-CONFIG-REPAIRS
+date: 2026-09-16
+scope: >-
+  Two repairs to scripts/daily_brief.py, instructed by Andy in the same
+  message as R-2026-09-16-G5-AUDIT-REDEFINITION. Implementation choices
+  below are bounded operational design under
+  R-2026-08-31-DERIVED-RULING-AUTHORITY(b); the instruction to make them is
+  Andy's.
+
+  (1) BANNER REPAIR. The config loader must skip leading comment lines
+      (lines whose first character is '#') before handing the file to
+      csv.DictReader, so the real header is read. This does NOT light G5 and
+      must not be reported as doing so: after the skip the header still
+      carries none of the graded mechanic columns, so the loader stays
+      CONFIG-BLIND — but for the true reason. The existing cfg_blind_reason
+      string must then name the real defect (schema carries no graded
+      mechanic columns; coverage is 10 of 43 bots) instead of the phantom one
+      it prints today. Rejected alternative: stripping the banner from
+      data/bots_config_v2.csv itself — the banner is that file's own
+      correction-record convention (CLAUDE.md section 5 condition 2) and
+      deleting it would destroy the provenance the file exists to carry.
+
+  (2) HEDGE-CLINIC UNGATING. Today every per-bot card is gated behind
+      `for bot in (sorted(by_bot) if cfgs else [])`, so a blind config
+      empties cards, hedge_clinic AND grades. Verified: the 2026-09-16 brief
+      carries cards [], hedge_clinic [], grades green 0 / amber 0 / red 0,
+      and has since the loop began. The instruction-mirror card and the
+      hedge clinic are both named in docs/daily-loop-spec.md as having
+      survived the 2026-07-31 merge, and the hedge clinic does not read the
+      config at all — it reads trades.csv and bots_meta.csv. The card is
+      therefore SPLIT:
+        - CONFIG-DEPENDENT rows (Filter, Entry, Profit target, Re-entry) and
+          compliance_pct: rendered only when cfgs is non-empty, as today.
+        - LEDGER-ONLY rows (breach lines, naked losses, hedge clinic,
+          day P/L, grade): rendered whenever the bot has trades that day,
+          regardless of cfgs.
+      With cfgs empty, compliance_pct is null and n_applicable is 0 — never
+      0% and never 100%. A card that grades nothing says so.
+      Rejected alternative: synthesising a mechanic table from
+      data/bots_meta.csv to light the whole card at once — bots_meta.csv is
+      hand-maintained, and feeding it to a compliance grader is precisely
+      the hand-written-record failure of CLAUDE.md section 3 rule 2.
+
+  No decision content: no gate threshold, sizing, kill criterion,
+  pre-registration text or OA bot behaviour changed by this record.
+verbatim: >-
+  Option 1, plus the banner/ungating repairs, with the amber-class carve-out
+  decided in the ruling
+verbatim_of: andy
+owner: >-
+  Andy instructed; implementation choices derived by Claude per
+  R-2026-08-31-DERIVED-RULING-AUTHORITY(b) with rejected alternatives
+  recorded above. Andy ratifies by committing.
+status: Active
+applies_to: >-
+  scripts/daily_brief.py (config loader, build_card, the cfgs gate);
+  data/brief/<day>_brief.json shape; board T-62, T-63.
+superseded_by: none
+source: >-
+  Cowork session 2026-09-16; scripts/daily_brief.py lines 268-300 and
+  400-460; data/brief/2026-09-16_brief.json (cards [], hedge_clinic [],
+  grades 0/0/0); docs/daily-loop-spec.md lines 7-8.
+unclear: false
+```
+
+```yaml
+ruling_id: R-2026-09-16-G5-STREAK-UNIT
+date: 2026-09-16
+scope: >-
+  AMENDS ONE CLAUSE of R-2026-09-16-G5-AUDIT-REDEFINITION, recorded the same
+  session and before commit. That record's carve-out, its DIRTY definition,
+  its pending rule and its rejected alternatives all STAND UNCHANGED. Only
+  the unit of the streak changes, because as written the streak was not
+  computable from the data it names.
+
+  THE DEFECT. The parent record set G5 at "ten consecutive graded TRADING
+  DAYS". Verified 2026-09-16 against the live
+  data/execution_audit_findings.csv: only 30 of 59 rows carry a `date`.
+  CLOSED_AT_MAE (21) and NEVER_IN_PROFIT (8) are dated; the single RED
+  EXPIRY_RATIO_FLIP carries 2026-08-31, which is its ONSET date, not the day
+  it was detected. SILENT_BOT (1), DUPLICATE_ARM (14) and the nine SKIPPED
+  EXPIRY_RATIO_FLIP rows are UNDATED — they are window-level findings
+  emitted once per run over window_start..window_end. A per-trading-day
+  streak cannot be computed from them, so N was a number attached to an
+  uncomputable quantity.
+
+  THE AMENDMENT. The streak counts CLOSES, not trading days: G5 passes when
+  a bot has TEN CONSECUTIVE CLEAN CLOSE RUNS. A close run is CLEAN for bot X
+  when that run's findings carry no COUNTING finding naming X, under the
+  parent record's unchanged definition. N = 10 is unchanged in value and
+  still awaits Andy's ratification.
+
+  WHY THIS IS THE MORE HONEST UNIT, not merely the available one. A
+  window-level finding is a statement about the bot's whole record AS OF
+  that close. So an unresolved RED keeps the bot dirty at every close until
+  the finding stops being emitted, rather than dirtying one historical day
+  and letting the streak run on over the top of it. That is strictly
+  tighter than the parent's wording and matches what a compliance gate is
+  for. Worked consequence: IC-SPX-FastPT25-S2 stays G5-FAIL every close for
+  as long as EXPIRY_RATIO_FLIP stands, and its streak starts at zero on the
+  first close after it clears.
+
+  PREREQUISITE, ruled here because the gate is inert without it.
+  data/execution_audit_findings.csv is REGENERATED on every close and keeps
+  no history, so consecutive closes cannot be read from it. An append-only
+  data/findings_ledger.csv is required, keyed on
+  (close_day, bot, rule, severity), written by the close after the audit
+  stage, following the APPEND/UPSERT pattern already used by
+  data/compliance.csv and data/hedge_tournament.csv so a re-run of the same
+  close never double-counts. G5 reads the ledger, not the regenerated file.
+  Board T-67. Until the ledger exists and has banked ten closes, EVERY bot
+  reads G5 PENDING — which is the correct and honest state, not a
+  regression: it is what the fleet has been in since the loop began, now
+  for a stated reason.
+
+  ⛔ EXPLICITLY NOT PERMITTED: dating the findings inside
+  execution_audit.py. It is the frozen fixed panel (daily-loop-spec.md §0,
+  v1.1.0, sha fdc43d0dcb727556); changing what it emits makes every banked
+  day uncomparable. The ledger records WHEN A FINDING WAS SEEN, which is a
+  property of the close, and adds nothing to the detector.
+
+  REJECTED ALTERNATIVE: reconstructing per-close findings from git history
+  of the regenerated CSV. Rejected — a gate that depends on git archaeology
+  is unreadable by the loop that must evaluate it, and git is barred on the
+  mounted tree (CLAUDE.md §9.1).
+verbatim: >-
+  Option 1, plus the banner/ungating repairs, with the amber-class carve-out
+  decided in the ruling
+verbatim_of: andy
+owner: >-
+  Claude (derived, per R-2026-08-31-DERIVED-RULING-AUTHORITY(b): the gate
+  itself is Andy's and unchanged; this chooses the only implementable unit
+  for a clause that named an uncomputable one, rejected alternative
+  recorded). Andy ratifies or vetoes at commit.
+status: Active
+applies_to: >-
+  R-2026-09-16-G5-AUDIT-REDEFINITION streak clause only;
+  docs/g5-audit-redefinition-spec-2026-09-16.md Task 3; scripts/report.py
+  g5_eval; new data/findings_ledger.csv; board T-61, T-67.
+superseded_by: none
+source: >-
+  Cowork session 2026-09-16; first-hand read of
+  data/execution_audit_findings.csv (30 of 59 rows dated; SILENT_BOT,
+  DUPLICATE_ARM and 9 of 10 EXPIRY_RATIO_FLIP undated);
+  data/execution_audit_findings_meta.json (window 2026-08-10..2026-09-16).
+unclear: false
+```

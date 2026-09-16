@@ -11390,3 +11390,155 @@ decommissioned) and Q4 (delta vs pct, no observation in 19 sessions); reconcilia
 orphaned `QQQ-IC-0DTE-Baseline` row in `bots_meta.csv`; a signed gate for PR-07/PR-08/PR-11.
 **Next step is Andy's terminal: `python3 scripts/render_brief.py 2026-09-16`, then the printed
 commit.**
+
+## 2026-09-16 — G5 REDEFINED to the execution audit; brief config repairs specced (Cowork, mounted tree)
+
+**Trigger:** the 09-16 R-table review found G5 pending on every bot in the fleet, so nothing can
+reach LIVE-READY regardless of sample. Andy: *"Option 1, plus the banner/ungating repairs, with
+the amber-class carve-out decided in the ruling."*
+
+**⚠ CORRECTION TO THIS SESSION'S OWN EARLIER CLAIM.** Cowork told Andy G5 was *"the single
+highest-leverage unblock — it needs a script change, not more trading days."* The second half
+holds; **the first half was wrong.** G5's compliance layer was **deliberately retired**
+(`daily-loop-spec.md` L9-11: *"G5 scored 100% instruction-compliance on five consecutive days
+while the champion's PT25 had generated zero orders for a month"*). Re-enabling the writer is the
+one move that reproduces the original hazard. Stated here so the wrong framing does not survive in
+the log.
+
+**Diagnosis, verified first-hand on the device.** G5 is blind for **two independent reasons**:
+1. `data/bots_config_v2.csv` opens with a **137-line comment banner**, so `csv.DictReader` takes
+   line 1 as the header and returns fieldnames `['# bots_config_v2.csv — POST-CUTOVER config
+   record. Built ONLY from capture', ' never hand-written']`. `daily_brief.py`'s schema tests both
+   fail against nonsense and `cfg_blind_reason` prints a defect that is not the real one.
+2. The **true header is line 138** —
+   `object_kind,name,oa_id,version,attached_to,input_id,input_type,input_label,input_default,a7_hash,captured,layer2_status`
+   — carrying **none** of the graded mechanic columns (`filter`, `entry_time`, `profit_target`,
+   `reentry`). **13 data rows, 10 of 43 bots.** The per-bot mechanic table G5 was specified against
+   **has never existed for 33 of 43 bots.** No code change lights the gate as written.
+
+**RULED — `R-2026-09-16-G5-AUDIT-REDEFINITION` (Andy; go-live gate, gated not derived).** G5 now
+reads the frozen execution detector (v1.1.0, sha `fdc43d0dcb727556`) against the position ledger
+plus the day's should-have-fired verdicts. **No config record, so no record to be wrong.**
+`compliance.csv` is demoted from gate input to brief feed. Pass = **10 consecutive graded trading
+days** with zero COUNTING findings. DIRTY = (a) RED/AMBER on axis MECHANICS, or (b) `SILENT_BOT`
+**and** a SUSPECT verdict that day.
+**The amber-class carve-out, decided in the ruling as instructed — report-only, never dirties:**
+`DUPLICATE_ARM` (14 of 15 AMBERs; a property of the **pair**, not of either bot's fidelity —
+counting it would permanently block seven arms on a question G5 does not ask; independence is G6's);
+`SILENT_BOT` with a JUSTIFIED/UNEVALUABLE verdict (worked case: `DIR-SPX-PutVIX22-SL75` is AMBER in
+the audit and **JUSTIFIED** by should_have_fired — the verdict decides the class, not the finding);
+severity `INFO`; severity `SKIPPED` (its own text reads *"NOT a pass"*).
+**Pending rule kept load-bearing:** an ungradeable bot-day is not a graded day and does not advance
+the streak, so all-SKIPPED/INFO bots stay pending forever rather than passing.
+**The check that it cannot lie the old way:** under this gate **`IC-SPX-FastPT25-S2` FAILS G5
+today** on `EXPIRY_RATIO_FLIP` — the same defect class the old gate scored 100% on.
+**Rejected:** retiring G5 (ladder would ask nothing about fidelity); capturing all 43 bots
+(re-creates a record that goes stale — the original hazard); a percentage threshold (the exact
+shape that produced "100% over five days").
+**⚠ OPEN FOR RATIFICATION: N = 10.** Chosen over the old gate's 5 because 5 is the number that
+lied, and to match the ten-close cadence in `R-2026-09-07-P1-BET-MET-AND-RENEWED`. The carve-out
+stands independently of N.
+
+**RULED — `R-2026-09-16-BRIEF-CONFIG-REPAIRS`.** (1) Skip leading `#` lines before `DictReader`;
+this does **not** light G5 and must not be reported as doing so — it makes `cfg_blind_reason`
+truthful. Banner stays in the CSV (it is that file's own correction-record convention).
+(2) **Split the card and ungate the hedge clinic.** `for bot in (sorted(by_bot) if cfgs else [])`
+empties `cards`, `hedge_clinic` **and** `grades` on a blind config — `2026-09-16_brief.json`
+carries `cards []`, `hedge_clinic []`, `grades 0/0/0`, **and every brief since the loop began does
+the same.** Config-dependent rows (Filter/Entry/PT/Re-entry + `compliance_pct`) render only with
+`cfgs`; ledger-only rows (breach lines, naked losses, hedge clinic, day P/L, grade) render whenever
+the bot traded. Blind ⇒ `compliance_pct: null`, never 0% and never 100%.
+**Rejected:** synthesising a mechanic table from `bots_meta.csv` — hand-maintained, i.e. the exact
+§3 rule-2 failure.
+
+**Files written this session:**
+- `docs/RULINGS.md` — two appended records; all 199 yaml blocks re-parsed clean.
+- `docs/evidence-standards.md` — §6 G5 row amended + dated banner, **original text left standing**
+  per the file's convention. sha `f6f08670369c9fb6…`.
+- `docs/g5-audit-redefinition-spec-2026-09-16.md` — NEW, 120 lines, the Claude Code hand-off
+  (4 tasks + acceptance + explicit out-of-scope). sha `b11c142b38b6a5fa…`.
+- `CLAUDE.md` §3/§6 — **evidence-backed correction under §5** (all five conditions; dated
+  first-hand device read 2026-09-16; both prior texts left standing): *"246 data rows"* is a LINE
+  count. True: **13 data rows / 10 of 43 bots.** It read as full config coverage when coverage is
+  23%. The sha in that banner (`e54ee4ea9f3bfa7d…`) was **correct** and is unchanged — only the
+  count was wrong. sha now `8bfc323a2e4c5628…`.
+- `data/portfolio.csv` + `portfolio.html` — **T-61..T-66** added; `portfolio.py --check` green
+  (9 programs, 120 items); board republished to the same artifact URL (version 16).
+- `check_docs_vs_csv.py`: **no contradictions.**
+
+**⚠ Board facts strip still reads `roster_rows 44`** — `portfolio.py` counts `bots_meta.csv`, which
+still carries the orphaned `QQQ-IC-0DTE-Baseline` row, while the 09-16 capture footer reads
+*"43 active bots"*. Filed as **T-66**; the board disagreeing with the roster is the invariant gap
+visible on its own dashboard.
+
+**Not run:** `check_refs.py` — it shells `git ls-files`, barred on the mounted tree
+(`CLAUDE.md` §9.1). Andy runs it with the commit.
+
+**Owed to Andy:** ratify or amend **N = 10**; rule **T-64** (`verify_by` trade-id staleness) and
+**T-65** (G4 RoE `$` `<FILL>`); dispatch **T-61/T-62/T-63** to Claude Code against the spec —
+**the anti-regression test is the point of T-61: a build where the champion passes G5 today is
+wrong, whatever else is green.**
+
+### 2026-09-16 — SAME-SESSION SELF-CORRECTION, before commit (two defects, one of them mine)
+
+Pre-commit check of the two items being handed to Andy found both were wrong. Recorded rather
+than quietly fixed.
+
+**1. The streak clause in my own ruling was uncomputable.** `R-2026-09-16-G5-AUDIT-REDEFINITION`
+set G5 at *"ten consecutive graded TRADING DAYS"*. Verified against the live findings file:
+**only 30 of 59 rows carry a `date`.** `CLOSED_AT_MAE` (21) and `NEVER_IN_PROFIT` (8) are dated;
+the RED `EXPIRY_RATIO_FLIP` carries `2026-08-31`, which is its **onset**, not its detection day;
+**`SILENT_BOT` (1), `DUPLICATE_ARM` (14) and the nine SKIPPED `EXPIRY_RATIO_FLIP` rows are
+undated** — window-level findings emitted once per run. **N was a number attached to a quantity
+that cannot be computed.** Andy would have been ratifying a value with no denominator.
+→ **`R-2026-09-16-G5-STREAK-UNIT`** appended. The streak counts **CLOSES**. Carve-out, DIRTY
+definition, pending rule and rejected alternatives of the parent all stand unchanged; N=10
+unchanged in value and still awaiting ratification. The close unit is also the **tighter** one: a
+window-level finding is a statement about the bot's record *as of that close*, so an unresolved
+RED keeps the bot dirty at every close instead of dirtying one historical day and letting the
+streak run over it. `IC-SPX-FastPT25-S2` stays G5-FAIL until `EXPIRY_RATIO_FLIP` clears.
+→ **Prerequisite ruled: `data/findings_ledger.csv`** (board **T-67**), append-only on
+`(close_day, bot, rule, severity)`, upsert pattern already used by `compliance.csv` and
+`hedge_tournament.csv`. The findings CSV is regenerated every close and keeps no history, so
+consecutive closes are unreadable from it. ⛔ **Not permitted:** dating findings inside
+`execution_audit.py` — frozen fixed panel. Until the ledger banks ten closes **every bot reads G5
+PENDING**; that is the honest state, and it is what the fleet has been in since the loop began —
+now for a stated reason.
+
+**2. T-65 was filed as a decision Andy owes. It is not.** `R-2026-09-01-G4-ROE-CAP` (dated
+2026-09-02, Active) **already fills the G4 dollar blank**: per-bot cumulative DD **$15,000**,
+fleet **$35,000**, single-day fleet loss halt **$8,000** — anchored on the v1 champion's worst
+cumulative DD (−$14,540/221 positions), the GF family's structural single-day max, and this
+program's worst single day (−$8,050, 2026-06-11). **T-39 is Done; T-44 carries the `report.py`
+half.** What actually remains is the **doc** half: `evidence-standards.md` L277 still prints
+*"the RoE $ cap is an unfilled `<FILL>`"*, so a retired blank renders on `STATUS.md` every trading
+day. T-65 rewritten as a **propagation gap, DEVIN lane, blocked_by T-44** — the exact class P7
+exists to catch, found on the board P7 itself owns.
+**Cowork's earlier statement to Andy — "G4's RoE $ cap is still a `<FILL>` blank … one dollar
+figure from Andy" — was wrong** and is retracted here. It was true of the doc text and false of
+the decision.
+
+**Files touched by this correction:** `docs/RULINGS.md` (1 record appended, 200 blocks parse
+clean, sha `86d86789d8454f41…`); `docs/evidence-standards.md` (streak-unit banner + G5 row, sha
+`b68ec507bd8cbe18…`); `docs/g5-audit-redefinition-spec-2026-09-16.md` (Task 5 added, Task 3 rule
+amended, G4 out-of-scope line corrected, sha `16546249698029d5…`); `data/portfolio.csv` +
+`portfolio.html` (T-65 rewritten, T-67 added; `--check` green, 9 programs / 121 items).
+`check_docs_vs_csv.py`: no contradictions.
+
+**Net effect on what Andy owes:** three items become two. Ratify **N = 10** (now against a
+computable unit), and rule **T-64**. G4 needed no decision at all.
+
+**3. T-64 was also filed as a ruling Andy owes. It is not, either.** `T-10` (*stable trade_id from
+the natural key and migrate the accumulator*, Devin, **Working on it**) and `G-4` (*re-key
+hedge_tournament.csv on the natural key*, Devin, **Working on it**) are the **root fix** already in
+flight. Once trade_ids are stable, `verify_by` stops going stale on its own and no ruling exists to
+make. The defect evidence stands unchanged — the 08-31 11:01 PR-01 condor is `T00261` in
+`hedge_tournament.csv` and `T00694` in `trades.csv` — but the only live question is whether the ~13
+`verify_by` strings get a `bot + open_date` stopgap before T-10 lands. T-64 rewritten: DEVIN lane,
+`blocked_by T-10, G-4`, close as superseded if T-10 lands first.
+
+**⚠ PATTERN WORTH NAMING, against this session.** Cowork handed Andy three items as decisions he
+owed. **Two were already decided or already in flight** (G4's cap ruled 09-02; the trade_id root
+fix assigned to Devin), and the third named an uncomputable quantity. All three were caught only
+because the commit hand-off was checked against the board and the register before being sent. The
+board and `RULINGS.md` are the check; reading them *first* is cheaper than retracting afterwards.

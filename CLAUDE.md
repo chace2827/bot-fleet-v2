@@ -27,7 +27,7 @@ Contract: `docs/daily-loop-spec.md`.
    `cdceb0a8d444e570…`]**): a one-time frozen
    pre-lapse snapshot for the 7 live mirrors, read **only** by funding decisions.
 2. **Config**: capture files → `data/bots_config_v2.csv` (not yet written — Phase 2)
-   **[CORRECTED 2026-08-19 — WRITTEN. 246 data rows; line 1 reads verbatim `# bots_config_v2.csv — POST-CUTOVER config record. Built ONLY from capture, never hand-written`; sha `e54ee4ea9f3bfa7d…`. Dated first-hand device read 2026-08-19. Original text left standing.]**. **Never
+   **[CORRECTED 2026-08-19 — WRITTEN. 246 data rows; line 1 reads verbatim `# bots_config_v2.csv — POST-CUTOVER config record. Built ONLY from capture, never hand-written`; sha `e54ee4ea9f3bfa7d…`. Dated first-hand device read 2026-08-19. Original text left standing.]** **[RE-CORRECTED 2026-09-16 — the "246 data rows" above is a LINE count, not a row count. Dated first-hand device read 2026-09-16: the file opens with a 137-line comment banner; its real header is on **line 138** (`object_kind,name,oa_id,version,attached_to,input_id,input_type,input_label,input_default,a7_hash,captured,layer2_status`) and it holds **13 data rows — 10 `object_kind=bot` + 3 `shared_automation` — covering 10 of the 43 bots on the 2026-09-16 roster.** This matters because 246 reads as full config coverage when coverage is 23%. Both prior texts left standing.]**. **Never
    hand-written, never memory-derived.** `data/archive/bots_config.csv` is the OLD hand-written record —
    proven wrong on 3 of 4 audited bots. Retained for diffing only. Do not read a config fact from it.
 3. **What a bot actually did**: the position's **Trades list**. The Exit Options panel is NEVER
@@ -157,7 +157,7 @@ platform change): `docs/evidence-standards.md` §1, §9.2. The audit itself: `do
 `data/`: `bots_meta.csv` · `execution_audit.csv` — the **frozen 35-row detector validation fixture**
 (a test asset that survives the cutover) · `lessons.csv` · `captures/` · `receipts/` · `raw/` and
 `brief/` (post-cutover working dirs, currently empty). ~~Not written yet: `bots_config_v2.csv`,
-`mirror_baseline.csv`~~ **[CORRECTED 2026-08-19 — BOTH WRITTEN. `bots_config_v2.csv` 246 data rows, sha
+`mirror_baseline.csv`~~ **[CORRECTED 2026-08-19 — BOTH WRITTEN. `bots_config_v2.csv` ~~246 data rows~~ **13 data rows / 10 of 43 bots (RE-CORRECTED 2026-09-16, §3 banner)**, sha
 `e54ee4ea9f3bfa7d…`; `mirror_baseline.csv` 10 data rows, sha `cdceb0a8d444e570…` (matches the §3 banner).
 Dated first-hand device read 2026-08-19. Original text struck, not removed.]** — Phase 2–4 deliverables
 tracked in the `bot-fleet-migration` tracker.

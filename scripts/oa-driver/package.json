@@ -1,0 +1,15 @@
+{
+  "name": "oa-driver",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Read + write drivers for Option Alpha, attached to a local debug Chrome. Reads use raw CDP (no deps); writes use Playwright.",
+  "scripts": {
+    "status": "node oa_driver.mjs status",
+    "watch": "node oa_driver.mjs watch 180",
+    "roster": "node oa_capture.mjs roster"
+  },
+  "dependencies": {
+    "playwright-core": "1.62.1"
+  }
+}
