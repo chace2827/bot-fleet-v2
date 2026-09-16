@@ -71,9 +71,11 @@ rule, modeled_pnl, risk, R, approx_flag, basis_note.
 Idempotent per date: re-running a date replaces that date's rows (like
 compliance.csv's upsert pattern in daily_brief.py), so daily.sh can call this
 every day without duplicating history. The persistent key is the natural key
-(bot, open_date, short_put, short_call, rule); trade_id is carried for
-convenience but is regenerated every build and must not be used as a cross-run
-key (rules-catalog.md §1.3 guard 2).
+(bot, open_date, short_put, short_call, rule). trade_id is build_ledger.py's
+natural-key hash (stable across rebuilds since T-10); on every run the rows
+kept from earlier dates are re-keyed from the ledger by their natural key, so
+an accumulator written under an older id scheme migrates forward on contact
+(G-4) and never goes stale against the trades.csv beside it.
 
 Usage:  python3 scripts/hedge_tournament.py [YYYY-MM-DD]
         (date filters which day's LEDGER rows get (re)computed; default = ALL
@@ -352,25 +354,32 @@ def build(day_filter=None):
     # Idempotent per date: keep all existing rows for dates NOT in this run,
     # replace rows for dates that ARE in this run (mirrors compliance.csv's
     # upsert-by-key pattern in daily_brief.py). Within a day the persistent key
-    # is (bot, open_date, short_put, short_call, rule); trade_id is carried for
-    # display but is not stable across rebuilds.
-    trades_by_tid = {t["trade_id"]: t for t in trades if t.get("trade_id")}
+    # is (bot, open_date, short_put, short_call, rule).
     existing = []
     if os.path.exists(OUT_CSV):
         existing = list(csv.DictReader(open(OUT_CSV)))
-    # Back-fill the natural-key columns for rows written by the old schema.
-    for r in existing:
-        if "open_date" not in r:
-            r["open_date"] = (trades_by_tid.get(r.get("trade_id"), {}).get("open_date")
-                              or r["date"])
-        if "short_put" not in r:
-            r["short_put"] = (trades_by_tid.get(r.get("trade_id"), {}).get("short_put")
-                              or "")
-        if "short_call" not in r:
-            r["short_call"] = (trades_by_tid.get(r.get("trade_id"), {}).get("short_call")
-                               or "")
     touched_days = {r["date"] for r in rows_out}
     kept = [r for r in existing if r["date"] not in touched_days]
+    # G-4: re-key kept rows on the natural key. Every leg in the ledger resolves
+    # by (bot, open_date, short_put, short_call); a kept row whose key resolves
+    # takes the ledger's current trade_id. One that does not is left as written
+    # and counted out loud — never silently dropped, never silently re-keyed.
+    tid_by_key = {(t["bot"], t["open_date"], t.get("short_put") or "",
+                   t.get("short_call") or ""): t["trade_id"] for t in trades}
+    rekeyed = unresolved = 0
+    for r in kept:
+        k = (r["bot"], r.get("open_date") or "", r.get("short_put") or "",
+             r.get("short_call") or "")
+        tid = tid_by_key.get(k)
+        if tid is None:
+            unresolved += 1
+        elif tid != r.get("trade_id"):
+            r["trade_id"] = tid
+            rekeyed += 1
+    if rekeyed or unresolved:
+        print(f"hedge_tournament.py: G-4 re-key of kept rows — {rekeyed} trade_id(s) "
+              f"updated from the ledger, {unresolved} natural key(s) unresolved "
+              f"(left as written)")
     all_rows = kept + rows_out
     all_rows.sort(key=lambda r: (
         r["date"], r["bot"], r.get("open_date") or r["date"],
