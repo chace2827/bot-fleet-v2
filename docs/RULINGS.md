@@ -5185,3 +5185,78 @@ source: >-
   first-hand read; board rows T-10 and G-4 (both Devin, Working on it).
 unclear: false
 ```
+
+```yaml
+ruling_id: R-2026-09-16-HEDGE-DEFINITION
+date: 2026-09-16
+scope: >-
+  Standing definition, fleet-wide, going forward: a HEDGE is a SEPARATE
+  PROTECTIVE POSITION. An exit strategy is NOT a hedge.
+
+  This settles the conflict logged as open ruling 9.1 in
+  docs/hedge-design-spec-2026-09-16.md, between hedge-research.md section 1
+  item 3 ("A hedge is config, not a pillar. It is a parameter on a strategy
+  — a stop level, a defang, a strike-touch close — not its own bot.
+  Standalone hedge bots are reserved for genuine separate protective
+  positions (tail put, VIX ladder), which this fleet does not run") and
+  Andy's 2026-09-08 statement ("hedge = SEPARATE protective position opened
+  after the condor starts losing; exit strategy != hedge"). Andy's
+  definition WINS. hedge-research.md section 1 item 3 is OVERRULED and is
+  to be bannered, not deleted, per the oa-platform-reference.md section 0.2
+  original-text-stands convention.
+
+  CONSEQUENCE, stated plainly and not worked around: every mechanic in the
+  current corpus called a "hedge" that is in fact a close/exit rule is
+  RENAMED, not re-scoped. Stop-loss rungs (SL50/75/100/130), profit
+  targets, trailing and armed-trailing stops, strike-touch cuts (S2),
+  time-gated flat closes and defang are EXIT MECHANICS. They may still be
+  built, measured and ranked — this ruling does not kill them — but they
+  may not be called hedges, may not be counted as hedge coverage, and may
+  not discharge a hedge item.
+
+  SECOND CONSEQUENCE, which is the operative one: under this definition
+  the fleet currently has NO buildable hedge on Option Alpha. Every
+  natively-expressible candidate in hedge-design-spec section 6 (C1 armed
+  trail, C2 maxtrail, C3 time-gated flat close) is an exit and is
+  disqualified by this ruling. The only true hedge candidate (C4, a
+  separate protective position opened on deterioration) has a trigger that
+  oa-platform-reference.md section 11 row 6 rules NOT NATIVE — "any
+  condition referencing its own past" — because give-back-from-high is
+  self-referential. The hedge program therefore needs one of: a
+  present-state trigger proxy that never references the position's own
+  history (candidate: time gate conjunct underlying-distance-to-own-short-
+  strike, expressibility UNVERIFIED — must be probed in OA before it is
+  specced), an off-platform trigger (webhook), or an explicit decision to
+  accept a time-only opener. NOT ruled here.
+
+  Nothing is renamed, swept or rebuilt by this ruling alone. The
+  propagation surface is 15+ files and a terminology sweep across specs is
+  itself a gated decision; it is filed as a separate open item, NOT applied
+  silently. See the propagation note in the same session's session-log.md
+  entry.
+verbatim: >-
+  Rule of thumb going forward should be : separate protective position,
+  exit strategy != hedge
+verbatim_of: andy
+owner: Andy (in-chat, Cowork session 2026-09-16). Definitional — gated, and given.
+status: Active
+applies_to: >-
+  docs/hedge-research.md section 1 item 3 (OVERRULED, banner owed), section
+  5.3 structural matrix, section 14; docs/hedge-design-spec-2026-09-16.md
+  sections 6 and 9.1; docs/greenfield-family-spec.md "hedge arm" labels on
+  PR-18 (GF-QQQ-IC-SL100) and PR-19 (GF-QQQ-IC-SL200), which are stop
+  losses and therefore exits; docs/daily-loop-spec.md line 212 ("defensive
+  exit (hedge / stop / defang)") which conflates the two; scripts/
+  hedge_tournament.py and the "Hedge tournament" section of STATUS.md via
+  scripts/report.py, both of which rank exit rules under a hedge name;
+  docs/rules-catalog.md; docs/pre-registration-ledger.md; docs/build-plan.md;
+  docs/state.md; docs/strategy-taxonomy.md; docs/track-b-arms-spec.md.
+superseded_by: none
+source: >-
+  Cowork session 2026-09-16, Andy in-chat, verbatim above; supersedes the
+  2026-09-08 statement's informal status by making it standing. Conflict
+  first surfaced as open ruling 9.1 in
+  docs/hedge-design-spec-2026-09-16.md. Platform limits cited from
+  docs/oa-platform-reference.md section 11 rows 5 and 6.
+unclear: false
+```

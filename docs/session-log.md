@@ -11588,3 +11588,138 @@ acceptance tests recorded; T-64 disposition; T-65 confirmed) — `--check` green
 
 **Owed to Andy:** the **P1 bet amendment** (new item, forced by the arithmetic above). Dispatch
 T-67 then T-61/62/63 to Claude Code.
+
+## 2026-09-16 (night) — Devin-lane dispatch review: P1-4 landed, six queue items re-truthed (Devin, mounted tree)
+
+Source: this session. Repo lane only — nothing touched OA. Trigger: Andy asked for the top-5
+Devin-outsource list, then said begin.
+
+**The queue audit found four stale premises — dispatching them would have repeated the P2-5
+refused-dispatch failure.** Verified by direct read, not assumption:
+
+- **P0-3 DONE already** — `.env.example` exists (`TRADIER_TOKEN` first, plus `TRADIER_BASE`,
+  `LEDGER_START`, `LESSONS_ALLOW_TRUNCATE`); `.gitignore` already carries `!.env.example`.
+- **P1-2 DONE already** — `build_ledger.py` refuses on UNCLASSIFIED post-cutover bots:
+  `ERROR: UNCLASSIFIED bot(s)...` then `sys.exit(1)`. The "warning, exits 0" premise was stale.
+- **P2-5a DONE already** — `report.py` `validate()` builds a scratch-root pre-registration-ledger
+  fixture with one unsigned bot and asserts the banner names it; `report.py --validate` → selftest OK.
+- **P2-5b premise shifted** — `report.py` now prints `WARNING: ledger-unsigned bot not in
+  bots_meta.csv — roster gap`; the under-report is warned, not silent. Remaining question is
+  warning→refusal, which is a detector-predicate change → still Class C, Andy's call.
+- **P0-2 reframed** — `.github/CODEOWNERS` exists and covers every gated surface; the item's
+  "lock the Devin lane out" model is superseded by charter §1/§8 (CODEOWNERS is notification-only,
+  must not block merges). What remains is Andy's branch-protection click, not Devin work.
+- **P1-5 Devin side done** — `tape.py`/`intraday_read.py` already read `TRADIER_TOKEN` from env or
+  `.env` and honor `TRADIER_BASE`. Only the token is owed, from Andy.
+
+**P1-4 landed — the one real code item.** `comparative_machinery.py`'s `--validate` had sat at
+35/36, baseline-pinned red, because its R-1 check called `load_meta()` against the LIVE
+`data/ledger_meta.json` — it stopped exercising the sentinel-refusal path the day the ledger went
+live. `load_meta(path=I2_META)` gained a defaulted fixture seam (production caller untouched);
+the suite now exercises all four R-1 refusal branches plus a post-sentinel LOADS check against a
+scratch file. **35/36 → 40/40, exit 0; `validate_baseline.txt` moved in the same change per its
+own rule.** `validate_all.py` PASS, all four suites match baseline; `check_refs.py` invariants
+clean. Class A throughout — no guard, predicate, or refusal contract changed; the R-1 refusals
+themselves are untouched, only now actually tested.
+
+**P1-3 (stable `trade_id`) sized, not started** — ~115 touchpoints plus a re-key of every
+`trades.csv` row and the `hedge_tournament` accumulator. Wants its own dispatch/PR, noted in the
+queue. It is also the root fix T-10/G-4 waits on.
+
+**Files:** `scripts/comparative_machinery.py` (`load_meta` path seam + R-1 fixture block) ·
+`scripts/ci/validate_baseline.txt` (35/36→40/40) · `scripts/ci/validate_all.py` (docstring: the
+35/36 rationale was falsified by the fix) · `docs/devin-queue.md` (six items re-truthed, P1-3
+sized) · this file.
+
+**Surfaced for Andy, not done (all Class C or ruling-blocked):** P2-5b warning→refusal · P7
+freeze-hash phase0 check (needs pre-auth per queue) · P6 Propagator-as-CI (blocked on the
+lessons-archive ruling) · P1-3 dispatch (adjacent to the unsigned MCP-dispatch ruling — a cloud
+Devin session opening a PR is the right vehicle, on Andy's word).
+
+---
+
+## 2026-09-16 — Hedge design spec drafted; the hedge tournament is measuring a loss-free sample
+
+**Loss autopsy on the working ledger** (`data/trades.csv`, 246 positions, 27 fill days, position
+grain, risk = larger side). Four findings, all reproducible from the ledger alone:
+
+1. **Every dollar of loss came from an exit; zero from expiration.** Exit losses -$11,211 / 35
+   positions. Expired losses $0 / 0 positions — all 56 expired legs are winners, +$12,525.
+2. **Not a large-move pattern.** The biggest underlying move in the sample (09-16, SPX -0.43% /
+   QQQ -0.50%) was a +$1,142 winning day.
+3. **A clock pattern.** 75% of losing 0DTE IC positions have their MAE after 14:00 vs 32% of
+   winners; **89% of all loss** has its MAE inside 14:00-15:30 ET.
+4. **Exits realize the worst tick.** 40% of losers close within 5 min of their own MAE (winners
+   6%), and 24 of 30 losers were green first — median MFE +0.70% before median MAE -2.30%.
+
+**⛔ The hedge tournament cannot currently rank a loss-capping mechanic.**
+`hedge_tournament.py` replays **only `status=expired` legs**, and per finding 1 every expired leg
+in this ledger is a winner. `data/hedge_tournament.csv` confirms: 23 legs, 3 bots, ride-arm
+**minimum R = +0.0204, zero losing legs**. The 43 losing legs are all `status=closed` and are
+excluded by construction. This is a fifth defect of the same family as `hedge-research.md` §5.1's
+four, and the same verdict applies — not a weak measurement, not a measurement. The file is also
+**stale** (last `open_date` 2026-09-04 vs a ledger running to 09-16). Root cause shared with the
+deferred `defang` arm: the ledger carries entry/exit/MFE/MAE but **no intraday premium path**.
+
+**⚠️ `hedge-research.md` §5.1 defect 1 is live again.** `GF-QQQ-IC-Ride`, `-Touch0` and
+`-Ride-Delta` are **100% identical** on every shared open (27/27, 9/9, 9/9 — same close timestamp,
+same P/L to the cent). Three of the eight-arm GF family are one arm wearing three names. Must be
+resolved before the GF family is the substrate for any hedge arm.
+
+**Written:** `docs/hedge-design-spec-2026-09-16.md` (234 lines, sha256
+`638a99acb143404aa8444149db20023f64690946702a5f6d3ca2d9b27d3a6e6c`) — **DRAFT, UNSIGNED**, T4
+evidence tier, explicitly authorizing nothing. Carries the trigger proposal (T-H1: prior positive
+MFE + give-back from high + at/after 14:00, thresholds left `<FILL>`), the platform-expressibility
+wall (§11 "any condition referencing its own past" is NOT NATIVE, so T-H1 is expressible as an
+**exit** but not as a **hedge opener**), six ranked candidate instruments, and five open rulings.
+
+**Open ruling flagged as blocking:** `hedge-research.md` §1.3 ("a hedge is config, not a pillar;
+standalone hedge bots are reserved for genuine separate protective positions, which this fleet
+does not run") is **opposed** to Andy's 2026-09-08 definition ("hedge = separate protective
+position opened after the condor starts losing; exit strategy != hedge"). The platform supports
+the first and blocks the trigger for the second. Needs a ruling before any arm is built.
+
+**AMENDED same session, at Andy's instruction.** The first draft framed defang as one of two
+blocking defects. **Wrong weighting — corrected.** Defang is excluded twice over
+(`oa-platform-reference.md` §11 row 5 NOT NATIVE; `greenfield-family-spec.md` §3.1 excluded as an
+arm) and `IC-SPX-Fortress-Defang` is OFF with **zero post-cutover ledger rows** — so the deferred
+arm is a closed decision advertising itself as an open gap, not a gap. §3 now carries ONE blocker
+(the loss-free tournament universe, §3.1), defang demoted to §3.2 "not a gap, dead code" with a
+recommendation to delete the stub, and the shared root cause (no intraday premium path) promoted
+to §3.3. New ruling slot §9.6. Also confirmed for the record, against Andy's question: the
+analysis uses **no pre-cutover data** — `trades.csv` earliest `open_date` is 2026-08-10, exactly
+`LEDGER_START`, zero rows before it.
+
+**RULED SAME SESSION — `R-2026-09-16-HEDGE-DEFINITION`.** Andy, verbatim: *"Rule of thumb going
+forward should be : separate protective position, exit strategy != hedge"*. This closes spec §9.1.
+`hedge-research.md` §1.3 ("a hedge is config, not a pillar… standalone hedge bots are reserved for
+genuine separate protective positions, which this fleet does not run") is **OVERRULED** — banner
+owed, original text stands per the §0.2 convention.
+
+**The operative consequence, recorded because it is not small: under this definition the fleet has
+NO buildable hedge on Option Alpha today.** Every natively-expressible candidate in spec §6 —
+armed trail (`tstop`), `maxtrail`, time-gated flat close — is an EXIT and is disqualified as a
+hedge. The only true hedge (a separate protective position opened on deterioration) needs a
+give-back-from-high trigger, which is self-referential, which `oa-platform-reference.md` §11 row 6
+rules NOT NATIVE. Spec §6.1 records the three ways out (present-state trigger proxy — leading
+candidate *time gate ∧ underlying-distance-to-own-short-strike*, expressibility **UNVERIFIED, must
+be probed in OA**; off-platform webhook trigger; or an explicit decision to accept a time-only
+opener). **None ruled.** Until one is, T-H1 stands as a measurement definition, not a buildable
+trigger.
+
+**⚠️ PROPAGATION SURFACE — FILED, DELIBERATELY NOT SWEPT.** The ruling renames a large amount of
+existing work: 15+ files call exit mechanics "hedges". Confirmed instances include
+`greenfield-family-spec.md` PR-18 `GF-QQQ-IC-SL100` and PR-19 `GF-QQQ-IC-SL200`, both labelled
+"experiment (hedge arm)" and both plain stop losses; `daily-loop-spec.md:212` ("defensive exit
+(hedge / stop / defang)") which conflates the two outright; `scripts/hedge_tournament.py` and the
+"Hedge tournament" section of `STATUS.md`, which rank exit rules under a hedge name; plus
+`rules-catalog.md` (19 hits), `pre-registration-ledger.md`, `build-plan.md`, `state.md`,
+`strategy-taxonomy.md`, `track-b-arms-spec.md`. A terminology sweep across specs is itself a gated
+decision under §5, so **nothing was renamed**. The mechanics are not killed — they may be built,
+measured and ranked as exits; they may not be called hedges or discharge a hedge item.
+
+**Files:** `docs/hedge-design-spec-2026-09-16.md` (new) · `docs/RULINGS.md` (one ruling appended) ·
+this file.
+
+**Nothing else touched.** No OA edit, no bot build, no slot, no change to any script, guard or
+predicate. Analysis was read-only against `data/trades.csv` and `data/hedge_tournament.csv`.
