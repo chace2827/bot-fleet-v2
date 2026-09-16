@@ -1,0 +1,101 @@
+{
+  "capture_note": "Request body as sent by OA frontend when 'Run Backtest' clicked. Batched with member.setData (UI pref). No auth headers beyond session cookie; only header sent: Content-type.",
+  "request": [
+    {
+      "t": "rpc",
+      "tid": "1789516457478-10007",
+      "api": "member.setData",
+      "args": [
+        "bots",
+        {
+          "ztestseed": 50000
+        }
+      ]
+    },
+    {
+      "t": "rpc",
+      "tid": "1789516457487-10008",
+      "api": "zdte.startTest",
+      "args": [
+        {
+          "entry": {},
+          "exits": {
+            "xslip": 0.05
+          },
+          "cri": {},
+          "series": {
+            "type": "days",
+            "days": 0,
+            "text": "exactly 0 days",
+            "compare": "exact",
+            "dtype": "m"
+          },
+          "posLimit": 1,
+          "seed": 50000,
+          "opp": {
+            "type": "shortputspread",
+            "symbol": "QQQ",
+            "longPut": {
+              "gap": 2,
+              "cop": "lt",
+              "shlg": "short",
+              "ltype": "put",
+              "mode": "closest",
+              "type": "leggap",
+              "textValues": {
+                "gap": "$2.00",
+                "cop": "below",
+                "shlg": "short",
+                "ltype": "put",
+                "mode": "or closest"
+              },
+              "text": "$2.00 below short put leg",
+              "optionType": "put"
+            },
+            "shortPut": {
+              "delta": -0.2,
+              "mode": "closest",
+              "type": "delta",
+              "textValues": {
+                "delta": "-.20",
+                "mode": "or closest"
+              },
+              "text": "-.20 delta",
+              "optionType": "put"
+            },
+            "text": "$2.00 below short put leg, -.20 delta"
+          },
+          "text": "QQQ Short Put Spread",
+          "emode": "time",
+          "ntime": 1330,
+          "psize": {
+            "type": "quantity",
+            "quantity": 1,
+            "text": "1 contract"
+          },
+          "period": "custom",
+          "startDate": "2026-06-15",
+          "endDate": "2026-09-15",
+          "name": "RPCTEST-BASE"
+        }
+      ]
+    }
+  ],
+  "response": [
+    {
+      "t": "res",
+      "tid": "1789516457487-10008",
+      "api": "zdte.startTest",
+      "data": "ZT4178951645761466778"
+    },
+    {
+      "t": "res",
+      "tid": "1789516457478-10007",
+      "api": "member.setData"
+    }
+  ],
+  "http_status": 200,
+  "request_header_names": [
+    "Content-type"
+  ]
+}

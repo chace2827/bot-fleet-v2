@@ -1,0 +1,550 @@
+{
+ "testId": "ZT4178951789730109583",
+ "name": "RPCTEST-TOUCH",
+ "stats": {
+  "dd": -214,
+  "cap": 50155,
+  "low": -203,
+  "mlp": 0,
+  "mpp": 0.746,
+  "pnl": 155,
+  "rdd": 0.7243,
+  "win": 47,
+  "best": 34,
+  "high": 243,
+  "loss": 15,
+  "touch": 15,
+  "worst": -75,
+  "avgpnl": 2.46,
+  "avgqty": 1,
+  "avgror": 0.0136,
+  "avgrwr": 0.1072,
+  "avgwin": 18.96,
+  "fcount": 0,
+  "maxwin": 47,
+  "trades": 63,
+  "winPnl": 891,
+  "avgloss": -49.07,
+  "avgrisk": 180.75,
+  "expired": 48,
+  "lossPnl": -736,
+  "maxloss": 0,
+  "maxrisk": -385,
+  "pfactor": 1.21,
+  "winrate": 0.746,
+  "avgprice": 0.19,
+  "winstreak": 23,
+  "avgpremium": 19.25,
+  "lossstreak": -3
+ },
+ "fieldNames": [
+  "ask",
+  "bid",
+  "mid",
+  "pnl",
+  "ror",
+  "rwr",
+  "legs",
+  "pnl1",
+  "risk",
+  "slip",
+  "type",
+  "ndate",
+  "ntime",
+  "cndate",
+  "exdate",
+  "reward",
+  "status",
+  "symbol",
+  "isShort",
+  "maxLoss",
+  "premium",
+  "isCredit",
+  "quantity",
+  "closeTime",
+  "maxProfit",
+  "closePrice",
+  "upriceClose"
+ ],
+ "touchExitCount": 15,
+ "expiredCount": 48,
+ "note": "closeTime = YYYYMMDDHHMM; touch exits have intraday minutes + clegs/bac fields; expired = closeTime ...1600",
+ "trades": [
+  {
+   "ndate": 20260616,
+   "ntime": 1330,
+   "status": "touch",
+   "closeTime": 202606161554,
+   "cndate": 20260616,
+   "exdate": 20260616,
+   "pnl": -30,
+   "premium": 21,
+   "risk": 179,
+   "closePrice": 0.51,
+   "upriceClose": 730.87,
+   "slip": 0,
+   "legs": [
+    {
+     "id": "longPut",
+     "ask": 0.22,
+     "bid": 0.21,
+     "mid": 0.22,
+     "oid": "QQQ_061626P729",
+     "type": "put",
+     "delta": -0.1136,
+     "strike": 729,
+     "uprice": 733.63
+    },
+    {
+     "id": "shortPut",
+     "ask": 0.43,
+     "bid": 0.42,
+     "mid": 0.43,
+     "oid": "QQQ_061626P731",
+     "type": "put",
+     "delta": -0.2145,
+     "strike": 731,
+     "uprice": 733.63
+    }
+   ],
+   "clegs": [
+    [
+     0.11,
+     0.1,
+     0.11
+    ],
+    [
+     0.61,
+     0.6,
+     0.61
+    ]
+   ],
+   "bac": [
+    0.49,
+    0.51
+   ]
+  },
+  {
+   "ndate": 20260617,
+   "ntime": 1330,
+   "status": "touch",
+   "closeTime": 202606171406,
+   "cndate": 20260617,
+   "exdate": 20260617,
+   "pnl": -75,
+   "premium": 26,
+   "risk": 174,
+   "closePrice": 1.01,
+   "upriceClose": 724.59,
+   "slip": 0,
+   "legs": [
+    {
+     "id": "longPut",
+     "ask": 0.62,
+     "bid": 0.61,
+     "mid": 0.62,
+     "oid": "QQQ_061726P724",
+     "type": "put",
+     "delta": -0.1447,
+     "strike": 724,
+     "uprice": 732.78
+    },
+    {
+     "id": "shortPut",
+     "ask": 0.88,
+     "bid": 0.87,
+     "mid": 0.88,
+     "oid": "QQQ_061726P726",
+     "type": "put",
+     "delta": -0.1961,
+     "strike": 726,
+     "uprice": 732.78
+    }
+   ],
+   "clegs": [
+    [
+     3.48,
+     3.46,
+     3.5
+    ],
+    [
+     4.44,
+     4.38,
+     4.49
+    ]
+   ],
+   "bac": [
+    0.88,
+    1.03
+   ]
+  },
+  {
+   "ndate": 20260623,
+   "ntime": 1330,
+   "status": "touch",
+   "closeTime": 202606231441,
+   "cndate": 20260623,
+   "exdate": 20260623,
+   "pnl": -70,
+   "premium": 18,
+   "risk": 182,
+   "closePrice": 0.88,
+   "upriceClose": 714.23,
+   "slip": 0,
+   "legs": [
+    {
+     "id": "longPut",
+     "ask": 0.27,
+     "bid": 0.26,
+     "mid": 0.27,
+     "oid": "QQQ_062326P713",
+     "type": "put",
+     "delta": -0.1098,
+     "strike": 713,
+     "uprice": 719.08
+    },
+    {
+     "id": "shortPut",
+     "ask": 0.45,
+     "bid": 0.44,
+     "mid": 0.45,
+     "oid": "QQQ_062326P715",
+     "type": "put",
+     "delta": -0.1811,
+     "strike": 715,
+     "uprice": 719.08
+    }
+   ],
+   "clegs": [
+    [
+     0.96,
+     0.95,
+     0.96
+    ],
+    [
+     1.82,
+     1.81,
+     1.83
+    ]
+   ],
+   "bac": [
+    0.85,
+    0.88
+   ]
+  },
+  {
+   "ndate": 20260626,
+   "ntime": 1330,
+   "status": "touch",
+   "closeTime": 202606261428,
+   "cndate": 20260626,
+   "exdate": 20260626,
+   "pnl": -49,
+   "premium": 22,
+   "risk": 178,
+   "closePrice": 0.71,
+   "upriceClose": 709.87,
+   "slip": 0,
+   "legs": [
+    {
+     "id": "longPut",
+     "ask": 0.31,
+     "bid": 0.3,
+     "mid": 0.31,
+     "oid": "QQQ_062626P708",
+     "type": "put",
+     "delta": -0.1251,
+     "strike": 708,
+     "uprice": 713.59
+    },
+    {
+     "id": "shortPut",
+     "ask": 0.54,
+     "bid": 0.52,
+     "mid": 0.53,
+     "oid": "QQQ_062626P710",
+     "type": "put",
+     "delta": -0.2092,
+     "strike": 710,
+     "uprice": 713.59
+    }
+   ],
+   "clegs": [
+    [
+     0.75,
+     0.74,
+     0.75
+    ],
+    [
+     1.45,
+     1.44,
+     1.45
+    ]
+   ],
+   "bac": [
+    0.69,
+    0.71
+   ]
+  },
+  {
+   "ndate": 20260701,
+   "ntime": 1330,
+   "status": "touch",
+   "closeTime": 202607011558,
+   "cndate": 20260701,
+   "exdate": 20260701,
+   "pnl": -34,
+   "premium": 16,
+   "risk": 184,
+   "closePrice": 0.5,
+   "upriceClose": 724.92,
+   "slip": 0,
+   "legs": [
+    {
+     "id": "longPut",
+     "ask": 0.18,
+     "bid": 0.17,
+     "mid": 0.18,
+     "oid": "QQQ_070126P723",
+     "type": "put",
+     "delta": -0.0924,
+     "strike": 723,
+     "uprice": 728.36
+    },
+    {
+     "id": "shortPut",
+     "ask": 0.34,
+     "bid": 0.33,
+     "mid": 0.34,
+     "oid": "QQQ_070126P725",
+     "type": "put",
+     "delta": -0.1735,
+     "strike": 725,
+     "uprice": 728.36
+    }
+   ],
+   "clegs": [
+    [
+     0.12,
+     0.11,
+     0.12
+    ],
+    [
+     0.6,
+     0.59,
+     0.61
+    ]
+   ],
+   "bac": [
+    0.47,
+    0.5
+   ]
+  },
+  {
+   "ndate": 20260707,
+   "ntime": 1330,
+   "status": "touch",
+   "closeTime": 202607071453,
+   "cndate": 20260707,
+   "exdate": 20260707,
+   "pnl": -45,
+   "premium": 25,
+   "risk": 175,
+   "closePrice": 0.7,
+   "upriceClose": 709.89,
+   "slip": 0,
+   "legs": [
+    {
+     "id": "longPut",
+     "ask": 0.22,
+     "bid": 0.21,
+     "mid": 0.22,
+     "oid": "QQQ_070726P708",
+     "type": "put",
+     "delta": -0.1124,
+     "strike": 708,
+     "uprice": 712.75
+    },
+    {
+     "id": "shortPut",
+     "ask": 0.47,
+     "bid": 0.46,
+     "mid": 0.47,
+     "oid": "QQQ_070726P710",
+     "type": "put",
+     "delta": -0.2225,
+     "strike": 710,
+     "uprice": 712.75
+    }
+   ],
+   "clegs": [
+    [
+     0.5,
+     0.49,
+     0.5
+    ],
+    [
+     1.19,
+     1.18,
+     1.19
+    ]
+   ],
+   "bac": [
+    0.68,
+    0.7
+   ]
+  },
+  {
+   "ndate": 20260615,
+   "ntime": 1330,
+   "status": "expired",
+   "closeTime": 202606151600,
+   "cndate": 20260615,
+   "exdate": 20260615,
+   "pnl": 11,
+   "premium": 11,
+   "risk": 189,
+   "closePrice": 0,
+   "upriceClose": 744,
+   "slip": 0,
+   "legs": [
+    {
+     "id": "longPut",
+     "ask": 0.18,
+     "bid": 0.17,
+     "mid": 0.18,
+     "oid": "QQQ_061526P739",
+     "type": "put",
+     "delta": -0.096,
+     "strike": 739,
+     "uprice": 744.01
+    },
+    {
+     "id": "shortPut",
+     "ask": 0.29,
+     "bid": 0.28,
+     "mid": 0.29,
+     "oid": "QQQ_061526P741",
+     "type": "put",
+     "delta": -0.1687,
+     "strike": 741,
+     "uprice": 744.01
+    }
+   ]
+  },
+  {
+   "ndate": 20260618,
+   "ntime": 1330,
+   "status": "expired",
+   "closeTime": 202606181600,
+   "cndate": 20260618,
+   "exdate": 20260618,
+   "pnl": 16,
+   "premium": 16,
+   "risk": 184,
+   "closePrice": 0,
+   "upriceClose": 740.62,
+   "slip": 0,
+   "legs": [
+    {
+     "id": "longPut",
+     "ask": 0.25,
+     "bid": 0.24,
+     "mid": 0.25,
+     "oid": "QQQ_061826P735",
+     "type": "put",
+     "delta": -0.1185,
+     "strike": 735,
+     "uprice": 739.99
+    },
+    {
+     "id": "shortPut",
+     "ask": 0.41,
+     "bid": 0.4,
+     "mid": 0.41,
+     "oid": "QQQ_061826P737",
+     "type": "put",
+     "delta": -0.2047,
+     "strike": 737,
+     "uprice": 739.99
+    }
+   ]
+  },
+  {
+   "ndate": 20260622,
+   "ntime": 1330,
+   "status": "expired",
+   "closeTime": 202606221600,
+   "cndate": 20260622,
+   "exdate": 20260622,
+   "pnl": 23,
+   "premium": 23,
+   "risk": 177,
+   "closePrice": 0,
+   "upriceClose": 737.95,
+   "slip": 0,
+   "legs": [
+    {
+     "id": "longPut",
+     "ask": 0.24,
+     "bid": 0.23,
+     "mid": 0.24,
+     "oid": "QQQ_062226P732",
+     "type": "put",
+     "delta": -0.1199,
+     "strike": 732,
+     "uprice": 736.65
+    },
+    {
+     "id": "shortPut",
+     "ask": 0.47,
+     "bid": 0.46,
+     "mid": 0.47,
+     "oid": "QQQ_062226P734",
+     "type": "put",
+     "delta": -0.2262,
+     "strike": 734,
+     "uprice": 736.65
+    }
+   ]
+  },
+  {
+   "ndate": 20260624,
+   "ntime": 1330,
+   "status": "expired",
+   "closeTime": 202606241600,
+   "cndate": 20260624,
+   "exdate": 20260624,
+   "pnl": 25,
+   "premium": 25,
+   "risk": 175,
+   "closePrice": 0,
+   "upriceClose": 710.62,
+   "slip": 0,
+   "legs": [
+    {
+     "id": "longPut",
+     "ask": 0.56,
+     "bid": 0.55,
+     "mid": 0.56,
+     "oid": "QQQ_062426P699",
+     "type": "put",
+     "delta": -0.1332,
+     "strike": 699,
+     "uprice": 708.05
+    },
+    {
+     "id": "shortPut",
+     "ask": 0.81,
+     "bid": 0.8,
+     "mid": 0.81,
+     "oid": "QQQ_062426P701",
+     "type": "put",
+     "delta": -0.1847,
+     "strike": 701,
+     "uprice": 708.05
+    }
+   ]
+  }
+ ]
+}
