@@ -275,7 +275,7 @@ the named blocker. `●` pass · `○` fail · `·` pending.
 | **G2** | Sample | **≥ 20 clean condors** |
 | **G3** | Edge — Exp(R) > 0 **and bootstrap 95% CI lower bound > 0** | 3,000 resamples, seed 7. Reports *"~N more trades"* when the CI still includes zero |
 | **G4** | Risk — maxDD-R within cap | **maxDD-R ≥ −5.0**. ⚠️ The RoE **$** cap is an unfilled `<FILL>`, so half of G4 is permanently pending |
-| **G5** | Compliance — instruction-mirror | ~~≥ 90% over ≥ 5 graded days~~ → **REDEFINED 2026-09-16 (`R-2026-09-16-G5-AUDIT-REDEFINITION` + `R-2026-09-16-G5-STREAK-UNIT`): 10 consecutive CLEAN CLOSE RUNS with zero COUNTING audit findings.** Reads `execution_audit_findings.csv` + the day's should-have-fired verdicts, **not** `compliance.csv`. Ungradeable days don't advance the streak, so it stays **pending, never a false pass** |
+| **G5** | Compliance — instruction-mirror | ~~≥ 90% over ≥ 5 graded days~~ → **REDEFINED 2026-09-16 (`R-2026-09-16-G5-AUDIT-REDEFINITION` + `R-2026-09-16-G5-STREAK-UNIT` + `R-2026-09-16-G5-N-FIVE`): **5** consecutive CLEAN CLOSE RUNS with zero COUNTING audit findings.** Reads `execution_audit_findings.csv` + the day's should-have-fired verdicts, **not** `compliance.csv`. Ungradeable days don't advance the streak, so it stays **pending, never a false pass** |
 | **G6** | Robustness — OOS half-split both halves positive, and **≤ 60%** of positive R in any single year | n < 20 → N/A |
 
 > ### ⛔ G5 IS THE GATE THAT LIED
@@ -324,11 +324,18 @@ the named blocker. `●` pass · `○` fail · `·` pending.
 >
 > **⭐ STREAK UNIT = CLOSES, not trading days** (`R-2026-09-16-G5-STREAK-UNIT`). Only 30 of 59 rows
 > in `execution_audit_findings.csv` carry a date — `SILENT_BOT`, `DUPLICATE_ARM` and 9 of 10
+> **N = 5, ratified `R-2026-09-16-G5-N-FIVE`.** The old gate also used five — that is a coincidence,
+> not a relapse. Its failure was *what it measured*; the count was incidental, and the new gate's
+> anti-lie property comes from its source and holds at any N. Setting 10 would have treated the
+> count as the lesson and made G5 hostage to the same close cadence P1's bet already depends on.
+> **Paired commitment (Andy, same ruling): close every trading day.** Earliest possible pass with
+> the streak starting at the 09-17 close is **2026-09-23**.
+>
 > `EXPIRY_RATIO_FLIP` rows are **undated window-level findings**, so a per-day streak is not
 > computable. A window-level finding is a statement about the bot's record **as of that close**, so
 > an unresolved RED keeps the bot dirty at *every* close until it clears — **strictly tighter** than
 > a per-day reading. Requires the append-only `data/findings_ledger.csv` (board **T-67**); until it
-> banks ten closes **every bot reads PENDING**, which is the honest state, not a regression.
+> banks five closes **every bot reads PENDING**, which is the honest state, not a regression.
 >
 > **The check that this gate cannot lie the way the old one did:** under it,
 > **`IC-SPX-FastPT25-S2` FAILS G5 today** on `EXPIRY_RATIO_FLIP` (RED/MECHANICS) — an exit that

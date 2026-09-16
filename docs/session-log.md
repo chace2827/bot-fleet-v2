@@ -11542,3 +11542,49 @@ owed. **Two were already decided or already in flight** (G4's cap ruled 09-02; t
 fix assigned to Devin), and the third named an uncomputable quantity. All three were caught only
 because the commit hand-off was checked against the board and the register before being sent. The
 board and `RULINGS.md` are the check; reading them *first* is cheaper than retracting afterwards.
+
+## 2026-09-16 (later) — Andy rules N=5 and no verify_by stopgap; P1's bet proven infeasible (Cowork)
+
+Andy, verbatim: *"1. N=5 and close every trading day."* · *"2. : don't stopgap. Wait for T-10."* ·
+*"3. Filled already it seems"* (G4 — confirmed, no decision owed, propagation only).
+
+**`R-2026-09-16-G5-N-FIVE`.** G5 = **5** consecutive clean close runs. `G5_STREAK_DAYS = 5`.
+Recorded in the ruling so the coincidence is not mistaken for a relapse: **the old gate also used
+five.** Its failure was *what it measured* — fidelity to a hand-written record wrong on 3 of 4
+audited bots — and the count was incidental. The redefined gate's anti-lie property comes from its
+source and holds at any N; setting 10 would have treated the count as the lesson. The deciding
+argument was the second one: at N=10, G5 and P1's bet would both have been ten-close requirements
+hostage to **one** cadence assumption — one point of failure counted twice, not redundancy.
+Paired commitment from Andy, recorded in the ruling because N is a bet on cadence and is only
+honest with it attached: **close every trading day.**
+
+**`R-2026-09-16-VERIFY-BY-NO-STOPGAP`.** No stopgap on the ~13 stale-trade_id `verify_by` strings;
+they wait for `T-10` / `G-4`, the root fix, both Devin/Working-on-it. Rejected the bot+open_date
+rewrite: it touches `execution_audit.py`, adjacent to the frozen panel, for a defect with a known
+expiry date. **Binding now, while T-10 is open: every verify is recorded by BOT + OPEN TIME, never
+by trade_id.** The owed one is *"IC-SPX-FastPT25-S2, position opened 2026-08-31 11:01 ET"*. T-64
+closes as superseded if T-10 lands with the natural key in place.
+
+**⛔ FINDING — the daily-close commitment does NOT rescue P1's bet, and now there is a number.**
+Computed against `scripts/market_calendar.py` (not by hand):
+`R-2026-09-07-P1-BET-MET-AND-RENEWED` requires **10 consecutive capture-PRESENT closes by
+2026-09-26**. Banked: **1** (2026-09-16). Trading days remaining through 09-26: **7**
+(09-17, 18, 21, 22, 23, 24, 25). **Maximum reachable: 8 of 10.** The bet fails by two **even with a
+perfect close every single trading day from tomorrow.** The earliest a tenth consecutive close can
+exist at all is **2026-09-30**. Devin flagged the infeasibility on 09-16 morning; this puts the
+arithmetic on it. **It needs an amendment decision from Andy — a kill-date move to 2026-09-30 or
+later, or a different bet — not more process.** Andy should not read his daily-close commitment as
+having fixed P1.
+
+**By contrast G5 at N=5 is reachable:** streak starting at the 09-17 close, earliest pass
+**2026-09-23** (would have been 2026-09-30 at N=10).
+
+**Files:** `docs/RULINGS.md` (2 records appended; 202 blocks parse clean) ·
+`docs/evidence-standards.md` (§6 G5 row 10→5, banner reasoning) ·
+`docs/g5-audit-redefinition-spec-2026-09-16.md` (N=5, `G5_STREAK_DAYS=5`, verify_by out-of-scope
+now cites the ruling) · `data/portfolio.csv` + `portfolio.html` (T-61 blocked_by T-67 + both
+acceptance tests recorded; T-64 disposition; T-65 confirmed) — `--check` green, 9 programs /
+121 items; `check_docs_vs_csv.py`: no contradictions.
+
+**Owed to Andy:** the **P1 bet amendment** (new item, forced by the arithmetic above). Dispatch
+T-67 then T-61/62/63 to Claude Code.

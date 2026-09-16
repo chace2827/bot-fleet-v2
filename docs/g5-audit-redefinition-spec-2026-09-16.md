@@ -74,7 +74,7 @@ written, stop reading it here.
 **Rule.** ⭐ **AMENDED by `R-2026-09-16-G5-STREAK-UNIT` — the streak counts CLOSES, not trading
 days.** Only 30 of 59 rows in `execution_audit_findings.csv` carry a `date`; `SILENT_BOT`,
 `DUPLICATE_ARM` and 9 of 10 `EXPIRY_RATIO_FLIP` rows are **undated window-level findings**, so a
-per-day streak is not computable. G5 passes when a bot has **N = 10 consecutive CLEAN CLOSE RUNS**.
+per-day streak is not computable. G5 passes when a bot has **N = 5 consecutive CLEAN CLOSE RUNS** (`R-2026-09-16-G5-N-FIVE`).
 A close run is **CLEAN** for a bot when that run's findings name no COUNTING finding for it.
 A close run is **DIRTY** for a bot if it carries either:
 
@@ -98,8 +98,9 @@ streak. All-`SKIPPED`/`INFO` bots accrue zero graded days → `None` (pending) f
 `True`. Return the existing `(value, detail)` shape; detail should read like
 `"7/10 consecutive clean graded days"` or `"dirty 2026-09-16: EXPIRY_RATIO_FLIP (RED/MECHANICS)"`.
 
-⚠️ **N = 10 is the one value awaiting Andy's ratification at commit.** Put it in a named constant
-(`G5_STREAK_DAYS = 10`) so amending it is one line.
+✅ **N = 5 — RATIFIED 2026-09-16 (`R-2026-09-16-G5-N-FIVE`).** Named constant
+`G5_STREAK_DAYS = 5`. Paired operating commitment: the close runs every trading day. Earliest
+possible pass, streak starting at the 09-17 close: **2026-09-23**.
 
 **Acceptance — the anti-regression test, and it is the point of this task.**
 - `IC-SPX-FastPT25-S2` evaluates **G5 = False** on the 2026-09-16 data, blocker citing
@@ -114,7 +115,7 @@ streak. All-`SKIPPED`/`INFO` bots accrue zero graded days → `None` (pending) f
   clothes. Implement the pending rule as *"the detector **evaluated** this bot at this close **and**
   returned no counting finding"* — **not** *"no counting finding was found for this bot"*. Absence
   of a row is absence of evidence. Test: a bot with zero positions in the window returns
-  **pending** across ten closes, never `True`.
+  **pending** across five closes, never `True`.
 - `grep -c "G5_THRESH\|compliance_pct" scripts/report.py` = **0**.
 
 ## Task 5 — `data/findings_ledger.csv` (NEW — build this first)
@@ -131,7 +132,7 @@ banked day uncomparable. The ledger records *when a finding was seen*, a propert
 and adds nothing to the detector.
 
 **Expected state on day one:** the ledger has one close in it, so **every bot reads G5 PENDING**
-until ten closes are banked. That is correct, not a regression.
+until five closes are banked. That is correct, not a regression.
 
 ## Task 4 — the readiness-board blocker string
 
@@ -150,5 +151,7 @@ gate 5 of 6 in order.
   `R-2026-09-01-G4-ROE-CAP` (per-bot $15,000 / fleet $35,000 / single-day halt $8,000). What
   remains is propagation: `evidence-standards.md` L277 still prints `<FILL>` (board **T-65**) and
   `report.py` still lacks the cap (board **T-44**). Separate tasks; don't fold them in here.
-- The `verify_by` trade-id staleness defect (`execution_audit.py:344`) — logged 2026-09-16, needs
-  its own ruling before any edit.
+- The `verify_by` trade-id staleness defect (`execution_audit.py:344`) — **RULED 2026-09-16,
+  `R-2026-09-16-VERIFY-BY-NO-STOPGAP`: no stopgap.** It waits for T-10/G-4, the root fix. Do not
+  touch those strings. While T-10 is open, every verify is addressed by **bot + open time**, never
+  by trade_id.

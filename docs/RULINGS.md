@@ -5092,3 +5092,96 @@ source: >-
   data/execution_audit_findings_meta.json (window 2026-08-10..2026-09-16).
 unclear: false
 ```
+
+```yaml
+ruling_id: R-2026-09-16-G5-N-FIVE
+date: 2026-09-16
+scope: >-
+  RATIFIES the open value left by R-2026-09-16-G5-AUDIT-REDEFINITION and
+  R-2026-09-16-G5-STREAK-UNIT. N = 5, not 10.
+  G5 passes when a bot has FIVE CONSECUTIVE CLEAN CLOSE RUNS under the
+  unchanged COUNTING definition, carve-out and pending rule of those two
+  records. G5_STREAK_DAYS = 5 in scripts/report.py.
+
+  REASONING, recorded because the number 5 is the number the OLD gate used
+  and the coincidence must not be mistaken for a relapse. The old G5's
+  failure was WHAT IT MEASURED — fidelity to bots_config.csv, a
+  hand-written record wrong on 3 of 4 audited bots. The count of five was
+  incidental to that failure. The anti-lie property of the redefined gate
+  comes entirely from its source (the frozen detector against the position
+  ledger, no config record to be wrong) and holds at any N. Setting N = 10
+  would have treated the count as the lesson, which is the wrong half.
+  Checkable consequence, unchanged by N: IC-SPX-FastPT25-S2 fails G5 at
+  every close for as long as EXPIRY_RATIO_FLIP stands.
+
+  What N = 10 would have cost, and why that decided it: two independent
+  gates would have been hostage to one cadence assumption. P1's bet
+  (R-2026-09-07-P1-BET-MET-AND-RENEWED) already requires ten consecutive
+  capture-PRESENT closes; making G5 a second ten-close requirement counts
+  one point of failure twice rather than adding redundancy.
+
+  PAIRED OPERATING COMMITMENT, Andy, same message: close EVERY trading day.
+  N is a bet on close cadence, not on strictness, and it is only honest
+  with that commitment attached. Computed against scripts/market_calendar.py
+  on 2026-09-16: with the streak starting at the 2026-09-17 close, the
+  earliest G5 pass is 2026-09-23 at N=5 and would have been 2026-09-30 at
+  N=10. Board T-61.
+verbatim: >-
+  1. N=5 and close every trading day.
+verbatim_of: andy
+owner: Andy (in-chat, Cowork session 2026-09-16). Go-live gate — gated.
+status: Active
+applies_to: >-
+  R-2026-09-16-G5-AUDIT-REDEFINITION open value; docs/evidence-standards.md
+  section 6 G5 row; scripts/report.py G5_STREAK_DAYS;
+  docs/g5-audit-redefinition-spec-2026-09-16.md Task 3; board T-61.
+superseded_by: none
+source: >-
+  Cowork session 2026-09-16; data/receipts/close-runs.jsonl (2 close runs
+  banked: 2026-09-04, 2026-09-16); scripts/market_calendar.py trading-day
+  projection run 2026-09-16.
+unclear: false
+```
+
+```yaml
+ruling_id: R-2026-09-16-VERIFY-BY-NO-STOPGAP
+date: 2026-09-16
+scope: >-
+  The stale-trade_id defect in execution_audit.py's verify_by strings
+  (board T-64) gets NO stopgap. It waits for T-10 (stable trade_id from the
+  natural key) and G-4 (re-key hedge_tournament.csv on the natural key),
+  both already Devin / Working on it, which are the root fix: once
+  trade_ids are stable the verify_by strings stop going stale by
+  themselves and no separate change is needed.
+
+  Rejected alternative: rewriting the ~13 verify_by strings to address by
+  bot + open_date now. Rejected because it edits execution_audit.py —
+  adjacent to the frozen fixed panel (daily-loop-spec.md section 0,
+  v1.1.0, sha fdc43d0dcb727556) — for a defect with a known expiry date,
+  and every touch there carries re-baseline risk that the stopgap's value
+  does not justify.
+
+  The defect evidence stands and is not disputed: the 2026-08-31 11:01
+  IC-SPX-FastPT25-S2 condor is T00261 in data/hedge_tournament.csv and
+  T00694 in data/trades.csv — one position, two IDs, both on disk.
+  Operational consequence while T-10 is open, and it binds now: any verify
+  recorded against a finding is addressed by BOT + OPEN TIME, never by
+  trade_id. The owed T00694 read is recorded as
+  "IC-SPX-FastPT25-S2, position opened 2026-08-31 11:01 ET".
+
+  T-64 is DEVIN lane, blocked_by T-10 and G-4, and is CLOSED AS SUPERSEDED
+  if T-10 lands with the natural key in place.
+verbatim: >-
+  2. : don't stopgap. Wait for T-10.
+verbatim_of: andy
+owner: Andy (in-chat, Cowork session 2026-09-16).
+status: Active
+applies_to: >-
+  scripts/execution_audit.py verify_by strings; board T-64 (blocked_by
+  T-10, G-4); the owed EXPIRY_RATIO_FLIP verify.
+superseded_by: none
+source: >-
+  Cowork session 2026-09-16; data/trades.csv vs data/hedge_tournament.csv
+  first-hand read; board rows T-10 and G-4 (both Devin, Working on it).
+unclear: false
+```
