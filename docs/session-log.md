@@ -11723,3 +11723,49 @@ this file.
 
 **Nothing else touched.** No OA edit, no bot build, no slot, no change to any script, guard or
 predicate. Analysis was read-only against `data/trades.csv` and `data/hedge_tournament.csv`.
+
+---
+
+## 2026-09-16 (addendum) — ⛔ the 2026-09-15 OA RPC verification has NO record in this tree
+
+**Not a 09-15 session entry.** This session did not run that work and has no first-hand evidence of
+it. Writing a 09-15 entry from the memory record would be exactly the unattributed-report failure
+`R-2026-08-19-LANE-STATE-OWNERSHIP` warns about. This is a **gap note**, dated to the session that
+found the gap.
+
+**What is missing, by dated first-hand device read 2026-09-16:**
+- `docs/experiments/oa-rpc-test-2026-09-15/` — **absent** from the working folder.
+- `docs/session-log.md` — **no 2026-09-15 entry** (grep, zero hits).
+- PR #79's branch — **not in local refs** (`gitstore/bot-fleet-v2.git`: heads = devin, master;
+  origin = devin, devin-free-v2-scratch-config-cwd-guard, durable-blocker-audit-basis, foreman,
+  master, t03-ledger-regression, t43-manifest-selftest-ci, t44-g4-caps, t45-export-range-guard,
+  t46-catchup-capture, t47-s24-freeze). No `master` merge commit for it in `logs/HEAD`.
+
+**What the memory record claims** (cited as a claim, not as evidence): the `zdte.*` backtest RPC
+was tested and verified USABLE end-to-end on 2026-09-15; UI and API twins produced identical stats;
+`zdte.testDetails` echoes the executed config; `testResults` with `pos:true` gives per-trade
+intraday closeTime + exit reason; evidence in `docs/experiments/oa-rpc-test-2026-09-15/` (PR #79).
+Standing planning assumption: **Andy obtains written OA authorization before any further use.**
+
+**Why this matters beyond bookkeeping.** §9.1 holds that uncommitted work at session end is
+unfinished work and that the folder is the only memory this project has. A verified capability that
+exists only in an unmerged PR and in chat memory **is invisible to every session that reads the
+folder** — which is precisely what happened here: this session analysed the hedge problem from
+`data/trades.csv` alone and concluded the key counterfactual was unanswerable without purchased
+option-chain history. That conclusion was **wrong**, and it was wrong because the ranking surface
+that answers it is not in the tree. Corrected in the spec, §3 banner and §6.1 option 4.
+
+**Owed:** land PR #79 (or pull it) so `docs/experiments/oa-rpc-test-2026-09-15/` and a 09-15 entry
+exist on disk. Until then the RPC path is cited in the spec as **UNVERIFIED IN THIS TREE** and is
+explicitly not load-bearing.
+
+**Spec amended same session** — `docs/hedge-design-spec-2026-09-16.md` now 284 lines, sha256
+`d94f2337b84e6e513f2f0d9726b380eaba0c211bc22702c830c6c96af0011833`. §3 header corrected (the
+blocker binds ranking **from the live ledger**, not ranking as such — OA's backtester is an
+independent surface; original text left standing per §0.2); §3.3's "only item actually owed" marked
+falsified by the same banner; §6.1 gains option 4 (answer it in the backtester — **whether `zdte`
+can express a SECOND position is UNMAPPED, and under `R-2026-09-16-HEDGE-DEFINITION` that is the
+whole question; one backtest settles it**); new ruling slot §9.7 making that probe the first action,
+gated on written OA authorization and on PR #79 landing.
+
+**Files:** `docs/hedge-design-spec-2026-09-16.md` (amended) · this file.

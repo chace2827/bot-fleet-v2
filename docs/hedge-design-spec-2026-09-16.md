@@ -81,7 +81,24 @@ false positive. Model it separately or not at all.
 
 ---
 
-## 3. ⛔ THE BLOCKING DEFECT — no arm may be ranked until it is closed
+## 3. ⛔ THE BLOCKING DEFECT — no arm may be ranked **from the live ledger** until it is closed
+
+> **[CORRECTED 2026-09-16, same session — the original header read "no arm may be ranked until it
+> is closed". Original text left standing above the amendment per `oa-platform-reference.md` §0.2.]**
+> That was too strong, and §3.3's "the only item in this section that is actually owed" is
+> falsified by it. The defect in §3.1 blocks ranking **from `data/trades.csv`**. It does not block
+> ranking as such, because a **second, independent ranking surface exists**: Option Alpha's own
+> `zdte.*` backtester, claimed VERIFIED USABLE end-to-end on 2026-09-15 (PR #79), whose
+> `testResults` with `pos:true` returns per-trade intraday closeTime and exit reason. A backtest
+> simulates the full path, so the hold-longer counterfactual that §3.1 makes unanswerable from the
+> ledger **is** answerable there, over OA's history rather than 27 live days.
+>
+> ⚠️ **UNVERIFIED IN THIS TREE.** `docs/experiments/oa-rpc-test-2026-09-15/` is absent from the
+> working folder, `session-log.md` carries no 2026-09-15 entry, and PR #79's branch is not in local
+> refs — dated first-hand device read 2026-09-16. The claim is cited here from the project memory
+> record, **not** from evidence on disk, and is not load-bearing until PR #79 lands. See §9.7.
+>
+> This changes no decision. It corrects a factual over-statement and adds a ruling slot.
 
 ### 3.1 The hedge tournament has never seen a loss
 
@@ -191,6 +208,14 @@ choice is **not ruled here**:
 2. **An off-platform trigger** (webhook into OA), moving the self-referential logic outside.
 3. **An explicit decision to accept a time-only opener** — blunt, and §2.3 shows a bare time gate
    also fires on the 29% of winners whose MAE lands 14:00-15:00.
+4. **[ADDED 2026-09-16, same session]** **Answer it in the backtester instead of on the live bot.**
+   The mapped `zdte.startTest` knobs (`exits.profits`, `opp.longCall.delta`, `series.days`,
+   `series.filter`) are all entry/exit/strike parameters of **one** position. **Whether `zdte` can
+   express a SECOND, separate protective position is UNMAPPED** — and under
+   `R-2026-09-16-HEDGE-DEFINITION` that is the whole question. If it can, the hedge is answerable
+   by sweep before anything is built in the account. If it cannot, the sweep is an **exit**
+   tournament (still worth running — it directly tests whether `SL100`/`SL200` are making losses
+   worse) and the hedge falls back to options 1-3. **One backtest settles which.** §9.7.
 
 Until one is chosen, §4's T-H1 stands as a **measurement definition** — the thing to detect and
 count in the ledger — not as a buildable trigger.
@@ -239,6 +264,11 @@ ledger expired-pnl sum, per day)? Widening likely requires re-deriving that inva
 config-capture gap, which blocks stage 3/4/8 grading?
 
 **9.5** `<FILL>` thresholds in §4 — not to be filled until §3.3 is closed.
+
+**9.7 — FIRST ACTION, cheapest decisive test.** Probe `zdte.startTest` for a second-position /
+second-structure field (§6.1 option 4). Gated behind Andy's own standing planning assumption:
+**written OA authorization before any further RPC use**, and reads-yes-writes-no — backtests via
+RPC, bot edits via the browser with both §5 proof layers. Blocked until PR #79 lands in the tree.
 
 **9.6** Delete the `defang` stub from `hedge_tournament.py` and its `report.py` standings line
 (§3.2)? Draft recommends yes — it advertises an open gap where there is a closed decision.
