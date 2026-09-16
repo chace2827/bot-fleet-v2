@@ -4777,3 +4777,51 @@ source: >-
   docs/evidence-standards-redesign-proposal-2026-08-08.md section 6 register; T-49 sitting 2026-09-07.
 unclear: false
 ```
+
+```yaml
+ruling_id: R-2026-09-16-CLOSE-DISCOVERY-DEFAULTS
+date: 2026-09-16
+scope: >-
+  Bounded operational design choices inside already-decided close machinery
+  (R-2026-08-21-CLOSE-RECEIPT-SURFACE; the close itself is settled — this rules
+  only between implementations), made under
+  R-2026-08-31-DERIVED-RULING-AUTHORITY(b):
+  (1) close.sh with no day argument derives the close day from the export's max
+      openDate via `ingest_export.py --dry-run` — the last day the export has
+      positions for. Replaces "newest file already in data/raw", which made a
+      bare invocation refuse on every fresh export (day < max_openDate).
+      Rejected alternative: ingest's mtime-day default, which misnames a
+      next-morning export — data/raw/<mtime-day>.csv would claim a close day
+      with no positions.
+  (2) close.sh auto-discovers the newest oa_*.txt carrying a `captured:`
+      header in the downloads dir when neither CAPTURE_TXT nor the per-day
+      inbox yields a capture; a capture dated before the close day is ignored
+      as stale with a warning. Rejected alternative: requiring manual
+      placement or the env var — a manual step guarding nothing the
+      `captured:` header does not already date-stamp.
+  (3) ingest_export.py treats a candidate whose sha256 is already banked
+      under data/raw/ as banked, not ambiguous — leftover exports stop
+      breaking later closes; a sole banked candidate still flows to the dest
+      sha-compare so a re-run proves equal or refuses a divergence. Rejected
+      alternative: move-not-copy ingest, which breaks the sha-verified
+      idempotent re-run (source gone, nothing to compare).
+  No decision content: no gate, sizing, kill criterion, verdict, or
+  pre-registration text changed.
+verbatim: >-
+  OK implement the suggested edits to enhance this workflow. I'll be
+  uploading the recent positions file and other reports once you are done
+verbatim_of: andy
+owner: >-
+  Claude (derived, per R-2026-08-31-DERIVED-RULING-AUTHORITY: bounded
+  operational design choice, rejected alternatives recorded above); Andy
+  ratifies by committing.
+status: Active
+applies_to: scripts/close.sh; scripts/ingest_export.py; docs/daily-close.md.
+superseded_by: none
+source: >-
+  Devin session 2026-09-16 (process review); ingest_export.py selftest D15/D16;
+  scratch-root end-to-end run FLEET_ROOT=/tmp/fleet-e2e 2026-09-16 (day derived
+  2026-09-04 from max openDate, banked export ignored, capture 2026-09-07
+  auto-discovered, manifest PRESENT).
+unclear: false
+```

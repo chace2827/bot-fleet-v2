@@ -13,12 +13,20 @@
 #   FLEET_ROOT=/tmp/scratch scripts/close.sh 2026-08-21
 #   INGEST_DOWNLOADS=/path/to/exports scripts/close.sh 2026-08-21
 #
+# With no day argument, the close day is derived from the export itself — its
+# max openDate, i.e. the last day it has positions for. Right for an
+# after-close export (today) and a next-morning one (yesterday) alike.
+#
 # Capture handling:
 #   - If CAPTURE_TXT is set, it is used as the raw /bots capture .txt, and
 #     CAPTURE_SCREENSHOTS (colon-separated) are passed as screenshots.
 #   - Otherwise, close.sh looks for raw capture files in
 #     $CAPTURE_INBOX/<day>/ (default data/captures/<day>/):
 #     exactly one .txt and any .png/.jpg/.jpeg/.pdf in the same directory.
+#   - Otherwise, the newest oa_*.txt carrying a `captured:` header in the
+#     downloads dir ($INGEST_DOWNLOADS or ~/Downloads) is used — the OA Grab
+#     bookmarklet lands there. One dated before the close day is stale and
+#     ignored with a warning.
 #   - If no raw capture is found, the manifest records capture: ABSENT.
 #   - capture_bundle.py names the bundle by the CAPTURE's own `captured:`
 #     date, which differs from the close day on a catch-up close.  The dir
@@ -40,18 +48,31 @@ export FLEET_ROOT
 SCRIPTS="$FLEET_ROOT/scripts"
 [ -d "$SCRIPTS" ] || SCRIPTS="$REPO/scripts"
 
+INGEST_ARGS=()
+if [ -n "${INGEST_DOWNLOADS:-}" ]; then
+  INGEST_ARGS+=("--downloads" "$INGEST_DOWNLOADS")
+fi
+
 DAY="${1:-}"
 if [ -z "$DAY" ]; then
-  DAY="$(python3 - <<'PY'
-import glob, os
-files = sorted(glob.glob(os.path.join(os.environ.get('FLEET_ROOT','.'), 'data/raw/*.csv')))
-if files:
-    print(os.path.basename(files[-1])[:-4])
-else:
-    import datetime
-    print(datetime.date.today().isoformat())
-PY
-  )"
+  # Derive the close day from the export: its max openDate is the last day it
+  # has positions for. --dry-run runs every check and prints every derivation
+  # while writing nothing.
+  echo "== deriving close day from the export =="
+  PROBE_RC=0
+  if [ ${#INGEST_ARGS[@]} -gt 0 ]; then
+    PROBE_OUT="$(python3 "$SCRIPTS/ingest_export.py" --root "$FLEET_ROOT" --dry-run "${INGEST_ARGS[@]}")" || PROBE_RC=$?
+  else
+    PROBE_OUT="$(python3 "$SCRIPTS/ingest_export.py" --root "$FLEET_ROOT" --dry-run)" || PROBE_RC=$?
+  fi
+  if [ $PROBE_RC -ne 0 ]; then
+    [ -n "$PROBE_OUT" ] && printf '%s\n' "$PROBE_OUT" >&2
+    echo "close.sh: FATAL: could not derive the close day from an export in ${INGEST_DOWNLOADS:-~/Downloads}." >&2
+    echo "  Pass the day explicitly: scripts/close.sh YYYY-MM-DD" >&2
+    exit 2
+  fi
+  printf '%s\n' "$PROBE_OUT"
+  DAY="$(printf '%s\n' "$PROBE_OUT" | sed -n 's/^max openDate: //p')"
 fi
 
 if ! [[ "$DAY" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]; then
@@ -75,10 +96,6 @@ echo "== close $DAY FLEET_ROOT=$FLEET_ROOT =="
 # ---------------------------------------------------------------------------
 # 1. Ingest the OA export from the downloads/fallback inbox into data/raw.
 # ---------------------------------------------------------------------------
-INGEST_ARGS=()
-if [ -n "${INGEST_DOWNLOADS:-}" ]; then
-  INGEST_ARGS+=("--downloads" "$INGEST_DOWNLOADS")
-fi
 echo "== 1/5 ingest_export $DAY =="
 if [ ${#INGEST_ARGS[@]} -gt 0 ]; then
   python3 "$SCRIPTS/ingest_export.py" --root "$FLEET_ROOT" --day "$DAY" "${INGEST_ARGS[@]}"
@@ -119,6 +136,55 @@ else
           [ -f "$s" ] && CAPTURE_SCREENSHOTS+=("$s")
         done
       done
+    fi
+  fi
+fi
+
+# Neither CAPTURE_TXT nor the inbox produced a capture: look next to the
+# export. The OA Grab bookmarklet downloads oa_*.txt to the same directory.
+# A capture whose own `captured:` date precedes the close day is stale —
+# ignored with a warning rather than bundled under the wrong day.
+if [ -z "$CAPTURE_TXT" ]; then
+  CAPTURE_DL="${INGEST_DOWNLOADS:-$HOME/Downloads}"
+  DISC="$(python3 - "$CAPTURE_DL" <<'PY'
+import datetime, glob, os, re, sys
+d = os.path.expanduser(sys.argv[1])
+cap_re = re.compile(r"^captured:\s*(.+?)\s*$")
+best = None
+for p in glob.glob(os.path.join(d, "oa_*.txt")):
+    try:
+        with open(p, encoding="utf-8", errors="replace") as fo:
+            head = fo.read(8192)
+    except OSError:
+        continue
+    cday = None
+    for line in head.splitlines():
+        m = cap_re.match(line)
+        if m:
+            try:
+                cday = datetime.datetime.strptime(
+                    m.group(1).split(" (")[0].strip(),
+                    "%a %b %d %Y %H:%M:%S GMT%z").strftime("%Y-%m-%d")
+            except ValueError:
+                cday = None
+            break
+    if cday is None:
+        continue
+    mt = os.path.getmtime(p)
+    if best is None or mt > best[0]:
+        best = (mt, cday, p)
+if best is not None:
+    print(best[1] + "\t" + best[2])
+PY
+)"
+  if [ -n "$DISC" ]; then
+    CAP_DAY="${DISC%%$'\t'*}"
+    CAP_PATH="${DISC#*$'\t'}"
+    if [[ "$CAP_DAY" < "$DAY" ]]; then
+      echo "close.sh: WARNING: newest capture in $CAPTURE_DL is dated $CAP_DAY, before close day $DAY; ignoring it as stale" >&2
+    else
+      CAPTURE_TXT="$CAP_PATH"
+      echo "close.sh: capture auto-discovered: $CAP_PATH (captured $CAP_DAY)"
     fi
   fi
 fi
@@ -168,4 +234,8 @@ fi
 echo "== commit command for $DAY =="
 python3 "$SCRIPTS/close_manifest.py" --root "$FLEET_ROOT" --commit-command "$DAY"
 
-echo "close.sh: done for $DAY. Review the printed commands, then run them."
+echo "close.sh: done for $DAY."
+echo "== remaining manual steps =="
+echo "  1. Write the narrative:  data/brief/${DAY}_narrative.md   (six ## slots; judgment, not generated)"
+echo "  2. Re-render the brief:  python3 scripts/render_brief.py $DAY"
+echo "  3. Commit:               the command printed above (Andy runs it)"

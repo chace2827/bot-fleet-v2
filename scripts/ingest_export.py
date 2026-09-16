@@ -146,19 +146,45 @@ def main():
     if not os.path.isdir(downloads):
         fail(f"ERROR: not a directory: {downloads}")
 
+    root = resolve_root(args.root)
+    raw_dir = os.path.join(root, "data", "raw")
+
     mangled = find_mangled(downloads)
     candidates = find_candidates(downloads)
 
     if not candidates:
         fail(f"ERROR: no OA export candidate found in {downloads}")
-    if len(candidates) > 1:
+
+    # A candidate whose sha256 is already banked under data/raw/ is a leftover
+    # from a previous close, not a new export — counting it would make every
+    # later close refuse on a false ambiguity. Only UNBANKED candidates can be
+    # ambiguous. A sole banked candidate is still passed through so the dest
+    # comparison below can prove the re-run equal or refuse a divergence.
+    banked = {}
+    if os.path.isdir(raw_dir):
+        for n in os.listdir(raw_dir):
+            if _RAW_NAME_RE.match(n):
+                banked.setdefault(sha256(os.path.join(raw_dir, n)), n)
+    fresh, leftover = [], []
+    for c in candidates:
+        (leftover if sha256(c) in banked else fresh).append(c)
+    for c in leftover:
+        print(f"already banked under data/raw/{banked[sha256(c)]}, "
+              f"not a candidate: {os.path.basename(c)}")
+    if not fresh:
+        if len(candidates) == 1:
+            fresh = candidates
+        else:
+            fail(f"ERROR: every OA export candidate in {downloads} is already "
+                 f"banked under data/raw/; nothing new to ingest")
+    if len(fresh) > 1:
         print(f"ERROR: more than one OA export candidate found in {downloads}:", file=sys.stderr)
-        for c in candidates:
+        for c in fresh:
             print(f"  {os.path.basename(c)}", file=sys.stderr)
         report_mangled(mangled)
         sys.exit(1)
 
-    src = candidates[0]
+    src = fresh[0]
     open_dates = read_open_dates(src)
     if not open_dates:
         fail(f"ERROR: no openDate values found in {src}")
@@ -185,9 +211,6 @@ def main():
              f"the export cannot be from before its latest position: {src}")
     if day < max_open:
         fail(f"ERROR: chosen day {day} is earlier than max openDate {max_open}: {src}")
-
-    root = resolve_root(args.root)
-    raw_dir = os.path.join(root, "data", "raw")
 
     # --- RANGE-SHORTENED EXPORT GUARD (T-45) -------------------------------
     # The same check build_ledger.py runs at ledger-build time, moved up to
@@ -367,8 +390,11 @@ def selftest():
         os.makedirs(multi_dl)
         f1 = os.path.join(multi_dl, "a.csv")
         f2 = os.path.join(multi_dl, "b.csv")
-        _st_write(f1, [_st_row(day1)]); os.utime(f1, (_st_ts(day1), _st_ts(day1)))
-        _st_write(f2, [_st_row(day1)]); os.utime(f2, (_st_ts(day1), _st_ts(day1)))
+        # Distinct content from anything already ingested — a banked file is
+        # not a candidate, so the ambiguity refusal is only exercised when
+        # both files are genuinely new.
+        _st_write(f1, [_st_row(day1, "GF-QQQ-IC-PT50")]); os.utime(f1, (_st_ts(day1), _st_ts(day1)))
+        _st_write(f2, [_st_row(day1, "GF-QQQ-IC-Trail")]); os.utime(f2, (_st_ts(day1), _st_ts(day1)))
         code, _, err = _st_run(base_args(day1, root, multi_dl))
         check("D4  multiple candidates refuses, listing them",
               (code is not None, "a.csv" in err, "b.csv" in err),
@@ -449,6 +475,39 @@ def selftest():
         check("D14 export reaching LEDGER_START with a previous raw present ingests",
               (code is None, "ingested" in out, os.path.exists(rng_dest)),
               (True, True, True))
+
+        # --- banked files are not candidates ---------------------------------
+        # A leftover export whose sha256 already lives under data/raw/ must
+        # not count toward ambiguity: one banked leftover + one fresh export
+        # -> the fresh one ingests, and the leftover is named in the output.
+        day4 = "2099-01-05"
+        bank_dl = os.path.join(tmp, "banked_downloads")
+        os.makedirs(bank_dl)
+        with open(rng_dest, "rb") as fi:
+            prev_bytes = fi.read()
+        banked_dup = os.path.join(bank_dl, "leftover.csv")
+        with open(banked_dup, "wb") as fo:
+            fo.write(prev_bytes)
+        fresh4 = os.path.join(bank_dl, "fresh.csv")
+        _st_write(fresh4, [_st_row(day1), _st_row(day4)])
+        os.utime(fresh4, (_st_ts(day4), _st_ts(day4)))
+        day4_dest = os.path.join(rng_root, "data", "raw", f"{day4}.csv")
+        code, out, err = _st_run(base_args(day1, rng_root, bank_dl, ["--day", day4]))
+        check("D15 banked leftover + one fresh export -> the fresh one ingests",
+              (code is None, os.path.exists(day4_dest),
+               "not a candidate" in out, "fresh.csv" in out),
+              (True, True, True, True))
+
+        # Sole candidate already banked -> the re-run still proves equal.
+        only_dl = os.path.join(tmp, "onlybanked_downloads")
+        os.makedirs(only_dl)
+        again = os.path.join(only_dl, "again.csv")
+        shutil.copyfile(banked_dup, again)
+        os.utime(again, (_st_ts(day3), _st_ts(day3)))
+        code, out, err = _st_run(base_args(day1, rng_root, only_dl, ["--day", day3]))
+        check("D16 sole banked candidate -> already ingested (re-run stays green)",
+              (code is None, "already ingested" in out),
+              (True, True))
 
         # --- idempotent equal-sha re-run -------------------------------------
         code, out, _ = _st_run(base_args(day2, root, good_dl))

@@ -11265,3 +11265,34 @@ Hosted board republished to the same URL (label "09-08 hedge + assumption audit"
 **Owed to Andy:** T-56 amendment text + P4 bet draft; T-57 run (Claude, next session); T-60 ruling.
 **Process note:** this session ran read-only `git log` against `~/gitstore/bot-fleet-v2.git` early on
 to date the commit history — CLAUDE.md §9.1 bars that on the mounted tree; noted, not repeated.
+
+## 2026-09-16 — Close-ritual process review + close.sh self-deriving (Devin, mounted tree)
+
+- **Review findings, for the record:** the documented `mv`-then-`close.sh` one-liner could
+  never have worked (`ingest_export.py` discovers the export in `~/Downloads` by header;
+  the `mv` removes the only candidate → stage-1 refusal). Bare `close.sh` was broken for
+  the common case (DAY resolved from the newest existing raw *before* ingest → refusal on
+  any fresh export). Ingest copied rather than moved → stale exports accumulate →
+  multi-candidate refusals. The narrative is written after the manifest → manifests
+  permanently record 0/6 slots and a re-run FATALs at stage 3 (bundle exists).
+- **P1 bet flag for Andy:** `R-2026-09-07-P1-BET-MET-AND-RENEWED` needs 10 consecutive
+  capture-PRESENT closes by 2026-09-26 (a Saturday); 9 trading days remain and 0 are
+  banked — infeasible as ruled; needs an amendment decision, not more process.
+- **Implemented under `R-2026-09-16-CLOSE-DISCOVERY-DEFAULTS`:** (1) `close.sh` bare
+  derives the close day from the export's `max openDate` via ingest `--dry-run`;
+  (2) `close.sh` auto-discovers the newest `oa_*.txt` with a `captured:` header in the
+  downloads dir (stale-before-close-day ignored with a warning); (3) `ingest_export.py`
+  treats sha-banked candidates as already-ingested rather than ambiguous; (4) close.sh
+  now prints the remaining manual steps (narrative → re-render → commit).
+- **New doc:** `docs/daily-close.md` — the one-page ritual. Declared winner over stale
+  project memory and any conflicting doc.
+- **Evidence:** `ingest_export.py --selftest` 18/18 (D4 fixture made content-distinct —
+  the old fixtures were byte-identical to a banked file, i.e. correctly non-candidates;
+  new D15 banked+fresh mix, D16 sole-banked re-run). Scratch-root end-to-end
+  (`FLEET_ROOT=/tmp/fleet-e2e`, `INGEST_DOWNLOADS=/tmp/dl-test`, no args): day derived
+  2026-09-04 from max openDate while mtime was 09-16; export banked-ignored then
+  sha-proven "already ingested"; capture 2026-09-07 auto-discovered and bundled;
+  manifest `capture: PRESENT`, drift ZERO, all 9 stages exit 0.
+- **The new ritual:** export + OA Grab (both land in `~/Downloads`) → `scripts/close.sh`
+  → narrative → `render_brief.py` → paste the printed commit. Cowork's role narrows to
+  the narrative and review; nothing is uploaded to it.
