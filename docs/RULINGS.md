@@ -5468,3 +5468,69 @@ source: >-
   device read of .agents/skills/option-alpha/SKILL.md (mtime 2026-08-17).
 unclear: false
 ```
+
+```yaml
+ruling_id: R-2026-09-16-DEVIN-OA-CHROME-CAPTURE-A2
+date: 2026-09-16
+scope: >-
+  AMENDMENT 2 to R-2026-09-16-DEVIN-OA-CHROME-CAPTURE. The original ruling
+  and -A1 stand; this amends the CAPTURE-ONLY clause in one narrow place and
+  changes nothing else.
+
+  WHY: the hedge comparison (Phase 1) is build-a-backtest, duplicate it, vary
+  one input, compare. That is impossible without saving. The capture-only
+  clause was aimed at the LIVE FLEET — bots, automations, scanners,
+  positions, settings — not at backtester scratch work, which touches none of
+  it. Recorded as a ruling rather than accepted as a chat aside ("these are
+  dispensable backtests… they can be saved," Andy, mid-run 2026-09-16),
+  because a boundary that moves on a passing remark is not a boundary.
+
+  PERMITTED, backtester surface only: create · save · duplicate · rename ·
+  delete · run backtest CONFIGURATIONS.
+
+  STILL FORBIDDEN, unchanged and absolute: any change to a bot, automation,
+  scanner, position or account setting; enabling or disabling any bot;
+  anything that touches the live fleet. A backtest is not a bot. If an action
+  would alter what a live bot does, it is out of scope whatever screen it is
+  reached from.
+
+  ⛔ MANDATORY NAMING — every agent-created backtest carries the prefix
+  `ZZ-AGENT-<YYYY-MM-DD>-<arm>`. Non-negotiable, and the reason is a defect
+  this project has already paid for: saved backtests accumulate in SHARED
+  ACCOUNT STATE, and a later capture that reads "the backtest list" will
+  contain agent-created entries indistinguishable from Andy's own. That is
+  the same class as the duplicate bots_meta row that silently rerouted $600
+  of realized P&L with 11/11 guards green (roster-invariant-gap). The prefix
+  makes every agent artifact identifiable at a glance and removable in one
+  pass. A backtest saved without it is a defect to be renamed, not a
+  judgment call.
+
+  ⚠️ CONSEQUENCE FOR THE EVIDENCE RECORD. docs/AI Agent Stack.md line 256
+  records, with citation, that OA BACKTEST DATA IS NOT EXPORTABLE
+  ("licensing agreements prevent OA from providing download capabilities of
+  backtest data"). If that holds, Phase 1 has NO Export Data path: results
+  are read off the rendered page and transcribed, and the capture bundle is
+  the PRIMARY record rather than a convenience. Every backtest result
+  therefore needs its configuration captured alongside it, verbatim, or the
+  number cannot be re-derived later — re-running the variant is the only way
+  to re-check it. Devin is to CONFIRM the no-export claim first-hand against
+  the results screen; it is currently a confirmation-by-absence, not an
+  affirmative statement from OA.
+verbatim: >-
+  If we are going to eventually have Devin build a backtest, and then
+  duplicate it for several variant comparison tests, it needs to save.
+verbatim_of: andy
+owner: Andy (in-chat, Cowork session 2026-09-16). Scope change to a signed ruling — gated, and given.
+status: Active
+applies_to: >-
+  R-2026-09-16-DEVIN-OA-CHROME-CAPTURE (capture-only clause, amended);
+  .agents/skills/oa-drive/SKILL.md authorization banner (capture-only bullet);
+  docs/dispatch-oa-capture-2026-09-16.md rule 1 and the Phase 1 rules.
+superseded_by: none
+source: >-
+  Cowork session 2026-09-16, Andy in-chat, verbatim above. No-export claim
+  cited from docs/AI Agent Stack.md line 256 (itself flagged there as
+  confirmation-by-absence). Naming rationale cited from the roster-invariant
+  duplicate-row incident.
+unclear: false
+```

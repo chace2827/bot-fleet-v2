@@ -12095,3 +12095,48 @@ numbers and writes no recommendation.
 **Dispatch stays blocked on Gate 1** — Andy reads the verbatim OA email first. Unchanged.
 
 **Files:** `docs/dispatch-oa-capture-2026-09-16.md` (extended) · this file.
+
+---
+
+## 2026-09-16 (close 6) — `-A2`: backtests may be saved; no OA MCP exists
+
+**✅ RULED — `R-2026-09-16-DEVIN-OA-CHROME-CAPTURE-A2`.** The capture-only clause is amended in one
+narrow place: **create · save · duplicate · rename · delete · run BACKTEST configurations is
+permitted.** Everything touching the **live fleet** — bots, automations, scanners, positions,
+account settings, enable/disable — remains forbidden and absolute. A backtest is not a bot.
+
+Recorded as a ruling rather than accepted as the chat aside it arrived as (*"these are dispensable
+backtests… they can be saved"*, mid-run). **A boundary that moves on a passing remark is not a
+boundary** — that was one of the four findings from reviewing the Devin exchange.
+
+**⛔ MANDATORY NAMING: `ZZ-AGENT-<YYYY-MM-DD>-<arm>` on every agent-created backtest.** Rationale
+cited in the ruling: saved backtests land in **shared account state**, and a later capture reading
+"the backtest list" cannot otherwise separate agent artifacts from Andy's own work. Same defect
+class as the duplicate `bots_meta` row that silently rerouted $600 with 11/11 guards green. One
+unprefixed backtest is a defect to be renamed, not a judgment call, and Devin must self-report it.
+
+**⛔ "We have an MCP with OA in Claude Code" — FALSE, and the correction matters.**
+`docs/AI Agent Stack.md`:256 records with citation: *"No public/read API, no MCP/SDK — confirmed by
+absence in `docs.optionalpha.com/llms.txt` and `sitemap.md` plus browser-only architecture."* What
+exists in Claude Code is the **Devin** MCP. And the conclusion holds either way: **OA publishes no
+API, so anything calling itself an OA MCP would necessarily be built on the undocumented internal
+`/api/request` RPC — the exact path `-A1` prohibits.** An MCP wrapper does not change what is
+underneath; the boundary is about the mechanism reaching OA, not the tool shape calling it. The UI
+path is not a detour around a better option — it is the only option.
+
+**⚠️ SURFACED AND CARRIED INTO THE DISPATCH: backtest data may not be exportable.**
+`docs/AI Agent Stack.md`:256, citing a community post — *"licensing agreements prevent OA from
+providing download capabilities of backtest data."* If it holds, **Phase 1 has no Export Data path**:
+results are read off the rendered page and transcribed, and the capture bundle becomes the
+**primary record**, not a convenience. Every result must carry its configuration captured verbatim
+alongside it or the number cannot be re-derived — re-running the variant is the only re-check. The
+dispatch now instructs Devin to **confirm the no-export claim first-hand** against the results
+screen, since the doc itself flags it as confirmation-by-absence rather than an affirmative OA
+statement.
+
+**Dispatch updated** (`docs/dispatch-oa-capture-2026-09-16.md`, sha256
+`688017222f626a0c8b219ffc644f3f384738b4a76c101220783390c29e9d162e`): rule 1 retitled **"NO
+LIVE-FLEET EDITS — EVER"** with the backtest exception and the naming rule stated inline; Phase 1
+rules carry the no-export assumption and the confirm-it instruction.
+
+**Files:** `docs/RULINGS.md` (one ruling) · `docs/dispatch-oa-capture-2026-09-16.md` · this file.

@@ -39,10 +39,18 @@ You are working in the `bot-fleet-v2` repo, connected as a local folder.
    contains `/login`, or a sign-in form appears, **STOP and report** — do not attempt to proceed,
    and do not ask Andy for a password. If you cannot attach to an authenticated session, the answer
    is "not attached," not "let me log in."
-1. **CAPTURE ONLY. NEVER EDIT.** Bot, automation, scanner, position and settings surfaces are
-   **read-only**. Do not open an edit form, do not change a field, do not toggle anything, do not
-   click Save — whatever the tooling permits. If a click would mutate state, **stop and report
-   instead**. Edits are a different lane under `CLAUDE.md` §5 and are not yours.
+1. **NO LIVE-FLEET EDITS — EVER.** Bot, automation, scanner, position and account-settings
+   surfaces are **read-only**. Do not open an edit form, change a field, toggle anything, or
+   enable/disable a bot — whatever the tooling permits. If an action would alter what a live bot
+   does, **stop and report instead**, whatever screen it is reached from. Live edits are a different
+   lane under `CLAUDE.md` §5 and are not yours.
+   **✅ BACKTESTS ARE THE EXCEPTION** (`R-2026-09-16-DEVIN-OA-CHROME-CAPTURE-A2`). You may
+   **create, save, duplicate, rename, delete and run backtest configurations** — a backtest is not a
+   bot and touches nothing live.
+   ⛔ **Every backtest you create is named `ZZ-AGENT-<YYYY-MM-DD>-<arm>`.** No exceptions, not a
+   judgment call. Saved backtests land in shared account state and a later capture reading "the
+   backtest list" cannot otherwise tell your artifacts from Andy's. One unprefixed backtest is a
+   defect to be renamed, and you report it if you make one.
 2. **NO WIRE PROTOCOL.** No fetch/XHR wrapping or patching, no `POST /api/request` calls of your
    own, no `zdte.*` replay, no traffic recorder, no reading the network panel. You drive the
    interface as a user does: navigate, click, read what is rendered, screenshot, use OA's own
@@ -146,9 +154,15 @@ hedge question is unanswered and why.
 
 ### Rules that bind both phases
 
-- **Backtests only. No live bot is created, cloned, enabled, or edited.** A backtest configuration
-  is not saved to the account unless saving is unavoidable to run it — and if it is, say so in the
-  report before doing it.
+- **Backtests only. No live bot is created, cloned, enabled, or edited.** Saving and duplicating
+  backtests is **authorized** (`-A2`); every one carries the `ZZ-AGENT-<date>-<arm>` prefix.
+- ⚠️ **ASSUME THERE IS NO EXPORT.** `docs/AI Agent Stack.md`:256 records that OA **backtest data is
+  not exportable** — *"licensing agreements prevent OA from providing download capabilities of
+  backtest data."* **Confirm this first-hand against the results screen and report what you find**;
+  it is currently confirmation-by-absence, not an affirmative OA statement. If it holds, the capture
+  bundle is the **primary record**, not a convenience: transcribe every result by hand, screenshot
+  it, and capture its configuration verbatim alongside it. A number whose configuration was not
+  captured cannot be re-derived — re-running the variant is the only way to re-check it.
 - **Every run gets its own raw capture**: the configuration as the UI displays it (verbatim labels,
   not your paraphrase) and the results as rendered. Config and result travel together or the run is
   uninterpretable later.
