@@ -1,0 +1,15 @@
+RPCTEST-TOUCH vs RPCTEST-BASE startTest args diff
+BASE testId=ZT4178951645761466778  TOUCH testId=ZT4178951789730109583
+Captured 2026-09-15, both UI-generated on /backtests
+-------------------------------------------------------
+exits.touch: undefined -> {"type":"usd","value":0,"text":"$0"}
+name: "RPCTEST-BASE" -> "RPCTEST-TOUCH"
+
+TOUCH FIELD: exits.touch = {"type":"usd","value":0,"text":"$0"}
+UI label: Exit Options > Touch = "$0" ($0 from ITM or less = exit when underlying reaches/touches short strike)
+Touch editor choices (verbatim):
+  Title: "Close position if underlying price is..."
+  value input: number, placeholder 0, step 0.01
+  unit pick: "$" (usd) | "%" (pct)
+  fixed suffix text: "from ITM or less"
+  info tooltip: "Use a negative value to allow the position to go ITM before exiting"
