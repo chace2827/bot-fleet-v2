@@ -1,0 +1,222 @@
+# Backtest_Settings (New Backtest editor, all sections expanded)
+https://app.optionalpha.com/backtests
+captured: 9/16/2026, 10:37:58 PM ET (America/New_York)
+
+===== RENDERED TEXT (content.editor-ct innerText, verbatim) =====
+
+Position Details
+Symbol
+SPX
+SPY
+QQQ
+XSP
+IWM
+GLD
+TLT
+Expiration
+exactly 0 days
+Strategy
+Short Put Spread
+Long put
+Select...
+Short put
+Select...
+Capital
+Allocation
+Max total capital to open positions 
+Position Size
+1 contract
+Position Entry
+Entry Trigger
+Time of day
+Opening range breakout
+Entry Time
+Trading Days
+Mon-Fri
+Skip Events
+None
+Position Limit
+1 position
+At least
+1 market day
+from last opened position
+Include
+slippage from the mid price on opening trades
+Position Criteria(optional)
+Mid price between
+-
+Reward/risk ratio is
+% or more
+Bid/ask spread is $
+or less
+Only 1 position open in an expiration at a time
+Entry Filters(optional)
+Ranges
+Indicators
+Moving averages
+More ...
+Exit Options(optional)
+Profit Taking %
+None
+Profit Taking $
+None
+Stop Loss %
+None
+Stop Loss $
+None
+Expiration
+None
+Avoid Events
+None
+Touch
+None
+Include
+slippage from the mid price on closing trades
+Automatically detect and ignore unrealistic exit prices
+Backtest Options(optional)
+Test Period
+1 year
+2 years
+3 years
+5 years
+Custom
+Description
+Excluded Dates
+Run Backtest
+
+===== SERIALIZED FORM INPUTS (name/type/checked/value, verbatim) =====
+
+name=symbol type=hidden checked=false value="QQQ"
+name=series type=hidden checked=false value="{\"type\":\"days\",\"days\":0,\"text\":\"exactly 0 days\",\"compare\":\"exact\",\"dtype\":\"m\"}"
+name=strategy type=hidden checked=false value="shortputspread"
+name=longPut type=hidden checked=false value=""
+name=shortPut type=hidden checked=false value=""
+name=seed type=number checked=false value="50000"
+name=amount type=hidden checked=false value="{\"type\":\"quantity\",\"quantity\":1,\"text\":\"1 contract\"}"
+name=emode type=checkbox checked=true value="time"
+name=emode type=checkbox checked=false value="orb"
+name=time type=time checked=false value="09:45"
+name=orbperiod type=hidden checked=false value="15"
+name=orbside type=hidden checked=false value="high"
+name=orbend type=time checked=false value="15:55"
+name=orbwidth type=hidden checked=false value=""
+name=dow type=hidden checked=false value="{\"value\":[1,2,3,4,5],\"text\":\"Mon-Fri\"}"
+name=skip type=hidden checked=false value=""
+name=skipmode type=hidden checked=false value="entry"
+name=posLimit type=hidden checked=false value="1"
+name=firstorb type=checkbox checked=false value="1"
+name=chfreq type=checkbox checked=false value="1"
+name=freq type=hidden checked=false value="m1"
+name=choslip type=checkbox checked=false value="1"
+name=oslip type=number checked=false value=""
+name=chprice type=checkbox checked=false value="1"
+name=minPrice type=number checked=false value=""
+name=maxPrice type=number checked=false value=""
+name=chrwr type=checkbox checked=false value="1"
+name=rwr type=number checked=false value=""
+name=chbidask type=checkbox checked=false value="1"
+name=bidask type=number checked=false value=""
+name=chdupexp type=checkbox checked=false value="1"
+name=profits type=hidden checked=false value="0"
+name=profitssh type=hidden checked=false value="0"
+name=dblhit type=checkbox checked=false value="1"
+name=dprofit type=hidden checked=false value=""
+name=prdblhit type=checkbox checked=false value="1"
+name=stoploss type=hidden checked=false value="0"
+name=stoplosssh type=hidden checked=false value="0"
+name=dstop type=hidden checked=false value=""
+name=exp type=hidden checked=false value="none"
+name=xevents type=hidden checked=false value=""
+name=touch type=hidden checked=false value=""
+name=nopdt type=checkbox checked=false value="1"
+name=chxslip type=checkbox checked=false value="1"
+name=xslip type=number checked=false value=""
+name=chdefba type=checkbox checked=true value="1"
+name=chigba type=checkbox checked=false value="1"
+name=igba type=number checked=false value=""
+name=period type=hidden checked=false value="1y"
+name=startDate type=date checked=false value=""
+name=endDate type=date checked=false value=""
+name=name type=textarea checked=undefined value=""
+name=exclude type=textarea checked=undefined value=""
+
+===== MENU OPTION LISTS (verbatim innerText of overlay.mpickmenu / overlay.mnu,
+     each opened and read individually during the same session, 22:2x-22:3x ET) =====
+
+[Strategy picker — a.mpickbox under "Strategy"]
+Long Call
+Long Call Spread
+Short Call Spread
+Long Put
+Long Put Spread
+Short Put Spread
+Iron Condor
+Iron Butterfly
+
+[Position Limit picker — a.mpickbox under "Position Limit"]
+1 position
+2 positions
+3 positions
+4 positions
+5 positions
+6 positions
+7 positions
+8 positions
+9 positions
+10 positions
+
+[Entry Filters > Ranges]
+VIX
+VIX Change
+VIX Change %
+IV Rank
+Change %
+Change SD
+Gap %
+Open Chg %
+
+[Entry Filters > Indicators]
+ADX(14)
+CCI(20)
+CMO(9)
+MACD(12,26,9)
+Momentum(10)
+RSI(14)
+Stoch(14,3,3)
+Stoch RSI(14,14,3,3)
+
+[Entry Filters > Moving averages]
+SMA(10)
+EMA(10)
+SMA(20)
+EMA(20)
+SMA(30)
+EMA(30)
+SMA(50)
+EMA(50)
+SMA(100)
+EMA(100)
+SMA(200)
+EMA(200)
+
+[Entry Filters > More ... — drawer "Entry Filters", full innerText, scrolled to bottom]
+Stocks
+- Symbol expected move for expiration is greater than $
+- Symbol expected move for expiration is greater than %
+- Symbol trading range is less than 1.5% since previous close
+- Symbol price is above 15 minute opening range high
+- Symbol 15 minute opening range width is greater than .2%
+Gamma Exposure
+- GEX (10 strikes, nearest) net gex is greater than value
+- GEX (10 strikes, nearest) max absolute gex strike's absolute gex is greater than value
+- GEX (10 strikes, nearest) max absolute gex strike's strike price is equal to
+- GEX (10 strikes, nearest) max net positive gex strike's strike price
+- GEX (10 strikes, above) net gex is greater than
+- GEX (10 strikes, below) net gex
+- Underlying price is between (min to max) above GEX (10 strikes, nearest) max absolute gex strike
+(Drawer has an Edit parameter pane with back / Next / Save controls; no filter was selected or saved.)
+
+[OA Portfolio tab — /backtests/portfolio — published backtest library]
+Tabs verbatim: "My Backtests 65 · Saved Backtests 0 · Top Backtests 1.4M · OA Portfolio"
+Compare link navigates to /backtests/compare/<ids>: "Compare Backtests · Save · Add Backtest ·
+Results · Combine Results" — aggregates equity curves of independent single-structure backtests.

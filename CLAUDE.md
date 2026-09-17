@@ -138,6 +138,9 @@ platform change): `docs/evidence-standards.md` §1, §9.2. The audit itself: `do
 - `docs/pre-registration-ledger.md` — template + drafted entries for all ≈18–20 active bots.
 - `docs/oa-platform-reference.md` · `docs/hedge-research.md` — the two v2 REWRITEs. Read the platform
   reference before designing any mechanic; it says what OA affirmatively cannot express.
+- `docs/hedge-north-star.md` — ⭐ the hedge program's direction doc (2026-09-16): the signed
+  definition, the loss signature it targets, the native-first strategy, the joined-backtest
+  research method. **What we are aiming for.** It authorizes nothing by itself.
 - `docs/capture-architecture-2026-07-30.md` — the export-vs-bookmarklet decision record and the
   26-column export schema.
 

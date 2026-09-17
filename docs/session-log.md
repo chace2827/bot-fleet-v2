@@ -11588,3 +11588,629 @@ acceptance tests recorded; T-64 disposition; T-65 confirmed) — `--check` green
 
 **Owed to Andy:** the **P1 bet amendment** (new item, forced by the arithmetic above). Dispatch
 T-67 then T-61/62/63 to Claude Code.
+
+## 2026-09-16 (night) — Devin-lane dispatch review: P1-4 landed, six queue items re-truthed (Devin, mounted tree)
+
+Source: this session. Repo lane only — nothing touched OA. Trigger: Andy asked for the top-5
+Devin-outsource list, then said begin.
+
+**The queue audit found four stale premises — dispatching them would have repeated the P2-5
+refused-dispatch failure.** Verified by direct read, not assumption:
+
+- **P0-3 DONE already** — `.env.example` exists (`TRADIER_TOKEN` first, plus `TRADIER_BASE`,
+  `LEDGER_START`, `LESSONS_ALLOW_TRUNCATE`); `.gitignore` already carries `!.env.example`.
+- **P1-2 DONE already** — `build_ledger.py` refuses on UNCLASSIFIED post-cutover bots:
+  `ERROR: UNCLASSIFIED bot(s)...` then `sys.exit(1)`. The "warning, exits 0" premise was stale.
+- **P2-5a DONE already** — `report.py` `validate()` builds a scratch-root pre-registration-ledger
+  fixture with one unsigned bot and asserts the banner names it; `report.py --validate` → selftest OK.
+- **P2-5b premise shifted** — `report.py` now prints `WARNING: ledger-unsigned bot not in
+  bots_meta.csv — roster gap`; the under-report is warned, not silent. Remaining question is
+  warning→refusal, which is a detector-predicate change → still Class C, Andy's call.
+- **P0-2 reframed** — `.github/CODEOWNERS` exists and covers every gated surface; the item's
+  "lock the Devin lane out" model is superseded by charter §1/§8 (CODEOWNERS is notification-only,
+  must not block merges). What remains is Andy's branch-protection click, not Devin work.
+- **P1-5 Devin side done** — `tape.py`/`intraday_read.py` already read `TRADIER_TOKEN` from env or
+  `.env` and honor `TRADIER_BASE`. Only the token is owed, from Andy.
+
+**P1-4 landed — the one real code item.** `comparative_machinery.py`'s `--validate` had sat at
+35/36, baseline-pinned red, because its R-1 check called `load_meta()` against the LIVE
+`data/ledger_meta.json` — it stopped exercising the sentinel-refusal path the day the ledger went
+live. `load_meta(path=I2_META)` gained a defaulted fixture seam (production caller untouched);
+the suite now exercises all four R-1 refusal branches plus a post-sentinel LOADS check against a
+scratch file. **35/36 → 40/40, exit 0; `validate_baseline.txt` moved in the same change per its
+own rule.** `validate_all.py` PASS, all four suites match baseline; `check_refs.py` invariants
+clean. Class A throughout — no guard, predicate, or refusal contract changed; the R-1 refusals
+themselves are untouched, only now actually tested.
+
+**P1-3 (stable `trade_id`) sized, not started** — ~115 touchpoints plus a re-key of every
+`trades.csv` row and the `hedge_tournament` accumulator. Wants its own dispatch/PR, noted in the
+queue. It is also the root fix T-10/G-4 waits on.
+
+**Files:** `scripts/comparative_machinery.py` (`load_meta` path seam + R-1 fixture block) ·
+`scripts/ci/validate_baseline.txt` (35/36→40/40) · `scripts/ci/validate_all.py` (docstring: the
+35/36 rationale was falsified by the fix) · `docs/devin-queue.md` (six items re-truthed, P1-3
+sized) · this file.
+
+**Surfaced for Andy, not done (all Class C or ruling-blocked):** P2-5b warning→refusal · P7
+freeze-hash phase0 check (needs pre-auth per queue) · P6 Propagator-as-CI (blocked on the
+lessons-archive ruling) · P1-3 dispatch (adjacent to the unsigned MCP-dispatch ruling — a cloud
+Devin session opening a PR is the right vehicle, on Andy's word).
+
+---
+
+## 2026-09-16 — Hedge design spec drafted; the hedge tournament is measuring a loss-free sample
+
+**Loss autopsy on the working ledger** (`data/trades.csv`, 246 positions, 27 fill days, position
+grain, risk = larger side). Four findings, all reproducible from the ledger alone:
+
+1. **Every dollar of loss came from an exit; zero from expiration.** Exit losses -$11,211 / 35
+   positions. Expired losses $0 / 0 positions — all 56 expired legs are winners, +$12,525.
+2. **Not a large-move pattern.** The biggest underlying move in the sample (09-16, SPX -0.43% /
+   QQQ -0.50%) was a +$1,142 winning day.
+3. **A clock pattern.** 75% of losing 0DTE IC positions have their MAE after 14:00 vs 32% of
+   winners; **89% of all loss** has its MAE inside 14:00-15:30 ET.
+4. **Exits realize the worst tick.** 40% of losers close within 5 min of their own MAE (winners
+   6%), and 24 of 30 losers were green first — median MFE +0.70% before median MAE -2.30%.
+
+**⛔ The hedge tournament cannot currently rank a loss-capping mechanic.**
+`hedge_tournament.py` replays **only `status=expired` legs**, and per finding 1 every expired leg
+in this ledger is a winner. `data/hedge_tournament.csv` confirms: 23 legs, 3 bots, ride-arm
+**minimum R = +0.0204, zero losing legs**. The 43 losing legs are all `status=closed` and are
+excluded by construction. This is a fifth defect of the same family as `hedge-research.md` §5.1's
+four, and the same verdict applies — not a weak measurement, not a measurement. The file is also
+**stale** (last `open_date` 2026-09-04 vs a ledger running to 09-16). Root cause shared with the
+deferred `defang` arm: the ledger carries entry/exit/MFE/MAE but **no intraday premium path**.
+
+**⚠️ `hedge-research.md` §5.1 defect 1 is live again.** `GF-QQQ-IC-Ride`, `-Touch0` and
+`-Ride-Delta` are **100% identical** on every shared open (27/27, 9/9, 9/9 — same close timestamp,
+same P/L to the cent). Three of the eight-arm GF family are one arm wearing three names. Must be
+resolved before the GF family is the substrate for any hedge arm.
+
+**Written:** `docs/hedge-design-spec-2026-09-16.md` (234 lines, sha256
+`638a99acb143404aa8444149db20023f64690946702a5f6d3ca2d9b27d3a6e6c`) — **DRAFT, UNSIGNED**, T4
+evidence tier, explicitly authorizing nothing. Carries the trigger proposal (T-H1: prior positive
+MFE + give-back from high + at/after 14:00, thresholds left `<FILL>`), the platform-expressibility
+wall (§11 "any condition referencing its own past" is NOT NATIVE, so T-H1 is expressible as an
+**exit** but not as a **hedge opener**), six ranked candidate instruments, and five open rulings.
+
+**Open ruling flagged as blocking:** `hedge-research.md` §1.3 ("a hedge is config, not a pillar;
+standalone hedge bots are reserved for genuine separate protective positions, which this fleet
+does not run") is **opposed** to Andy's 2026-09-08 definition ("hedge = separate protective
+position opened after the condor starts losing; exit strategy != hedge"). The platform supports
+the first and blocks the trigger for the second. Needs a ruling before any arm is built.
+
+**AMENDED same session, at Andy's instruction.** The first draft framed defang as one of two
+blocking defects. **Wrong weighting — corrected.** Defang is excluded twice over
+(`oa-platform-reference.md` §11 row 5 NOT NATIVE; `greenfield-family-spec.md` §3.1 excluded as an
+arm) and `IC-SPX-Fortress-Defang` is OFF with **zero post-cutover ledger rows** — so the deferred
+arm is a closed decision advertising itself as an open gap, not a gap. §3 now carries ONE blocker
+(the loss-free tournament universe, §3.1), defang demoted to §3.2 "not a gap, dead code" with a
+recommendation to delete the stub, and the shared root cause (no intraday premium path) promoted
+to §3.3. New ruling slot §9.6. Also confirmed for the record, against Andy's question: the
+analysis uses **no pre-cutover data** — `trades.csv` earliest `open_date` is 2026-08-10, exactly
+`LEDGER_START`, zero rows before it.
+
+**RULED SAME SESSION — `R-2026-09-16-HEDGE-DEFINITION`.** Andy, verbatim: *"Rule of thumb going
+forward should be : separate protective position, exit strategy != hedge"*. This closes spec §9.1.
+`hedge-research.md` §1.3 ("a hedge is config, not a pillar… standalone hedge bots are reserved for
+genuine separate protective positions, which this fleet does not run") is **OVERRULED** — banner
+owed, original text stands per the §0.2 convention.
+
+**The operative consequence, recorded because it is not small: under this definition the fleet has
+NO buildable hedge on Option Alpha today.** Every natively-expressible candidate in spec §6 —
+armed trail (`tstop`), `maxtrail`, time-gated flat close — is an EXIT and is disqualified as a
+hedge. The only true hedge (a separate protective position opened on deterioration) needs a
+give-back-from-high trigger, which is self-referential, which `oa-platform-reference.md` §11 row 6
+rules NOT NATIVE. Spec §6.1 records the three ways out (present-state trigger proxy — leading
+candidate *time gate ∧ underlying-distance-to-own-short-strike*, expressibility **UNVERIFIED, must
+be probed in OA**; off-platform webhook trigger; or an explicit decision to accept a time-only
+opener). **None ruled.** Until one is, T-H1 stands as a measurement definition, not a buildable
+trigger.
+
+**⚠️ PROPAGATION SURFACE — FILED, DELIBERATELY NOT SWEPT.** The ruling renames a large amount of
+existing work: 15+ files call exit mechanics "hedges". Confirmed instances include
+`greenfield-family-spec.md` PR-18 `GF-QQQ-IC-SL100` and PR-19 `GF-QQQ-IC-SL200`, both labelled
+"experiment (hedge arm)" and both plain stop losses; `daily-loop-spec.md:212` ("defensive exit
+(hedge / stop / defang)") which conflates the two outright; `scripts/hedge_tournament.py` and the
+"Hedge tournament" section of `STATUS.md`, which rank exit rules under a hedge name; plus
+`rules-catalog.md` (19 hits), `pre-registration-ledger.md`, `build-plan.md`, `state.md`,
+`strategy-taxonomy.md`, `track-b-arms-spec.md`. A terminology sweep across specs is itself a gated
+decision under §5, so **nothing was renamed**. The mechanics are not killed — they may be built,
+measured and ranked as exits; they may not be called hedges or discharge a hedge item.
+
+**Files:** `docs/hedge-design-spec-2026-09-16.md` (new) · `docs/RULINGS.md` (one ruling appended) ·
+this file.
+
+**Nothing else touched.** No OA edit, no bot build, no slot, no change to any script, guard or
+predicate. Analysis was read-only against `data/trades.csv` and `data/hedge_tournament.csv`.
+
+---
+
+## 2026-09-16 (addendum) — ⛔ the 2026-09-15 OA RPC verification has NO record in this tree
+
+**Not a 09-15 session entry.** This session did not run that work and has no first-hand evidence of
+it. Writing a 09-15 entry from the memory record would be exactly the unattributed-report failure
+`R-2026-08-19-LANE-STATE-OWNERSHIP` warns about. This is a **gap note**, dated to the session that
+found the gap.
+
+**What is missing, by dated first-hand device read 2026-09-16:**
+- `docs/experiments/oa-rpc-test-2026-09-15/` — **absent** from the working folder.
+- `docs/session-log.md` — **no 2026-09-15 entry** (grep, zero hits).
+- PR #79's branch — **not in local refs** (`gitstore/bot-fleet-v2.git`: heads = devin, master;
+  origin = devin, devin-free-v2-scratch-config-cwd-guard, durable-blocker-audit-basis, foreman,
+  master, t03-ledger-regression, t43-manifest-selftest-ci, t44-g4-caps, t45-export-range-guard,
+  t46-catchup-capture, t47-s24-freeze). No `master` merge commit for it in `logs/HEAD`.
+
+**What the memory record claims** (cited as a claim, not as evidence): the `zdte.*` backtest RPC
+was tested and verified USABLE end-to-end on 2026-09-15; UI and API twins produced identical stats;
+`zdte.testDetails` echoes the executed config; `testResults` with `pos:true` gives per-trade
+intraday closeTime + exit reason; evidence in `docs/experiments/oa-rpc-test-2026-09-15/` (PR #79).
+Standing planning assumption: **Andy obtains written OA authorization before any further use.**
+
+**Why this matters beyond bookkeeping.** §9.1 holds that uncommitted work at session end is
+unfinished work and that the folder is the only memory this project has. A verified capability that
+exists only in an unmerged PR and in chat memory **is invisible to every session that reads the
+folder** — which is precisely what happened here: this session analysed the hedge problem from
+`data/trades.csv` alone and concluded the key counterfactual was unanswerable without purchased
+option-chain history. That conclusion was **wrong**, and it was wrong because the ranking surface
+that answers it is not in the tree. Corrected in the spec, §3 banner and §6.1 option 4.
+
+**Owed:** land PR #79 (or pull it) so `docs/experiments/oa-rpc-test-2026-09-15/` and a 09-15 entry
+exist on disk. Until then the RPC path is cited in the spec as **UNVERIFIED IN THIS TREE** and is
+explicitly not load-bearing.
+
+**Spec amended same session** — `docs/hedge-design-spec-2026-09-16.md` now 284 lines, sha256
+`d94f2337b84e6e513f2f0d9726b380eaba0c211bc22702c830c6c96af0011833`. §3 header corrected (the
+blocker binds ranking **from the live ledger**, not ranking as such — OA's backtester is an
+independent surface; original text left standing per §0.2); §3.3's "only item actually owed" marked
+falsified by the same banner; §6.1 gains option 4 (answer it in the backtester — **whether `zdte`
+can express a SECOND position is UNMAPPED, and under `R-2026-09-16-HEDGE-DEFINITION` that is the
+whole question; one backtest settles it**); new ruling slot §9.7 making that probe the first action,
+gated on written OA authorization and on PR #79 landing.
+
+**Files:** `docs/hedge-design-spec-2026-09-16.md` (amended) · this file.
+
+*Addendum ~00:15 UTC:* Andy said go; T-10/P1-3 dispatched as cloud session
+`ac1033c682c54d9db23d843c640e62b1` (tags T-10/G-4, repo chace2827/bot-fleet-v2, branch→PR, no merge).
+Pre-check found the portfolio "in flight" marker stale — zero live sessions existed. Dispatched via
+v3 API with the fresh service-user key after `devin auth logout` + `auth login
+--force-manual-token-flow`; the in-session MCP layer still holds the old credential until the app
+restarts, so session management ran through `api.devin.ai` directly.
+
+---
+
+## 2026-09-16 (addendum 2) — §9.3 drafted; the reconciliation it guarded is a no-op
+
+**⛔ Finding, dated first-hand device read 2026-09-16.** `hedge_tournament.py`'s ride-arm
+reconciliation (`:343-348`) **checks nothing.** `arm_ride` (`:200`) returns `fl(leg["pnl"])`
+verbatim with no reference to `status`; `:306` `ride_check[day] += pnl` and `:307`
+`ledger_check[day] += fl(t["pnl"])` increment **in the same loop iteration from the same leg**; the
+`risk <= 0` guard at `:292` `continue`s before both, so they cannot diverge even on skipped legs.
+`ride_check == ledger_check` is tautologically true. It is a check that addition works.
+
+This **falsifies the premise of spec §9.3**, which was written on the assumption that widening the
+replay past `status=expired` would break the invariant. There is no invariant to break. The slot is
+therefore not "how do we preserve it" but "what should it have been, and what baseline is each rule
+scored against."
+
+**Written:** `docs/decision-card-2026-09-16-tournament-baseline.md` (120 lines, sha256
+`8d898d0d12f0e1e2856992d64f432f6058e4c6c6d776ce4394b29e521d2fe422`) — **ONE SLOT, NOT RULED.**
+Proposes `R-2026-09-16-TOURNAMENT-BASELINE`: widen the universe to all positive-risk legs (admits
+the 43 losing legs the engine has never seen); baseline becomes per-population — settlement for
+`expired`, **what actually happened** for `closed`; `ride` renamed `actual` and every rule's
+`else ride` becomes `else actual`. Backward compatible **and testable** — `arm_ride` already
+returns `pnl` verbatim, so an expired-only re-run must reproduce every existing value unchanged,
+and a single altered number means the change overreached. The hold-longer counterfactual is marked
+**NOT EVALUABLE**, never modeled — it is answerable only in OA's `zdte.*` backtester, gated on
+written OA authorization. The dead recon is replaced by three checks that can actually fail
+(population count, ordering law, bounds).
+
+Rationale recorded in the card: the engine has been scoring every rule against a settlement the
+losing positions never reached. Andy's own question — *"which hedges would have turned a losing
+position to less neutral or positive"* — names **what happened** as the comparison target, not
+settlement. Same defect as §3.1 in different clothes.
+
+Card carries a drafted Devin queue item (**H-1**), deliberately **not** added to
+`docs/devin-queue.md` — it is contingent on the signature. H-1 has **no OA dependency** and runs
+entirely against `trades.csv`, so it is workable while OA authorization is outstanding.
+
+**Status of the other threads:** PR #79 merge — Andy's, outstanding. Written OA authorization —
+requested by Andy, awaiting answer; blocks §9.7. Terminology sweep, `hedge-research.md` §1.3
+banner, §9.6 defang stub — all still unruled.
+
+**Files:** `docs/decision-card-2026-09-16-tournament-baseline.md` (new) · this file.
+
+---
+
+## 2026-09-16 (close) — Devin OA-capture authorized; handoff written; H-1 running
+
+**H-1 is working** — dispatched to Devin Desktop connected to this folder (not the CLI wrapper,
+not a `/tmp` clone). The Desktop route sidesteps the gitignored-CSV-absent-from-clones trap, since
+`data/hedge_tournament.csv` is tracked and present in the live folder.
+
+⚠️ **H-1 implements `R-2026-09-16-TOURNAMENT-BASELINE`, which is still UNSIGNED** (drafted in
+`docs/decision-card-2026-09-16-tournament-baseline.md`). Andy authorized the dispatch in chat, but
+the card is marked NOT RULED. **Sign it to match what was executed**, or the record shows work that
+outran its authorization — flagged in the pickup block, not silently reconciled.
+
+**RULED — `R-2026-09-16-DEVIN-OA-CHROME-CAPTURE`.** Devin may drive its own Chrome to capture what
+the hedge test needs from OA. **CAPTURE ONLY — not edits**; §5's two-layer regime and §7's lane
+split stand for edits. This is a bounded carve-out recorded deliberately rather than drifted into.
+Three binding conditions, each from a defect already paid for: (a) scope every capture to the host
+under study **at capture time** — the 2026-08-20 recon incident wrote 41 WebSocket frames from an
+unrelated tab into a repo file; (b) **Devin does not have the `oa-driving` skill** — its traps live
+in a Claude skill, not this repo, so any Devin OA prompt must name `docs/oa-ops-runbook.md` and
+`docs/oa-platform-reference.md` §0.3 as the in-repo substitutes; (c) the Exit Options panel is never
+evidence — the Trades list is.
+
+The `zdte.*` RPC path is **DEFERRED, not rejected.** Spec §9.7's probe stays open and stays gated on
+written OA authorization, still outstanding.
+
+**Handoff written** to `docs/state.md` as a `▶ PICKUP` block at the top of the cold-read doc: read
+order, the thread in four sentences, what was signed, what was drafted-not-signed, what is open, and
+what is blocked on Andy rather than on work. Written so the next session starts from files instead of
+re-deriving in chat.
+
+**Lane ruling recorded in the pickup block, not as a new ruling** (it restates `CLAUDE.md` §7 rather
+than amending it): Devin dispatch and foreman duty belong in **Claude Code (terminal)**. Cowork
+cannot commit, cannot push, has no Devin MCP token, and its permission classifier refuses
+agent-spawning scripts by design — so Cowork cannot run that lane regardless of preference. Cowork
+keeps strategy, rulings, specs, docs and OA judgment.
+
+**Nothing built.** Andy: *"don't build anything yet."* This entry and the two documents it names are
+close-out under §9.1, not work product.
+
+**Files:** `docs/RULINGS.md` (one ruling appended) · `docs/state.md` (PICKUP block) · this file.
+
+---
+
+## 2026-09-16 (close 2) — baseline card SIGNED; §1.3 bannered; Devin notes recorded
+
+**✅ `R-2026-09-16-TOURNAMENT-BASELINE` SIGNED** (Andy in-chat, verbatim *"Help me sign the
+tournament baseline card?"*). Recorded in `docs/RULINGS.md` status Active; card header updated;
+spec §9.3 marked RULED with the original slot text struck, not removed. Recorded **explicitly** that
+the signature came **after** H-1's dispatch and ratifies work in flight — not backdated, and Andy
+keeps rejection at commit review. The §3 acceptance test (expired-only re-run must reproduce every
+committed value unchanged) is what makes ratify-after-dispatch safe: an overreaching implementation
+fails loudly rather than landing quietly.
+
+**✅ `hedge-research.md` §1.3 OVERRULE BANNER APPLIED.** Mechanical propagation of
+`R-2026-09-16-HEDGE-DEFINITION` under `R-2026-08-31-DERIVED-RULING-AUTHORITY` (a) — the entailment
+is the ruling itself, no new judgment. Original text left standing and quoted in full per
+`oa-platform-reference.md` §0.2. The clause *"which this fleet does not run"* is called out as
+overtaken: running a separate protective position is now the objective.
+
+**Devin notes recorded, both as OPEN items rather than applied changes:**
+- ⛔ **HOLD on the Devin OA dispatch prompt.** Andy: *"Awaiting notes on what the OA claude skill
+  will be in Devin, wait on building new chat prompt until we have this."* Per §9.2 a hold means no
+  writes on that item until released. Nothing was drafted. The underlying problem is
+  `R-2026-09-16-DEVIN-OA-CHROME-CAPTURE` condition (b) — the `oa-driving` skill's traps live outside
+  this repo and Devin cannot read them; how they reach Devin is unresolved.
+- ⚠️ **Model pin conflict.** Devin note says **use SWE-2 MAX**; `scripts/devin_free.sh` hardcodes
+  `swe-1-7` and refuses `--model` by design (the wrapper exists precisely because
+  `swe-1-7-lightning` prefix-matches `swe-1-7` and is PAID). H-1 went via Devin Desktop, which
+  bypasses the wrapper, so the conflict is **dormant, not resolved**. Must be settled before any CLI
+  dispatch — probe and assert the receipt, never assume.
+
+**Still outstanding and NOT actionable from this lane:** PR #79 merge (Andy — this session cannot
+reach git or the GitHub API); written OA authorization (gates spec §9.7).
+
+**Files:** `docs/RULINGS.md` (one ruling) · `docs/decision-card-2026-09-16-tournament-baseline.md`
+(header → RULED) · `docs/hedge-design-spec-2026-09-16.md` (§9.3 closed) · `docs/hedge-research.md`
+(§1.3 banner) · `docs/state.md` (PICKUP updated) · this file.
+
+## 2026-09-16 — Devin (Desktop, SWE-2 Max): oa-drive skill written; zdte.* verification lands
+
+- **`.agents/skills/oa-drive/SKILL.md` written** — the in-repo, Devin-discoverable OA access
+  skill (it entered the live skill list on write). Covers: Andy's launch ritual (dedicated
+  CDP profile `$HOME/.chrome-oa-profile`, he logs in), attach+verify (no `/login`, PAPER on
+  `/home` — the `/backtests` shell hides the account bar), `oa_capture.mjs` read path,
+  `oa_driver.mjs` write path (dry-run default, `--allow-write --bot`, ambiguity/occlusion
+  refusals, traces), the passive recorder pattern, the verified `zdte.*` arg shapes, and the
+  stop conditions. Closes the mechanism named in `R-2026-09-16-DEVIN-OA-CHROME-CAPTURE`
+  condition (b). **The state.md HOLD is NOT released** — that is Andy's call; the update note
+  records only that the mechanism exists.
+- **`zdte.*` RPC verification (ran 2026-09-15 under Andy's in-session "continue the job")**:
+  verdict USABLE — `zdte.startTest` executes the exact config sent; API results byte-identical
+  to UI-built twins (BASE replay, PT50 variant); `testDetails.opts` echoes sent config; touch
+  wire format captured (`exits.touch={type:usd,value:0}` = "$0 from ITM or less"); 15/63 trades
+  exited by touch with intraday `closeTime`s. Artifacts + probe log on **PR #79 (OPEN)**,
+  branch `devin/oa-rpc-test-2026-09-15`, `docs/experiments/oa-rpc-test-2026-09-15/`.
+- **Written OA authorization for scripted/AI-driven access remains outstanding** — the ToU
+  exposure is logged in the experiment's risk section; the skill gates all use on it.
+- RPCTEST-BASE ×2, RPCTEST-PT50 ×2, RPCTEST-TOUCH exist in the OA backtest list — Andy may
+  delete them in the UI.
+
+**Files:** `.agents/skills/oa-drive/SKILL.md` (new) · `docs/state.md` (HOLD update note) ·
+this file.
+
+---
+
+## 2026-09-16 (close 3) — OA authorization returned SCOPED; boundary recorded; skill rewritten
+
+**OA replied. The grant is narrow and the word "deferred" is retired.**
+`R-2026-09-16-DEVIN-OA-CHROME-CAPTURE-A1` amends (does not replace) the morning's ruling:
+
+- **AUTHORIZED — the UI path.** Launch/attach Chrome, navigate, click, fill forms, read rendered
+  content, screenshot, OA's own Export Data, build and run backtests **through the interface**.
+- **CAPTURE ONLY — no OA edits.** Bot/automation/scanner/position/settings surfaces are read-only.
+  Edits stay in the Cowork lane under §5's two-layer regime.
+- **NOT AUTHORIZED — the wire protocol.** No fetch/XHR wrapping, no `POST /api/request` of our own,
+  no `zdte.*` replay, no traffic recorder. **The 2026-09-15 verification is history, not a toolkit.**
+- **"Deferred, revisit later" → "OUT OF SCOPE pending a broader written grant."** Deferral is a
+  scheduling choice we make; this is a permission boundary someone else set.
+
+**⚠️ THE WEAKEST JOINT, recorded deliberately: the boundary rests on Andy's PARAPHRASE of OA's
+reply, not its verbatim text. The verbatim email controls.** Two places the reading may be wider
+than the grant: (1) **CDP** — the argument for including it is *"CDP is the only mechanism Devin has
+for navigating Chrome, therefore the grant includes it,"* which reasons from OUR capability to THEIR
+permission, backwards as logic even where it lands right; CDP is literally the Chrome DevTools
+Protocol and the relayed prohibition names *"the inspection portion of each page."* (2) **Page-context
+reads** (`Runtime.evaluate`, the OA Grab bookmarklet) — marked in-scope-but-most-exposed in the skill,
+and the first line to fall if OA's text is narrower. **Andy owns re-reading the email; if it says
+anything broader than "the API process," the banner narrows BEFORE any run.**
+
+**⛔ Condition (b) of the morning ruling was FALSE when written — withdrawn.** It claimed the
+oa-driving traps *"live in a Claude skill, not in this repo, and Devin cannot read them."* Dated
+first-hand device read: `.agents/skills/option-alpha/SKILL.md` has been **tracked since 2026-08-17**
+(14,648 bytes) carrying the five laws, §5 Traps, §4 two-layer verification, §7 not-expressible and
+§8 rules of engagement. The HOLD rested on a premise that was never true. What was genuinely missing
+was the **plumbing**, now at `.agents/skills/oa-drive/SKILL.md` (rewritten 00:46 with the
+authorization banner at the top).
+
+**Propagated:** spec §9.7 → OUT OF SCOPE (original text struck, not removed); §6.1 option 4 → the
+backtester question survives but is answered **through the UI, by opening it and looking**, not by
+probing `zdte.startTest`. Recorded there in plain terms what that costs: **scale.** The RPC path made
+sweeps cheap; the UI path is one hand-built backtest at a time, so **which hypotheses get tested now
+matters far more than it did.**
+
+**⛔ PREMISE CORRECTION — a relayed claim was wrong.** The hand-off stated PR #79 was *"not yet
+pulled to this tree."* Dated first-hand device read: `docs/experiments/oa-rpc-test-2026-09-15/`
+**is present, 20 files.** It was pulled during this session's rebase. The other half of the claim
+**stands**: `grep "^## 2026-09-15" docs/session-log.md` returns **0** — the 09-15 entry is still owed
+and cannot be written from this lane without first-hand evidence of that session's work.
+
+**Files:** `docs/RULINGS.md` (amendment ruling) · `docs/hedge-design-spec-2026-09-16.md` (§9.7, §6.1)
+· `docs/state.md` (HOLD note + PR #79 / authorization status) · this file.
+**Not written by this session:** `.agents/skills/oa-drive/SKILL.md` (Devin's, already on disk).
+
+---
+
+## 2026-09-16 (close 4) — HOLD RELEASED; Devin OA dispatch prompt drafted
+
+**✅ HOLD RELEASED by Andy.** Mechanism decision recorded as **FINAL**: Devin's OA access is the
+**browser-driven UI path only; it will never use the API.** The boundary is already carried in
+`.agents/skills/oa-drive/SKILL.md`'s top banner (CDP/UI navigation and capture authorized,
+capture-only with no bot edits, wire protocol prohibited, stop conditions).
+
+**Written: `docs/dispatch-oa-capture-2026-09-16.md`** (118 lines, sha256
+`3f329f856621e54a7d756a422b0e2dc71b73c7b83764ef78cafe8754d4861d14`) — as a repo doc, not a chat
+paste, per the free-wave lesson that a run starting from files costs minutes and one starting from a
+chat costs a session.
+
+It points at **both** in-repo skills in reading order (`option-alpha` = the law and it wins on
+conflict; `oa-drive` = plumbing + boundary), and carries the ruling's conditions as three
+no-judgment rules: **capture only, never edit** · **no wire protocol** · **scope every capture to
+the host at capture time**, the last citing the 2026-08-20 recon incident by name. The evidence rule
+is stated separately: **the Trades list is the only order-level evidence**; the Exit Options panel is
+intent, not execution; a tool success message is not verification.
+
+**First task = backtester surface reconnaissance, read-only.** *Can OA's backtester express a
+SECOND, separate protective position?* Under `R-2026-09-16-HEDGE-DEFINITION` that is the blocking
+question for the entire hedge program (spec §6.1 option 4), and it is answered by opening the
+backtester and looking rather than by probing an endpoint. `NOT DETERMINABLE` is named as a
+legitimate answer. Chosen as the first dispatch because it is pure read, has a verifiable answer,
+and exercises the whole lane where a wrong answer is cheap — `CLAUDE.md` §5, pilot on a dead bot.
+
+**Deliverable shape is `data/captures/2026-09-16-roster/`, imitated not reinvented**: raw `01-*`
+capture unmodified · derived `02-*` whose header names the raw file **and its sha256** · screenshots
+· README with TZ-offset timestamp, a file/sha256/what-it-is table, verbatim quotes of anything
+relied on · `SHA256SUMS.txt`. The prompt also requires Devin to **list its refusals**, on the
+reasoning that a run with none, under a boundary this tight, is more suspicious than one with
+several.
+
+**⛔ TWO STANDING GATES RECORDED — NEITHER DISCHARGED, AND GATE 1 BLOCKS DISPATCH.**
+1. **The verbatim OA email controls.** Andy re-reads it before the first run. If narrower than "the
+   API process," the banner narrows and **page-context reads (`Runtime.evaluate`, the OA Grab
+   bookmarklet) fall first.** ⚠️ Noted in both the dispatch doc and `state.md`: **the 2026-09-16
+   roster bundle the prompt tells Devin to imitate was produced by the bookmarklet**, so a narrowing
+   changes the capture method, not only the paperwork.
+2. **If the email is ambiguous**, Andy sends OA a one-line mechanism clarification — *"operates its
+   own browser, clicks and reads like a user, never calls internal API endpoints"* — rather than
+   proceeding on inference.
+
+**Files:** `docs/dispatch-oa-capture-2026-09-16.md` (new) · `docs/state.md` (HOLD → RELEASED, gates
+recorded) · this file.
+
+## 2026-09-16 (close 5) — SWE-2 MAX / devin_free.sh pin question settled from local evidence (Devin, mounted tree)
+
+Andy asked which Devin session had worked the SWE-2 MAX problem and what to tell Cowork. The
+Devin MCP is unauthenticated on the Cowork side and `~/.local/share/devin/` is outside Cowork's
+folders, so the answer was pulled first-hand from `cli/sessions.db` + `cli/logs/` on this side.
+
+**The "lost" session was never titled for the pin.** The SWE-2 MAX findings live in
+`closed-poppyseed` ("Difference Between Two Models" — ran ON swe-2-max) and `achieved-plane`
+("Free Models: Usage, Limits, and Comparison to Claude"). This session (`occipital-provelone`)
+auto-took the pin-conflict title from Andy's paste, which is why it masquerades as the original
+in the session list.
+
+**Three facts handed to Cowork, each with its proof:**
+1. Resolved identifier is `swe-2-max`: `sessions.model` verbatim, 10 sessions, persisted via ACP
+   `session/set_config_option{config_id=model}` (devin_20260915-170017_33591.log). The requested
+   artifact `resolved_model_uid=swe-2-max` exists nowhere — that field is emitted only on the
+   `-p` dispatch path and has only ever been `swe-1-7` (362x) / `swe-1-7-medium` (58x).
+2. The CLI accepts the string — the same binary ran all 10 swe-2-max sessions via ACP — but
+   `devin models list` cannot enumerate the catalog: `devin auth status` → **Not logged in**
+   (the expired key; Andy's restart-app queue item covers it). End-to-end `-p --model swe-2-max`
+   is NOT DETERMINABLE without a live dispatch.
+3. **SWE-2 Max is paid** (picker-sourced: "Max = highest reasoning effort — burns the most
+   credits per request"); the Free-marked SWE-1.x entry is SWE-1.7 Medium, and swe-1-7 carries
+   362 confirmed-free dispatch receipts. So `MODEL="swe-1-7"` in `scripts/devin_free.sh` is
+   correct as pinned; swe-2-max belongs on the wrapper's known-paid list, not in MODEL.
+
+**New finding worth its own line:** the free lane is **dead on auth, not merely dormant** —
+`devin -p` cannot dispatch at all until the Devin-app restart renews `credentials.toml`. The
+model question is moot until that lands. Remaining unverifiable-by-agent: the Desktop picker's
+`Promo · Free` badges — Andy eyeballs which entries still carry Free (if swe-1-7's promo ended,
+that — not SWE-2 MAX — is the trigger to revisit the wrapper).
+
+**Files:** this file only. No repo code touched; no decision changed — the wrapper is unchanged
+and the recommendation is "keep the pin."
+
+---
+
+## 2026-09-16 (close 5) — dispatch doc extended to two phases; hedge test arms named
+
+`docs/dispatch-oa-capture-2026-09-16.md` now 168 lines, sha256
+`0d733b989610a7940c6b8d4108bf67de90f3bd0f92be9b2d596b33a9951abef6`.
+
+**⛔ ADDED AS RULE 0 — DEVIN DOES NOT LOG IN.** Andy launches Chrome and authenticates by hand
+(`oa-drive` §1, *"What Andy does by hand (the session cannot)"*); Devin attaches to an
+already-authenticated browser and **never requests, enters, stores or reads credentials.** `/login`
+in a URL or a sign-in form is a **STOP**, not a prompt to ask Andy for a password. Added because the
+request was phrased as "log into my OA account," which would have put credentials in the agent's
+hands and is the opposite of how the skill is designed.
+
+**Phase structure.** Phase 0 = the read-only backtester reconnaissance (unchanged). **Phase 1 = the
+hedge tests, and it must not run in the same session** — Phase 0's answer decides which Phase 1
+exists.
+
+- **Phase 0 = YES** (backtester can express a second, separate position) → four arms, one backtest
+  at a time, in order: **H-0 control** (no hedge, no stop, ride — run FIRST; without it nothing
+  else means anything) · **H-A** protective position opened at/after 14:00 only when the primary is
+  already losing (the core hypothesis, from §2.3's 75%-vs-32% clock split and the 89% of loss with
+  its MAE in 14:00-15:30) · **H-B** same but unconditional on time alone, to isolate whether the
+  conditionality earns its cost · **H-C** SL100 / SL200 as the **incumbent to beat**, included
+  deliberately because both are net negative on live data.
+- **Phase 0 = NO / NOT DETERMINABLE** → H-0 and H-C only, reported as an **exit** comparison, with
+  the README saying the hedge question is unanswered. ⛔ **Explicitly forbidden: substituting an exit
+  variant and calling it a hedge** — `R-2026-09-16-HEDGE-DEFINITION` makes that a category error.
+
+**Binding on both phases:** backtests only, no live bot created/cloned/enabled/edited · every run
+captures its configuration (verbatim UI labels) alongside its results or the run is uninterpretable
+later · the sample window must be quoted from the UI · compare by **R**, never raw $, with the unit
+labelled · ⚠️ results are **T4 at best** and support no live-capital decision, so Devin reports
+numbers and writes no recommendation.
+
+**Dispatch stays blocked on Gate 1** — Andy reads the verbatim OA email first. Unchanged.
+
+**Files:** `docs/dispatch-oa-capture-2026-09-16.md` (extended) · this file.
+
+---
+
+## 2026-09-16 (close 6) — `-A2`: backtests may be saved; no OA MCP exists
+
+**✅ RULED — `R-2026-09-16-DEVIN-OA-CHROME-CAPTURE-A2`.** The capture-only clause is amended in one
+narrow place: **create · save · duplicate · rename · delete · run BACKTEST configurations is
+permitted.** Everything touching the **live fleet** — bots, automations, scanners, positions,
+account settings, enable/disable — remains forbidden and absolute. A backtest is not a bot.
+
+Recorded as a ruling rather than accepted as the chat aside it arrived as (*"these are dispensable
+backtests… they can be saved"*, mid-run). **A boundary that moves on a passing remark is not a
+boundary** — that was one of the four findings from reviewing the Devin exchange.
+
+**⛔ MANDATORY NAMING: `ZZ-AGENT-<YYYY-MM-DD>-<arm>` on every agent-created backtest.** Rationale
+cited in the ruling: saved backtests land in **shared account state**, and a later capture reading
+"the backtest list" cannot otherwise separate agent artifacts from Andy's own work. Same defect
+class as the duplicate `bots_meta` row that silently rerouted $600 with 11/11 guards green. One
+unprefixed backtest is a defect to be renamed, not a judgment call, and Devin must self-report it.
+
+**⛔ "We have an MCP with OA in Claude Code" — FALSE, and the correction matters.**
+`docs/AI Agent Stack.md`:256 records with citation: *"No public/read API, no MCP/SDK — confirmed by
+absence in `docs.optionalpha.com/llms.txt` and `sitemap.md` plus browser-only architecture."* What
+exists in Claude Code is the **Devin** MCP. And the conclusion holds either way: **OA publishes no
+API, so anything calling itself an OA MCP would necessarily be built on the undocumented internal
+`/api/request` RPC — the exact path `-A1` prohibits.** An MCP wrapper does not change what is
+underneath; the boundary is about the mechanism reaching OA, not the tool shape calling it. The UI
+path is not a detour around a better option — it is the only option.
+
+**⚠️ SURFACED AND CARRIED INTO THE DISPATCH: backtest data may not be exportable.**
+`docs/AI Agent Stack.md`:256, citing a community post — *"licensing agreements prevent OA from
+providing download capabilities of backtest data."* If it holds, **Phase 1 has no Export Data path**:
+results are read off the rendered page and transcribed, and the capture bundle becomes the
+**primary record**, not a convenience. Every result must carry its configuration captured verbatim
+alongside it or the number cannot be re-derived — re-running the variant is the only re-check. The
+dispatch now instructs Devin to **confirm the no-export claim first-hand** against the results
+screen, since the doc itself flags it as confirmation-by-absence rather than an affirmative OA
+statement.
+
+**Dispatch updated** (`docs/dispatch-oa-capture-2026-09-16.md`, sha256
+`688017222f626a0c8b219ffc644f3f384738b4a76c101220783390c29e9d162e`): rule 1 retitled **"NO
+LIVE-FLEET EDITS — EVER"** with the backtest exception and the naming rule stated inline; Phase 1
+rules carry the no-export assumption and the confirm-it instruction.
+
+**Files:** `docs/RULINGS.md` (one ruling) · `docs/dispatch-oa-capture-2026-09-16.md` · this file.
+
+## 2026-09-16 (close 7) — Hedge north star written; Devin 09-15 sessions reconstructed (Devin, mounted tree)
+
+Source: Devin Desktop session (selective-kitten), read-only research + docs write. No OA contact.
+
+- **All seven Devin sessions started 2026-09-15 reconstructed from the local sessions DB**
+  (`~/.local/share/devin/cli/sessions.db`) — the Devin MCP route is dead (401, expired API key;
+  matches the known auth issue). Relevant to this project: `bird-roarer` (OA backtest UI nav test,
+  superseded mid-run), `sudden-iodine` (the `zdte.*` RPC validation probe → verdict USABLE, PR #79,
+  detectability + ToU analysis, the ~175-run cost model, and the first draft of what became
+  `.agents/skills/oa-drive/SKILL.md`), `uttermost-twilight` (close-process review → self-deriving
+  `close.sh` + `docs/daily-close.md`; also ran the 09-16 close), `moored-gazelle` (tastytrade MCP
+  docs review — future sanctioned-path candidate). `prickly-fiber`/`river-passive` are the other
+  project dir (TT3).
+- **`docs/hedge-north-star.md` written** — the hedge program's direction doc, built at Andy's
+  instruction by merging the Cowork strategy chat ("The honest verdict" / "How I'd run the research
+  natively", pasted in full — the claude.ai share link is Cloudflare-gated and unfetchable) with the
+  signed rulings and post-cutover evidence. Contents: the signed definition; the §2 loss signature;
+  native-first reactive hedge (Monitor CAN open a position — `oa-platform-reference.md` §4); the
+  joined-backtest method (V0–V4) that the Phase-0 NO answer requires; the UI-only authorization
+  boundary with the chat's `zdte.startTest` plan explicitly marked withdrawn; the §5.2 arm bar;
+  the assumption-register precondition; merged cost/calendar.
+- **Two corrections carried, not smoothed:** the chat's "condors die on large directional moves" is
+  the v1 model — this fleet's losses are 14:00–15:30 give-backs on small-net-move days (spec §2.2);
+  and the chat's RPC sweep predates the scoped grant — UI path only, one test at a time.
+- **Pointers added** so the aim is visible everywhere a session starts: `CLAUDE.md` §6 file map,
+  `docs/state.md` PICKUP read-order, `docs/hedge-research.md` top banner, `docs/hedge-design-spec-
+  2026-09-16.md` STATUS banner, `docs/devin-queue.md` header.
+- **Standing:** the doc is direction, not authorization — builds still need "amend the plan" +
+  pre-registration. `magical-quart` (Phase-0 backtester recon) was still running at write time;
+  its bundle `data/captures/2026-09-16-oa-backtester/` was not yet on disk.
+
+**Files:** `docs/hedge-north-star.md` (new) · `CLAUDE.md` · `docs/state.md` ·
+`docs/hedge-research.md` · `docs/hedge-design-spec-2026-09-16.md` · `docs/devin-queue.md` · this file.
+
+## 2026-09-16 (close 8) — Phase 0 backtester recon COMPLETE: answer NO (Devin, mounted tree)
+
+**Phase 0 of `docs/dispatch-oa-capture-2026-09-16.md` executed.** Attached to Andy's
+hand-launched authenticated Chrome via CDP (paper account; `/login` never seen, no
+stop condition triggered). Opened New Backtest → the `Backtest Settings` drawer,
+expanded all 7 sections, enumerated every control verbatim, read every dropdown
+and the Entry Filters "More" drawer, screenshotted each section, closed the editor
+via its ✕ having changed nothing.
+
+**ANSWER: NO — single-structure only.** The `Strategy` picker is exactly 8 single
+structures (Long Call … Iron Butterfly, verbatim in the raw file); `Position
+Limit` runs `1 position`–`10 positions` but repeats the SAME structure; Position
+Criteria states verbatim `Only 1 position open in an expiration at a time`; all
+Entry Filters predicate on the underlying/market (Ranges, Indicators, MAs, Stocks
++ GEX templates) — none reference an existing position; everything post-entry is
+an exit (PT%, PT$, SL%, SL$, Expiration, Avoid Events, Touch), and an exit is not
+a hedge under `R-2026-09-16-HEDGE-DEFINITION`. `OA Portfolio` is a published
+backtest library; `Compare` aggregates independent results. Andy stated the same
+conclusion in-session; the bundle makes it captured evidence rather than memory.
+
+**Corollary for Phase 1 (Andy's call, not started):** hedge arms H-A/H-B are not
+expressible; H-0 and H-C are (single-structure + exits). Hedge venue moves to
+live paper bots or webhooks — spec-level, gated.
+
+**Bundle:** `data/captures/2026-09-16-oa-backtester/` — raw
+`01-backtest-settings-form-2026-09-16-223758.txt` (sha
+`02376a44a3b60afdaf069974ae50292f4cdc93e2bfe10003413ae6fcfebe9973`) · derived
+`02-second-position-expressivity-2026-09-16.md` · 10 screenshots · README ·
+SHA256SUMS. Template matched to `data/captures/2026-09-16-roster/`.
+
+**Boundary notes / refusals:** never logged in (attach-only); no wire protocol,
+no network inspection; no live-fleet surface touched; no field set, no save, no
+run — Phase 0 stayed capture-only even though `-A2` now permits saved backtests
+(naming rule `ZZ-AGENT-<date>-<arm>` noted for Phase 1). Untrusted synthetic
+events could not dismiss OA menus — trusted `Input.dispatch*` clicks were used;
+one menu-close took several attempts. Stop conditions never triggered.
+
+**Files:** `data/captures/2026-09-16-oa-backtester/` (new bundle) · this file.
+Tracker artifact update owed — no `update_artifact` tool in this lane.

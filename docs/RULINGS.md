@@ -5185,3 +5185,352 @@ source: >-
   first-hand read; board rows T-10 and G-4 (both Devin, Working on it).
 unclear: false
 ```
+
+```yaml
+ruling_id: R-2026-09-16-HEDGE-DEFINITION
+date: 2026-09-16
+scope: >-
+  Standing definition, fleet-wide, going forward: a HEDGE is a SEPARATE
+  PROTECTIVE POSITION. An exit strategy is NOT a hedge.
+
+  This settles the conflict logged as open ruling 9.1 in
+  docs/hedge-design-spec-2026-09-16.md, between hedge-research.md section 1
+  item 3 ("A hedge is config, not a pillar. It is a parameter on a strategy
+  — a stop level, a defang, a strike-touch close — not its own bot.
+  Standalone hedge bots are reserved for genuine separate protective
+  positions (tail put, VIX ladder), which this fleet does not run") and
+  Andy's 2026-09-08 statement ("hedge = SEPARATE protective position opened
+  after the condor starts losing; exit strategy != hedge"). Andy's
+  definition WINS. hedge-research.md section 1 item 3 is OVERRULED and is
+  to be bannered, not deleted, per the oa-platform-reference.md section 0.2
+  original-text-stands convention.
+
+  CONSEQUENCE, stated plainly and not worked around: every mechanic in the
+  current corpus called a "hedge" that is in fact a close/exit rule is
+  RENAMED, not re-scoped. Stop-loss rungs (SL50/75/100/130), profit
+  targets, trailing and armed-trailing stops, strike-touch cuts (S2),
+  time-gated flat closes and defang are EXIT MECHANICS. They may still be
+  built, measured and ranked — this ruling does not kill them — but they
+  may not be called hedges, may not be counted as hedge coverage, and may
+  not discharge a hedge item.
+
+  SECOND CONSEQUENCE, which is the operative one: under this definition
+  the fleet currently has NO buildable hedge on Option Alpha. Every
+  natively-expressible candidate in hedge-design-spec section 6 (C1 armed
+  trail, C2 maxtrail, C3 time-gated flat close) is an exit and is
+  disqualified by this ruling. The only true hedge candidate (C4, a
+  separate protective position opened on deterioration) has a trigger that
+  oa-platform-reference.md section 11 row 6 rules NOT NATIVE — "any
+  condition referencing its own past" — because give-back-from-high is
+  self-referential. The hedge program therefore needs one of: a
+  present-state trigger proxy that never references the position's own
+  history (candidate: time gate conjunct underlying-distance-to-own-short-
+  strike, expressibility UNVERIFIED — must be probed in OA before it is
+  specced), an off-platform trigger (webhook), or an explicit decision to
+  accept a time-only opener. NOT ruled here.
+
+  Nothing is renamed, swept or rebuilt by this ruling alone. The
+  propagation surface is 15+ files and a terminology sweep across specs is
+  itself a gated decision; it is filed as a separate open item, NOT applied
+  silently. See the propagation note in the same session's session-log.md
+  entry.
+verbatim: >-
+  Rule of thumb going forward should be : separate protective position,
+  exit strategy != hedge
+verbatim_of: andy
+owner: Andy (in-chat, Cowork session 2026-09-16). Definitional — gated, and given.
+status: Active
+applies_to: >-
+  docs/hedge-research.md section 1 item 3 (OVERRULED, banner owed), section
+  5.3 structural matrix, section 14; docs/hedge-design-spec-2026-09-16.md
+  sections 6 and 9.1; docs/greenfield-family-spec.md "hedge arm" labels on
+  PR-18 (GF-QQQ-IC-SL100) and PR-19 (GF-QQQ-IC-SL200), which are stop
+  losses and therefore exits; docs/daily-loop-spec.md line 212 ("defensive
+  exit (hedge / stop / defang)") which conflates the two; scripts/
+  hedge_tournament.py and the "Hedge tournament" section of STATUS.md via
+  scripts/report.py, both of which rank exit rules under a hedge name;
+  docs/rules-catalog.md; docs/pre-registration-ledger.md; docs/build-plan.md;
+  docs/state.md; docs/strategy-taxonomy.md; docs/track-b-arms-spec.md.
+superseded_by: none
+source: >-
+  Cowork session 2026-09-16, Andy in-chat, verbatim above; supersedes the
+  2026-09-08 statement's informal status by making it standing. Conflict
+  first surfaced as open ruling 9.1 in
+  docs/hedge-design-spec-2026-09-16.md. Platform limits cited from
+  docs/oa-platform-reference.md section 11 rows 5 and 6.
+unclear: false
+```
+
+```yaml
+ruling_id: R-2026-09-16-DEVIN-OA-CHROME-CAPTURE
+date: 2026-09-16
+scope: >-
+  Devin is AUTHORIZED to use its own Chrome-based navigation to capture
+  what the hedge test needs from Option Alpha. The zdte.* RPC path is
+  DEFERRED — not rejected — and is revisited later; spec section 9.7's
+  probe stays open and stays gated on written OA authorization, which is
+  still outstanding.
+
+  SCOPE OF THE AUTHORIZATION: CAPTURE ONLY. Reads, screenshots, exports,
+  backtest construction and comparison in Devin's browser. This ruling does
+  NOT grant Devin authority to make OA EDITS. CLAUDE.md section 5's
+  two-layer proof regime and section 7's placement of OA work in the Cowork
+  lane are unchanged for edits; this is a bounded carve-out for capture,
+  and it is a lane change recorded deliberately rather than drifted into.
+
+  ⛔ THREE CONDITIONS, each from a defect this project has already paid for:
+
+  (a) SCOPE EVERY CAPTURE TO THE HOST UNDER STUDY AT CAPTURE TIME, never
+  afterwards in analysis. The 2026-08-20 recon incident wrote 41 WebSocket
+  frames from an unrelated site open in another tab into a repo file,
+  because the websocket handler lacked the host filter the request handlers
+  already had. A recorder pointed at "the browser" records the WHOLE
+  browser. Devin driving a full Chrome is the same exposure, wider.
+
+  (b) DEVIN DOES NOT HAVE THE oa-driving SKILL. Its traps — three save
+  layers, a version bump that hides an unchanged routine, ref clicks that
+  silently no-op — live in a Claude skill, not in this repo, and Devin
+  cannot read them. The in-repo substitutes MUST be named in the dispatch
+  prompt: docs/oa-ops-runbook.md (capture ritual, page coverage, the nine
+  traps) and docs/oa-platform-reference.md section 0.3. Without them a
+  Devin OA capture will be confidently wrong in the ways already
+  catalogued.
+
+  (c) THE EXIT OPTIONS PANEL IS NEVER EVIDENCE. What a bot actually did is
+  read from the position's Trades list (CLAUDE.md section 3 item 3,
+  oa-platform-reference.md section 0.3). This binds Devin exactly as it
+  binds Claude, and an HTTP 200 or a tool-success message is not
+  verification (section 9.1a).
+
+  Nothing is built under this ruling yet. Andy's instruction was
+  explicitly "don't build anything yet."
+verbatim: >-
+  We will go forward for now with authorization for Devin to use it's
+  chrome based naviagtion to capture what we need. Down the road we can
+  look into using the API zdte path.
+verbatim_of: andy
+owner: Andy (in-chat, Cowork session 2026-09-16). Lane authority — gated, and given.
+status: Active
+applies_to: >-
+  docs/hedge-design-spec-2026-09-16.md section 9.7 (probe stays open, RPC
+  deferred); CLAUDE.md section 7 lane split (bounded capture carve-out for
+  Devin; edits unchanged); docs/oa-ops-runbook.md and
+  docs/oa-platform-reference.md section 0.3 (must be cited in any Devin OA
+  dispatch prompt); docs/devin-queue.md (future OA-capture items).
+superseded_by: none
+source: >-
+  Cowork session 2026-09-16, Andy in-chat, verbatim above. Conditions (a)
+  and (b) cite the 2026-08-20 recon incident and the oa-driving skill's
+  non-availability to Devin respectively; condition (c) cites CLAUDE.md
+  section 3 item 3.
+unclear: false
+```
+
+```yaml
+ruling_id: R-2026-09-16-TOURNAMENT-BASELINE
+date: 2026-09-16
+scope: >-
+  The hedge tournament's replay universe WIDENS from status=expired to every
+  leg with risk > 0, and each rule's baseline becomes PER-POPULATION:
+  settlement for expired legs, WHAT ACTUALLY HAPPENED for closed legs. The
+  "ride" arm is renamed "actual". Full text, rationale, rejected
+  alternative, acceptance test and the three replacement checks:
+  docs/decision-card-2026-09-16-tournament-baseline.md.
+
+  WHY: scripts/hedge_tournament.py:279 replays only status=expired legs, and
+  every expired leg in this ledger is a winner (data/hedge_tournament.csv:
+  23 legs, ride-arm minimum R +0.0204, zero losers). The 43 losing legs are
+  all status=closed and excluded by construction, so the engine cannot rank
+  a loss-capping mechanic at all. The engine has been scoring every rule
+  against a settlement the losing positions never reached.
+
+  ⭐ THE PREMISE OF THE SLOT WAS FALSIFIED IN DRAFTING. Spec 9.3 assumed
+  widening would break the ride-arm reconciliation. It cannot: arm_ride
+  (:200) returns fl(leg["pnl"]) verbatim with no reference to status, and
+  :306/:307 increment both sides of the assertion from the same leg in the
+  same loop pass, so :343-348 is tautologically true. It is a check that
+  addition works. It is REPLACED by three checks that can fail — population
+  count, ordering law (a fired rule's trigger timestamp <= that leg's actual
+  close_date), and bounds.
+
+  ⛔ NOT EVALUABLE, NEVER MODELED: anything requiring a position to have
+  continued past its actual exit — the hold-longer counterfactual, and the
+  "would it have recovered" hypothesis. Emits a marker row as defang does at
+  :333. This is where the strongest hypothesis lives (40% of losers close
+  within 5 minutes of their own MAE) and this ruling does not answer it and
+  must not appear to; it is answerable only in OA's zdte.* backtester.
+
+  BACKWARD COMPATIBLE AND TESTED AS SUCH: arm_pt (:204) and arm_sl (:223)
+  already fall back to fl(leg["pnl"]), so no arm's arithmetic changes — only
+  the population and the labels. Acceptance test: an expired-only re-run must
+  reproduce every committed value in data/hedge_tournament.csv unchanged.
+
+  SCOPE LIMIT: changes what the engine measures against. Changes no evidence
+  tier, sample gate, kill criterion or go-live gate, and ranks nothing.
+
+  SIGNED AFTER DISPATCH: Devin item H-1 was dispatched against this ruling
+  while unsigned. The signature ratifies work in flight; Andy retains
+  rejection at commit review. The acceptance test is what makes that safe.
+verbatim: >-
+  Help me sign the tournament baseline card?
+verbatim_of: andy
+owner: Andy (in-chat, Cowork session 2026-09-16). Measurement methodology — gated, and given.
+status: Active
+applies_to: >-
+  scripts/hedge_tournament.py (:279 universe; arm_ride -> arm_actual;
+  :343-348 recon replacement; NOT EVALUABLE markers); scripts/report.py
+  (standings must show the two populations separately, never pooled);
+  data/hedge_tournament.csv (regenerate — stale, last open_date 2026-09-04
+  against a ledger running to 2026-09-16);
+  docs/hedge-design-spec-2026-09-16.md 9.3 (CLOSED) and its 3.1;
+  docs/devin-queue.md item H-1.
+superseded_by: none
+source: >-
+  Cowork session 2026-09-16; docs/decision-card-2026-09-16-tournament-baseline.md;
+  dated first-hand device reads of scripts/hedge_tournament.py:200, :204,
+  :223, :279, :292, :306, :307, :333, :343-348 and of
+  data/hedge_tournament.csv and data/trades.csv.
+unclear: false
+```
+
+```yaml
+ruling_id: R-2026-09-16-DEVIN-OA-CHROME-CAPTURE-A1
+date: 2026-09-16
+scope: >-
+  AMENDMENT to R-2026-09-16-DEVIN-OA-CHROME-CAPTURE. The original ruling
+  stands as written; this amends it in three places and does not replace it.
+
+  (a) CONDITION (b) WAS FALSE WHEN WRITTEN — WITHDRAWN. The original said
+  the oa-driving traps "live in a Claude skill, not in this repo, and Devin
+  cannot read them." Dated first-hand device read 2026-09-16:
+  .agents/skills/option-alpha/SKILL.md has been tracked in this repo since
+  2026-08-17 (14,648 bytes) and carries the five laws, section 5 Traps,
+  section 4 two-layer verification, section 7 not-expressible, and section 8
+  rules of engagement — including "The Trades list is the only order-level
+  evidence." The HOLD that condition (b) justified rested on a premise that
+  was never true. What was genuinely missing was the PLUMBING (attach
+  sequence, oa_capture.mjs / oa_driver.mjs, wire shapes), now at
+  .agents/skills/oa-drive/SKILL.md.
+
+  (b) THE BOUNDARY, STATED. Written authorization exists for ONE scope:
+    • AUTHORIZED — the UI path. Launch/attach Chrome, navigate, click, fill
+      forms, read rendered content, screenshot, use OA's own Export Data,
+      build and run backtests through the interface. CDP is treated as the
+      mechanism that performs that navigation rather than a separate thing
+      needing its own grant (see the RECORDED INFERENCE below).
+    • CAPTURE ONLY — no OA edits. Bot, automation, scanner, position and
+      settings surfaces are READ-ONLY. Edits remain in the Cowork lane under
+      CLAUDE.md section 5's two-layer regime.
+    • NOT AUTHORIZED — the wire protocol. No fetch/XHR wrapping or patching,
+      no POST /api/request calls of our own, no zdte.* replay, no traffic
+      recorder. The 2026-09-15 verification is HISTORY, NOT A TOOLKIT.
+
+  (c) "DEFERRED" IS THE WRONG WORD — REPLACED. Everywhere the RPC path was
+  described as "deferred, revisited later," read "OUT OF SCOPE PENDING A
+  BROADER WRITTEN GRANT." Deferral is a scheduling choice this project makes
+  for itself; this is a permission boundary set by someone else. A grant that
+  says only "later" is not a grant.
+
+  ⚠️ RECORDED INFERENCE, NOT OA'S WORDS — THE WEAKEST JOINT. This boundary
+  rests on Andy's PARAPHRASE of OA's reply, not on its verbatim text. The
+  verbatim email CONTROLS. Two specific places the reading could be wider
+  than what OA granted:
+    1. CDP. The argument for including it is "CDP is the only mechanism Devin
+       has for navigating Chrome, therefore a grant of Devin's chrome
+       navigation necessarily includes it." That reasons from OUR capability
+       to THEIR permission, which is backwards as a matter of logic even
+       where it lands on the right answer. CDP is literally the Chrome
+       DevTools Protocol, and the prohibition Andy relayed names "the
+       inspection portion of each page."
+    2. Page-context reads (Runtime.evaluate, the OA Grab bookmarklet) —
+       marked in-scope-but-most-exposed in the skill. If OA's text is
+       narrower, this is the first line to fall.
+  If the verbatim email says anything broader than "the API process" — e.g.
+  "no DevTools or inspection of any kind" — the boundary narrows and the
+  skill banner must narrow with it, BEFORE any run. Andy owns re-reading the
+  email; nothing here substitutes for it.
+verbatim: >-
+  I got permission to use Devin to use its own chrome navigation system to
+  record data from bots, but no permission to use the API process that
+  involves going in the inspection portion of each page
+verbatim_of: andy
+owner: Andy (in-chat, Cowork session 2026-09-16). Permission boundary — gated, and given.
+status: Active
+applies_to: >-
+  R-2026-09-16-DEVIN-OA-CHROME-CAPTURE (amended, not replaced);
+  .agents/skills/oa-drive/SKILL.md authorization banner;
+  docs/hedge-design-spec-2026-09-16.md section 9.7 and section 6.1 option 4;
+  docs/state.md HOLD note; docs/oa-internal-api.md.
+superseded_by: none
+source: >-
+  Cowork session 2026-09-16, Andy in-chat, verbatim above, relaying OA's
+  reply in paraphrase. Condition (b) withdrawal rests on a dated first-hand
+  device read of .agents/skills/option-alpha/SKILL.md (mtime 2026-08-17).
+unclear: false
+```
+
+```yaml
+ruling_id: R-2026-09-16-DEVIN-OA-CHROME-CAPTURE-A2
+date: 2026-09-16
+scope: >-
+  AMENDMENT 2 to R-2026-09-16-DEVIN-OA-CHROME-CAPTURE. The original ruling
+  and -A1 stand; this amends the CAPTURE-ONLY clause in one narrow place and
+  changes nothing else.
+
+  WHY: the hedge comparison (Phase 1) is build-a-backtest, duplicate it, vary
+  one input, compare. That is impossible without saving. The capture-only
+  clause was aimed at the LIVE FLEET — bots, automations, scanners,
+  positions, settings — not at backtester scratch work, which touches none of
+  it. Recorded as a ruling rather than accepted as a chat aside ("these are
+  dispensable backtests… they can be saved," Andy, mid-run 2026-09-16),
+  because a boundary that moves on a passing remark is not a boundary.
+
+  PERMITTED, backtester surface only: create · save · duplicate · rename ·
+  delete · run backtest CONFIGURATIONS.
+
+  STILL FORBIDDEN, unchanged and absolute: any change to a bot, automation,
+  scanner, position or account setting; enabling or disabling any bot;
+  anything that touches the live fleet. A backtest is not a bot. If an action
+  would alter what a live bot does, it is out of scope whatever screen it is
+  reached from.
+
+  ⛔ MANDATORY NAMING — every agent-created backtest carries the prefix
+  `ZZ-AGENT-<YYYY-MM-DD>-<arm>`. Non-negotiable, and the reason is a defect
+  this project has already paid for: saved backtests accumulate in SHARED
+  ACCOUNT STATE, and a later capture that reads "the backtest list" will
+  contain agent-created entries indistinguishable from Andy's own. That is
+  the same class as the duplicate bots_meta row that silently rerouted $600
+  of realized P&L with 11/11 guards green (roster-invariant-gap). The prefix
+  makes every agent artifact identifiable at a glance and removable in one
+  pass. A backtest saved without it is a defect to be renamed, not a
+  judgment call.
+
+  ⚠️ CONSEQUENCE FOR THE EVIDENCE RECORD. docs/AI Agent Stack.md line 256
+  records, with citation, that OA BACKTEST DATA IS NOT EXPORTABLE
+  ("licensing agreements prevent OA from providing download capabilities of
+  backtest data"). If that holds, Phase 1 has NO Export Data path: results
+  are read off the rendered page and transcribed, and the capture bundle is
+  the PRIMARY record rather than a convenience. Every backtest result
+  therefore needs its configuration captured alongside it, verbatim, or the
+  number cannot be re-derived later — re-running the variant is the only way
+  to re-check it. Devin is to CONFIRM the no-export claim first-hand against
+  the results screen; it is currently a confirmation-by-absence, not an
+  affirmative statement from OA.
+verbatim: >-
+  If we are going to eventually have Devin build a backtest, and then
+  duplicate it for several variant comparison tests, it needs to save.
+verbatim_of: andy
+owner: Andy (in-chat, Cowork session 2026-09-16). Scope change to a signed ruling — gated, and given.
+status: Active
+applies_to: >-
+  R-2026-09-16-DEVIN-OA-CHROME-CAPTURE (capture-only clause, amended);
+  .agents/skills/oa-drive/SKILL.md authorization banner (capture-only bullet);
+  docs/dispatch-oa-capture-2026-09-16.md rule 1 and the Phase 1 rules.
+superseded_by: none
+source: >-
+  Cowork session 2026-09-16, Andy in-chat, verbatim above. No-export claim
+  cited from docs/AI Agent Stack.md line 256 (itself flagged there as
+  confirmation-by-absence). Naming rationale cited from the roster-invariant
+  duplicate-row incident.
+unclear: false
+```

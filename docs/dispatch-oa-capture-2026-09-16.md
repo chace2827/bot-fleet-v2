@@ -1,0 +1,182 @@
+# Devin OA capture — dispatch prompt
+
+**Lane:** Devin, browser-driven UI path only. **Authorized by** `R-2026-09-16-DEVIN-OA-CHROME-CAPTURE`
+as amended by `-A1`. **HOLD released 2026-09-16 by Andy.**
+
+⚠️ **TWO STANDING GATES — BOTH ANDY'S, NEITHER DISCHARGED BY THIS DOCUMENT.**
+1. **The verbatim OA email controls.** Andy re-reads it **before the first run**. If it is narrower
+   than "the API process," the `oa-drive` banner narrows and **page-context reads
+   (`Runtime.evaluate`, the OA Grab bookmarklet) fall first** — note that the 2026-09-16 roster
+   bundle this prompt imitates was produced **by the bookmarklet**, so a narrowing changes the
+   method, not just the paperwork.
+2. **If the email is ambiguous, Andy sends OA a one-line mechanism clarification** — *"operates its
+   own browser, clicks and reads like a user, never calls internal API endpoints"* — rather than
+   proceeding on inference.
+
+Do not dispatch until gate 1 is discharged.
+
+---
+
+## The prompt (paste below the line)
+
+---
+
+You are working in the `bot-fleet-v2` repo, connected as a local folder.
+
+**Read these three, in this order, before doing anything:**
+1. `CLAUDE.md` — the project contract.
+2. `.agents/skills/option-alpha/SKILL.md` — **the law.** Five laws, §5 Traps, §4 two-layer
+   verification, §7 what is not expressible, §8 rules of engagement. This governs. When it and any
+   other file disagree, it wins.
+3. `.agents/skills/oa-drive/SKILL.md` — **the plumbing and the authorization boundary.** Read the
+   top banner first and treat it as binding, not advisory.
+
+### ⛔ THE BOUNDARY — three rules, no exceptions, no judgment calls
+
+0. **YOU DO NOT LOG IN.** Andy launches Chrome and authenticates to OA **by hand**, before you
+   start (`oa-drive` §1 — *"What Andy does by hand (the session cannot)"*). You attach to an
+   already-authenticated browser. **Never request, enter, store or read credentials.** If any URL
+   contains `/login`, or a sign-in form appears, **STOP and report** — do not attempt to proceed,
+   and do not ask Andy for a password. If you cannot attach to an authenticated session, the answer
+   is "not attached," not "let me log in."
+1. **NO LIVE-FLEET EDITS — EVER.** Bot, automation, scanner, position and account-settings
+   surfaces are **read-only**. Do not open an edit form, change a field, toggle anything, or
+   enable/disable a bot — whatever the tooling permits. If an action would alter what a live bot
+   does, **stop and report instead**, whatever screen it is reached from. Live edits are a different
+   lane under `CLAUDE.md` §5 and are not yours.
+   **✅ BACKTESTS ARE THE EXCEPTION** (`R-2026-09-16-DEVIN-OA-CHROME-CAPTURE-A2`). You may
+   **create, save, duplicate, rename, delete and run backtest configurations** — a backtest is not a
+   bot and touches nothing live.
+   ⛔ **Every backtest you create is named `ZZ-AGENT-<YYYY-MM-DD>-<arm>`.** No exceptions, not a
+   judgment call. Saved backtests land in shared account state and a later capture reading "the
+   backtest list" cannot otherwise tell your artifacts from Andy's. One unprefixed backtest is a
+   defect to be renamed, and you report it if you make one.
+2. **NO WIRE PROTOCOL.** No fetch/XHR wrapping or patching, no `POST /api/request` calls of your
+   own, no `zdte.*` replay, no traffic recorder, no reading the network panel. You drive the
+   interface as a user does: navigate, click, read what is rendered, screenshot, use OA's own
+   Export Data. `docs/experiments/oa-rpc-test-2026-09-15/` proves the RPC path exists — **that
+   record is history, not a toolkit.** Using it is out of scope pending a broader written grant.
+3. **SCOPE EVERY CAPTURE TO THE HOST AT CAPTURE TIME — never afterwards in analysis.** On
+   2026-08-20 a recorder pointed at "the browser" wrote 41 WebSocket frames **from an unrelated
+   site in another tab** into a repo file. A recorder pointed at the browser records the whole
+   browser. Filter to `app.optionalpha.com` at the moment of capture, not when cleaning up.
+
+### ⛔ THE EVIDENCE RULE
+
+**The position's Trades list is the only order-level evidence.** The Exit Options panel shows
+*intent*, not execution — it is never evidence of what a bot did (`option-alpha` SKILL.md §0.3
+lineage; `oa-platform-reference.md` §0.3). A tool returning success is not verification either
+(`CLAUDE.md` §9.1a). State what you observed and where you observed it, every time.
+
+### PHASE 0 — TASK: backtester surface reconnaissance (read-only)
+
+Under `R-2026-09-16-HEDGE-DEFINITION` a **hedge is a separate protective position**; an exit
+strategy is not a hedge. The blocking question for the whole hedge program is:
+
+> **Can OA's backtester express a SECOND, separate protective position — one opened after the
+> primary position is already on — or is it single-structure only?**
+
+Answer it by **opening the backtester in the UI and looking.** Not by probing an endpoint.
+
+Capture, read-only:
+- The backtester's full configuration surface — every section, every control, expanded.
+- Specifically: whether any control adds a second structure/leg-group/position distinct from the
+  primary, and whether any control opens a position **conditionally, mid-trade**.
+- The vocabulary the UI uses for these, verbatim. Do not paraphrase labels.
+- Screenshots of each configuration section.
+
+**Report the answer as YES / NO / NOT DETERMINABLE, with the screenshot and the verbatim label
+that establishes it.** "Not determinable" is a legitimate and useful answer — `NOT EVALUABLE` is
+preferred over a confident guess throughout this project. Do not run a backtest to find out; do
+not build a variant; do not save a configuration.
+
+### DELIVERABLE — imitate this bundle, do not reinvent it
+
+`data/captures/2026-09-16-roster/` is the template. Copy its shape exactly into
+`data/captures/2026-09-16-oa-backtester/`:
+
+| file | what |
+|---|---|
+| `01-<surface>-<YYYY-MM-DD>-<HHMMSS>.txt` | **RAW capture, unmodified.** Rendered text as read. Never hand-edited. |
+| `02-<derived>-<YYYY-MM-DD>.tsv` or `.md` | **DERIVED.** Its header comment names the raw file **and its sha256** as the source of every field. |
+| `screenshots/` | One per configuration section, named by section. |
+| `README.md` | Purpose · capture timestamp **with TZ offset** · a `file / sha256 / what it is` table · the findings · a **verbatim** quote of any footer or label relied on · cross-check path if one exists. |
+| `SHA256SUMS.txt` | Hashes for every file in the bundle. |
+
+Read `data/captures/2026-09-16-roster/README.md` and match its structure before writing yours.
+
+### PROHIBITIONS
+
+- No git: no `add`, `commit`, `push`, no branches. **Andy runs every commit** (`CLAUDE.md` §9.1).
+  Leave the bundle in the working tree and say it is there.
+- Touch nothing outside `data/captures/2026-09-16-oa-backtester/`.
+- Do not edit `CLAUDE.md`, `docs/build-plan.md`, any spec, or any ruling.
+- No figures in prose. If you state a number, name the file and line that produced it.
+- **Stop conditions — no retries past these:** 401/403/429 · an unrecognized response shape · UI
+  numbers disagreeing with each other · a URL containing `/login` · any terms or payment prompt ·
+  **anything indicating a live (non-PAPER) account.** Stop and report; do not work around.
+
+### REPORT
+
+What you read, where you read it, the YES/NO/NOT-DETERMINABLE answer with its evidence, the bundle
+path, and anything you declined to do because a rule above forbade it. **List the refusals** — a
+run with no refusals in a boundary this tight is more suspicious than one with several.
+
+---
+
+## PHASE 1 — the hedge tests (only after Phase 0 answers)
+
+**Do not start Phase 1 in the same session as Phase 0.** Phase 0's answer decides which Phase 1
+exists. Report Phase 0, stop, wait for Andy.
+
+### If Phase 0 = YES (the backtester can express a second, separate position)
+
+Then a hedge in the project's sense is testable, and these are the hypotheses — **in this order**,
+one backtest at a time. The UI path has no sweep, so the order is the budget.
+
+| # | Arm | What it tests |
+|---|---|---|
+| **H-0** | **Control — no hedge, no stop, ride to settlement.** | The baseline every other arm is measured against. Run it FIRST. Without it the others mean nothing. |
+| **H-A** | Primary + a **separate protective position opened at/after 14:00 ET**, only on days the primary is already losing. | The core hypothesis. `hedge-design-spec` §2.3: 75% of losing positions take their worst tick after 14:00 vs 32% of winners; 89% of all loss has its MAE inside 14:00-15:30. |
+| **H-B** | Same as H-A but opened at a **fixed time regardless** of whether the primary is losing. | Isolates whether the *conditionality* earns its cost, or whether the clock alone does the work. §2.3 warns a bare time gate also fires on the 29% of winners whose MAE lands 14:00-15:00. |
+| **H-C** | Primary + **SL100** and, separately, **SL200**. | Not a hedge — an exit, and included deliberately as the incumbent to beat. Both are **net negative on live data** (-$173, -$584), the only two GF arms underwater. If the hedge cannot beat a stop that is already losing money, it is not a finding. |
+
+**Compare by R (pnl ÷ risk), never by raw $** (`CLAUDE.md` §4). Report per-arm: N, Exp(R), win
+rate, max drawdown in R, worst single R. Label the unit — *"per condor, ex-artifact"* or
+*"per leg, raw"* — every time. An Exp(R) with no unit label is untrustworthy.
+
+### If Phase 0 = NO or NOT DETERMINABLE
+
+There is no hedge to test in the backtester. **Do not substitute an exit variant and call it a
+hedge** — `R-2026-09-16-HEDGE-DEFINITION` makes that a category error, not a near-enough. Run
+**H-0 and H-C only**, report them as an *exit* comparison, and say plainly in the README that the
+hedge question is unanswered and why.
+
+### Rules that bind both phases
+
+- **Backtests only. No live bot is created, cloned, enabled, or edited.** Saving and duplicating
+  backtests is **authorized** (`-A2`); every one carries the `ZZ-AGENT-<date>-<arm>` prefix.
+- ⚠️ **ASSUME THERE IS NO EXPORT.** `docs/AI Agent Stack.md`:256 records that OA **backtest data is
+  not exportable** — *"licensing agreements prevent OA from providing download capabilities of
+  backtest data."* **Confirm this first-hand against the results screen and report what you find**;
+  it is currently confirmation-by-absence, not an affirmative OA statement. If it holds, the capture
+  bundle is the **primary record**, not a convenience: transcribe every result by hand, screenshot
+  it, and capture its configuration verbatim alongside it. A number whose configuration was not
+  captured cannot be re-derived — re-running the variant is the only way to re-check it.
+- **Every run gets its own raw capture**: the configuration as the UI displays it (verbatim labels,
+  not your paraphrase) and the results as rendered. Config and result travel together or the run is
+  uninterpretable later.
+- **State the sample.** OA's backtest history window is whatever the UI says it is — quote it. A
+  result with an unstated sample period is not a result.
+- ⚠️ **These are PAPER/backtest figures and are T4 at best.** Nothing here supports a live-capital
+  decision (`CLAUDE.md` §4 requires T2 with n>=100 / 6 months / a regime change). Do not write a
+  recommendation. Report the numbers and stop.
+
+---
+
+## Why this task first
+
+It is the blocking question for the hedge program (`hedge-design-spec-2026-09-16.md` §6.1 option 4),
+it is pure read, it has a verifiable answer, and it exercises the whole lane — skills, boundary,
+bundle discipline — on a task where a wrong answer is cheap and visible. `CLAUDE.md` §5: pilot on a
+dead bot; the champion goes last.

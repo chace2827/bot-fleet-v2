@@ -1,0 +1,13 @@
+02376a44a3b60afdaf069974ae50292f4cdc93e2bfe10003413ae6fcfebe9973  ./01-backtest-settings-form-2026-09-16-223758.txt
+123da5a08846dc1538716ec195ba983dc0439d2d594695212450d7224075ac8b  ./02-second-position-expressivity-2026-09-16.md
+88ab818aab159a0349d38064be140aa96e2f0c1c3895cb0f18541aa38b30ae26  ./README.md
+58aa3a2e741d3490856ebbfd3f39de4a1eaaf3054f3370daafde1953436141b1  ./screenshots/entry-filters-more-drawer.png
+4ebf112a3ad42258d0b66f5b6554badc97a53d9f6d20d11e47f8084d1437a7aa  ./screenshots/oa-portfolio-tab.png
+5f8a5786ed8f1c8296f3aca38667e949abe45eb1b293db05c6755bd96b01b3c1  ./screenshots/section-01-position-details.png
+89cf9988b5ab5a312a8b70a08d98566be2bfb0492f9561767d13052bbe6d71aa  ./screenshots/section-02-capital.png
+dbe14dfabd63ca6ffea1b44ab86e9075dead050a709591192f4137381bd3be7b  ./screenshots/section-03-position-entry.png
+00aa496729638e1eae91a9e0f2937ea94e16f74d85a5453b8f0b2933fc5d9cd2  ./screenshots/section-04-position-criteria-optional.png
+4a94a1297d9f2a7608b7b1fd4f6af0c44199d4f416edf46480d191cded81f9f1  ./screenshots/section-05-entry-filters-optional.png
+3221f151c01ac523db0502d6e263aeebd3d1e40dfd85ba2dd92b6d8c1e83e308  ./screenshots/section-06-exit-options-optional.png
+8012fcdd0e4b8e4e88e4009650a6a99a7592da16faf05bf4231b4a69860dceeb  ./screenshots/section-07-backtest-options-optional.png
+169e2f277a598da4311d4810cbe1d26dab816f33b0c7dfce6d3d2dc9a3251200  ./screenshots/section-99-run-backtest.png

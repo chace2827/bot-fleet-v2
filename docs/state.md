@@ -1,5 +1,87 @@
 # State — Bot Fleet v2
 
+> ## ▶ PICKUP — next session starts here (written 2026-09-16, end of Cowork session)
+>
+> **Read in this order:** `CLAUDE.md` → this block → `STATUS.md` →
+> `docs/hedge-north-star.md` (⭐ the program's aim — written 2026-09-16, merges the Cowork
+> strategy chat with the signed rulings) → `docs/hedge-design-spec-2026-09-16.md` →
+> `docs/decision-card-2026-09-16-tournament-baseline.md`.
+> Do **not** re-derive any of it in chat. A session that starts from files costs minutes; one that
+> starts from a chat costs a session.
+>
+> **The thread:** a loss autopsy on the post-cutover ledger found that all loss is exit-driven
+> (nothing held to expiry has ever lost money), is not move-driven, and is clock-bound — the worst
+> tick lands after 14:00 on 75% of losers vs 32% of winners, and 40% of losers are closed within
+> five minutes of their own worst tick. That produced a hedge design spec, two rulings and a
+> decision card.
+>
+> **Signed this session:**
+> - `R-2026-09-16-HEDGE-DEFINITION` — a hedge is a SEPARATE PROTECTIVE POSITION; an exit strategy
+>   is not a hedge. Overrules `hedge-research.md` §1.3 (**banner still owed**). Consequence: every
+>   natively-expressible OA candidate is an exit and is disqualified, so the fleet has **no
+>   buildable hedge on OA today**.
+> - `R-2026-09-16-DEVIN-OA-CHROME-CAPTURE` — Devin may drive its own Chrome to capture what the
+>   hedge test needs. **Capture only, not edits.** Three binding conditions; read the ruling.
+>
+> - `R-2026-09-16-TOURNAMENT-BASELINE` — widens the hedge tournament past the loss-free
+>   `status=expired` universe; baseline becomes per-population. Signed **after** its Devin item H-1
+>   was dispatched; the signature ratifies work in flight and the acceptance test is what makes that
+>   safe. H-1 is running via Devin Desktop connected to this folder.
+>
+> ✅ **HOLD RELEASED 2026-09-16 by Andy.** Mechanism decision is FINAL: **Devin's OA access is the
+> browser-driven UI path only; it will never use the API.** Andy, 2026-09-16: *"Awaiting
+> notes on what the OA claude skill will be in Devin, wait on building new chat prompt until we have
+> this."* **The answer exists:** the path is **CDP/UI capture, no API** — `.agents/skills/oa-drive/`
+> (plumbing, with the authorization banner) plus `.agents/skills/option-alpha/` (the law, tracked
+> since 2026-08-17). ⚠️ **The stated reason for the HOLD was false:** condition (b) claimed the traps
+> were unreadable by Devin; they have been in-repo for a month. Withdrawn by
+> `R-2026-09-16-DEVIN-OA-CHROME-CAPTURE-A1`.
+>
+> **▶ Dispatch prompt: `docs/dispatch-oa-capture-2026-09-16.md`.** First task is backtester surface
+> reconnaissance, READ-ONLY — *can OA's backtester express a second, separate protective position?*
+> That is the blocking question for the whole hedge program (spec §6.1 option 4).
+>
+> ⛔ **TWO STANDING GATES, BOTH ANDY'S, NEITHER DISCHARGED. GATE 1 BLOCKS DISPATCH.**
+> 1. **The verbatim OA email CONTROLS.** Andy re-reads it **before the first Devin OA run**. The
+>    boundary currently rests on his **paraphrase**. If it is narrower than "the API process," the
+>    `oa-drive` banner narrows and **page-context reads (`Runtime.evaluate`, the OA Grab
+>    bookmarklet) fall first** — and ⚠️ **the 2026-09-16 roster bundle the dispatch tells Devin to
+>    imitate was produced BY the bookmarklet**, so a narrowing changes the capture method, not just
+>    the paperwork.
+> 2. **If the email is ambiguous**, Andy sends OA a one-line mechanism clarification — *"operates
+>    its own browser, clicks and reads like a user, never calls internal API endpoints"* — rather
+>    than proceeding on inference.
+>   **[UPDATE 2026-09-16, Devin session]** — the mechanism named in condition (b) now exists
+>   in-repo: `.agents/skills/oa-drive/SKILL.md` (written this session; Devin-discovers it — it
+>   appeared in the live skill list on write) covering the launch ritual, CDP attach+verify,
+>   read/write paths, recorder pattern, verified `zdte.*` shapes, and stop conditions; alongside
+>   the pre-existing `.agents/skills/option-alpha/SKILL.md`. ~~**The HOLD stands**~~ — **RELEASED by
+>   Andy 2026-09-16**, see the block above. Note the `zdte.*` shapes this update mentions are
+>   **history, not a toolkit**: the wire protocol is NOT authorized (`-A1`).
+>
+> ⚠️ **Model pin conflict, unresolved.** Devin note 2026-09-16: **use SWE-2 MAX**. But
+> `scripts/devin_free.sh` hardcodes `swe-1-7` and **refuses `--model` by design** (the wrapper exists
+> because `swe-1-7-lightning` prefix-matches `swe-1-7` and is PAID). The Desktop route H-1 used
+> bypasses the wrapper entirely, so the conflict is dormant, not fixed. **Resolve before any CLI
+> dispatch**: either the wrapper learns SWE-2 MAX, or the CLI lane stays `swe-1-7` and SWE-2 MAX is
+> Desktop-only. Do not assume; probe and assert the receipt.
+>
+> **Open, unruled:** the terminology sweep under `HEDGE-DEFINITION` (15+ files call exits hedges);
+> §9.6 defang stub deletion; spec §9.2, §9.4, §9.5. *(The `hedge-research.md` §1.3 banner is DONE —
+> applied 2026-09-16 as mechanical propagation.)*
+>
+> **Blocked on Andy, not on work:** PR #79 merge (⚠️ until it lands, the 09-15 `zdte.*` RPC
+> verification is invisible to any session that reads this folder — that gap already caused one
+> wrong conclusion this session); written OA authorization (gates spec §9.7's probe; the RPC path
+> is DEFERRED by the ruling above but the probe is not withdrawn).
+>
+> **Lane note:** Devin dispatch and foreman duty belong in **Claude Code (terminal)**, not Cowork —
+> Cowork cannot commit, cannot push, has no Devin MCP token, and its permission classifier refuses
+> agent-spawning scripts by design. Cowork keeps strategy, rulings, specs, docs and OA judgment.
+>
+> ⛔ **Next action is a decision, not a build.** Andy: "don't build anything yet."
+
+
 > ## ✅ LAYER 2 — QUANTITY CLOSED 2026-09-07 · BOTH-SIDES → **MONITORED SHAPE** (ruled 2026-09-07)
 > ### `R-2026-09-07-GF-CALL-SIDE-SHAPE`: the put-only days are the family's measured shape (7 both / 4 put-only / 0 call-only on Ride, 08-14…09-04), kept as configured pending the T-48 Log study. Carry the put-only rate in every brief; it is a P3 bet input, not an open defect.
 >

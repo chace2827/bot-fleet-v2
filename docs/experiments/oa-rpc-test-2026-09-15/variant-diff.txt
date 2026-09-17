@@ -1,0 +1,14 @@
+--- RPCTEST-BASE captured args
++++ RPCTEST-PT50-API variant args
+@@ -4,9 +4,10 @@
+   "endDate": "2026-09-15",
+   "entry": {},
+   "exits": {
++    "profits": 0.5,
+     "xslip": 0.05
+   },
+-  "name": "RPCTEST-BASE",
++  "name": "RPCTEST-PT50",
+   "ntime": 1330,
+   "opp": {
+     "longPut": {

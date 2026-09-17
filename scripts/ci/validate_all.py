@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 """Run every --validate suite and compare the result to a committed baseline.
 
-Why a baseline instead of "all four must exit 0": comparative_machinery is at 35/36
-today (R-1 reads live ledger metadata rather than a fixture, so it stopped exercising
-the sentinel path when the ledger went live). Making that green by editing the test
-would be the wrong fix, and skipping the suite would drop 35 real assertions. So the
-current state is recorded, and CI fails on any *movement* from it — a regression and
-a silent improvement both demand that someone look.
+Why a baseline instead of "all four must exit 0": a known-red suite used to be the
+state of record (comparative_machinery sat at 35/36 while its R-1 check read live
+ledger metadata instead of a fixture — fixture-isolated under P1-4, now 40/40).
+The baseline mechanism stays: CI fails on any *movement* from the recorded state —
+a regression and a silent improvement both demand that someone look.
 
 When a change is intended, update scripts/ci/validate_baseline.txt in the same PR.
 The diff then shows the assertion count moving, which is the point.

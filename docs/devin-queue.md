@@ -13,6 +13,10 @@ command that produces it, and the command's output wins.
 line at commit review (§5 doc-edit authority — this file is a corrections-class artifact, not a
 decision-class one).
 
+**North star:** the hedge program's aim is `docs/hedge-north-star.md` (2026-09-16). Read it before
+any hedge/backtest dispatch — it carries the signed definition, the authorization boundary
+(UI-only; `zdte.*` is parked), and the joined-backtest method that Phase-0's NO answer requires.
+
 ---
 
 ## Now
@@ -25,11 +29,16 @@ decision-class one).
       `generated`-timestamp-normalizer wording described one possible implementation, not the
       requirement. Delivered by PR #7 (`0051b5e`), which superseded the closed PR #3; hardened by
       #13, #20 and #27. Owner: Devin.
-- [ ] **P0-2 — CODEOWNERS + branch protection.** Mechanically lock the Devin lane out of
-      `docs/build-plan.md`, `docs/pre-registration-ledger.md`, `CLAUDE.md` and every spec. Nothing
-      merges red. Owner: Devin. *Andy must enable branch protection in repo settings.*
-- [ ] **P0-3 — `.env.example`.** Currently swallowed by `.gitignore`'s `.env.*`. Un-ignore and list
-      the vars a fresh clone needs, `TRADIER_TOKEN` first. Owner: Devin.
+- [ ] **P0-2 — branch protection. Devin side DONE; Andy's click remains.** `.github/CODEOWNERS`
+      already exists and covers the gated surfaces (build-plan, pre-registration ledger,
+      evidence-standards, CLAUDE.md, all specs, source-of-truth CSVs, `data/archive/`). The
+      item's original "lock the Devin lane out" model is **superseded by the signed charter**:
+      §1 removed identity-based restrictions and §8 rules CODEOWNERS is *notification only and
+      must not block a merge* — the mechanical gate is branch protection + required CI check,
+      which only Andy can enable in repo settings. Verified 2026-09-16 by direct read.
+- [x] **P0-3 — `.env.example`. DONE — premise was stale.** `.env.example` exists and lists
+      `TRADIER_TOKEN` first (plus `TRADIER_BASE`, `LEDGER_START`, `LESSONS_ALLOW_TRUNCATE`);
+      `.gitignore` already carries `!.env.example`. Verified 2026-09-16 by direct read.
 - [x] **PR #26 — disposition recorded: merged at 424d57b, no rework.** The original "still open
       with changes requested" premise was falsified. `gh pr view 26` reads `state: MERGED`
       (`Add decidability countdown to report.py`); `git log -S _condor_close_dates -- scripts/report.py`
@@ -49,25 +58,35 @@ decision-class one).
 - [x] **P1-1a — RULING: roster facts applied.** Andy ruled R-2026-08-18-P1-1A-ROSTER-FACTS,
       ordering seven individual pre-registration ledger entries for the GF arms. The entries
       cite the active build, sizing, naming, signature, go-live and entry-method rulings. Owner: Devin.
-- [ ] **P1-2 — promote the UNCLASSIFIED warning to a refusal.** `build_ledger.py` prints a warning
-      to stdout for export bots absent from `bots_meta.csv` and exits 0. A warning is not a gate,
-      and stdout is unread in a scheduled run. Same shape as the existing ops-class fence.
-      Owner: Devin. Depends on P1-1.
+- [x] **P1-2 — UNCLASSIFIED is already a refusal. DONE — premise was stale.**
+      `build_ledger.py` (the `unclassified` block after roster gating) prints
+      `ERROR: UNCLASSIFIED bot(s) in the post-cutover working set:` naming each bot and
+      `sys.exit(1)` — the refusal the item asked for already exists. Verified 2026-09-16
+      by direct read.
 - [ ] **P1-3 — stable `trade_id`.** Currently assigned positionally, so a rebuild re-keys it and
       accumulators keyed on it go stale (`data/hedge_tournament.csv` is stale against the
       `data/trades.csv` committed beside it). Derive it from
       `(bot, open_date, short_put, short_call)` — the natural key
       `docs/comparative-machinery-spec.md` §1.4 already chose, explicitly "not `trade_id`". Migrate
-      the accumulator forward. Owner: Devin.
-- [ ] **P1-4 — fixture-isolate the non-hermetic tests.** `comparative_machinery.py --validate` R-1
-      calls `load_meta()` with no argument, so it reads the live `data/ledger_meta.json`; when the
-      ledger went live it stopped exercising the sentinel path it exists to guard. Do this before
-      config work touches the same pattern in `execution_audit`'s V7 matrix
-      (`docs/split2-design-2026-08-08.md` predicts it there). Owner: Devin.
-- [ ] **P1-5 — `TRADIER_TOKEN`.** Without it `tape.py` falls back to a reconstructed tape: no
-      intraday series, so `daily-loop-spec.md` §1's chart cannot be drawn and §2's directionality
-      ratio is null. Check `data/brief/<date>_tape.json` for `"source"`. Owner: Andy (token), Devin
-      (wiring).
+      the accumulator forward. **Sized 2026-09-16: ~115 `trade_id` touchpoints across scripts/
+      plus a re-key of every `trades.csv` row — too big to fold into a batch; wants its own
+      dispatch/PR.** **DISPATCHED 2026-09-16 — cloud session
+      `ac1033c682c54d9db23d843c640e62b1` (app.devin.ai/sessions/ac1033c682c54d9db23d843c640e62b1),
+      tags T-10/G-4; the portfolio "in flight" marker was stale — zero live sessions existed when
+      checked first-hand.** Owner: Devin.
+- [x] **P1-4 — fixture-isolate the non-hermetic tests. DONE 2026-09-16.**
+      `load_meta(path=I2_META)` gained a defaulted fixture seam (production caller unchanged);
+      `--validate` now exercises all four R-1 refusal branches plus a post-sentinel LOADS check
+      against a scratch file, never the live `ledger_meta.json`. Suite moved 35/36 (known-red,
+      baseline-pinned) → **40/40 exit 0**; `scripts/ci/validate_baseline.txt` updated in the
+      same change per its own rule. The same live-input pattern is predicted in
+      `execution_audit`'s V7 matrix (`docs/split2-design-2026-08-08.md`) — the `path=` seam is
+      the template. Owner: Devin.
+- [ ] **P1-5 — `TRADIER_TOKEN`. Devin side DONE; Andy's token remains.** `tape.py` already reads
+      env `TRADIER_TOKEN` or a `TRADIER_TOKEN=` line in `./.env`, honors `TRADIER_BASE`, and
+      prints a token-rejected diagnostic; `intraday_read.py` same. `.env.example` documents both.
+      Check `data/brief/<date>_tape.json` for `"source"`. Verified 2026-09-16 by direct read.
+      Owner: Andy (token only).
 
 ## Then — the mechanics contract
 
@@ -94,17 +113,18 @@ decision-class one).
       `grep -ci unsigned scripts/report.py` returns **12**, not zero. A dispatch built on that premise
       was written and refused in pre-flight; it would have added a second banner.
       **Two real tasks remain, carried forward as P2-5a and P2-5b below.** Owner: Devin.
-- [ ] **P2-5a — the banner is a guard with no test.** `validate()` (`report.py:184`) builds fixtures for
-      `bots_meta.csv`, `bots.csv`, `trades.csv` and `ledger_meta.json` — **and no pre-registration
-      ledger** — so `_ledger_unsigned` is empty and the `if unsigned_bots:` branch is never exercised
-      by the self-test. Same shape as P1-4. Class A. Owner: Devin.
-- [ ] **P2-5b — 🔒 the banner can under-report silently.** `report.py:351` is an intersection:
-      `unsigned_bots = sorted(b for b in meta if b in _ledger_unsigned)`. A bot unsigned in the ledger
-      but absent from `data/bots_meta.csv` is dropped with **no warning** — and item P1-1 documents that roster
-      as the pre-cutover one, carrying none of the GF arms and none of the `PR-NN` registrations.
-      Verify with `python3 -c "import scripts.pre_registration_ledger as p; print(sorted(p.unsigned_from_ledger('docs/pre-registration-ledger.md')))"`
-      against the `bot` column of `data/bots_meta.csv`. A fix changes a detector predicate → **Class C**,
-      pre-authorisation required per charter §4. Owner: Andy rules, Devin applies.
+- [x] **P2-5a — the banner guard HAS a test. DONE — verified green 2026-09-16.** `validate()`
+      builds a scratch-root pre-registration-ledger fixture with one unsigned bot in
+      `bots_meta.csv` and asserts the banner renders and names it (`report.py` validate block,
+      marked P2-5a). `python3 scripts/report.py --validate` → `selftest OK`. Premise was stale.
+- [ ] **P2-5b — 🔒 the banner can under-report — now WARNED, not silent.** `report.py` prints
+      `WARNING: ledger-unsigned bot not in bots_meta.csv — roster gap` for each ledger-unsigned
+      bot absent from `data/bots_meta.csv` (added since this item was written — the "dropped with
+      no warning" premise is stale). The open question is now only whether that warning should
+      become a refusal — a detector-predicate change → **Class C**, pre-authorisation required
+      per charter §4. Verify the gap set with
+      `python3 -c "import scripts.pre_registration_ledger as p; print(sorted(p.unsigned_from_ledger('docs/pre-registration-ledger.md')))"`
+      against the `bot` column of `data/bots_meta.csv`. Owner: Andy rules, Devin applies.
 - [ ] **P2-6 — the 24 dangling citations.** `python3 scripts/check_refs.py` (prints **25**; one of them, `scripts/check_refs.py:263 -> docs/fixture.md`, is the checker's own `--selftest` temp fixture, not a citation — 24 real citations remain). Each needs a
       source-of-truth call (rewrite vs. drop the citation), so none are fixed unilaterally.
       Owner: Andy rules, Devin applies.
