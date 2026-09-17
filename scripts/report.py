@@ -792,7 +792,22 @@ if _alloc_rows_written:
 # Absent file => section is skipped entirely (honest: hasn't been run yet).
 _ht_path = os.path.join(D, "hedge_tournament.csv")
 if os.path.exists(_ht_path):
-    ht_rows = [r for r in csv.DictReader(open(_ht_path)) if r.get("R") not in (None, "")]
+    ht_all = list(csv.DictReader(open(_ht_path)))
+    ht_rows = [r for r in ht_all if r.get("R") not in (None, "")]
+
+    # Population split (R-2026-09-16-TOURNAMENT-BASELINE): an expired leg's
+    # `actual` is settlement; a closed leg's `actual` is the recorded early-exit
+    # fill. The two baselines mean different things and are NEVER pooled — an
+    # Exp(R) mixing settlement with actual-exit outcomes is meaningless.
+    _status_by_key = {(t["bot"], t["open_date"], t.get("short_put") or "",
+                       t.get("short_call") or ""): t["status"] for t in trades}
+
+    def _pop(r):
+        return (r.get("status")
+                or _status_by_key.get((r["bot"], r.get("open_date") or "",
+                                       r.get("short_put") or "",
+                                       r.get("short_call") or ""))
+                or "unknown")
 
     def _ht_stats(rs):
         """Exp(R)/Tot R/WR/maxDD-R/worst-R for one rule's rows, walking the
@@ -813,76 +828,103 @@ if os.path.exists(_ht_path):
         return {"n": n, "exp": mean, "tot": sum(vals), "wr": wins / n * 100,
                 "mdd": mdd, "worst": worst}
 
-    RULE_ORDER = ["ride", "pt25", "pt50", "pt100", "sl50", "sl75", "sl100", "sl130", "s2"]
-    by_rule = collections.defaultdict(list)
+    RULE_ORDER = ["actual", "pt25", "pt50", "pt100", "sl50", "sl75", "sl100", "sl130", "s2"]
+    by_pop = collections.defaultdict(list)
     for r in ht_rows:
-        by_rule[r["rule"]].append(r)
-    n_defang = sum(1 for r in csv.DictReader(open(_ht_path)) if r["rule"] == "defang")
+        by_pop[_pop(r)].append(r)
+    n_defang = sum(1 for r in ht_all if r["rule"] == "defang")
+    n_settle = sum(1 for r in ht_all if r["rule"] == "settle")
 
     L += ["## Hedge tournament (live-data counterfactual)",
-          "> **The productized loss autopsy.** Every real, settled (status=expired) leg replayed "
-          "through the v1 hedge library — Ride/no-stop, PT+X%/SL-X% return-threshold rules, and "
-          "an S2 strike-touch cut (tape-gated, 5-min grain). **Optimistic bound, not a live "
-          "estimate** — every non-Ride arm assumes a fill exactly at the threshold; real fills "
-          "slip. Compare rules by **R** (pnl÷risk), never $. Basis: PT/SL % are of the credit "
-          "collected (`|premium|`), per `mfe_pct`/`mae_pct` already carrying that unit (verified "
-          "against the ledger — see `scripts/hedge_tournament.py` docstring). "
+          "> **The productized loss autopsy.** Every ledger leg with risk > 0 replayed "
+          "through the v1 hedge library — Actual (the recorded outcome), PT+X%/SL-X% "
+          "return-threshold rules, and an S2 strike-touch cut (tape-gated, 5-min grain, "
+          "bounded at the position's actual close). **The two populations are reported "
+          "separately and never pooled** — `status=expired` scores against settlement, "
+          "`status=closed` against the exit that actually happened. **Optimistic bound, "
+          "not a live estimate** — every non-Actual arm assumes a fill exactly at the "
+          "threshold; real fills slip. Compare rules by **R** (pnl÷risk), never $. "
+          "Basis: PT/SL % are of the credit collected (`|premium|`), per `mfe_pct`/"
+          "`mae_pct` already carrying that unit (verified against the ledger — see "
+          "`scripts/hedge_tournament.py` docstring). "
           f"**Defang: deferred v1** ({n_defang} legs marked, not modeled — needs an intraday "
           "premium-decay path not yet in the ledger).",
-          "",
-          "| Rule | N | Exp(R) | Tot R | WR | maxDD-R | worst-R |",
-          "|---|--:|--:|--:|--:|--:|--:|"]
-    for rule in RULE_ORDER:
-        st = _ht_stats(by_rule.get(rule, []))
-        if st is None:
-            note = " (no legs — S2 needs a tape file for that day/underlying)" if rule == "s2" else " (no legs)"
-            L.append(f"| {rule} | 0 | — | — | — | — | —{note} |")
-            continue
-        L.append(f"| {rule} | {st['n']} | {st['exp']*100:+.1f}% | {st['tot']:+.2f} | "
-                  f"{st['wr']:.0f}% | {st['mdd']:.2f} | {st['worst']*100:+.1f}% |")
+          ""]
+    if n_settle:
+        L += [f"> **`settle` = NOT EVALUABLE** ({n_settle} closed legs marked, never modeled — "
+              "what a closed leg would have returned held to settlement needs post-exit "
+              "path data that does not exist).",
+              ""]
 
-    # --- per-bot cut (Ride vs SL75, the mid-spectrum published rung) ---------
-    L += ["", "#### Per-bot cut  (Ride vs SL75 — the mid-spectrum published rung)",
-          "| Bot | N | Ride Exp(R) | SL75 Exp(R) | Δ |",
-          "|---|--:|--:|--:|--:|"]
-    ride_by_bot = collections.defaultdict(list)
-    sl75_by_bot = collections.defaultdict(list)
-    for r in ht_rows:
-        if r["rule"] == "ride":
-            ride_by_bot[r["bot"]].append(fl(r["R"]))
-        elif r["rule"] == "sl75":
-            sl75_by_bot[r["bot"]].append(fl(r["R"]))
-    for bot in sorted(ride_by_bot, key=lambda b: -sum(ride_by_bot[b])):
-        rr = ride_by_bot[bot]
-        sr = sl75_by_bot.get(bot, [])
-        if not rr:
-            continue
-        re_ = sum(rr) / len(rr)
-        if sr:
-            se_ = sum(sr) / len(sr)
-            se_fmt, delta = f"{se_*100:+.1f}%", f"{(se_-re_)*100:+.1f}pp"
-        else:
-            se_fmt, delta = "—", "—"
-        L.append(f"| {bot} | {len(rr)} | {re_*100:+.1f}% | {se_fmt} | {delta} |")
+    _POP_HEAD = {
+        "expired": "Settled at expiry (`status=expired`) — `actual` = settlement pnl",
+        "closed": "Closed early (`status=closed`) — `actual` = the recorded exit fill, "
+                  "not settlement",
+    }
+    for pop in ([p for p in ("expired", "closed") if p in by_pop]
+                + sorted(p for p in by_pop if p not in ("expired", "closed"))):
+        prows = by_pop[pop]
+        by_rule = collections.defaultdict(list)
+        for r in prows:
+            by_rule[r["rule"]].append(r)
 
-    # --- regime cut -----------------------------------------------------------
-    L += ["", "#### Regime cut  (Ride vs SL75, by tape-derived regime label)",
-          "| Regime | N | Ride Exp(R) | SL75 Exp(R) |",
-          "|---|--:|--:|--:|"]
-    ride_by_regime = collections.defaultdict(list)
-    sl75_by_regime = collections.defaultdict(list)
-    for r in ht_rows:
-        if r["rule"] == "ride":
-            ride_by_regime[r["regime"]].append(fl(r["R"]))
-        elif r["rule"] == "sl75":
-            sl75_by_regime[r["regime"]].append(fl(r["R"]))
-    for reg in sorted(ride_by_regime, key=lambda x: (x == "n/a", x)):
-        rr = ride_by_regime[reg]
-        sr = sl75_by_regime.get(reg, [])
-        re_ = sum(rr) / len(rr) if rr else 0.0
-        se_ = f"{(sum(sr)/len(sr))*100:+.1f}%" if sr else "—"
-        L.append(f"| {reg} | {len(rr)} | {re_*100:+.1f}% | {se_} |")
-    L += ["", "> N is small and concentrated in the last few tape-covered trading days (tape.py "
+        L += [f"### {_POP_HEAD.get(pop, 'Population `' + pop + '`')}",
+              "",
+              "| Rule | N | Exp(R) | Tot R | WR | maxDD-R | worst-R |",
+              "|---|--:|--:|--:|--:|--:|--:|"]
+        for rule in RULE_ORDER:
+            st = _ht_stats(by_rule.get(rule, []))
+            if st is None:
+                note = " (no legs — S2 needs a tape file for that day/underlying)" if rule == "s2" else " (no legs)"
+                L.append(f"| {rule} | 0 | — | — | — | — | —{note} |")
+                continue
+            L.append(f"| {rule} | {st['n']} | {st['exp']*100:+.1f}% | {st['tot']:+.2f} | "
+                      f"{st['wr']:.0f}% | {st['mdd']:.2f} | {st['worst']*100:+.1f}% |")
+
+        # --- per-bot cut (Actual vs SL75, the mid-spectrum published rung) ----
+        L += ["", f"#### Per-bot cut — {pop}  (Actual vs SL75 — the mid-spectrum published rung)",
+              "| Bot | N | Actual Exp(R) | SL75 Exp(R) | Δ |",
+              "|---|--:|--:|--:|--:|"]
+        act_by_bot = collections.defaultdict(list)
+        sl75_by_bot = collections.defaultdict(list)
+        for r in prows:
+            if r["rule"] == "actual":
+                act_by_bot[r["bot"]].append(fl(r["R"]))
+            elif r["rule"] == "sl75":
+                sl75_by_bot[r["bot"]].append(fl(r["R"]))
+        for bot in sorted(act_by_bot, key=lambda b: -sum(act_by_bot[b])):
+            rr = act_by_bot[bot]
+            sr = sl75_by_bot.get(bot, [])
+            if not rr:
+                continue
+            re_ = sum(rr) / len(rr)
+            if sr:
+                se_ = sum(sr) / len(sr)
+                se_fmt, delta = f"{se_*100:+.1f}%", f"{(se_-re_)*100:+.1f}pp"
+            else:
+                se_fmt, delta = "—", "—"
+            L.append(f"| {bot} | {len(rr)} | {re_*100:+.1f}% | {se_fmt} | {delta} |")
+
+        # --- regime cut -------------------------------------------------------
+        L += ["", f"#### Regime cut — {pop}  (Actual vs SL75, by tape-derived regime label)",
+              "| Regime | N | Actual Exp(R) | SL75 Exp(R) |",
+              "|---|--:|--:|--:|"]
+        act_by_regime = collections.defaultdict(list)
+        sl75_by_regime = collections.defaultdict(list)
+        for r in prows:
+            if r["rule"] == "actual":
+                act_by_regime[r["regime"]].append(fl(r["R"]))
+            elif r["rule"] == "sl75":
+                sl75_by_regime[r["regime"]].append(fl(r["R"]))
+        for reg in sorted(act_by_regime, key=lambda x: (x == "n/a", x)):
+            rr = act_by_regime[reg]
+            sr = sl75_by_regime.get(reg, [])
+            re_ = sum(rr) / len(rr) if rr else 0.0
+            se_ = f"{(sum(sr)/len(sr))*100:+.1f}%" if sr else "—"
+            L.append(f"| {reg} | {len(rr)} | {re_*100:+.1f}% | {se_} |")
+        L.append("")
+
+    L += ["> N is small and concentrated in the last few tape-covered trading days (tape.py "
           "is new); the S2 arm and the regime cut will thicken as more days accrue. Read this as "
           "an early ranking to cross-check the LEAN/OA backtest tournament, not a standalone "
           "verdict.", ""]
