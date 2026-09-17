@@ -208,14 +208,21 @@ choice is **not ruled here**:
 2. **An off-platform trigger** (webhook into OA), moving the self-referential logic outside.
 3. **An explicit decision to accept a time-only opener** — blunt, and §2.3 shows a bare time gate
    also fires on the 29% of winners whose MAE lands 14:00-15:00.
-4. **[ADDED 2026-09-16, same session]** **Answer it in the backtester instead of on the live bot.**
-   The mapped `zdte.startTest` knobs (`exits.profits`, `opp.longCall.delta`, `series.days`,
-   `series.filter`) are all entry/exit/strike parameters of **one** position. **Whether `zdte` can
-   express a SECOND, separate protective position is UNMAPPED** — and under
-   `R-2026-09-16-HEDGE-DEFINITION` that is the whole question. If it can, the hedge is answerable
-   by sweep before anything is built in the account. If it cannot, the sweep is an **exit**
-   tournament (still worth running — it directly tests whether `SL100`/`SL200` are making losses
-   worse) and the hedge falls back to options 1-3. **One backtest settles which.** §9.7.
+4. **Answer it in the backtester — but through the UI, not the RPC.** *(Added 2026-09-16; amended
+   the same day by `R-2026-09-16-DEVIN-OA-CHROME-CAPTURE-A1`.)*
+   ⛔ **The RPC sweep is OUT OF SCOPE pending a broader written grant** — `zdte.*` replay and our
+   own `POST /api/request` calls are not authorized. What **is** authorized is building and running
+   backtests **through OA's interface, as a user**, and reading the rendered results.
+   The question is unchanged: the mapped `zdte.startTest` knobs (`exits.profits`,
+   `opp.longCall.delta`, `series.days`, `series.filter`) are all entry/exit/strike parameters of
+   **one** position, so **whether the backtester can express a SECOND, separate protective position
+   is UNMAPPED** — and under `R-2026-09-16-HEDGE-DEFINITION` that is the whole question. It is now
+   answered by *opening the backtester UI and looking*, not by probing the endpoint.
+   ⚠️ **What this costs: scale.** The RPC path was attractive because sweeps were cheap — dozens of
+   variants polled programmatically. Through the UI it is one backtest at a time, hand-constructed.
+   That changes the work from "sweep the parameter space" to "test a few specific hypotheses," so
+   **which hypotheses get tested now matters far more than it did.** §2.3–§2.5 are the ranked
+   candidates.
 
 Until one is chosen, §4's T-H1 stands as a **measurement definition** — the thing to detect and
 count in the ledger — not as a buildable trigger.
@@ -270,10 +277,14 @@ config-capture gap, which blocks stage 3/4/8 grading?
 
 **9.5** `<FILL>` thresholds in §4 — not to be filled until §3.3 is closed.
 
-**9.7 — FIRST ACTION, cheapest decisive test.** Probe `zdte.startTest` for a second-position /
-second-structure field (§6.1 option 4). Gated behind Andy's own standing planning assumption:
-**written OA authorization before any further RPC use**, and reads-yes-writes-no — backtests via
-RPC, bot edits via the browser with both §5 proof layers. Blocked until PR #79 lands in the tree.
+**9.7 — ⛔ OUT OF SCOPE PENDING A BROADER WRITTEN GRANT** (was: "FIRST ACTION, cheapest decisive
+test"). Amended 2026-09-16 by `R-2026-09-16-DEVIN-OA-CHROME-CAPTURE-A1`. OA's written
+authorization came back **scoped**: the UI path is authorized, the **wire protocol is not** — no
+`POST /api/request` of our own, no `zdte.*` replay, no traffic recorder. Probing
+`zdte.startTest` is exactly that. This is a **permission boundary, not a scheduling choice**;
+"deferred, revisit later" was the wrong word and is withdrawn. ~~Original slot text:~~ Probe
+`zdte.startTest` for a second-position / second-structure field (§6.1 option 4). Gated behind
+Andy's own standing planning assumption: written OA authorization before any further RPC use.
 
 **9.6** Delete the `defang` stub from `hedge_tournament.py` and its `report.py` standings line
 (§3.2)? Draft recommends yes — it advertises an open gap where there is a closed decision.

@@ -26,11 +26,18 @@
 >   was dispatched; the signature ratifies work in flight and the acceptance test is what makes that
 >   safe. H-1 is running via Devin Desktop connected to this folder.
 >
-> ⛔ **HOLD — do not build the Devin OA dispatch prompt.** Andy, 2026-09-16: *"Awaiting notes on what
-> the OA claude skill will be in Devin, wait on building new chat prompt until we have this."* The
-> `oa-driving` skill's traps are not readable by Devin (`R-2026-09-16-DEVIN-OA-CHROME-CAPTURE`
-> condition (b)); how they reach Devin is unresolved. §9.2 — a hold means no writes on that item
-> until Andy releases it.
+> ⛔ **HOLD — still Andy's to release; its question is now ANSWERED.** Andy, 2026-09-16: *"Awaiting
+> notes on what the OA claude skill will be in Devin, wait on building new chat prompt until we have
+> this."* **The answer exists:** the path is **CDP/UI capture, no API** — `.agents/skills/oa-drive/`
+> (plumbing, with the authorization banner) plus `.agents/skills/option-alpha/` (the law, tracked
+> since 2026-08-17). ⚠️ **The stated reason for the HOLD was false:** condition (b) claimed the traps
+> were unreadable by Devin; they have been in-repo for a month. Withdrawn by
+> `R-2026-09-16-DEVIN-OA-CHROME-CAPTURE-A1`. §9.2 still binds — no writes on this item until Andy
+> releases it — but it is now a decision, not a blocker.
+>
+> ⚠️ **Before releasing it:** the boundary rests on Andy's **paraphrase** of OA's reply. The verbatim
+> email controls. If it is narrower than "the API process," the skill banner narrows first — the
+> exposed line is page-context reads (`Runtime.evaluate`, the OA Grab bookmarklet).
 >   **[UPDATE 2026-09-16, Devin session]** — the mechanism named in condition (b) now exists
 >   in-repo: `.agents/skills/oa-drive/SKILL.md` (written this session; Devin-discovers it — it
 >   appeared in the live skill list on write) covering the launch ritual, CDP attach+verify,

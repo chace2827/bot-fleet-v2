@@ -11923,3 +11923,53 @@ reach git or the GitHub API); written OA authorization (gates spec §9.7).
 
 **Files:** `.agents/skills/oa-drive/SKILL.md` (new) · `docs/state.md` (HOLD update note) ·
 this file.
+
+---
+
+## 2026-09-16 (close 3) — OA authorization returned SCOPED; boundary recorded; skill rewritten
+
+**OA replied. The grant is narrow and the word "deferred" is retired.**
+`R-2026-09-16-DEVIN-OA-CHROME-CAPTURE-A1` amends (does not replace) the morning's ruling:
+
+- **AUTHORIZED — the UI path.** Launch/attach Chrome, navigate, click, fill forms, read rendered
+  content, screenshot, OA's own Export Data, build and run backtests **through the interface**.
+- **CAPTURE ONLY — no OA edits.** Bot/automation/scanner/position/settings surfaces are read-only.
+  Edits stay in the Cowork lane under §5's two-layer regime.
+- **NOT AUTHORIZED — the wire protocol.** No fetch/XHR wrapping, no `POST /api/request` of our own,
+  no `zdte.*` replay, no traffic recorder. **The 2026-09-15 verification is history, not a toolkit.**
+- **"Deferred, revisit later" → "OUT OF SCOPE pending a broader written grant."** Deferral is a
+  scheduling choice we make; this is a permission boundary someone else set.
+
+**⚠️ THE WEAKEST JOINT, recorded deliberately: the boundary rests on Andy's PARAPHRASE of OA's
+reply, not its verbatim text. The verbatim email controls.** Two places the reading may be wider
+than the grant: (1) **CDP** — the argument for including it is *"CDP is the only mechanism Devin has
+for navigating Chrome, therefore the grant includes it,"* which reasons from OUR capability to THEIR
+permission, backwards as logic even where it lands right; CDP is literally the Chrome DevTools
+Protocol and the relayed prohibition names *"the inspection portion of each page."* (2) **Page-context
+reads** (`Runtime.evaluate`, the OA Grab bookmarklet) — marked in-scope-but-most-exposed in the skill,
+and the first line to fall if OA's text is narrower. **Andy owns re-reading the email; if it says
+anything broader than "the API process," the banner narrows BEFORE any run.**
+
+**⛔ Condition (b) of the morning ruling was FALSE when written — withdrawn.** It claimed the
+oa-driving traps *"live in a Claude skill, not in this repo, and Devin cannot read them."* Dated
+first-hand device read: `.agents/skills/option-alpha/SKILL.md` has been **tracked since 2026-08-17**
+(14,648 bytes) carrying the five laws, §5 Traps, §4 two-layer verification, §7 not-expressible and
+§8 rules of engagement. The HOLD rested on a premise that was never true. What was genuinely missing
+was the **plumbing**, now at `.agents/skills/oa-drive/SKILL.md` (rewritten 00:46 with the
+authorization banner at the top).
+
+**Propagated:** spec §9.7 → OUT OF SCOPE (original text struck, not removed); §6.1 option 4 → the
+backtester question survives but is answered **through the UI, by opening it and looking**, not by
+probing `zdte.startTest`. Recorded there in plain terms what that costs: **scale.** The RPC path made
+sweeps cheap; the UI path is one hand-built backtest at a time, so **which hypotheses get tested now
+matters far more than it did.**
+
+**⛔ PREMISE CORRECTION — a relayed claim was wrong.** The hand-off stated PR #79 was *"not yet
+pulled to this tree."* Dated first-hand device read: `docs/experiments/oa-rpc-test-2026-09-15/`
+**is present, 20 files.** It was pulled during this session's rebase. The other half of the claim
+**stands**: `grep "^## 2026-09-15" docs/session-log.md` returns **0** — the 09-15 entry is still owed
+and cannot be written from this lane without first-hand evidence of that session's work.
+
+**Files:** `docs/RULINGS.md` (amendment ruling) · `docs/hedge-design-spec-2026-09-16.md` (§9.7, §6.1)
+· `docs/state.md` (HOLD note + PR #79 / authorization status) · this file.
+**Not written by this session:** `.agents/skills/oa-drive/SKILL.md` (Devin's, already on disk).

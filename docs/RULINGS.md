@@ -5392,3 +5392,79 @@ source: >-
   data/hedge_tournament.csv and data/trades.csv.
 unclear: false
 ```
+
+```yaml
+ruling_id: R-2026-09-16-DEVIN-OA-CHROME-CAPTURE-A1
+date: 2026-09-16
+scope: >-
+  AMENDMENT to R-2026-09-16-DEVIN-OA-CHROME-CAPTURE. The original ruling
+  stands as written; this amends it in three places and does not replace it.
+
+  (a) CONDITION (b) WAS FALSE WHEN WRITTEN — WITHDRAWN. The original said
+  the oa-driving traps "live in a Claude skill, not in this repo, and Devin
+  cannot read them." Dated first-hand device read 2026-09-16:
+  .agents/skills/option-alpha/SKILL.md has been tracked in this repo since
+  2026-08-17 (14,648 bytes) and carries the five laws, section 5 Traps,
+  section 4 two-layer verification, section 7 not-expressible, and section 8
+  rules of engagement — including "The Trades list is the only order-level
+  evidence." The HOLD that condition (b) justified rested on a premise that
+  was never true. What was genuinely missing was the PLUMBING (attach
+  sequence, oa_capture.mjs / oa_driver.mjs, wire shapes), now at
+  .agents/skills/oa-drive/SKILL.md.
+
+  (b) THE BOUNDARY, STATED. Written authorization exists for ONE scope:
+    • AUTHORIZED — the UI path. Launch/attach Chrome, navigate, click, fill
+      forms, read rendered content, screenshot, use OA's own Export Data,
+      build and run backtests through the interface. CDP is treated as the
+      mechanism that performs that navigation rather than a separate thing
+      needing its own grant (see the RECORDED INFERENCE below).
+    • CAPTURE ONLY — no OA edits. Bot, automation, scanner, position and
+      settings surfaces are READ-ONLY. Edits remain in the Cowork lane under
+      CLAUDE.md section 5's two-layer regime.
+    • NOT AUTHORIZED — the wire protocol. No fetch/XHR wrapping or patching,
+      no POST /api/request calls of our own, no zdte.* replay, no traffic
+      recorder. The 2026-09-15 verification is HISTORY, NOT A TOOLKIT.
+
+  (c) "DEFERRED" IS THE WRONG WORD — REPLACED. Everywhere the RPC path was
+  described as "deferred, revisited later," read "OUT OF SCOPE PENDING A
+  BROADER WRITTEN GRANT." Deferral is a scheduling choice this project makes
+  for itself; this is a permission boundary set by someone else. A grant that
+  says only "later" is not a grant.
+
+  ⚠️ RECORDED INFERENCE, NOT OA'S WORDS — THE WEAKEST JOINT. This boundary
+  rests on Andy's PARAPHRASE of OA's reply, not on its verbatim text. The
+  verbatim email CONTROLS. Two specific places the reading could be wider
+  than what OA granted:
+    1. CDP. The argument for including it is "CDP is the only mechanism Devin
+       has for navigating Chrome, therefore a grant of Devin's chrome
+       navigation necessarily includes it." That reasons from OUR capability
+       to THEIR permission, which is backwards as a matter of logic even
+       where it lands on the right answer. CDP is literally the Chrome
+       DevTools Protocol, and the prohibition Andy relayed names "the
+       inspection portion of each page."
+    2. Page-context reads (Runtime.evaluate, the OA Grab bookmarklet) —
+       marked in-scope-but-most-exposed in the skill. If OA's text is
+       narrower, this is the first line to fall.
+  If the verbatim email says anything broader than "the API process" — e.g.
+  "no DevTools or inspection of any kind" — the boundary narrows and the
+  skill banner must narrow with it, BEFORE any run. Andy owns re-reading the
+  email; nothing here substitutes for it.
+verbatim: >-
+  I got permission to use Devin to use its own chrome navigation system to
+  record data from bots, but no permission to use the API process that
+  involves going in the inspection portion of each page
+verbatim_of: andy
+owner: Andy (in-chat, Cowork session 2026-09-16). Permission boundary — gated, and given.
+status: Active
+applies_to: >-
+  R-2026-09-16-DEVIN-OA-CHROME-CAPTURE (amended, not replaced);
+  .agents/skills/oa-drive/SKILL.md authorization banner;
+  docs/hedge-design-spec-2026-09-16.md section 9.7 and section 6.1 option 4;
+  docs/state.md HOLD note; docs/oa-internal-api.md.
+superseded_by: none
+source: >-
+  Cowork session 2026-09-16, Andy in-chat, verbatim above, relaying OA's
+  reply in paraphrase. Condition (b) withdrawal rests on a dated first-hand
+  device read of .agents/skills/option-alpha/SKILL.md (mtime 2026-08-17).
+unclear: false
+```
