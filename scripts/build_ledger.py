@@ -149,7 +149,7 @@ Usage:
   FLEET_ROOT=/tmp/scratch python3 scripts/build_ledger.py
   python3 scripts/build_ledger.py --selftest      # exclusion + monotonicity-guard tests
 """
-import argparse, csv, glob, json, os, re, sys, collections
+import argparse, csv, glob, hashlib, json, os, re, sys, collections
 
 # ---------------------------------------------------------------------------
 # SET THIS ON DAY-0. It is the reactivation date, format YYYY-MM-DD.
@@ -256,42 +256,21 @@ def previous_raw(src):
     return files[-2]
 
 
-def _tid_int(s):
-    try:
-        return int(s[1:]) if s and s[0] == "T" else 0
-    except (ValueError, TypeError):
-        return 0
+TRADE_ID_HEX = 12
 
 
-def max_existing_tid(day, out_dir=None):
-    """Largest trade_id already assigned to a day other than `day`.
+def natural_trade_id(bot, open_day, short_put, short_call, seq=0):
+    """Stable trade_id: a content hash of the position's natural key.
 
-    build_ledger.py overwrites data/trades.csv, so the counter must continue from
-    the persisted hedge_tournament.csv (and any trades.csv rows from other days)
-    rather than resetting.  Re-running the same day ignores that day's own rows
-    so trade_ids are deterministic.
-
-    G-3: reads from OUT, not from the repo. Bound to the module-level ROOT as a
-    default argument this resolved at import time, so a --root or selftest run
-    read the LIVE hedge_tournament.csv and trades.csv to seed the counter — a
-    fixture run reaching into live data is exactly the class of leak G-3 closes.
+    The key is (bot, open_date[:10], short_put, short_call) — the one
+    comparative-machinery-spec.md §1.4 chose — plus `seq`, the 0-based rank of
+    this position among same-key positions on the day (a bot re-entering the
+    same short strike twice). Nothing positional and nothing read from any
+    accumulator goes in, so rebuilding from the same export yields the same id
+    and a persisted accumulator never goes stale against the ledger.
     """
-    m = 0
-    base = out_dir or OUT
-    for name, date_key in (("hedge_tournament.csv", "date"),
-                           ("trades.csv", "open_date")):
-        path = os.path.join(base, name)
-        if not os.path.exists(path):
-            continue
-        with open(path) as f:
-            for r in csv.DictReader(f):
-                d = (r.get(date_key) or "")[:10]
-                if d == day:
-                    continue
-                t = _tid_int(r.get("trade_id", ""))
-                if t > m:
-                    m = t
-    return m
+    key = "\x1f".join([bot, open_day[:10], short_put or "", short_call or "", str(seq)])
+    return "T" + hashlib.sha1(key.encode("utf-8")).hexdigest()[:TRADE_ID_HEX]
 
 
 def max_open_date(rows, key):
@@ -612,9 +591,9 @@ STRADDLER_NOTE = ("PRE-CUTOVER OPEN — mirror baseline layer only; "
 # fixture — the mechanism it already uses for data/archive/trades.csv
 # (§3.3 item 8) — plus a `note` column mirroring STRADDLER_NOTE's visibility.
 # ⚠️ `trade_id` is BLANK by construction: the partition happens BEFORE the condor
-# pairing block (§3.3 item 2), because pairing assigns trade_id from a global
-# counter and excluding afterwards would corrupt the numbering. Whether ops rows
-# should get their own trade_id namespace is NOT ruled — see the hand-off.
+# pairing block (§3.3 item 2), so ops rows are never paired and never keyed.
+# Whether ops rows should get their own trade_id namespace is NOT ruled — see
+# the hand-off.
 OPSCOLS = TCOLS + ["note"]
 
 OPS_NOTE = ("LAB OPS-CLASS — excluded from the working ledger by declaration "
@@ -891,8 +870,8 @@ def main():
 
     # --- THE OPS-CLASS PARTITION (E-3 §3.3 item 2) ------------------------
     # Immediately after the cutover partition and BEFORE the condor pairing
-    # block: pairing assigns trade_id from a global counter, so excluding
-    # afterwards would corrupt the numbering.
+    # block, so an ops leg can never be paired with (or shape the natural key
+    # of) a working-ledger position.
     # `post_cutover` keeps its own meaning (the TIME axis alone); `ops_rows` is
     # the second axis, counted separately. Working-ledger legs = post_cutover
     # minus ops_rows.
@@ -968,12 +947,14 @@ def main():
         elif t == "shortputspread": buckets[key]["put"].append(i)
         else: buckets[key]["other"].append(i)
 
-    trade_of = {}
-    trade_size = collections.Counter()
-    tid = max_existing_tid(day)
+    # Positions first (a list of leg-index lists), ids second: trade_id is a
+    # hash of the natural key (natural_trade_id), never a counter, so the
+    # pairing order below decides WHICH legs form a position but not WHAT it
+    # is called. Same export in -> same ids out, on every rebuild.
+    positions = []
     for (bot, bday), b in buckets.items():
         for i in b["ic"]:
-            tid += 1; k = f"T{tid:05d}"; trade_of[i] = k; trade_size[k] = 1
+            positions.append([i])
         cand = sorted((abs(secs(ci) - secs(pi)), ci, pi)
                       for ci in b["call"] for pi in b["put"]
                       if abs(secs(ci) - secs(pi)) <= PAIR_WINDOW_S)
@@ -981,12 +962,40 @@ def main():
         for _, ci, pi in cand:
             if ci in used or pi in used: continue
             used.add(ci); used.add(pi)
-            tid += 1; k = f"T{tid:05d}"
-            trade_of[ci] = k; trade_of[pi] = k; trade_size[k] = 2
+            positions.append([ci, pi])
         leftovers = [i for i in b["call"] if i not in used] + \
                     [i for i in b["put"] if i not in used] + b["other"]
         for i in leftovers:
-            tid += 1; k = f"T{tid:05d}"; trade_of[i] = k; trade_size[k] = 1
+            positions.append([i])
+
+    def natural_key(idx):
+        legs = [rows[i] for i in idx]
+        strikes = [parse_strikes(r.get("description", "")) for r in legs]
+        sp = next((s["short_put"] for s in strikes if s["short_put"]), "")
+        sc = next((s["short_call"] for s in strikes if s["short_call"]), "")
+        return (legs[0]["botName"], legs[0]["openDate"][:10], sp, sc)
+
+    def leg_order(idx):
+        # Rank same-key positions by earliest open time, then by the legs'
+        # full export content — export ROW ORDER is deliberately not a factor.
+        return (min(rows[i]["openDate"] for i in idx),
+                sorted(tuple(sorted(rows[i].items())) for i in idx))
+
+    by_key = collections.defaultdict(list)
+    for idx in positions:
+        by_key[natural_key(idx)].append(idx)
+
+    trade_of = {}
+    trade_size = collections.Counter()
+    for key, same in by_key.items():
+        for seq, idx in enumerate(sorted(same, key=leg_order)):
+            k = natural_trade_id(*key, seq=seq)
+            if k in trade_size:
+                sys.exit(f"FATAL: trade_id collision {k} for natural key {key} seq {seq}. "
+                         f"Nothing written.")
+            trade_size[k] = len(idx)
+            for i in idx:
+                trade_of[i] = k
 
     def single_sided(i):
         r = rows[i]
@@ -1608,19 +1617,60 @@ def selftest():
               (os.path.join(tmp, "data", "raw"), os.path.join(tmp, "data"),
                os.path.join(tmp, "data", "bots_meta.csv")))
 
-        # R2 is the leak that made this selftest non-hermetic in the first place:
-        # max_existing_tid()'s root defaulted to the module ROOT, bound at import
-        # time, so a --root or selftest run seeded its trade_id counter from the
-        # REPO's hedge_tournament.csv and trades.csv. A scratch run must read the
-        # scratch accumulator and nothing outside its root.
+        # R2 was the leak that made this selftest non-hermetic in the first
+        # place: the positional counter seeded itself from the REPO's
+        # hedge_tournament.csv. trade_id is now a hash of the natural key, so no
+        # accumulator — scratch or live — is read at all: a seeded accumulator
+        # must leave the id exactly what the key alone says it is.
         _st_env(tmp, [norm_meta], [_st_row(NORMBOT)])
         with open(_st_out(tmp, "hedge_tournament.csv"), "w", newline="") as fo:
             w = csv.writer(fo); w.writerow(["date", "trade_id"])
             w.writerow(["2099-01-01", "T00042"])
         code, _, _ = _st_run(tmp)
         led = list(csv.DictReader(open(_st_out(tmp, "trades.csv"))))
-        check("R2  trade_id continues from the SCRATCH accumulator, not the repo's",
-              (code, [r["trade_id"] for r in led]), (None, ["T00043"]))
+        check("R2  trade_id is the natural-key hash, independent of any accumulator",
+              (code, [r["trade_id"] for r in led]),
+              (None, [natural_trade_id(NORMBOT, "2099-01-02", "500", "", 0)]))
+
+        # ---- K1-K4: STABLE trade_id (T-10 / P1-3) -------------------------
+        # K1: a condor's two legs share one id, derived from BOTH short strikes.
+        # K2: rebuilding from the same export is byte-identical in trade_id,
+        #     even with the legs in a different export row order.
+        # K3: two same-key positions on one day (a re-entry at the same strike)
+        #     get distinct ids, ranked by open time, not by export row order.
+        # K4: the id never carries a positional counter — a prior ledger with
+        #     other days present does not shift it.
+        put_leg = _st_row(NORMBOT)
+        call_leg = dict(_st_row(NORMBOT, typ="shortcallspread"),
+                        description="-520 call +522 call", openDate="2099-01-02 09:46:03")
+        re1 = dict(_st_row(NORMBOT), openDate="2099-01-02 13:39:12", pnl="5")
+        re2 = dict(_st_row(NORMBOT), openDate="2099-01-02 13:39:14", pnl="7")
+        export_a = [put_leg, call_leg, re1, re2]
+        export_b = [re2, call_leg, re1, put_leg]
+
+        def ids_for(export):
+            _st_env(tmp, [norm_meta], export)
+            code, _, _ = _st_run(tmp)
+            led = list(csv.DictReader(open(_st_out(tmp, "trades.csv"))))
+            return code, {(r["open_date"], r["structure"]): r["trade_id"] for r in led}
+
+        code_a, ids_a = ids_for(export_a)
+        code_b, ids_b = ids_for(export_b)
+        condor_id = natural_trade_id(NORMBOT, "2099-01-02", "500", "520", 0)
+        check("K1  condor legs share one id derived from both short strikes",
+              (code_a, ids_a[("2099-01-02 09:46:00", "shortputspread")],
+               ids_a[("2099-01-02 09:46:03", "shortcallspread")]),
+              (None, condor_id, condor_id))
+        check("K2  same export, shuffled row order -> identical trade_ids",
+              (code_b, ids_b), (None, ids_a))
+        check("K3  same-key re-entries get distinct ids ranked by open time",
+              (ids_a[("2099-01-02 13:39:12", "shortputspread")],
+               ids_a[("2099-01-02 13:39:14", "shortputspread")]),
+              (natural_trade_id(NORMBOT, "2099-01-02", "500", "", 0),
+               natural_trade_id(NORMBOT, "2099-01-02", "500", "", 1)))
+        check("K4  every trade_id is T + %d hex, no positional counter" % TRADE_ID_HEX,
+              all(re.fullmatch(r"T[0-9a-f]{%d}" % TRADE_ID_HEX, t) for t in ids_a.values())
+              and len(set(ids_a.values())) == 3, True)
 
         check("R3  the whole selftest left the repo's data/trades.csv byte-identical",
               live_sha(), live_before)
@@ -1637,6 +1687,7 @@ def selftest():
     print("  S* = T-45 RANGE-SHORTENED EXPORT GUARD (newest raw vs previous raw)")
     print("  M* = DUPLICATE-KEY FATAL (bots_meta.csv `bot` column)")
     print("  R* = G-3 FIXTURE / LIVE SEPARATION (--root)")
+    print("  K* = T-10 STABLE trade_id FROM THE NATURAL KEY (spec §1.4)")
     print("=" * 74)
     for ok, name, got, want in results:
         print(f"  {'PASS' if ok else 'FAIL'}  {name}")
