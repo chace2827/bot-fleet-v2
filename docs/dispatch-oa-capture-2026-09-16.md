@@ -124,6 +124,153 @@ run with no refusals in a boundary this tight is more suspicious than one with s
 
 ---
 
+## PHASE 0b — the Compare & Combine surface (RULED 2026-09-16, `R-2026-09-16-BACKTEST-COMBINE-S2`)
+
+**Phase 0 is answered and closed** — the bundle exists and the answer is NO for one backtest.
+Phase 0b, read-mostly, on the authorized UI path, asks the question Phase 0's dispatch never
+asked: what do **two** backtests do together.
+
+Andy has 65 existing backtests. Open `/backtests/compare/<ids>` with two of them and answer,
+with screenshots and verbatim labels:
+
+1. **Procedure** — how backtests are added to a comparison and combined. `OA-1143` and
+   `OA-1144` are DOCS-SILENT on exactly this; the capture is the only possible record.
+2. **Granularity** — does the combined portfolio curve expose **per-day rows**, or summary
+   stats only? Day-level is what the loss anatomy and the day-strip heatmap require.
+   Summary-only means two trade lists still get transcribed and joined by hand, and the
+   combine saving shrinks.
+3. **Conditionality** — is combination additive at the portfolio level only, or does any
+   control condition one backtest's entries on the other's state? This is the load-bearing
+   question. Expect additive; report what is rendered, not what is expected.
+4. **Size ratio** — is there a control for relative sizing between combined backtests, or is
+   it 1:1? Size ratio is a required field of the Monitor spec (`hedge-north-star.md` §6). If
+   absent, the ratio has to be swept as separate backtests and the grid grows.
+5. **Duplicate fidelity** — does duplicating a config preserve the full fixed frame so only
+   the differ changes? If yes it also retires the `text`/`textValues` display-string trap on
+   the 21 untouched fields — a second reason to prefer duplicate over hand-construction.
+6. **Ceiling** — confirm or falsify `OA-1090`'s *"up to four backtests simultaneously"* against
+   the live surface, and record whether the four-way cap applies to Compare only or to Combine
+   Results as well.
+
+**Naming.** Any saved comparison lands in shared account state exactly as a saved backtest
+does — `ZZ-AGENT-<YYYY-MM-DD>-<arm>` applies to it (`-A2`), or nothing is saved at all.
+
+**Read scope — RULED 2026-09-16 (`R-2026-09-16-BACKTEST-COMBINE-S4`):** DOM/JS reads of page
+state are inside the grant — rendered text, `input.value`, hidden-input serialization,
+hydrated models. Still forbidden, unchanged: any API call, replay, network inspection, or
+traffic recorder.
+
+**Do not start Phase 1 in the same session as Phase 0b either.** Phase 0b's answers re-size
+the grid and decide whether any manual join survives outside V3.
+
+### The Phase 0b prompt (paste below the line)
+
+---
+
+You are working in the `bot-fleet-v2` repo, connected as a local folder.
+
+**Read these three, in this order, before doing anything:**
+1. `CLAUDE.md` — the project contract.
+2. `.agents/skills/option-alpha/SKILL.md` — **the law.** When it and any other file disagree,
+   it wins.
+3. `.agents/skills/oa-drive/SKILL.md` — **the plumbing and the authorization boundary.** Read
+   the top banner first and treat it as binding, not advisory.
+
+Then read `docs/decision-card-2026-09-16-backtest-combine.md` — all five slots are ruled; it
+tells you why this task exists.
+
+### ⛔ THE BOUNDARY — three rules, no exceptions, no judgment calls
+
+0. **YOU DO NOT LOG IN.** Andy launches Chrome and authenticates to OA **by hand** before you
+   start (`oa-drive` §1). You attach to an already-authenticated browser. **Never request,
+   enter, store or read credentials.** If any URL contains `/login`, or a sign-in form appears,
+   **STOP and report.** "Not attached" is the answer, not "let me log in."
+1. **NO LIVE-FLEET EDITS — EVER.** Bot, automation, scanner, position and account-settings
+   surfaces are **read-only**. If an action would alter what a live bot does, **stop and
+   report**, whatever screen it is reached from.
+   **✅ BACKTESTS ARE THE EXCEPTION** (`-A2`): you may create, save, duplicate, rename, delete
+   and run backtest **configurations**. For this task you should not need to create any —
+   Andy has 65 existing backtests; use them.
+   ⛔ **If you save anything — including a saved comparison — it is named
+   `ZZ-AGENT-<YYYY-MM-DD>-<arm>`.** No exceptions.
+2. **NO WIRE PROTOCOL.** No fetch/XHR wrapping, no `POST /api/request` calls of your own, no
+   `zdte.*` replay, no traffic recorder, no reading the network panel. You drive the interface
+   as a user does.
+   **Read scope — RULED 2026-09-16 (`R-2026-09-16-BACKTEST-COMBINE-S4`):** DOM/JS reads of page
+   state are inside the grant — rendered text, `input.value`, hidden-input serialization,
+   hydrated models. "The inspection portion" means the API-discovery path, not DOM reads.
+3. **SCOPE EVERY CAPTURE TO THE HOST AT CAPTURE TIME** — filter to `app.optionalpha.com` at
+   the moment of capture, never afterwards in analysis.
+
+### ⛔ THE EVIDENCE RULE
+
+**The position's Trades list is the only order-level evidence.** A tool returning success is
+not verification (`CLAUDE.md` §9.1a). State what you observed and where you observed it,
+every time. Report what is **rendered**, not what you expect — this task's whole point is
+that the expected answer is unverified.
+
+### PHASE 0b — TASK: the Compare & Combine surface (read-mostly)
+
+Phase 0 proved **one** backtest is single-structure. OA also offers `/backtests/compare/<ids>`
+with `Add Backtest` and `Combine Results` (capture `01-…-223758.txt`, lines 219-222). What
+**two** backtests do together was never asked. Answer it by **opening the surface and
+looking.**
+
+Open `/backtests/compare/` with two of Andy's existing backtests (pick any two — this is a
+surface recon, not a result read) and answer, with screenshots and **verbatim labels** —
+do not paraphrase:
+
+1. **Procedure** — how are backtests added to a comparison, and how is `Combine Results`
+   invoked? Record the exact controls and the exact click path.
+2. **Granularity** — does the combined portfolio view expose **per-day rows** (a trade list
+   or daily P/L table), or summary stats only? Verbatim the column headers of whatever table
+   exists.
+3. **Conditionality** — is combination additive at the portfolio level only, or does ANY
+   control condition one backtest's entries on the other's state? **This is the load-bearing
+   question.** Expect additive; report what is rendered.
+4. **Size ratio** — is there any control for relative sizing between combined backtests, or
+   is it 1:1? Verbatim the control label if one exists.
+5. **Duplicate fidelity** — open one of the compared backtests' settings and duplicate it.
+   Does the duplicate carry the full configuration, so only the differ changes? Do not save
+   the duplicate — report what the duplicate form pre-fills.
+6. **Ceiling** — `OA-1090` documents *"up to four backtests simultaneously."* Confirm or
+   falsify against the live surface: try to add a fifth; record the exact error or the exact
+   fifth slot. Record whether the cap applies to Compare only or to Combine Results as well.
+
+**Also confirm first-hand:** whether the results/compare view has any **export** mechanism
+(`docs/AI Agent Stack.md`:256 says backtest data is not exportable — confirmation-by-absence,
+not an OA statement). Report what you find.
+
+### DELIVERABLE — same bundle shape, new directory
+
+`data/captures/2026-09-16-oa-backtester/` is the template. Copy its shape into
+`data/captures/2026-09-16-oa-compare/`: raw capture files (`01-…` unmodified), derived files
+whose headers name the raw source **and its sha256**, `screenshots/` named by section,
+`README.md` (purpose · timestamp **with TZ offset** · file/sha256/what table · the six answers
+each with its verbatim-label evidence), `SHA256SUMS.txt` over everything.
+
+### PROHIBITIONS
+
+- No git: no `add`, `commit`, `push`, no branches. **Andy runs every commit.**
+- Touch nothing outside `data/captures/2026-09-16-oa-compare/`.
+- Do not edit `CLAUDE.md`, `docs/build-plan.md`, any spec, or any ruling.
+- Do not run a backtest; do not create, save, rename or delete one; do not save a comparison.
+  Read-only navigation plus, at most, opening a duplicate form to read what it pre-fills.
+- **Stop conditions — no retries past these:** 401/403/429 · an unrecognized response shape ·
+  UI numbers disagreeing with each other · a URL containing `/login` · any terms or payment
+  prompt · **anything indicating a live (non-PAPER) account.** Stop and report.
+
+### REPORT
+
+The six answers, each YES/NO/NOT-DETERMINABLE where that applies, each with its screenshot and
+verbatim label; the export finding; the bundle path; and **the refusals** — anything you
+declined because a rule above forbade it. A run with no refusals in a boundary this tight is
+more suspicious than one with several.
+
+**Do not start Phase 1 in this session.** Report Phase 0b, stop, wait for Andy.
+
+---
+
 ## PHASE 1 — the hedge tests (only after Phase 0 answers)
 
 **Do not start Phase 1 in the same session as Phase 0.** Phase 0's answer decides which Phase 1

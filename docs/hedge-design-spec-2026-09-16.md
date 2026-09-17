@@ -197,8 +197,8 @@ A hedge is a **separate protective position**. An exit strategy is not a hedge. 
 ### 6.1 ⛔ The operative consequence
 
 > **[CORRECTED 2026-09-16 — option 4's framing is incomplete. Original text left standing per
-> §0.2. **CHANGES NO DECISION**; the replacement is drafted and **UNRULED** in
-> `docs/decision-card-2026-09-16-backtest-combine.md`.]**
+> §0.2. The replacement is in `docs/decision-card-2026-09-16-backtest-combine.md`; **Slots 1–3
+> and 5 RULED 2026-09-16** (Andy in-chat to Devin), Slot 4 pending.]**
 >
 > This section treats "can the backtester express a SECOND, separate protective position" as the
 > blocking question. The 2026-09-16 Phase-0 capture answered **NO for one backtest** — and in the

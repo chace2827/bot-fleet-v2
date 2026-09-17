@@ -1,14 +1,16 @@
 # Decision card — 2026-09-16 — native compare & combine
 
-**FIVE SLOTS — NONE RULED.** Raised by Andy in-chat 2026-09-16, verbatim: *"Does this plan know
-that backtests can be duplicated as variants and compared? And then we can add several backtests
-to a portfolio to compare? This is all native in the OA."*
+**ALL FIVE SLOTS RULED 2026-09-16 (Andy, in-chat to the Devin session).** Raised by Andy in-chat
+2026-09-16, verbatim: *"Does this plan know that backtests can be duplicated as variants and
+compared? And then we can add several backtests to a portfolio to compare? This is all native in
+the OA."*
 
 Answer: **the plan did not.** The capability is documented in `data/oa_facts.csv` (harvested
 2026-08-04) and was observed first-hand in the 2026-09-16 Phase-0 capture, and neither
 `docs/hedge-north-star.md` §4 nor `docs/hedge-design-spec-2026-09-16.md` §6.1 cites either source.
-Slots 1, 2 and 5 change what gets built and are therefore **gated** (`CLAUDE.md` §5). Nothing in this
-card is applied.
+Slots 1, 2 and 5 change what gets built and are therefore **gated** (`CLAUDE.md` §5) — now ruled
+as recorded per-slot below. Slot 4 remains unruled; **no further capture reads hidden inputs
+until it is.**
 
 ---
 
@@ -88,7 +90,11 @@ mechanic named without its platform primitive) approaching from the opposite dir
 
 ---
 
-## Slot 1 — replace §4's research method  ⬜ UNRULED
+## Slot 1 — replace §4's research method  ✅ RULED 2026-09-16
+
+**Andy, in-chat to Devin, verbatim: *"Slot 1 - rule it."*** Applied: `hedge-north-star.md` §4
+carries the replacement text below; the falsified-premise banner is updated to RULED. Registered
+as `R-2026-09-16-BACKTEST-COMBINE-S1`.
 
 Replace `hedge-north-star.md` §4's *"The way around it"* paragraph and the **How tested** column of
 the variant table. Proposed text:
@@ -109,7 +115,11 @@ as the cross-check against a different surface.
 
 ---
 
-## Slot 2 — rewrite the dispatch's Phase-0 question  ⬜ UNRULED
+## Slot 2 — rewrite the dispatch's Phase-0 question  ✅ RULED 2026-09-16
+
+**Andy, in-chat to Devin, verbatim: *"2 - Authorized."*** Applied: `dispatch-oa-capture-2026-09-16.md`
+carries Phase 0b verbatim below as the next task. Registered as
+`R-2026-09-16-BACKTEST-COMBINE-S2`.
 
 `docs/dispatch-oa-capture-2026-09-16.md` Phase 0 is **answered and closed** — the bundle exists and
 the answer is NO. Proposed replacement, **Phase 0b**, read-mostly, on the authorized UI path:
@@ -140,7 +150,12 @@ the answer is NO. Proposed replacement, **Phase 0b**, read-mostly, on the author
 
 ---
 
-## Slot 3 — the four-backtest ceiling vs a five-variant frame  ⬜ UNRULED
+## Slot 3 — the four-backtest ceiling vs a five-variant frame  ✅ RULED 2026-09-16
+
+**Andy, in-chat to Devin, verbatim: *"3 - Yes"* — taken as acceptance of the draft
+recommendation: (c) confirm the cap first in Phase 0b item 6, then (a) two comparisons sharing
+V0 as the common control** (which doubles as a fixed-frame consistency check: V0's curve must be
+identical in both). Registered as `R-2026-09-16-BACKTEST-COMBINE-S3`.
 
 OA-1090 caps simultaneous comparison at **four**. The frame is **V0–V4 — five.** §4's "single
 screen" spec (five equity curves overlaid, one stats column per variant) cannot render as written.
@@ -155,7 +170,20 @@ Three options, none ruled:
 
 ---
 
-## Slot 4 — was the Phase-0 capture inside the authorization boundary?  ⬜ UNRULED — permission question, raise before the next capture
+## Slot 4 — was the Phase-0 capture inside the authorization boundary?  ✅ RULED 2026-09-16
+
+**Andy, in-chat to Devin, verbatim: *"lets move forward with A"* — DOM/JS reads of page state,
+including `input[type=hidden]` serialization, are INSIDE the grant.** Grounding Andy cited: the
+Chrome-era read method (2026-08-04 → 2026-09-07) read hydrated app models (`a5.bots.bot`,
+`a5.bots.acedit.routine`) and `input.value`/`.checked`/`data-value` — *never* `innerText` — so
+hidden-input serialization is a strict subset of the established capture method the grant's
+"record data" wording describes, and "the API process that involves going in the inspection
+portion" most plausibly means network-inspection → endpoint discovery → replay (the `zdte.*`
+route), which involves zero DOM reads. Residual risk is an inference about wording; the one-line
+OA clarification (the rejected Option C) remains available non-load-bearing. Registered as
+`R-2026-09-16-BACKTEST-COMBINE-S4`. **The interim hold ("no hidden-input serialization until
+ruled") is discharged — captures may serialize form state again.** The still-forbidden surface
+is unchanged: no API calls, no replay, no network inspection, no traffic recorder.
 
 The bundle's own README states it was taken *"over CDP against Andy's authenticated Chrome"* and
 that `01-…txt` contains *"rendered innerText + all 51 serialized form inputs."*
@@ -173,7 +201,28 @@ this is ruled.**
 
 ---
 
-## Slot 5 — which surface dispatches the OA grid  ⬜ UNRULED
+## Slot 5 — which surface dispatches the OA grid  ✅ RULED 2026-09-16 — delegated
+
+**Andy, in-chat to Devin, verbatim: *"5 whatever you suggest."*** The ruling delegates the
+surface design to Devin's recommendation, recorded here and **vetoable at commit review**
+(`R-2026-08-31-DERIVED-RULING-AUTHORITY` (b) — bounded operational design choice; the rejected
+alternatives are recorded in 5a–5e). Registered as `R-2026-09-16-BACKTEST-COMBINE-S5`.
+
+**Devin's suggestion, adopted:**
+
+- **5a:** MCP lane = **repo-only work, and each dispatch carries an explicit per-session cost
+  assertion** (named expected model + ACU behavior) — because `devin_session_create` exposes no
+  model pin, an MCP session inherits the org default and cannot be guaranteed free. MCP is never
+  the OA lane.
+- **5b:** foreman runs CLI-spawned sessions in a **scratch workspace outside the three guarded
+  roots** and moves bundles into the repo itself — the wrapper's CWD guard is not amended.
+- **5c:** option **(ii)** — the CLI lane stays `swe-1-7`; SWE-2 MAX remains Desktop-only until a
+  live `acu 0.0` receipt exists for it on the CLI backend.
+- **5d:** the cheap proof session runs **early** — one `devin-free`-spawned session attaches to
+  the authenticated Chrome, reads one rendered backtest, exits. It converts "the CLI lane can
+  drive OA" from a claim into a capability before the lane carries real hours.
+- **5e:** order stands — **Slot 1 → Phase 0b → re-size the grid → dispatch surface.** Desktop
+  paste remains the proven route in the meantime.
 
 Raised by Devin 2026-09-16, correcting an earlier claim in the Cowork chat that OA-lane dispatch
 requires Andy pasting into Devin Desktop. **The correction is accepted on mechanism and rejected on

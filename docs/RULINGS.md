@@ -5534,3 +5534,133 @@ source: >-
   duplicate-row incident.
 unclear: false
 ```
+
+```yaml
+ruling_id: R-2026-09-16-BACKTEST-COMBINE-S1
+date: 2026-09-16
+scope: >-
+  Replace hedge-north-star.md §4's manual joined-backtest method with the native
+  Compare/Combine method (V1/V2/V4 native combines; manual join reserved for V3
+  plus one hand-joined cross-check variant).
+verbatim: Slot 1 - rule it
+verbatim_of: andy
+owner: Andy (in-chat to the Devin CLI session, 2026-09-16)
+status: Active
+applies_to: >-
+  docs/hedge-north-star.md §4 (replacement text applied; falsified-premise banner
+  updated to RULED); docs/hedge-design-spec-2026-09-16.md §6.1 banner (status
+  updated); docs/decision-card-2026-09-16-backtest-combine.md Slot 1.
+superseded_by: none
+source: >-
+  docs/decision-card-2026-09-16-backtest-combine.md Slot 1 — applied by the Devin
+  session as mechanical propagation of Andy's ruling.
+unclear: false
+```
+
+```yaml
+ruling_id: R-2026-09-16-BACKTEST-COMBINE-S2
+date: 2026-09-16
+scope: >-
+  Authorize Phase 0b: a read-mostly UI recon of OA's /backtests/compare surface —
+  procedure, per-day granularity, additivity/conditionality, size ratio, duplicate
+  fidelity, and the four-backtest ceiling — before the research grid is re-sized.
+verbatim: 2-Authorized
+verbatim_of: andy
+owner: Andy (in-chat to the Devin CLI session, 2026-09-16)
+status: Active
+applies_to: >-
+  docs/dispatch-oa-capture-2026-09-16.md — new section "PHASE 0b — the Compare &
+  Combine surface" inserted verbatim from the decision card's drafted text, plus
+  the Slot-4 hold on hidden-input serialization until R-2026-09-16-BACKTEST-COMBINE-S4
+  is ruled.
+superseded_by: none
+source: >-
+  docs/decision-card-2026-09-16-backtest-combine.md Slot 2 — applied by the Devin
+  session as mechanical propagation of Andy's ruling.
+unclear: false
+```
+
+```yaml
+ruling_id: R-2026-09-16-BACKTEST-COMBINE-S3
+date: 2026-09-16
+scope: >-
+  Resolve the four-backtest compare ceiling (OA-1090) against the five-variant
+  frame: (c) confirm the cap first via Phase 0b item 6, then (a) run two
+  comparisons sharing V0 as the common control — which doubles as a fixed-frame
+  consistency check.
+verbatim: 3 - Yes
+verbatim_of: andy
+owner: Andy (in-chat to the Devin CLI session, 2026-09-16)
+status: Active
+applies_to: >-
+  docs/decision-card-2026-09-16-backtest-combine.md Slot 3 — the draft's
+  recommended ordering (c)-then-(a) was what "Yes" accepted; recorded as such.
+superseded_by: none
+source: >-
+  docs/decision-card-2026-09-16-backtest-combine.md Slot 3 — applied by the Devin
+  session as mechanical propagation of Andy's ruling.
+unclear: false
+```
+
+```yaml
+ruling_id: R-2026-09-16-BACKTEST-COMBINE-S5
+date: 2026-09-16
+scope: >-
+  Dispatch surface for the OA grid: delegated by Andy to Devin's recommendation.
+  Adopted — 5a: MCP lane is repo-only and every dispatch carries an explicit
+  per-session cost assertion (no model pin exists on devin_session_create, so an
+  MCP session inherits the org default and cannot be guaranteed free). 5b:
+  CLI-spawned sessions run in a scratch workspace outside the three guarded
+  roots; the foreman moves bundles into the repo — the CWD guard is not amended.
+  5c: the CLI lane stays pinned to swe-1-7; SWE-2 MAX remains Desktop-only until
+  a live acu 0.0 receipt exists for it on the CLI backend. 5d: one cheap proof
+  session runs early (attach to authenticated Chrome, read one rendered
+  backtest, exit). 5e: order stands — Slot 1 → Phase 0b → re-size → dispatch
+  surface; Desktop paste remains the proven route meanwhile.
+verbatim: 5 whatever you suggest
+verbatim_of: andy
+owner: >-
+  Andy (in-chat to the Devin CLI session, 2026-09-16) — delegation to Devin's
+  recorded recommendation under R-2026-08-31-DERIVED-RULING-AUTHORITY (b),
+  bounded operational design choice; vetoable at commit review.
+status: Active
+applies_to: >-
+  docs/decision-card-2026-09-16-backtest-combine.md Slot 5; scripts/devin_free.sh
+  (unchanged — CWD guard not amended); any future MCP dispatch (cost assertion
+  required); any future CLI-spawned OA session (scratch workspace + proof session
+  first).
+superseded_by: none
+source: >-
+  docs/decision-card-2026-09-16-backtest-combine.md Slot 5 — recorded by the
+  Devin session; the rejected alternatives are listed per-sub-slot in the card.
+unclear: false
+```
+
+```yaml
+ruling_id: R-2026-09-16-BACKTEST-COMBINE-S4
+date: 2026-09-16
+scope: >-
+  DOM/JS reads of OA page state — input.value, input[type=hidden] serialization,
+  hydrated app models — are INSIDE the written grant. "The API process that
+  involves going in the inspection portion" means network-inspection → endpoint
+  discovery → replay (the zdte.* route), not DOM reads. Still forbidden,
+  unchanged: any API call, request replay, network inspection, traffic recorder.
+verbatim: lets move forward with A
+verbatim_of: andy
+owner: Andy (in-chat to the Devin CLI session, 2026-09-16)
+status: Active
+applies_to: >-
+  docs/decision-card-2026-09-16-backtest-combine.md Slot 4;
+  docs/dispatch-oa-capture-2026-09-16.md Phase 0b read scope (interim hold
+  discharged); docs/hedge-north-star.md §5 boundary line; every future capture —
+  hidden-input serialization is permitted again.
+superseded_by: none
+source: >-
+  docs/decision-card-2026-09-16-backtest-combine.md Slot 4 — grounding Andy cited:
+  the Chrome-era read method (2026-08-04 → 2026-09-07) read a5.bots.bot,
+  a5.bots.acedit.routine and input.value/.checked/data-value, never innerText —
+  a strict superset of hidden-input serialization and the method the grant's
+  "record data" wording describes. The one-line OA clarification (Option C)
+  remains available, non-load-bearing.
+unclear: false
+```

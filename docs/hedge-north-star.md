@@ -83,10 +83,9 @@ no entry, no restart.
 
 ## 4. The research method — joined backtests
 
-> **[CORRECTED 2026-09-16 — this section's premise is factually falsified. Original text left
-> standing per `oa-platform-reference.md` §0.2. **THIS CHANGES NO DECISION:** the replacement
-> method is drafted and **UNRULED** in `docs/decision-card-2026-09-16-backtest-combine.md` Slot 1.
-> Until that slot is ruled, the method below stands as written.]**
+> **[CORRECTED 2026-09-16 — this section's premise was factually falsified; the correction is
+> now **RULED 2026-09-16** — Andy in-chat to Devin, verbatim: *"Slot 1 - rule it"* —
+> `R-2026-09-16-BACKTEST-COMBINE-S1`. The replacement below is in force.]**
 >
 > "The way around it" was written as though OA offered no native way to combine backtests. It
 > does. Evidence, on two independent surfaces:
@@ -118,20 +117,24 @@ position mid-trade — chat premise, and the 2026-09-16 Phase-0 UI recon answere
 (single-structure: 8 fixed strategies, "Position Limit: 1 position," one position per
 expiration, exits-only exit stack; entry filters are all underlying-market state).
 
-**The way around it (the chat's method, which stands):** run hedge structures as **standalone
-backtests across an entry-time grid**, then join each hedge run to the condor day-by-day at the
-moment the trigger would have fired. A hedge triggered by market state is independent of the
-strategy it protects — one QQQ hedge run combines with every QQQ bot, built or mirrored.
+**The way around it — RULED 2026-09-16 (Slot 1):** OA combines backtests **natively**.
+`/backtests/compare/<ids>` exposes `Add Backtest` and `Combine Results` (first-hand capture
+2026-09-16, sha `02376a44…`), and **OA-1077** documents *"combine the results of multiple
+strategies into one portfolio curve."* Run each hedge structure as its own standalone backtest
+over the fixed frame, then combine it with the condor backtest in the Compare surface. The
+manual day-by-day join is reserved for **V3 alone** — its trigger references the condor's own
+P&L and cannot be expressed as an independent backtest's entry filter. One hand-joined variant
+is retained anyway as a cross-check on the native result.
 
 **The variant frame (V0–V4, fixed frame: period, seed, symbol, sizing):**
 
 | Variant | Construction | How tested |
 |---|---|---|
 | **V0** | 130PM condor, no hedge | Native backtest — the control everything is measured against |
-| **V1** | Short-strike touch → tested-side debit spread | Joined (trigger time computable from 1-min underlying bars) |
-| **V2** | Underlying % move since open → debit spread | Joined (same — exact) |
-| **V3** | Condor return −X% → debit spread | Joined but **approximate** — needs intraday option marks (the owed premium path, spec §3.3; Tradier tape is the in-repo source) |
-| **V4** | Far-OTM put / strangle bought at 1:30 alongside the condor | Native backtest standalone — the entry-time overlay; join is trivial since trigger = entry |
+| **V1** | Short-strike touch → tested-side debit spread | **Native combine** — trigger is underlying state, so it runs as its own backtest |
+| **V2** | Underlying % move since open → debit spread | **Native combine** — same |
+| **V3** | Condor return −X% → debit spread | **Manual join** — the only cross-position variant left; still **approximate** — needs intraday option marks (the owed premium path, spec §3.3; Tradier tape is the in-repo source) |
+| **V4** | Far-OTM put / strangle bought at 1:30 alongside the condor | **Native combine** — trigger = entry time |
 
 **Mapping to the dispatched arms:** V0 = H-0 (control, runs first); V1–V3 are the H-A family
 realized through the join rather than in one test; V4 is the entry-time overlay the dispatch
@@ -165,8 +168,11 @@ years 1–2 vs year 3 in analysis.
 This is where the chat is stale, and the correction is binding:
 
 - **UI path only.** OA's written grant is scoped: Devin's own browser driving the interface —
-  yes. The `zdte.*` wire protocol, request replay, traffic recorders, page-context inspection —
-  **no** (`R-2026-09-16-DEVIN-OA-CHROME-CAPTURE` as amended by `-A1`). The chat's "each runs
+  yes. The `zdte.*` wire protocol, request replay, traffic recorders, network inspection —
+  **no** (`R-2026-09-16-DEVIN-OA-CHROME-CAPTURE` as amended by `-A1`). DOM/JS reads of page
+  state — `input.value`, hidden inputs, hydrated models — are **inside** the grant
+  (`R-2026-09-16-BACKTEST-COMBINE-S4`, ruled 2026-09-16): the Chrome-era read method was
+  exactly this, and "the inspection portion" means the API-discovery path, not DOM reads. The chat's "each runs
   through `zdte.startTest`" is **withdrawn as a plan**; the RPC verification is history, not a
   toolkit. If Andy wants that speed back it takes a broader written grant, stated plainly:
   ~200 scripted backtests, serial, no parallelism.

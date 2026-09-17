@@ -12330,3 +12330,81 @@ Phase-0b rewrite is Slot 2 and the dispatch surface is Slot 5, both gated.
 
 **Files:** `docs/decision-card-2026-09-16-backtest-combine.md` · this file.
 Tracker artifact update owed — no `update_artifact` tool in this lane (same as closes 8 and 9).
+
+## 2026-09-16 (close 11) — Combine card Slots 1, 2, 3, 5 RULED by Andy; applied (Devin, mounted tree)
+
+Andy ruled four of the five slots on `docs/decision-card-2026-09-16-backtest-combine.md` in-chat,
+verbatim: *"Slot 1 - rule it · 2-Authorized · 3 - Yes · 5 whatever you suggest."* Slot 4 (the
+hidden-input permission question) was held pending a detailed explanation of its three options —
+it gates all further captures, and the interim hold stands: rendered text + screenshots only, no
+`input[type=hidden]` serialization.
+
+**Applied, as mechanical propagation of the rulings:**
+
+- `docs/decision-card-2026-09-16-backtest-combine.md` — header FIVE SLOTS now reads "1, 2, 3 and
+  5 RULED; SLOT 4 PENDING"; each ruled slot carries Andy's verbatim and its ruling ID.
+- `docs/RULINGS.md` — four records appended: `R-2026-09-16-BACKTEST-COMBINE-S1` (§4 method
+  replaced), `-S2` (Phase 0b authorized), `-S3` (ceiling: (c) confirm in Phase 0b item 6, then
+  (a) two comparisons sharing V0), `-S5` (dispatch surface, delegated to Devin's recorded
+  recommendation under `R-2026-08-31-DERIVED-RULING-AUTHORITY` (b) — 5a MCP repo-only with a
+  per-session cost assertion; 5b scratch workspace outside the guarded roots, CWD guard
+  untouched; 5c CLI stays `swe-1-7`, SWE-2 MAX Desktop-only until a live `acu 0.0` receipt; 5d
+  one early `devin-free`→Chrome proof session; 5e order stands).
+- `docs/hedge-north-star.md` §4 — the card's drafted replacement applied verbatim: "The way
+  around it" now reads native combine; V1/V2/V4 → **Native combine**, V3 → **Manual join** (the
+  only cross-position variant left); banner updated UNRULED→RULED; one hand-joined variant kept
+  as cross-check.
+- `docs/hedge-design-spec-2026-09-16.md` §6.1 banner — "UNRULED" → "Slots 1–3 and 5 RULED
+  2026-09-16, Slot 4 pending."
+- `docs/dispatch-oa-capture-2026-09-16.md` — new section **PHASE 0b — the Compare & Combine
+  surface** inserted between Phase 0 and Phase 1: six questions (procedure, per-day granularity,
+  conditionality, size ratio, duplicate fidelity, four-backtest ceiling), ZZ-AGENT naming on any
+  saved comparison, the Slot-4 capture hold, and "do not start Phase 1 in the same session."
+
+**Next in sequence:** rule Slot 4 → dispatch Phase 0b (Desktop paste — proven route; the CLI lane
+carries it only after 5d's proof session lands) → re-size the grid → then the dispatch surface
+under the ruled 5a–5e. Carried unruled underneath: `§9.2` (paper arms vs measurement-only) and
+the GF triple-identity defect.
+
+**Files:** `docs/decision-card-2026-09-16-backtest-combine.md` · `docs/RULINGS.md` ·
+`docs/hedge-north-star.md` · `docs/hedge-design-spec-2026-09-16.md` ·
+`docs/dispatch-oa-capture-2026-09-16.md` · this file.
+Tracker artifact update owed — no `update_artifact` tool in this lane.
+
+## 2026-09-16 (close 12) — Slot 4 RULED "A": DOM reads inside the grant; all five slots ruled (Devin, mounted tree)
+
+Andy ruled the last open slot in-chat, verbatim: *"lets move forward with A."* Grounding he
+cited: the Chrome-era method (Aug 4–Sep 7) read hydrated models (`a5.bots.bot`,
+`a5.bots.acedit.routine`) and `input.value`/`.checked`/`data-value` — never `innerText` — so
+hidden-input serialization is a strict subset of the established capture method; and the
+grant's "inspection portion" clause most plausibly targets the network→endpoint→replay path
+(`zdte.*`), which involves zero DOM reads. Applied: card Slot 4 marked RULED with the verbatim
+and grounding; `R-2026-09-16-BACKTEST-COMBINE-S4` registered; the Phase-0b ⛔ hold in the
+dispatch doc replaced with the ruled read scope; `hedge-north-star.md` §5 boundary line amended
+("network inspection — no; DOM/JS reads of page state — yes"). Still forbidden, unchanged:
+API calls, replay, network inspection, traffic recorders.
+
+**All five slots on the combine card are now ruled.** Path forward: dispatch **Phase 0b** —
+six questions on `/backtests/compare` (procedure, per-day granularity, conditionality, size
+ratio, duplicate fidelity, four-backtest ceiling) — via Desktop paste (proven route; the CLI
+lane carries it only after 5d's proof session lands). Then re-size the grid, then the dispatch
+surface under ruled 5a–5e. Carried unruled underneath: `§9.2` (paper arms vs measurement-only)
+and the GF triple-identity defect.
+
+**Files:** `docs/decision-card-2026-09-16-backtest-combine.md` · `docs/RULINGS.md` ·
+`docs/dispatch-oa-capture-2026-09-16.md` · `docs/hedge-north-star.md` · this file.
+Tracker artifact update owed — no `update_artifact` tool in this lane.
+
+## 2026-09-16 (close 13) — Phase 0b paste-prompt drafted into the dispatch doc (Devin, mounted tree)
+
+Andy asked for the paste-ready Phase 0b dispatch. Added **"The Phase 0b prompt (paste below the
+line)"** to `docs/dispatch-oa-capture-2026-09-16.md` — same self-contained shape as Phase 0's:
+read-order (CLAUDE.md → option-alpha SKILL → oa-drive SKILL → the combine card), the three
+boundary rules verbatim (no login; live-fleet read-only with the `-A2` backtest exception and
+`ZZ-AGENT` naming on anything saved; no wire protocol, now carrying the **S4-ruled read scope** —
+DOM/JS reads in, API/replay/network-inspection out), the evidence rule, the six questions with
+verbatim-label requirements, the `2026-09-16-oa-compare/` bundle spec, prohibitions (read-only
+nav; no runs, no saves; duplicate-form may be *opened and read* but not saved), and the
+report/refusals format. Closes with "Do not start Phase 1 in this session."
+
+**Files:** `docs/dispatch-oa-capture-2026-09-16.md` · this file.
