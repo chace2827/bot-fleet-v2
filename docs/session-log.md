@@ -11861,3 +11861,40 @@ keeps strategy, rulings, specs, docs and OA judgment.
 close-out under §9.1, not work product.
 
 **Files:** `docs/RULINGS.md` (one ruling appended) · `docs/state.md` (PICKUP block) · this file.
+
+---
+
+## 2026-09-16 (close 2) — baseline card SIGNED; §1.3 bannered; Devin notes recorded
+
+**✅ `R-2026-09-16-TOURNAMENT-BASELINE` SIGNED** (Andy in-chat, verbatim *"Help me sign the
+tournament baseline card?"*). Recorded in `docs/RULINGS.md` status Active; card header updated;
+spec §9.3 marked RULED with the original slot text struck, not removed. Recorded **explicitly** that
+the signature came **after** H-1's dispatch and ratifies work in flight — not backdated, and Andy
+keeps rejection at commit review. The §3 acceptance test (expired-only re-run must reproduce every
+committed value unchanged) is what makes ratify-after-dispatch safe: an overreaching implementation
+fails loudly rather than landing quietly.
+
+**✅ `hedge-research.md` §1.3 OVERRULE BANNER APPLIED.** Mechanical propagation of
+`R-2026-09-16-HEDGE-DEFINITION` under `R-2026-08-31-DERIVED-RULING-AUTHORITY` (a) — the entailment
+is the ruling itself, no new judgment. Original text left standing and quoted in full per
+`oa-platform-reference.md` §0.2. The clause *"which this fleet does not run"* is called out as
+overtaken: running a separate protective position is now the objective.
+
+**Devin notes recorded, both as OPEN items rather than applied changes:**
+- ⛔ **HOLD on the Devin OA dispatch prompt.** Andy: *"Awaiting notes on what the OA claude skill
+  will be in Devin, wait on building new chat prompt until we have this."* Per §9.2 a hold means no
+  writes on that item until released. Nothing was drafted. The underlying problem is
+  `R-2026-09-16-DEVIN-OA-CHROME-CAPTURE` condition (b) — the `oa-driving` skill's traps live outside
+  this repo and Devin cannot read them; how they reach Devin is unresolved.
+- ⚠️ **Model pin conflict.** Devin note says **use SWE-2 MAX**; `scripts/devin_free.sh` hardcodes
+  `swe-1-7` and refuses `--model` by design (the wrapper exists precisely because
+  `swe-1-7-lightning` prefix-matches `swe-1-7` and is PAID). H-1 went via Devin Desktop, which
+  bypasses the wrapper, so the conflict is **dormant, not resolved**. Must be settled before any CLI
+  dispatch — probe and assert the receipt, never assume.
+
+**Still outstanding and NOT actionable from this lane:** PR #79 merge (Andy — this session cannot
+reach git or the GitHub API); written OA authorization (gates spec §9.7).
+
+**Files:** `docs/RULINGS.md` (one ruling) · `docs/decision-card-2026-09-16-tournament-baseline.md`
+(header → RULED) · `docs/hedge-design-spec-2026-09-16.md` (§9.3 closed) · `docs/hedge-research.md`
+(§1.3 banner) · `docs/state.md` (PICKUP updated) · this file.

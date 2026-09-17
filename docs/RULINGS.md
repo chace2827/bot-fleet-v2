@@ -5325,3 +5325,70 @@ source: >-
   section 3 item 3.
 unclear: false
 ```
+
+```yaml
+ruling_id: R-2026-09-16-TOURNAMENT-BASELINE
+date: 2026-09-16
+scope: >-
+  The hedge tournament's replay universe WIDENS from status=expired to every
+  leg with risk > 0, and each rule's baseline becomes PER-POPULATION:
+  settlement for expired legs, WHAT ACTUALLY HAPPENED for closed legs. The
+  "ride" arm is renamed "actual". Full text, rationale, rejected
+  alternative, acceptance test and the three replacement checks:
+  docs/decision-card-2026-09-16-tournament-baseline.md.
+
+  WHY: scripts/hedge_tournament.py:279 replays only status=expired legs, and
+  every expired leg in this ledger is a winner (data/hedge_tournament.csv:
+  23 legs, ride-arm minimum R +0.0204, zero losers). The 43 losing legs are
+  all status=closed and excluded by construction, so the engine cannot rank
+  a loss-capping mechanic at all. The engine has been scoring every rule
+  against a settlement the losing positions never reached.
+
+  ⭐ THE PREMISE OF THE SLOT WAS FALSIFIED IN DRAFTING. Spec 9.3 assumed
+  widening would break the ride-arm reconciliation. It cannot: arm_ride
+  (:200) returns fl(leg["pnl"]) verbatim with no reference to status, and
+  :306/:307 increment both sides of the assertion from the same leg in the
+  same loop pass, so :343-348 is tautologically true. It is a check that
+  addition works. It is REPLACED by three checks that can fail — population
+  count, ordering law (a fired rule's trigger timestamp <= that leg's actual
+  close_date), and bounds.
+
+  ⛔ NOT EVALUABLE, NEVER MODELED: anything requiring a position to have
+  continued past its actual exit — the hold-longer counterfactual, and the
+  "would it have recovered" hypothesis. Emits a marker row as defang does at
+  :333. This is where the strongest hypothesis lives (40% of losers close
+  within 5 minutes of their own MAE) and this ruling does not answer it and
+  must not appear to; it is answerable only in OA's zdte.* backtester.
+
+  BACKWARD COMPATIBLE AND TESTED AS SUCH: arm_pt (:204) and arm_sl (:223)
+  already fall back to fl(leg["pnl"]), so no arm's arithmetic changes — only
+  the population and the labels. Acceptance test: an expired-only re-run must
+  reproduce every committed value in data/hedge_tournament.csv unchanged.
+
+  SCOPE LIMIT: changes what the engine measures against. Changes no evidence
+  tier, sample gate, kill criterion or go-live gate, and ranks nothing.
+
+  SIGNED AFTER DISPATCH: Devin item H-1 was dispatched against this ruling
+  while unsigned. The signature ratifies work in flight; Andy retains
+  rejection at commit review. The acceptance test is what makes that safe.
+verbatim: >-
+  Help me sign the tournament baseline card?
+verbatim_of: andy
+owner: Andy (in-chat, Cowork session 2026-09-16). Measurement methodology — gated, and given.
+status: Active
+applies_to: >-
+  scripts/hedge_tournament.py (:279 universe; arm_ride -> arm_actual;
+  :343-348 recon replacement; NOT EVALUABLE markers); scripts/report.py
+  (standings must show the two populations separately, never pooled);
+  data/hedge_tournament.csv (regenerate — stale, last open_date 2026-09-04
+  against a ledger running to 2026-09-16);
+  docs/hedge-design-spec-2026-09-16.md 9.3 (CLOSED) and its 3.1;
+  docs/devin-queue.md item H-1.
+superseded_by: none
+source: >-
+  Cowork session 2026-09-16; docs/decision-card-2026-09-16-tournament-baseline.md;
+  dated first-hand device reads of scripts/hedge_tournament.py:200, :204,
+  :223, :279, :292, :306, :307, :333, :343-348 and of
+  data/hedge_tournament.csv and data/trades.csv.
+unclear: false
+```

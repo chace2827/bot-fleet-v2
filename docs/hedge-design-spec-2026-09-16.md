@@ -256,7 +256,12 @@ consequence in §6.1.
 **9.2** Does this spec authorize paper arms, or measurement work only? (Draft assumes
 measurement only, per the T4 tier.)
 
-**9.3** Is the §3.1 tournament-universe defect fixed by widening the replay to `status=closed`
+**9.3 — ✅ RULED 2026-09-16. `R-2026-09-16-TOURNAMENT-BASELINE`.** Widen the universe; baseline
+becomes per-population (settlement for expired, **what actually happened** for closed). The premise
+of this slot was **falsified in drafting** — the reconciliation it worried about is tautological and
+checks nothing; it is replaced by three checks that can fail. Hold-longer counterfactual marked NOT
+EVALUABLE, never modeled. Card: `docs/decision-card-2026-09-16-tournament-baseline.md`.
+~~Original slot text:~~ Is the §3.1 tournament-universe defect fixed by widening the replay to `status=closed`
 legs, or does that break the ride-arm reconciliation (`hedge_tournament.py` recon: ride sum ==
 ledger expired-pnl sum, per day)? Widening likely requires re-deriving that invariant.
 

@@ -33,9 +33,22 @@ Unchanged from v1. This is the part that survived contact with the data.
 2. **The entry filter is the first line of defence.** Range075 (skip if |Δ% since prior close|
    > 0.75%) prevents more loss than any stop repairs. Hedges are the *second* line, for the
    days that get through.
-3. **A hedge is config, not a pillar.** It is a parameter on a strategy — a stop level, a
-   defang, a strike-touch close — not its own bot. Standalone hedge *bots* are reserved for
-   genuine separate protective positions (tail put, VIX ladder), which this fleet does not run.
+3. ~~**A hedge is config, not a pillar.**~~ ⛔ **OVERRULED 2026-09-16 by
+   `R-2026-09-16-HEDGE-DEFINITION`.** Original text left standing per
+   `oa-platform-reference.md` §0.2: *"A hedge is config, not a pillar. It is a parameter on a
+   strategy — a stop level, a defang, a strike-touch close — not its own bot. Standalone hedge
+   bots are reserved for genuine separate protective positions (tail put, VIX ladder), which this
+   fleet does not run."*
+   **The standing definition is now the opposite.** Andy, verbatim: *"separate protective
+   position, exit strategy != hedge."* A hedge **IS** a separate protective position. Stop levels,
+   profit targets, trailing and armed-trailing stops, strike-touch cuts, time-gated flat closes and
+   defang are **EXIT MECHANICS** — they may still be built, measured and ranked, but they may not
+   be called hedges, counted as hedge coverage, or used to discharge a hedge item. The clause
+   *"which this fleet does not run"* is likewise overtaken: running one is now the objective.
+   Consequence, recorded in `hedge-design-spec-2026-09-16.md` §6.1 — every natively-expressible OA
+   candidate is an exit, so the fleet currently has **no buildable hedge on Option Alpha**.
+   *(Mechanical propagation of a signed ruling under `R-2026-08-31-DERIVED-RULING-AUTHORITY` (a);
+   entailment is the ruling itself, no new judgment.)*
 4. **Decide by tournament, backtest-first.** Never by intuition, and never off the contaminated
    QQQ live data. Narrow the field on clean backtest history, then run only the finalists live
    as matched parallel arms.

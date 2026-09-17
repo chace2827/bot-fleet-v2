@@ -1,7 +1,14 @@
 # Decision card — 2026-09-16 — the tournament baseline
 
-**ONE SLOT. NOT RULED.** Drafted for Andy's signature; closes §9.3 of
-`docs/hedge-design-spec-2026-09-16.md`. Nothing here is applied.
+**ONE SLOT — ✅ RULED AND SIGNED 2026-09-16 by Andy** (in-chat, verbatim: *"Help me sign the
+tournament baseline card?"*). Recorded as `R-2026-09-16-TOURNAMENT-BASELINE` in `docs/RULINGS.md`,
+status Active. Closes §9.3 of `docs/hedge-design-spec-2026-09-16.md`.
+
+> ⚠️ **Signed AFTER dispatch, deliberately recorded as such.** Devin item H-1 was dispatched
+> against this ruling while it was still unsigned. The signature ratifies work already in flight;
+> it is not backdated, and Andy retains rejection at commit review per `CLAUDE.md` §5. The
+> acceptance test in §3 below is what makes that safe — an expired-only re-run must reproduce every
+> committed value unchanged, so an overreaching implementation fails loudly rather than landing.
 
 ---
 
@@ -32,7 +39,7 @@ baseline each rule is scored against."**
 
 ## The slot
 
-### Proposed ruling — `R-2026-09-16-TOURNAMENT-BASELINE` (UNSIGNED)
+### Ruling — `R-2026-09-16-TOURNAMENT-BASELINE` ✅ SIGNED 2026-09-16
 
 **1. The replay universe widens** from `status=expired` to every leg with a positive `risk`.
 `:279` `expired = [t for t in trades if t["status"] == "expired"]` becomes the full set. This
@@ -98,7 +105,7 @@ back to, so a single fabricated value would propagate into every rule's `else` b
 
 ---
 
-## If signed — the Devin queue item (drafted, not yet added to `docs/devin-queue.md`)
+## Signed — the Devin queue item (H-1 DISPATCHED 2026-09-16 via Devin Desktop)
 
 > **H-1 — widen the hedge tournament to the closed-leg population.** Implements
 > `R-2026-09-16-TOURNAMENT-BASELINE`. Base on `origin/master`, not the working tree

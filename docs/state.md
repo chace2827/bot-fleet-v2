@@ -21,13 +21,33 @@
 > - `R-2026-09-16-DEVIN-OA-CHROME-CAPTURE` — Devin may drive its own Chrome to capture what the
 >   hedge test needs. **Capture only, not edits.** Three binding conditions; read the ruling.
 >
-> **Drafted, NOT signed:** `R-2026-09-16-TOURNAMENT-BASELINE` (the decision card). Widens the
-> hedge tournament past the loss-free `status=expired` universe. Its Devin item **H-1 was dispatched
-> and is working** via Devin Desktop connected to this folder — so the card should be signed to
-> match what was executed, or the record shows work that outran its authorization.
+> - `R-2026-09-16-TOURNAMENT-BASELINE` — widens the hedge tournament past the loss-free
+>   `status=expired` universe; baseline becomes per-population. Signed **after** its Devin item H-1
+>   was dispatched; the signature ratifies work in flight and the acceptance test is what makes that
+>   safe. H-1 is running via Devin Desktop connected to this folder.
+>
+> ⛔ **HOLD — do not build the Devin OA dispatch prompt.** Andy, 2026-09-16: *"Awaiting notes on what
+> the OA claude skill will be in Devin, wait on building new chat prompt until we have this."* The
+> `oa-driving` skill's traps are not readable by Devin (`R-2026-09-16-DEVIN-OA-CHROME-CAPTURE`
+> condition (b)); how they reach Devin is unresolved. §9.2 — a hold means no writes on that item
+> until Andy releases it.
+>   **[UPDATE 2026-09-16, Devin session]** — the mechanism named in condition (b) now exists
+>   in-repo: `.agents/skills/oa-drive/SKILL.md` (written this session; Devin-discovers it — it
+>   appeared in the live skill list on write) covering the launch ritual, CDP attach+verify,
+>   read/write paths, recorder pattern, verified `zdte.*` shapes, and stop conditions; alongside
+>   the pre-existing `.agents/skills/option-alpha/SKILL.md`. **The HOLD stands** — Andy releases it,
+>   not this note.
+>
+> ⚠️ **Model pin conflict, unresolved.** Devin note 2026-09-16: **use SWE-2 MAX**. But
+> `scripts/devin_free.sh` hardcodes `swe-1-7` and **refuses `--model` by design** (the wrapper exists
+> because `swe-1-7-lightning` prefix-matches `swe-1-7` and is PAID). The Desktop route H-1 used
+> bypasses the wrapper entirely, so the conflict is dormant, not fixed. **Resolve before any CLI
+> dispatch**: either the wrapper learns SWE-2 MAX, or the CLI lane stays `swe-1-7` and SWE-2 MAX is
+> Desktop-only. Do not assume; probe and assert the receipt.
 >
 > **Open, unruled:** the terminology sweep under `HEDGE-DEFINITION` (15+ files call exits hedges);
-> the `hedge-research.md` §1.3 banner; §9.6 defang stub deletion; spec §9.2, §9.4, §9.5.
+> §9.6 defang stub deletion; spec §9.2, §9.4, §9.5. *(The `hedge-research.md` §1.3 banner is DONE —
+> applied 2026-09-16 as mechanical propagation.)*
 >
 > **Blocked on Andy, not on work:** PR #79 merge (⚠️ until it lands, the 09-15 `zdte.*` RPC
 > verification is invisible to any session that reads this folder — that gap already caused one
