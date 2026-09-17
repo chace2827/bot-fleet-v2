@@ -12056,3 +12056,42 @@ that — not SWE-2 MAX — is the trigger to revisit the wrapper).
 
 **Files:** this file only. No repo code touched; no decision changed — the wrapper is unchanged
 and the recommendation is "keep the pin."
+
+---
+
+## 2026-09-16 (close 5) — dispatch doc extended to two phases; hedge test arms named
+
+`docs/dispatch-oa-capture-2026-09-16.md` now 168 lines, sha256
+`0d733b989610a7940c6b8d4108bf67de90f3bd0f92be9b2d596b33a9951abef6`.
+
+**⛔ ADDED AS RULE 0 — DEVIN DOES NOT LOG IN.** Andy launches Chrome and authenticates by hand
+(`oa-drive` §1, *"What Andy does by hand (the session cannot)"*); Devin attaches to an
+already-authenticated browser and **never requests, enters, stores or reads credentials.** `/login`
+in a URL or a sign-in form is a **STOP**, not a prompt to ask Andy for a password. Added because the
+request was phrased as "log into my OA account," which would have put credentials in the agent's
+hands and is the opposite of how the skill is designed.
+
+**Phase structure.** Phase 0 = the read-only backtester reconnaissance (unchanged). **Phase 1 = the
+hedge tests, and it must not run in the same session** — Phase 0's answer decides which Phase 1
+exists.
+
+- **Phase 0 = YES** (backtester can express a second, separate position) → four arms, one backtest
+  at a time, in order: **H-0 control** (no hedge, no stop, ride — run FIRST; without it nothing
+  else means anything) · **H-A** protective position opened at/after 14:00 only when the primary is
+  already losing (the core hypothesis, from §2.3's 75%-vs-32% clock split and the 89% of loss with
+  its MAE in 14:00-15:30) · **H-B** same but unconditional on time alone, to isolate whether the
+  conditionality earns its cost · **H-C** SL100 / SL200 as the **incumbent to beat**, included
+  deliberately because both are net negative on live data.
+- **Phase 0 = NO / NOT DETERMINABLE** → H-0 and H-C only, reported as an **exit** comparison, with
+  the README saying the hedge question is unanswered. ⛔ **Explicitly forbidden: substituting an exit
+  variant and calling it a hedge** — `R-2026-09-16-HEDGE-DEFINITION` makes that a category error.
+
+**Binding on both phases:** backtests only, no live bot created/cloned/enabled/edited · every run
+captures its configuration (verbatim UI labels) alongside its results or the run is uninterpretable
+later · the sample window must be quoted from the UI · compare by **R**, never raw $, with the unit
+labelled · ⚠️ results are **T4 at best** and support no live-capital decision, so Devin reports
+numbers and writes no recommendation.
+
+**Dispatch stays blocked on Gate 1** — Andy reads the verbatim OA email first. Unchanged.
+
+**Files:** `docs/dispatch-oa-capture-2026-09-16.md` (extended) · this file.

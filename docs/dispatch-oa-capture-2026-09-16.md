@@ -33,6 +33,12 @@ You are working in the `bot-fleet-v2` repo, connected as a local folder.
 
 ### ⛔ THE BOUNDARY — three rules, no exceptions, no judgment calls
 
+0. **YOU DO NOT LOG IN.** Andy launches Chrome and authenticates to OA **by hand**, before you
+   start (`oa-drive` §1 — *"What Andy does by hand (the session cannot)"*). You attach to an
+   already-authenticated browser. **Never request, enter, store or read credentials.** If any URL
+   contains `/login`, or a sign-in form appears, **STOP and report** — do not attempt to proceed,
+   and do not ask Andy for a password. If you cannot attach to an authenticated session, the answer
+   is "not attached," not "let me log in."
 1. **CAPTURE ONLY. NEVER EDIT.** Bot, automation, scanner, position and settings surfaces are
    **read-only**. Do not open an edit form, do not change a field, do not toggle anything, do not
    click Save — whatever the tooling permits. If a click would mutate state, **stop and report
@@ -54,7 +60,7 @@ You are working in the `bot-fleet-v2` repo, connected as a local folder.
 lineage; `oa-platform-reference.md` §0.3). A tool returning success is not verification either
 (`CLAUDE.md` §9.1a). State what you observed and where you observed it, every time.
 
-### TASK — backtester surface reconnaissance (read-only)
+### PHASE 0 — TASK: backtester surface reconnaissance (read-only)
 
 Under `R-2026-09-16-HEDGE-DEFINITION` a **hedge is a separate protective position**; an exit
 strategy is not a hedge. The blocking question for the whole hedge program is:
@@ -107,6 +113,50 @@ Read `data/captures/2026-09-16-roster/README.md` and match its structure before 
 What you read, where you read it, the YES/NO/NOT-DETERMINABLE answer with its evidence, the bundle
 path, and anything you declined to do because a rule above forbade it. **List the refusals** — a
 run with no refusals in a boundary this tight is more suspicious than one with several.
+
+---
+
+## PHASE 1 — the hedge tests (only after Phase 0 answers)
+
+**Do not start Phase 1 in the same session as Phase 0.** Phase 0's answer decides which Phase 1
+exists. Report Phase 0, stop, wait for Andy.
+
+### If Phase 0 = YES (the backtester can express a second, separate position)
+
+Then a hedge in the project's sense is testable, and these are the hypotheses — **in this order**,
+one backtest at a time. The UI path has no sweep, so the order is the budget.
+
+| # | Arm | What it tests |
+|---|---|---|
+| **H-0** | **Control — no hedge, no stop, ride to settlement.** | The baseline every other arm is measured against. Run it FIRST. Without it the others mean nothing. |
+| **H-A** | Primary + a **separate protective position opened at/after 14:00 ET**, only on days the primary is already losing. | The core hypothesis. `hedge-design-spec` §2.3: 75% of losing positions take their worst tick after 14:00 vs 32% of winners; 89% of all loss has its MAE inside 14:00-15:30. |
+| **H-B** | Same as H-A but opened at a **fixed time regardless** of whether the primary is losing. | Isolates whether the *conditionality* earns its cost, or whether the clock alone does the work. §2.3 warns a bare time gate also fires on the 29% of winners whose MAE lands 14:00-15:00. |
+| **H-C** | Primary + **SL100** and, separately, **SL200**. | Not a hedge — an exit, and included deliberately as the incumbent to beat. Both are **net negative on live data** (-$173, -$584), the only two GF arms underwater. If the hedge cannot beat a stop that is already losing money, it is not a finding. |
+
+**Compare by R (pnl ÷ risk), never by raw $** (`CLAUDE.md` §4). Report per-arm: N, Exp(R), win
+rate, max drawdown in R, worst single R. Label the unit — *"per condor, ex-artifact"* or
+*"per leg, raw"* — every time. An Exp(R) with no unit label is untrustworthy.
+
+### If Phase 0 = NO or NOT DETERMINABLE
+
+There is no hedge to test in the backtester. **Do not substitute an exit variant and call it a
+hedge** — `R-2026-09-16-HEDGE-DEFINITION` makes that a category error, not a near-enough. Run
+**H-0 and H-C only**, report them as an *exit* comparison, and say plainly in the README that the
+hedge question is unanswered and why.
+
+### Rules that bind both phases
+
+- **Backtests only. No live bot is created, cloned, enabled, or edited.** A backtest configuration
+  is not saved to the account unless saving is unavoidable to run it — and if it is, say so in the
+  report before doing it.
+- **Every run gets its own raw capture**: the configuration as the UI displays it (verbatim labels,
+  not your paraphrase) and the results as rendered. Config and result travel together or the run is
+  uninterpretable later.
+- **State the sample.** OA's backtest history window is whatever the UI says it is — quote it. A
+  result with an unstated sample period is not a result.
+- ⚠️ **These are PAPER/backtest figures and are T4 at best.** Nothing here supports a live-capital
+  decision (`CLAUDE.md` §4 requires T2 with n>=100 / 6 months / a regime change). Do not write a
+  recommendation. Report the numbers and stop.
 
 ---
 
