@@ -26,24 +26,36 @@
 >   was dispatched; the signature ratifies work in flight and the acceptance test is what makes that
 >   safe. H-1 is running via Devin Desktop connected to this folder.
 >
-> ⛔ **HOLD — still Andy's to release; its question is now ANSWERED.** Andy, 2026-09-16: *"Awaiting
+> ✅ **HOLD RELEASED 2026-09-16 by Andy.** Mechanism decision is FINAL: **Devin's OA access is the
+> browser-driven UI path only; it will never use the API.** Andy, 2026-09-16: *"Awaiting
 > notes on what the OA claude skill will be in Devin, wait on building new chat prompt until we have
 > this."* **The answer exists:** the path is **CDP/UI capture, no API** — `.agents/skills/oa-drive/`
 > (plumbing, with the authorization banner) plus `.agents/skills/option-alpha/` (the law, tracked
 > since 2026-08-17). ⚠️ **The stated reason for the HOLD was false:** condition (b) claimed the traps
 > were unreadable by Devin; they have been in-repo for a month. Withdrawn by
-> `R-2026-09-16-DEVIN-OA-CHROME-CAPTURE-A1`. §9.2 still binds — no writes on this item until Andy
-> releases it — but it is now a decision, not a blocker.
+> `R-2026-09-16-DEVIN-OA-CHROME-CAPTURE-A1`.
 >
-> ⚠️ **Before releasing it:** the boundary rests on Andy's **paraphrase** of OA's reply. The verbatim
-> email controls. If it is narrower than "the API process," the skill banner narrows first — the
-> exposed line is page-context reads (`Runtime.evaluate`, the OA Grab bookmarklet).
+> **▶ Dispatch prompt: `docs/dispatch-oa-capture-2026-09-16.md`.** First task is backtester surface
+> reconnaissance, READ-ONLY — *can OA's backtester express a second, separate protective position?*
+> That is the blocking question for the whole hedge program (spec §6.1 option 4).
+>
+> ⛔ **TWO STANDING GATES, BOTH ANDY'S, NEITHER DISCHARGED. GATE 1 BLOCKS DISPATCH.**
+> 1. **The verbatim OA email CONTROLS.** Andy re-reads it **before the first Devin OA run**. The
+>    boundary currently rests on his **paraphrase**. If it is narrower than "the API process," the
+>    `oa-drive` banner narrows and **page-context reads (`Runtime.evaluate`, the OA Grab
+>    bookmarklet) fall first** — and ⚠️ **the 2026-09-16 roster bundle the dispatch tells Devin to
+>    imitate was produced BY the bookmarklet**, so a narrowing changes the capture method, not just
+>    the paperwork.
+> 2. **If the email is ambiguous**, Andy sends OA a one-line mechanism clarification — *"operates
+>    its own browser, clicks and reads like a user, never calls internal API endpoints"* — rather
+>    than proceeding on inference.
 >   **[UPDATE 2026-09-16, Devin session]** — the mechanism named in condition (b) now exists
 >   in-repo: `.agents/skills/oa-drive/SKILL.md` (written this session; Devin-discovers it — it
 >   appeared in the live skill list on write) covering the launch ritual, CDP attach+verify,
 >   read/write paths, recorder pattern, verified `zdte.*` shapes, and stop conditions; alongside
->   the pre-existing `.agents/skills/option-alpha/SKILL.md`. **The HOLD stands** — Andy releases it,
->   not this note.
+>   the pre-existing `.agents/skills/option-alpha/SKILL.md`. ~~**The HOLD stands**~~ — **RELEASED by
+>   Andy 2026-09-16**, see the block above. Note the `zdte.*` shapes this update mentions are
+>   **history, not a toolkit**: the wire protocol is NOT authorized (`-A1`).
 >
 > ⚠️ **Model pin conflict, unresolved.** Devin note 2026-09-16: **use SWE-2 MAX**. But
 > `scripts/devin_free.sh` hardcodes `swe-1-7` and **refuses `--model` by design** (the wrapper exists

@@ -11973,3 +11973,51 @@ and cannot be written from this lane without first-hand evidence of that session
 **Files:** `docs/RULINGS.md` (amendment ruling) · `docs/hedge-design-spec-2026-09-16.md` (§9.7, §6.1)
 · `docs/state.md` (HOLD note + PR #79 / authorization status) · this file.
 **Not written by this session:** `.agents/skills/oa-drive/SKILL.md` (Devin's, already on disk).
+
+---
+
+## 2026-09-16 (close 4) — HOLD RELEASED; Devin OA dispatch prompt drafted
+
+**✅ HOLD RELEASED by Andy.** Mechanism decision recorded as **FINAL**: Devin's OA access is the
+**browser-driven UI path only; it will never use the API.** The boundary is already carried in
+`.agents/skills/oa-drive/SKILL.md`'s top banner (CDP/UI navigation and capture authorized,
+capture-only with no bot edits, wire protocol prohibited, stop conditions).
+
+**Written: `docs/dispatch-oa-capture-2026-09-16.md`** (118 lines, sha256
+`3f329f856621e54a7d756a422b0e2dc71b73c7b83764ef78cafe8754d4861d14`) — as a repo doc, not a chat
+paste, per the free-wave lesson that a run starting from files costs minutes and one starting from a
+chat costs a session.
+
+It points at **both** in-repo skills in reading order (`option-alpha` = the law and it wins on
+conflict; `oa-drive` = plumbing + boundary), and carries the ruling's conditions as three
+no-judgment rules: **capture only, never edit** · **no wire protocol** · **scope every capture to
+the host at capture time**, the last citing the 2026-08-20 recon incident by name. The evidence rule
+is stated separately: **the Trades list is the only order-level evidence**; the Exit Options panel is
+intent, not execution; a tool success message is not verification.
+
+**First task = backtester surface reconnaissance, read-only.** *Can OA's backtester express a
+SECOND, separate protective position?* Under `R-2026-09-16-HEDGE-DEFINITION` that is the blocking
+question for the entire hedge program (spec §6.1 option 4), and it is answered by opening the
+backtester and looking rather than by probing an endpoint. `NOT DETERMINABLE` is named as a
+legitimate answer. Chosen as the first dispatch because it is pure read, has a verifiable answer,
+and exercises the whole lane where a wrong answer is cheap — `CLAUDE.md` §5, pilot on a dead bot.
+
+**Deliverable shape is `data/captures/2026-09-16-roster/`, imitated not reinvented**: raw `01-*`
+capture unmodified · derived `02-*` whose header names the raw file **and its sha256** · screenshots
+· README with TZ-offset timestamp, a file/sha256/what-it-is table, verbatim quotes of anything
+relied on · `SHA256SUMS.txt`. The prompt also requires Devin to **list its refusals**, on the
+reasoning that a run with none, under a boundary this tight, is more suspicious than one with
+several.
+
+**⛔ TWO STANDING GATES RECORDED — NEITHER DISCHARGED, AND GATE 1 BLOCKS DISPATCH.**
+1. **The verbatim OA email controls.** Andy re-reads it before the first run. If narrower than "the
+   API process," the banner narrows and **page-context reads (`Runtime.evaluate`, the OA Grab
+   bookmarklet) fall first.** ⚠️ Noted in both the dispatch doc and `state.md`: **the 2026-09-16
+   roster bundle the prompt tells Devin to imitate was produced by the bookmarklet**, so a narrowing
+   changes the capture method, not only the paperwork.
+2. **If the email is ambiguous**, Andy sends OA a one-line mechanism clarification — *"operates its
+   own browser, clicks and reads like a user, never calls internal API endpoints"* — rather than
+   proceeding on inference.
+
+**Files:** `docs/dispatch-oa-capture-2026-09-16.md` (new) · `docs/state.md` (HOLD → RELEASED, gates
+recorded) · this file.
