@@ -12408,3 +12408,241 @@ nav; no runs, no saves; duplicate-form may be *opened and read* but not saved), 
 report/refusals format. Closes with "Do not start Phase 1 in this session."
 
 **Files:** `docs/dispatch-oa-capture-2026-09-16.md` · this file.
+
+## 2026-09-16 (close 14) — Phase 0b reference shelf added to the dispatch prompt (Cowork, mounted tree)
+
+Andy asked for a Phase 0b prompt that lets Devin reach for `data/oa_facts.csv` and the other repo
+references when the Compare surface is ambiguous. Added **"📚 REFERENCE SHELF — what to read when the
+UI is ambiguous"** inside the Phase 0b paste-prompt in `docs/dispatch-oa-capture-2026-09-16.md`,
+between the six questions and the DELIVERABLE block. Additive only — no existing prompt text changed.
+
+What it carries: the **precedence law** (rendered UI outranks every repo file; a docs fact is CONTEXT
+never EVIDENCE; no project doc cited as evidence about OA — `CLAUDE.md` §5 provenance rule; absence is
+not an observation); a query recipe for `data/oa_facts.csv` with the `quote`-is-citable /
+`claim`-is-not distinction and the `DOCUMENTED` vs `DOCS-SILENT` tier read; a **fact-ID map from the
+117 backtest-related rows to the six Phase 0b questions** (Q1 → `OA-1141`…`OA-1144`/`OA-1147`, all
+DOCS-SILENT; Q2 → `OA-1079`/`1099`/`1107`/`1109`; Q3 → `OA-1076`/`1077`/`1091`; Q4 → genuine silence,
+no fact in the harvest touches relative sizing; Q5 → `OA-1076`; Q6 → `OA-1089`/`1090`/`1091`); a
+**worked staleness trap** — those last three are three clauses of ONE docs sentence and the first
+(`OA-1089`, "up to three years") is already falsified by
+`data/captures/2026-09-16-oa-backtester/01-backtest-settings-form-2026-09-16-223758.txt` lines 77-82
+rendering `1 year · 2 years · 3 years · 5 years · Custom`, so the four-backtest cap inherits the
+staleness and Q6 must be answered by adding until the surface refuses; a do-read/do-not-read table
+(⛔ `oa-platform-reference.md` — 1,431 lines, backtester appears once, line 47, as an aside; ⛔ the
+falsified `ic-trailing-stop-backtest.md`; ⛔ LEAN/OO — other platforms; ⛔ the RPC experiment folder —
+history, not a toolkit, outside the grant); and a new required README section
+**`## Docs-vs-render deltas`** (fact ID · verbatim doc quote · verbatim rendered label · screenshot),
+with "none found" plus the checked list as an acceptable result.
+
+Separately answered, no file written: there is **no single doc** in the folder covering the OA
+backtester's capability surface — the knowledge is split across `data/oa_facts.csv` (117 rows), the
+09-16 capture bundle, and the combine decision card. `oa-platform-reference.md` does not cover it.
+An `oa-backtester-reference.md` is offered and unbuilt.
+
+**Files:** `docs/dispatch-oa-capture-2026-09-16.md` (sha256 `b00c47d994abecbd…`, 435 lines) · this file.
+Tracker artifact update owed — no `update_artifact` tool in this lane.
+
+## 2026-09-16 (close 15) — Phase 0b DONE: Compare & Combine surface recon (Devin, mounted tree)
+
+Dispatched Phase 0b — open `/backtests/compare/<ids>` with two existing backtests and answer six
+questions by looking. Bundle: `data/captures/2026-09-16-oa-compare/` (raw `01-…txt`, derived
+`02-…md`, raw `03-…csv` Copy CSV output, 16 screenshots, README, SHA256SUMS). Tests used:
+A=`ZT4178951789730109583` (RPCTEST-TOUCH), B=`ZT4178951710152798882` (RPCTEST-PT50); cap test used
+the first 7 roster rows. Read-mostly; one probe Combo Rule added+deleted before View Results.
+
+**The six answers:**
+1. **Procedure** — row `cell.compare` check cells → `N backtests selected` → menu `Compare` →
+   `/backtests/compare/<id1>,<id2>`; inside compare, `+ Add Backtest` (new-build drawer) or card ⋮
+   `Add Variation`. Combine = `Combine Results` toggle → drawer (`Daily Positions`, `Position
+   Limit`, `Combo Rules`) → `View Results` → `Combine Backtests` (`?crules=…&combine=1`).
+2. **Granularity — YES per-day rows.** `126 positions` drawer via Stats `Count` links: headers
+   `TEST | DESCRIPTION | LEGS | DATE | STATUS | RISK | P/L`, per-day dates, TEST-of-origin column,
+   `Load more`. Aggregate granularity bottoms out at `Combined Monthly P/L` (monthly rows).
+3. **Conditionality — NOT purely additive.** `Combo Rules` renders verbatim
+   `Only open [Test B ▾] if [Test A ▾] is [open ▾]` — a cross-test entry gate. Vocabulary is
+   exactly open/not-open; intraday-vs-interday timing NOT DETERMINABLE without a run (prohibited).
+   **This changes the Slot-1 frame's additive-only caveat — the hedge trigger shape exists natively.**
+4. **Size ratio — NO control.** Each test keeps its own `Position Size`; combine adds only
+   portfolio caps (`Daily Positions`, `Position Limit`, 1–10 pickers).
+5. **Duplicate fidelity — YES.** `Add Variation` pre-fills all 51 serialized inputs identically
+   (name, dates, leg JSON, slippage) — only the differ changes.
+6. **Ceiling — 7, not 4.** `FOR UP TO 7 BACKTESTS:` verbatim; 7-way compare+combine renders
+   (Stats `A B C D E F G =`); 8th selection greys `Compare`/`Rerun Backtests` (`mi disabled` — the
+   disabled item IS the refusal). Same cap feeds Combine. **OA-1090 falsified** (docs-vs-render
+   delta, alongside OA-1089's 3-year test period vs rendered `5 years · Custom`).
+
+**Export — YES at position level.** Every positions drawer carries `Copy CSV`/`Download CSV`;
+Copy CSV exercised once → real 126-row CSV (24 cols incl. `Test`; P/L sums −18 = combined `=$-18`).
+`AI Agent Stack.md`:256 "not exportable" falsified for position data; no export on Stats/chart/
+monthly panels. `Download CSV` declined (writes outside bundle). No `Save`, no `Create Bot`, no
+`Run Backtest`, no saved comparison — refusals listed in README Boundary notes.
+
+**Files:** `data/captures/2026-09-16-oa-compare/` (whole bundle) · this file.
+Tracker artifact update owed — no `update_artifact` tool in this lane. Phase 1 not started —
+awaiting Andy per dispatch.
+
+## 2026-09-17 (close 16) — Phase 0b verified; combo-rules amendment applied; Phase 0c authorized (Cowork, mounted tree)
+
+**Verified before reading** (§9.1a): `data/captures/2026-09-16-oa-compare/` — 20/20 SHA256SUMS
+pass by direct `device_bash` read, and the load-bearing finding sits in the RAW capture
+(`01-compare-combine-surface-2026-09-16-2355.txt` lines 249-267: hidden inputs `rule0-test1` /
+`rule0-test2` / `rule0-state`, state options exactly `open` | `not open`), not only in the derived
+file. Devin's report is accepted on that basis, with three framing corrections sent back.
+
+**Andy ruled four slots in-chat.** Slot 1 "1. Yes" → `R-2026-09-17-COMBO-SEMANTICS-RUN`.
+Slot 2 "Go recommended" → the three evidence-backed corrections applied. Slot 3 "Amend the plan" →
+`R-2026-09-17-COMBO-RULES-PRESENCE-ONLY`. Slot 4 "Unsure" → **held, decomposed, not applied**
+(see below). Slot 5 self-resolved before I reached it — `tasks/` no longer exists and the three
+lessons are now rows in `data/lessons.csv` (4 lines); no action taken.
+
+**The amendment (Slot 3).** "Combination is additive at the portfolio level" is FALSIFIED — a
+`Combo Rules` pane renders `Only open [Test] if [Test] is [open|not open]`. But the predicate is
+position PRESENCE, not P/L. Identical dated banner applied to three files, originals standing:
+`hedge-north-star.md` §4 · `hedge-design-spec-2026-09-16.md` §6.1 ·
+`decision-card-2026-09-16-backtest-combine.md`. Net effect on the Phase 1 arms: **H-A still NOT
+expressible** (no P/L predicate exists); **H-B now expressible and improved** (presence gate
+removes false fires on days the primary never entered); the combo rule lands **between H-A and H-B,
+nearer H-B**, and any arm built on it is named a **presence-gated overlay**; **V3 unchanged**, still
+needs §3.3. Sole remaining unknown: does `open` mean concurrent-at-entry or opened-that-day.
+
+**The corrections (Slot 2).** New `docs/oa-reconciliation-report.md` **§7 Docs-vs-render deltas** —
+a different register from R-01…R-20 (those check project docs against the ledger; §7 checks the
+**ledger** against the live product). D-01 `OA-1089` "three years" stale vs rendered `5 years ·
+Custom`. D-02 `OA-1090` "four backtests" falsified — cap is **seven**, and an 8th selection greys
+the menu item rather than erroring. D-03 `OA-1077`/`OA-1091` accurate but **incomplete** — no row
+in the 1,548-fact corpus mentions `Combo Rules`; `DOCUMENTED` means "OA said this," never "OA said
+all of this." D-04 the export claim, corrected in place at `docs/AI Agent Stack.md` with the full
+24-column CSV header quoted; **scope is position data only** — Stats/chart/monthly panels still have
+no export. ⭐ Generalised lesson recorded at D-02: `OA-1089`/`1090`/`1091` are three clauses of ONE
+sentence and two are now falsified — **treat a multi-clause docs sentence as one staleness unit.**
+That trap was written into the 0b reference shelf from D-01 alone and immediately caught D-02.
+
+**Slot 4 held and decomposed** — it bundled two questions with different answers, which is why it
+did not rule cleanly. (a) The transcribe-by-hand regime should be **narrowed, not struck**: position
+data comes from CSV, summary stats still get screenshot+transcribed, and the CSV is not treated as a
+census until Phase 0c task 3 says whether a combine drops rows. (b) The 7-cap frees **Compare**, not
+**Combine** — the combine drawer auto-defaults `Daily Positions`/`Position Limit` scaling with test
+count (7-per-day/7-positions at 7 tests), so a 7-way combine is a different capital frame than a
+2-way and combined results are not comparable across pass sizes. Proposed: rank arms in a one-pass
+7-way **Compare**; use **Combine** only for the specific pairings under test, at a fixed test count,
+with the caps recorded. Awaiting Andy.
+
+**Also carried to Devin, uncaptured by it:** raw line 275 — `?crules={"posLimit":2,"posLimitDay":2,"rules":[]}&combine=1`.
+The rule set travels in the URL as JSON, so combine configurations are addressable by navigation
+with no wire protocol. Round-trip of a POPULATED rules array is Phase 0c task 2.
+
+**Files:** `docs/RULINGS.md` (`bef401e6f4e41468…`, 2 new rulings) · `docs/oa-reconciliation-report.md`
+(`3af42bb0a5f96cef…`, §7 added, 492 lines) · `docs/hedge-north-star.md` (`282885b52992e5c6…`) ·
+`docs/hedge-design-spec-2026-09-16.md` (`0e9b561737216133…`) ·
+`docs/decision-card-2026-09-16-backtest-combine.md` (`43dd599815c1a2c0…`) ·
+`docs/AI Agent Stack.md` (`30a8c57071cb2ce5…`) · this file.
+Phase 1 arm-table respec OWED (gated on Slot 4). Tracker artifact update owed — no `update_artifact` in this lane.
+
+## 2026-09-17 (close 17) — Phase 1 preconditions card drafted; §8 found stale (Cowork, mounted tree)
+
+Andy asked for the GF-substrate scope question and `hedge-design-spec` §9.2 drafted as a two-slot
+card while Phase 0c runs. Written to `docs/decision-card-2026-09-17-phase1-preconditions.md`
+(`ca74cbaf01976b6f…`, 117 lines). **Neither slot ruled** — the card authorizes nothing.
+
+⭐ **Finding that emerged in drafting: `hedge-design-spec-2026-09-16.md` §8 is STALE.** It calls
+`GF-QQQ-IC-Ride` / `-Touch0` / `-Ride-Delta` a live **triple** identity. `R-2026-08-17-PR23-RETIRE`
+(Andy's own words, one month earlier) already retired Ride-Delta as *"redundant with PR-14 on every
+axis."* The 27/27, 9/9, 9/9 measurement stands; the count does not. **The live defect is a PAIR —
+`Ride` vs `Touch0`** — and it reduces to one answerable question: has Touch0's touch trigger ever
+fired, or is it Ride under another name? A dated staleness banner on §8 citing the ruling is OWED
+(evidence-backed correction, not a decision) — applied on Slot A's ruling or sooner on Andy's word.
+
+**Slot A — does Phase 1 rank against LIVE GF results?** Not obvious, because the arm table already
+does it without saying so: H-C is defined by *"net negative on live data (-$173, -$584), the only two
+GF arms underwater"* — a live-ledger number used as the bar a backtest arm must clear. That is an
+unruled cross-surface comparison and it is the seam the identity defect would enter through.
+Mitigating and recorded so the slot is not over-weighted: the identity pair is Ride/Touch0; H-C rests
+on SL100/SL200 and is **not** implicated. Options A1 self-contained / A2 ranks-against-live /
+**A3 split — recommended**: grid self-contained and launches now, ledger-side comparison defined as
+its own deliverable and gated on the identity resolution.
+
+**Slot B — §9.2 paper arms or measurement only.** The calendar fact is load-bearing: north-star §6,
+*"the paper phase cannot be shortened… 2–3 months for ~10 fires."* B1 measurement-only makes that
+2–3 months serial. Options B1 / B2 blanket / **B3 — recommended**: measurement only PLUS a
+pre-authorized paper arm for the single winning variant, on a pass bar written into the ruling
+**before results exist** and pre-registered per §5. Proposed bar recorded in the card for Andy to
+accept or replace. T4 tier untouched either way.
+
+**Files:** `docs/decision-card-2026-09-17-phase1-preconditions.md` (new) · this file.
+Owed: §8 staleness banner; Phase 1 arm-table respec (gated on Slot 4 + 0c); tracker artifact update
+— no `update_artifact` in this lane.
+
+## 2026-09-17 (close 18) — Slots A and B ruled and applied (Cowork, mounted tree)
+
+Andy, verbatim: *"i agree w reccomendations"*. Taken as covering the three items in the message he
+replied to — Slot A (A3), Slot B (B3 with the proposed bar), and the §8 staleness banner. **Slot 4
+of the earlier sitting was NOT taken as covered and remains held** (`CLAUDE.md` §5: ambiguous is
+gated) — and 0c task 4 is about to inform 4b anyway, so holding costs nothing.
+
+**`R-2026-09-17-PHASE1-SUBSTRATE-SPLIT` (A3).** Phase 1 grid is self-contained; no live-ledger
+number enters any ranking inside it. H-C's −$173/−$584 demote from *the bar* to context; H-C ranks
+in R against H-0 like every other arm. The incumbent-to-beat comparison survives as its **own
+deliverable**, gated on the Ride/Touch0 identity. Net: **the identity defect no longer gates the
+Phase 1 launch**, and the cross-surface comparison stops happening implicitly inside an arm
+definition.
+
+**`R-2026-09-17-PAPER-ARM-PREAUTH` (B3).** Measurement-only by default plus ONE pre-authorized
+paper arm for the single winning variant. Bar accepted as proposed and recorded in the ruling,
+conjunct, set blind: beats H-0 on Exp(R) per condor ex-artifact **and** beats both H-C stop arms
+**and** fire count implies ≥10 fires within 3 months. Pre-registration per §5 owed before it runs.
+T4 tier and the live-capital gate untouched.
+
+**Applied:** §8 staleness banner on `hedge-design-spec-2026-09-16.md` (count corrected to a PAIR,
+citing `R-2026-08-17-PR23-RETIRE`, original standing) · a dated Phase-1 banner on
+`docs/dispatch-oa-capture-2026-09-16.md` recording all three of
+`PHASE1-SUBSTRATE-SPLIT` / `COMBO-RULES-PRESENCE-ONLY` / `PAPER-ARM-PREAUTH` against the arm table,
+**explicitly marking the table NOT yet rewritten** and telling any reader not to run Phase 1 off it
+until the respec lands · card slots marked RULED with Andy's verbatim.
+
+**Gate status for Phase 1 launch:** open items are now (1) Phase 0c's four answers, in flight;
+(2) Slot 4 (a/b); (3) the arm-table respec, which is mine and waits on 1 and 2. Nothing else blocks.
+
+**Files:** `docs/RULINGS.md` (`fce8b4eee3ef86f8…`, 2 new) ·
+`docs/decision-card-2026-09-17-phase1-preconditions.md` (`5a492845a8c5180c…`) ·
+`docs/hedge-design-spec-2026-09-16.md` (`0a6f474365 4a1484…`) ·
+`docs/dispatch-oa-capture-2026-09-16.md` (`056274eaf882dba3…`) · this file.
+Owed: §9.2 slot-closed banner on the spec; pre-registration entry before any paper arm; tracker
+artifact update — no `update_artifact` in this lane.
+
+## 2026-09-17 (close 19) — hedge program thesis written to the folder (Cowork, mounted tree)
+
+Andy asked what the hedge contest is actually doing for the project, where 6 and 12 months land if
+it succeeds, and what success means — then asked that the answer be **saved rather than left in
+chat**. It was chat-only; it is now `docs/hedge-program-thesis.md` (`748f5d4c46278c6b…`, 133 lines),
+with a pointer added at the top of `docs/hedge-north-star.md`. Rationale document — authorizes
+nothing, decides nothing, and defers to the cited CSVs on every figure per §10.
+
+**The thesis it records:** the usual framing ("add downside protection") is wrong for this fleet.
+Per `hedge-design-spec` §2 — every dollar of loss came from an **exit** (−$11,211 / 35 positions);
+expired losses are **$0 across 0 positions** with all 56 expired legs winners (+$12,525); the exits
+**book the extreme** rather than cap it (40% of losers close within 5 min of their own MAE vs 6% of
+winners); 24 of 30 losers were green first. ⭐ **So the hedge exists so the fleet can STOP EXITING** —
+hold to settlement where the record is perfect, and carry a separate position through the
+14:00–15:30 window that holds 89% of all loss. The B3 bar is relative by design: **the hedge may
+lose money on most fires and still win**, provided ride+hedge beats ride-and-get-stopped-out.
+
+**Calendar recorded:** 6 months = conviction, not size — one paper hedge bot, exits coming off the
+GF family, T2 (n≥100 / 6 months / regime change) NOT cleared because paper does not clear it.
+12 months = approaching T2 on a live sample, and the real prize is fleet-wide: the loss signature is
+a **fleet property, not a bot property**, and the roster is 44 bots.
+
+**The argument against is recorded in the same file, deliberately (§5).** The loss signature rests
+on **n=28 losers over ~27 live trading days**; if the 14:00–15:30 clock is a short-sample artifact
+the hedge gets optimised for noise, and this project is well-governed enough to produce a confident,
+thoroughly-documented **wrong** answer. The grid over years of OA history is the check — and
+`hedge-design-spec` §3 makes it structural: no arm may be ranked from the live ledger at all. ⭐ The
+most valuable Phase 1 output may be **killing the thesis cheaply**, and §5 states that a Phase 1
+which does so is a success of the same kind as one that confirms it.
+
+§6 records the lane dependency both ways: the dates assume the Devin lane runs the grid, and if the
+lane stalls every date moves with it.
+
+**Files:** `docs/hedge-program-thesis.md` (new) · `docs/hedge-north-star.md` (pointer only) ·
+this file.
+📝 Owed: a `docs/hedge-program-thesis.md` line in `CLAUDE.md` §6's file map — NOT applied, CLAUDE.md
+is the project contract and was not touched without Andy's word.

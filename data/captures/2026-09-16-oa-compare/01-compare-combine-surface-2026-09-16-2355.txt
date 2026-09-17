@@ -1,0 +1,421 @@
+# Compare & Combine surface — RAW capture (unmodified)
+https://app.optionalpha.com/backtests/compare/ZT4178951789730109583,ZT4178951710152798882
+captured: 9/16/2026, ~11:4x-11:5x PM ET (America/New_York)
+Method: CDP Runtime.evaluate DOM reads + Input.dispatch* trusted clicks against Andy's
+authenticated Chrome (paper account). Scope: app.optionalpha.com only at capture time.
+Test ids: A=ZT4178951789730109583 (RPCTEST-TOUCH) B=ZT4178951710152798882 (RPCTEST-PT50)
+
+==================================================================
+SECTION 1 — /backtests list page: how a comparison is started
+==================================================================
+
+Grid: view.bots-ztests-mytests > grid.framed.sticky.selectable
+Each row carries data-key=<test id>, e.g. row0 data-key="ZT4178951789730109583".
+Each row's first cell: <div class="cell compare"> containing
+  <a class="cmpcheck" data-click="onCheck" data-id="<testid>"><i class="fa fa-check-circle"></i></a>
+Header cell class verbatim: "cell compare th nosort".
+
+Click path observed:
+  1. click a.cmpcheck on two rows -> rows render a checked circle; header bar shows
+     verbatim: "2 backtests selected"  (a.btn.gray.selbtn)
+  2. click "2 backtests selected" -> OVERLAY.mnu opens with items, verbatim:
+       Clear Selections
+       Delete Backtests
+       FOR UP TO 7 BACKTESTS:
+       Compare
+       Rerun Backtests
+  3. click "Compare" -> navigates to
+     /backtests/compare/ZT4178951789730109583,ZT4178951710152798882
+     (comma-separated ids in path)
+
+At "7 backtests selected" the same menu renders Compare ENABLED.
+At "8 backtests selected" the same menu renders with items
+  Compare            class="mi disabled nodesc has-icon"  (greyed, unclickable)
+  Rerun Backtests    class="mi disabled nodesc has-icon"  (greyed, unclickable)
+No error text is rendered; the refusal is the disabled item itself.
+
+==================================================================
+SECTION 2 — compare view (2 tests), rendered innerText verbatim
+==================================================================
+
+Compare Backtests
+Save
+Add Backtest
+Results
+Combine Results
+$400
+$200
+0
+-$200
+-$400
+-$600
+Jul '26
+15 Jul
+Aug '26
+15 Aug
+Sep '26
+15 Sep
+Stats
+A
+B
+Total P/L
+$155
+-$173
+-
+Max Drawdown
+-$214
+-$487
+-
+Return on DD
+72.4%
+-35.5%
+-
+High P/L
+$243
+$49
+-
+Low P/L
+-$203
+-$438
+-
+Profit Factor
+1.21
+0.76
+-
+Sharpe Ratio
+1.254
+-1.029
+-
+Sortino Ratio
+0.739
+-0.326
+-
+Positions
+Count
+63
+63
+-
+Filtered
+-
+-
+-
+Win Rate
+74.6%
+90.5%
+-
+Win/Loss
+47W / 15L
+57W / 6L
+-
+Best Win
+$34
+$20
+-
+Worst Loss
+-$75
+-$180
+-
+Win Streak
+23
+30
+-
+Loss Streak
+-3
+-1
+-
+Max Profit %
+74.6%
+3.2%
+-
+Max Loss %
+0
+4.8%
+-
+Averages
+P/L
+$2
+-$3
+-
+Risk
+$181
+$181
+-
+Return On Risk
+1.4%
+-1.5%
+-
+Reward/Risk
+10.7%
+10.7%
+-
+Entry Price
+0.19
+0.19
+-
+Premium
+$19
+$19
+-
+Win
+$19
+$10
+-
+Loss
+-$49
+-$121
+-
+Exits
+Profits
+-
+54
+-
+Expired
+48
+9
+-
+Touch
+15
+-
+-
+Insights
+Test A
+Test B
+Estimated fees: $6.24[Adjust fees][More about fees]
+1 position expired in the money may be assigned or exercised.[More about assignment risk]
+1 closed position had wider than normal bid/ask spreads that may affect results.[Learn about bid/ask guards]
+48 positions held into expiration may be assigned after hours.[More about assignment risk]
+Longest drawdown lasted 52 days.
+Average drawdown duration is 36 days.
+Average drawdown is $151.00.
+No entry slippage in a symbol that typically has slippage.[More about slippage]
+Settings
+QQQ Short Put Spread
+1:30pm • 1 contract • CUSTOM
+RPCTEST-TOUCH
+QQQ Short Put Spread
+1:30pm • 1 contract • CUSTOM
+RPCTEST-PT50
+
+Controls map (compare view):
+  title: A.edit-title "Compare Backtests" (editable name field)
+  A.btn.gray "Save"            @1265,17   — saves the comparison (NOT clicked)
+  A.btn.gray "Add Backtest"    @1425,17   — opens Backtest Settings drawer (new build)
+  A.btn.gray.sm.trans "Combine Results" @959,93 — toggle for combined mode
+  Settings card (per test): "QQQ Short Put Spread / 1:30pm • 1 contract • CUSTOM / <name>"
+     with i.fa-ellipsis-v menu, verbatim items:
+       Edit Settings
+       Edit Description
+       Create Bot
+       Move Down              (card A only; card B showed Move Up/Down by position)
+       Add Variation
+       Replace Variation
+       Save Test
+       Remove Test
+       Delete Test
+  Stats table column headers verbatim: "A" "B" "+" (the + adds another test)
+  Stats "Count" cells are <a data-click="showPositions"> links;
+  Exits cells are <a data-click="showPositions"> filtered variants;
+  Insights "N position(s)" texts are <a data-click="showInPos"> links;
+  Insights pickbar options verbatim: "Test A" "Test B" ("Combined" appears when combined).
+
+==================================================================
+SECTION 3 — Combine Results drawer (overlay.stack.drawer), verbatim
+==================================================================
+
+Combine Results
+Daily Positions
+2 per day
+Max positions opened in one day.
+Position Limit
+2 positions
+Max open positions at once.
+Combo Rules
+View Results
+
+Serialized inputs in the drawer (verbatim attributes):
+  input name="posLimitDay" value="2" data-items=[1..10] text "N per day"
+  input name="posLimit"    value="2" data-items=[1..10] text "N positions"
+  <h2 class="pad">Combo Rules</h2> + <div class="crules"> (empty until + is clicked)
+  <a class="btn gray sm ionly" data-click="addRule"><i class="fa fa-plus"></i></a>
+  BUTTON.btn.green "View Results"
+
+Note: on a 7-test comparison the same drawer defaults to
+  "7 per day" / "7 positions" (auto-scales with the number of tests).
+
+==================================================================
+SECTION 4 — a Combo Rule row, rendered + serialized verbatim
+==================================================================
+
+Row innerText verbatim:
+  Only open
+  Test B
+  if
+  Test A
+  is
+  open
+
+Rendered sentence (one line): "Only open [Test B ▾] if [Test A ▾] is [open ▾]  ✕"
+
+Pickers (verbatim data-items from the hidden inputs):
+  name=rule0-test1  options: Test A, Test B        (the gated test)
+  name=rule0-test2  options: Test A, Test B        (the condition test)
+  name=rule0-state  options: "open" , "not open"   (the only two states offered)
+
+Leading text "Only open" is fixed, not a picker.
+Each rule row has a deleteRule ✕; the "+" addRule button allows more than one rule.
+No other rule shape exists in the DOM — the vocabulary is exactly:
+  "Only open <Test> if <Test> is <open|not open>".
+
+==================================================================
+SECTION 5 — combined view (2 tests), rendered innerText verbatim
+==================================================================
+
+URL after View Results:
+  /backtests/compare/ZT4178951789730109583,ZT4178951710152798882
+    ?crules={"posLimit":2,"posLimitDay":2,"rules":[]}&combine=1
+Title changes to "Combine Backtests"; new button "Create Bot" appears in the bar.
+Stats table gains a third value column headed "=" (combined), then the "+" column.
+
+Combine Backtests
+Save
+Create Bot
+Add Backtest
+Results
+Combine Results
+Stats / A / B / = / +
+Total P/L        $155    -$173    -$18     -
+Max Drawdown     -$214   -$487    -$649    -
+Return on DD     72.4%   -35.5%   -2.8%    -
+High P/L         $243    $49      $73      -
+Low P/L          -$203   -$438    -$633    -
+Profit Factor    1.21    0.76     0.99     -
+Sharpe Ratio     1.254   -1.029   -0.105   -
+Sortino Ratio    0.739   -0.326   -0.056   -
+Positions
+Count            63      63       126      -
+Filtered         -       -        -        -
+Win Rate         74.6%   90.5%    82.5%    -
+Win/Loss         47W/15L 57W/6L   104W/21L -
+Best Win         $34     $20      $34      -
+Worst Loss       -$75    -$180    -$180    -
+Win Streak       23      30       46       -
+Loss Streak      -3      -1       -3       -
+Max Profit %     74.6%   3.2%     38.9%    -
+Max Loss %       0       4.8%     2.4%     -
+Averages
+P/L              $2      -$3      -$0      -
+Risk             $181    $181     $181     -
+Return On Risk   1.4%    -1.5%    -0.1%    -
+Reward/Risk      10.7%   10.7%    10.7%    -
+Entry Price      0.19    0.19     0.19     -
+Premium          $19     $19      $19      -
+Win              $19     $10      $14      -
+Loss             -$49    -$121    -$70     -
+Exits
+Profits          -       54       54       -
+Expired          48      9        57       -
+Touch            15      -        15       -
+Insights  (pickbar verbatim: "Test A" "Test B" "Combined")
+Combined tab verbatim body:
+  Estimated fees: $15.60[Adjust fees][More about fees]
+  Profit factor of 0.99 is considered poor.[More about profit factor]
+  82.54% win rate is high.
+  Longest drawdown lasted 72 days.
+  Average drawdown duration is 22 days.
+  Average drawdown is $208.00.
+  * Review tests individually for insights specific to each strategy
+Settings cards: A card, B card, and "= Combined Results / 2 backtests" card
+  Combined card ellipsis menu verbatim: Edit Settings / Create Bot / Remove
+  ("Edit Settings" reopens the same Combine Results drawer — Section 3)
+
+==================================================================
+SECTION 6 — Combined Monthly P/L (collapsed by default; expanded)
+==================================================================
+
+Combined Monthly P/L
+MONTH | P/L | TRADES | WIN RATE | AVG ROR | AVG P/L | AVG RISK | BEST | WORST
+2026       -$18   126   83.2%   -0.1%   -$0    $181   $34   -$180
+June       -$289  22    72.7%   -7.3%   -$13   $180   $25   -$178
+July       -$152  44    77.3%   -1.9%   -$3    $178   $34   -$180
+August     $479   42    97.6%   6.2%    $11    $183   $25   -$42
+September  -$56   18    76.5%   -1.7%   -$3    $184   $22   -$65
+
+Every month row is itself a showPositions link (month-filtered positions drawer).
+
+==================================================================
+SECTION 7 — positions drawer (clicked Stats Count "126" = column)
+==================================================================
+
+Title verbatim: "126 positions"
+Buttons verbatim: "Copy CSV" [data-click=copycsv] · "Download CSV" [data-click=download]
+  · column sort links "DATE" "STATUS" "RISK" "P/L" · "Load more"
+Column headers verbatim: TEST | DESCRIPTION | LEGS | DATE | STATUS | RISK | P/L
+~100 row elements render before the "Load more" pager.
+
+First rows verbatim (TEST column distinguishes the parent backtest):
+  A QQQ Short Put Spread 708P/710P Sep 14, 2026 1:30pm → 3:56pm Touch   $185 -$40
+  B QQQ Short Put Spread 708P/710P Sep 14, 2026 1:30pm → 1:53pm Profits $185 $7
+  A QQQ Short Put Spread 713P/715P Sep 11, 2026 1:30pm → 4:00pm Expired $188 --
+  B QQQ Short Put Spread 713P/715P Sep 11, 2026 1:30pm → 3:42pm Profits $188 $5
+  A QQQ Short Put Spread 706P/708P Sep 10, 2026 1:30pm → 4:00pm Expired $186 $14
+  B QQQ Short Put Spread 706P/708P Sep 10, 2026 1:30pm → 4:00pm Expired $186 $14
+  ...
+
+"Copy CSV" exercised once: produced a 126-row CSV on the clipboard
+(saved verbatim as 03-combined-positions-copycsv-2026-09-16-2347.csv).
+CSV header verbatim:
+  Opened,Closed,Symbol,Exp,Type,Legs,Quantity,Status,P/L,Risk,ROR,Premium,
+  Reward/Risk,Open Price,Open Bid Price,Open Ask Price,Close Price,
+  Close Bid Price,Close Ask Price,Max Loss,Max Profit,Price at Open,
+  Price at Close,Test
+Row counts: 63 A + 63 B = 126; CSV P/L column sums to -18, matching the
+combined "=" column's Total P/L -$18 exactly.
+
+==================================================================
+SECTION 8 — Add Backtest / variation paths (each opened, read, closed)
+==================================================================
+
+"Add Backtest" (compare bar) opens the Backtest Settings drawer — a NEW
+backtest builder, pre-filled with the most recently viewed test's config
+(RPCTEST-TOUCH: strategy=shortputspread, longPut "$2.00 below short put leg",
+shortPut "-.20 delta", symbol QQQ, period custom 2026-06-15→2026-09-15,
+name="RPCTEST-TOUCH"). Only action button: "Run Backtest". NOT run.
+
+Card ellipsis → "Edit Settings" opens the same drawer with that test's
+serialized config — 51 inputs, all carrying live values
+(name=RPCTEST-TOUCH, touch {"$0"}, chxslip checked xslip=0.05, etc.).
+
+Card ellipsis → "Add Variation" opens the same Backtest Settings drawer
+pre-filled with ALL 51 inputs identical to the parent test — including
+name="RPCTEST-TOUCH", startDate/endDate, leg JSON payloads, and the exit
+slippage checkbox. The variation differs only by what you then change.
+Only action button: "Run Backtest". NOT run.
+
+==================================================================
+SECTION 9 — 7-way comparison + combine (cap check)
+==================================================================
+
+7 ids comma-separated in the URL render a 7-column Stats table (A B C D E F G)
+plus "=" when combined. Combine Results drawer at 7 defaults to
+"7 per day" / "7 positions". View Results renders the combined 7-way view:
+  Stats columns A B C D E F G =
+  Total P/L (combined) -$25,651
+Settings sidebar: 7 test cards + "= Combined Results / 7 backtests".
+
+An 8th selection leaves "Compare" and "Rerun Backtests" DISABLED in the
+"N backtests selected" menu — Section 1. The cap binds at the selection
+menu that feeds both surfaces; no separate combine cap was observed.
+
+==================================================================
+SECTION 10 — NOT exercised (refusals)
+==================================================================
+
+"Save" on the compare bar (saves a comparison to the account) — prohibited.
+"Create Bot" (appears only in combined mode; also in card menu) — live-fleet
+  surface, out of scope; never clicked.
+"Save Test" / "Delete Test" / "Delete Backtests" / "Rerun Backtests" /
+  "Run Backtest" — write/run actions, all declined.
+"Download CSV" — declined after "Copy CSV" already proved export; a browser
+  download writes outside the bundle directory.
+"Replace Variation", "Edit Description", "Move Down", "Remove", "Create Bot"
+  in the combined card's menu — not needed for the six answers.

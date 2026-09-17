@@ -217,6 +217,32 @@ A hedge is a **separate protective position**. An exit strategy is not a hedge. 
 > opened on deterioration. Additivity is **UNVERIFIED** and is Phase 0b's load-bearing question.
 > What this changes is the **research route**, not §6.1's buildable-hedge verdict.
 
+> ### ⛔ AMENDED 2026-09-17 — `R-2026-09-17-COMBO-RULES-PRESENCE-ONLY`. Original text stands above.
+> **"Additive at the portfolio level" is FALSIFIED.** Phase 0b (bundle
+> `data/captures/2026-09-16-oa-compare/`, raw `01-compare-combine-surface-2026-09-16-2355.txt`
+> lines 249-267, all 20 hashes verified) renders a `Combo Rules` pane in the Combine Results
+> drawer whose only rule shape is, verbatim:
+> **`Only open [Test ▾] if [Test ▾] is [open ▾]`** — hidden inputs `rule0-test1`, `rule0-test2`,
+> `rule0-state`, the state picker offering **exactly `open` | `not open`** and nothing else.
+> Combination therefore **is** cross-test conditional.
+>
+> ⚠️ **But read the predicate precisely, or this mis-ranks the grid.** `open` is a **position
+> PRESENCE** predicate. It is not P/L, not delta, not time, not deterioration. What the gate buys
+> is *"only on days the primary actually traded"* — it does **not** buy *"only on days the primary
+> is losing."* Consequences:
+> - **H-A** (hedge opens only on days the primary is already losing) — **STILL NOT EXPRESSIBLE.**
+> - **H-B** (hedge opens at a fixed time regardless) — **now expressible and improved**: gating on
+>   the primary being `open` removes false fires on days the primary never entered.
+> - The combo rule lands **between H-A and H-B, nearer H-B.** Any arm built on it is a
+>   **presence-gated overlay**, and the pass bar names it that — calling it a reactive hedge is the
+>   `HedgeD-Conditional` failure mode arriving from a third direction.
+> - **V3 unchanged** — still cross-position, still needs the §3.3 intraday premium path.
+>   `not open` means "the primary already closed," which is not "the primary is down X%."
+>
+> **Still UNVERIFIED and now the only load-bearing unknown:** whether `open` means *concurrent at
+> the gated test's entry moment* or *opened at any point that day*. Phase 0c resolves it
+> (`R-2026-09-17-COMBO-SEMANTICS-RUN`).
+
 
 **Under this ruling the fleet has no buildable hedge on Option Alpha today.** Every natively
 expressible candidate is an exit and is disqualified. The one true hedge, C4, needs a trigger that
@@ -275,6 +301,22 @@ timestamp, same P/L to the cent. Three of the eight-arm family are one arm weari
 This is not a hedge-spec item, but it must be resolved before the GF family is used as the
 measurement substrate for any hedge arm, or the same defect that invalidated the v1 tournament
 invalidates this one.
+
+> ### ⛔ STALE 2026-09-17 — the COUNT is wrong; the measurement above stands. Original text stands.
+> `R-2026-08-17-PR23-RETIRE` (`docs/RULINGS.md`, Andy verbatim, **2026-08-17 — one month before
+> this section was written**) already retired one of the three named arms:
+> *"PR-23 / GF-QQQ-IC-Ride-Delta is RETIRED. Under the shared delta scanners it is redundant with
+> PR-14 (GF-QQQ-IC-Ride) on every axis. Ledger history preserved."*
+>
+> **The live defect is therefore a PAIR, not a triple: `GF-QQQ-IC-Ride` vs `GF-QQQ-IC-Touch0`.**
+> The 27/27, 9/9, 9/9 identity measurement is unaffected — Ride-Delta was simply already
+> dispositioned when this section re-counted it as open.
+>
+> **What remains, and it is narrow:** has `Touch0`'s touch trigger ever fired a close attributable
+> to a touch, or is `Touch0` `Ride` under another name? A ledger query answers it. Unruled.
+> Scoped — not resolved — by `R-2026-09-17-PHASE1-SUBSTRATE-SPLIT`
+> (`docs/decision-card-2026-09-17-phase1-preconditions.md` Slot A): it gates the **ledger-side
+> comparison**, not the Phase 1 backtest grid.
 
 ---
 

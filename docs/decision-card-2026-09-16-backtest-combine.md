@@ -88,6 +88,32 @@ an overlay and calls it a hedge. This is the `HedgeD-Conditional` failure mode (
 mechanic named without its platform primitive) approaching from the opposite direction.
 **Whether combination is additive-only is UNVERIFIED and is the first thing Phase 0b must answer.**
 
+> ### ⛔ AMENDED 2026-09-17 — `R-2026-09-17-COMBO-RULES-PRESENCE-ONLY`. Original text stands above.
+> **"Additive at the portfolio level" is FALSIFIED.** Phase 0b (bundle
+> `data/captures/2026-09-16-oa-compare/`, raw `01-compare-combine-surface-2026-09-16-2355.txt`
+> lines 249-267, all 20 hashes verified) renders a `Combo Rules` pane in the Combine Results
+> drawer whose only rule shape is, verbatim:
+> **`Only open [Test ▾] if [Test ▾] is [open ▾]`** — hidden inputs `rule0-test1`, `rule0-test2`,
+> `rule0-state`, the state picker offering **exactly `open` | `not open`** and nothing else.
+> Combination therefore **is** cross-test conditional.
+>
+> ⚠️ **But read the predicate precisely, or this mis-ranks the grid.** `open` is a **position
+> PRESENCE** predicate. It is not P/L, not delta, not time, not deterioration. What the gate buys
+> is *"only on days the primary actually traded"* — it does **not** buy *"only on days the primary
+> is losing."* Consequences:
+> - **H-A** (hedge opens only on days the primary is already losing) — **STILL NOT EXPRESSIBLE.**
+> - **H-B** (hedge opens at a fixed time regardless) — **now expressible and improved**: gating on
+>   the primary being `open` removes false fires on days the primary never entered.
+> - The combo rule lands **between H-A and H-B, nearer H-B.** Any arm built on it is a
+>   **presence-gated overlay**, and the pass bar names it that — calling it a reactive hedge is the
+>   `HedgeD-Conditional` failure mode arriving from a third direction.
+> - **V3 unchanged** — still cross-position, still needs the §3.3 intraday premium path.
+>   `not open` means "the primary already closed," which is not "the primary is down X%."
+>
+> **Still UNVERIFIED and now the only load-bearing unknown:** whether `open` means *concurrent at
+> the gated test's entry moment* or *opened at any point that day*. Phase 0c resolves it
+> (`R-2026-09-17-COMBO-SEMANTICS-RUN`).
+
 ---
 
 ## Slot 1 — replace §4's research method  ✅ RULED 2026-09-16

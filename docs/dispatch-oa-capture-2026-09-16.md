@@ -241,6 +241,112 @@ do not paraphrase:
 (`docs/AI Agent Stack.md`:256 says backtest data is not exportable — confirmation-by-absence,
 not an OA statement). Report what you find.
 
+### 📚 REFERENCE SHELF — what to read when the UI is ambiguous (ADDED 2026-09-16, at Andy's instruction)
+
+You are not expected to derive this surface from nothing. The repo carries a harvest of OA's own
+documentation and one first-hand capture of the adjacent surface. **Use them to know what to look
+for and what to name it. Never use them to answer.**
+
+#### ⛔ The precedence law — read this before you open any of them
+
+**What is RENDERED on the live surface outranks every file in this repo, always.** A repo file can
+tell you a control is supposed to exist; only the screenshot proves it does. If a file and the
+screen disagree, the screen wins and **the disagreement is itself a finding you must report** — fact
+ID, verbatim doc quote, verbatim rendered label, screenshot.
+
+Three rules that follow from it:
+
+- **A docs fact is CONTEXT, never EVIDENCE.** Every one of the six answers is established by a
+  screenshot plus a verbatim rendered label. A `data/oa_facts.csv` fact ID may appear in your README
+  only as *"docs said X; the surface renders Y"* — never as the basis for an answer.
+- **Never cite a project document as evidence for a claim about OA.** Two documents vouching for
+  each other is a citation loop (`CLAUDE.md` §5, provenance rule). Cite OA's own words (a fact ID
+  with its verbatim `quote` column) or a dated first-hand observation you made. Nothing else.
+- **Inference from absence is not an observation** (`CLAUDE.md` §5). "The docs don't mention a size
+  ratio control" is not an answer to question 4. "I opened Combine Results, expanded every pane, and
+  no control bearing on relative sizing is rendered — screenshot `04-combine-results.png`" is.
+
+#### 🔧 `data/oa_facts.csv` — 1,548 facts harvested from docs.optionalpha.com on 2026-08-04
+
+Columns: `fact_id,area,page_title,page_url,claim,quote,tier,gap_flag,last_verified,page_fingerprint`.
+`quote` is OA's verbatim sentence — that is the citable unit. `claim` is the harvester's paraphrase
+and is **not** citable.
+
+Query it, don't read it whole:
+
+```
+grep -i "backtest" data/oa_facts.csv | cut -d, -f1,3,5 | head -50
+python3 -c "import csv;[print(r['fact_id'],'|',r['tier'],'|',r['quote']) for r in csv.DictReader(open('data/oa_facts.csv')) if r['page_title']=='Backtesting Metrics']"
+```
+
+**Two tiers matter here.** `DOCUMENTED` = OA published a sentence saying it. `DOCS-SILENT` = the
+harvest established that OA's docs **do not** cover it, with the open question recorded in
+`gap_flag`. A `DOCS-SILENT` row is a licence to go look, not a finding.
+
+**The 117 backtest-related rows, mapped to your six questions:**
+
+| Your question | Facts to pull first | What they give you |
+|---|---|---|
+| 1. Procedure | `OA-1141`…`OA-1144`, `OA-1147` | All **DOCS-SILENT**. `OA-1143`/`OA-1144` record that OA's "Comparing and combining backtests" page is an *empty embed block with a blank URL* — there is no written procedure anywhere. **Your capture is the only record that will ever exist.** |
+| 2. Granularity | `OA-1079`, `OA-1099`, `OA-1107`, `OA-1109` | The per-backtest vocabulary: "detailed trade logs", `Count`, per-trade averaging, the `Filtered Trades` view. Whether any of it survives into the *combined* view is exactly what is unknown. |
+| 3. Conditionality | `OA-1076`, `OA-1077`, `OA-1091` | The only three sentences OA has ever published on combining. All three describe **result aggregation** — *"combine the results of multiple strategies into one portfolio curve."* None describes coupling. Expect additive; report what is rendered. |
+| 4. Size ratio | *(nothing — no fact in the harvest mentions relative sizing between backtests)* | Genuine silence. Treat as unknown, not as absent. |
+| 5. Duplicate fidelity | `OA-1076` | *"Quickly add multiple variations to stress-test different variations and variables"* — the vendor's own framing of the variant workflow. It does not say what a duplicate carries. |
+| 6. Ceiling | `OA-1089`, `OA-1090`, `OA-1091` | ⚠️ **Read the trap below before using these.** |
+
+#### ⚠️ The worked example — why you check the render even when the docs are unambiguous
+
+`OA-1089`, `OA-1090` and `OA-1091` are **three clauses of one sentence** on one page
+(`docs.optionalpha.com/tools/backtesting/backtesting-metrics`):
+
+> *"Traders can use a test period of up to three years, and compare up to four backtests
+> simultaneously, and combine multiple backtested strategies to see a single portfolio P/L curve."*
+
+The first clause is **already falsified by first-hand capture.**
+`data/captures/2026-09-16-oa-backtester/01-backtest-settings-form-2026-09-16-223758.txt` lines 77-82
+render `Test Period` as `1 year · 2 years · 3 years · 5 years · Custom`. The docs sentence is stale —
+it predates the June-2026 backtester release.
+
+**Therefore the four-backtest cap in the sibling clause inherits the same staleness risk.** Do not
+report question 6 as "confirmed by `OA-1090`." Add backtests until the surface refuses, and record
+the exact refusal — the error text, or the fifth slot accepting. One stale clause in a sentence
+means the whole sentence is dated, not that the rest is fine.
+
+#### 📁 The rest of the shelf — what each file is for, and its limit
+
+| File | Use it for | Limit |
+|---|---|---|
+| `data/captures/2026-09-16-oa-backtester/` | **The template and the baseline.** `02-second-position-expressivity-2026-09-16.md` is a control-by-control table of the single-backtest form with verbatim labels — reuse its vocabulary so your bundle is diffable against it. `01-…-223758.txt` lines 219-222 are the sighting that generated your task. | It is the **New Backtest** surface, not Compare. Nothing in it answers a two-backtest question. |
+| `docs/decision-card-2026-09-16-backtest-combine.md` | **Why this task exists.** §"What it changes" maps V0-V4 onto the variant frame; it states plainly that additive-only combination makes V1/V2 *unconditional overlays, not reactive hedges*. Read it so you understand which answer costs what. | It is a decision record, not evidence about OA. Never cite it for a platform fact. |
+| `docs/backtest-ingest-protocol.md` | The house standard for reading backtest results — DISCOVERY vs CONFIRMATION, window policy, compare-by-R. Useful for naming things the way this project names them. | About analysing results. Not about the Compare UI. |
+| `.agents/skills/option-alpha/SKILL.md` | **The law**, already in your read-first list. §7 is what OA affirmatively cannot express. | Governs; when it and any other file disagree, it wins. |
+| `data/oa_facts.csv` `page_title='Backtesting'` / `'Backtesting Metrics'` | Metric definitions in OA's own words — `Max Risk`, `Max Drawdown`, `Profit Factor`, `Count`, `Win Rate`. Use them to read the Compare grid's column headers correctly. | Definitions for a **single** backtest. Whether a combined view recomputes them or sums them is unknown and is worth recording if the surface shows it. |
+
+#### ⛔ Not on the shelf — do not read these for this task
+
+- `docs/oa-platform-reference.md` and its v3 draft. 1,431 lines on **bots**, and the backtester
+  appears exactly once (line 47) as an aside noting the June-2026 release postdates its research.
+  There is no backtester content in it. Reading it will cost you an hour and teach you nothing.
+- `docs/ic-trailing-stop-backtest.md` — carries a **PREMISE FALSIFIED** banner.
+- `docs/lean-backtesting-reference.md`, `docs/quantconnect-lean-exploration-brief.md` — QuantConnect,
+  a different platform entirely.
+- `docs/oo-trial-backtests.md` — OptionOmega, a different vendor.
+- `docs/experiments/oa-rpc-test-2026-09-15/` — **history, not a toolkit.** The RPC path is outside
+  the grant (BOUNDARY rule 2). Do not open it looking for a shortcut.
+- Anything under `data/archive/` or `~/bot-fleet` — frozen v1, never an input.
+
+#### 📝 What the shelf obliges you to report
+
+Add one section to your `README.md`, **`## Docs-vs-render deltas`**: every place a
+`data/oa_facts.csv` fact and the live surface disagreed, as a row of *fact ID · verbatim doc quote ·
+verbatim rendered label · screenshot*. `OA-1089` is already one and is yours to confirm if the
+Compare surface restates a period. If you find none, say "none found" and name the facts you checked
+against — a checked-and-agreed list is a result.
+
+If a question is unanswerable because the shelf is silent **and** the surface does not render it,
+the answer is `NOT DETERMINABLE` with both halves stated. That is a legitimate result here and is
+strongly preferred to a confident guess.
+
 ### DELIVERABLE — same bundle shape, new directory
 
 `data/captures/2026-09-16-oa-backtester/` is the template. Copy its shape into
@@ -291,6 +397,27 @@ one backtest at a time. The UI path has no sweep, so the order is the budget.
 **Compare by R (pnl ÷ risk), never by raw $** (`CLAUDE.md` §4). Report per-arm: N, Exp(R), win
 rate, max drawdown in R, worst single R. Label the unit — *"per condor, ex-artifact"* or
 *"per leg, raw"* — every time. An Exp(R) with no unit label is untrustworthy.
+
+> ### 📌 AMENDED 2026-09-17 — two rulings bear on this table. FULL RESPEC STILL OWED.
+> **`R-2026-09-17-PHASE1-SUBSTRATE-SPLIT` (Slot A = A3).** The Phase 1 grid is **self-contained**.
+> No live-ledger number enters any ranking in it. **H-C's `-$173` / `-$584` demote to CONTEXT and
+> are no longer the bar** — H-C's bar is restated in **R against H-0**, like every other arm. The
+> incumbent-to-beat comparison against live GF is not cancelled; it becomes its **own deliverable**,
+> and that deliverable is gated on resolving the `Ride`/`Touch0` identity (§8 banner above).
+>
+> **`R-2026-09-17-COMBO-RULES-PRESENCE-ONLY`.** H-A ("only on days the primary is already losing")
+> is **NOT expressible** — no P/L predicate exists in `Combo Rules`, whose only vocabulary is
+> `open` | `not open`. H-B becomes natively expressible **and improves** (a presence gate removes
+> false fires on days the primary never entered). Any arm built on a combo rule is named a
+> **presence-gated overlay**, never a reactive hedge.
+>
+> **`R-2026-09-17-PAPER-ARM-PREAUTH` (Slot B = B3).** One paper arm is pre-authorized for the
+> single winning variant, on the bar recorded in that ruling, pre-registered per `CLAUDE.md` §5.
+> Measurement remains the default for everything else.
+>
+> ⛔ **The table above is NOT yet rewritten.** The respec waits on Phase 0c's `open` semantics
+> (`R-2026-09-17-COMBO-SEMANTICS-RUN`) and on Slot 4 of the 2026-09-17 sitting, both open at the
+> time of this banner. Do not run Phase 1 off this table until the respec lands.
 
 ### If Phase 0 = NO or NOT DETERMINABLE
 

@@ -1,1 +1,6 @@
 date,bot,tag,lesson
+2026-09-16,-,capture,"Clipboard captures are volatile: run the Copy click and pbpaste > file in the SAME exec call, then verify the file header before moving on"
+2026-09-16,-,oa-drive,"Trusted-click misses on small icon buttons (drawer X, deleteRule X) land on padding and silently do nothing — click the icon element's own center, then re-read state"
+2026-09-16,-,tooling,"CDP helper scripts print then hang on WebSocket teardown — add explicit setTimeout(process.exit) after close"
+2026-09-17,oa_shots.mjs is a fixed capture script not a generic screenshot tool — invoking its `shot` arg re-ran its built-in sequence and overwrote 8 verified PNGs in data/captures/2026-09-16-oa-backtester/ (restored via git restore). Put a generic `shot` in oa_cdp.mjs instead; never run oa_shots.mjs except as its original one-shot capture
+2026-09-17,In the OA drawer Escape closes the ENTIRE drawer (discarding an unsaved New Backtest form) — close inner pickers via their back arrow or X, never Escape; also re-locate buttons right before clicking because the drawer scroll position changes

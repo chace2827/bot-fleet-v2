@@ -1,6 +1,8 @@
 # Hedge program — the north star
 
-**STATUS: direction document — the aim, not an authorization.** Written 2026-09-16 at Andy's
+**STATUS: direction document — the aim, not an authorization.** Companion: **`docs/hedge-program-thesis.md`**
+(added 2026-09-17) — the *case* for the program: why it is worth running, what success buys in
+calendar terms, and the argument against it. This file is the aim; that one is the rationale. Written 2026-09-16 at Andy's
 explicit instruction: *"build me a new hedging guide as our north star going forward."* It merges
 the Cowork strategy chat (sections "The honest verdict" and "How I'd run the research natively,"
 pasted by Andy into the Devin session of the same date) with this project's signed rulings and
@@ -110,6 +112,32 @@ no entry, no restart.
 > works. Under the drafted replacement, V1, V2 and V4 become native combines and only V3 keeps a
 > manual join. ⚠️ Combination is expected to be **additive at the portfolio level** — UNVERIFIED —
 > so a combined overlay is not a reactive hedge under `R-2026-09-16-HEDGE-DEFINITION`.
+
+> ### ⛔ AMENDED 2026-09-17 — `R-2026-09-17-COMBO-RULES-PRESENCE-ONLY`. Original text stands above.
+> **"Additive at the portfolio level" is FALSIFIED.** Phase 0b (bundle
+> `data/captures/2026-09-16-oa-compare/`, raw `01-compare-combine-surface-2026-09-16-2355.txt`
+> lines 249-267, all 20 hashes verified) renders a `Combo Rules` pane in the Combine Results
+> drawer whose only rule shape is, verbatim:
+> **`Only open [Test ▾] if [Test ▾] is [open ▾]`** — hidden inputs `rule0-test1`, `rule0-test2`,
+> `rule0-state`, the state picker offering **exactly `open` | `not open`** and nothing else.
+> Combination therefore **is** cross-test conditional.
+>
+> ⚠️ **But read the predicate precisely, or this mis-ranks the grid.** `open` is a **position
+> PRESENCE** predicate. It is not P/L, not delta, not time, not deterioration. What the gate buys
+> is *"only on days the primary actually traded"* — it does **not** buy *"only on days the primary
+> is losing."* Consequences:
+> - **H-A** (hedge opens only on days the primary is already losing) — **STILL NOT EXPRESSIBLE.**
+> - **H-B** (hedge opens at a fixed time regardless) — **now expressible and improved**: gating on
+>   the primary being `open` removes false fires on days the primary never entered.
+> - The combo rule lands **between H-A and H-B, nearer H-B.** Any arm built on it is a
+>   **presence-gated overlay**, and the pass bar names it that — calling it a reactive hedge is the
+>   `HedgeD-Conditional` failure mode arriving from a third direction.
+> - **V3 unchanged** — still cross-position, still needs the §3.3 intraday premium path.
+>   `not open` means "the primary already closed," which is not "the primary is down X%."
+>
+> **Still UNVERIFIED and now the only load-bearing unknown:** whether `open` means *concurrent at
+> the gated test's entry moment* or *opened at any point that day*. Phase 0c resolves it
+> (`R-2026-09-17-COMBO-SEMANTICS-RUN`).
 
 
 **The platform wall (confirmed twice):** neither OO nor OA's backtester can open a second

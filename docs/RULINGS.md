@@ -5664,3 +5664,144 @@ source: >-
   remains available, non-load-bearing.
 unclear: false
 ```
+
+```yaml
+ruling_id: R-2026-09-17-COMBO-RULES-PRESENCE-ONLY
+date: 2026-09-17
+scope: >-
+  "Combination is additive at the portfolio level" is FALSIFIED — OA's Combine
+  Results drawer renders a Combo Rules pane, verbatim
+  "Only open [Test] if [Test] is [open|not open]" (hidden inputs rule0-test1 /
+  rule0-test2 / rule0-state; those two states are the ONLY vocabulary). But the
+  predicate is position PRESENCE, not P/L: the gate buys "only on days the primary
+  actually traded," NOT "only on days the primary is losing." Therefore H-A (hedge
+  conditional on the primary losing) remains NOT EXPRESSIBLE; H-B (fixed-time
+  hedge) becomes natively expressible and improves, gaining a presence gate that
+  removes false fires on days the primary never entered; any arm built on a combo
+  rule is named a PRESENCE-GATED OVERLAY, never a reactive hedge; V3 is unchanged
+  and still needs the §3.3 intraday premium path. Whether "open" means concurrent
+  at the gated test's entry moment or opened-at-any-point-that-day remains
+  UNVERIFIED and is the sole load-bearing unknown.
+verbatim: Amend the plan
+verbatim_of: andy
+owner: Andy (in-chat, Cowork session, 2026-09-17)
+status: Active
+applies_to: >-
+  docs/hedge-north-star.md §4 (banner applied); docs/hedge-design-spec-2026-09-16.md
+  §6.1 (banner applied) and §3.3 (unchanged, still gates V3);
+  docs/decision-card-2026-09-16-backtest-combine.md "What it changes" (banner
+  applied); docs/dispatch-oa-capture-2026-09-16.md Phase 1 arm table H-A/H-B —
+  RESPEC OWED, not yet applied.
+superseded_by: none
+source: >-
+  Phase 0b capture bundle data/captures/2026-09-16-oa-compare/ — raw
+  01-compare-combine-surface-2026-09-16-2355.txt lines 249-267 (hidden-input
+  serialization of the rule row), 20/20 SHA256SUMS verified by direct device_bash
+  read 2026-09-17. Docs corroboration is ABSENT by design: OA-1141..OA-1144 are
+  DOCS-SILENT and no row in the 1,548-fact corpus mentions Combo Rules
+  (docs/oa-reconciliation-report.md D-03).
+unclear: false
+```
+
+```yaml
+ruling_id: R-2026-09-17-COMBO-SEMANTICS-RUN
+date: 2026-09-17
+scope: >-
+  Phase 0c AUTHORIZED. Devin may CREATE and RUN backtests and combines for the
+  sole purpose of resolving what "open" means in a Combo Rule. The Phase 0b
+  prohibition on runs is lifted for self-created tests under the
+  ZZ-AGENT-2026-09-17-<arm> prefix and for nothing else. Three combines of one
+  purpose-built pair (early-entry primary with a tight PT so it closes before
+  midday; 15:00 overlay): (a) NO RULE — the control, mandatory, since without it a
+  gated-out day is indistinguishable from a no-signal day; (b) "is open";
+  (c) "is not open". Verdict is read from the exported positions CSVs, not the
+  chart, partitioning primary rows by whether they closed before 15:00. Live-fleet
+  surfaces remain read-only; Create Bot is forbidden on a single or combined
+  backtest; no wire protocol; DOM/JS reads remain in scope per
+  R-2026-09-16-BACKTEST-COMBINE-S4.
+verbatim: "1. Yes"
+verbatim_of: andy
+owner: Andy (in-chat, Cowork session, 2026-09-17)
+status: Active
+applies_to: >-
+  docs/dispatch-oa-capture-2026-09-16.md (Phase 0c dispatch); new bundle
+  data/captures/2026-09-17-oa-combo-semantics/; R-2026-09-16-DEVIN-OA-CHROME-CAPTURE-A2
+  (naming prefix unchanged).
+superseded_by: none
+source: >-
+  Cowork session 2026-09-17, Slot 1 of the four slots put to Andy after the Phase 0b
+  report; the run is the discriminator named in
+  R-2026-09-17-COMBO-RULES-PRESENCE-ONLY.
+unclear: false
+```
+
+```yaml
+ruling_id: R-2026-09-17-PHASE1-SUBSTRATE-SPLIT
+date: 2026-09-17
+scope: >-
+  Slot A = A3 (split). The Phase 1 hedge grid is SELF-CONTAINED: no live-ledger
+  number enters any ranking inside it. H-C's -$173 / -$584 (GF SL100 / SL200)
+  demote from "the bar" to CONTEXT; H-C is ranked in R against H-0 like every
+  other arm. The incumbent-to-beat comparison against live GF is not cancelled —
+  it becomes its OWN deliverable, defined separately, and THAT deliverable is
+  gated on resolving the GF-QQQ-IC-Ride vs GF-QQQ-IC-Touch0 identity. Consequence:
+  the identity defect does NOT gate the Phase 1 launch, and the cross-surface
+  comparison no longer happens implicitly inside an arm definition. Rejected: A1
+  alone (self-contained, full stop) — it silently discards the incumbent-to-beat
+  question instead of scheduling it; A2 (rank against live) — gates launch on a
+  defect that does not touch the arms H-C actually rests on.
+verbatim: i agree w reccomendations
+verbatim_of: andy
+owner: Andy (in-chat, Cowork session, 2026-09-17)
+status: Active
+applies_to: >-
+  docs/decision-card-2026-09-17-phase1-preconditions.md Slot A;
+  docs/dispatch-oa-capture-2026-09-16.md Phase 1 arm table (banner applied; full
+  respec still owed); docs/hedge-design-spec-2026-09-16.md §8 (staleness banner
+  applied); the future ledger-side comparison deliverable, not yet written.
+superseded_by: none
+source: >-
+  docs/decision-card-2026-09-17-phase1-preconditions.md Slot A. Grounding: the arm
+  table's H-C was defined by a live-ledger figure ("net negative on live data
+  -$173, -$584, the only two GF arms underwater") — an unruled cross-surface
+  comparison. Mitigating fact recorded in the card: the identity pair is
+  Ride/Touch0; H-C rests on SL100/SL200 and is not implicated.
+unclear: false
+```
+
+```yaml
+ruling_id: R-2026-09-17-PAPER-ARM-PREAUTH
+date: 2026-09-17
+scope: >-
+  Slot B (hedge-design-spec §9.2) = B3. Phase 1 is MEASUREMENT ONLY by default,
+  PLUS one paper arm pre-authorized for the SINGLE winning variant, contingent on
+  a pass bar fixed BEFORE any result exists. THE BAR, as accepted: the winning arm
+  (a) beats H-0 on Exp(R) per condor, ex-artifact, (b) beats BOTH H-C stop arms,
+  and (c) its fire count implies >=10 fires within 3 months. All three conjunct;
+  failing any one means no paper arm and a fresh ruling is required. The paper arm
+  is pre-registered per CLAUDE.md §5 before it runs — hypothesis, kill criterion,
+  sample target, review date, config-capture hash — no entry in the ledger, no
+  start. Backtest figures remain T4; this ruling does not touch the live-capital
+  gate (T2, n>=100 / 6 months / a regime change) and authorizes no live capital.
+  Rejected: B1 (measurement only, full stop) — makes north-star §6's unshortenable
+  2-3 month paper phase fully serial after a separate re-ruling; B2 (blanket paper
+  authorization on a PASS) — lets a weak grid result walk into a paper slot with no
+  pre-set bar.
+verbatim: i agree w reccomendations
+verbatim_of: andy
+owner: Andy (in-chat, Cowork session, 2026-09-17)
+status: Active
+applies_to: >-
+  docs/decision-card-2026-09-17-phase1-preconditions.md Slot B;
+  docs/hedge-design-spec-2026-09-16.md §9.2 (slot closed; banner owed);
+  docs/pre-registration-ledger.md (an entry is owed before any paper arm runs);
+  docs/dispatch-oa-capture-2026-09-16.md Phase 1 (banner applied).
+superseded_by: none
+source: >-
+  docs/decision-card-2026-09-17-phase1-preconditions.md Slot B. Grounding:
+  docs/hedge-north-star.md §6 verbatim — "The paper phase cannot be shortened — it
+  depends on how often the hedge fires. A 3-5 fires/month trigger needs 2-3 months
+  for ~10 fires." The bar is set blind by construction: this ruling predates the
+  grid.
+unclear: false
+```

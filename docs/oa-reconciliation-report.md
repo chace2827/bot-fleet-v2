@@ -422,3 +422,71 @@ in `oa_facts.csv` and in **no** v2 doc.
   `docs/r-edit-authorization-2026-08-05.md`. **R-01…R-07 and the three standing items were ruled
   per-item and applied 2026-08-05**; R-11 and R-13 above are **stale** — both were answered
   first-hand on 2026-08-04 (§9 checks #9 and #10) and need no doc change.
+
+---
+
+## 7. Docs-vs-render deltas — first-hand, post-harvest (ADDED 2026-09-17)
+
+*A different register from R-01…R-20 above. Those check **project docs** against the fact ledger.
+These check the **fact ledger itself** against the live product. A `DOCUMENTED` row is not wrong
+when it lands here — it faithfully records what OA's docs say. It is **stale**: the product moved
+and the docs did not. Nothing in §§1-6 is altered by this section.*
+
+**Method.** Each delta cites (a) the `data/oa_facts.csv` fact ID with its verbatim `quote`, and
+(b) a dated first-hand render with its capture file and line numbers. Per `CLAUDE.md` §5, a
+project document is never the evidence — only OA's own words or a dated observation.
+
+### D-01 ⛔ `OA-1089` — "up to three years" is stale
+
+> `OA-1089` [DOCUMENTED], `docs.optionalpha.com/tools/backtesting/backtesting-metrics`, verbatim:
+> *"Traders can use a test period of up to three years,"*
+
+**Render, 2026-09-16 22:37:58-04:00** — `data/captures/2026-09-16-oa-backtester/01-backtest-settings-form-2026-09-16-223758.txt`
+lines 77-82: `Backtest Options(optional)` → `Test Period` → `1 year · 2 years · 3 years ·
+**5 years** · **Custom**`. The docs sentence predates the June-2026 backtester release.
+
+### D-02 ⛔ `OA-1090` — "up to four backtests" is falsified; the cap is **seven**
+
+> `OA-1090` [DOCUMENTED], same page, same sentence, verbatim:
+> *"and compare up to four backtests simultaneously,"*
+
+**Render, 2026-09-16** — `data/captures/2026-09-16-oa-compare/`: the list-page selection menu
+header reads verbatim `FOR UP TO 7 BACKTESTS:`; the 5th, 6th and 7th selections are accepted; a
+seven-way compare renders columns `A B C D E F G =` and a seven-way combine renders. An 8th
+selection greys `Compare` and `Rerun Backtests` (`mi disabled`) — **the disabled item is the
+refusal; no error text is emitted.** The cap governs Compare and Combine Results alike.
+
+⭐ **The lesson that generalises.** `OA-1089`, `OA-1090` and `OA-1091` are **three clauses of one
+sentence on one page.** Two of the three are now falsified by render. **Treat a multi-clause docs
+sentence as one staleness unit:** once any clause fails against the product, no sibling clause may
+be cited as confirmation without its own first-hand check. This trap was written into the Phase 0b
+dispatch's reference shelf from D-01 alone and immediately caught D-02.
+
+### D-03 ⚠️ `OA-1077` / `OA-1091` — accurate but **incomplete**, and the omission was load-bearing
+
+> `OA-1077` [DOCUMENTED]: *"Then, combine the results of multiple strategies into one portfolio curve."*
+> `OA-1091` [DOCUMENTED]: *"and combine multiple backtested strategies to see a single portfolio P/L curve."*
+
+Both render as described — the `=` column and the combined curve are exactly this. **But neither
+sentence, nor any row in the 1,548-fact corpus, mentions `Combo Rules`**, the cross-test entry gate
+that renders in the same drawer (`01-compare-combine-surface-2026-09-16-2355.txt` lines 249-267).
+The docs describe aggregation and are silent on coupling. A program that had trusted the corpus
+here would have concluded combination is additive-only — which is precisely the conclusion
+`hedge-north-star.md` §4 and `hedge-design-spec-2026-09-16.md` §6.1 carried until 2026-09-17.
+**`DOCUMENTED` means "OA said this," never "OA said all of this."**
+
+### D-04 ⛔ Non-corpus — "backtest data not exportable" is falsified for position data
+
+Not a `data/oa_facts.csv` row: the claim lives in `docs/AI Agent Stack.md` sourced to a community
+post (~Jun 2025), and was always flagged there as confirmation-by-absence rather than an OA
+statement. Falsified by render 2026-09-16 23:47 ET — `Copy CSV` / `Download CSV` on every positions
+drawer, one exercise yielding a 126-row, 24-column CSV with minute-level `Opened`/`Closed` and a
+per-test `Test` column. Corrected in place at that file with the full header quoted. **Scope:
+position data only** — no export control renders on the Stats, chart or Combined Monthly P/L panels.
+
+### Standing note for this section
+
+`OA-1141`…`OA-1144` ("Comparing and combining backtests") are **DOCS-SILENT** — OA's own page for
+this feature is an embed block with a blank URL. There is no vendor text to go stale and none to
+check against. For this surface the capture bundles are not a corroborating source; they are the
+**only** source that will ever exist.
