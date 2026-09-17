@@ -5260,3 +5260,68 @@ source: >-
   docs/oa-platform-reference.md section 11 rows 5 and 6.
 unclear: false
 ```
+
+```yaml
+ruling_id: R-2026-09-16-DEVIN-OA-CHROME-CAPTURE
+date: 2026-09-16
+scope: >-
+  Devin is AUTHORIZED to use its own Chrome-based navigation to capture
+  what the hedge test needs from Option Alpha. The zdte.* RPC path is
+  DEFERRED — not rejected — and is revisited later; spec section 9.7's
+  probe stays open and stays gated on written OA authorization, which is
+  still outstanding.
+
+  SCOPE OF THE AUTHORIZATION: CAPTURE ONLY. Reads, screenshots, exports,
+  backtest construction and comparison in Devin's browser. This ruling does
+  NOT grant Devin authority to make OA EDITS. CLAUDE.md section 5's
+  two-layer proof regime and section 7's placement of OA work in the Cowork
+  lane are unchanged for edits; this is a bounded carve-out for capture,
+  and it is a lane change recorded deliberately rather than drifted into.
+
+  ⛔ THREE CONDITIONS, each from a defect this project has already paid for:
+
+  (a) SCOPE EVERY CAPTURE TO THE HOST UNDER STUDY AT CAPTURE TIME, never
+  afterwards in analysis. The 2026-08-20 recon incident wrote 41 WebSocket
+  frames from an unrelated site open in another tab into a repo file,
+  because the websocket handler lacked the host filter the request handlers
+  already had. A recorder pointed at "the browser" records the WHOLE
+  browser. Devin driving a full Chrome is the same exposure, wider.
+
+  (b) DEVIN DOES NOT HAVE THE oa-driving SKILL. Its traps — three save
+  layers, a version bump that hides an unchanged routine, ref clicks that
+  silently no-op — live in a Claude skill, not in this repo, and Devin
+  cannot read them. The in-repo substitutes MUST be named in the dispatch
+  prompt: docs/oa-ops-runbook.md (capture ritual, page coverage, the nine
+  traps) and docs/oa-platform-reference.md section 0.3. Without them a
+  Devin OA capture will be confidently wrong in the ways already
+  catalogued.
+
+  (c) THE EXIT OPTIONS PANEL IS NEVER EVIDENCE. What a bot actually did is
+  read from the position's Trades list (CLAUDE.md section 3 item 3,
+  oa-platform-reference.md section 0.3). This binds Devin exactly as it
+  binds Claude, and an HTTP 200 or a tool-success message is not
+  verification (section 9.1a).
+
+  Nothing is built under this ruling yet. Andy's instruction was
+  explicitly "don't build anything yet."
+verbatim: >-
+  We will go forward for now with authorization for Devin to use it's
+  chrome based naviagtion to capture what we need. Down the road we can
+  look into using the API zdte path.
+verbatim_of: andy
+owner: Andy (in-chat, Cowork session 2026-09-16). Lane authority — gated, and given.
+status: Active
+applies_to: >-
+  docs/hedge-design-spec-2026-09-16.md section 9.7 (probe stays open, RPC
+  deferred); CLAUDE.md section 7 lane split (bounded capture carve-out for
+  Devin; edits unchanged); docs/oa-ops-runbook.md and
+  docs/oa-platform-reference.md section 0.3 (must be cited in any Devin OA
+  dispatch prompt); docs/devin-queue.md (future OA-capture items).
+superseded_by: none
+source: >-
+  Cowork session 2026-09-16, Andy in-chat, verbatim above. Conditions (a)
+  and (b) cite the 2026-08-20 recon incident and the oa-driving skill's
+  non-availability to Devin respectively; condition (c) cites CLAUDE.md
+  section 3 item 3.
+unclear: false
+```

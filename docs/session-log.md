@@ -11819,3 +11819,45 @@ requested by Andy, awaiting answer; blocks §9.7. Terminology sweep, `hedge-rese
 banner, §9.6 defang stub — all still unruled.
 
 **Files:** `docs/decision-card-2026-09-16-tournament-baseline.md` (new) · this file.
+
+---
+
+## 2026-09-16 (close) — Devin OA-capture authorized; handoff written; H-1 running
+
+**H-1 is working** — dispatched to Devin Desktop connected to this folder (not the CLI wrapper,
+not a `/tmp` clone). The Desktop route sidesteps the gitignored-CSV-absent-from-clones trap, since
+`data/hedge_tournament.csv` is tracked and present in the live folder.
+
+⚠️ **H-1 implements `R-2026-09-16-TOURNAMENT-BASELINE`, which is still UNSIGNED** (drafted in
+`docs/decision-card-2026-09-16-tournament-baseline.md`). Andy authorized the dispatch in chat, but
+the card is marked NOT RULED. **Sign it to match what was executed**, or the record shows work that
+outran its authorization — flagged in the pickup block, not silently reconciled.
+
+**RULED — `R-2026-09-16-DEVIN-OA-CHROME-CAPTURE`.** Devin may drive its own Chrome to capture what
+the hedge test needs from OA. **CAPTURE ONLY — not edits**; §5's two-layer regime and §7's lane
+split stand for edits. This is a bounded carve-out recorded deliberately rather than drifted into.
+Three binding conditions, each from a defect already paid for: (a) scope every capture to the host
+under study **at capture time** — the 2026-08-20 recon incident wrote 41 WebSocket frames from an
+unrelated tab into a repo file; (b) **Devin does not have the `oa-driving` skill** — its traps live
+in a Claude skill, not this repo, so any Devin OA prompt must name `docs/oa-ops-runbook.md` and
+`docs/oa-platform-reference.md` §0.3 as the in-repo substitutes; (c) the Exit Options panel is never
+evidence — the Trades list is.
+
+The `zdte.*` RPC path is **DEFERRED, not rejected.** Spec §9.7's probe stays open and stays gated on
+written OA authorization, still outstanding.
+
+**Handoff written** to `docs/state.md` as a `▶ PICKUP` block at the top of the cold-read doc: read
+order, the thread in four sentences, what was signed, what was drafted-not-signed, what is open, and
+what is blocked on Andy rather than on work. Written so the next session starts from files instead of
+re-deriving in chat.
+
+**Lane ruling recorded in the pickup block, not as a new ruling** (it restates `CLAUDE.md` §7 rather
+than amending it): Devin dispatch and foreman duty belong in **Claude Code (terminal)**. Cowork
+cannot commit, cannot push, has no Devin MCP token, and its permission classifier refuses
+agent-spawning scripts by design — so Cowork cannot run that lane regardless of preference. Cowork
+keeps strategy, rulings, specs, docs and OA judgment.
+
+**Nothing built.** Andy: *"don't build anything yet."* This entry and the two documents it names are
+close-out under §9.1, not work product.
+
+**Files:** `docs/RULINGS.md` (one ruling appended) · `docs/state.md` (PICKUP block) · this file.
