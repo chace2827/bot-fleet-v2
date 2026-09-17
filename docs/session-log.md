@@ -11898,3 +11898,28 @@ reach git or the GitHub API); written OA authorization (gates spec §9.7).
 **Files:** `docs/RULINGS.md` (one ruling) · `docs/decision-card-2026-09-16-tournament-baseline.md`
 (header → RULED) · `docs/hedge-design-spec-2026-09-16.md` (§9.3 closed) · `docs/hedge-research.md`
 (§1.3 banner) · `docs/state.md` (PICKUP updated) · this file.
+
+## 2026-09-16 — Devin (Desktop, SWE-2 Max): oa-drive skill written; zdte.* verification lands
+
+- **`.agents/skills/oa-drive/SKILL.md` written** — the in-repo, Devin-discoverable OA access
+  skill (it entered the live skill list on write). Covers: Andy's launch ritual (dedicated
+  CDP profile `$HOME/.chrome-oa-profile`, he logs in), attach+verify (no `/login`, PAPER on
+  `/home` — the `/backtests` shell hides the account bar), `oa_capture.mjs` read path,
+  `oa_driver.mjs` write path (dry-run default, `--allow-write --bot`, ambiguity/occlusion
+  refusals, traces), the passive recorder pattern, the verified `zdte.*` arg shapes, and the
+  stop conditions. Closes the mechanism named in `R-2026-09-16-DEVIN-OA-CHROME-CAPTURE`
+  condition (b). **The state.md HOLD is NOT released** — that is Andy's call; the update note
+  records only that the mechanism exists.
+- **`zdte.*` RPC verification (ran 2026-09-15 under Andy's in-session "continue the job")**:
+  verdict USABLE — `zdte.startTest` executes the exact config sent; API results byte-identical
+  to UI-built twins (BASE replay, PT50 variant); `testDetails.opts` echoes sent config; touch
+  wire format captured (`exits.touch={type:usd,value:0}` = "$0 from ITM or less"); 15/63 trades
+  exited by touch with intraday `closeTime`s. Artifacts + probe log on **PR #79 (OPEN)**,
+  branch `devin/oa-rpc-test-2026-09-15`, `docs/experiments/oa-rpc-test-2026-09-15/`.
+- **Written OA authorization for scripted/AI-driven access remains outstanding** — the ToU
+  exposure is logged in the experiment's risk section; the skill gates all use on it.
+- RPCTEST-BASE ×2, RPCTEST-PT50 ×2, RPCTEST-TOUCH exist in the OA backtest list — Andy may
+  delete them in the UI.
+
+**Files:** `.agents/skills/oa-drive/SKILL.md` (new) · `docs/state.md` (HOLD update note) ·
+this file.
