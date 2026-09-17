@@ -47,7 +47,7 @@ group); risk = the LARGER side; R basis is `ror` = sum(pnl)/max(risk), carried
 [DERIVED, UNCORROBORATED] (ror is not a ledger column). Every aggregate carries its n and
 its unit; an absent number is EMPTY — n=0, never 0.000R.
 """
-import argparse, csv, datetime, hashlib, json, math, os, random, statistics, sys
+import argparse, csv, datetime, hashlib, json, math, os, random, statistics, sys, tempfile
 
 VERSION   = "0.1.0-DRAFT"
 FROZEN_ON = None                          # execution_audit.py pattern; signed, not coded
@@ -154,11 +154,13 @@ def exit_rows_status():
 # ===========================================================================
 # Inputs
 # ===========================================================================
-def load_meta():
-    """I-2 + refusal R-1."""
-    if not os.path.exists(I2_META):
+def load_meta(path=I2_META):
+    """I-2 + refusal R-1. `path` is the fixture seam (P1-4): --validate passes a
+    scratch file so the refusal branches are exercised regardless of the live
+    ledger's state. Every production caller uses the default."""
+    if not os.path.exists(path):
         raise Refuse("R-1: data/ledger_meta.json missing")
-    meta = json.load(open(I2_META))
+    meta = json.load(open(path))
     ls = meta.get("ledger_start")
     if ls is None or ls == "2099-01-01":
         raise Refuse(f"R-1: ledger_start == {ls!r} (pre-Day-0 sentinel) — engine refuses to run")
@@ -918,8 +920,25 @@ def _validate_rulings(check, raises):
                                     "mfe_pct": 0.5, "mae_pct": -0.5, "underlying_open": 100.0, "underlying_close": 100.0}]),
            PositionRefused)
 
-    # --- R-1: today's sentinel meta refuses the run ---
-    raises("R-1 ledger_start sentinel (2099-01-01) refuses the run (exit non-zero)", load_meta, Refuse)
+    # --- R-1: fixture-isolated (P1-4). The old check called load_meta() with no
+    #     argument, so it read the LIVE data/ledger_meta.json and stopped exercising
+    #     the sentinel path the day the ledger went live (baseline recorded it red).
+    #     Every R-1 branch now reads a scratch file — the test exercises the guard,
+    #     not the ledger's current state. ---
+    with tempfile.TemporaryDirectory() as td:
+        mp = os.path.join(td, "ledger_meta.json")
+        def _w(obj):
+            with open(mp, "w") as f: json.dump(obj, f)
+        raises("R-1 missing ledger_meta.json refuses", lambda: load_meta(mp), Refuse)
+        _w({"ledger_start": "2099-01-01", "source_export": "x.csv", "counts": {"export_rows": 1}})
+        raises("R-1 ledger_start sentinel (2099-01-01) refuses", lambda: load_meta(mp), Refuse)
+        _w({"ledger_start": "2026-08-10", "source_export": None, "counts": {"export_rows": 1}})
+        raises("R-1 null source_export refuses", lambda: load_meta(mp), Refuse)
+        _w({"ledger_start": "2026-08-10", "source_export": "x.csv", "counts": {"export_rows": 0}})
+        raises("R-1 export_rows == 0 (empty ledger) refuses", lambda: load_meta(mp), Refuse)
+        _w({"ledger_start": "2026-08-10", "source_export": "x.csv", "counts": {"export_rows": 1}})
+        check("R-1 a post-sentinel meta LOADS (the live state today)",
+              load_meta(mp)["ledger_start"], "2026-08-10")
 
     # --- G-2 / G-16 / matched-days: exactly-one, all-expired excluded, M6 vs M7 ---
     pos = [
