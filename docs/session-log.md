@@ -12021,3 +12021,38 @@ several.
 
 **Files:** `docs/dispatch-oa-capture-2026-09-16.md` (new) · `docs/state.md` (HOLD → RELEASED, gates
 recorded) · this file.
+
+## 2026-09-16 (close 5) — SWE-2 MAX / devin_free.sh pin question settled from local evidence (Devin, mounted tree)
+
+Andy asked which Devin session had worked the SWE-2 MAX problem and what to tell Cowork. The
+Devin MCP is unauthenticated on the Cowork side and `~/.local/share/devin/` is outside Cowork's
+folders, so the answer was pulled first-hand from `cli/sessions.db` + `cli/logs/` on this side.
+
+**The "lost" session was never titled for the pin.** The SWE-2 MAX findings live in
+`closed-poppyseed` ("Difference Between Two Models" — ran ON swe-2-max) and `achieved-plane`
+("Free Models: Usage, Limits, and Comparison to Claude"). This session (`occipital-provelone`)
+auto-took the pin-conflict title from Andy's paste, which is why it masquerades as the original
+in the session list.
+
+**Three facts handed to Cowork, each with its proof:**
+1. Resolved identifier is `swe-2-max`: `sessions.model` verbatim, 10 sessions, persisted via ACP
+   `session/set_config_option{config_id=model}` (devin_20260915-170017_33591.log). The requested
+   artifact `resolved_model_uid=swe-2-max` exists nowhere — that field is emitted only on the
+   `-p` dispatch path and has only ever been `swe-1-7` (362x) / `swe-1-7-medium` (58x).
+2. The CLI accepts the string — the same binary ran all 10 swe-2-max sessions via ACP — but
+   `devin models list` cannot enumerate the catalog: `devin auth status` → **Not logged in**
+   (the expired key; Andy's restart-app queue item covers it). End-to-end `-p --model swe-2-max`
+   is NOT DETERMINABLE without a live dispatch.
+3. **SWE-2 Max is paid** (picker-sourced: "Max = highest reasoning effort — burns the most
+   credits per request"); the Free-marked SWE-1.x entry is SWE-1.7 Medium, and swe-1-7 carries
+   362 confirmed-free dispatch receipts. So `MODEL="swe-1-7"` in `scripts/devin_free.sh` is
+   correct as pinned; swe-2-max belongs on the wrapper's known-paid list, not in MODEL.
+
+**New finding worth its own line:** the free lane is **dead on auth, not merely dormant** —
+`devin -p` cannot dispatch at all until the Devin-app restart renews `credentials.toml`. The
+model question is moot until that lands. Remaining unverifiable-by-agent: the Desktop picker's
+`Promo · Free` badges — Andy eyeballs which entries still carry Free (if swe-1-7's promo ended,
+that — not SWE-2 MAX — is the trigger to revisit the wrapper).
+
+**Files:** this file only. No repo code touched; no decision changed — the wrapper is unchanged
+and the recommendation is "keep the pin."
