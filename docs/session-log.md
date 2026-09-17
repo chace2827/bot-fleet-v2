@@ -11769,3 +11769,53 @@ whole question; one backtest settles it**); new ruling slot §9.7 making that pr
 gated on written OA authorization and on PR #79 landing.
 
 **Files:** `docs/hedge-design-spec-2026-09-16.md` (amended) · this file.
+
+*Addendum ~00:15 UTC:* Andy said go; T-10/P1-3 dispatched as cloud session
+`ac1033c682c54d9db23d843c640e62b1` (tags T-10/G-4, repo chace2827/bot-fleet-v2, branch→PR, no merge).
+Pre-check found the portfolio "in flight" marker stale — zero live sessions existed. Dispatched via
+v3 API with the fresh service-user key after `devin auth logout` + `auth login
+--force-manual-token-flow`; the in-session MCP layer still holds the old credential until the app
+restarts, so session management ran through `api.devin.ai` directly.
+
+---
+
+## 2026-09-16 (addendum 2) — §9.3 drafted; the reconciliation it guarded is a no-op
+
+**⛔ Finding, dated first-hand device read 2026-09-16.** `hedge_tournament.py`'s ride-arm
+reconciliation (`:343-348`) **checks nothing.** `arm_ride` (`:200`) returns `fl(leg["pnl"])`
+verbatim with no reference to `status`; `:306` `ride_check[day] += pnl` and `:307`
+`ledger_check[day] += fl(t["pnl"])` increment **in the same loop iteration from the same leg**; the
+`risk <= 0` guard at `:292` `continue`s before both, so they cannot diverge even on skipped legs.
+`ride_check == ledger_check` is tautologically true. It is a check that addition works.
+
+This **falsifies the premise of spec §9.3**, which was written on the assumption that widening the
+replay past `status=expired` would break the invariant. There is no invariant to break. The slot is
+therefore not "how do we preserve it" but "what should it have been, and what baseline is each rule
+scored against."
+
+**Written:** `docs/decision-card-2026-09-16-tournament-baseline.md` (120 lines, sha256
+`8d898d0d12f0e1e2856992d64f432f6058e4c6c6d776ce4394b29e521d2fe422`) — **ONE SLOT, NOT RULED.**
+Proposes `R-2026-09-16-TOURNAMENT-BASELINE`: widen the universe to all positive-risk legs (admits
+the 43 losing legs the engine has never seen); baseline becomes per-population — settlement for
+`expired`, **what actually happened** for `closed`; `ride` renamed `actual` and every rule's
+`else ride` becomes `else actual`. Backward compatible **and testable** — `arm_ride` already
+returns `pnl` verbatim, so an expired-only re-run must reproduce every existing value unchanged,
+and a single altered number means the change overreached. The hold-longer counterfactual is marked
+**NOT EVALUABLE**, never modeled — it is answerable only in OA's `zdte.*` backtester, gated on
+written OA authorization. The dead recon is replaced by three checks that can actually fail
+(population count, ordering law, bounds).
+
+Rationale recorded in the card: the engine has been scoring every rule against a settlement the
+losing positions never reached. Andy's own question — *"which hedges would have turned a losing
+position to less neutral or positive"* — names **what happened** as the comparison target, not
+settlement. Same defect as §3.1 in different clothes.
+
+Card carries a drafted Devin queue item (**H-1**), deliberately **not** added to
+`docs/devin-queue.md` — it is contingent on the signature. H-1 has **no OA dependency** and runs
+entirely against `trades.csv`, so it is workable while OA authorization is outstanding.
+
+**Status of the other threads:** PR #79 merge — Andy's, outstanding. Written OA authorization —
+requested by Andy, awaiting answer; blocks §9.7. Terminology sweep, `hedge-research.md` §1.3
+banner, §9.6 defang stub — all still unruled.
+
+**Files:** `docs/decision-card-2026-09-16-tournament-baseline.md` (new) · this file.
