@@ -382,6 +382,70 @@ more suspicious than one with several.
 **Do not start Phase 1 in the same session as Phase 0.** Phase 0's answer decides which Phase 1
 exists. Report Phase 0, stop, wait for Andy.
 
+### ✅ THE ARM TABLE — RULED 2026-09-17, `R-2026-09-17-PHASE1-ARM-TABLE`
+
+**This replaces the YES/NO branching below.** That branching was written before Phase 0b and 0c and
+is superseded: Phase 0 answered NO *for one backtest*, but `Combo Rules` makes the question a
+two-backtest one, and 0c settled its semantics. The original text is preserved beneath, struck.
+
+**Arm count is the budget** — the UI path has no sweep. Stage 1 spends five arms to reach the
+decision. Stage 2 runs **only** if Stage 1's combine clears the `R-2026-09-17-PAPER-ARM-PREAUTH`
+bar.
+
+#### Stage 1 — 4 backtests + 1 combine. Fits one 7-way Compare.
+
+| # | Arm | Build | What it answers |
+|---|---|---|---|
+| **S1-0** | **H-0 control** — primary condor, ride to settlement. No PT, no SL, expiration only. | 1 backtest | The baseline. **Run FIRST**; nothing else means anything without it. |
+| **S1-a** | **SL100** — primary + stop | 1 backtest | incumbent exit to beat |
+| **S1-b** | **SL200** — primary + stop | 1 backtest | incumbent exit to beat |
+| **S1-c** | **Overlay** — long put debit spread, **14:00 ET**, 1 contract | 1 backtest | the hedge leg's standalone cost |
+| **S1-H** | **H-B** = S1-0 ⊕ S1-c, **presence-gated**, caps pinned in `crules` | 1 combine | ⭐ **the question: does hold-plus-hedge beat stop?** |
+
+**The comparison that decides Phase 1: S1-H against S1-a and S1-b, in R, against S1-0.**
+
+#### The Stage-1 primary — from `greenfield-family-spec.md` §3, NOT invented
+
+`QQQ` · expiration **exactly 0 days** · short strikes **0.75% OTM** both sides · width **$2.00** ·
+**1 contract** · entry **after 13:30 ET** · **Range075** gate (symbol change % between −0.75 and
++0.75 since previous close, via the backtester's `Change %` entry filter) · minimum credit mid
+**≥ $0.08**.
+
+⚠️ **Divergence to record in the bundle, not smooth over:** the fleet builds this as **two paired
+spreads** (ScannerA put / ScannerB call); the backtester offers **Iron Condor as one structure**.
+Stage 1 uses the single structure, which collapses the fleet's per-side exit independence.
+
+#### Three constraints that bind every arm
+
+1. **No arm is tested-side-reactive, and none may be described as such.** Nothing in the predicate
+   surface reads a sibling position's state — `Combo Rules` is `open`|`not open`, entry filters are
+   underlying/market state, the 8-structure picker is set at config time. Every hedge arm is a
+   **fixed-side unconditional overlay with a presence gate**. `hedge-north-star.md` §4's
+   "tested-side" V1 is not buildable here.
+2. **Put side only**, and every Stage-1 write-up says so. Side selection is not expressible, so
+   choosing one is a **choice, not a finding**.
+3. **The presence gate is kept ON and is not a separate arm.** It removes precisely the
+   Range075-rejected days — the large-move days on which the condor never enters and an ungated
+   overlay would fire with nothing to protect, booking pure cost.
+
+#### Stage 2 — gated on S1-H clearing the bar. Nothing here runs otherwise.
+
+| sweep | arms | note |
+|---|--:|---|
+| Entry time — 13:30 / 14:00 / 14:30 / 15:00 | 4 | §2.3 puts 89% of loss in 14:00–15:30 |
+| **Size ratio** — overlay at 2ct, 3ct | 2 | **not optional, only deferrable**: no relative-sizing control exists (0b Q4) and `hedge-north-star.md` §6 makes ratio a required Monitor field |
+| Call side | 1–2 | a strangle overlay is S1-0 ⊕ put ⊕ call = 3 tests, inside the 7-cap |
+| No-hedge-after cutoff | 1–2 | cheapest inferred from the time sweep first |
+
+#### Measurement
+
+Compare by **R**, never raw $ (`CLAUDE.md` §4), and label the unit every time. For a combined arm
+the denominator is stated explicitly — **primary risk + overlay debit, per condor, ex-artifact**.
+**A combined Exp(R) whose denominator is not written down is not a result.**
+
+<details>
+<summary>⊗ SUPERSEDED — the original YES/NO branching, preserved verbatim (2026-09-16)</summary>
+
 ### If Phase 0 = YES (the backtester can express a second, separate position)
 
 Then a hedge in the project's sense is testable, and these are the hypotheses — **in this order**,
@@ -426,10 +490,33 @@ hedge** — `R-2026-09-16-HEDGE-DEFINITION` makes that a category error, not a n
 **H-0 and H-C only**, report them as an *exit* comparison, and say plainly in the README that the
 hedge question is unanswered and why.
 
+</details>
+
 ### Rules that bind both phases
 
 - **Backtests only. No live bot is created, cloned, enabled, or edited.** Saving and duplicating
   backtests is **authorized** (`-A2`); every one carries the `ZZ-AGENT-<date>-<arm>` prefix.
+> ### ⛔ SUPERSEDED 2026-09-17 — `R-2026-09-17-PHASE1-EVIDENCE-PROCEDURE`. Bullet below stands, struck.
+> **Export EXISTS at position level.** Every positions drawer renders `Copy CSV` / `Download CSV`;
+> proven 2026-09-16 with a 126-row, 24-column CSV carrying minute-level `Opened`/`Closed` and a
+> per-test `Test` column. The regime is **narrowed, not struck**:
+> - **Position data** comes from the CSV export.
+> - **Summary statistics** (Stats table, equity chart, Combined Monthly P/L) have **no export
+>   control** and remain screenshot-and-transcribe.
+> - ⛔ **A combined export is a RESULT, not a CENSUS.** Standalone 249 + 249 = 498 against an
+>   unruled control of **497** — the `2025-11-03` overlay row is absent from *every* combined run
+>   including the rules-free one, with caps permitting it and **no error rendered**. **Reconcile
+>   every combine row-for-row against standalone exports of its constituent tests BEFORE ranking.
+>   Report an unexplained delta; never absorb it.**
+> - ⛔ **Pin `posLimit` and `posLimitDay` explicitly in `crules` on every combine** and record them
+>   with the run. Defaults scale exactly N (2 tests → 2/2, 4 → 4/4, 7 → 7/7) and demonstrably change
+>   results, so combined results are not comparable across pass sizes under defaults.
+> - ⛔ **A malformed rule or invalid JSON does NOT error** — the page silently falls back to the
+>   unruled control and renders a complete-looking result, while the SPA-sticky drawer can display a
+>   rule the URL does not carry. **Verify what ran from the URL and the row count, never the
+>   drawer.** Any combined run whose row count equals the unruled control's is **presumed UNRULED**
+>   until its URL is re-read.
+
 - ⚠️ **ASSUME THERE IS NO EXPORT.** `docs/AI Agent Stack.md`:256 records that OA **backtest data is
   not exportable** — *"licensing agreements prevent OA from providing download capabilities of
   backtest data."* **Confirm this first-hand against the results screen and report what you find**;
@@ -454,3 +541,160 @@ It is the blocking question for the hedge program (`hedge-design-spec-2026-09-16
 it is pure read, it has a verifiable answer, and it exercises the whole lane — skills, boundary,
 bundle discipline — on a task where a wrong answer is cheap and visible. `CLAUDE.md` §5: pilot on a
 dead bot; the champion goes last.
+
+---
+
+## PHASE 1 — Stage 1. The hedge grid. (RULED 2026-09-17, `R-2026-09-17-PHASE1-ARM-TABLE`)
+
+Every gate is discharged. Stage 1 is **4 backtests + 1 combine**, and Stage 2 does not exist until
+Andy rules on Stage 1's result.
+
+### The Phase 1 Stage-1 prompt (paste below the line)
+
+---
+
+You are working in the `bot-fleet-v2` repo, connected as a local folder.
+
+**Read these, in this order, before doing anything:**
+1. `CLAUDE.md` — the project contract. §4 (evidence law, compare by R) and §9.1a are load-bearing.
+2. `.agents/skills/option-alpha/SKILL.md` — **the law.** When it and any other file disagree, it wins.
+3. `.agents/skills/oa-drive/SKILL.md` — the plumbing and the authorization boundary.
+4. `docs/decision-card-2026-09-17-phase1-arm-respec.md` — **the table you are building**, and why
+   each arm exists.
+5. `docs/phase0c-verification-2026-09-17.md` — §1, §3 and §5 are the traps that will bite this run.
+
+Then read these four rulings in `docs/RULINGS.md`. They govern how you build, verify and phrase
+everything: `R-2026-09-17-PHASE1-ARM-TABLE` · `R-2026-09-17-PHASE1-EVIDENCE-PROCEDURE` ·
+`R-2026-09-17-COMBO-RULES-PRESENCE-ONLY` · `R-2026-09-17-PAPER-ARM-PREAUTH`.
+
+### ⛔ THE BOUNDARY
+
+0. **YOU DO NOT LOG IN.** Andy authenticates Chrome by hand before you start. Attach to an
+   already-authenticated browser. If a URL contains `/login` or a sign-in form appears, **STOP and
+   report.** Never request, enter, store or read credentials.
+1. **NO LIVE-FLEET EDITS — EVER.** Bot, automation, scanner, position and account-settings surfaces
+   are read-only. ⛔ **NO `Create Bot`** — not on a single backtest, not on a combined one, not on
+   any surface, whatever the ruling says about paper arms. A paper arm is a separate, pre-registered
+   act that is not yours.
+   ✅ **RUNS ARE AUTHORIZED FOR THIS TASK** (`-A2`, `R-2026-09-17-PHASE1-ARM-TABLE`): create, save,
+   duplicate, rename, delete and run **backtest configurations and combines**.
+   ⛔ **Everything you save is named `ZZ-AGENT-<YYYY-MM-DD>-P1-<arm>`** — e.g.
+   `ZZ-AGENT-2026-09-17-P1-S1-0`. No exceptions. Note the 0c fixtures
+   (`ZZ-AGENT-2026-09-17-primary` / `-overlay`) already exist and are **NOT** Phase 1 arms — do not
+   reuse, rename or delete them.
+2. **NO WIRE PROTOCOL.** No fetch/XHR wrapping, no `POST /api/request` of your own, no `zdte.*`
+   replay, no traffic recorder, no network panel. DOM/JS reads of page state remain in scope
+   (`R-2026-09-16-BACKTEST-COMBINE-S4`).
+3. **Scope every capture to `app.optionalpha.com` at capture time**, never afterwards in analysis.
+
+### ⛔ THE THREE TRAPS THAT WILL BITE THIS RUN — read before building
+
+1. **A malformed `crules` rule or invalid JSON does NOT error.** The page silently falls back to the
+   **unruled control** and renders a complete-looking result. The drawer's form state is
+   **SPA-sticky** and can display a rule the URL does not carry. **Verify what ran from the URL and
+   the row count, never the drawer.** ⛔ **Any combined run whose row count equals the unruled
+   control's is PRESUMED UNRULED until its URL is re-read.**
+2. **A combined export is a RESULT, not a CENSUS.** Proven: standalone 249 + 249 = 498 against an
+   unruled control of **497**, one row absent from every combined run with caps permitting it and no
+   error shown. ⛔ **Reconcile every combine row-for-row against standalone exports of its
+   constituent tests BEFORE computing any ranking. Report an unexplained delta; never absorb it.**
+3. **Caps change results and default to exactly N.** ⛔ **Pin `posLimit` and `posLimitDay`
+   explicitly in `crules` on the combine, and record the pinned values with the run.** Do not accept
+   the defaults silently.
+
+### THE PRIMARY — build it exactly; do not improvise
+
+From `greenfield-family-spec.md` §3. This mirrors the live fleet and is not negotiable:
+
+| Field | Value |
+|---|---|
+| Symbol | `QQQ` |
+| Expiration | `exactly 0 days` |
+| Strategy | **Iron Condor** (single structure) |
+| Short strikes | **0.75% OTM** both sides |
+| Width | **$2.00** each side |
+| Position Size | **1 contract** |
+| Entry time | **13:30 ET** |
+| Entry filter | **`Change %` between −0.75 and +0.75** (the Range075 gate) |
+| Position Criteria | mid price **≥ $0.08** |
+| Test Period | the longest the UI offers; **quote it verbatim in the README** |
+
+⚠️ Record in your README: the fleet builds this as **two paired spreads** (ScannerA put /
+ScannerB call); you are using the backtester's **single Iron Condor**, which collapses per-side exit
+independence. State the divergence; do not smooth it over.
+
+### THE FIVE ARMS — build and run in this order
+
+| # | Name | Config |
+|---|---|---|
+| **S1-0** | `…-P1-S1-0` | The primary above. **No Exit Options at all** — no PT, no SL, no trail, no touch. Expiration only. **RUN THIS FIRST.** |
+| **S1-a** | `…-P1-S1-a` | Primary + **Stop Loss % = 100**. Nothing else changed. |
+| **S1-b** | `…-P1-S1-b` | Primary + **Stop Loss % = 200**. Nothing else changed. |
+| **S1-c** | `…-P1-S1-c` | **Overlay**, standalone: **Long Put Spread** (debit), QQQ, `exactly 0 days`, entry **14:00 ET**, **1 contract**, same test period. Strike selection: mirror the primary's method (0.75% OTM short leg reference, $2.00 wide) so the two are comparable. No entry filter. |
+| **S1-H** | comparison, not a new backtest | **Combine S1-0 ⊕ S1-c** with the rule `Only open [S1-c] if [S1-0] is [open]`, caps **pinned**. |
+
+**Export the standalone positions CSV for every one of S1-0, S1-a, S1-b, S1-c** before building the
+combine — you need S1-0's and S1-c's for trap 2's reconciliation, and all four for the ranking.
+
+### THE COMBINE — S1-H
+
+- Open `/backtests/compare/<S1-0>,<S1-c>`, enable `Combine Results`.
+- Add the rule: `Only open [S1-c] if [S1-0] is [open]`. **`open`, not `not open`.**
+- **Pin the caps explicitly** rather than accepting defaults. Record the values.
+- **Re-read the URL** and paste the full `crules` payload verbatim into your raw capture.
+- Export the combined positions CSV.
+- **Reconcile**: combined A-rows against S1-0 standalone, combined B-rows against S1-c standalone.
+  Report every discrepancy with its date and both rows.
+
+### MEASUREMENT — the denominator is part of the number
+
+Compare by **R (P/L ÷ risk)**, never raw $ (`CLAUDE.md` §4). Report per arm: **N, Exp(R), win rate,
+max drawdown in R, worst single R**.
+
+⛔ **For S1-H the denominator is stated explicitly: primary risk + overlay debit, per condor,
+ex-artifact.** A combined Exp(R) whose denominator is not written down **is not a result.** Label
+the unit on every figure, every time.
+
+**The comparison that decides Phase 1: S1-H against S1-a and S1-b, in R, against S1-0.**
+
+### PHRASING — three things you may not write
+
+1. **No arm is "tested-side-reactive"** and none may be described that way. Nothing in the predicate
+   surface reads a sibling position's state. Every hedge arm here is a **fixed-side unconditional
+   overlay with a presence gate**.
+2. **This is put-side only.** Say so in every write-up. Side selection is not expressible, so
+   choosing one is a **choice, not a finding**.
+3. **Do not write a recommendation.** These are **T4** figures (`CLAUDE.md` §4 requires T2 with
+   n≥100 / 6 months / a regime change for live capital). Report the numbers and stop. Whether the
+   `PAPER-ARM-PREAUTH` bar is cleared is **Andy's call on your numbers**, not your verdict.
+
+### DELIVERABLE
+
+`data/captures/<YYYY-MM-DD>-p1-stage1/` — same bundle shape as the 0c bundle: raw capture(s)
+unmodified (`01-…`), derived file(s) naming their raw source **and its sha256**, `screenshots/` per
+arm and per results screen, **every exported CSV as a raw file**, `README.md` (purpose · timestamp
+with TZ offset · file/sha256/what table · the per-arm table with units labelled · the reconciliation
+result · the verbatim `crules` payload · the Iron-Condor-vs-paired-spreads divergence note ·
+`## Docs-vs-render deltas`), and `SHA256SUMS.txt` over everything.
+
+### PROHIBITIONS
+
+- No git: no `add`, `commit`, `push`, no branches. **Andy runs every commit.**
+- Touch nothing outside the new bundle directory.
+- Do not edit `CLAUDE.md`, `docs/build-plan.md`, any spec, or any ruling.
+- **No `Create Bot`. No Stage 2** — no time sweep, no size-ratio sweep, no call side, no cutoff.
+- **Never run a script that re-executes a prior capture sequence.** On 2026-09-17 `/tmp/oa_shots.mjs`
+  re-ran its built-in sequence and overwrote 8 PNGs inside an already-verified bundle. Scope every
+  screenshot script to this run's directory before you invoke it.
+- **Stop conditions — no retries past these:** 401/403/429 · an unrecognized response shape · UI
+  numbers disagreeing with each other · a URL containing `/login` · any terms or payment prompt ·
+  **anything indicating a live (non-PAPER) account.**
+
+### REPORT
+
+The five arms with N / Exp(R) / win rate / max DD in R / worst R, **units labelled**; the S1-H
+denominator written out; the reconciliation result for the combine; the verbatim `crules` payload;
+the bundle path; and **the refusals.** A run with no refusals in a boundary this tight is more
+suspicious than one with several.
+
+**Stop after Stage 1. Do not start Stage 2 in this session.**

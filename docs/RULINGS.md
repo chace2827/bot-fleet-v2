@@ -5805,3 +5805,91 @@ source: >-
   grid.
 unclear: false
 ```
+
+```yaml
+ruling_id: R-2026-09-17-PHASE1-EVIDENCE-PROCEDURE
+date: 2026-09-17
+scope: >-
+  Slot 4, both halves, settled against Phase 0c evidence rather than expectation.
+  (a) The "assume no export, transcribe every result by hand" regime is NARROWED,
+  not struck. Position-level data comes from the Copy CSV export. Summary
+  statistics (Stats table, equity chart, Combined Monthly P/L) have NO export
+  control and remain screenshot-and-transcribe. A combined export is a RESULT,
+  NOT A CENSUS — proven: standalone 249 + 249 = 498 against an unruled control of
+  497, the 2025-11-03 overlay row absent from every combined run including the
+  rules-free one, with caps permitting it and no error rendered. Therefore every
+  Phase-1 combine is reconciled row-for-row against standalone exports of its
+  constituent tests BEFORE any ranking is computed, and an unexplained delta is
+  reported, never absorbed.
+  (b) COMPARE is unaffected by caps and may run to the 7-test ceiling in one pass;
+  columns render standalone Counts under every crules variant. COMBINE is NOT
+  comparable across pass sizes under default caps, which scale exactly N (2 tests
+  -> 2/day + 2 concurrent; 4 -> 4/4; 7 -> 7/7) and demonstrably change results
+  (posLimitDay=1 -> 249 rows, A-only; posLimit=1 -> 489, B-set identical to the
+  "is not open" rule run). Since caps are URL-addressable in crules, the rule is
+  to PIN posLimit and posLimitDay EXPLICITLY on every combine rather than merely
+  holding test count fixed; the pinned values are recorded with the run.
+  (c) Added from the same evidence, and binding: a malformed crules rule or
+  invalid JSON does NOT error — the page silently falls back to the unruled
+  control and renders a complete-looking result, while the drawer's SPA-sticky
+  form state can display a rule the URL does not carry. Verification of what
+  actually ran comes from the URL and the row count, NEVER the drawer. Any
+  combined run whose row count equals the unruled control's is presumed UNRULED
+  until its URL is re-read.
+verbatim: help me do slot 4 and arm respec
+verbatim_of: andy
+owner: Andy (in-chat, Cowork session, 2026-09-17)
+status: Active
+applies_to: >-
+  docs/dispatch-oa-capture-2026-09-16.md Phase 1 "Rules that bind both phases"
+  (the assume-no-export bullet is superseded); the Phase 1 arm table; every future
+  combine run; .agents/skills/oa-drive/SKILL.md and the oa-driving skill (the
+  silent-fallback trap is OWED into both).
+superseded_by: none
+source: >-
+  docs/phase0c-verification-2026-09-17.md sections 1, 3, 5, computed independently
+  from data/captures/2026-09-17-oa-combo-semantics/ (17/17 SHA256SUMS verified);
+  Devin's Phase 0c report, Tasks 2-4.
+unclear: false
+```
+
+```yaml
+ruling_id: R-2026-09-17-PHASE1-ARM-TABLE
+date: 2026-09-17
+scope: >-
+  Part B of the arm respec, all four slots, ruled together. (1) STAGED STRUCTURE
+  ACCEPTED. Stage 1 is four backtests plus one combine and fits a single 7-way
+  Compare: S1-0 H-0 control (primary condor, ride to settlement, no PT, no SL,
+  expiration only) - S1-a SL100 - S1-b SL200 - S1-c put-side long put debit
+  spread overlay, 1 contract, 14:00 entry - S1-H the combine S1-0 (+) S1-c,
+  presence-gated, caps pinned in crules. Stage 2 (entry-time sweep, size-ratio
+  sweep, call side, no-hedge-after cutoff) runs ONLY if S1-H clears the
+  R-2026-09-17-PAPER-ARM-PREAUTH bar. Five arms to the decision instead of eleven.
+  (2) PUT SIDE FIRST, and every Stage-1 write-up is labelled "put-side only" -
+  side selection is not expressible on this platform, so choosing one is a choice,
+  not a finding. (3) STAGE-1 OVERLAY CLOCK = 14:00 ET, the start of the window
+  carrying 89% of loss per hedge-design-spec 2.3; the clock is swept in Stage 2,
+  never tuned inside Stage 1. (4) PRIMARY CONFIG IS TAKEN FROM
+  greenfield-family-spec.md, NOT invented: QQQ, expiration exactly 0 days, short
+  strikes 0.75% OTM, $2.00 wide, 1 contract, entry after 13:30 ET, Range075 gate
+  (symbol change % between -0.75 and +0.75 since previous close) expressed via the
+  backtester's Change % entry filter, minimum credit mid >= $0.08. Built as the
+  backtester's single Iron Condor structure rather than the fleet's two paired
+  spreads; that divergence is recorded in the bundle, not smoothed over.
+verbatim: go with your reccos
+verbatim_of: andy
+owner: Andy (in-chat, Cowork session, 2026-09-17)
+status: Active
+applies_to: >-
+  docs/decision-card-2026-09-17-phase1-arm-respec.md Part B (slots 1-4);
+  docs/dispatch-oa-capture-2026-09-16.md Phase 1 arm table (now rewritten);
+  the Phase 1 dispatch, not yet written.
+superseded_by: none
+source: >-
+  docs/decision-card-2026-09-17-phase1-arm-respec.md. Primary config read
+  first-hand from docs/greenfield-family-spec.md 3 "Open Short Put Spread" table
+  and the Loop QQQ automation listing (after 1:30pm + two symbol-change-%
+  decisions). Predicate-surface finding (no sibling-position state anywhere) from
+  data/captures/2026-09-16-oa-backtester/ and /2026-09-16-oa-compare/.
+unclear: false
+```

@@ -12646,3 +12646,215 @@ lane stalls every date moves with it.
 this file.
 📝 Owed: a `docs/hedge-program-thesis.md` line in `CLAUDE.md` §6's file map — NOT applied, CLAUDE.md
 is the project contract and was not touched without Andy's word.
+
+> ### ✅ COMMITTED — closes 14, 16, 17, 18, 19 all landed in `bc8d726` (master, 2026-09-17)
+> Andy ran it and confirmed: **32 files changed, 1737 insertions(+), 1 deletion(-)**. The live 0c
+> bundle stayed correctly untracked (`?? data/captures/2026-09-17-oa-combo-semantics/`), and
+> `data/captures/2026-09-16-oa-backtester/` did not stage — it was already committed in an earlier
+> pass. Contents: the 0b compare bundle + `data/lessons.csv`; the four 2026-09-17 rulings;
+> `oa-reconciliation-report.md` §7 (D-01…D-04); the §8 pair correction; the export correction in
+> `AI Agent Stack.md`; the Phase-1 banner on the dispatch; and the two new docs
+> (`decision-card-2026-09-17-phase1-preconditions.md`, `hedge-program-thesis.md`).
+>
+> **Still uncommitted and deliberately so:** the in-flight 0c bundle, and the 2026-09-16 daily-loop
+> outputs (`data/trades.csv`, `data/brief/*`, `data/close/*`, `data/portfolio.csv` and siblings) —
+> a separate commit, state unknown from this lane.
+
+## Session 2026-09-17 — Phase 0c: combo-rule `open` semantics (CLOSED)
+- Built + ran `ZZ-AGENT-2026-09-17-primary` (ZT41789618576434486115) and `-overlay` (ZT41789619101486375116): identical QQQ 0DTE short put spreads, 1ct, PT 2.5%, 1y period (Sep'25→Sep'26 rendered), entries 09:35 vs 15:00. 249 positions each.
+- **Task 1 — `open` is CONCURRENT, not day-level.** Three combines: control=497 rows; `is open`=257 (A249+B8); `is not open`=489 (A249+B240). On all 240 days the primary closed before 15:00, the open-rule run admits ZERO overlay rows; runs are disjoint and union=control exactly. Presence is evaluated at the gated test's entry moment.
+- **Task 2 — populated `crules` round-trips via URL.** `rules:[{type:"state",test1,test2,state:"open",text}]` re-renders in the drawer from a hand-built URL; combined view honors it. Two rules accepted in array order (rule0/rule1). Malformed rules/invalid JSON silently ignored → unruled fallback (497), no error. Caveat: drawer form state is SPA-sticky, can disagree with URL; combine toggle also sticky. URL is the record.
+- **Task 3 — combined positions export is a RESULT, not a census.** Control=497 vs 498 standalone rows: overlay's Nov 3, 2025 row dropped by combine caps despite posLimitDay=2/posLimit=2 headroom. Rules filter further. Diff combined exports against standalones before assuming coverage.
+- Bundle: `data/captures/2026-09-17-oa-combo-semantics/` — raw 01, derived 02 (names source sha), 5 CSVs, 7 screenshots, README, SHA256SUMS (15 files, all verified).
+- Incidents: `/tmp/oa_shots.mjs` invoked as generic shot tool overwrote 8 verified PNGs in `2026-09-16-oa-backtester/screenshots/` — restored via `git restore`, re-verified 13/13 OK; lesson logged in `data/lessons.csv`. Also: Escape closes the whole OA drawer discarding unsaved forms (lesson logged).
+- Refusals: Create Bot (all surfaces), Save comparison, Download CSV (Copy CSV used), Rerun/Delete/Replace/EditDescription, wire protocol. Stop conditions never triggered.
+- **Task 4 (addendum) — combine caps.** Defaults = exactly N: 2 tests→`2 per day`/`2 positions`, 4→`4/4`, 7→`7/7`. Editable 1–10 both pickers. Caps change the result: `posLimitDay=1`→249 rows (overlay fully gated, all A); `posLimit=1`→489 rows dropping exactly the 9 open-at-15:00 days — B-day set IDENTICAL to the `is not open` run (cap evaluates concurrent presence too, corroborates Answer 1). **Combined results not comparable across pass sizes under default caps** — pin crules caps or hold test count fixed. Compare A..G imposes no shared caps. 2 more CSVs added to bundle; 17 files all verified.
+- Phase 1 NOT started. Awaiting Andy.
+
+## 2026-09-17 (close 20) — Phase 0c verified independently; one silent row-drop found (Cowork, mounted tree)
+
+Devin reported Task 4 and the 0c bundle. Verified per §9.1a before accepting: **17/17 SHA256SUMS
+pass** by direct `device_bash` read, and every figure recomputed from the CSVs rather than the
+report. Written up as `docs/phase0c-verification-2026-09-17.md` (`cad8aa73d13a1de5…`, 99 lines).
+**The bundle is NOT modified** — Devin's attestation stands as delivered; the verification is a
+separate document that cites it.
+
+⛔ **FINDING — the combined export is not a census.** True counts are `DictReader` counts; the CSVs
+carry no trailing newline so `wc -l` undercounts every file by one (the "249/497" filenames are
+line counts). Standalone primary **249** + standalone overlay **249** = 498, but the **unconstrained
+control returns 497** — A 249 / B **248**. The missing row is **`2025-11-03`** and it is absent from
+**every** combined run including the rules-free control. Not a cap effect (two positions, default cap
+`2 per day`/`2 positions`) and not a rule effect (`"rules":[]`). No error, no visible Filtered-Trades
+entry. ⚠️ The dropped row is an **overlay winner (+5) on a day the primary lost (−48) and was still
+open at 15:00** — exactly a hedge-fire day. **n=1; explicitly NOT reported as systematic bias**, but
+the mechanism is unknown and the one instance lands on the worst possible day type. Procedural
+consequence adopted in the doc: every Phase-1 combine is reconciled row-for-row against standalone
+exports before any ranking.
+
+✅ **Answer 1 (CONCURRENT) stands, denominator corrected.** Primary closed <15:00 on 240 of 249 days,
+≥15:00 on **9**. Under `is open` the overlay traded **8** days, all 8 late-close, **zero false
+positives** — `open` is concurrent presence at the gated test's entry moment. But it is **8 of 9**,
+not 8 of 8; the ninth is the dropped 11-03 row. `is open` 8 + `is not open` 240 = 248 vs 249 overlay
+days — the mirror is exact only once the drop is accounted for.
+
+✅ **Answer 4 confirmed independently.** `posLimitDay=1` → 249, A-only. `posLimit=1` → 489 with a
+B-day set **identical** to the `is not open` run — a concurrent-position cap and the `not open`
+predicate read live presence the same way. Defaults scale exactly N; both pickers editable 1…10.
+Cross-pass comparability concern **confirmed** — caps must be pinned in `crules` or test count held
+fixed.
+
+⭐ **Read before the arm respec.** The primary closed early on 96% of days **by construction** (the
+test spec called for a tight PT to manufacture early closes). That is a property of the test, not the
+fleet. The real primary is a 0DTE condor carried into 14:00–15:30 and is open at hedge time
+essentially always — so a presence gate on the real structure filters **only days the primary never
+entered**. **H-B-with-gate ≈ H-B-without-gate for the actual fleet**, unlikely to be worth two arms.
+This does not weaken `R-2026-09-17-COMBO-RULES-PRESENCE-ONLY`; it right-sizes the gate and may save
+an arm where arm count is the budget.
+
+**Files:** `docs/phase0c-verification-2026-09-17.md` (new) · this file.
+Owed: reply to Devin (row-drop reconciliation + one diagnostic run); arm-table respec still gated on
+Slot 4; §9.2 slot-closed banner; CLAUDE.md §6 file-map lines; tracker artifact update.
+
+> ### ⛔ CORRECTION to close 20, same session — Devin's full 0c report arrived after that entry was written
+> Close 20 framed the `2025-11-03` row-drop as a reconciliation gap in Devin's write-up. **That is
+> wrong and is withdrawn.** His full report identifies the drop explicitly, names it as absent from
+> all three runs, and answers Task 3 as *"combined positions export is a RESULT, not a census —
+> CONFIRMED."* **He found it; the verification pass confirmed it independently.** Close 20 also said
+> the `249/497` filenames were line counts — also **wrong**: those are the true row counts and
+> `wc -l` is what undercounts (no trailing newline). Both corrections are applied in
+> `docs/phase0c-verification-2026-09-17.md` (now `433d17f4cfa98932…`) with the original text struck
+> in place. What survives from close 20 unchanged: the independent recomputation, the bias-direction
+> note (n=1, explicitly not systematic), the reconcile-against-standalones rule, and §4's
+> presence-gate right-sizing.
+>
+> ⛔ **NEW from the full report — the operational trap that outranks everything else in the bundle.**
+> A **malformed `crules` rule, or invalid JSON, does not error**: the page silently falls back to the
+> **unruled control** and renders a complete-looking 497. And the drawer's form state is
+> **SPA-sticky** — it can display a rule the URL does not carry, and the combine toggle persists
+> across bare navigations. Together: an operator sees the intended rule in the drawer, reads the
+> combined numbers, and is reading **control data with no error anywhere on screen**. A URL-driven
+> sweep is precisely the workflow that walks into this. **Phase-1 rule adopted in the verification
+> doc §5: verify what ran from the URL and the row count, never the drawer; a combined run whose row
+> count equals the unruled control is presumed unruled until its URL is re-read.** Owed: this into
+> the `oa-driving` skill.
+>
+> 📌 **Incident.** `/tmp/oa_shots.mjs` re-ran its built-in sequence and overwrote **8 PNGs inside the
+> already-verified `data/captures/2026-09-16-oa-backtester/` bundle**; repaired with `git restore`,
+> re-verified 13/13. ⭐ **Recoverable only because that bundle was committed in `bc8d726` earlier the
+> same day** — an uncommitted bundle overwritten this way is gone, and its `SHA256SUMS.txt` would
+> have been silently wrong rather than obviously wrong. Cite this the next time the commit cadence in
+> §9.1 feels like overhead.
+>
+> Bundle is **17 files** as verified here, not the 15 named in the report — the two Task-4 cap CSVs
+> landed after that text was written. 17/17 hashes pass.
+
+## 2026-09-17 (close 21) — Slot 4 ruled; arm respec drafted, Part A applied (Cowork, mounted tree)
+
+Andy: *"help me do slot 4 and arm respec."*
+
+**Slot 4 → `R-2026-09-17-PHASE1-EVIDENCE-PROCEDURE`**, settled against 0c evidence rather than
+expectation. (a) Transcribe-by-hand **narrowed, not struck** — position data from Copy CSV, summary
+stats still screenshot+transcribe, and **every combine reconciled row-for-row against standalone
+exports before ranking** because a combined export is a RESULT not a census (249+249=498 vs an
+unruled control of 497). (b) **Compare** is cap-free and may run to the 7-ceiling in one pass;
+**Combine** is not comparable across pass sizes under default caps, which scale exactly N and
+demonstrably change results — so the rule is to **pin `posLimit`/`posLimitDay` explicitly in
+`crules`** (they are URL-addressable) rather than merely hold test count fixed. (c) Added and
+binding: **a malformed rule or invalid JSON silently falls back to the unruled control** while the
+SPA-sticky drawer can show a rule the URL does not carry — **verify from URL + row count, never the
+drawer**; a run whose row count equals the unruled control is presumed unruled. Owed into
+`oa-drive/SKILL.md` and the `oa-driving` skill.
+
+**Arm respec → `docs/decision-card-2026-09-17-phase1-arm-respec.md`** (`6d0ae76534ec089f…`, 118
+lines). **Part A applied** (mechanical propagation, entailments cited): H-A **REMOVED** (no P/L
+predicate exists); H-C's bar **restated in R against H-0**; the assume-no-export bullet superseded;
+caps pinned; combines reconciled; URL-not-drawer verification. **Part B UNRULED** — it is new
+judgment.
+
+⛔ **The finding that drove the respec, and it is new: the hedge cannot be tested-side-reactive.**
+The complete predicate surface — `Combo Rules` (`open`|`not open` only), Entry Filters (underlying/
+market state only), Position Criteria (entry-scoped), and the 8-structure picker (chosen at config
+time) — contains **nothing that reads a sibling position's state**. So the overlay's structure is
+fixed when the backtest is written; it cannot see the condor and pick the pressured side. **Every
+Phase-1 hedge arm is a fixed-side unconditional overlay with at most a presence gate**, and
+north-star §4's "tested-side" V1 is not buildable here. ⭐ Combined with the §4 no-op finding, gated
+and ungated H-B collapse into **one** arm.
+
+**Proposed table:** Stage 1 = 4 backtests (H-0 ride control · SL100 · SL200 · put-side overlay 1ct)
+plus 1 combine (H-0 ⊕ overlay, presence-gated, caps pinned) — **5 arms to the decision instead of
+11**, and it fits one 7-way Compare. Stage 2 (time sweep, size-ratio sweep — forced because no
+relative-sizing control exists, call side, cutoff) runs **only if** the Stage-1 combine clears the
+`PAPER-ARM-PREAUTH` bar. Four slots put to Andy: the staged structure, put-side-first, the Stage-1
+clock (draft recommends 14:00), and the primary config — **explicitly NOT invented**, owed from
+`greenfield-family-spec.md`.
+
+**Files:** `docs/RULINGS.md` (`afe76d363599816a…`, 1 new) ·
+`docs/decision-card-2026-09-17-phase1-arm-respec.md` (new) · this file.
+
+## 2026-09-17 (close 22) — Part B ruled; the Phase 1 arm table is REWRITTEN (Cowork, mounted tree)
+
+Andy: *"go with your reccos"* → `R-2026-09-17-PHASE1-ARM-TABLE`, all four Part-B slots as drafted.
+
+**The arm table in `docs/dispatch-oa-capture-2026-09-16.md` is now rewritten** — the "NOT yet
+rewritten / do not run Phase 1 off this table" banner is discharged. The original YES/NO branching is
+preserved verbatim inside a collapsed `⊗ SUPERSEDED` block; it was written before 0b/0c and its
+premise (Phase 0 = NO) is a one-backtest answer to a two-backtest question. The
+`ASSUME THERE IS NO EXPORT` bullet in "Rules that bind both phases" now carries a superseding banner
+with the full narrowed regime — position data from CSV, summary stats still transcribed, combines
+reconciled against standalones, caps pinned in `crules`, and the silent-fallback trap.
+
+**Stage 1 = 4 backtests + 1 combine**, one 7-way Compare: S1-0 ride control · S1-a SL100 ·
+S1-b SL200 · S1-c put-side long put debit spread at 14:00, 1ct · **S1-H = S1-0 ⊕ S1-c**,
+presence-gated, caps pinned. Decision comparison: **S1-H vs S1-a/S1-b, in R, against S1-0.**
+Stage 2 (time sweep · size-ratio sweep · call side · cutoff) gated on S1-H clearing the
+`PAPER-ARM-PREAUTH` bar. Five arms to the decision instead of eleven.
+
+**Slot 4 answered from the spec, not invented** — `greenfield-family-spec.md` §3 read first-hand:
+QQQ · exp exactly 0 days · short strikes **0.75% OTM** · width **$2.00** · **1 contract** · entry
+**after 13:30** · **Range075** gate (±0.75% since previous close, via the backtester's `Change %`
+filter) · min credit mid **≥ $0.08**. ⚠️ Divergence recorded: the fleet builds this as **two paired
+spreads** (ScannerA/ScannerB), the backtester offers **Iron Condor as one structure** — Stage 1 uses
+the single structure, which collapses per-side exit independence. To be stated in the bundle README.
+
+⭐ **A finding of mine was UPGRADED by reading the primary's real config.**
+`phase0c-verification-2026-09-17.md` §4 called the presence gate "near-no-op," reasoning that a
+condor carried into 14:00–15:30 is open at hedge time essentially always. **Incomplete.** The GF
+entry is gated by **Range075** — on any day the underlying has already moved beyond ±0.75%, **the
+condor never enters at all**. So the presence gate removes precisely the large-move days on which an
+ungated fixed-time overlay would fire with nothing to protect, booking pure cost. **The gate earns
+its place.** The "not worth two arms" conclusion survives, for a better reason: gated is simply
+correct, so the ungated variant is not a comparison worth buying. Recorded in the card as an
+explicit upgrade, with §4's original reasoning left standing.
+
+**Files:** `docs/RULINGS.md` (`e41fbcc6aa8a73d9…`) ·
+`docs/decision-card-2026-09-17-phase1-arm-respec.md` (`fd161f6ac048d042…`) ·
+`docs/dispatch-oa-capture-2026-09-16.md` (arm table rewritten + export bullet superseded) · this file.
+Owed: the Phase 1 dispatch prompt itself; the silent-fallback trap into `oa-drive/SKILL.md` and the
+`oa-driving` skill; §9.2 slot-closed banner; CLAUDE.md §6 file-map lines; tracker artifact update.
+
+## 2026-09-17 (close 23) — Phase 1 Stage-1 dispatch prompt written (Cowork, mounted tree)
+
+Appended **"PHASE 1 — Stage 1. The hedge grid."** to `docs/dispatch-oa-capture-2026-09-16.md`
+(now `32a1ba698aebbed4…`, 700 lines) — a self-contained paste prompt in the same shape as Phase 0 /
+0b / 0c. Every Phase-1 gate is discharged; this is the last owed artifact before the grid can run.
+
+Carries: the read-order (CLAUDE.md → option-alpha SKILL → oa-drive SKILL → the arm-respec card →
+the 0c verification doc) plus the four governing rulings by id; the boundary with **runs AUTHORIZED**
+under `-A2` + `PHASE1-ARM-TABLE` and a hard **no `Create Bot` on any surface** (a paper arm is a
+separate pre-registered act, not the agent's); the `ZZ-AGENT-<date>-P1-<arm>` prefix with an explicit
+note that the 0c fixtures are **not** Phase-1 arms; **the three traps** as a pre-build section
+(silent `crules` fallback + SPA-sticky drawer → verify from URL and row count, a run matching the
+control's row count is presumed unruled · combined export is a result not a census → reconcile
+row-for-row before ranking · caps default to exactly N and change results → pin them); the primary
+config verbatim from `greenfield-family-spec.md` §3 with the Iron-Condor-vs-paired-spreads divergence
+required in the README; the five arms with build order (S1-0 first) and standalone exports required
+before the combine; the combine procedure; **the measurement rule** (R only, and the S1-H denominator
+— primary risk + overlay debit, per condor, ex-artifact — written out or it is not a result); a
+**phrasing section** forbidding three specific things (no "tested-side-reactive", put-side-only
+stated everywhere, **no recommendation** — T4, the bar is Andy's call on the numbers); the bundle
+spec; prohibitions including **never re-run a prior capture script** (the 2026-09-17 overwrite
+incident, cited); and stop conditions. Ends: stop after Stage 1.
+
+**Files:** `docs/dispatch-oa-capture-2026-09-16.md` · this file.
+Owed, none blocking Phase 1: the silent-fallback trap into `oa-drive/SKILL.md` and the `oa-driving`
+skill; §9.2 slot-closed banner; CLAUDE.md §6 file-map lines; tracker artifact update.

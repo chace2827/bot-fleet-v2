@@ -1,0 +1,178 @@
+RAW CAPTURE — Phase 0c combo-rule semantics
+Host: app.optionalpha.com (PAPER verified on /home 2026-09-16; no /login, no 401/403/429, no payment/terms prompt encountered)
+Captured: 2026-09-17 ~00:05–00:45 local (UTC-4, America/New_York — UI clock read 12:xxAM)
+Method: Chrome DevTools Protocol attach to Andy's authenticated Chrome (127.0.0.1:9222).
+        DOM/JS reads + trusted Input.dispatch* clicks/keys only. No wire protocol, no fetch/XHR,
+        no POST /api/request, no network panel. Scope filtered to app.optionalpha.com at capture time.
+
+Tests created for this task (ZZ-AGENT prefix, run authorization granted for these only):
+  PRIMARY  ZZ-AGENT-2026-09-17-primary  id=ZT41789618576434486115
+  OVERLAY  ZZ-AGENT-2026-09-17-overlay  id=ZT41789619101486375116
+
+============================================================
+§1 — PRIMARY build form (serialized inputs, verbatim values)
+============================================================
+symbol        = QQQ
+series        = {"type":"days","days":0,"text":"exactly 0 days","compare":"exact","dtype":"m"}
+strategy      = shortputspread
+amount        = {"type":"quantity","quantity":1,"text":"1 contract"}
+emode_time    = true   (ENTRY TRIGGER = Time)
+time          = 09:35            <- earliest slot offered in the 5-min-step picker
+posLimit      = 1
+profitssh     = 0.025            <- rendered "2.5% of credit" (tightest option; menu offered None, 2.5%, 5%, ... 95%)
+period        = 1y
+name          = ZZ-AGENT-2026-09-17-primary
+Legs (recipe pickers, wizard flow Edit->Next->Save):
+  Short put  = {"delta":-0.3,"mode":"closest","type":"delta","text":"-.30 delta","optionType":"put"}
+  Long put   = {"gap":2,"cop":"lt","shlg":"short","ltype":"put","mode":"closest","type":"leggap",
+                textValues:{"gap":"$2.00","cop":"below","shlg":"short","ltype":"put","mode":"or closest"}}
+  Rendered:  "Long put $2.00 below short put leg" | "Short put -.30 delta"
+
+Run: clicked "Run Backtest" -> drawer rendered verbatim:
+  "Backtest Settings   Backtest running.   Close   Compare   View Results"
+Results URL: /backtests/test/ZT41789618576434486115
+
+============================================================
+§2 — PRIMARY results (rendered stats, verbatim)
+============================================================
+QQQ Short Put Spread | TOTAL P/L $62 | MAX DRAWDOWN -$344 | RETURN ON DD 18.0%
+COUNT 249 | FILTERED 2 | WIN RATE 96.8% | WIN/LOSS 241W / 8L | BEST WIN $14 | WORST LOSS -$166
+Exits: PROFITS 241 | EXPIRED 8
+Settings card (verbatim):
+  "ZZ-AGENT-2026-09-17-primary | Position Details | SYMBOL QQQ | DTE exactly 0 days |
+   STRATEGY Short Put Spread | LONG PUT $2.00 below short put leg | SHORT PUT -.30 delta |
+   Capital ALLOCATION $50,000 | POSITION SIZE 1 contract | Position Entry ENTRY TRIGGER Time |
+   ENTRY TIME 9:35am | TRADING DAYS Mon-Fri | POSITION LIMIT 1 position | Position Criteria None |
+   Entry Filters None | Exit Options PROFIT TAKING 2.5%"
+Monthly P/L (rendered test window — headers MONTH | P/L | TRADES | WIN RATE | AVG ROR | AVG P/L | AVG RISK | BEST | WORST):
+  2025: September 11t, October 23t, November 18t, December 21t  (partial-year start)
+  2026: January 20t, February 19t, March 22t, April 21t, May 20t, June 21t, July 22t, August 21t, September 10t
+  => rendered test period = Sep 2025 -> Sep 2026 (1 year, partial Septembers at both ends)
+Chart x-axis verbatim: Oct '25 Nov '25 Dec '25 2026 Feb '26 Mar '26 Apr '26 May '26 Jun '26 Jul '26 Aug '26 Sep '26 Oct '26
+Positions drawer: "249 positions | Copy CSV | Download CSV | DESCRIPTION | LEGS | DATE | STATUS | RISK | P/L"
+  row shape: "QQQ Short Put Spread 704 P 706 P Sep 15, 2026 9:35am → 9:36am Profits $154 $9"
+Copy CSV -> standalone-primary-249.csv (250 lines: header + 249 rows; cols include Opened,Closed,Status)
+
+============================================================
+§3 — OVERLAY build + results
+============================================================
+Identical form EXCEPT: time = 15:00 ; name = ZZ-AGENT-2026-09-17-overlay
+Run -> same "Backtest running." state -> results URL /backtests/test/ZT41789619101486375116
+Rendered stats: TOTAL P/L -$62 | COUNT 249 | WIN RATE 96.0% | 239W / 10L | PROFITS 237 | EXPIRED 12
+Positions drawer row shape: "QQQ Short Put Spread 702 P 704 P Sep 15, 2026 3:00pm → 3:01pm Profits"
+Copy CSV -> standalone-overlay-249.csv (250 lines: header + 249 rows)
+
+============================================================
+§4 — COMBINE drawer (verbatim, all three runs)
+============================================================
+Drawer text: "Combine Results | Daily Positions 2 per day | Max positions opened in one day. |
+              Position Limit 2 positions | Max open positions at once. | Combo Rules | View Results"
+Rule row verbatim: "Only open [Test B ▾] if [Test A ▾] is [open ▾]" + "+" (add) + "✕" (delete)
+State picker options exactly: "open" | "not open"
+Hidden inputs when rule present:
+  rule0-test1 = ZT41789619101486375116   (gated test = overlay = Test B)
+  rule0-test2 = ZT41789618576434486115   (predicate test = primary = Test A)
+  rule0-state = open | not
+
+(A) CONTROL — no rules.
+    URL: /backtests/compare/ZT41789618576434486115,ZT41789619101486375116?crules=
+         {"posLimit":2,"posLimitDay":2,"rules":[]}&combine=1
+    Stats Count cells (showPositions links): A=249 | B=249 | =(combined)=497
+    Positions drawer: "497 positions | TEST | DESCRIPTION | LEGS | DATE | STATUS | RISK | P/L"
+    Copy CSV -> combined-control-497.csv (498 lines: header + 497 rows; Test col = A|B)
+
+(B) RULE: Only open Test B if Test A is open
+    URL crules verbatim (decoded):
+      {"posLimit":2,"posLimitDay":2,"rules":[{"type":"state","test1":"ZT41789619101486375116",
+      "test2":"ZT41789618576434486115","state":"open","text":"Only open Test B if Test A is open"}]}
+    Count: A=249 | B=249 | =(combined)=257
+    Copy CSV -> combined-open-257.csv (258 lines: header + 257 rows; A=249, B=8)
+
+(C) RULE: Only open Test B if Test A is not open   (hidden input rule0-state=not)
+    URL crules verbatim (decoded):
+      {"posLimit":2,"posLimitDay":2,"rules":[{"type":"state","test1":"ZT41789619101486375116",
+      "test2":"ZT41789618576434486115","state":"not","text":"Only open Test B if Test A is not open"}]}
+    Count: A=249 | B=249 | =(combined)=489
+    Copy CSV -> combined-notopen-489.csv (490 lines: header + 489 rows; A=249, B=240)
+
+============================================================
+§5 — crules URL round-trip (Task 2, verbatim observations)
+============================================================
+1. Hand-constructed URL carrying the populated open-rule (same JSON as §4B) ->
+   navigated; combined Count rendered 257 (identical to drawer-built run).
+   Reopened Combine Results drawer: re-rendered verbatim
+   "Only open Test B if Test A is open" with rule0-test1/2/state populated. ROUND-TRIP CONFIRMED.
+
+2. Two-rule array hand-built:
+   rules[0] = {type:state,test1:overlay,test2:primary,state:open,text:"Only open Test B if Test A is open"}
+   rules[1] = {type:state,test1:primary,test2:overlay,state:not, text:"Only open Test A if Test B is not open"}
+   -> accepted; drawer renders BOTH rows in array order as rule0/rule1; combined Count=257
+      (rule1 gates A on B's 15:00 presence — at 09:35 B has never opened, so A unaffected).
+   Hidden inputs: rule0-*, rule1-* — array index maps to ruleN in order.
+
+3. Malformed variants:
+   rules:[{"bogus":1,"foo":"bar"}]  -> no error rendered; combined Count=497 (unruled fallback).
+   crules={"posLimit":2,"rules":[{{{  (invalid JSON) -> no error rendered; Count=497 (unruled fallback).
+   NOTE/divergence: under the malformed-rule URL the drawer still displayed the previous
+   session rule ("Only open Test B if Test A is open") — drawer form state is SPA-sticky and
+   is NOT a reliable mirror of the URL's rules array.
+   Bare compare URL (no crules, no combine=1): the Combine Results toggle persisted checked
+   across navigation, but the view rendered no '=' combined column until combine=1 present —
+   toggle state is also SPA-sticky.
+
+============================================================
+§6 — anomaly note (feeds Task 3)
+============================================================
+Nov 3, 2025: primary opened 9:35am -> 4:00pm "expired" (still open at 15:00);
+overlay standalone opened 3:00pm -> 3:01pm profits. In the CONTROL combined export the
+overlay's Nov-3 row is ABSENT (497 = 249+248 not 498) despite caps posLimitDay=2 / posLimit=2
+nominally permitting both. Absent in all three runs. Combined export is a filtered result,
+not a census of the two tests' positions.
+
+============================================================
+§7 — exported CSV inventory (raw evidence files)
+============================================================
+standalone-primary-249.csv   249 rows  (header + 249; wc -l 250 w/o trailing NL)
+standalone-overlay-249.csv   249 rows
+combined-control-497.csv     497 rows  (Test=A:249, B:248)
+combined-open-257.csv        257 rows  (Test=A:249, B:8)
+combined-notopen-489.csv     489 rows  (Test=A:249, B:240)
+All have header row 1: Opened,Closed,Symbol,Exp,Type,Legs,Quantity,Status,P/L,Risk,ROR,Premium,
+Reward/Risk,Open Price,Open Bid Price,Open Ask Price,Close Price,Close Bid Price,Close Ask Price,
+Max Loss,Max Profit,Price at Open,Price at Close[,Test]
+
+============================================================
+§8 — TASK 4: combine caps (verbatim, 2026-09-17 ~00:45-00:55)
+============================================================
+(a) Defaults at first drawer open (hidden inputs + rendered labels):
+    2 tests : posLimitDay=2 posLimit=2  rendered "2 per day" / "2 positions"
+    4 tests : posLimitDay=4 posLimit=4  rendered "4 per day" / "4 positions"
+            (ids: ZT41789618576434486115,ZT41789619101486375116,
+                  ZT4178951789730109583,ZT4178951710152798882)
+    7 tests : posLimitDay=7 posLimit=7  rendered "7 per day" / "7 positions"
+            (Phase 0b observation, unchanged this session)
+    => default = exactly N at every pass size observed.
+
+(b) Editable: YES. Both are menu pickers.
+    Daily Positions options verbatim: "1 per day" "2 per day" "3 per day" "4 per day"
+      "5 per day" "6 per day" "7 per day" "8 per day" "9 per day" "10 per day"   (1-10)
+    Position Limit options verbatim: "1 position" "2 positions" "3 positions" "4 positions"
+      "5 positions" "6 positions" "7 positions" "8 positions" "9 positions" "10 positions" (1-10)
+    Values persist in the drawer across toggle off/on within the session.
+
+(c) Same pair, two cap settings (no rules), exported positions CSVs:
+    Run D1: crules={"posLimit":2,"posLimitDay":1,"rules":[]}
+        -> Count =249; CSV combined-cap-day1-249.csv = 249 rows ALL Test=A.
+           Every overlay row gated out (the 15:00 open is always the day's second open).
+           vs control (497): all 248 B-rows absent; all 249 A-rows present.
+    Run D2: crules={"posLimit":1,"posLimitDay":2,"rules":[]}
+        -> Count =489; CSV combined-cap-pos1-489.csv = 249 A + 240 B.
+           B-days identical (set equality, zero diff) to the `is not open` rule run:
+           the concurrent-position cap blocks B on exactly the 9 days A is open at 15:00.
+           vs control (497): 8 B-rows absent (the open15 days minus Nov-3 already cap-dropped).
+    Note: posLimit=1 reproduces the `is not open` rule's B-day set exactly — the cap itself
+    evaluates concurrent presence, independently corroborating Answer 1.
+
+(d) Compare (columns A..G) does NOT impose shared caps: per-test Count columns render the
+    standalone counts (249/249) unchanged under every crules variant tested. Caps live only
+    in the Combine Results drawer and the '=' column. No contrary evidence seen.

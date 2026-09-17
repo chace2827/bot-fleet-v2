@@ -1,0 +1,17 @@
+092135f7f677c0aaaa42f1420652311fbff091e87befd4d33934d076c73f0d4f  ./01-combo-semantics-2026-09-17-0030.txt
+434e350bc090bd90253b2b9ee0b675d1f259c123605e7fdb7730ef9246ab6536  ./02-combo-semantics-answers-2026-09-17.md
+0b3939e192ceada1f65b1405d0a0c9ef2249469fa6e006f48965d48233f107c5  ./README.md
+c993a48f57efbd3fafd69a56a9266637266154b76a343dccd0e67733cbb73ed3  ./combined-cap-day1-249.csv
+01af5d4bb645a6c81149cf2a180f9e89d5977fae5f9c430e5dcae0b33b502a54  ./combined-cap-pos1-489.csv
+aeeb327e300afe9fc1dbf337f95da425a2259de3e9a1244af6716e928ef6f7d4  ./combined-control-497.csv
+01af5d4bb645a6c81149cf2a180f9e89d5977fae5f9c430e5dcae0b33b502a54  ./combined-notopen-489.csv
+e390d47d8bc9463f0a431b58c8c4c492ddda787e0cc221d1cab077794e379f91  ./combined-open-257.csv
+6b0c06c31137a9137662a7142bf3c9f21f24b05fb5e0797cccba0fbb2cda7700  ./screenshots/01-primary-config.png
+644556eec861885a31849d45ef8593264a80f4fff1f863eef7d949f460a89e2c  ./screenshots/02-primary-running.png
+da76f487d7e201d2ad2e244155c4d350d6bff81c273dbb2ec6b7d5c9c0bf66ec  ./screenshots/03-overlay-config.png
+ffe14cb636eb2fb195fb7c7143acfa8d49ffe0083265544a6f1a5e113c9a5d38  ./screenshots/04-combined-open-rule-view.png
+e6d785decae0bb2ec3a89c6f6a8e4e094e5a9ba482e010b46f27e21a6390a331  ./screenshots/05-combo-rule-drawer-open.png
+5a51a155311fc9c7965a545d27929103f8d84e79b444b39cba2973d6b2c758e9  ./screenshots/06-combo-rule-drawer-first-add.png
+644556eec861885a31849d45ef8593264a80f4fff1f863eef7d949f460a89e2c  ./screenshots/07-backtest-running-state.png
+157deb2df4071cae2d2b8e802d5b2c910388eab97f7d120792e380f7c2ac6343  ./standalone-overlay-249.csv
+b234578248266f7a6ad83a59cd545b4938fc4205b707e4388de82aeeb8fb0986  ./standalone-primary-249.csv
