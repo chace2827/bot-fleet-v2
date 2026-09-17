@@ -27,6 +27,31 @@ From `hedge-design-spec-2026-09-16.md` §2, derived from the working ledger:
 - **Every dollar of loss came from an exit.** −$11,211 across 35 positions.
 - **Expired losses: $0 across 0 positions.** All 56 expired legs are winners, **+$12,525**.
   Nothing this fleet has ever held to settlement has lost money.
+
+> ### ⛔ FALSIFIED 2026-09-17 — `R-2026-09-17-EXPIRED-LOSS-CLAIM-FALSIFIED`. Original stands above.
+> **The structural claim is false. The live record is not.** Read the scope note before citing either.
+>
+> Phase 1 arm **S1-0** is this claim run for five years — GF primary config (QQQ 0DTE, 0.75% OTM,
+> $2.00 wide, 13:30 entry, Range075 gate), **ride to settlement, no PT / SL / trail / touch**. All
+> **353** positions close `expired`:
+>
+> | | |
+> |---|--:|
+> | losing positions | **53 of 353 — 15.0%** |
+> | total loss on those | **−$5,438** |
+> | worst single | **−$266** |
+> | net across all 353 | **+$2,030** |
+>
+> **Holding to settlement loses money.** Still net positive — but *"nothing held to settlement has
+> ever lost"* is **false at scale**.
+>
+> 📌 **SCOPE, required whenever this is cited.** The original speaks of the **live fleet** (paired
+> spreads, ~27 trading days) and **remains literally true of that sample.** What is falsified is the
+> **structural generalization**. The live record was a **small-sample artifact, not an error** —
+> nothing was mis-measured; it could not show a loss it had not yet had time to take.
+>
+> Evidence: `data/captures/2026-09-17-p1-stage1/standalone-S1-0.csv` (18/18 SHA256SUMS verified);
+> analysis in `docs/phase1-stage1-verification-2026-09-17.md` §4.
 - The exits are **booking the extreme, not capping it**: 40% of losers close within five minutes of
   their own MAE, against 6% of winners (§2.4).
 - **The losers were green first** — 24 of 30 carried positive MFE, median +0.70%, median MAE

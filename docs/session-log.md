@@ -12858,3 +12858,179 @@ incident, cited); and stop conditions. Ends: stop after Stage 1.
 **Files:** `docs/dispatch-oa-capture-2026-09-16.md` · this file.
 Owed, none blocking Phase 1: the silent-fallback trap into `oa-drive/SKILL.md` and the `oa-driving`
 skill; §9.2 slot-closed banner; CLAUDE.md §6 file-map lines; tracker artifact update.
+
+> ### 🔧 `data/lessons.csv` REPAIRED 2026-09-17 — it was malformed and committed that way
+> Caught while checking whether Devin's 0c lessons had landed. The header is `date,bot,tag,lesson`
+> (4 fields) but the two 2026-09-17 rows were written **unquoted with the lesson text in the `bot`
+> column** — field counts read `[4,4,4,4,2,3]`, so the file no longer parsed as CSV and the `bot`
+> and `tag` columns were lost on both rows. Repaired in place: text moved to `lesson`, `bot` set to
+> `-`, `tag` inferred (`tooling` for the oa_shots row, `oa-drive` for the Escape row), all rows now
+> 4 fields. **No content was dropped.**
+>
+> Three lessons from this session appended while there: the **silent `crules` fallback** (verify
+> from URL + row count, never the drawer), **combined export is a result not a census** (reconcile
+> against standalones), and **`wc -l` undercounts OA's CSV exports by one** (no trailing newline —
+> count with a CSV reader). `data/lessons.csv` now `7de7365cfa5b6448…` before those three appends.
+>
+> 📝 Note for the lane: the malformed rows were **committed** in that state. A CSV that stops parsing
+> is a silent failure — nothing reads `data/lessons.csv` in CI, so it would have sat broken
+> indefinitely. Worth a parse check if anything ever consumes it.
+
+## 2026-09-17 (close 24) — PHASE 1 STAGE 1 COMPLETE. The hedge fails the bar; the program's premise is falsified. (Cowork, mounted tree)
+
+Devin delivered `data/captures/2026-09-17-p1-stage1/` — **18/18 SHA256SUMS verified**, every figure
+recomputed from the CSVs before acceptance. **His numbers reproduce exactly.** Verification written
+to `docs/phase1-stage1-verification-2026-09-17.md` (`ba12fd9a3c0b2c48…`, 127 lines); the bundle is
+not modified. Devin **could not** append here — the dispatch said "touch nothing outside the bundle,"
+which conflicts with §9.1; **that is the dispatch's fault, not his**, and he flagged it in the README
+rather than silently breaking either rule. Future dispatches carve out `docs/session-log.md`.
+
+| Arm | N | Exp(R) | 95% CI | Total P/L |
+|---|--:|--:|---|--:|
+| S1-0 ride control | 353 | **+0.0367** | [−0.0033, +0.0767] | +$2,030 |
+| S1-a SL100 | 353 | +0.0323 | [−0.0029, +0.0675] | +$1,933 |
+| S1-b SL200 | 353 | +0.0382 | [+0.0003, +0.0760] | +$2,148 |
+| S1-c overlay standalone | 1,109 | **−0.2047** (16.4% win) | — | −$6,110 |
+| **S1-H as exported** | 353 | **−0.0019** | — | +$83 |
+| **S1-H drop-corrected** | 353 | **+0.0083** | — | +$663 |
+
+⛔ **S1-H FAILS `R-2026-09-17-PAPER-ARM-PREAUTH` — it must beat H-0 AND both stops, and it beats
+none, before or after correcting the 21 silently dropped rows (+$580).** Corrected it reaches
++0.0083 against a +0.0367 control. Stops did fire (66 / 26 `stoploss` closes), so the arms are valid.
+
+⚠️ **Nobody may read S1-b as a winner.** All three condor arms sit inside each other's 95% CIs;
+per-position R has sd 0.34–0.38 against Exp(R) gaps of 0.002–0.006. **Over 353 positions this grid
+cannot distinguish ride from stop.** S1-0 and S1-a do not clear zero.
+
+⛔ **Put-side-only does NOT explain the failure, and Stage 2's call side would not rescue it.**
+S1-0's 53 losers split **28 put-side (−$3,003) / 25 call-side (−$2,435)** — roughly even, so the
+overlay was pointed at 55% of loss dollars and still failed to recover them (cost ≈ $1,367 net). A
+call overlay is unconditional too: it adds cost on all ~353 days to address $2,435. Same arithmetic,
+same direction. **Do not buy the call-side arm hoping it flips the verdict.**
+
+⭐⭐ **THE PROGRAM'S FOUNDATIONAL CLAIM IS FALSIFIED.** `hedge-design-spec` §2.1 — *"Expired losses:
+$0 across 0 positions… nothing this fleet has ever held to settlement has lost money"* — **S1-0 is
+that claim run for five years**: all 353 positions close `expired`, and **53 of them (15.0%) lose,
+−$5,438 total, worst −$266.** Ride is still net positive (+$2,030) but the no-expired-losses claim
+was a **~27-trading-day small-sample artifact**. 📌 This is exactly the question
+`hedge-program-thesis.md` §5 was written to pose, and §5 says in advance that a Phase 1 which kills
+the thesis cheaply **is a success of the same kind as one that confirms it**. This is that outcome.
+⛔ A correction to §2.1 is **OWED and GATED** — it changes the program's premise, so it is a decision.
+
+⭐ **The finding, sharpened:** Phase 1 killed an **unconditional, fixed-time, fixed-side** overlay
+(the overlay bleeds at Exp(R) −0.2047 over 1,109 trades). It did **not** test a hedge that fires only
+on deterioration — H-A, removed because **no P/L predicate exists anywhere in the surface**. So:
+**the hedge shape OA can express does not pay, and the shape that might pay is not expressible on
+OA.** `hedge-north-star.md` §3's native-first route is **exhausted**; §3 prices what remains —
+webhook + VPS, *"months of plumbing; untestable in either backtester."* **Andy's decision, not this
+session's.**
+
+📌 **`R-2026-09-17-PHASE1-EVIDENCE-PROCEDURE` earned itself on first live use** — the silent row-drop
+replicated at 21× scale, caps permitting, no error; the reconcile rule caught every one.
+Two OA driving facts owed into the skill: `Copy CSV` never writes the clipboard under CDP (use
+`Browser.setDownloadBehavior` + `Download CSV`), and several delegated `data-click` handlers ignore
+trusted `Input.dispatchMouseEvent` but respond to a JS `.click()`.
+
+**Files:** `docs/phase1-stage1-verification-2026-09-17.md` (new) · this file · Devin's bundle.
+**Owed:** the §2.1 correction (GATED) · Andy's call on the `PAPER-ARM-PREAUTH` bar and on whether
+the program continues · the two OA facts into `oa-drive/SKILL.md` · tracker artifact update.
+
+## 2026-09-17 (close 25) — Devin's challenge accepted on all three counts; both gates ruled (Cowork, mounted tree)
+
+Devin verified close 24's arithmetic against the raw CSVs (reproduces to the digit) and challenged
+three **claims**. **All three conceded.** Andy: *"devin reponse. I agree."*
+
+⛔ **(a) "The failure is robust" — WITHDRAWN.** Close 24 applied unpaired CIs to the condor arms and
+then asserted robustness for S1-H without the same standard. S1-H vs S1-0 is a **paired** comparison
+— same 353 days. Paired test, **independently reproduced here**: mean diff **−0.0284 R/condor-day**,
+sd 0.3151, SE 0.0168, **t = −1.70, 95% CI [−0.0613, +0.0044], p ≈ 0.090. The CI crosses zero.**
+Correct wording is **"no demonstrated benefit," not "demonstrated failure"** — the data do not
+reject the hedge, they fail to endorse it, and the bar is unmet **under burden of proof**. Devin's
+supporting point that close 24 didn't use: S1-H's drawdown is worse (8.28R vs 5.38R).
+
+⛔ **(b) "Native-first exhausted" — OVERSTATED.** OA **can** express a conditional close 24 missed:
+an **entry filter on the OVERLAY itself** (VIX, Change %, IV Rank, gap), gating which *days* the
+debit is paid. Still fixed-side, still blind to the primary's P/L, so still not H-A — but it is the
+difference between paying premium on **1,109 days** and paying it in selected regimes, and since the
+overlay's problem **is cost**, that is exactly the lever. Ruled wording: **"unconditional fixed-side
+exhausted; market-state-conditional remains expressible, unpromising, untested."** Not authorized —
+priced and left open.
+
+⛔ **(c) The GF obituary — PREMATURE, made conditional.** "Ranking unachievable" generalized to eight
+arms from a spread measured across **three**. **MDE is the detection floor, not the spread.** Ruled
+wording: unachievable **IF** the remaining mechanics land inside ±0.076 R — which the four-arm test
+resolves, and which is why that test runs *before* the family is judged.
+
+📌 **Devin's open question, tested here.** Are the 21 dropped rows directionally biased? Retained
+B-rows: n=316, mean −$6.16, 18.7% wins. Dropped: n=21, mean **+$27.62**, **38.1% wins**, total +$580.
+**Welch t = +1.82 — not distinguishable at n=21**; medians identical (−$22), so it is a few tail
+wins, not a shifted distribution. Honest statement: the point estimate leans toward the drops
+removing hedge wins, the sample cannot establish it. **Verdict unaffected — every figure already
+uses the drop-corrected numbers.** ⚠️ But if OA's drop mechanism does correlate with row economics,
+a combined export is **non-randomly** incomplete, which raises the stakes on never absorbing a delta.
+
+**THREE RULINGS:**
+- **`R-2026-09-17-EXPIRED-LOSS-CLAIM-FALSIFIED`** (Gate 1) — applied **and propagated** to all three
+  docs that carry the claim (`hedge-design-spec` §2.1 `cbd5510405abf2c7…`, `hedge-north-star`
+  `5453397c559ee9f5…`, `hedge-program-thesis` `56331a5096f6d2e7…`), originals standing, each banner
+  carrying the **live-vs-structural scope note** Devin asked for: the live record remains literally
+  true of its ~27-day sample; what is falsified is the generalization; it was a **small-sample
+  artifact, not an error**. Propagated deliberately — `propagation_sweeps` counts seven prior
+  instances of corrections failing to travel in this repo.
+- **`R-2026-09-17-HEDGE-PROGRAM-DISPOSITION`** (Gate 2) — **A + C, explicitly NOT B.** The hedge
+  program stops in its current form; no paper arm triggers (`PAPER-ARM-PREAUTH` unmet); the
+  webhook/VPS build is **rejected** — months of plumbing for a mechanic testable only in paper/live,
+  after the unconditional form bled −0.2047 over 1,109 trades, is what evidence law exists to
+  prevent; freed machinery redirects to **entry rules, structure, width, DTE, symbol, the Range075
+  gate** — variables whose effects exceed the 0.076 R detection floor.
+- **`R-2026-09-17-GF-EXIT-SPREAD-TEST`** — the four-arm test (PT50 · Trail · Touch0 · Canary) on the
+  S1-0 fixture is **authorized**. Four arms to price an eight-arm family.
+
+**Files:** `docs/RULINGS.md` (`adafbe31426ee3ef…`, 3 new) ·
+`docs/phase1-stage1-verification-2026-09-17.md` (`69f0634faa10910d…`, amended with all three
+corrections at the top + the drop-bias test as §5b) · the three propagated docs · this file.
+**Owed:** the four-arm dispatch prompt · the two OA driving facts into `oa-drive/SKILL.md` ·
+tracker artifact update.
+
+## 2026-09-17 (close 26) — GF exit-spread dispatch written; my ±0.076 threshold was WRONG and is corrected (Cowork, mounted tree)
+
+Wrote `docs/dispatch-gf-exit-spread-2026-09-17.md` (`485a3a8d786fe8f1…`, 162 lines) for
+`R-2026-09-17-GF-EXIT-SPREAD-TEST`. **Seven arms is exactly the Compare ceiling** — three exist from
+Stage 1 and are reused (`S1-0` Ride, `S1-a` SL100, `S1-b` SL200), four are new (PT50, Trail, Touch0,
+Canary), built by **Add Variation off S1-0** so only the exit field changes.
+
+⛔ **THIRD CORRECTION TO MY OWN ANALYSIS TODAY, and it is the one that matters most.** The
+**±0.076 R** floor I quoted — and which `R-2026-09-17-GF-EXIT-SPREAD-TEST` records — is the
+**UNPAIRED** figure and is **the wrong instrument** for exit variants. Exit variants on the same
+primary are **identical on every day no exit fires**, so paired differences carry far less variance.
+Measured from the Stage-1 CSVs:
+
+| paired vs Ride | differing days | sd_diff | mean | t | MDE |
+|---|--:|--:|--:|--:|--:|
+| SL100 | 66 / 353 (18.7%) | 0.1998 | −0.0044 | −0.41 | **0.0298 R** |
+| SL200 | 26 / 353 (7.4%) | 0.1249 | +0.0015 | +0.22 | **0.0186 R** |
+
+**Pooled paired sd ≈ 0.1624 → MDE at n=353 is 0.0242 R, not 0.076 — the test is ~3× more sensitive
+than I told Andy.** The dispatch records ±0.0242 as the operative threshold and marks the ruling's
+±0.076 superseded.
+
+⭐ **Two consequences that revise what close 24/25 claimed.** (1) Stage 1 already established
+something **stronger than "cannot distinguish"**: both stop arms are **measurably within ~0.03 R of
+ride** (t = −0.41, +0.22) — *demonstrated practical equivalence*, not absence of evidence.
+(2) Exit-mechanic ranking is **NOT unachievable in principle**: paired, a 0.03 R effect needs ~230
+positions ≈ **3 years live**, not the 73 years my unpaired arithmetic implied. Devin's challenge (c)
+was right for a better reason than either of us gave — the floor itself was miscomputed.
+
+**Design points written into the prompt:** Trail is the **ARMED** trail (`target`=40 / `trail`=15
+per the 2026-08-06 C2 ruling), not a plain trail — a plain trail would be a different mechanic
+wearing the name; each arm must be **serialized and shown to differ from S1-0 in exactly one field**
+or it is not an arm; the analysis is **paired, matched by expiration date**, and the deliverable is
+the **SPREAD**, not a ranking — 7 arms give 21 pairwise comparisons and some will look significant by
+chance, so ranking is explicitly forbidden; no recommendation and no conclusion about the family's
+future, which is Andy's ruling on the spread.
+
+📌 The prompt **explicitly carves out `docs/session-log.md`** from the "touch nothing outside the
+bundle" prohibition — the Stage-1 dispatch wrongly forbade it and forced Devin to skip his §9.1
+close-out.
+
+**Files:** `docs/dispatch-gf-exit-spread-2026-09-17.md` (new) · this file.

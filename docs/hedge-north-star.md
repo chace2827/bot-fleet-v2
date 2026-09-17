@@ -32,6 +32,31 @@ All from the post-cutover ledger — `hedge-design-spec-2026-09-16.md` §2, whic
 
 - **Every dollar of loss came from an exit.** −$11,211 across 35 positions; nothing held to
   settlement has ever lost (56 expired legs, +$12,525).
+
+> ### ⛔ FALSIFIED 2026-09-17 — `R-2026-09-17-EXPIRED-LOSS-CLAIM-FALSIFIED`. Original stands above.
+> **The structural claim is false. The live record is not.** Read the scope note before citing either.
+>
+> Phase 1 arm **S1-0** is this claim run for five years — GF primary config (QQQ 0DTE, 0.75% OTM,
+> $2.00 wide, 13:30 entry, Range075 gate), **ride to settlement, no PT / SL / trail / touch**. All
+> **353** positions close `expired`:
+>
+> | | |
+> |---|--:|
+> | losing positions | **53 of 353 — 15.0%** |
+> | total loss on those | **−$5,438** |
+> | worst single | **−$266** |
+> | net across all 353 | **+$2,030** |
+>
+> **Holding to settlement loses money.** Still net positive — but *"nothing held to settlement has
+> ever lost"* is **false at scale**.
+>
+> 📌 **SCOPE, required whenever this is cited.** The original speaks of the **live fleet** (paired
+> spreads, ~27 trading days) and **remains literally true of that sample.** What is falsified is the
+> **structural generalization**. The live record was a **small-sample artifact, not an error** —
+> nothing was mis-measured; it could not show a loss it had not yet had time to take.
+>
+> Evidence: `data/captures/2026-09-17-p1-stage1/standalone-S1-0.csv` (18/18 SHA256SUMS verified);
+> analysis in `docs/phase1-stage1-verification-2026-09-17.md` §4.
 - **It is a clock, not a magnitude.** 75% of losers take their worst tick after 14:00 ET vs 32%
   of winners; 89% of all loss has its MAE inside 14:00–15:30. Underlying net move on the worst
   days is ±0.20–0.78% — the largest move day was a +$1,142 winner.

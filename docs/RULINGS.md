@@ -5893,3 +5893,104 @@ source: >-
   data/captures/2026-09-16-oa-backtester/ and /2026-09-16-oa-compare/.
 unclear: false
 ```
+
+```yaml
+ruling_id: R-2026-09-17-EXPIRED-LOSS-CLAIM-FALSIFIED
+date: 2026-09-17
+scope: >-
+  Gate 1. hedge-design-spec-2026-09-16.md §2.1's claim — "Expired losses: $0
+  across 0 positions... nothing this fleet has ever held to settlement has lost
+  money" — is FALSIFIED as a structural generalization and the correction is
+  APPLIED AND PROPAGATED, dated banners, originals standing. Evidence: S1-0 is
+  that claim run for five years — ride to settlement, expiration only, all 353
+  positions close `expired` — and 53 of them (15.0%) lose, -$5,438 total, worst
+  -$266, net +$2,030. SCOPE NOTE, required in every banner: §2.1 speaks of the
+  LIVE fleet (paired spreads, ~27 trading days) and remains LITERALLY TRUE of
+  that sample; what is falsified is the structural claim that holding to
+  settlement does not lose. The live record is now shown to be a small-sample
+  artifact, not an error. Propagation targets: hedge-design-spec §2.1,
+  hedge-north-star §2, hedge-program-thesis §1 — because this repo has a counted
+  history of corrections failing to propagate (propagation_sweeps, 7 instances).
+verbatim: devin reponse. I agree
+verbatim_of: andy
+owner: Andy (in-chat, Cowork session, 2026-09-17)
+status: Active
+applies_to: >-
+  docs/hedge-design-spec-2026-09-16.md §2.1; docs/hedge-north-star.md §2;
+  docs/hedge-program-thesis.md §1; docs/phase1-stage1-verification-2026-09-17.md §4.
+superseded_by: none
+source: >-
+  docs/phase1-stage1-verification-2026-09-17.md §4, computed from
+  data/captures/2026-09-17-p1-stage1/standalone-S1-0.csv (18/18 SHA256SUMS
+  verified). Scope note added at Devin's challenge, accepted by Andy.
+unclear: false
+```
+
+```yaml
+ruling_id: R-2026-09-17-HEDGE-PROGRAM-DISPOSITION
+date: 2026-09-17
+scope: >-
+  Gate 2 = A + C, explicitly NOT B. (A) The hedge program STOPS in its current
+  form. S1-H does not meet R-2026-09-17-PAPER-ARM-PREAUTH — the bar requires
+  beating H-0 AND both stop arms and it beats none. No paper arm is triggered.
+  (B) REJECTED: the webhook/VPS conditional hedge is NOT built — months of
+  plumbing for a mechanic testable only in paper/live, after the unconditional
+  form bled Exp(R) -0.2047 over 1,109 trades, is what evidence law exists to
+  prevent. (C) The freed machinery redirects to variables whose effects are large
+  enough to detect: entry rules, structure, width, DTE, symbol, and the Range075
+  gate itself. Grounding: at n=353 the minimum detectable difference is 0.076 R
+  against an observed condor-arm spread of 0.0059 R.
+  ⚠️ LANGUAGE AMENDED at Devin's challenge, accepted: the finding is NOT "the
+  native-first route is exhausted". It is "UNCONDITIONAL FIXED-SIDE IS EXHAUSTED;
+  MARKET-STATE-CONDITIONAL REMAINS EXPRESSIBLE, UNPROMISING, AND UNTESTED" — an
+  entry filter on the OVERLAY (VIX, Change %, IV Rank, gap) is expressible and
+  changes which days the debit is paid, which is the cost lever. It is not
+  authorized here; it is priced and left open.
+  ⚠️ And the verdict wording is "NO DEMONSTRATED BENEFIT", not "demonstrated
+  failure": the paired test is mean -0.0284 R/condor-day, t = -1.70, 95% CI
+  [-0.0613, +0.0044], p ~ 0.090 — the CI crosses zero. The bar is unmet under
+  burden of proof, not by rejection.
+verbatim: devin reponse. I agree
+verbatim_of: andy
+owner: Andy (in-chat, Cowork session, 2026-09-17)
+status: Active
+applies_to: >-
+  docs/hedge-north-star.md §3 and §6; docs/hedge-design-spec-2026-09-16.md §6.1
+  and §9.2; docs/hedge-program-thesis.md §3/§4/§5;
+  docs/dispatch-oa-capture-2026-09-16.md Phase 1 Stage 2 (does not run);
+  R-2026-09-17-PAPER-ARM-PREAUTH (bar unmet, no paper arm).
+superseded_by: none
+source: >-
+  docs/phase1-stage1-verification-2026-09-17.md; Devin's challenge memo
+  2026-09-17 (three overstatements conceded); Andy's agreement in-chat.
+unclear: false
+```
+
+```yaml
+ruling_id: R-2026-09-17-GF-EXIT-SPREAD-TEST
+date: 2026-09-17
+scope: >-
+  The four-arm confirming test is AUTHORIZED: PT50, Trail, Touch0 and Canary run
+  as backtest arms on the S1-0 fixture over the same window, same primary config,
+  exit mechanic the only variable. Purpose: measure the GF family's REAL exit
+  spread before any conclusion is drawn about the family. ⚠️ The GF-family
+  obituary is explicitly NOT ruled and is stated conditionally: exit-mechanic
+  ranking is unachievable IF the remaining mechanics land inside +/-0.076 R —
+  MDE is the detection floor, not the spread, and a spread measured across three
+  arms may not generalise to eight. Four arms to price an eight-arm family, reusing
+  the Stage-1 fixture. Every Stage-1 procedure binds: reconcile against
+  standalones, pin caps, verify from URL and row count, R with the unit labelled,
+  no recommendation written.
+verbatim: devin reponse. I agree
+verbatim_of: andy
+owner: Andy (in-chat, Cowork session, 2026-09-17)
+status: Active
+applies_to: >-
+  docs/greenfield-family-spec.md (the 8-arm family, pending the result);
+  a new dispatch, not yet written; data/captures/<date>-gf-exit-spread/.
+superseded_by: none
+source: >-
+  docs/phase1-stage1-verification-2026-09-17.md §2 and its 2026-09-17 amendment
+  (c); Devin's challenge, accepted by Andy.
+unclear: false
+```
