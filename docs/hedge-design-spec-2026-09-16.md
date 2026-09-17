@@ -196,6 +196,28 @@ A hedge is a **separate protective position**. An exit strategy is not a hedge. 
 
 ### 6.1 ⛔ The operative consequence
 
+> **[CORRECTED 2026-09-16 — option 4's framing is incomplete. Original text left standing per
+> §0.2. **CHANGES NO DECISION**; the replacement is drafted and **UNRULED** in
+> `docs/decision-card-2026-09-16-backtest-combine.md`.]**
+>
+> This section treats "can the backtester express a SECOND, separate protective position" as the
+> blocking question. The 2026-09-16 Phase-0 capture answered **NO for one backtest** — and in the
+> same bundle recorded that **two backtests combine natively**. Dated first-hand device read
+> 2026-09-16 22:37:58-04:00,
+> `data/captures/2026-09-16-oa-backtester/01-backtest-settings-form-2026-09-16-223758.txt`
+> sha256 `02376a44a3b60afdaf069974ae50292f4cdc93e2bfe10003413ae6fcfebe9973`, lines 219-222:
+> `/backtests/compare/<ids>` renders verbatim
+> `Compare Backtests · Save · Add Backtest · Results · Combine Results`. Corroborated on a second
+> surface by `data/oa_facts.csv` **OA-1077**, DOCUMENTED, verbatim: *"Then, combine the results of
+> multiple strategies into one portfolio curve."*
+>
+> ⚠️ **This does NOT make C4 buildable, and must not be read as doing so.** Combination is expected
+> to be additive at the portfolio level — the hedge backtest's entry is not conditioned on the
+> primary's state — so a combined overlay remains an overlay, not a separate protective position
+> opened on deterioration. Additivity is **UNVERIFIED** and is Phase 0b's load-bearing question.
+> What this changes is the **research route**, not §6.1's buildable-hedge verdict.
+
+
 **Under this ruling the fleet has no buildable hedge on Option Alpha today.** Every natively
 expressible candidate is an exit and is disqualified. The one true hedge, C4, needs a trigger that
 `oa-platform-reference.md` §11 row 6 rules NOT NATIVE — *"any condition referencing its own past"* —

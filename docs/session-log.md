@@ -12214,3 +12214,119 @@ one menu-close took several attempts. Stop conditions never triggered.
 
 **Files:** `data/captures/2026-09-16-oa-backtester/` (new bundle) · this file.
 Tracker artifact update owed — no `update_artifact` tool in this lane.
+
+## 2026-09-16 (close 9) — Native compare/combine found; §4's joined-backtest method falsified (Cowork, mounted tree)
+
+**Raised by Andy in-chat**, verbatim: *"Does this plan know that backtests can be
+duplicated as variants and compared? And then we can add several backtests to a
+portfolio to compare? This is all native in the OA."* It did not.
+
+**The finding, on two independent surfaces** (`verification_surfaces` — two agreeing
+derivations would be weaker than one check against a different surface):
+
+- `data/oa_facts.csv`, harvested 2026-08-04: **OA-1090** DOCUMENTED *"and compare up to
+  four backtests simultaneously,"* · **OA-1077** DOCUMENTED *"Then, combine the results
+  of multiple strategies into one portfolio curve."* · **OA-1091** DOCUMENTED *"and
+  combine multiple backtested strategies to see a single portfolio P/L curve."* ·
+  **OA-1141/1142** the docs page "Comparing and combining backtests" is an **empty embed
+  block** · **OA-1143/1144** DOCS-SILENT on the procedure for both.
+- `data/captures/2026-09-16-oa-backtester/01-backtest-settings-form-2026-09-16-223758.txt`
+  sha `02376a44a3b60afdaf069974ae50292f4cdc93e2bfe10003413ae6fcfebe9973`, lines 219-222:
+  `/backtests/compare/<ids>` renders verbatim `Compare Backtests · Save · Add Backtest ·
+  Results · Combine Results`. Tabs: `My Backtests 65 · Saved Backtests 0 · Top Backtests
+  1.4M · OA Portfolio`.
+
+**Why close 8 missed it.** Phase 0 *did* record the Compare surface — as the last line of
+its findings, framed as a negative ("aggregates independent results"), correctly answering
+the question the dispatch asked. The dispatch asked whether **one** backtest holds a second
+position (NO, correct). Whether **two** backtests combine into one curve was never asked, so
+a YES sitting in the same capture read as a disclaimer. ⭐ **A dispatch question scoped to one
+object cannot return a finding about the relation between two. `NOT EVALUABLE` guards against
+a confident wrong answer; nothing in the dispatch format guards against a correct answer to
+the wrong question.**
+
+**Consequence.** `hedge-north-star.md` §4's platform wall is true **per backtest** and
+irrelevant **across** backtests (`Position Limit: 1 position` is a per-config constraint).
+V1, V2 and V4 become native combines; only V3 keeps a manual join, so
+`hedge-design-spec-2026-09-16.md` §3.3 (intraday premium path) leaves the Phase-1 critical
+path while remaining owed for V3 and ledger-side ranking. ⚠️ Combination is expected to be
+**additive at the portfolio level** — UNVERIFIED — so a combined overlay is **not** a
+reactive hedge under `R-2026-09-16-HEDGE-DEFINITION`, and §6.1's buildable-hedge verdict is
+unchanged.
+
+**Applied — evidence-backed corrections under `CLAUDE.md` §5, change no decision, originals
+left standing, each citing fact IDs plus the dated capture sha (never another project doc):**
+
+| file | sha256 after edit |
+|---|---|
+| `docs/hedge-north-star.md` | `56e31da8fb6f707b9d3df19ea12f2d60eef89a10b8037f274e8dd8341318dba6` |
+| `docs/hedge-design-spec-2026-09-16.md` | `8838e1caf961a9ac3b74e2b4216aeb42f78510689031806ef679aba82eb82fe9` |
+
+Verified by direct `device_bash` sha256 + single-match grep of the new text, and by grep
+confirming both original premises still stand (1 match each). Not by any write-tool response.
+
+**Drafted, NOT applied — gated, four slots, none ruled:**
+`docs/decision-card-2026-09-16-backtest-combine.md`
+(sha `34193911424809e9eb771d2e89f64deb405d2d968a6e400c457ceee64be07a35`).
+S-1 replace §4's method with native combine · S-2 Phase 0b question rewrite (procedure,
+per-day granularity, **conditionality — load-bearing**, size-ratio control, duplicate
+fidelity, confirm the four-way cap) · S-3 the four-backtest ceiling vs a five-variant frame
+· S-4 **permission question**: the close-8 capture serialized 51 form inputs including hidden
+ones over CDP — `-A1` scopes the grant to driving the interface *as a user does*. Raised as a
+question, not a charge; no further capture should read hidden inputs until ruled.
+
+**Not changed:** `docs/state.md` — no stated fact in it moved (the research method lives in
+the north star). No ranking, no paper arm, no tier change; backtest evidence stays T4.
+
+**Files:** `docs/decision-card-2026-09-16-backtest-combine.md` (new) ·
+`docs/hedge-north-star.md` · `docs/hedge-design-spec-2026-09-16.md` · this file.
+Tracker artifact update owed — no `update_artifact` tool in this lane (same as close 8).
+
+## 2026-09-16 (close 10) — Dispatch-surface correction from Devin; card Slot 5 added (Cowork, mounted tree)
+
+**Devin corrected a claim made in the Cowork chat** — that OA-lane dispatch requires Andy pasting
+into Devin Desktop. Correction **accepted on mechanism, rejected on readiness.** Nothing applied;
+the whole of it lands as **Slot 5** of `docs/decision-card-2026-09-16-backtest-combine.md`, UNRULED.
+
+**Accepted.** Claude Code (terminal) foremans both lanes — already the standing position in
+`state.md` "Lane note". Two surfaces: `devin_session_create` (cloud, repo-only, no local Chrome)
+and the local CLI lane `scripts/devin_free.sh` → `~/bin/devin-free`, which runs on the laptop and
+can in principle attach to the authenticated Chrome. Desktop paste is one manual route, not the
+only one. The grant is untouched: UI path only, `zdte.*` parked, Andy's hand-launched login stays.
+
+**Rejected as ready — three blockers already in this repo, none named in the correction:**
+
+- **5a — the cost guard is on the wrong lane.** The correction caveats the CLI lane's model pin.
+  That lane is the only one that *can* pin. `devin_session_create` exposes **no model parameter**
+  (`devin_mode` only: normal/fast/lite/ultra/fusion), so an MCP session inherits the org default
+  and cannot be guaranteed free. Proposing MCP as surface #1 without that caveat inverts the risk.
+- **5b — the CWD guard refuses the proposed lane.** `scripts/devin_free.sh` refuses above exec,
+  `exit 2`, anywhere inside `$HOME/bot-fleet-v2`, `$HOME/gitstore`, `$HOME/bot-fleet`, and the
+  guard **resolves `--workspace`** (header lines 29-33, 64-68). The OA grid's deliverable is a
+  capture bundle under `data/captures/` in the live repo, so the lane as proposed refuses itself.
+- **5c — the pin fix is a wrapper redesign.** `state.md` lines 62-67 already carries this and
+  already says *"Resolve before any CLI dispatch."* Omitted by the correction: the wrapper
+  **refuses `--model` by design**, which is its entire reason to exist
+  (`swe-1-7-lightning` prefix-matches `swe-1-7` and is PAID). Draft recommends the CLI lane stays
+  `swe-1-7` and SWE-2 MAX remains Desktop-only until a live `acu 0.0` receipt exists on the CLI
+  backend. Caveat (b) accepted: `devin auth status` verified every session.
+
+**Plus two of ours:** 5d — no session-log entry records a `devin-free`-spawned session attaching to
+Chrome and driving OA; the CDP/Playwright driving on record (2026-08-19, and close 8) came from
+other lanes. Prove it with one throwaway session before the lane carries 25+ agent-hours
+(`fleet_harness_lessons`: an agent's claim of a capability is not the capability). 5e — the
+~175-run grid is the wrong size under Slot 1 and may shrink again after Phase 0b; sizing dispatch
+machinery to a number about to change produces inventory. **Order: rule Slot 1 → run Phase 0b →
+re-size the grid → then choose the dispatch surface.**
+
+**Changed:** `docs/decision-card-2026-09-16-backtest-combine.md` only — Slot 5 added, header
+FOUR→FIVE slots, gated list now "Slots 1, 2 and 5". New sha
+`1e6b0d7626bc54dd40e5ebf316f3b2e735cc5400ecb14f458cd8543c38143d1e`, verified by direct
+`device_bash` sha256 plus grep (FIVE=1, FOUR=0, "Slots 1, 2 and 5"=1).
+
+**Not changed:** `docs/state.md` — its model-pin-conflict block and Lane note already state both
+positions correctly and remain accurate. `docs/dispatch-oa-capture-2026-09-16.md` untouched: the
+Phase-0b rewrite is Slot 2 and the dispatch surface is Slot 5, both gated.
+
+**Files:** `docs/decision-card-2026-09-16-backtest-combine.md` · this file.
+Tracker artifact update owed — no `update_artifact` tool in this lane (same as closes 8 and 9).

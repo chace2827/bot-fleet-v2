@@ -83,6 +83,36 @@ no entry, no restart.
 
 ## 4. The research method — joined backtests
 
+> **[CORRECTED 2026-09-16 — this section's premise is factually falsified. Original text left
+> standing per `oa-platform-reference.md` §0.2. **THIS CHANGES NO DECISION:** the replacement
+> method is drafted and **UNRULED** in `docs/decision-card-2026-09-16-backtest-combine.md` Slot 1.
+> Until that slot is ruled, the method below stands as written.]**
+>
+> "The way around it" was written as though OA offered no native way to combine backtests. It
+> does. Evidence, on two independent surfaces:
+>
+> - `data/oa_facts.csv` **OA-1077**, DOCUMENTED, verbatim: *"Then, combine the results of multiple
+>   strategies into one portfolio curve."*
+> - `data/oa_facts.csv` **OA-1091**, DOCUMENTED, verbatim: *"and combine multiple backtested
+>   strategies to see a single portfolio P/L curve."*
+> - `data/oa_facts.csv` **OA-1090**, DOCUMENTED, verbatim: *"and compare up to four backtests
+>   simultaneously,"* — note that ceiling of **four** against this section's **five**-variant frame.
+> - `data/oa_facts.csv` **OA-1143 / OA-1144**, DOCS-SILENT: the *procedure* for comparing and for
+>   combining is documented nowhere, which is why the capability could be harvested and still not
+>   surface as a method.
+> - Dated first-hand device read **2026-09-16 22:37:58-04:00**,
+>   `data/captures/2026-09-16-oa-backtester/01-backtest-settings-form-2026-09-16-223758.txt`
+>   sha256 `02376a44a3b60afdaf069974ae50292f4cdc93e2bfe10003413ae6fcfebe9973`, lines 219-222:
+>   `/backtests/compare/<ids>` renders verbatim
+>   `Compare Backtests · Save · Add Backtest · Results · Combine Results`.
+>
+> The platform-wall sentence below remains true **per backtest** and is irrelevant **across**
+> backtests — `Position Limit: 1 position` is a per-config constraint, which is why combining
+> works. Under the drafted replacement, V1, V2 and V4 become native combines and only V3 keeps a
+> manual join. ⚠️ Combination is expected to be **additive at the portfolio level** — UNVERIFIED —
+> so a combined overlay is not a reactive hedge under `R-2026-09-16-HEDGE-DEFINITION`.
+
+
 **The platform wall (confirmed twice):** neither OO nor OA's backtester can open a second
 position mid-trade — chat premise, and the 2026-09-16 Phase-0 UI recon answered **NO**
 (single-structure: 8 fixed strategies, "Position Limit: 1 position," one position per
