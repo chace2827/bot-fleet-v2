@@ -19,6 +19,13 @@
 > decision freeze and its fleet table is the authority. Nothing here changes which bots exist,
 > which are archived, or which arms get built. Where a finding has roster implications, it is
 > flagged as **[ROSTER IMPLICATION — ANDY]** and stops there.
+>
+> ### ⭐ NORTH STAR — `docs/hedge-north-star.md` (2026-09-16)
+> The hedge program's direction doc: the signed definition (`R-2026-09-16-HEDGE-DEFINITION` —
+> hedge = separate protective position, exits ≠ hedges), the post-cutover loss signature it
+> targets, the native-first reactive strategy, and the joined-backtest research method. This file
+> stays the mechanic library and §5.2's arm-validity bar; the north star is the aim. On conflict,
+> the north star and signed rulings win.
 
 ---
 

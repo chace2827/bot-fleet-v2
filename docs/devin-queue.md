@@ -13,6 +13,10 @@ command that produces it, and the command's output wins.
 line at commit review (§5 doc-edit authority — this file is a corrections-class artifact, not a
 decision-class one).
 
+**North star:** the hedge program's aim is `docs/hedge-north-star.md` (2026-09-16). Read it before
+any hedge/backtest dispatch — it carries the signed definition, the authorization boundary
+(UI-only; `zdte.*` is parked), and the joined-backtest method that Phase-0's NO answer requires.
+
 ---
 
 ## Now

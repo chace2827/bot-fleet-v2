@@ -5,6 +5,10 @@ Written 2026-09-16 at Andy's request ("yes hedge design"). Under `CLAUDE.md` §5
 **gated decision**: this document changes nothing until Andy issues an explicit "amend the plan".
 It is a proposal plus its evidence, with the open rulings listed in §9.
 
+> ⭐ **North star:** `docs/hedge-north-star.md` (same day) is the program's direction doc — this
+> spec is the evidence pack underneath it. Read the north star for the aim; read this for the
+> numbers and the open rulings.
+
 **Evidence tier: T4.** n=30 losing positions over 27 fill days, single post-cutover epoch, one
 regime. Below the T2 / n>=100 / 6-month / regime-change bar that `CLAUDE.md` §4 requires for any
 live-capital decision. This spec may authorize *paper arms and measurement work only*.

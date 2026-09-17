@@ -3,7 +3,9 @@
 > ## ▶ PICKUP — next session starts here (written 2026-09-16, end of Cowork session)
 >
 > **Read in this order:** `CLAUDE.md` → this block → `STATUS.md` →
-> `docs/hedge-design-spec-2026-09-16.md` → `docs/decision-card-2026-09-16-tournament-baseline.md`.
+> `docs/hedge-north-star.md` (⭐ the program's aim — written 2026-09-16, merges the Cowork
+> strategy chat with the signed rulings) → `docs/hedge-design-spec-2026-09-16.md` →
+> `docs/decision-card-2026-09-16-tournament-baseline.md`.
 > Do **not** re-derive any of it in chat. A session that starts from files costs minutes; one that
 > starts from a chat costs a session.
 >

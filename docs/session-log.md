@@ -12140,3 +12140,77 @@ LIVE-FLEET EDITS — EVER"** with the backtest exception and the naming rule sta
 rules carry the no-export assumption and the confirm-it instruction.
 
 **Files:** `docs/RULINGS.md` (one ruling) · `docs/dispatch-oa-capture-2026-09-16.md` · this file.
+
+## 2026-09-16 (close 7) — Hedge north star written; Devin 09-15 sessions reconstructed (Devin, mounted tree)
+
+Source: Devin Desktop session (selective-kitten), read-only research + docs write. No OA contact.
+
+- **All seven Devin sessions started 2026-09-15 reconstructed from the local sessions DB**
+  (`~/.local/share/devin/cli/sessions.db`) — the Devin MCP route is dead (401, expired API key;
+  matches the known auth issue). Relevant to this project: `bird-roarer` (OA backtest UI nav test,
+  superseded mid-run), `sudden-iodine` (the `zdte.*` RPC validation probe → verdict USABLE, PR #79,
+  detectability + ToU analysis, the ~175-run cost model, and the first draft of what became
+  `.agents/skills/oa-drive/SKILL.md`), `uttermost-twilight` (close-process review → self-deriving
+  `close.sh` + `docs/daily-close.md`; also ran the 09-16 close), `moored-gazelle` (tastytrade MCP
+  docs review — future sanctioned-path candidate). `prickly-fiber`/`river-passive` are the other
+  project dir (TT3).
+- **`docs/hedge-north-star.md` written** — the hedge program's direction doc, built at Andy's
+  instruction by merging the Cowork strategy chat ("The honest verdict" / "How I'd run the research
+  natively", pasted in full — the claude.ai share link is Cloudflare-gated and unfetchable) with the
+  signed rulings and post-cutover evidence. Contents: the signed definition; the §2 loss signature;
+  native-first reactive hedge (Monitor CAN open a position — `oa-platform-reference.md` §4); the
+  joined-backtest method (V0–V4) that the Phase-0 NO answer requires; the UI-only authorization
+  boundary with the chat's `zdte.startTest` plan explicitly marked withdrawn; the §5.2 arm bar;
+  the assumption-register precondition; merged cost/calendar.
+- **Two corrections carried, not smoothed:** the chat's "condors die on large directional moves" is
+  the v1 model — this fleet's losses are 14:00–15:30 give-backs on small-net-move days (spec §2.2);
+  and the chat's RPC sweep predates the scoped grant — UI path only, one test at a time.
+- **Pointers added** so the aim is visible everywhere a session starts: `CLAUDE.md` §6 file map,
+  `docs/state.md` PICKUP read-order, `docs/hedge-research.md` top banner, `docs/hedge-design-spec-
+  2026-09-16.md` STATUS banner, `docs/devin-queue.md` header.
+- **Standing:** the doc is direction, not authorization — builds still need "amend the plan" +
+  pre-registration. `magical-quart` (Phase-0 backtester recon) was still running at write time;
+  its bundle `data/captures/2026-09-16-oa-backtester/` was not yet on disk.
+
+**Files:** `docs/hedge-north-star.md` (new) · `CLAUDE.md` · `docs/state.md` ·
+`docs/hedge-research.md` · `docs/hedge-design-spec-2026-09-16.md` · `docs/devin-queue.md` · this file.
+
+## 2026-09-16 (close 8) — Phase 0 backtester recon COMPLETE: answer NO (Devin, mounted tree)
+
+**Phase 0 of `docs/dispatch-oa-capture-2026-09-16.md` executed.** Attached to Andy's
+hand-launched authenticated Chrome via CDP (paper account; `/login` never seen, no
+stop condition triggered). Opened New Backtest → the `Backtest Settings` drawer,
+expanded all 7 sections, enumerated every control verbatim, read every dropdown
+and the Entry Filters "More" drawer, screenshotted each section, closed the editor
+via its ✕ having changed nothing.
+
+**ANSWER: NO — single-structure only.** The `Strategy` picker is exactly 8 single
+structures (Long Call … Iron Butterfly, verbatim in the raw file); `Position
+Limit` runs `1 position`–`10 positions` but repeats the SAME structure; Position
+Criteria states verbatim `Only 1 position open in an expiration at a time`; all
+Entry Filters predicate on the underlying/market (Ranges, Indicators, MAs, Stocks
++ GEX templates) — none reference an existing position; everything post-entry is
+an exit (PT%, PT$, SL%, SL$, Expiration, Avoid Events, Touch), and an exit is not
+a hedge under `R-2026-09-16-HEDGE-DEFINITION`. `OA Portfolio` is a published
+backtest library; `Compare` aggregates independent results. Andy stated the same
+conclusion in-session; the bundle makes it captured evidence rather than memory.
+
+**Corollary for Phase 1 (Andy's call, not started):** hedge arms H-A/H-B are not
+expressible; H-0 and H-C are (single-structure + exits). Hedge venue moves to
+live paper bots or webhooks — spec-level, gated.
+
+**Bundle:** `data/captures/2026-09-16-oa-backtester/` — raw
+`01-backtest-settings-form-2026-09-16-223758.txt` (sha
+`02376a44a3b60afdaf069974ae50292f4cdc93e2bfe10003413ae6fcfebe9973`) · derived
+`02-second-position-expressivity-2026-09-16.md` · 10 screenshots · README ·
+SHA256SUMS. Template matched to `data/captures/2026-09-16-roster/`.
+
+**Boundary notes / refusals:** never logged in (attach-only); no wire protocol,
+no network inspection; no live-fleet surface touched; no field set, no save, no
+run — Phase 0 stayed capture-only even though `-A2` now permits saved backtests
+(naming rule `ZZ-AGENT-<date>-<arm>` noted for Phase 1). Untrusted synthetic
+events could not dismiss OA menus — trusted `Input.dispatch*` clicks were used;
+one menu-close took several attempts. Stop conditions never triggered.
+
+**Files:** `data/captures/2026-09-16-oa-backtester/` (new bundle) · this file.
+Tracker artifact update owed — no `update_artifact` tool in this lane.
