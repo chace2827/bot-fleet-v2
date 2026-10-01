@@ -7181,6 +7181,11 @@ is not this session's. **This session wrote exactly the two files listed above.*
 `QQQ-IC-0DTE-Baseline` (−$31,580, 38% of the v1 fleet loss), using
 `docs/baseline-forensic-2026-08-07.md` as the model, described in the brief as "the champion
 forensic."
+*[HISTORICAL 2026-08-19 — that file was NEVER WRITTEN, correctly, for the reason given immediately
+below. The filename above appears only as a quotation of the brief. Left standing; do not create
+the file and do not repoint the citation. Deliberately not repeated in backticks here: the path
+scanner reads a quoted filename as a live reference, so restating it would manufacture a second
+dangling ref out of a note explaining the first.]*
 
 **⛔ THE BRIEF'S PREMISE WAS WRONG AND THE DELIVERABLE WAS NOT WRITTEN.**
 `docs/baseline-forensic-2026-08-07.md` **is** the QQQ-IC-0DTE-Baseline forensic — Sprint Task 12,
