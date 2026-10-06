@@ -13149,3 +13149,8 @@ the editor. Closed via `Close` (not Save), so nothing changed. **New gated quest
 paired S2 condors. Narrative updated + re-rendered.
 **Addendum 2 — 09-30 post-mortem added to the 10-06 narrative** (bot-by-bot table, 1-min SPX crossing times from a scratch Tradier pull, estimated Touch-exit counterfactual). Narrative re-rendered.
 **Addendum 3 — R-2026-10-06-TAIL-SCORING-RULE signed** (bad day >= 0.5R; paired fixed-vs-created sign test p<0.05; mean >= 80% of control). On existing QQQ backtests Touch0 wins; Canary fails the guard. Owed: evidence-standards.md banner; S2-shape SPX backtest dispatch.
+**Addendum 4 — T1 S2 tail test RUN (Cowork, built-in browser, backtests only).** 6 arms × 825 days, SPX .10Δ IC 13:30, 5y.
+Under R-2026-10-06-TAIL-SCORING-RULE every touch/SL arm passes; **Touch $10 wins** (bad days 95→11, fixed 84/created 0,
+mean R 6× control, maxDD 9.37R→4.08R). ⛔ Backtester stops exits ~3:45pm — 09-30 is max loss on every arm; late
+breaches untested. Bundle: data/captures/2026-10-06-t1-s2-tail/README.md. No bot touched; any bot change is gated.
+**Addendum 5 — T1b run.** 13:30: all touch buffers pass; rule (gross) picks $20 (0 bad days, maxDD 1.32R) but net of OA's $3.16/transaction fee estimate only $10 (+$801) and $7.50 are positive. 11:00 (PR-01 shape): NO arm passes the 80% floor; ride itself maxDD 15.6R. Bundle README §T1b.
