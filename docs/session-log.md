@@ -13208,3 +13208,4 @@ answer, v2 changelog) and `PROPOSED-packet-runner-v2.js` to the 08-27 bundle —
 v2 fixes the three recorded quirks (space/`=` args, non-exit, serialized
 decision texts) plus §2 leg-classes/UTC-ids and §5 absence-proof paging;
 original runner untouched in the 08-26 bundle. SHA256SUMS regenerated.
+**Addendum 17 — loss_register gains config_at_loss column.** 130PM: no edit recorded after 2026-08-09 (limits); automation hashes not re-read since 2026-08-08 baseline — re-hash owed before any fix is applied. GF bots changed 08-17 (delta) and 09-02 (sizing): their 09-18 row must cite config state.
