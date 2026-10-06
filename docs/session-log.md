@@ -13159,3 +13159,19 @@ breaches untested. Bundle: data/captures/2026-10-06-t1-s2-tail/README.md. No bot
 **Addendum 8 — dispatch written (not launched):** docs/dispatch-strike-distance-2026-10-06.md — T2 strike-distance sweep (.05/.07/.10/.15Δ × ride/Touch $10), gated on the loss-packet calibration passing.
 **Addendum 9 — decision card drafted:** docs/decision-card-2026-10-06-tail-method.md (holdout split · live paired clone · fees in scoring · tail profile in pre-reg) — UNSIGNED. Queued after the loss register: win-day project (give-back, capture rate, entry selection), scored on the same full-period scoreboard.
 **Addendum 10 — signed 1A 2A 3(ignore fees) 4A:** R-2026-10-06-TAIL-HOLDOUT / -LIVE-CLONE / -FEES-IGNORED / -PROFILE-PREREG in RULINGS.md; evidence-standards.md banner written; loss_register fix fields updated (gross winner Touch $20, pending holdout + clone); T2 dispatch updated to gross + holdout. Owed: pre-registration-ledger template field for tail profile.
+
+## 2026-10-06 — loss packet: IC-SPX-FastPT25-S2-130PM on 2026-08-26 (Devin Desktop, blind calibration)
+
+**Done**
+- Built `data/captures/2026-10-06-loss-packet-20260826-s2-130pm/` (7 files + SHA256SUMS): ledger rows, both OA
+  position drawers verbatim (put 7655/7650 +$150 · call 7690/7695 −$1,650), full trades + Automation Log
+  iterations, the 13:25–16:00 bot-log run list (202 rows), all 3:04PM/3:05PM decision texts, a 5-min SPX tape
+  (1min unavailable — retention), all 11 backtest arms' Aug-26 rows, and a derived facts table.
+- Facts (no interpretation): `Scalp-Mon-S2-StrikeTouch` evaluated "underlying above short call strike" No at
+  15:04, Yes at 15:05 → closed call at $2.05 (15:05:01); `Scalp-Mon-S2-Cleanup` then closed the surviving put
+  at $0.05 (15:05:04) on exactly-1-position. Tape: breach max +0.73 over 7,690 (15:00–15:05 bars); SPX 16:00
+  = 7,675.70 — both legs would have expired OTM. Backtest strikes STRIKES MATCH on all 11 arms.
+- **Blind rule honored**: loss register / loss-day register / today's log entries not opened. Read-only OA;
+  one stale-drawer misread detected, discarded, re-verified (packet README §Refusals). Chrome CDP :9222,
+  Andy-authenticated; `~/.chrome-oa-profile`.
+**Addendum 11 — loss-packet calibration PASSED** (08-26 S2-130PM, bundle data/captures/2026-10-06-loss-packet-20260826-s2-130pm/, SHA256SUMS 7/7 OK). Every fact in the Cowork register row reproduced blind; Devin's packet adds the 15:04 No/15:05 Yes StrikeTouch pair and all 11 backtest arms. Two dispatch defects fixed for run 2 (tape milestones counted pre-entry; session-log append required a read): docs/dispatch-loss-packet-2026-10-06.md now targets 08-27.
