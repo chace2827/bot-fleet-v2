@@ -71,6 +71,9 @@ caveats) · this file.
 
 ⛔ No recommendation about any bot.
 
+
+⛔ **Existing shared files are append-only for you** (`docs/devin-queue.md`, `docs/session-log.md`, any `docs/*.md` or `data/*.csv`): never recreate or overwrite one. When you finish a queue item, change only its status cell from `pending` to `done → <bundle path>`. On 2026-10-06 a session overwrote the 184-line queue backlog.
+
 ### DELIVERABLE
 `data/captures/<date>-t2-strike-distance/`: `01-raw-capture.txt` (the diffs, test ids, rendered stats),
 `02-analysis.md` (naming its source CSVs with sha256), every CSV raw, `README.md` (purpose ·

@@ -122,6 +122,8 @@ Cowork's job and the point of the calibration. Observations that look odd go und
 Raw text is verbatim from the page or file. Do not paraphrase inside `01`–`05`.
 
 ### PROHIBITIONS
+
+⛔ **Existing shared files are append-only for you** (`docs/devin-queue.md`, `docs/session-log.md`, any `docs/*.md` or `data/*.csv`): never recreate or overwrite one. When you finish a queue item, change only its status cell from `pending` to `done → <bundle path>`. On 2026-10-06 a session overwrote the 184-line queue backlog.
 No git. No writes outside the bundle directory **except** appending a close-out entry to
 `docs/session-log.md` — append with a shell `>>` heredoc **without reading the file**. No writes under `~/.claude`. Nothing written into `data/` other than the
 bundle. Never reuse or re-run a script from a prior capture.
