@@ -90,6 +90,36 @@ Paper Trading, read-only; Trades lists from `/positions/closed`, bot log `?date=
   the RED's question, *"is there an exit order at all?"*: **no**. The cause is the
   `countpos == 1` cleanup guard, not a dead exit engine.
 
+**09-30 POST-MORTEM — added 2026-10-06 at Andy's request.** Day: **−$8,590 on $75,574 risk**;
+the two S2 put legs are **−$8,060 (94%)**. Bot by bot (ledger `data/trades.csv`):
+
+| bot | P/L | legs |
+|---|---|---|
+| `IC-SPX-FastPT25-S2-130PM` | **−$4,400** | put −$4,750 · call +$350 |
+| `IC-SPX-FastPT25-S2` | **−$3,210** | put −$3,310 · call +$100 |
+| `GF-QQQ-IC-Touch0` / `-Ride` | −$338 each | call −$286 · put −$52 |
+| `QQQ-IC-0DTE-Fortress-NoPT50` | −$302 | call −$250 · put −$52 |
+| `GF-QQQ-IC-SL100` / `-SL200` / `-PT50` | −$52 each | put only |
+| `GF-QQQ-IC-Canary` (1ct) | −$8 | |
+| `Nigiri` / `3DTE` / `ORB` / `GF-Trail` | +$20 / +$40 / +$50 / +$52 | |
+
+**Cause: a closing sell-off that landed after the monitors stopped.** Tradier 1-minute SPX
+bars (pulled 2026-10-06 into a scratch root, not the repo): 7,687 at 15:45 → low 7,666.02 at
+15:54 → **15:55 low 7,662.95** (the 130PM short 7665 first breached) → back to 7,665–7,667 at 15:56–57 →
+15:58 low 7,662.66 → **15:59 low 7,652.9** (PR-01 short 7655 first breached) → settle 7,651.54.
+The 3:55PM StrikeTouch run read "not below" (see VERIFIES above). It evidently evaluated at
+the minute's open, near 7,666. The QQQ arms all closed at or before about 15:50 with no strike
+threatened.
+
+**Why it cost so much:** (1) the paired S2 condors have no exit after 15:55. (2) The payoff is
+asymmetric: the 130PM put collected $250 against $4,750 at risk (~1:19), so one breach erases
+~16 typical winning days. (3) The strikes were close: the 130PM short put was 0.45% below SPX at
+entry, and PR-01's 0.75%. **Counterfactual, estimated and not measured:** a Touch Exit Option
+(checked each minute to 15:59) would likely have closed the 130PM put on the 15:55–58 dips. Its
+three prior breach closes cost −$1,750 to −$2,250, against −$4,750 here. PR-01's breach falls
+only inside the 15:59 minute, so it is a coin-flip whether any exit fires in time. Any such
+change to OA bot behavior is gated (`CLAUDE.md` §5 standing exception).
+
 **THE GAP.**
 - **No tape for 09-17 → 10-05.** `2026-10-06_tape.json` covers 10-06 only. Both loss days
   (09-18, 09-30) have P&L and fill times and **no market context**.

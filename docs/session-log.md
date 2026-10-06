@@ -13147,3 +13147,4 @@ reading (a). (2) 09-18 Touch0 close label `Touch: OTM -$0.13`, the touch Exit Op
 onset: no exit order either side. Incident: one stray click opened `Scalp-Mon-S2-StrikeTouch` in
 the editor. Closed via `Close` (not Save), so nothing changed. **New gated question for Andy:** a pre-15:55 exit for
 paired S2 condors. Narrative updated + re-rendered.
+**Addendum 2 — 09-30 post-mortem added to the 10-06 narrative** (bot-by-bot table, 1-min SPX crossing times from a scratch Tradier pull, estimated Touch-exit counterfactual). Narrative re-rendered.
