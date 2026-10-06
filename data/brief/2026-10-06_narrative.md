@@ -68,6 +68,28 @@ was `T00694`. **That is the renumbering defect flagged on 09-16, reproduced live
 position, a third ID. The verify is still **OWED** and is recorded by natural key:
 `IC-SPX-FastPT25-S2`, position opened **2026-08-31 11:01 ET**.
 
+**⭐ VERIFIES DISCHARGED — dated first-hand OA reads, 2026-10-06 ~16:45 ET (built-in browser,
+Paper Trading, read-only; Trades lists from `/positions/closed`, bot log `?date=2026-09-30`):**
+- **09-30, both S2 put legs → reading (a) CONFIRMED.** Both Trades lists hold **only the Open
+  trade**: `Open 10 contracts - Sep 30, 2026 11:01AM` (PR-01) and `… 1:31PM` (130PM). There is
+  no close order, rejected order or unfilled order. OA banner, verbatim: *"This position expired in-the-money.
+  The close price and P/L is estimated based on the underlying price (7,651.54) at
+  expiration."* The 130PM bot log for 09-30 ends at **3:55PM**, and the 3:55PM
+  `Scalp-Mon-S2-StrikeTouch` run reads, for `SPX-7,665 put, +7,660 put`: *"Position underlying
+  price is below short put strike price — **No**"*. SPX was above 7665, and so also above PR-01's
+  7655, at the last monitor tick. **The breach came in the final 5 minutes, after the loop
+  stopped.** StrikeTouch did not miss it. Neither position's worst marked loss before settlement got
+  near the realized loss: PR-01 marked a low of −$330 (realized −$3,310), 130PM −$1,250 (realized
+  −$4,750). **The 15:55 → 16:00 window is a structural blind spot with no exit on either S2
+  arm.** That is a design property now, not a hypothesis.
+- **09-18 Touch0 → CONFIRMED as the touch Exit Option.** The close trade reads verbatim
+  `Close 26 contracts - Sep 18, 2026 2:53PM` · `Touch: OTM -$0.13` · filled at $0.55. The Exit
+  Options panel shows `TOUCH $0 / 0 OTM` (intent only). The Trades-list label is the evidence.
+- **08-31 RED onset (`T01079`) → DISCHARGED.** `IC-SPX-FastPT25-S2` opened 2026-08-31: put
+  `Open … 11:01AM` and call `Open … 11:02AM`, and **no exit order on either side**. That answers
+  the RED's question, *"is there an exit order at all?"*: **no**. The cause is the
+  `countpos == 1` cleanup guard, not a dead exit engine.
+
 **THE GAP.**
 - **No tape for 09-17 → 10-05.** `2026-10-06_tape.json` covers 10-06 only. Both loss days
   (09-18, 09-30) have P&L and fill times and **no market context**.
@@ -124,12 +146,11 @@ no instrument that knows which kind of break it is in**, and the two worst days 
 are both the kind that doesn't revert.
 
 ## tomorrow
-1. **The 09-30 Trades lists** (not the ledger): `IC-SPX-FastPT25-S2` opened 2026-09-30 11:01 ET
-   and `IC-SPX-FastPT25-S2-130PM` opened 2026-09-30 13:31 ET. Is there any exit order on the put
-   side? Prediction, stated in advance: **none**, consistent with (a). If there is a rejected or
-   unfilled order, (b) is live.
-2. **The 09-18 Touch0 Trades list** (opened 13:36 ET): is the 14:53 close the touch rule?
-3. **The T01079 / 08-31 verify**, owed since 09-16. Address it by bot + open time.
+1. ✅ ~~09-30 Trades lists~~ **DISCHARGED 10-06: reading (a), the breach came after the 15:55 loop end.**
+   **Decision for Andy (gated, OA bot behavior):** does either S2 arm get a pre-15:55 exit for
+   paired condors? Riding the last 5 minutes is the risk that cost $8,060 on 09-30.
+2. ✅ ~~09-18 Touch0~~ **DISCHARGED: `Touch: OTM -$0.13`.**
+3. ✅ ~~T01079 / 08-31~~ **DISCHARGED: no exit order on either side.**
 4. **Does 130PM ever produce a single-leg trade?** 0 in 36.
 5. **Next break: does the 3-for-3 hold-beats-stop pattern meet a non-reverting break where
    both have legs?** That comparison is the one the data is missing.

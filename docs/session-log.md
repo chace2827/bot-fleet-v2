@@ -13140,3 +13140,10 @@ OWED to the 09-30 Trades lists. (2) The 09-17 "live Touch0 not firing" claim is 
 legs. The rate gap vs backtest stands. Trades-list confirm OWED. (3) The RED onset position is now `T01079`
 (was `T00694`), which reproduces the trade-ID renumbering defect.
 **Owed:** tracker artifact update; the three Trades-list verifies above.
+**Addendum (same session, ~16:45 ET) — three OA Trades-list verifies DISCHARGED via the built-in
+browser (read-only, Paper Trading).** (1) 09-30 S2 put legs: Open trade only, no exit order; 130PM log
+at 3:55PM StrikeTouch reads "underlying below short put strike: No" → breach after the 15:55 loop end,
+reading (a). (2) 09-18 Touch0 close label `Touch: OTM -$0.13`, the touch Exit Option. (3) 08-31 PR-01
+onset: no exit order either side. Incident: one stray click opened `Scalp-Mon-S2-StrikeTouch` in
+the editor. Closed via `Close` (not Save), so nothing changed. **New gated question for Andy:** a pre-15:55 exit for
+paired S2 condors. Narrative updated + re-rendered.
