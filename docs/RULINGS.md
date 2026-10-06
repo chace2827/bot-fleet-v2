@@ -6037,3 +6037,67 @@ source: >-
   Ride/PT50/Trail -$2,548 (Trades list `Touch: OTM -$0.13`).
 unclear: false
 ```
+
+```yaml
+ruling_id: R-2026-10-06-TAIL-HOLDOUT
+date: 2026-10-06
+scope: >-
+  Any setting chosen from a backtest sweep (exit buffer, delta, entry filter) is CHOSEN on
+  2021-10 → 2024-12 and CONFIRMED on 2025-01 → present. The chosen setting must still pass
+  R-2026-10-06-TAIL-SCORING-RULE on the holdout window; if it fails there it is not adopted.
+verbatim: "1A"
+verbatim_of: andy
+owner: Andy (in-chat, Cowork, 2026-10-06; docs/decision-card-2026-10-06-tail-method.md slot 1)
+status: Active
+applies_to: T1/T1b (data/captures/2026-10-06-t1-s2-tail/), T2 and every later sweep.
+superseded_by: none
+unclear: false
+```
+
+```yaml
+ruling_id: R-2026-10-06-TAIL-LIVE-CLONE
+date: 2026-10-06
+scope: >-
+  A fix is applied first to ONE clone of the affected bot; the original runs unchanged as the paired
+  control. The fix spreads to other bots only after 20 live paired trading days OR the first 3 days on
+  which the fix fires, whichever is later, with no adverse divergence in bad days or fill quality.
+  Applying the fix to the clone is itself an OA bot change and stays gated ("amend the plan").
+verbatim: "2A"
+verbatim_of: andy
+owner: Andy (in-chat, Cowork, 2026-10-06; decision card slot 2)
+status: Active
+applies_to: any fix from the loss register / tail backtests.
+superseded_by: none
+unclear: false
+```
+
+```yaml
+ruling_id: R-2026-10-06-TAIL-FEES-IGNORED
+date: 2026-10-06
+scope: >-
+  R-2026-10-06-TAIL-SCORING-RULE scores GROSS R. Fees are ignored in the decision (Andy chose this
+  over the card's options A/B). Consequence recorded at signing: on T1b the gross winner at 13:30 is
+  Touch $20 (0 bad days), not Touch $10.
+verbatim: "3 ignore fees"
+verbatim_of: andy
+owner: Andy (in-chat, Cowork, 2026-10-06; decision card slot 3)
+status: Active
+applies_to: R-2026-10-06-TAIL-SCORING-RULE; T2 dispatch verdicts.
+superseded_by: none
+unclear: false
+```
+
+```yaml
+ruling_id: R-2026-10-06-TAIL-PROFILE-PREREG
+date: 2026-10-06
+scope: >-
+  Every new or re-spec'd bot's pre-registration entry must carry a backtested tail profile: bad days
+  (<= -0.5R), max DD (R), worst-5% mean, P/L, with backtest ids. A bot with no tail profile cannot be signed.
+verbatim: "4A"
+verbatim_of: andy
+owner: Andy (in-chat, Cowork, 2026-10-06; decision card slot 4)
+status: Active
+applies_to: docs/pre-registration-ledger.md (template update owed).
+superseded_by: none
+unclear: false
+```

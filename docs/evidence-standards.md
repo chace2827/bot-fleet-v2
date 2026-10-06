@@ -2,6 +2,16 @@
 
 *Written 2026-07-31 for Bot Fleet v2. First version.*
 
+> ## 📌 ADDED 2026-10-06 — a second decision metric for TAIL questions (rulings signed in-chat)
+> For any question whose purpose is reducing bad days (exits, hedges, strike distance, entry filters),
+> the deciding metric is **`R-2026-10-06-TAIL-SCORING-RULE`**: paired bad-day count (≤ −0.5R per
+> condor-day), fixed vs created, exact sign test p < 0.05, mean R ≥ 80% of control. Scored **gross**
+> (`R-2026-10-06-TAIL-FEES-IGNORED`); settings chosen on 2021-10→2024-12 and **confirmed on
+> 2025-01→present** (`R-2026-10-06-TAIL-HOLDOUT`); fixes go to **one live paired clone** first
+> (`R-2026-10-06-TAIL-LIVE-CLONE`); every new or re-spec'd bot carries a **backtested tail profile** in
+> its pre-registration (`R-2026-10-06-TAIL-PROFILE-PREREG`). Exp(R) remains the metric for edge/income
+> questions. The text below is unchanged.
+
 > ## ✍️ WRITTEN TO BE REVISED
 > Andy has flagged wanting a scoring redesign. **This document is a faithful consolidation of
 > the standards already adopted — not a proposal, and not my own design.** Its job is to put
