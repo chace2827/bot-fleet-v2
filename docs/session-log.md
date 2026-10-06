@@ -13034,3 +13034,109 @@ bundle" prohibition — the Stage-1 dispatch wrongly forbade it and forced Devin
 close-out.
 
 **Files:** `docs/dispatch-gf-exit-spread-2026-09-17.md` (new) · this file.
+
+## 2026-09-17 (close 17) — GF exit-spread test DONE, minus one inexpressible arm (Devin, mounted tree)
+
+Ran `docs/dispatch-gf-exit-spread-2026-09-17.md`. Bundle:
+`data/captures/2026-09-17-gf-exit-spread/` (13/13 SHA256SUMS verified).
+
+**Built via compare-card ⋮ → Add Variation off S1-0** (each verified to differ from the S1-0
+serialization in exactly one field + name, positional 58-input diff pasted into 01-capture §4):
+`ZZ-AGENT-2026-09-17-GF-PT50` (`profitssh`→0.5, id …8138), `-GF-Canary` (→0.05, …1139),
+`-GF-Touch0` (`touch`→`{"$0"}` JSON, …2140). All ran, all exported standalone, all 353 rows on the
+identical day-set as S1-0 (verified by Exp equality).
+
+**⛔ GF-Trail NOT BUILT — inexpressible in the backtester.** Exit Options enumerates to exactly 7
+pickers (PT%, PT$, SL%, SL$, Expiration, Avoid Events, Touch); every menu was opened and read, no
+"trail" string exists in the drawer, no `tstop`/`target`/`trail` slot exists in the serialization.
+The armed trail is a bot-surface mechanic only. Reported as refusal, not approximated.
+
+**The answer:** paired vs Ride (n=353 each): SL100 −0.0044 · SL200 +0.0015 · PT50 +0.0026 ·
+Touch0 −0.0049 · Canary −0.0190 R. **Spread = 0.0215 R — inside the ±0.0242 paired floor; no CI
+excludes zero.** $-scaled at Andy's $5k risk: spread ≈ $108/condor-day. No ranking, no verdict —
+per dispatch.
+
+**Notes:** `profitssh` is the credit-fraction slot (`profits` stays "0"); S1-0 Edit drawer opened
+once for enumeration, discarded unrun; JS `.click()` needed on the drawer close (delegated-handler
+trap again). No git, nothing outside bundle except this entry.
+
+**Files:** `data/captures/2026-09-17-gf-exit-spread/` (whole bundle) · this file.
+Tracker artifact update owed — no `update_artifact` tool in this lane.
+
+## 2026-09-17 (close 27) — GF exit-spread VERIFIED; the conditional resolves; Trail is unbacktestable (Cowork, mounted tree)
+
+Bundle `data/captures/2026-09-17-gf-exit-spread/` — **13/13 SHA256SUMS verified**, every figure
+recomputed from the CSVs. **Devin's paired table reproduces exactly.** Verification written to
+`docs/gf-exit-spread-verification-2026-09-17.md` (`9859cd1850c2d860…`, 94 lines).
+
+**The measurement** (5 arms vs Ride, paired by Exp, n=353, identical $60,751 risk base): SL200
++0.0015 (t +0.22) · SL100 −0.0044 (t −0.41) · PT50 +0.0026 (t +0.17) · Touch0 −0.0049 (t −0.28) ·
+Canary −0.0190 (t −0.94). **Spread 0.0215 R. Every CI includes zero.** No exit mechanic is
+demonstrably different from riding to settlement.
+
+⛔ **FOURTH CORRECTION TO MY OWN WORK TODAY — the dispatch's ±0.0242 threshold was one number where
+five were needed.** It was pooled from **SL100/SL200 only**, the two arms that fire *least*. The new
+arms fire far more and carry 1.7–2.3× the paired sd, so per-arm MDE runs **0.0186 → 0.0565**.
+Devin's "inside the ±0.0242 floor" applies a figure to arms it wasn't derived from. **Conclusion
+unchanged and cleaner per-arm:** the spread sits below the detection threshold of the three arms that
+move outcomes most, and no CI excludes zero.
+
+⭐ **The mechanism, counterintuitive and worth carrying:** an exit that fires MORE often is HARDER to
+distinguish, not easier. **Canary changes the outcome on 97% of days and is still indistinguishable
+from Ride** — constant firing inflates the paired difference's variance. **Frequency of action is not
+evidence of effect.**
+
+**The conditional in `R-2026-09-17-GF-EXIT-SPREAD-TEST` RESOLVES.** n needed to detect each arm's own
+observed effect: Canary 3,138 (~45 yrs live) · SL100 16,324 (~233) · Touch0 34,227 (~489) · SL200
+56,692 (~810) · PT50 93,575 (~1,337). **Not answerable on any timeline this program will have** — and
+the backtest is the *generous* case at 353 positions against the live fleet's tens.
+
+⭐ **NEW STRUCTURAL FINDING — `GF-QQQ-IC-Trail` / PR-16 cannot be backtested at all.** Devin
+enumerated the backtester's whole exit surface: **7 pickers** (PT% · PT$ · SL% · SL$ · Expiration ·
+Avoid Events · Touch). **No trailing-stop control**, no `trail` string in the drawer, no
+`tstop`/`target`/`trail` slot in the 58-input serialization; every menu opened, nothing substituted.
+The armed trail (`target`=40/`trail`=15, ruled 2026-08-06 by check C2) is a **bot-automation-surface
+mechanic only.** So Trail is **unevaluable by any means available to this program** — no backtest,
+and the live path needs centuries. Not a gap to close; a property of the arm.
+
+**$-scaled at $5,000/condor:** SL200 +$7 · PT50 +$13 · SL100 −$22 · Touch0 −$24 · Canary −$95 per
+condor-day; whole spread ≈$108, every interval straddling zero.
+
+**Files:** `docs/gf-exit-spread-verification-2026-09-17.md` (new) · this file · Devin's bundle
+(+ his own close-out entry above, appended under the carve-out).
+**Owed:** Andy's ruling on the GF family's disposition · the two OA driving facts into
+`oa-drive/SKILL.md` · tracker artifact update.
+
+> ### ⛔⛔ UNPLANNED FINDING from close 27's data — a LIVE config defect is strongly indicated
+> The exit-spread backtest establishes Touch0's firing rate: `{expired: 284, touch: 69}` — **the
+> touch exit fires on 69 of 353 days, 19.5%.** The live bot fires **never**:
+> `hedge-design-spec` §8 records `GF-QQQ-IC-Ride` and `GF-QQQ-IC-Touch0` as *"100% identical on every
+> shared open — 27/27, same close timestamp, same P/L to the cent."*
+>
+> **If the live exit were armed at the measured rate, P(zero touch closes in 27 opens) = 0.28%.**
+> ⭐ **The Ride/Touch0 identity is ~99.7% unlikely to be chance — the live Touch0 touch exit is almost
+> certainly NOT FIRING.** A configuration defect, not two mechanics that agree.
+>
+> ⚠️ **Same failure class that caused the v2 rebuild** (`CLAUDE.md` §1 — the prior project's exit
+> engine *"silently dead since June"*). Caveat strengthens it: live arms are **paired spreads**, the
+> backtest a **single IC** — paired spreads expose each side independently, so live should see **at
+> least** the backtest's touch opportunities, not fewer.
+>
+> **Resolves** the identity question `R-2026-09-17-PHASE1-SUBSTRATE-SPLIT` gates the ledger-side
+> comparison on — as a **defect**, not equivalence. **Does not confirm** it: that needs a first-hand
+> live read, out of scope for the verification doc. **The cheap check:** search the post-cutover
+> ledger for any `GF-QQQ-IC-Touch0` close attributable to a touch. Trades list only — the Exit
+> Options panel is never evidence (§0.3).
+
+## 2026-10-06 — catch-up close (Cowork)
+Close 2026-10-06 ran clean via `INGEST_DOWNLOADS=~/close-inbox/2026-10-06` (Downloads held 47
+unbanked legacy OA exports → ambiguity refusal; the clean dir is the documented override, not a
+code change). 13 trading days unobserved (09-17 → 10-05). Capture PRESENT, drift ZERO, 43 bots.
+Narrative `data/brief/2026-10-06_narrative.md` (`e80696046a1c9780…`), 6/6 slots; brief re-rendered.
+**Findings:** (1) 09-30 both S2 arms held a paired condor through a put breach to settlement,
+−$3,310 / −$4,750; this is the 09-16 no-exit failure mode realized. Whether StrikeTouch should have fired is
+OWED to the 09-30 Trades lists. (2) The 09-17 "live Touch0 not firing" claim is FALSIFIED as stated:
+09-18 Touch0 call closed 14:53 at QQQ 719.13 vs 719 short, 1 divergence in 39 shared Ride/Touch0
+legs. The rate gap vs backtest stands. Trades-list confirm OWED. (3) The RED onset position is now `T01079`
+(was `T00694`), which reproduces the trade-ID renumbering defect.
+**Owed:** tracker artifact update; the three Trades-list verifies above.

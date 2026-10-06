@@ -1,0 +1,11 @@
+date	bot	pr_id	verdict	reason
+2026-10-06	3DTE $140-$350	PR-07	UNEVALUABLE_BY_DESIGN	gate_type=unknown for 3DTE $140-$350; no signed entry condition
+2026-10-06	60min-ORB-10W-Paper-v1	PR-12	SUSPECT	SPX p=7836.17 at 11:05 breaks ORB range 7805.96-7835.09 (prior_close 7773.95)
+2026-10-06	DIR-SPX-CallVIXdrop	PR-06	JUSTIFIED	VIX low=15.35 vs prior=15.52 gives -1.1% change, threshold <=-2.0%; never reached in window 11:00 (1 bars)
+2026-10-06	DIR-SPX-PutVIX22-SL75	PR-05	JUSTIFIED	VIX high=15.37, low=15.35, prior_close=15.52; threshold >=22.0; high < threshold in window 11:00 (1 bars)
+2026-10-06	Friday 14 DTE Broken Wing IB (B-70)	PR-10	JUSTIFIED	date is Tue, gate requires Fri
+2026-10-06	IC-SPX-FastPT25-S2	PR-01	JUSTIFIED	SPX max |Δ%|=0.77 (p=7833.86 at 11:00, Δ%=0.77) vs threshold <0.75
+2026-10-06	IC-SPX-Fortress-Unstopped	INC-01	SUSPECT	no market gate and no fill_precondition declared; silence is suspect
+2026-10-06	Nigiri-Paper-v1	PR-08	UNEVALUABLE_BY_DESIGN	gate_type=unknown for Nigiri-Paper-v1; no signed entry condition
+2026-10-06	QQQ-IC-0DTE-Fortress-NoPT50	PR-04	UNEVALUABLE_FLOOR	fill_precondition credit floor value unrecorded
+2026-10-06	Trendy-Paper-v1	PR-11	UNEVALUABLE_BY_DESIGN	gate_type=unknown for Trendy-Paper-v1; no signed entry condition
