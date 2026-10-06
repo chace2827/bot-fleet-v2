@@ -25,7 +25,15 @@ context from prior work.
 
 (Run 1, 2026-08-26, PASSED calibration 2026-10-06 — bundle `data/captures/2026-10-06-loss-packet-20260826-s2-130pm/` is the reference shape. Reuse its methods; read its README first.)
 
-**Before the target day — PILOT the runner.** Read that bundle's `07-debrief.md` (§8 = dispatch additions)
+**UPDATED 2026-10-06 (after run 2) — use `PROPOSED-packet-runner-v2.js`** from
+`data/captures/2026-10-06-loss-packet-20260827-s2-130pm/`. **Pilot v2 once** against that 08-27 bundle
+(diff its §2/§3 decision texts/§5 output vs `02`/`03`/`05`); a clean diff licenses it for all later
+packets in the same session. **§3 is narrowed:** drop the full 13:25–16:00 run list. Capture only the
+decision texts (every pager iteration) for (a) the **scanner runs in the entry minute and the minute
+before** (they show which gate held or released entry) and (b) the **close minute and the minute
+before**. **§5:** if the date is absent, the v2 oldest-row-predates proof is enough, so don't page to exhaustion.
+
+(Original run-1 instruction below, superseded by the paragraph above.) **Before the target day — PILOT the runner.** Read that bundle's `07-debrief.md` (§8 = dispatch additions)
 and `PROPOSED-skill-diff.md`. Then run `PROPOSED-packet-runner.js` and `PROPOSED-tape.py` (copied into your
 scratch root, never edited in place) for **2026-08-26** and diff their output against that bundle's
 `02`/`03`/`04`/`05`. Any field that differs = STOP and report. Only a clean diff licenses using them for
@@ -49,6 +57,12 @@ the target day; record the pilot diff in the new bundle as `00-runner-pilot.txt`
 3. **NO WIRE PROTOCOL.** DOM/JS reads are in scope. No API calls to OA, no replay, no network panel,
    no recorder. Scope every capture to `app.optionalpha.com`.
 4. Assert `ACCOUNT` reads **Paper Trading** before any read. Anything live: STOP.
+
+⏱ **PACING (Andy, 2026-10-06):** every OA click or page load is followed by a randomized pause of
+**1.5–4 s** (in the runner, a `sleep(1500 + Math.random()*2500)` after each action; on a page load,
+wait for the page to settle and then pause). Never fire a burst of more than **5 actions** without a
+**≥10 s** pause. One OA session at a time; never parallel tabs driving OA. Report the extra minutes
+in `out.timings`. Speed is not the goal; staying unremarkable is.
 
 ### ⛔ TRAPS (each has bitten before)
 - **Drawer occlusion:** with a position drawer open, clicking the next grid row returns the

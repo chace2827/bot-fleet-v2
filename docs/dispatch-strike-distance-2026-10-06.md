@@ -46,6 +46,12 @@ caveats) · this file.
    ⛔ No `Create Bot`, no bot, automation or position surface edits.
 2. DOM/JS reads OK. No API calls, replay, network panel or recorder.
 
+⏱ **PACING (Andy, 2026-10-06):** every OA click or page load is followed by a randomized pause of
+**1.5–4 s** (in the runner, a `sleep(1500 + Math.random()*2500)` after each action; on a page load,
+wait for the page to settle and then pause). Never fire a burst of more than **5 actions** without a
+**≥10 s** pause. One OA session at a time; never parallel tabs driving OA. Report the extra minutes
+in `out.timings`. Speed is not the goal; staying unremarkable is.
+
 ### TASK
 1. Open `/backtests/compare/ZT217913212733763171103`. For each new arm: ⋮ → **Add Variation** →
    set short put delta, short call delta (the leg picker's `delta` recipe, value from the table) and,
