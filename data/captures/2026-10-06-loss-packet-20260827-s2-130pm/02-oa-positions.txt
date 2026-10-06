@@ -1,0 +1,291 @@
+OA /positions/closed — bot IC-SPX-FastPT25-S2-130PM (BOTfw5TkkCRF3017861977616287731)
+Positions opened 2026-08-27 · captured 2026-10-06 ET · Paper Trading account
+Grid group: AUG 27 (sorted close-date desc; Load-more paged until the next
+rowhd rendered = group provably complete). Row filter: i[title] =
+"IC-SPX-FastPT25-S2-130PM". Position order = grid order (newest close first).
+
+================================================================================
+POSITION 1 of 2 — row key fw5TkkCRF1917878527626870586782
+Grid row verbatim: SPX | Short Call Spread | 7,760 | C | 7,755 | C | Aug 27 | Closed | Aug 27 | 10 | 0.15 | 0.05 | $100 | 2.1% | +$150 | $4,850 | 0d | 7,732.73 | 7,713.31
+
+--- Position Details drawer (verbatim innerText) ---
+Position Details
+Edit
+SPX
+Short Call Spread
+AUG 27
+7,755
+C
+7,760
+C
+CLOSED P/L
+$100
+RETURN %
+66.67%
+CREDIT TO OPEN
+$150
+DEBIT TO CLOSE
+$50
+CAPITAL AT RISK
+$4,850
+RETURN ON RISK
+2.06%
+TRADE PRICE
+$0.15
+CLOSE PRICE
+$0.05
+QUANTITY
+10 contracts
+DIT
+0days
+PRICE AT OPEN
+7,732.73
+PRICE AT CLOSE
+7,713.31
+Exit Options
+PROFIT %
+None
+100.0% highAug 27
+PROFIT $
+None
+$150 highAug 27
+STOP LOSS %
+None
+20.0% lowAug 27
+STOP LOSS $
+None
+$30 lowAug 27
+EXPIRATION
+None
+Bot
+IC-SPX-FastPT25-S2-130PM
+Paper Trading
+Trades
+Close 10 contracts - Aug 27, 2026 2:28PM
+Automation Log
+0.05
+filled at $0.05
+Open 10 contracts - Aug 27, 2026 1:46PM
+Automation Log
+0.10
+filled at $0.15
+Tags
+call side
+Notes
+Edit Notes
+
+--- Leg classes (from drawer markup) ---
+"7,755 C" class="strike flex short"  (side=short; title attr: None)
+"7,760 C" class="strike flex long"  (side=long; title attr: None)
+
+--- Trades list (verbatim; timestamps from em.from data-value, UTC) ---
+Close 10 contracts - Aug 27, 2026 2:28PM | Automation Log | 0.05 | filled at $0.05
+  [item data-id=Tfw5TkkCRF19178785528189788421 · ts "2026-08-27T18:28:01.897Z"]
+Open 10 contracts - Aug 27, 2026 1:46PM | Automation Log | 0.10 | filled at $0.15
+  [item data-id=Tfw5TkkCRF19178785276270283018 · ts "2026-08-27T17:46:02.702Z"]
+
+--- Automation Log: Close trade (log id n/a — opened via trade item Tfw5TkkCRF19178785528189788421) — iteration 1/1 ---
+Automation Log
+Automation
+Scalp-Mon-S2-Cleanup
+Triggered by
+Monitor
+Aug 27, 2026 2:28PM
+Start automation
+Repeat for each position
+1
+/
+1
+SPX-7,755 call, +7,760 call
+Position has been open 2 minutes or more
+Yes
+Bot has exactly 1 position with any type and open status
+Yes
+Close Position
+SPX Short Call Spread Aug 27
+-7,755 call, +7,760 call
+View Position
+End
+[pager: 1/1 — next disabled after]
+
+--- Automation Log: Open trade (log id n/a — opened via trade item Tfw5TkkCRF19178785276270283018) — iteration 1/1 ---
+Automation Log
+Automation
+Scalp-Scan-Call
+Triggered by
+Scanner
+Aug 27, 2026 1:46PM
+Start automation
+Loop SPX
+1
+/
+1
+SPX
+Symbol change % is greater than -0.75 since previous close
+Yes
+Symbol change % is less than 0.75 since previous close
+Yes
+FOMC Meeting today
+No
+Current market time is after 1:30pm
+Yes
+NOT Bot opened a position with call side today
+Yes
+Open Position
+SPX Short Call Spread Aug 27
+-7,755 call, +7,760 call
+View Position
+End
+[pager: 1/1 — next disabled after]
+
+================================================================================
+POSITION 2 of 2 — row key fw5TkkCRF1917878527610129686769
+Grid row verbatim: SPX | Short Put Spread | 7,715 | P | 7,710 | P | Aug 27 | Closed | Aug 27 | 10 | 0.30 | 2.20 | -$1,900 | -40.4% | +$300 | $4,700 | 0d | 7,733.01 | 7,713.29
+
+--- Position Details drawer (verbatim innerText) ---
+Position Details
+Edit
+SPX
+Short Put Spread
+AUG 27
+7,710
+P
+7,715
+P
+CLOSED P/L
+-$1,900
+RETURN %
+-633.33%
+CREDIT TO OPEN
+$300
+DEBIT TO CLOSE
+$2,200
+CAPITAL AT RISK
+$4,700
+RETURN ON RISK
+-40.43%
+TRADE PRICE
+$0.30
+CLOSE PRICE
+$2.20
+QUANTITY
+10 contracts
+DIT
+0days
+PRICE AT OPEN
+7,733.01
+PRICE AT CLOSE
+7,713.29
+Exit Options
+PROFIT %
+None
+PROFIT $
+None
+STOP LOSS %
+None
+-633.3% lowAug 27
+STOP LOSS $
+None
+-$1,900 lowAug 27
+EXPIRATION
+None
+Bot
+IC-SPX-FastPT25-S2-130PM
+Paper Trading
+Trades
+Close 10 contracts - Aug 27, 2026 2:28PM
+Automation Log
+2.20 → 2.30
+filled at $2.20
+Open 10 contracts - Aug 27, 2026 1:46PM
+Automation Log
+0.30
+filled at $0.30
+Tags
+put side
+Notes
+Edit Notes
+
+--- Leg classes (from drawer markup) ---
+"7,710 P" class="strike flex long"  (side=long; title attr: None)
+"7,715 P" class="strike flex short"  (side=short; title attr: None)
+
+--- Trades list (verbatim; timestamps from em.from data-value, UTC) ---
+Close 10 contracts - Aug 27, 2026 2:28PM | Automation Log | 2.20 → 2.30 | filled at $2.20
+  [item data-id=Tfw5TkkCRF19178785528050650720 · ts "2026-08-27T18:28:00.506Z"]
+Open 10 contracts - Aug 27, 2026 1:46PM | Automation Log | 0.30 | filled at $0.30
+  [item data-id=Tfw5TkkCRF19178785276103862717 · ts "2026-08-27T17:46:01.038Z"]
+
+--- Automation Log: Close trade (log id n/a — opened via trade item Tfw5TkkCRF19178785528050650720) — iteration 1/2 ---
+Automation Log
+Automation
+Scalp-Mon-S2-StrikeTouch
+Triggered by
+Monitor
+Aug 27, 2026 2:28PM
+Start automation
+Repeat for each position
+1
+/
+2
+SPX-7,715 put, +7,710 put
+Position has any of these tags: put side
+Yes
+Position underlying price is below short put strike price
+Yes
+Close Position
+SPX Short Put Spread Aug 27
+-7,715 put, +7,710 put
+View Position
+End
+[pager: 1/2]
+
+--- Automation Log: Close trade (log id n/a — opened via trade item Tfw5TkkCRF19178785528050650720) — iteration 2/2 ---
+Automation Log
+Automation
+Scalp-Mon-S2-StrikeTouch
+Triggered by
+Monitor
+Aug 27, 2026 2:28PM
+Start automation
+Repeat for each position
+2
+/
+2
+SPX-7,755 call, +7,760 call
+Position has any of these tags: put side
+No
+Position underlying price is above short call strike price
+No
+End
+[pager: 2/2 — next disabled after]
+
+--- Automation Log: Open trade (log id n/a — opened via trade item Tfw5TkkCRF19178785276103862717) — iteration 1/1 ---
+Automation Log
+Automation
+Scalp-Scan-Put
+Triggered by
+Scanner
+Aug 27, 2026 1:46PM
+Start automation
+Loop SPX
+1
+/
+1
+SPX
+Symbol change % is greater than -0.75 since previous close
+Yes
+Symbol change % is less than 0.75 since previous close
+Yes
+FOMC Meeting today
+No
+Current market time is after 1:30pm
+Yes
+NOT Bot opened a position with put side today
+Yes
+Open Position
+SPX Short Put Spread Aug 27
+-7,715 put, +7,710 put
+View Position
+End
+[pager: 1/1 — next disabled after]

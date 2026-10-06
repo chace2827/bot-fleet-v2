@@ -1,0 +1,382 @@
+OA bot log — /bots/bot/BOTfw5TkkCRF3017861977616287731/log?date=2026-08-27
+Bot: IC-SPX-FastPT25-S2-130PM · ACCOUNT: Paper Trading · BOT GROUP: IC-Focus
+Captured 2026-10-06 ET. Date group header for the day-filtered view.
+NOTE: the UI Date filter only presets ~3 weeks of weekdays; the target
+date was reached via the page URL ?date=2026-08-27, which the log view
+honored (a UI read path). Day-filtered list held 150 rows total
+(newest first); rows below are every run whose time falls in 13:25-16:00
+(128 rows, verbatim, newest first).
+
+== RUN LIST 13:25-16:00 (time | automation | info) ==
+2:28PM | Scalp-Mon-S2-Cleanup | 1 close position | 1 decision | 1 conditional | 1 loop
+2:28PM | Scalp-Mon-S2-StrikeTouch | 1 close position | 4 decisions | 1 loop
+2:27PM | Scalp-Mon-S2-Cleanup | 2 decisions | 2 conditionals | 1 loop
+2:27PM | Scalp-Mon-S2-StrikeTouch | 4 decisions | 1 loop
+2:26PM | Scalp-Mon-S2-Cleanup | 2 decisions | 2 conditionals | 1 loop
+2:26PM | Scalp-Mon-S2-StrikeTouch | 4 decisions | 1 loop
+2:25PM | Scalp-Mon-S2-Cleanup | 2 decisions | 2 conditionals | 1 loop
+2:25PM | Scalp-Mon-S2-StrikeTouch | 4 decisions | 1 loop
+2:24PM | Scalp-Mon-S2-Cleanup | 2 decisions | 2 conditionals | 1 loop
+2:24PM | Scalp-Mon-S2-StrikeTouch | 4 decisions | 1 loop
+2:23PM | Scalp-Mon-S2-Cleanup | 2 decisions | 2 conditionals | 1 loop
+2:23PM | Scalp-Mon-S2-StrikeTouch | 4 decisions | 1 loop
+2:22PM | Scalp-Mon-S2-Cleanup | 2 decisions | 2 conditionals | 1 loop
+2:22PM | Scalp-Mon-S2-StrikeTouch | 4 decisions | 1 loop
+2:21PM | Scalp-Mon-S2-Cleanup | 2 decisions | 2 conditionals | 1 loop
+2:21PM | Scalp-Mon-S2-StrikeTouch | 4 decisions | 1 loop
+2:20PM | Scalp-Mon-S2-Cleanup | 2 decisions | 2 conditionals | 1 loop
+2:20PM | Scalp-Mon-S2-StrikeTouch | 4 decisions | 1 loop
+2:19PM | Scalp-Mon-S2-Cleanup | 2 decisions | 2 conditionals | 1 loop
+2:19PM | Scalp-Mon-S2-StrikeTouch | 4 decisions | 1 loop
+2:18PM | Scalp-Mon-S2-Cleanup | 2 decisions | 2 conditionals | 1 loop
+2:18PM | Scalp-Mon-S2-StrikeTouch | 4 decisions | 1 loop
+2:17PM | Scalp-Mon-S2-Cleanup | 2 decisions | 2 conditionals | 1 loop
+2:17PM | Scalp-Mon-S2-StrikeTouch | 4 decisions | 1 loop
+2:16PM | Scalp-Mon-S2-Cleanup | 2 decisions | 2 conditionals | 1 loop
+2:16PM | Scalp-Mon-S2-StrikeTouch | 4 decisions | 1 loop
+2:15PM | Scalp-Mon-S2-Cleanup | 2 decisions | 2 conditionals | 1 loop
+2:15PM | Scalp-Mon-S2-StrikeTouch | 4 decisions | 1 loop
+2:14PM | Scalp-Mon-S2-Cleanup | 2 decisions | 2 conditionals | 1 loop
+2:14PM | Scalp-Mon-S2-StrikeTouch | 4 decisions | 1 loop
+2:13PM | Scalp-Mon-S2-Cleanup | 2 decisions | 2 conditionals | 1 loop
+2:13PM | Scalp-Mon-S2-StrikeTouch | 4 decisions | 1 loop
+2:12PM | Scalp-Mon-S2-Cleanup | 2 decisions | 2 conditionals | 1 loop
+2:12PM | Scalp-Mon-S2-StrikeTouch | 4 decisions | 1 loop
+2:11PM | Scalp-Mon-S2-Cleanup | 2 decisions | 2 conditionals | 1 loop
+2:11PM | Scalp-Mon-S2-StrikeTouch | 4 decisions | 1 loop
+2:10PM | Scalp-Mon-S2-Cleanup | 2 decisions | 2 conditionals | 1 loop
+2:10PM | Scalp-Mon-S2-StrikeTouch | 4 decisions | 1 loop
+2:09PM | Scalp-Mon-S2-Cleanup | 2 decisions | 2 conditionals | 1 loop
+2:09PM | Scalp-Mon-S2-StrikeTouch | 4 decisions | 1 loop
+2:08PM | Scalp-Mon-S2-Cleanup | 2 decisions | 2 conditionals | 1 loop
+2:08PM | Scalp-Mon-S2-StrikeTouch | 4 decisions | 1 loop
+2:07PM | Scalp-Mon-S2-Cleanup | 2 decisions | 2 conditionals | 1 loop
+2:07PM | Scalp-Mon-S2-StrikeTouch | 4 decisions | 1 loop
+2:06PM | Scalp-Mon-S2-Cleanup | 2 decisions | 2 conditionals | 1 loop
+2:06PM | Scalp-Mon-S2-StrikeTouch | 4 decisions | 1 loop
+2:05PM | Scalp-Mon-S2-Cleanup | 2 decisions | 2 conditionals | 1 loop
+2:05PM | Scalp-Mon-S2-StrikeTouch | 4 decisions | 1 loop
+2:04PM | Scalp-Mon-S2-Cleanup | 2 decisions | 2 conditionals | 1 loop
+2:04PM | Scalp-Mon-S2-StrikeTouch | 4 decisions | 1 loop
+2:03PM | Scalp-Mon-S2-Cleanup | 2 decisions | 2 conditionals | 1 loop
+2:03PM | Scalp-Mon-S2-StrikeTouch | 4 decisions | 1 loop
+2:02PM | Scalp-Mon-S2-Cleanup | 2 decisions | 2 conditionals | 1 loop
+2:02PM | Scalp-Mon-S2-StrikeTouch | 4 decisions | 1 loop
+2:01PM | Scalp-Mon-S2-Cleanup | 2 decisions | 2 conditionals | 1 loop
+2:01PM | Scalp-Mon-S2-StrikeTouch | 4 decisions | 1 loop
+2:00PM | Scalp-Mon-S2-Cleanup | 2 decisions | 2 conditionals | 1 loop
+2:00PM | Scalp-Mon-S2-StrikeTouch | 4 decisions | 1 loop
+1:59PM | Scalp-Mon-S2-Cleanup | 2 decisions | 2 conditionals | 1 loop
+1:59PM | Scalp-Mon-S2-StrikeTouch | 4 decisions | 1 loop
+1:58PM | Scalp-Mon-S2-Cleanup | 2 decisions | 2 conditionals | 1 loop
+1:58PM | Scalp-Mon-S2-StrikeTouch | 4 decisions | 1 loop
+1:57PM | Scalp-Mon-S2-Cleanup | 2 decisions | 2 conditionals | 1 loop
+1:57PM | Scalp-Mon-S2-StrikeTouch | 4 decisions | 1 loop
+1:56PM | Scalp-Mon-S2-Cleanup | 2 decisions | 2 conditionals | 1 loop
+1:56PM | Scalp-Mon-S2-StrikeTouch | 4 decisions | 1 loop
+1:55PM | Scalp-Mon-S2-Cleanup | 2 decisions | 2 conditionals | 1 loop
+1:55PM | Scalp-Mon-S2-StrikeTouch | 4 decisions | 1 loop
+1:54PM | Scalp-Mon-S2-Cleanup | 2 decisions | 2 conditionals | 1 loop
+1:54PM | Scalp-Mon-S2-StrikeTouch | 4 decisions | 1 loop
+1:53PM | Scalp-Mon-S2-Cleanup | 2 decisions | 2 conditionals | 1 loop
+1:53PM | Scalp-Mon-S2-StrikeTouch | 4 decisions | 1 loop
+1:52PM | Scalp-Mon-S2-Cleanup | 2 decisions | 2 conditionals | 1 loop
+1:52PM | Scalp-Mon-S2-StrikeTouch | 4 decisions | 1 loop
+1:51PM | Scalp-Mon-S2-Cleanup | 2 decisions | 2 conditionals | 1 loop
+1:51PM | Scalp-Mon-S2-StrikeTouch | 4 decisions | 1 loop
+1:50PM | Scalp-Mon-S2-Cleanup | 2 decisions | 2 conditionals | 1 loop
+1:50PM | Scalp-Mon-S2-StrikeTouch | 4 decisions | 1 loop
+1:49PM | Scalp-Mon-S2-Cleanup | 2 decisions | 2 conditionals | 1 loop
+1:49PM | Scalp-Mon-S2-StrikeTouch | 4 decisions | 1 loop
+1:48PM | Scalp-Mon-S2-Cleanup | 2 decisions | 2 conditionals | 1 loop
+1:48PM | Scalp-Mon-S2-StrikeTouch | 4 decisions | 1 loop
+1:47PM | Scalp-Mon-S2-Cleanup | 2 conditionals | 1 loop
+1:47PM | Scalp-Mon-S2-StrikeTouch | 4 decisions | 1 loop
+1:46PM | Scalp-Scan-Call | 1 open position | 5 decisions | 1 loop
+1:46PM | Scalp-Scan-Put | 1 open position | 5 decisions | 1 loop
+1:45PM | Scalp-Scan-Call | 2 decisions | 1 loop
+1:45PM | Scalp-Scan-Put | 2 decisions | 1 loop
+1:44PM | Scalp-Scan-Call | 2 decisions | 1 loop
+1:44PM | Scalp-Scan-Put | 2 decisions | 1 loop
+1:43PM | Scalp-Scan-Call | 2 decisions | 1 loop
+1:43PM | Scalp-Scan-Put | 2 decisions | 1 loop
+1:42PM | Scalp-Scan-Call | 2 decisions | 1 loop
+1:42PM | Scalp-Scan-Put | 2 decisions | 1 loop
+1:41PM | Scalp-Scan-Call | 2 decisions | 1 loop
+1:41PM | Scalp-Scan-Put | 2 decisions | 1 loop
+1:40PM | Scalp-Scan-Call | 2 decisions | 1 loop
+1:40PM | Scalp-Scan-Put | 2 decisions | 1 loop
+1:39PM | Scalp-Scan-Call | 2 decisions | 1 loop
+1:39PM | Scalp-Scan-Put | 2 decisions | 1 loop
+1:38PM | Scalp-Scan-Call | 2 decisions | 1 loop
+1:38PM | Scalp-Scan-Put | 2 decisions | 1 loop
+1:37PM | Scalp-Scan-Call | 2 decisions | 1 loop
+1:37PM | Scalp-Scan-Put | 2 decisions | 1 loop
+1:36PM | Scalp-Scan-Call | 2 decisions | 1 loop
+1:36PM | Scalp-Scan-Put | 2 decisions | 1 loop
+1:35PM | Scalp-Scan-Call | 2 decisions | 1 loop
+1:35PM | Scalp-Scan-Put | 2 decisions | 1 loop
+1:34PM | Scalp-Scan-Call | 2 decisions | 1 loop
+1:34PM | Scalp-Scan-Put | 2 decisions | 1 loop
+1:33PM | Scalp-Scan-Call | 2 decisions | 1 loop
+1:33PM | Scalp-Scan-Put | 2 decisions | 1 loop
+1:32PM | Scalp-Scan-Call | 2 decisions | 1 loop
+1:32PM | Scalp-Scan-Put | 2 decisions | 1 loop
+1:31PM | Scalp-Scan-Call | 2 decisions | 1 loop
+1:31PM | Scalp-Scan-Put | 2 decisions | 1 loop
+1:30PM | Scalp-Scan-Call | 2 decisions | 1 loop
+1:30PM | Scalp-Scan-Put | 2 decisions | 1 loop
+1:29PM | Scalp-Scan-Call | 2 decisions | 1 loop
+1:29PM | Scalp-Scan-Put | 2 decisions | 1 loop
+1:28PM | Scalp-Scan-Call | 2 decisions | 1 loop
+1:28PM | Scalp-Scan-Put | 2 decisions | 1 loop
+1:27PM | Scalp-Scan-Call | 2 decisions | 1 loop
+1:27PM | Scalp-Scan-Put | 2 decisions | 1 loop
+1:26PM | Scalp-Scan-Call | 2 decisions | 1 loop
+1:26PM | Scalp-Scan-Put | 2 decisions | 1 loop
+1:25PM | Scalp-Scan-Call | 2 decisions | 1 loop
+1:25PM | Scalp-Scan-Put | 2 decisions | 1 loop
+
+(Day-filtered list ends at 1:14PM Scalp-Scan-Put — earliest logged run
+of the day. Nothing logged after 2:28PM — first row of the day-filtered
+list is the 2:28PM Cleanup close run; bot flat thereafter.)
+
+== DECISION TEXT — every run in the minute of each close (2:28PM) and the
+   minute before it (2:27PM); every pager iteration recorded ==
+
+--- 2:27PM | Scalp-Mon-S2-Cleanup | 2 decisions | 2 conditionals | 1 loop ---
+--- iteration 1/2 ---
+Automation Log
+Automation
+Scalp-Mon-S2-Cleanup
+Triggered by
+Monitor
+Aug 27, 2026 2:27PM
+Start automation
+Repeat for each position
+1
+/
+2
+SPX-7,715 put, +7,710 put
+Position has been open 2 minutes or more
+Yes
+Bot has exactly 1 position with any type and open status
+No
+End
+[pager 1/2]
+
+--- iteration 2/2 ---
+Automation Log
+Automation
+Scalp-Mon-S2-Cleanup
+Triggered by
+Monitor
+Aug 27, 2026 2:27PM
+Start automation
+Repeat for each position
+2
+/
+2
+SPX-7,755 call, +7,760 call
+Position has been open 2 minutes or more
+Yes
+Bot has exactly 1 position with any type and open status
+No
+End
+[pager 2/2 — next disabled after]
+
+--- 2:27PM | Scalp-Mon-S2-StrikeTouch | 4 decisions | 1 loop ---
+--- iteration 1/2 ---
+Automation Log
+Automation
+Scalp-Mon-S2-StrikeTouch
+Triggered by
+Monitor
+Aug 27, 2026 2:27PM
+Start automation
+Repeat for each position
+1
+/
+2
+SPX-7,715 put, +7,710 put
+Position has any of these tags: put side
+Yes
+Position underlying price is below short put strike price
+No
+End
+[pager 1/2]
+
+--- iteration 2/2 ---
+Automation Log
+Automation
+Scalp-Mon-S2-StrikeTouch
+Triggered by
+Monitor
+Aug 27, 2026 2:27PM
+Start automation
+Repeat for each position
+2
+/
+2
+SPX-7,755 call, +7,760 call
+Position has any of these tags: put side
+No
+Position underlying price is above short call strike price
+No
+End
+[pager 2/2 — next disabled after]
+
+--- 2:28PM | Scalp-Mon-S2-Cleanup | 1 close position | 1 decision | 1 conditional | 1 loop ---
+Automation Log
+Automation
+Scalp-Mon-S2-Cleanup
+Triggered by
+Monitor
+Aug 27, 2026 2:28PM
+Start automation
+Repeat for each position
+1
+/
+1
+SPX-7,755 call, +7,760 call
+Position has been open 2 minutes or more
+Yes
+Bot has exactly 1 position with any type and open status
+Yes
+Close Position
+SPX Short Call Spread Aug 27
+-7,755 call, +7,760 call
+View Position
+End
+[pager 1/1 — next disabled after]
+
+--- 2:28PM | Scalp-Mon-S2-StrikeTouch | 1 close position | 4 decisions | 1 loop ---
+--- iteration 1/2 ---
+Automation Log
+Automation
+Scalp-Mon-S2-StrikeTouch
+Triggered by
+Monitor
+Aug 27, 2026 2:28PM
+Start automation
+Repeat for each position
+1
+/
+2
+SPX-7,715 put, +7,710 put
+Position has any of these tags: put side
+Yes
+Position underlying price is below short put strike price
+Yes
+Close Position
+SPX Short Put Spread Aug 27
+-7,715 put, +7,710 put
+View Position
+End
+[pager 1/2]
+
+--- iteration 2/2 ---
+Automation Log
+Automation
+Scalp-Mon-S2-StrikeTouch
+Triggered by
+Monitor
+Aug 27, 2026 2:28PM
+Start automation
+Repeat for each position
+2
+/
+2
+SPX-7,755 call, +7,760 call
+Position has any of these tags: put side
+No
+Position underlying price is above short call strike price
+No
+End
+[pager 2/2 — next disabled after]
+
+== ADDITIONAL (beyond spec §3) — pre-open scanner decision texts ==
+Captured because the day's opens were 1:46PM, not ~1:31PM: the 1:30PM
+entry-window run and the last pre-open run (1:45PM), verbatim. These are
+the same scanner runs the run list shows as '2 decisions'.
+
+--- 1:30PM | Scalp-Scan-Call | 2 decisions | 1 loop ---
+Automation Log
+Automation
+Scalp-Scan-Call
+Triggered by
+Scanner
+Aug 27, 2026 1:30PM
+Start automation
+Loop SPX
+1
+/
+1
+SPX
+Symbol change % is greater than -0.75 since previous close
+Yes
+Symbol change % is less than 0.75 since previous close
+No
+End
+[pager 1/1 — next disabled after]
+
+--- 1:30PM | Scalp-Scan-Put | 2 decisions | 1 loop ---
+Automation Log
+Automation
+Scalp-Scan-Put
+Triggered by
+Scanner
+Aug 27, 2026 1:30PM
+Start automation
+Loop SPX
+1
+/
+1
+SPX
+Symbol change % is greater than -0.75 since previous close
+Yes
+Symbol change % is less than 0.75 since previous close
+No
+End
+[pager 1/1 — next disabled after]
+
+--- 1:45PM | Scalp-Scan-Call | 2 decisions | 1 loop ---
+Automation Log
+Automation
+Scalp-Scan-Call
+Triggered by
+Scanner
+Aug 27, 2026 1:45PM
+Start automation
+Loop SPX
+1
+/
+1
+SPX
+Symbol change % is greater than -0.75 since previous close
+Yes
+Symbol change % is less than 0.75 since previous close
+No
+End
+[pager 1/1 — next disabled after]
+
+--- 1:45PM | Scalp-Scan-Put | 2 decisions | 1 loop ---
+Automation Log
+Automation
+Scalp-Scan-Put
+Triggered by
+Scanner
+Aug 27, 2026 1:45PM
+Start automation
+Loop SPX
+1
+/
+1
+SPX
+Symbol change % is greater than -0.75 since previous close
+Yes
+Symbol change % is less than 0.75 since previous close
+No
+End
+[pager 1/1 — next disabled after]
+

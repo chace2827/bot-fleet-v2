@@ -13178,3 +13178,33 @@ breaches untested. Bundle: data/captures/2026-10-06-t1-s2-tail/README.md. No bot
 **Addendum 12 — debrief files added to the same bundle (Devin):** `07-debrief.md` (time/action budget, all 16 dead ends, READ-vs-DERIVED audit, stale-drawer confirmation, OA↔ledger↔backtest mismatch list) + `PROPOSED-packet-runner.js` (one-pass §2/§3/§5) + `PROPOSED-tape.py` (one-command §4) + `PROPOSED-skill-diff.md` (oa-drive additions: ?date= param, /backtests/test/<id>, showPositions, stale-view-after-close) + `PROPOSED-knowledge-note.md` (note "bot-fleet-v2 loss-packet procedure" — devin MCP create failed HTTP 401, key expired; content saved for paste/retry). SHA256SUMS regenerated over all 12 files. Est. with runner: ~15–20 min/packet; remaining 6 fit one session.
 **Addendum 13 — devin-queue.md created:** docs/devin-queue.md seeded with Cowork's ordering (08-27 packet → strike-distance sweep → remaining 5 packet jobs), all pointers to the existing dispatch files. New sessions launch on "Take the next item from docs/devin-queue.md". Also: devin MCP key still 401 after app restart (desktop-mcp service-user credential is app-injected, not file-config); PROPOSED-knowledge-note.md stands as the manual paste fallback.
 **Addendum 14 — devin-queue.md restore:** a Devin session had overwritten the backlog with a 25-line pointer list; restored from HEAD beneath the pointer list (209 lines, 'Blocked on a ruling' present). Append-only rule added to both dispatches.
+**Addendum 15 — handoff written:** docs/handoff-edge-funnel-2026-10-06.md (new Cowork chat for the Edge Funnel arm; first job = mine prior backtest learnings incl. v1 archive into data/backtest_findings.csv; then draft search scope for signing).
+
+## 2026-10-06 — Devin: loss packet IC-SPX-FastPT25-S2-130PM × 2026-08-27 (queue #1)
+
+Bundle `data/captures/2026-10-06-loss-packet-20260827-s2-130pm/` (8 files,
+SHA256SUMS.txt). Read-only OA + backtest reads, CDP :9222 on Andy's logged-in
+Chrome, Paper Trading. Pilot of PROPOSED-packet-runner.js + PROPOSED-tape.py
+against the 08-26 reference bundle: CLEAN on every emitted field (verbatim
+diffs in 00-runner-pilot.txt), so they ran the target day. Runner quirks found,
+recorded, unpatched: args need `--k=v`, process never exits (open WebSocket),
+`openRun` is a callback not serialized (companion pilot-s3.js pattern used for
+decision texts; supplementary pass added leg classes + trade UTC ids).
+
+Findings (facts only, Cowork writes the register row): put leg 7,715/7,710
+stopped by Scalp-Mon-S2-StrikeTouch at 14:28:00.5 for −$1,900 (fill $2.20);
+call leg 7,755/7,760 swept by Scalp-Mon-S2-Cleanup at 14:28:01.9 for +$100.
+Net −$1,800. Tape (5min): put breach −4.83 max inside the 14:25 bar; SPX
+16:00 = 7,730.99 → both legs would have expired OTM. Mirror image of 08-26's
+call-side loss. Entry was 1:46PM, not ~1:31PM — scanner logs show the "<0.75%
+change" gate failing at 1:30PM and 1:45PM, passing at 1:46PM (verbatim in 03).
+⛔ No Aug-27 row exists in ANY of the 11 backtests — A0 paged to exhaustion
+(825 rows → Oct 2021), Aug 26/28 present; one-shot 1:30pm entry never retried.
+STRIKES: cannot be compared — reported absent, not filled in.
+**Addendum 16 — 08-27 packet reviewed (Devin, bundle verified 7/7) → register row 3** (whipsaw-touch-exit, -1,800; ride would have been +450). New divergence filed: live scanner enters late after the change% gate clears (13:46); backtest one-shot 13:30 entry skips such days.
+
+Addendum (same session): added `07-debrief.md` (per-section timings, §3-load
+answer, v2 changelog) and `PROPOSED-packet-runner-v2.js` to the 08-27 bundle —
+v2 fixes the three recorded quirks (space/`=` args, non-exit, serialized
+decision texts) plus §2 leg-classes/UTC-ids and §5 absence-proof paging;
+original runner untouched in the 08-26 bundle. SHA256SUMS regenerated.

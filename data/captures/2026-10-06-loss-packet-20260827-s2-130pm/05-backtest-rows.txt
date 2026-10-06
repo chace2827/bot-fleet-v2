@@ -1,0 +1,94 @@
+Backtest rows (READ-ONLY) — 13:30 set, captured 2026-10-06 ET, Paper Trading.
+Page shape: /backtests/test/<id> → Positions "showPositions" link → positions
+grid (100 rows/load, newest first). Test name from item.tdesc; Settings-card
+Exit Options line from the page's last section (innerText).
+
+⛔ TARGET-DATE ROW: none exists. For all 11 tests the loaded positions grid was
+filtered for 'Aug 27, 2026' → 0 rows. On A0 the grid was additionally paged
+to exhaustion (825 rows, oldest Oct 6, 2021 — the full 5Y window): Aug 27,
+2026 is ABSENT while Aug 28 and Aug 26 are present — an isolated skip, not a
+data hole. The backtester did not open a position on 2026-08-27.
+
+Common settings (same family as reference bundle, A0 card): SPX Iron Condor,
+DTE exactly 0 days, LONG PUT $5.00 below short put leg, SHORT PUT -.10 delta,
+SHORT CALL .10 delta, LONG CALL $5.00 above short call leg, $50,000 allocation,
+1 contract, ENTRY TRIGGER Time, ENTRY TIME 1:30pm, Mon-Fri, POSITION LIMIT 1,
+Position Criteria None, Entry Filters CHANGE % -0.75% to 0.75%, window 5Y.
+
+================================================================================
+A0 · ZT217913212733763171103 · name: ZZ-COWORK-2026-10-06-T1-A0-ride
+Settings-card Exit Options line: "Exit Options / None"
+positions-grid rows loaded: 100 · rows matching 'Aug 27, 2026': 0
+
+================================================================================
+A1 · ZT217913213667172591104 · name: ZZ-COWORK-2026-10-06-T1-A1-touch0
+Settings-card Exit Options line: "Exit Options / TOUCH / $0"
+positions-grid rows loaded: 100 · rows matching 'Aug 27, 2026': 0
+
+================================================================================
+A2 · ZT217913214071275321105 · name: ZZ-COWORK-2026-10-06-T1-A2-touch5
+Settings-card Exit Options line: "Exit Options / TOUCH / $5.00"
+positions-grid rows loaded: 100 · rows matching 'Aug 27, 2026': 0
+
+================================================================================
+A3 · ZT217913214243169681106 · name: ZZ-COWORK-2026-10-06-T1-A3-touch10
+Settings-card Exit Options line: "Exit Options / TOUCH / $10.00"
+positions-grid rows loaded: 100 · rows matching 'Aug 27, 2026': 0
+
+================================================================================
+A4 · ZT217913214629138811108 · name: ZZ-COWORK-2026-10-06-T1-A4-sl100
+Settings-card Exit Options line: "Exit Options / STOP LOSS / 100%"
+positions-grid rows loaded: 100 · rows matching 'Aug 27, 2026': 0
+
+================================================================================
+A5 · ZT217913214854667371110 · name: ZZ-COWORK-2026-10-06-T1-A5-exp10m
+Settings-card Exit Options line: "Exit Options / EXPIRATION / 10 minutes"
+positions-grid rows loaded: 100 · rows matching 'Aug 27, 2026': 0
+
+================================================================================
+A6 · ZT217913221146838271122 · name: ZZ-COWORK-2026-10-06-T1b-A6-touch7.5
+Settings-card Exit Options line: "Exit Options / TOUCH / $7.50"
+positions-grid rows loaded: 100 · rows matching 'Aug 27, 2026': 0
+
+================================================================================
+A7 · ZT217913221268980491124 · name: ZZ-COWORK-2026-10-06-T1b-A7-touch12.5
+Settings-card Exit Options line: "Exit Options / TOUCH / $12.50"
+positions-grid rows loaded: 100 · rows matching 'Aug 27, 2026': 0
+
+================================================================================
+A8 · ZT217913221505807901126 · name: ZZ-COWORK-2026-10-06-T1b-A8-touch15
+Settings-card Exit Options line: "Exit Options / TOUCH / $15.00"
+positions-grid rows loaded: 100 · rows matching 'Aug 27, 2026': 0
+
+================================================================================
+A9 · ZT217913221702251821127 · name: ZZ-COWORK-2026-10-06-T1b-A9-touch20
+Settings-card Exit Options line: "Exit Options / TOUCH / $20.00"
+positions-grid rows loaded: 100 · rows matching 'Aug 27, 2026': 0
+
+================================================================================
+A10 · ZT217913221818381131128 · name: ZZ-COWORK-2026-10-06-T1b-A10-touch25
+Settings-card Exit Options line: "Exit Options / TOUCH / $25.00"
+positions-grid rows loaded: 100 · rows matching 'Aug 27, 2026': 0
+
+================================================================================
+A0 gap evidence — adjacent rows verbatim from the exhaustively-paged grid
+(context only, NOT the target date):
+
+Aug 28, 2026:
+SPX | Iron Condor | 7,660 | P | 7,665 | P | 7,735 | C | 7,740 | C | Aug 28, 2026 | 1:30pm → 4:00pm | Expired | $435 | $65
+
+Aug 26, 2026:
+SPX | Iron Condor | 7,650 | P | 7,655 | P | 7,690 | C | 7,695 | C | Aug 26, 2026 | 1:30pm → 4:00pm | Expired | $445 | $55
+
+================================================================================
+11:00 set (B0–B4): NOT USED — target bot is a 13:30-entry bot.
+
+================================================================================
+STRIKES CHECK
+Live position (from OA drawers, leg classes):
+  put leg:  short 7,715 P / long 7,710 P
+  call leg: short 7,755 C / long 7,760 C
+Backtest Aug-27 rows: NONE (all 11 tests) — no strikes to compare.
+
+=> STRIKES CANNOT BE COMPARED — the 13:30-set backtests have no 2026-08-27
+   position. Neither MATCH nor DO-NOT-MATCH is assertable; reported absent.

@@ -1,0 +1,58 @@
+00 — Runner pilot record (dispatch: "Before the target day")
+
+Date: 2026-10-06 · Session: Devin (SWE-2 Max), Devin Desktop, mounted repo.
+Pilot target: 2026-08-26 × IC-SPX-FastPT25-S2-130PM against reference bundle
+`data/captures/2026-10-06-loss-packet-20260826-s2-130pm/`.
+
+VERDICT: CLEAN — the PROPOSED runner + tape scripts are licensed for 2026-08-27.
+
+Method: scripts copied UNEDITED to /tmp/lp-20260827/ (with scripts/ + .env for
+the tape call, per dispatch §4). Runner invoked over CDP :9222 on Andy's
+logged-in Chrome; tape invoked once for the calibration date.
+
+== Field-level diffs (all clean) ==
+
+§2 positions — runner JSON vs 02-oa-positions.txt:
+  - 2 positions; row keys fw5TkkCRF2617877654628373956388 (put) and
+    fw5TkkCRF2617877654642679876410 (call) — identical to reference.
+  - Grid row text, full Position Details innerText: byte-verbatim substrings
+    of the reference file (11 mechanical checks, 0 failures).
+  - Every trade's Automation Log captured with all pager iterations
+    (Cleanup 1/1, StrikeTouch 2/2, Scan-Put 1/1, Scan-Call 1/1) — verbatim.
+  - No STALE_DRAWER error field fired on this pilot.
+
+§3 bot log — runner rows vs 03-bot-log.txt:
+  - Runner loads the whole day-filtered day (250 rows, 13:01–15:05); the
+    dispatch window 13:25–16:00 inside it is 202 rows — identical count and
+    BYTE-VERBATIM to the reference list (0 diffs on zip-compare).
+  - Decision texts: the runner emits `openRun` as a callback (not serialized
+    to JSON), so the companion capture (same overlay: row INFO-cell click →
+    view.logentry-view → bar.rebar pager) was exercised for 3:04PM + 3:05PM:
+    4 runs, all iterations, verbatim-identical to the reference texts.
+
+§4 tape — PROPOSED-tape.py vs 04-tape-5min.csv:
+  - 1min requested first → unavailable (~29 trading days back); 5min used.
+  - Output CSV byte-identical (diff exit 0). Milestones identical:
+    put 7655 within_20/within_10 @13:00, never at/through, extreme_low
+    7664.15 (9.15 short); call 7690 within_20 @13:15, within_10 @14:45,
+    at/through @15:00, extreme_high 7690.73 (+0.73).
+
+§5 backtests — runner rows vs 05-backtest-rows.txt:
+  - 11/11 tests: ids, names (ZZ-COWORK-2026-10-06-T1*/T1b*), Exit Options
+    lines, Aug-26 row text, status/risk/pnl, leg long/short classes — all
+    present verbatim in the reference file (0 failures).
+
+== Runner quirks found (script unedited; recorded, not patched) ==
+
+1. Arg parser only accepts `--key=value` — the usage line's `--tests id1,id2`
+   (space-separated) silently parses to `true`. Invocation must use `=` for
+   every flag (--bot/--botid/--date/--tests).
+2. Process does not exit after printing — the CDP WebSocket is never closed.
+   Output JSON is complete once written; terminate the process after capture.
+3. `s3_botlog.openRun` is returned as a function and therefore does NOT appear
+   in the JSON — decision texts for the close minute + minute-before need the
+   companion step (pilot-s3.js pattern: INFO-cell click → logentry-view →
+   pager). Proven verbatim-clean above.
+4. §2 collects rows by `i[title]` == bot name inside the target date group;
+   worked here because only the target bot's rows matched — confirmed against
+   the reference's two positions.
