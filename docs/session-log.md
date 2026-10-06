@@ -13154,3 +13154,4 @@ Under R-2026-10-06-TAIL-SCORING-RULE every touch/SL arm passes; **Touch $10 wins
 mean R 6× control, maxDD 9.37R→4.08R). ⛔ Backtester stops exits ~3:45pm — 09-30 is max loss on every arm; late
 breaches untested. Bundle: data/captures/2026-10-06-t1-s2-tail/README.md. No bot touched; any bot change is gated.
 **Addendum 5 — T1b run.** 13:30: all touch buffers pass; rule (gross) picks $20 (0 bad days, maxDD 1.32R) but net of OA's $3.16/transaction fee estimate only $10 (+$801) and $7.50 are positive. 11:00 (PR-01 shape): NO arm passes the 80% floor; ride itself maxDD 15.6R. Bundle README §T1b.
+**Addendum 6 — loss register moved to data/loss_register.csv** (2 rows: 09-30, 08-26); docs/loss-day-register.md now a pointer.
