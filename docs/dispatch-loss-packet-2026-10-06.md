@@ -25,6 +25,12 @@ context from prior work.
 
 (Run 1, 2026-08-26, PASSED calibration 2026-10-06 — bundle `data/captures/2026-10-06-loss-packet-20260826-s2-130pm/` is the reference shape. Reuse its methods; read its README first.)
 
+**Before the target day — PILOT the runner.** Read that bundle's `07-debrief.md` (§8 = dispatch additions)
+and `PROPOSED-skill-diff.md`. Then run `PROPOSED-packet-runner.js` and `PROPOSED-tape.py` (copied into your
+scratch root, never edited in place) for **2026-08-26** and diff their output against that bundle's
+`02`/`03`/`04`/`05`. Any field that differs = STOP and report. Only a clean diff licenses using them for
+the target day; record the pilot diff in the new bundle as `00-runner-pilot.txt`.
+
 **Read, in order:** `CLAUDE.md` (§3, §5, §9.1a) · `.agents/skills/option-alpha/SKILL.md` (the law) ·
 `.agents/skills/oa-drive/SKILL.md` · this file.
 
