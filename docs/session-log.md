@@ -13148,3 +13148,4 @@ onset: no exit order either side. Incident: one stray click opened `Scalp-Mon-S2
 the editor. Closed via `Close` (not Save), so nothing changed. **New gated question for Andy:** a pre-15:55 exit for
 paired S2 condors. Narrative updated + re-rendered.
 **Addendum 2 — 09-30 post-mortem added to the 10-06 narrative** (bot-by-bot table, 1-min SPX crossing times from a scratch Tradier pull, estimated Touch-exit counterfactual). Narrative re-rendered.
+**Addendum 3 — R-2026-10-06-TAIL-SCORING-RULE signed** (bad day >= 0.5R; paired fixed-vs-created sign test p<0.05; mean >= 80% of control). On existing QQQ backtests Touch0 wins; Canary fails the guard. Owed: evidence-standards.md banner; S2-shape SPX backtest dispatch.

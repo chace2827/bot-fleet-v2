@@ -5994,3 +5994,46 @@ source: >-
   (c); Devin's challenge, accepted by Andy.
 unclear: false
 ```
+
+```yaml
+ruling_id: R-2026-10-06-TAIL-SCORING-RULE
+date: 2026-10-06
+scope: >-
+  NEW DECISION METRIC for any question whose purpose is reducing bad days (exit
+  mechanics, hedges, strike distance, entry filters) on IC/credit-spread arms.
+  Unit: R per condor-day (P/L / risk, position = condor), paired against the
+  control on identical days.
+  (1) BAD DAY = a condor-day losing >= 0.5R (S2 at ~$4,800 risk ~ -$2,400).
+  (2) PRIMARY TEST: count paired days the arm FIXED (control bad, arm not) vs
+  CREATED (arm bad, control not). The arm passes only if fixed > created and the
+  exact two-sided sign test on (fixed, created) gives p < 0.05.
+  (3) RETURN GUARD: the arm's mean R (point estimate) must be >= 80% of the
+  control's mean R. If the control's mean is <= 0, the guard is arm mean >= control
+  mean. (The guard is a point-estimate floor because the paired mean test has
+  ~0.03R MDE and cannot detect a halving of return; a "not significantly worse"
+  guard would pass an arm that avoids losses by barely trading.)
+  (4) WINNER among passing arms: most net bad days removed (fixed - created);
+  tie -> higher mean R.
+  (5) REPORTED, NEVER DECIDING: max drawdown (R), mean of worst 5% of days,
+  worst day, win rate.
+  Applied to the existing 2026-09-17 backtests (QQQ IC, 353 days): Touch0
+  passes (fixed 26 / created 0, p=3e-8, keeps 87%) and WINS; SL100 passes (16/2,
+  88%); SL200 (10/1, 104%) and PT50 (10/0, 107%) pass; Canary FAILS the guard
+  (35/0 but keeps 48%).
+  Mean-only Exp(R) remains the metric for questions about edge/income; this rule
+  does not replace it there. It changes no bot by itself.
+verbatim: "Bad day: Loss >= 0.5R (Recommended)" / "Return floor: Keep >= 80% (Recommended)"
+verbatim_of: andy
+owner: Andy (in-chat, Cowork session, 2026-10-06, AskUserQuestion answers)
+status: Active
+applies_to: >-
+  docs/evidence-standards.md (banner OWED — a new decision metric beside Exp(R));
+  the S2-shape tail backtest (next dispatch); any future hedge/exit tournament.
+superseded_by: none
+source: >-
+  data/captures/2026-09-17-p1-stage1/standalone-S1-{0,a,b}.csv and
+  data/captures/2026-09-17-gf-exit-spread/standalone-GF-{PT50,Touch0,Canary}.csv,
+  re-scored 2026-10-06 (Cowork). Live corroboration: 09-18 Touch0 -$1,222 vs
+  Ride/PT50/Trail -$2,548 (Trades list `Touch: OTM -$0.13`).
+unclear: false
+```
