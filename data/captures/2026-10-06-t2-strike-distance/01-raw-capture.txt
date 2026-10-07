@@ -1,0 +1,552 @@
+T2 STRIKE-DISTANCE SWEEP — RAW CAPTURE
+=====================================
+Captured 2026-10-06 (session ~22:30-00:15 local, America/Los_Angeles).
+OA account: Paper Trading (asserted at session start; no /login at any point).
+Driver: CDP on http://127.0.0.1:9222, dedicated profile ~/.chrome-oa-profile.
+Method per arm: /backtests/compare/ZT217913212733763171103 -> A0 card "..." menu -> Add Variation ->
+verify prefill == A0 -> set shortPut/shortCall delta recipe -> (t10 arms) Exit Options > Touch $10 ->
+rename -> dump serialized inputs -> diff vs A0 -> Run Backtest.
+PACING RULE APPLIED: 1500-4000ms random pause after every OA click/page-load; +10s every 5 actions.
+paceMs/actionCount reported per arm below.
+
+CONTROL: A0 = ZZ-COWORK-2026-10-06-T1-A0-ride (ZT217913212733763171103), 59 serialized inputs.
+A3 = ZZ-COWORK-2026-10-06-T1-A3-touch10 (ZT217913214243169681106). Neither modified; no ZZ-* test re-run.
+
+=== ARM D05-ride ===
+prefill check: prefill diffs vs A0 (expect none): []
+FIELD_DIFFS [
+ {
+  "field": "shortPut",
+  "A0": "{\"mode\":\"closest\",\"text\":\"-.10 delta\",\"type\":\"delta\",\"delta\":-0.1,\"optionType\":\"put\",\"textValues\":{\"mode\":\"or closest\",\"delta\":\"-.10\"}}",
+  "arm": "{\"delta\":-0.05,\"mode\":\"closest\",\"type\":\"delta\",\"textValues\":{\"delta\":\"-.05\",\"mode\":\"or closest\"},\"text\":\"-.05 delta\",\"optionType\":\"put\"}"
+ },
+ {
+  "field": "shortCall",
+  "A0": "{\"mode\":\"closest\",\"text\":\".10 delta\",\"type\":\"delta\",\"delta\":0.1,\"optionType\":\"call\",\"textValues\":{\"mode\":\"or closest\",\"delta\":\".10\"}}",
+  "arm": "{\"delta\":0.05,\"mode\":\"closest\",\"type\":\"delta\",\"textValues\":{\"delta\":\".05\",\"mode\":\"or closest\"},\"text\":\".05 delta\",\"optionType\":\"call\"}"
+ },
+ {
+  "field": "name",
+  "A0": "ZZ-COWORK-2026-10-06-T1-A0-ride",
+  "arm": "ZZ-AGENT-2026-10-06-T2-D05-ride"
+ }
+]
+RESULT {"name":"ZZ-AGENT-2026-10-06-T2-D05-ride","newId":"ZT217913302687266451310","paceMs":74925,"actionCount":16}
+
+=== ARM D07-ride ===
+prefill check: prefill diffs vs A0 (expect none): []
+FIELD_DIFFS [
+ {
+  "field": "shortPut",
+  "A0": "{\"mode\":\"closest\",\"text\":\"-.10 delta\",\"type\":\"delta\",\"delta\":-0.1,\"optionType\":\"put\",\"textValues\":{\"mode\":\"or closest\",\"delta\":\"-.10\"}}",
+  "arm": "{\"delta\":-0.07,\"mode\":\"closest\",\"type\":\"delta\",\"textValues\":{\"delta\":\"-.07\",\"mode\":\"or closest\"},\"text\":\"-.07 delta\",\"optionType\":\"put\"}"
+ },
+ {
+  "field": "shortCall",
+  "A0": "{\"mode\":\"closest\",\"text\":\".10 delta\",\"type\":\"delta\",\"delta\":0.1,\"optionType\":\"call\",\"textValues\":{\"mode\":\"or closest\",\"delta\":\".10\"}}",
+  "arm": "{\"delta\":0.07,\"mode\":\"closest\",\"type\":\"delta\",\"textValues\":{\"delta\":\".07\",\"mode\":\"or closest\"},\"text\":\".07 delta\",\"optionType\":\"call\"}"
+ },
+ {
+  "field": "name",
+  "A0": "ZZ-COWORK-2026-10-06-T1-A0-ride",
+  "arm": "ZZ-AGENT-2026-10-06-T2-D07-ride"
+ }
+]
+RESULT {"name":"ZZ-AGENT-2026-10-06-T2-D07-ride","newId":"ZT217913303682146891313","paceMs":76319,"actionCount":16}
+
+=== ARM D15-ride ===
+prefill check: prefill diffs vs A0 (expect none): []
+FIELD_DIFFS [
+ {
+  "field": "shortPut",
+  "A0": "{\"mode\":\"closest\",\"text\":\"-.10 delta\",\"type\":\"delta\",\"delta\":-0.1,\"optionType\":\"put\",\"textValues\":{\"mode\":\"or closest\",\"delta\":\"-.10\"}}",
+  "arm": "{\"delta\":-0.15,\"mode\":\"closest\",\"type\":\"delta\",\"textValues\":{\"delta\":\"-.15\",\"mode\":\"or closest\"},\"text\":\"-.15 delta\",\"optionType\":\"put\"}"
+ },
+ {
+  "field": "shortCall",
+  "A0": "{\"mode\":\"closest\",\"text\":\".10 delta\",\"type\":\"delta\",\"delta\":0.1,\"optionType\":\"call\",\"textValues\":{\"mode\":\"or closest\",\"delta\":\".10\"}}",
+  "arm": "{\"delta\":0.15,\"mode\":\"closest\",\"type\":\"delta\",\"textValues\":{\"delta\":\".15\",\"mode\":\"or closest\"},\"text\":\".15 delta\",\"optionType\":\"call\"}"
+ },
+ {
+  "field": "name",
+  "A0": "ZZ-COWORK-2026-10-06-T1-A0-ride",
+  "arm": "ZZ-AGENT-2026-10-06-T2-D15-ride"
+ }
+]
+RESULT {"name":"ZZ-AGENT-2026-10-06-T2-D15-ride","newId":"ZT217913304644751371315","paceMs":78184,"actionCount":16}
+
+=== ARM D05-t10 ===
+prefill check: prefill diffs vs A0 (expect none): []
+FIELD_DIFFS [
+ {
+  "field": "shortPut",
+  "A0": "{\"mode\":\"closest\",\"text\":\"-.10 delta\",\"type\":\"delta\",\"delta\":-0.1,\"optionType\":\"put\",\"textValues\":{\"mode\":\"or closest\",\"delta\":\"-.10\"}}",
+  "arm": "{\"delta\":-0.05,\"mode\":\"closest\",\"type\":\"delta\",\"textValues\":{\"delta\":\"-.05\",\"mode\":\"or closest\"},\"text\":\"-.05 delta\",\"optionType\":\"put\"}"
+ },
+ {
+  "field": "shortCall",
+  "A0": "{\"mode\":\"closest\",\"text\":\".10 delta\",\"type\":\"delta\",\"delta\":0.1,\"optionType\":\"call\",\"textValues\":{\"mode\":\"or closest\",\"delta\":\".10\"}}",
+  "arm": "{\"delta\":0.05,\"mode\":\"closest\",\"type\":\"delta\",\"textValues\":{\"delta\":\".05\",\"mode\":\"or closest\"},\"text\":\".05 delta\",\"optionType\":\"call\"}"
+ },
+ {
+  "field": "touch",
+  "A0": "",
+  "arm": "{\"type\":\"usd\",\"value\":10,\"text\":\"$10.00\"}"
+ },
+ {
+  "field": "name",
+  "A0": "ZZ-COWORK-2026-10-06-T1-A0-ride",
+  "arm": "ZZ-AGENT-2026-10-06-T2-D05-t10"
+ }
+]
+RESULT {"name":"ZZ-AGENT-2026-10-06-T2-D05-t10","newId":"ZT217913305943676011317","paceMs":101676,"actionCount":21}
+
+=== ARM D07-t10 ===
+prefill check: prefill diffs vs A0 (expect none): []
+FIELD_DIFFS [
+ {
+  "field": "shortPut",
+  "A0": "{\"mode\":\"closest\",\"text\":\"-.10 delta\",\"type\":\"delta\",\"delta\":-0.1,\"optionType\":\"put\",\"textValues\":{\"mode\":\"or closest\",\"delta\":\"-.10\"}}",
+  "arm": "{\"delta\":-0.07,\"mode\":\"closest\",\"type\":\"delta\",\"textValues\":{\"delta\":\"-.07\",\"mode\":\"or closest\"},\"text\":\"-.07 delta\",\"optionType\":\"put\"}"
+ },
+ {
+  "field": "shortCall",
+  "A0": "{\"mode\":\"closest\",\"text\":\".10 delta\",\"type\":\"delta\",\"delta\":0.1,\"optionType\":\"call\",\"textValues\":{\"mode\":\"or closest\",\"delta\":\".10\"}}",
+  "arm": "{\"delta\":0.07,\"mode\":\"closest\",\"type\":\"delta\",\"textValues\":{\"delta\":\".07\",\"mode\":\"or closest\"},\"text\":\".07 delta\",\"optionType\":\"call\"}"
+ },
+ {
+  "field": "touch",
+  "A0": "",
+  "arm": "{\"type\":\"usd\",\"value\":10,\"text\":\"$10.00\"}"
+ },
+ {
+  "field": "name",
+  "A0": "ZZ-COWORK-2026-10-06-T1-A0-ride",
+  "arm": "ZZ-AGENT-2026-10-06-T2-D07-t10"
+ }
+]
+RESULT {"name":"ZZ-AGENT-2026-10-06-T2-D07-t10","newId":"ZT217913307185959691324","paceMs":100188,"actionCount":21}
+
+=== ARM D15-t10 ===
+prefill check: prefill diffs vs A0 (expect none): []
+note: first run killed between Touch Apply and rename; drawer state preserved and finished by finish_d15t10.mjs (touch already committed $10; name set; diff re-verified before Run).
+FIELD_DIFFS [
+ {
+  "field": "shortPut",
+  "A0": "{\"mode\":\"closest\",\"text\":\"-.10 delta\",\"type\":\"delta\",\"delta\":-0.1,\"optionType\":\"put\",\"textValues\":{\"mode\":\"or closest\",\"delta\":\"-.10\"}}",
+  "arm": "{\"delta\":-0.15,\"mode\":\"closest\",\"type\":\"delta\",\"textValues\":{\"delta\":\"-.15\",\"mode\":\"or closest\"},\"text\":\"-.15 delta\",\"optionType\":\"put\"}"
+ },
+ {
+  "field": "shortCall",
+  "A0": "{\"mode\":\"closest\",\"text\":\".10 delta\",\"type\":\"delta\",\"delta\":0.1,\"optionType\":\"call\",\"textValues\":{\"mode\":\"or closest\",\"delta\":\".10\"}}",
+  "arm": "{\"delta\":0.15,\"mode\":\"closest\",\"type\":\"delta\",\"textValues\":{\"delta\":\".15\",\"mode\":\"or closest\"},\"text\":\".15 delta\",\"optionType\":\"call\"}"
+ },
+ {
+  "field": "touch",
+  "A0": "",
+  "arm": "{\"type\":\"usd\",\"value\":10,\"text\":\"$10.00\"}"
+ },
+ {
+  "field": "name",
+  "A0": "ZZ-COWORK-2026-10-06-T1-A0-ride",
+  "arm": "ZZ-AGENT-2026-10-06-T2-D15-t10"
+ }
+]
+RESULT {"name":"ZZ-AGENT-2026-10-06-T2-D15-t10","newId":"ZT217913309624633191333","paceMs":6910,"actionCount":3}
+
+=== RENDERED STATS + FEE INSIGHTS (from results pages) ===
+
+--- ZZ-COWORK-2026-10-06-T1-A3-touch10 (ZT217913214243169681106) file=A3-t10.csv csv_lines=826 drawer='825 positions' ---
+SPX Iron Condor|Save|Share|Create Bot|Compare|Results|Show Underlying Price|$6,000|$4,000|$2,000|0|-$2,000|2022|2023|2024|2025|2026|2027|Stats|TOTAL P/L|$4,691|MAX DRAWDOWN|-$1,794|RETURN ON DD|261.5%|HIGH P/L|$5,495|LOW P/L|-$668|PROFIT FACTOR|1.22|SHARPE RATIO|0.979|SORTINO RATIO|0.636|Positions|COUNT|825|FILTERED|430|WIN RATE|57.9%|WIN/LOSS|478W / 340L|BEST WIN|$105|WORST LOSS|-$460|WIN STREAK|9|LOSS STREAK|-11|MAX PROFIT %|49.3%|MAX LOSS %|0.7%|Averages|P/L|$6|RISK|$441|RETURN ON RISK|1.3%|REWARD/RISK|13.9%|ENTRY PRICE|0.61|PREMIUM|$61|WIN|$55|LOSS|-$64|Exits|EXPIRED|419|TOUCH|406|Insights|Estimated fees: $3,889.96[Adjust fees][More about fees]|2 closed positions had wider than normal bid/ask spreads that may affect results.[Learn about bid/ask guards]|1 losing streak with 10 or more losses in a row.|12 positions expired in the money may have assignment fees.|Longest drawdown lasted 357 days.|10 drawdowns lasted 30 days or more.|Average drawdown duration is 34 days.|Average drawdown is $230.62.|Strategy OptimizerAI Analysis|Monthly P/L|Day of Week Analysis|Market Event Analysis|Reward/Risk Analysis|Entry Range Analysis|Indicator Analysis|Moving Average Analysis|Settings|Edit|SPX Iron Condor|1:30PM • 1 CONTRACT • 5Y|ZZ-COWORK-2026-10-06-T1-A3-touch10|Position Details|SYMBOL|SPX|DTE|exactly 0 days|STRATEGY|Iron Condor|LONG PUT|$5.00 below short put leg|SHORT PUT|-.10 delta|SHORT CALL|.10 delta|LONG CALL|$5.00 above short call leg|Capital|ALLOCATION|$50,000|POSITION SIZE|1 contract|Position Entry|ENTRY TRIGGER|Time|ENTRY TIME|1:30pm|TRADING DAYS|Mon-Fri|POSITION LIMIT|1 position|Position Criteria|None|Entry Filters|CHANGE %|-0.75% to 0.75%|Exit Options|TOUCH|$10.00
+FEE INSIGHT: Estimated fees: $3,889.96[Adjust fees][More about fees]
+
+--- ZZ-AGENT-2026-10-06-T2-D05-ride (ZT217913302687266451310) file=D05-ride.csv csv_lines=825 drawer='824 positions' ---
+SPX Iron Condor|Save|Share|Create Bot|Compare|Results|Show Underlying Price|$2,000|0|-$2,000|-$4,000|-$6,000|2022|2023|2024|2025|2026|2027|Stats|TOTAL P/L|-$173|MAX DRAWDOWN|-$4,776|RETURN ON DD|-3.6%|HIGH P/L|$190|LOW P/L|-$4,586|PROFIT FACTOR|0.99|SHARPE RATIO|-0.037|SORTINO RATIO|-0.008|Positions|COUNT|824|FILTERED|431|WIN RATE|93.9%|WIN/LOSS|774W / 50L|BEST WIN|$53|WORST LOSS|-$488|WIN STREAK|107|LOSS STREAK|-2|MAX PROFIT %|93.8%|MAX LOSS %|4.1%|Averages|P/L|-$0|RISK|$475|RETURN ON RISK|-0.0%|REWARD/RISK|5.3%|ENTRY PRICE|0.25|PREMIUM|$25|WIN|$25|LOSS|-$388|Exits|EXPIRED|824|Insights|Estimated fees: $2,603.84[Adjust fees][More about fees]|Profit factor of 0.99 is considered poor.[More about profit factor]|51 positions expired in the money may have assignment fees.|93.93% win rate is very high.|Longest drawdown lasted 1,806 days.|Average drawdown duration is 1,806 days.|Average drawdown is $4,776.00.|Strategy OptimizerAI Analysis|Monthly P/L|Day of Week Analysis|Market Event Analysis|Reward/Risk Analysis|Entry Range Analysis|Indicator Analysis|Moving Average Analysis|Settings|Edit|SPX Iron Condor|1:30PM • 1 CONTRACT • 5Y|ZZ-AGENT-2026-10-06-T2-D05-ride|Position Details|SYMBOL|SPX|DTE|exactly 0 days|STRATEGY|Iron Condor|LONG PUT|$5.00 below short put leg|SHORT PUT|-.05 delta|SHORT CALL|.05 delta|LONG CALL|$5.00 above short call leg|Capital|ALLOCATION|$50,000|POSITION SIZE|1 contract|Position Entry|ENTRY TRIGGER|Time|ENTRY TIME|1:30pm|TRADING DAYS|Mon-Fri|POSITION LIMIT|1 position|Position Criteria|None|Entry Filters|CHANGE %|-0.75% to 0.75%|Exit Options|None
+FEE INSIGHT: Estimated fees: $2,603.84[Adjust fees][More about fees]
+
+--- ZZ-AGENT-2026-10-06-T2-D05-t10 (ZT217913305943676011317) file=D05-t10.csv csv_lines=825 drawer='824 positions' ---
+SPX Iron Condor|Save|Share|Create Bot|Compare|Results|Show Underlying Price|$2,000|$1,000|0|-$1,000|-$2,000|-$3,000|2022|2023|2024|2025|2026|2027|Stats|TOTAL P/L|$1,586|MAX DRAWDOWN|-$2,017|RETURN ON DD|78.6%|HIGH P/L|$1,586|LOW P/L|-$2,017|PROFIT FACTOR|1.1|SHARPE RATIO|0.332|SORTINO RATIO|0.115|Positions|COUNT|824|FILTERED|431|WIN RATE|83.7%|WIN/LOSS|690W / 134L|BEST WIN|$53|WORST LOSS|-$488|WIN STREAK|31|LOSS STREAK|-3|MAX PROFIT %|83.3%|MAX LOSS %|1.5%|Averages|P/L|$2|RISK|$475|RETURN ON RISK|0.4%|REWARD/RISK|5.3%|ENTRY PRICE|0.25|PREMIUM|$25|WIN|$25|LOSS|-$117|Exits|EXPIRED|707|TOUCH|117|Insights|Estimated fees: $2,973.56[Adjust fees][More about fees]|21 positions expired in the money may have assignment fees.|83.74% win rate is high.|Longest drawdown lasted 1,589 days.|2 drawdowns lasted 30 days or more.|Average drawdown duration is 241 days.|Average drawdown is $381.29.|Strategy OptimizerAI Analysis|Monthly P/L|Day of Week Analysis|Market Event Analysis|Reward/Risk Analysis|Entry Range Analysis|Indicator Analysis|Moving Average Analysis|Settings|Edit|SPX Iron Condor|1:30PM • 1 CONTRACT • 5Y|ZZ-AGENT-2026-10-06-T2-D05-t10|Position Details|SYMBOL|SPX|DTE|exactly 0 days|STRATEGY|Iron Condor|LONG PUT|$5.00 below short put leg|SHORT PUT|-.05 delta|SHORT CALL|.05 delta|LONG CALL|$5.00 above short call leg|Capital|ALLOCATION|$50,000|POSITION SIZE|1 contract|Position Entry|ENTRY TRIGGER|Time|ENTRY TIME|1:30pm|TRADING DAYS|Mon-Fri|POSITION LIMIT|1 position|Position Criteria|None|Entry Filters|CHANGE %|-0.75% to 0.75%|Exit Options|TOUCH|$10.00
+FEE INSIGHT: Estimated fees: $2,973.56[Adjust fees][More about fees]
+
+--- ZZ-AGENT-2026-10-06-T2-D07-ride (ZT217913303682146891313) file=D07-ride.csv csv_lines=827 drawer='826 positions' ---
+SPX Iron Condor|Save|Share|Create Bot|Compare|Results|Show Underlying Price|0|-$2,000|-$4,000|-$6,000|-$8,000|2022|2023|2024|2025|2026|2027|Stats|TOTAL P/L|-$971|MAX DRAWDOWN|-$6,166|RETURN ON DD|-15.8%|HIGH P/L|0|LOW P/L|-$6,166|PROFIT FACTOR|0.97|SHARPE RATIO|-0.122|SORTINO RATIO|-0.033|Positions|COUNT|826|FILTERED|429|WIN RATE|90.0%|WIN/LOSS|743W / 83L|BEST WIN|$100|WORST LOSS|-$480|WIN STREAK|68|LOSS STREAK|-2|MAX PROFIT %|89.8%|MAX LOSS %|6.4%|Averages|P/L|-$1|RISK|$463|RETURN ON RISK|-0.3%|REWARD/RISK|8.3%|ENTRY PRICE|0.38|PREMIUM|$38|WIN|$38|LOSS|-$350|Exits|EXPIRED|826|Insights|Estimated fees: $2,610.16[Adjust fees][More about fees]|Profit factor of 0.97 is considered poor.[More about profit factor]|84 positions expired in the money may have assignment fees.|89.95% win rate is very high.|Longest drawdown lasted 1,827 days.|Average drawdown duration is 1,827 days.|Average drawdown is $6,166.00.|Strategy OptimizerAI Analysis|Monthly P/L|Day of Week Analysis|Market Event Analysis|Reward/Risk Analysis|Entry Range Analysis|Indicator Analysis|Moving Average Analysis|Settings|Edit|SPX Iron Condor|1:30PM • 1 CONTRACT • 5Y|ZZ-AGENT-2026-10-06-T2-D07-ride|Position Details|SYMBOL|SPX|DTE|exactly 0 days|STRATEGY|Iron Condor|LONG PUT|$5.00 below short put leg|SHORT PUT|-.07 delta|SHORT CALL|.07 delta|LONG CALL|$5.00 above short call leg|Capital|ALLOCATION|$50,000|POSITION SIZE|1 contract|Position Entry|ENTRY TRIGGER|Time|ENTRY TIME|1:30pm|TRADING DAYS|Mon-Fri|POSITION LIMIT|1 position|Position Criteria|None|Entry Filters|CHANGE %|-0.75% to 0.75%|Exit Options|None
+FEE INSIGHT: Estimated fees: $2,610.16[Adjust fees][More about fees]
+
+--- ZZ-AGENT-2026-10-06-T2-D07-t10 (ZT217913307185959691324) file=D07-t10.csv csv_lines=827 drawer='826 positions' ---
+SPX Iron Condor|Save|Share|Create Bot|Compare|Results|Show Underlying Price|$800|0|-$800|-$1,600|-$2,400|2022|2023|2024|2025|2026|2027|Stats|TOTAL P/L|$34|MAX DRAWDOWN|-$2,018|RETURN ON DD|1.7%|HIGH P/L|$427|LOW P/L|-$1,938|PROFIT FACTOR|1.0|SHARPE RATIO|-0.001|SORTINO RATIO|-0.001|Positions|COUNT|826|FILTERED|429|WIN RATE|72.2%|WIN/LOSS|596W / 229L|BEST WIN|$73|WORST LOSS|-$480|WIN STREAK|25|LOSS STREAK|-4|MAX PROFIT %|70.1%|MAX LOSS %|1.9%|Averages|P/L|$0|RISK|$463|RETURN ON RISK|0.0%|REWARD/RISK|8.3%|ENTRY PRICE|0.38|PREMIUM|$38|WIN|$38|LOSS|-$98|Exits|EXPIRED|603|TOUCH|223|Insights|Estimated fees: $3,314.84[Adjust fees][More about fees]|2 closed positions had wider than normal bid/ask spreads that may affect results.[Learn about bid/ask guards]|24 positions expired in the money may have assignment fees.|Longest drawdown lasted 1,722 days.|2 drawdowns lasted 30 days or more.|Average drawdown duration is 450 days.|Average drawdown is $686.25.|Strategy OptimizerAI Analysis|Monthly P/L|Day of Week Analysis|Market Event Analysis|Reward/Risk Analysis|Entry Range Analysis|Indicator Analysis|Moving Average Analysis|Settings|Edit|SPX Iron Condor|1:30PM • 1 CONTRACT • 5Y|ZZ-AGENT-2026-10-06-T2-D07-t10|Position Details|SYMBOL|SPX|DTE|exactly 0 days|STRATEGY|Iron Condor|LONG PUT|$5.00 below short put leg|SHORT PUT|-.07 delta|SHORT CALL|.07 delta|LONG CALL|$5.00 above short call leg|Capital|ALLOCATION|$50,000|POSITION SIZE|1 contract|Position Entry|ENTRY TRIGGER|Time|ENTRY TIME|1:30pm|TRADING DAYS|Mon-Fri|POSITION LIMIT|1 position|Position Criteria|None|Entry Filters|CHANGE %|-0.75% to 0.75%|Exit Options|TOUCH|$10.00
+FEE INSIGHT: Estimated fees: $3,314.84[Adjust fees][More about fees]
+
+--- ZZ-AGENT-2026-10-06-T2-D15-ride (ZT217913304644751371315) file=D15-ride.csv csv_lines=826 drawer='825 positions' ---
+SPX Iron Condor|Save|Share|Create Bot|Compare|Results|Show Underlying Price|$6,000|$3,000|0|-$3,000|-$6,000|2022|2023|2024|2025|2026|2027|Stats|TOTAL P/L|$3,801|MAX DRAWDOWN|-$4,643|RETURN ON DD|81.9%|HIGH P/L|$3,913|LOW P/L|-$4,277|PROFIT FACTOR|1.06|SHARPE RATIO|0.328|SORTINO RATIO|0.142|Positions|COUNT|825|FILTERED|430|WIN RATE|78.1%|WIN/LOSS|644W / 181L|BEST WIN|$160|WORST LOSS|-$443|WIN STREAK|18|LOSS STREAK|-3|MAX PROFIT %|76.0%|MAX LOSS %|15.4%|Averages|P/L|$5|RISK|$399|RETURN ON RISK|1.2%|REWARD/RISK|25.7%|ENTRY PRICE|1.01|PREMIUM|$101|WIN|$99|LOSS|-$333|Exits|EXPIRED|825|Insights|Estimated fees: $2,607[Adjust fees][More about fees]|198 positions expired in the money may have assignment fees.|78.06% win rate is high.|Longest drawdown lasted 1,369 days.|3 drawdowns lasted 30 days or more.|Average drawdown duration is 145 days.|Average drawdown is $974.50.|Strategy OptimizerAI Analysis|Monthly P/L|Day of Week Analysis|Market Event Analysis|Reward/Risk Analysis|Entry Range Analysis|Indicator Analysis|Moving Average Analysis|Settings|Edit|SPX Iron Condor|1:30PM • 1 CONTRACT • 5Y|ZZ-AGENT-2026-10-06-T2-D15-ride|Position Details|SYMBOL|SPX|DTE|exactly 0 days|STRATEGY|Iron Condor|LONG PUT|$5.00 below short put leg|SHORT PUT|-.15 delta|SHORT CALL|.15 delta|LONG CALL|$5.00 above short call leg|Capital|ALLOCATION|$50,000|POSITION SIZE|1 contract|Position Entry|ENTRY TRIGGER|Time|ENTRY TIME|1:30pm|TRADING DAYS|Mon-Fri|POSITION LIMIT|1 position|Position Criteria|None|Entry Filters|CHANGE %|-0.75% to 0.75%|Exit Options|None
+FEE INSIGHT: Estimated fees: $2,607[Adjust fees][More about fees]
+
+--- ZZ-AGENT-2026-10-06-T2-D15-t10 (ZT217913309624633191333) file=D15-t10.csv csv_lines=826 drawer='825 positions' ---
+SPX Iron Condor|Save|Share|Create Bot|Compare|Results|Show Underlying Price|$8,000|$6,000|$4,000|$2,000|0|-$2,000|2022|2023|2024|2025|2026|2027|Stats|TOTAL P/L|$5,992|MAX DRAWDOWN|-$644|RETURN ON DD|930.4%|HIGH P/L|$6,022|LOW P/L|-$192|PROFIT FACTOR|1.43|SHARPE RATIO|1.614|SORTINO RATIO|1.684|Positions|COUNT|825|FILTERED|430|WIN RATE|46.8%|WIN/LOSS|386W / 423L|BEST WIN|$160|WORST LOSS|-$397|WIN STREAK|8|LOSS STREAK|-9|MAX PROFIT %|18.2%|MAX LOSS %|0.1%|Averages|P/L|$7|RISK|$399|RETURN ON RISK|1.8%|REWARD/RISK|25.7%|ENTRY PRICE|1.01|PREMIUM|$101|WIN|$51|LOSS|-$33|Exits|EXPIRED|153|TOUCH|672|Insights|Estimated fees: $4,730.52[Adjust fees][More about fees]|7 closed positions had wider than normal bid/ask spreads that may affect results.[Learn about bid/ask guards]|3 positions expired in the money may have assignment fees.|Longest drawdown lasted 216 days.|10 drawdowns lasted 30 days or more.|Average drawdown duration is 24 days.|Average drawdown is $112.33.|Strategy OptimizerAI Analysis|Monthly P/L|Day of Week Analysis|Market Event Analysis|Reward/Risk Analysis|Entry Range Analysis|Indicator Analysis|Moving Average Analysis|Settings|Edit|SPX Iron Condor|1:30PM • 1 CONTRACT • 5Y|ZZ-AGENT-2026-10-06-T2-D15-t10|Position Details|SYMBOL|SPX|DTE|exactly 0 days|STRATEGY|Iron Condor|LONG PUT|$5.00 below short put leg|SHORT PUT|-.15 delta|SHORT CALL|.15 delta|LONG CALL|$5.00 above short call leg|Capital|ALLOCATION|$50,000|POSITION SIZE|1 contract|Position Entry|ENTRY TRIGGER|Time|ENTRY TIME|1:30pm|TRADING DAYS|Mon-Fri|POSITION LIMIT|1 position|Position Criteria|None|Entry Filters|CHANGE %|-0.75% to 0.75%|Exit Options|TOUCH|$10.00
+FEE INSIGHT: Estimated fees: $4,730.52[Adjust fees][More about fees]
+
+--- ZZ-COWORK-2026-10-06-T1-A0-ride (ZT217913212733763171103) file=A0-ride.csv csv_lines=826 (825 positions) ---
+{"url":"https://app.optionalpha.com/backtests/test/ZT217913212733763171103","login":false,"paper":false}
+SPX Iron Condor|Save|Share|Create Bot|Compare|Results|Show Underlying Price|$2,000|0|-$2,000|-$4,000|-$6,000|2022|2023|2024|2025|2026|2027|Feb 14, 2025|-$2,175 Total P/L|Stats|TOTAL P/L|$848|MAX DRAWDOWN|-$4,023|RETURN ON DD|21.1%|HIGH P/L|$1,264|LOW P/L|-$4,006|PROFIT FACTOR|1.02|SHARPE RATIO|0.074|SORTINO RATIO|0.024|Positions|COUNT|825|FILTERED|430|WIN RATE|86.1%|WIN/LOSS|710W / 114L|BEST WIN|$110|WORST LOSS|-$477|WIN STREAK|43|LOSS STREAK|-2|MAX PROFIT %|85.2%|MAX LOSS %|9.7%|Averages|P/L|$1|RISK|$441|RETURN ON RISK|0.2%|REWARD/RISK|13.9%|ENTRY PRICE|0.61|PREMIUM|$61|WIN|$60|LOSS|-$366|Exits|EXPIRED|825|Insights|Estimated fees: $2,607[Adjust fees][More about fees]|122 positions expired in the money may have assignment fees.|86.06% win rate is very high.|Longest drawdown lasted 1,750 days.|Average drawdown duration is 596 days.|Average drawdown is $1,684.00.|Strategy OptimizerAI Analysis|Monthly P/L|Day of Week Analysis|Market Event Analysis|Reward/Risk Analysis|Entry Range Analysis|Indicator Analysis|Moving Average Analysis|Settings|Edit|SPX Iron Condor|1:30PM • 1 CONTRACT • 5Y|ZZ-COWORK-2026-10-06-T1-A0-ride|Position Details|SYMBOL|SPX|DTE|exactly 0 days|STRATEGY|Iron Condor|LONG PUT|$5.00 below short put leg|SHORT PUT|-.10 delta|SHORT CALL|.10 delta|LONG CALL|$5.00 above short call leg|Capital|ALLOCATION|$50,000|POSITION SIZE|1 contract|Position Entry|ENTRY TRIGGER|Time|ENTRY TIME|1:30pm|TRADING DAYS|Mon-Fri|POSITION LIMIT|1 position|Position Criteria|None|Entry Filters|CHANGE %|-0.75% to 0.75%|Exit Options|None
+FEES: Estimated fees: $2,607[Adjust fees][More about fees]
+
+=== VERBATIM CSV ROWS: 2026-08-26 and 2026-09-30 ===
+
+[A0-ride.csv / Aug 26, 2026] Opened=Aug 26, 2026 1:30pm
+Closed=Aug 26, 2026 4:00pm
+Symbol=SPX
+Exp=Aug 26, 2026
+Type=ironcondor
+Legs=long put 7,650 / short put 7,655 / short call 7,690 / long call 7,695
+Quantity=1
+Status=expired
+P/L=55
+Risk=445
+ROR=12.36
+Premium=55
+Reward/Risk=12.36
+Open Price=0.55
+Open Bid Price=0.4
+Open Ask Price=0.7
+Close Price=0
+Max Loss=445
+Max Profit=55
+Price at Open=7673.94
+Price at Close=7675.7
+
+[A0-ride.csv / Sep 30, 2026] Opened=Sep 30, 2026 1:30pm
+Closed=Sep 30, 2026 4:00pm
+Symbol=SPX
+Exp=Sep 30, 2026
+Type=ironcondor
+Legs=long put 7,660 / short put 7,665 / short call 7,725 / long call 7,730
+Quantity=1
+Status=expired
+P/L=-437
+Risk=437
+ROR=-100
+Premium=63
+Reward/Risk=14.42
+Open Price=0.63
+Open Bid Price=0.5
+Open Ask Price=0.75
+Close Price=5
+Max Loss=437
+Max Profit=63
+Price at Open=7698.65
+Price at Close=7652.38
+
+[A3-t10.csv / Aug 26, 2026] Opened=Aug 26, 2026 1:30pm
+Closed=Aug 26, 2026 2:47pm
+Symbol=SPX
+Exp=Aug 26, 2026
+Type=ironcondor
+Legs=long put 7,650 / short put 7,655 / short call 7,690 / long call 7,695
+Quantity=1
+Status=touch
+P/L=-2
+Risk=445
+ROR=-0.45
+Premium=55
+Reward/Risk=12.36
+Open Price=0.55
+Open Bid Price=0.4
+Open Ask Price=0.7
+Close Price=0.57
+Close Bid Price=0.45
+Close Ask Price=0.7
+Max Loss=445
+Max Profit=55
+Price at Open=7673.94
+Price at Close=7680.7
+
+[A3-t10.csv / Sep 30, 2026] Opened=Sep 30, 2026 1:30pm
+Closed=Sep 30, 2026 4:00pm
+Symbol=SPX
+Exp=Sep 30, 2026
+Type=ironcondor
+Legs=long put 7,660 / short put 7,665 / short call 7,725 / long call 7,730
+Quantity=1
+Status=expired
+P/L=-437
+Risk=437
+ROR=-100
+Premium=63
+Reward/Risk=14.42
+Open Price=0.63
+Open Bid Price=0.5
+Open Ask Price=0.75
+Close Price=5
+Max Loss=437
+Max Profit=63
+Price at Open=7698.65
+Price at Close=7652.38
+
+[D05-ride.csv / Aug 26, 2026] Opened=Aug 26, 2026 1:30pm
+Closed=Aug 26, 2026 4:00pm
+Symbol=SPX
+Exp=Aug 26, 2026
+Type=ironcondor
+Legs=long put 7,645 / short put 7,650 / short call 7,700 / long call 7,705
+Quantity=1
+Status=expired
+P/L=25
+Risk=475
+ROR=5.26
+Premium=25
+Reward/Risk=5.26
+Open Price=0.25
+Open Bid Price=0.15
+Open Ask Price=0.35
+Close Price=0
+Max Loss=475
+Max Profit=25
+Price at Open=7673.94
+Price at Close=7675.7
+
+[D05-ride.csv / Sep 30, 2026] Opened=Sep 30, 2026 1:30pm
+Closed=Sep 30, 2026 4:00pm
+Symbol=SPX
+Exp=Sep 30, 2026
+Type=ironcondor
+Legs=long put 7,645 / short put 7,650 / short call 7,740 / long call 7,745
+Quantity=1
+Status=expired
+P/L=20
+Risk=480
+ROR=4.17
+Premium=20
+Reward/Risk=4.17
+Open Price=0.2
+Open Bid Price=0.1
+Open Ask Price=0.3
+Close Price=0
+Max Loss=480
+Max Profit=20
+Price at Open=7698.65
+Price at Close=7652.38
+
+[D05-t10.csv / Aug 26, 2026] Opened=Aug 26, 2026 1:30pm
+Closed=Aug 26, 2026 4:00pm
+Symbol=SPX
+Exp=Aug 26, 2026
+Type=ironcondor
+Legs=long put 7,645 / short put 7,650 / short call 7,700 / long call 7,705
+Quantity=1
+Status=expired
+P/L=25
+Risk=475
+ROR=5.26
+Premium=25
+Reward/Risk=5.26
+Open Price=0.25
+Open Bid Price=0.15
+Open Ask Price=0.35
+Close Price=0
+Max Loss=475
+Max Profit=25
+Price at Open=7673.94
+Price at Close=7675.7
+
+[D05-t10.csv / Sep 30, 2026] Opened=Sep 30, 2026 1:30pm
+Closed=Sep 30, 2026 4:00pm
+Symbol=SPX
+Exp=Sep 30, 2026
+Type=ironcondor
+Legs=long put 7,645 / short put 7,650 / short call 7,740 / long call 7,745
+Quantity=1
+Status=expired
+P/L=20
+Risk=480
+ROR=4.17
+Premium=20
+Reward/Risk=4.17
+Open Price=0.2
+Open Bid Price=0.1
+Open Ask Price=0.3
+Close Price=0
+Max Loss=480
+Max Profit=20
+Price at Open=7698.65
+Price at Close=7652.38
+
+[D07-ride.csv / Aug 26, 2026] Opened=Aug 26, 2026 1:30pm
+Closed=Aug 26, 2026 4:00pm
+Symbol=SPX
+Exp=Aug 26, 2026
+Type=ironcondor
+Legs=long put 7,645 / short put 7,650 / short call 7,695 / long call 7,700
+Quantity=1
+Status=expired
+P/L=27
+Risk=473
+ROR=5.71
+Premium=27
+Reward/Risk=5.71
+Open Price=0.27
+Open Bid Price=0.15
+Open Ask Price=0.4
+Close Price=0
+Max Loss=473
+Max Profit=27
+Price at Open=7673.94
+Price at Close=7675.7
+
+[D07-ride.csv / Sep 30, 2026] Opened=Sep 30, 2026 1:30pm
+Closed=Sep 30, 2026 4:00pm
+Symbol=SPX
+Exp=Sep 30, 2026
+Type=ironcondor
+Legs=long put 7,655 / short put 7,660 / short call 7,730 / long call 7,735
+Quantity=1
+Status=expired
+P/L=-458
+Risk=458
+ROR=-100
+Premium=42
+Reward/Risk=9.17
+Open Price=0.42
+Open Bid Price=0.3
+Open Ask Price=0.55
+Close Price=5
+Max Loss=458
+Max Profit=42
+Price at Open=7698.65
+Price at Close=7652.38
+
+[D07-t10.csv / Aug 26, 2026] Opened=Aug 26, 2026 1:30pm
+Closed=Aug 26, 2026 3:02pm
+Symbol=SPX
+Exp=Aug 26, 2026
+Type=ironcondor
+Legs=long put 7,645 / short put 7,650 / short call 7,695 / long call 7,700
+Quantity=1
+Status=touch
+P/L=-53
+Risk=473
+ROR=-11.2
+Premium=27
+Reward/Risk=5.71
+Open Price=0.27
+Open Bid Price=0.15
+Open Ask Price=0.4
+Close Price=0.8
+Close Bid Price=0.7
+Close Ask Price=0.9
+Max Loss=473
+Max Profit=27
+Price at Open=7673.94
+Price at Close=7686.71
+
+[D07-t10.csv / Sep 30, 2026] Opened=Sep 30, 2026 1:30pm
+Closed=Sep 30, 2026 4:00pm
+Symbol=SPX
+Exp=Sep 30, 2026
+Type=ironcondor
+Legs=long put 7,655 / short put 7,660 / short call 7,730 / long call 7,735
+Quantity=1
+Status=expired
+P/L=-458
+Risk=458
+ROR=-100
+Premium=42
+Reward/Risk=9.17
+Open Price=0.42
+Open Bid Price=0.3
+Open Ask Price=0.55
+Close Price=5
+Max Loss=458
+Max Profit=42
+Price at Open=7698.65
+Price at Close=7652.38
+
+[D15-ride.csv / Aug 26, 2026] Opened=Aug 26, 2026 1:30pm
+Closed=Aug 26, 2026 4:00pm
+Symbol=SPX
+Exp=Aug 26, 2026
+Type=ironcondor
+Legs=long put 7,655 / short put 7,660 / short call 7,690 / long call 7,695
+Quantity=1
+Status=expired
+P/L=81
+Risk=419
+ROR=19.33
+Premium=81
+Reward/Risk=19.33
+Open Price=0.81
+Open Bid Price=0.65
+Open Ask Price=0.95
+Close Price=0
+Max Loss=419
+Max Profit=81
+Price at Open=7673.94
+Price at Close=7675.7
+
+[D15-ride.csv / Sep 30, 2026] Opened=Sep 30, 2026 1:30pm
+Closed=Sep 30, 2026 4:00pm
+Symbol=SPX
+Exp=Sep 30, 2026
+Type=ironcondor
+Legs=long put 7,670 / short put 7,675 / short call 7,720 / long call 7,725
+Quantity=1
+Status=expired
+P/L=-397
+Risk=397
+ROR=-100
+Premium=103
+Reward/Risk=25.94
+Open Price=1.03
+Open Bid Price=0.9
+Open Ask Price=1.15
+Close Price=5
+Max Loss=397
+Max Profit=103
+Price at Open=7698.65
+Price at Close=7652.38
+
+[D15-t10.csv / Aug 26, 2026] Opened=Aug 26, 2026 1:30pm
+Closed=Aug 26, 2026 2:47pm
+Symbol=SPX
+Exp=Aug 26, 2026
+Type=ironcondor
+Legs=long put 7,655 / short put 7,660 / short call 7,690 / long call 7,695
+Quantity=1
+Status=touch
+P/L=18
+Risk=419
+ROR=4.3
+Premium=81
+Reward/Risk=19.33
+Open Price=0.81
+Open Bid Price=0.65
+Open Ask Price=0.95
+Close Price=0.63
+Close Bid Price=0.5
+Close Ask Price=0.75
+Max Loss=419
+Max Profit=81
+Price at Open=7673.94
+Price at Close=7680.7
+
+[D15-t10.csv / Sep 30, 2026] Opened=Sep 30, 2026 1:30pm
+Closed=Sep 30, 2026 3:48pm
+Symbol=SPX
+Exp=Sep 30, 2026
+Type=ironcondor
+Legs=long put 7,670 / short put 7,675 / short call 7,720 / long call 7,725
+Quantity=1
+Status=touch
+P/L=28
+Risk=397
+ROR=7.05
+Premium=103
+Reward/Risk=25.94
+Open Price=1.03
+Open Bid Price=0.9
+Open Ask Price=1.15
+Close Price=0.75
+Close Bid Price=0.65
+Close Ask Price=0.85
+Max Loss=397
+Max Profit=103
+Price at Open=7698.65
+Price at Close=7683.41

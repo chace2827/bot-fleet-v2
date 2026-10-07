@@ -6,7 +6,7 @@ Each job is a pointer to its dispatch file — the dispatch is the spec; this fi
 | # | Status | Job | Dispatch / spec |
 |---|--------|-----|-----------------|
 | 1 | done → `data/captures/2026-10-06-loss-packet-20260827-s2-130pm/` | Loss packet: `IC-SPX-FastPT25-S2-130PM` × **2026-08-27** | `docs/dispatch-loss-packet-2026-10-06.md` |
-| 2 | pending | T2 strike-distance sweep (.05/.07/.10/.15Δ × ride/Touch $10) — calibration passed | `docs/dispatch-strike-distance-2026-10-06.md` |
+| 2 | done → `data/captures/2026-10-06-t2-strike-distance` | T2 strike-distance sweep (.05/.07/.10/.15Δ × ride/Touch $10) — calibration passed | `docs/dispatch-strike-distance-2026-10-06.md` |
 | 3 | pending | Loss packet: `IC-SPX-FastPT25-S2-130PM` × **2026-09-08** | `docs/dispatch-loss-packet-2026-10-06.md` |
 | 4 | pending | Loss packet: `IC-SPX-FastPT25-S2-130PM` × **2026-09-18** | `docs/dispatch-loss-packet-2026-10-06.md` |
 | 5 | pending | Loss packet: `IC-SPX-FastPT25-S2-130PM` × **2026-10-05** | `docs/dispatch-loss-packet-2026-10-06.md` |
