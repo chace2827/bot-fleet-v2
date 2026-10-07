@@ -72,7 +72,7 @@
 set -euo pipefail
 
 DEVIN_BIN="/Applications/Devin.app/Contents/Resources/app/extensions/windsurf/devin/bin/devin"
-MODEL="swe-1-7"          # SWE-1.7 Max. Free. The only model this wrapper will run.
+MODEL="swe-2-max"        # SWE-2 Max. Free. The only model this wrapper will run.
 SELF="${BASH_SOURCE[0]}"
 
 FREE_CONFIG_DIR="$HOME/.local/share/devin-free-lane"

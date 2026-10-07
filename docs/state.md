@@ -65,6 +65,15 @@
 > bypasses the wrapper entirely, so the conflict is dormant, not fixed. **Resolve before any CLI
 > dispatch**: either the wrapper learns SWE-2 MAX, or the CLI lane stays `swe-1-7` and SWE-2 MAX is
 > Desktop-only. Do not assume; probe and assert the receipt.
+>   **[RESOLVED 2026-10-06 — `R-2026-10-06-DEVIN-PIN-SWE2MAX`.** First-hand `devin models
+>   list`: swe-1-7's Free badge ENDED (now $0.5/$0.2/$2.5 per MTok); the only Free entries
+>   are swe-2-high/-medium/-max. Andy: "just use swe-2 max" → `MODEL="swe-2-max"` in
+>   `scripts/devin_free.sh` + `~/bin/devin-free`, joint sha256 `2240332c…` (was `3479939d…`).
+>   Two traps found and recorded: stale `credentials.toml` blocked `auth login`
+>   (logout→login fixed it), and `ACP_BACKEND` inside a Devin session's exec env makes
+>   `devin auth status` falsely read logged-out — unset it for CLI checks. Standing receipt
+>   check carried forward: balance delta = 0 on the first swe-2-max CLI dispatch. Original
+>   text left standing.]
 >
 > **Open, unruled:** the terminology sweep under `HEDGE-DEFINITION` (15+ files call exits hedges);
 > §9.6 defang stub deletion; spec §9.2, §9.4, §9.5. *(The `hedge-research.md` §1.3 banner is DONE —

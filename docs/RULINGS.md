@@ -6101,3 +6101,32 @@ applies_to: docs/pre-registration-ledger.md (template update owed).
 superseded_by: none
 unclear: false
 ```
+
+```yaml
+ruling_id: R-2026-10-06-DEVIN-PIN-SWE2MAX
+date: 2026-10-06
+scope: >-
+  scripts/devin_free.sh MODEL pin moved swe-1-7 to swe-2-max. First-hand
+  `devin models list` read 2026-10-06: swe-1-7's Free badge ended (now
+  $0.5/$0.2/$2.5 per MTok); the only Free entries are swe-2-high,
+  swe-2-medium, swe-2-max. The wrapper's purpose — pin the free model —
+  propagates to the new pin. ~/bin/devin-free updated byte-identical; new
+  joint sha256 2240332c0ddb8add542162a0b531031cb063f01ca181d344f17ee402acb4f0da
+  (was 3479939d...). Carried forward from R-2026-09-16-BACKTEST-COMBINE-S5
+  5c: a balance-delta-0 receipt on the first swe-2-max CLI dispatch remains
+  the standing receipt check.
+verbatim: just use swe-2 max
+verbatim_of: andy
+owner: Andy (in-chat to the Devin Desktop session, 2026-10-06)
+status: Active
+applies_to: >-
+  scripts/devin_free.sh + ~/bin/devin-free (applied both); docs/state.md
+  model-pin-conflict paragraph (bannered resolved); R-2026-09-16-BACKTEST-
+  COMBINE-S5 5c (the "swe-1-7 pin" premise superseded; its acu-0.0 receipt
+  caution carried forward).
+superseded_by: none
+source: >-
+  `devin models list` first-hand read 2026-10-06 (swe-2-* Free; swe-1-7 and
+  swe-1-7-lightning paid); Andy verbatim this session.
+unclear: false
+```

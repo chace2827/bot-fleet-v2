@@ -13211,3 +13211,158 @@ original runner untouched in the 08-26 bundle. SHA256SUMS regenerated.
 **Addendum 17 — loss_register gains config_at_loss column.** 130PM: no edit recorded after 2026-08-09 (limits); automation hashes not re-read since 2026-08-08 baseline — re-hash owed before any fix is applied. GF bots changed 08-17 (delta) and 09-02 (sizing): their 09-18 row must cite config state.
 **Addendum 18 — run-2 debrief accepted:** runner v2 (arg parse, clean exit, inline decision texts, §2 leg classes/UTC ids, §5 absence proof) adopted subject to a one-time pilot vs the 08-27 bundle; §3 narrowed to entry-minute + close-minute decision texts (full run list dropped).
 **Addendum 19 — pacing rule added to both Devin dispatches** (1.5–4 s randomized pause per OA action, ≥10 s after any 5-action burst, one session only).
+
+## 2026-10-06 — Devin: connector-state recon for the Edge Funnel handoff (no repo code changes)
+
+Asked to explain how the Claude Code ⇄ Devin-local connection is wired and
+what needs re-provisioning. Verified first-hand:
+
+- **`devin auth status` → "Not logged in"** (`~/.local/share/devin/credentials.toml`).
+  This is the dead connector key the handoff names — the `devin-free` →
+  `devin -p` lane cannot dispatch until `devin auth login` or an app restart
+  renews it. Binary present: devin 3000.10.48 (fcf7ba39). `devin doctor` clean.
+- **Claude Code's Devin MCP credential is LIVE** — the `cog_` Bearer +
+  X-Org-Id in `~/.claude.json` mcpServers.devin: a direct `tools/list` POST
+  to `mcp.devin.ai/mcp` returned 24 private tools incl. `devin_session_create`.
+  (Addendum 13's 401 was the Desktop-side app-injected credential — a
+  different secret from this key.)
+- **Guardrails intact:** `~/bin/devin-free --selfhash` ==
+  `shasum -a 256 scripts/devin_free.sh` == `3479939d…`;
+  `~/.local/share/devin-free-lane/config.json` carries
+  `skip_workspace_trust: true`; `.claude/settings.local.json` still holds the
+  wrapper allow + raw-binary deny pair.
+- **CDP :9222 UP** — 3 targets, one on
+  `/backtests/compare/ZT217913212733763171103` (the T1 A0 base for the pending
+  T2 strike-distance sweep).
+- `~/waves/2026-09-08/` and `~/0dte-day-taxonomy/workers/dispatch.sh` still on
+  disk — the foreman machinery survives.
+
+Files: this file only.
+
+## 2026-10-06 — Devin: Claude Code mods research (docs read, nothing built)
+
+Read code.claude.com mods docs (overview/events/api) at Andy's request and
+proposed a mod layer for the project: (1) `bot-fleet-guards` plugin —
+`tool.call`/`tool.check` hooks converting prose rules into runtime denies
+(raw `devin`/model flags, mounted-tree git, append-only shared files,
+gated surfaces, `oa_driver --allow-write --bot`, secret-spill); (2) a
+foreman status pane (auth/CDP/selfhash/queue/promo countdown); (3)
+zero-token `/commands` (`/preflight`, `/receipts`, `/queue`, `/closeout`);
+(4) `prompt.submit` context injection; (5) `turn.complete` close-out nudge;
+(6) context-window watcher; (7) provenance ledger. Suggested shipping as a
+repo-hosted plugin (`plugins/bot-fleet-guards/`); flagged: mods run with
+full user permissions — self-authored only, and they complement
+`devin_free.sh`, never replace it. Whether mods reach Cowork cloud sessions
+is UNVERIFIED.
+
+Files: this file only.
+
+## 2026-10-06 — Devin: connection re-provision staging (Claude-token-free window)
+
+Andy reported the currently-free model is **SWE-2 MAX** (correcting this
+session's earlier swe-1-7 framing — logged in `tasks/lessons.md`, file
+created). Implication flagged: if `swe-1-7` no longer carries a Free badge,
+`devin-free` as pinned would dispatch a paid model — `devin models list`
+after login is the live check, and changing the wrapper pin is Andy's ruling
+(the wrapper exists so that change is deliberate; 5c pends a live acu-0.0
+receipt on the CLI backend).
+
+Staged in `/tmp/devin-conn-2026-10-06/` (outside repo, no commit needed):
+- `conn-preflight.sh` — 8-check readiness script (binary · auth · wrapper
+  hash · free-lane config · allow/deny pair · refusal probe · CDP).
+  **Run today: 7 PASS, 1 FAIL — the FAIL is auth only.**
+- `proof-prompt.md` — the ruled 5d cheap-proof prompt (attach CDP, read one
+  rendered backtest, write ./proof-out.txt, exit).
+- `/tmp/proof-oa-read/` — empty scratch workspace for the proof session.
+
+Pending Andy: `devin auth login` → `devin models list` (Free flags decide
+dispatch safety) → preflight re-run → optional proof dispatch.
+
+Files: `tasks/lessons.md` (new) · this file.
+
+## 2026-10-06 — Devin: connection RESTORED; wrapper re-pinned to swe-2-max
+
+**Auth fixed.** The stale `credentials.toml` was the blocker — `auth login`
+kept saying "already logged in" because a stale credential was never cleared
+(the earlier `devin auth logout` attempt had failed on `command not found`).
+Andy's `logout` → `login` (browser OAuth) → `auth status` = Logged in, Devin
+Pro, org org-87802….
+
+**Two traps found, both worth keeping:**
+
+1. **`ACP_BACKEND` poisoning.** Inside a Devin session's exec env the var
+   makes `devin auth status`/`models list` report "Not logged in" even with
+   a valid credential — verified by bisection: `env -u ACP_BACKEND` flips it
+   to logged-in. This likely explains earlier "dead auth" readings taken
+   from inside Devin sessions. Rule: run CLI checks with `env -u
+   ACP_BACKEND` or from Andy's shell. `conn-preflight.sh` now unsets it.
+2. **The promo moved.** `devin models list` first-hand: **swe-1-7 is now
+   PAID** ($0.5/$0.2/$2.5 per MTok); the only `Free]` entries are
+   swe-2-high/-medium/-max. Andy's correction was right — `devin-free` as
+   pinned would have billed real money on every dispatch.
+
+**Ruled + applied:** `R-2026-10-06-DEVIN-PIN-SWE2MAX` (Andy verbatim "just
+use swe-2 max") — `MODEL="swe-2-max"` in `scripts/devin_free.sh` +
+`~/bin/devin-free`, byte-identical, new joint sha256 `2240332c…` (was
+`3479939d…`). state.md pin-conflict paragraph bannered resolved.
+conn-preflight.sh gained check 6b (pinned model still Free) and now runs
+**9/9 PASS**.
+
+**Lane status:** auth ✓ · wrapper free-pinned ✓ · permissions ✓ · CDP
+:9222 ✓ · Devin MCP cog_ key ✓. The ruled 5d proof (staged at
+/tmp/devin-conn-2026-10-06/proof-prompt.md + /tmp/proof-oa-read/) is the
+next dispatch — balance delta = 0 receipt stands (carried from 5c).
+
+Files: `scripts/devin_free.sh` · `~/bin/devin-free` · `docs/RULINGS.md` ·
+`docs/state.md` · this file.
+
+## 2026-10-06 — Devin: 5d proof PASSED — the CLI lane is a proven capability
+
+Andy launched the staged proof (`devin-free --workspace /tmp/proof-oa-read
+--permission-mode dangerous -- "$(cat proof-prompt.md)"`). Result, first-hand:
+
+- **Provenance line:** `v2 sha256 2240332c… | model swe-2-max (free)` — the
+  re-pinned wrapper in action.
+- **Resolved receipt:** `resolved_model_uid=swe-2-max` in
+  `devin_20261006-200313_73047.log` — actually ran the free model. The
+  account-side leg (Andy's balance delta = 0) remains his to snapshot.
+- **The chain works end to end:** spawned session → CDP attach →
+  `Runtime.evaluate` read of `/backtests/test/ZT217913212733763171103` →
+  `proof-out.txt` (verbatim JSON: title, href, stats — P/L $848, PF 1.02,
+  the T1 A0 ride row) → clean exit, no writes outside the workspace.
+- **Honest caveats the worker self-reported:** rendered position rows = 0
+  (the table mounts on a click — out of bounds for a read-only proof) and
+  the open target was `/backtests/test/` not `/compare/` (same test id).
+  Read-only boundary held throughout; no STOPs hit.
+
+`R-2026-09-16-BACKTEST-COMBINE-S5` item 5d is now closed: a
+`devin-free`-spawned session driving the authenticated Chrome is proven,
+not claimed. Lane status: auth ✓ · free pin ✓ · live free-model receipt ✓ ·
+CDP ✓ · MCP cog_ key ✓. Ready for real dispatches (queue #2, T2 sweep).
+
+Files: this file only.
+
+## 2026-10-06 — T2 strike-distance sweep (queue #2) — DONE
+
+Six new backtest arms built off T1-A0 via Add Variation (OA Paper, paced driver,
+serialized-diff verified before every Run — only shortPut/shortCall/touch/name
+ever differed). IDs: D05-ride ZT217913302687266451310, D05-t10 ZT217913305943676011317,
+D07-ride ZT217913303682146891313, D07-t10 ZT217913307185959691324,
+D15-ride ZT217913304644751371315, D15-t10 ZT217913309624633191333.
+No existing ZZ-* test modified or re-run; no live surface touched.
+
+Verdict: **selection winner D15-t10 (.15Δ + Touch $10)** — 64 fixed / 1 created
+bad days on 2021-10→2024-12 (p=3.6e-18). **Holdout FAILS the return guard** —
+mean R = 63% of control (<80%); bad-day elimination itself stays perfect (30/0,
+p=1.9e-9). Only D05-t10 passes the full rule on both windows; whether a runner-up
+may advance is logged as a question for Andy (rulings silent). Notable: .15Δ-ride
+*created* 58 bad days — wider credit ≠ safer. 09-30 max loss dodged by D05 arms
+entirely; D15-t10 touch-exited it +$28. Fee constant re-derived: $3.16/txn
+(opens + touch closes); exceeds gross on 5 of 8 arms.
+
+Files: `data/captures/2026-10-06-t2-strike-distance/` (8 CSVs, raw capture,
+analysis, README, SHA256SUMS — all verified). Deviations: repo README.md briefly
+overwritten by a misdirected heredoc and restored via git checkout (git status
+clean); D15-t10 finished by a second script after its first was killed mid-drawer
+(state re-verified before Run — documented in raw capture). Primer not updated —
+dispatch prohibits writes under ~/.claude this run.
