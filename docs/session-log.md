@@ -13377,3 +13377,29 @@ dispatch prohibits writes under ~/.claude this run.
 - §5 scope NOT drafted. No git. Tracker artifact not updated this session.
 **Addendum 22 — touch-decision hedge study queued** in docs/handoff-edge-funnel-2026-10-06.md §5b (touch study on SPX intraday history → branch plan priced on chain data → one paired clone; first action = price datasets for Andy).
 - **Addendum (same session, after re-reading the handoff, which now has §5b):** added BF-053 (`03-cowork-tail-winside-score.md`, which landed after the first sweep) and BF-054 (`data/loss_register.csv`, read-only) → 54 rows. The prior-art doc's §5 now points at handoff §5b. §5b itself was not started (its first action, pricing data, is outside the §4 instruction).
+- **Addendum — §5 search scope DRAFTED:** `docs/edge-search-scope-DRAFT-2026-10-06.md` (unsigned; 7 slots S1–S7 for Andy). Gate 0 (VIX Change% timing, QQQ fee constant, exit cutoff) precedes any arm; selection runs end 2024-12-31 so the holdout never renders; net scoring recommended; stop date proposed 2026-11-13. Nothing dispatched.
+**Addendum 23 — research dispatch queued** (#8): docs/dispatch-ic-defense-research-2026-10-06.md — IC defense/hedge prior-art register, web read-only, parallel-safe.
+
+## 2026-10-06 — Devin: queue #8, IC defense prior-art research (web, read-only)
+
+Dispatch `docs/dispatch-ic-defense-research-2026-10-06.md` executed. Output in
+`data/research/`: `ic-defense-register.csv` (66 rows, mechanic×source; evidence mix: 17 backtest /
+2 live / 17 anecdote / 30 theory), `ic-defense-summary.md` (top-10 ranking, two-loss-shape mapping,
+gaps), `SHA256SUMS.txt`.
+
+Headline findings for the Edge-Funnel Cowork chat:
+- The single most on-point external result: tastytrade 0DTE SPX study (via stockwirex, R03) —
+  ~48% of 0.5x-stopped 0DTE condors recover to >=breakeven by expiry; 0.5x stop cuts CVaR >50% but
+  drops win rate below 50%. That is our whipsaw-vs-breach trade-off quantified.
+- The conditional touch response (handoff §5b) is **absent from the literature** — unconditional
+  triggers only. Open ground, but Talon's builder (R33) found no predictive entry signal on a 71B-row
+  SPX 0DTE tick DB — expect the touch decision to be equally hard.
+- OA constraint discovered: overlapping-strikes failsafe blocks a hedge leg sharing the condor's
+  strike in-bot (R55) — mouse-ear must sit at adjacent strikes or a sibling bot.
+- The >15:45 breach window is a literature blind spot; universal doctrine is "flat before it."
+- Academic anchor for revert-vs-continue: Dim/Eraker/Vilkov — positive MM gamma → intraday reversal,
+  negative → momentum (R36); Cboe OMM-gamma study corroborates (R43).
+
+No git operations performed. Files touched: `data/research/` (new), this log append,
+`docs/devin-queue.md` item-8 status cell.
+**Addendum 24 — IC-defense research (#8) reviewed:** data/research/ SHA256SUMS OK, 66 rows, all cited, quotes ≤15 words; evidence honestly tiered (backtest 17 / live 2 / anecdote 17 / theory 30; only 2 rows claim out-of-sample). Key: no published CONDITIONAL touch response exists (§5b is open ground); 0DTE stop study: ~48% of 0.5x-stopped condors recover (anecdote tier, our whipsaw shape); strongest cheap candidates = day-level event gates (backtestable via Skip Events) and a pre-close flat/backstop past 15:55 via Repeating trigger; OA overlapping-strikes failsafe constrains hedge-leg placement (R55). Feeds the edge-funnel chat.

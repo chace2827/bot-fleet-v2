@@ -12,6 +12,7 @@ Each job is a pointer to its dispatch file — the dispatch is the spec; this fi
 | 5 | pending | Loss packet: `IC-SPX-FastPT25-S2-130PM` × **2026-10-05** | `docs/dispatch-loss-packet-2026-10-06.md` |
 | 6 | pending | Loss packet: `IC-SPX-FastPT25-S2` × **2026-09-30** | `docs/dispatch-loss-packet-2026-10-06.md` |
 | 7 | pending | Loss packet: `GF-QQQ-IC-{Ride,PT50,Trail,Touch0}` × **2026-09-18** (one packet, four bots) | `docs/dispatch-loss-packet-2026-10-06.md` |
+| 8 | done → `data/research/` | **Web research (no OA — may run in parallel):** IC defense/hedge prior art → `data/research/` | `docs/dispatch-ic-defense-research-2026-10-06.md` |
 
 Notes for the session picking up an item:
 - Run 1 (`2026-08-26` × `IC-SPX-FastPT25-S2-130PM`) is **done** — calibration PASSED
